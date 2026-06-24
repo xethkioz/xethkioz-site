@@ -5,44 +5,41 @@ className?: string
 
 export default function Logo({
 size = 'md',
-className = '',
+className = ''
 }: LogoProps) {
-const sizes = {
-sm: 'max-w-[120px]',
-md: 'max-w-[160px]',
-lg: 'max-w-[220px]',
-xl: 'max-w-[320px]',
-}
 
-const fontSizes = {
-sm: 16,
-md: 22,
-lg: 30,
-xl: 44,
-}
+const s = {
+sm: { w: 120, h: 36, f: 16 },
+md: { w: 160, h: 48, f: 22 },
+lg: { w: 220, h: 66, f: 30 },
+xl: { w: 320, h: 96, f: 44 }
+}[size]
 
 const g = "l${size}"
 
 return (
 <svg
+width={s.w}
+height={s.h}
 viewBox="0 0 200 60"
-preserveAspectRatio="xMidYMid meet"
+fill="none"
 xmlns="http://www.w3.org/2000/svg"
-className={"${sizes[size]} w-full h-auto block ${className}"}
+className={"max-w-full h-auto block ${className}"}
 role="img"
 aria-label="XETHKIOZ"
 >
 <defs>
-<linearGradient
-id={"o${g}"}
-x1="0%"
-y1="0%"
-x2="100%"
-y2="100%"
->
-<stop offset="0%" stopColor="#FF8A1A" />
-<stop offset="100%" stopColor="#FF6A00" />
-</linearGradient>
+
+    <linearGradient
+      id={`o${g}`}
+      x1="0%"
+      y1="0%"
+      x2="100%"
+      y2="100%"
+    >
+      <stop offset="0%" stopColor="#FF8A1A" />
+      <stop offset="100%" stopColor="#FF6A00" />
+    </linearGradient>
 
     <linearGradient
       id={`p${g}`}
@@ -70,6 +67,7 @@ y2="100%"
         <feMergeNode in="SourceGraphic" />
       </feMerge>
     </filter>
+
   </defs>
 
   <g filter={`url(#og${g})`}>
@@ -92,12 +90,13 @@ y2="100%"
     y="38"
     fontFamily="Orbitron, sans-serif"
     fontWeight="900"
-    fontSize={fontSizes[size]}
+    fontSize={s.f}
     fill={`url(#p${g})`}
     filter={`url(#pg${g})`}
   >
     ETHKIOZ
   </text>
+
 </svg>
 
 )
