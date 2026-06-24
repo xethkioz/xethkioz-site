@@ -10,9 +10,9 @@ className = ''
 
 const s = {
 sm: { w: 120, h: 36, f: 16 },
-md: { w: 160, h: 48, f: 22 },
-lg: { w: 220, h: 66, f: 30 },
-xl: { w: 320, h: 96, f: 44 }
+md: { w: 180, h: 54, f: 22 },
+lg: { w: 280, h: 84, f: 30 },
+xl: { w: 520, h: 120, f: 44 }
 }[size]
 
 const g = "l${size}"
@@ -21,7 +21,7 @@ return (
 <svg
 width={s.w}
 height={s.h}
-viewBox="0 0 200 60"
+viewBox="0 0 300 60"
 fill="none"
 xmlns="http://www.w3.org/2000/svg"
 className={"max-w-full h-auto block ${className}"}
