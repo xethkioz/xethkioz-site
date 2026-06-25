@@ -24,8 +24,11 @@ import Support from './pages/Support'
 import Authors from './pages/Authors'
 import AuthorProfile from './pages/AuthorProfile'
 import Admin from './pages/Admin'
+import CmsStudio from './pages/CmsStudio'
+import LiveChecklist from './pages/LiveChecklist'
 import NotFound from './pages/NotFound'
 import ComingSoon from './pages/ComingSoon'
+import FloatingCommunityChat from './components/FloatingCommunityChat'
 export default function App() {
   return (
     <LangProvider>
@@ -40,6 +43,7 @@ export default function App() {
           <Route path="/article/:slug" element={<ArticlePage />} />
           <Route path="/streaming" element={<Streaming />} />
           <Route path="/streaming/chat-overlay" element={<ChatOverlayPage />} />
+          <Route path="/chat-overlay" element={<ChatOverlayPage />} />
           <Route path="/media" element={<Media />} />
           <Route path="/community" element={<Community />} />
           <Route path="/community/:featureSlug" element={<CommunityFeature />} />
@@ -51,11 +55,14 @@ export default function App() {
           <Route path="/authors" element={<Authors />} />
           <Route path="/author/:slug" element={<AuthorProfile />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/cms" element={<CmsStudio />} />
+          <Route path="/live-checklist" element={<LiveChecklist />} />
           <Route path="/coming-soon" element={<ComingSoon />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />
+      <FloatingCommunityChat />
     </LangProvider>
   )
 }

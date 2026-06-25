@@ -34,6 +34,7 @@ export default function Header() {
     { to: '/news', label: t.nav.news },
     { to: '/streaming', label: t.nav.streaming },
     { to: '/media', label: t.nav.media },
+    { to: '/cms', label: 'CMS' },
     { to: '/community', label: t.nav.community },
     { to: '/about', label: t.nav.about },
     { to: '/contact', label: t.nav.contact },

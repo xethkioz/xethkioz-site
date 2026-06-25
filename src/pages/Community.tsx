@@ -15,6 +15,7 @@ export default function Community() {
 
   const features: CardItem[] = [
     { icon: '👤', label: t.community.profiles, slug: 'perfiles', description: 'Cuentas, identidad y perfil público.', active: true },
+    { icon: '💬', label: 'Chat flotante', slug: 'chat-flotante', description: 'Salas tipo Discord: General, Gaming, IA, Ciencia y Streaming.', active: true },
     { icon: '💬', label: t.community.comments, slug: 'comentarios', description: 'Debate en noticias y publicaciones.' },
     { icon: '🗣️', label: t.community.forums, slug: 'foros', description: 'Temas por juegos, tech e IA.' },
     { icon: '📊', label: t.community.polls, slug: 'encuestas', description: 'Votaciones para decidir contenido.' },

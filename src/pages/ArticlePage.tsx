@@ -5,6 +5,7 @@ import ArticleCard from '../components/ArticleCard'
 import { ErrorDisplay } from '../components/Skeletons'
 import SEO from '../components/SEO'
 import SafeImage, { articleFallback, cleanImageUrl } from '../components/SafeImage'
+import ReactionBar from '../components/ReactionBar'
 export default function ArticlePage() {
   const { slug } = useParams()
   const { t } = useLang()
@@ -29,6 +30,7 @@ export default function ArticlePage() {
         </div>
         <div className="rounded-2xl overflow-hidden mb-8 border border-white/10"><SafeImage src={article.cover_image} fallback={articleFallback(article.category?.portal, article.category?.slug)} alt={article.title} className="w-full h-auto object-cover" loading="eager" /></div>
         <div className="prose prose-invert max-w-none">{article.content.split('\n').map((p, i) => <p key={i} className="text-gray-300 leading-relaxed mb-4 text-base md:text-lg">{p}</p>)}</div>
+        <ReactionBar articleId={article.id} />
         {article.tags.length > 0 && <div className="flex flex-wrap gap-2 mt-8 pt-6 border-t border-white/10"><span className="text-xs text-gray-500 font-display uppercase tracking-wider mr-2">{t.news.tags}:</span>{article.tags.map((tag) => <span key={tag} className="tag border-white/20 text-gray-400">#{tag}</span>)}</div>}
       </article>
       {ra.length > 0 && <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12"><h2 className="section-title gradient-text mb-6">{t.news.relatedArticles}</h2><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">{ra.map((a) => <ArticleCard key={a.id} article={a} />)}</div></section>}

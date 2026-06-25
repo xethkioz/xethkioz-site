@@ -15,6 +15,8 @@ export function articleFallback(portal?: string | null, categorySlug?: string | 
   if (key.includes('gaming') || key.includes('game') || key.includes('esport')) return '/images/articles/gaming.svg'
   if (key.includes('tech') || key.includes('ai') || key.includes('hardware')) return '/images/articles/tech.svg'
   if (key.includes('science') || key.includes('space') || key.includes('medicine')) return '/images/articles/science.svg'
+  if (key.includes('stream')) return '/images/articles/obs-streaming.svg'
+  if (key.includes('comunidad') || key.includes('community') || key.includes('chat')) return '/images/articles/community-chat.svg'
   return IMAGE_FALLBACK
 }
 

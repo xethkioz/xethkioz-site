@@ -16,7 +16,7 @@ export default function Streaming() {
   return (
     <div className="animate-fade-in max-w-7xl mx-auto px-4 sm:px-6 py-8">
       <SEO title={t.streaming.title} description="YouTube • Kick • Twitch" />
-      <div className="text-center mb-10"><div className="text-5xl mb-3">📺</div><h1 className="font-display text-3xl md:text-5xl font-bold gradient-text mb-3">{t.streaming.title}</h1><p className="text-gray-400">YouTube • Kick • Twitch</p><div className="mt-5 flex flex-col sm:flex-row justify-center gap-3"><Link to="/streaming/chat-overlay" className="btn-primary">Ver Chat Overlay</Link><a href="https://kick.com/xethkioz" target="_blank" rel="noopener noreferrer" className="btn-secondary">Abrir Kick</a></div></div>
+      <div className="text-center mb-10"><div className="text-5xl mb-3">📺</div><h1 className="font-display text-3xl md:text-5xl font-bold gradient-text mb-3">{t.streaming.title}</h1><p className="text-gray-400">YouTube • Kick • Twitch</p><div className="mt-5 flex flex-col sm:flex-row justify-center gap-3"><Link to="/chat-overlay" className="btn-primary">Ver Chat Overlay</Link><a href="https://kick.com/xethkioz" target="_blank" rel="noopener noreferrer" className="btn-secondary">Abrir Kick</a></div></div>
       <div className="mb-12"><ChatOverlay compact /></div>
       {loading ? (
         <>

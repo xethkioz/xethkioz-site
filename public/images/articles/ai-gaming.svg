@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="IA Generativa">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#08080d"/><stop offset="0.45" stop-color="#15111d"/><stop offset="1" stop-color="#06060a"/></linearGradient>
+    <linearGradient id="a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a2be2" stop-opacity=".95"/><stop offset="1" stop-color="#ff6a00" stop-opacity=".75"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#8a2be2" stroke-opacity=".12" stroke-width="1"/></pattern>
+  </defs>
+  <rect width="1200" height="675" fill="url(#g)"/>
+  <rect width="1200" height="675" fill="url(#grid)" opacity=".9"/>
+  <circle cx="1020" cy="90" r="230" fill="#ff6a00" opacity=".14" filter="url(#glow)"/>
+  <circle cx="130" cy="600" r="260" fill="#8a2be2" opacity=".13" filter="url(#glow)"/>
+  <rect x="58" y="58" width="1084" height="559" rx="34" fill="#080810" fill-opacity=".62" stroke="url(#a)" stroke-width="3"/>
+  <text x="86" y="126" fill="#8a2be2" font-family="Arial Black, Impact, sans-serif" font-size="34" letter-spacing="13">XETHKIOZ NEWS</text>
+  <text x="600" y="315" text-anchor="middle" font-size="112" filter="url(#glow)">🤖</text>
+  <text x="600" y="420" text-anchor="middle" fill="#fff" font-family="Arial Black, Impact, sans-serif" font-size="58">IA Generativa</text>
+  <text x="600" y="472" text-anchor="middle" fill="#c9c2d8" font-family="Arial, sans-serif" font-size="24">Inteligencia artificial aplicada al gaming</text>
+  <text x="86" y="565" fill="#8a2be2" font-family="Arial Black, Impact, sans-serif" font-size="18">Gaming Is My Passion • Beyond The Game</text>
+</svg>

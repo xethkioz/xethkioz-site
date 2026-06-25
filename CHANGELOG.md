@@ -42,3 +42,54 @@
 
 ### Notes
 - No se incluye `.env`, `.git`, `node_modules` ni `dist` en el paquete entregable.
+
+## [4.0.0-alpha.2] - 2026-06-25
+
+### Added
+
+- Content foundation expanded by portal.
+- Local SVG cover images and video thumbnails.
+- Floating community chat mock with rooms and emojis.
+- OBS-ready chat overlay route: `/chat-overlay?obs=1`.
+- Short route `/chat-overlay`.
+- CMS and chat SQL foundation draft.
+- Alpha 2 implementation and final review docs.
+
+### Changed
+
+- Version updated to `4.0.0-alpha.2`.
+- Streaming/media/article fallback data improved.
+
+### Notes
+
+- Community chat is currently local/mock and prepared for Supabase Realtime.
+- YouTube handle requires final confirmation before production.
+
+
+## v4.0.0-alpha.3
+
+- Added 100 editorial fallback articles.
+- Added internal SVG covers and video thumbnails.
+- Improved OBS chat overlay with alert blocks.
+- Added article reaction component.
+- Added Supabase SQL foundation for comments, reactions and realtime chat.
+- Updated docs for Alpha 3 QA.
+
+
+## [4.0.0-alpha.4] - 2026-06-25
+
+### Added
+- CMS Studio público en `/cms` como base visual del flujo editorial.
+- Checklist de publicación LIVE en `/live-checklist`.
+- Sala `Asia Gaming` en el chat flotante de comunidad.
+- Documentación Alpha 4 de pulido, deploy y revisión final.
+- Migración SQL base para CMS, chat, reacciones y moderación.
+
+### Changed
+- Versión del proyecto actualizada a `4.0.0-alpha.4`.
+- Header y Footer incorporan accesos a CMS Studio y Checklist LIVE.
+- Chat flotante ajustado como modo local preparado para Supabase Realtime.
+- Chat Overlay documentado como Alpha 4.
+
+### Notes
+- Alpha 4 está pensada como punto de pulido antes de preparar una Beta con conexión real a Supabase Realtime y CMS operativo completo.

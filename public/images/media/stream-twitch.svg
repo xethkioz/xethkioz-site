@@ -1,14 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="Twitch Stream">
-  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9146ff"/><stop offset="1" stop-color="#ff7a18"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-  <rect width="1200" height="675" fill="#080812"/>
-  <rect x="34" y="34" width="1132" height="607" rx="34" fill="url(#g)" opacity=".22"/>
-  <path d="M0 520 C220 430 360 590 590 490 C830 390 950 500 1200 370 L1200 675 L0 675 Z" fill="url(#g)" opacity=".28"/>
-  <g filter="url(#glow)"><text x="72" y="118" fill="#fff" font-family="Arial Black, Arial" font-size="44">XETHKIOZ</text><text x="72" y="172" fill="#ff7a18" font-family="Arial" font-size="24">Gaming Is My Passion • Beyond The Game</text></g>
-  <rect x="72" y="228" width="650" height="255" rx="24" fill="#0d0d19" stroke="#ffffff22"/>
-  <circle cx="174" cy="356" r="58" fill="#ff7a18" opacity=".85"/><polygon points="158,322 158,390 214,356" fill="#080812"/>
-  <text x="260" y="338" fill="#fff" font-family="Arial Black, Arial" font-size="38">Twitch Stream</text>
-  <text x="260" y="386" fill="#b7b7c8" font-family="Arial" font-size="24">Noticias • Streaming • IA • Comunidad</text>
-  <rect x="770" y="228" width="350" height="255" rx="24" fill="#0d0d19" stroke="#ffffff22"/>
-  <text x="810" y="315" fill="#a855f7" font-family="Arial Black, Arial" font-size="34">EN VIVO</text>
-  <text x="810" y="365" fill="#fff" font-family="Arial" font-size="24">Kick • Twitch • YouTube</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="Twitch Live">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#08080d"/><stop offset="0.45" stop-color="#15111d"/><stop offset="1" stop-color="#06060a"/></linearGradient>
+    <linearGradient id="a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a2be2" stop-opacity=".95"/><stop offset="1" stop-color="#ff6a00" stop-opacity=".75"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#8a2be2" stroke-opacity=".12" stroke-width="1"/></pattern>
+  </defs>
+  <rect width="1200" height="675" fill="url(#g)"/>
+  <rect width="1200" height="675" fill="url(#grid)" opacity=".9"/>
+  <circle cx="1020" cy="90" r="230" fill="#ff6a00" opacity=".14" filter="url(#glow)"/>
+  <circle cx="130" cy="600" r="260" fill="#8a2be2" opacity=".13" filter="url(#glow)"/>
+  <rect x="58" y="58" width="1084" height="559" rx="34" fill="#080810" fill-opacity=".62" stroke="url(#a)" stroke-width="3"/>
+  <text x="86" y="126" fill="#8a2be2" font-family="Arial Black, Impact, sans-serif" font-size="34" letter-spacing="13">XETHKIOZ NEWS</text>
+  <text x="600" y="315" text-anchor="middle" font-size="112" filter="url(#glow)">🟣</text>
+  <text x="600" y="420" text-anchor="middle" fill="#fff" font-family="Arial Black, Impact, sans-serif" font-size="58">Twitch Live</text>
+  <text x="600" y="472" text-anchor="middle" fill="#c9c2d8" font-family="Arial, sans-serif" font-size="24">Streams, chat y comunidad</text>
+  <text x="86" y="565" fill="#8a2be2" font-family="Arial Black, Impact, sans-serif" font-size="18">Gaming Is My Passion • Beyond The Game</text>
 </svg>

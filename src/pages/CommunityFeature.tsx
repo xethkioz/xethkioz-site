@@ -12,6 +12,7 @@ type Feature = {
 }
 
 const features: Feature[] = [
+  { slug: 'chat-flotante', icon: '💬', title: 'Chat flotante de comunidad', section: 'Comunidad', status: 'Activo', description: 'Base visual del chat comunitario tipo Discord. Incluye salas por tema, mensajes locales, emojis y preparación para Supabase Realtime.', actions: [{ label: 'Volver a la comunidad', to: '/community', primary: true }, { label: 'Ver noticias', to: '/news' }] },
   { slug: 'perfiles', icon: '👤', title: 'Perfiles de Usuario', section: 'Comunidad', status: 'Activo', description: 'Base para que cada usuario o creador tenga una identidad dentro de XETHKIOZ.', actions: [{ label: 'Crear cuenta de creador', to: '/creator', primary: true }, { label: 'Ver comunidad', to: '/community' }] },
   { slug: 'comentarios', icon: '💬', title: 'Comentarios', section: 'Comunidad', status: 'Preparado', description: 'Espacio pensado para comentar noticias, streams, artículos y debates gaming.', actions: [{ label: 'Crear cuenta para comentar', to: '/creator', primary: true }, { label: 'Leer noticias', to: '/news' }] },
   { slug: 'foros', icon: '🗣️', title: 'Foros', section: 'Comunidad', status: 'Preparado', description: 'Foros para MMORPG, cooperativos, tecnología, IA, esports y proyectos de la comunidad.', actions: [{ label: 'Unirme como miembro', to: '/creator', primary: true }, { label: 'Contactar a XETHKIOZ', to: '/contact' }] },

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="Builds LoL">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#111018" offset="0"/>
+      <stop stop-color="#21102f" offset=".52"/>
+      <stop stop-color="#0b0b10" offset="1"/>
+    </linearGradient>
+    <radialGradient id="o" cx=".15" cy=".1" r=".9">
+      <stop stop-color="#ff6a00" stop-opacity=".45" offset="0"/>
+      <stop stop-color="#ff6a00" stop-opacity="0" offset=".55"/>
+    </radialGradient>
+    <radialGradient id="p" cx=".86" cy=".74" r=".8">
+      <stop stop-color="#9d2cff" stop-opacity=".42" offset="0"/>
+      <stop stop-color="#9d2cff" stop-opacity="0" offset=".58"/>
+    </radialGradient>
+    <pattern id="grid" width="54" height="54" patternUnits="userSpaceOnUse">
+      <path d="M54 0H0v54" fill="none" stroke="#ffffff" stroke-opacity=".07" stroke-width="1"/>
+    </pattern>
+    <filter id="glow"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1200" height="675" fill="url(#g)"/>
+  <rect width="1200" height="675" fill="url(#o)"/>
+  <rect width="1200" height="675" fill="url(#p)"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+  <rect x="48" y="52" width="1104" height="571" rx="36" fill="#06060a" fill-opacity=".42" stroke="#ff6a00" stroke-opacity=".46"/>
+  <text x="78" y="115" fill="#ff6a00" font-family="Arial Black, Arial" font-size="38" letter-spacing="12">XETHKIOZ NEWS</text>
+  <text x="600" y="305" text-anchor="middle" font-size="118" filter="url(#glow)">🧪</text>
+  <text x="600" y="425" text-anchor="middle" fill="#fff" font-family="Arial Black, Arial" font-size="54">Builds LoL</text>
+  <text x="600" y="478" text-anchor="middle" fill="#c9c1d9" font-family="Arial, sans-serif" font-size="25">Portal editorial gamer, tech, IA y ciencia</text>
+  <text x="78" y="585" fill="#9d2cff" font-family="Arial Black, Arial" font-size="22">Gaming Is My Passion • Beyond The Game</text>
+</svg>
