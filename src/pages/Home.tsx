@@ -6,6 +6,7 @@ import SocialSection from '../components/SocialSection'
 import Logo from '../components/Logo'
 import SEO from '../components/SEO'
 import { ArticleGridSkeleton, ErrorDisplay } from '../components/Skeletons'
+import SafeImage from '../components/SafeImage'
 
 export default function Home() {
   const { t } = useLang()
@@ -39,6 +40,31 @@ export default function Home() {
               <span className="h-1 w-12 bg-orange rounded-full" />
               <span className="h-1 w-4 bg-neon rounded-full" />
               <span className="h-1 w-12 bg-orange rounded-full" />
+            </div>
+          </div>
+
+
+
+          <div className="relative overflow-hidden rounded-3xl border border-orange/25 bg-ink-300 shadow-[0_0_45px_rgba(255,106,0,0.12)] mb-8 animate-fade-up" style={{ animationDelay: '0.08s' }}>
+            <video
+              className="w-full aspect-[16/5] min-h-[160px] max-h-[360px] object-cover opacity-95"
+              src="/videos/xethkioz-pixel-banner.mp4"
+              poster="/images/articles/gaming.svg"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-label="XETHKIOZ pixel art animated banner"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-ink/75 via-transparent to-ink/65 pointer-events-none" />
+            <div className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+              <div>
+                <p className="section-eyebrow mb-1">XETHKIOZ LIVE WORLD</p>
+                <h2 className="font-display text-xl md:text-3xl font-black text-white drop-shadow-lg">El portal está vivo</h2>
+                <p className="text-xs md:text-sm text-gray-300 max-w-xl">Banner pixel art oficial para acompañar noticias, comunidad y contenido gamer.</p>
+              </div>
+              <Link to="/community" className="btn-primary self-start md:self-auto text-sm">Entrar a la comunidad</Link>
             </div>
           </div>
 
@@ -196,11 +222,11 @@ export default function Home() {
               {streams.slice(0, 3).map((s) => (
                 <a key={s.id} href={s.channel_url} target="_blank" rel="noopener noreferrer" className="group relative overflow-hidden rounded-xl news-card card-hover">
                   <div className="aspect-video overflow-hidden">
-                    <img
-                      src={s.thumbnail || 'https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?auto=compress&cs=tinysrgb&w=400'}
+                    <SafeImage
+                      src={s.thumbnail}
+                      fallback="/images/articles/streaming.svg"
                       alt={s.title}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      loading="lazy"
                     />
                   </div>
                   {s.is_live && <span className="absolute top-3 left-3 px-2 py-1 text-xs font-bold text-white bg-red-600 rounded animate-pulse">{t.home.liveBadge}</span>}

@@ -18,6 +18,7 @@ import CommunityFeature from './pages/CommunityFeature'
 import CreatorAccount from './pages/CreatorAccount'
 import About from './pages/About'
 import Contact from './pages/Contact'
+import Support from './pages/Support'
 import Authors from './pages/Authors'
 import AuthorProfile from './pages/AuthorProfile'
 import Admin from './pages/Admin'
@@ -42,6 +43,7 @@ export default function App() {
           <Route path="/creator" element={<CreatorAccount />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/support" element={<Support />} />
           <Route path="/authors" element={<Authors />} />
           <Route path="/author/:slug" element={<AuthorProfile />} />
           <Route path="/admin" element={<Admin />} />

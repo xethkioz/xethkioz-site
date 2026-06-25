@@ -37,6 +37,7 @@ export default function Header() {
     { to: '/community', label: t.nav.community },
     { to: '/about', label: t.nav.about },
     { to: '/contact', label: t.nav.contact },
+    { to: '/support', label: 'Apoyar' },
   ]
 
   const langLabels: Record<Lang, string> = {
@@ -132,6 +133,14 @@ export default function Header() {
               )}
             </div>
 
+            <Link to="/creator" className="hidden md:inline-flex px-3 py-2 rounded-md text-sm font-semibold text-orange border border-orange/30 hover:bg-orange/10 transition-all">
+              Crear cuenta
+            </Link>
+
+            <Link to="/support" className="hidden md:inline-flex px-3 py-2 rounded-md text-sm font-semibold text-neon border border-neon/30 hover:bg-neon/10 transition-all">
+              Apoyar
+            </Link>
+
             <button
               onClick={() => setMobileOpen((v) => !v)}
               className="xl:hidden p-2 text-gray-300 hover:text-white rounded-md hover:bg-white/5 transition-colors"
@@ -186,6 +195,10 @@ export default function Header() {
                   {item.label}
                 </NavLink>
               ))}
+              <div className="mt-2 grid grid-cols-1 gap-2 border-t border-white/10 pt-3">
+                <NavLink to="/creator" className="btn-primary text-center text-sm">Crear cuenta / Iniciar sesión</NavLink>
+                <NavLink to="/support" className="btn-secondary text-center text-sm">Patrocinar o donar</NavLink>
+              </div>
             </div>
           </nav>
         )}

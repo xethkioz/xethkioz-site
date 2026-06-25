@@ -18,6 +18,7 @@
   .gradient-text-purple { @apply bg-gradient-to-r from-neon-300 via-neon to-neon-600 bg-clip-text text-transparent; }
   .gradient-text-mix { @apply bg-gradient-to-r from-orange via-neon-300 to-neon bg-clip-text text-transparent; }
   .btn-primary { @apply px-6 py-3 rounded-lg bg-gradient-to-r from-orange to-orange-600 text-white font-semibold transition-all duration-300 hover:shadow-[0_0_24px_rgba(255,106,0,0.5)] hover:scale-[1.03] active:scale-95; }
+  .btn-secondary { @apply px-6 py-3 rounded-lg border border-neon/40 bg-neon/10 text-neon font-semibold transition-all duration-300 hover:border-neon hover:bg-neon/20 hover:shadow-[0_0_24px_rgba(138,43,226,0.35)] hover:scale-[1.03] active:scale-95; }
   .section-title { @apply font-display text-xl md:text-2xl font-bold tracking-wide; }
   .section-eyebrow { @apply text-xs font-display font-bold uppercase tracking-[0.2em] text-orange mb-2; }
   .tag { @apply inline-block px-2.5 py-1 rounded-full text-xs font-medium border transition-colors; }

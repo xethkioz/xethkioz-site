@@ -28,7 +28,7 @@ const features: Feature[] = [
   { slug: 'cursos', icon: '🎓', title: 'Cursos', section: 'Monetización', status: 'Preparado', description: 'Futuros cursos sobre creación de contenido, streaming, IA, gaming y proyectos digitales.', actions: [{ label: 'Quiero recibir novedades', to: '/creator', primary: true }, { label: 'Contactar', to: '/contact' }] },
   { slug: 'interviews', icon: '🎤', title: 'Interviews', section: 'Monetización', status: 'Preparado', description: 'Entrevistas a creadores, gamers, streamers, proyectos y referentes de tecnología.', actions: [{ label: 'Proponer entrevista', to: '/contact', primary: true }, { label: 'Ver comunidad', to: '/community' }] },
   { slug: 'live-events', icon: '📡', title: 'Live Events', section: 'Monetización', status: 'Preparado', description: 'Eventos en vivo, coberturas, directos y activaciones especiales.', actions: [{ label: 'Ver streaming', to: '/streaming', primary: true }, { label: 'Crear cuenta', to: '/creator' }] },
-  { slug: 'donaciones', icon: '💝', title: 'Donaciones', section: 'Monetización', status: 'Preparado', description: 'Área futura para apoyar el crecimiento de XETHKIOZ y sostener el proyecto.', actions: [{ label: 'Contactar para apoyar', to: '/contact', primary: true }, { label: 'Volver', to: '/community' }] },
+  { slug: 'donaciones', icon: '💝', title: 'Donaciones', section: 'Monetización', status: 'Activo', description: 'Área para apoyar el crecimiento de XETHKIOZ con PayPal, Mercado Pago o propuestas de patrocinio.', actions: [{ label: 'Apoyar ahora', to: '/support', primary: true }, { label: 'Contactar por sponsor', to: '/contact' }] },
 ]
 
 export default function CommunityFeature() {

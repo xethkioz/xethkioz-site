@@ -3,6 +3,7 @@ import { useLang } from '../lib/LangContext'
 import { useCategories, useAuthors, useArticles, useMedia } from '../lib/hooks'
 import { supabase } from '../lib/supabase'
 import SEO from '../components/SEO'
+import SafeImage from '../components/SafeImage'
 export default function Admin() {
   const { t } = useLang()
   const { categories } = useCategories()
@@ -53,7 +54,7 @@ export default function Admin() {
       )}
       {tab === 'list' && (
         <div className="space-y-3">
-          {al ? <div className="text-center py-10 text-gray-500">{t.common.loading}</div> : articles.length === 0 ? <div className="text-center py-10 text-gray-500">{t.common.noContent}</div> : articles.map((a) => <div key={a.id} className="glass border border-white/10 rounded-lg p-4 flex items-center gap-4">{a.cover_image && <img src={a.cover_image} alt={a.title} className="w-16 h-16 rounded object-cover flex-shrink-0" />}<div className="flex-1 min-w-0"><h3 className="text-sm font-semibold text-white line-clamp-1">{a.title}</h3><p className="text-xs text-gray-500">{a.category?.name} • {new Date(a.published_at).toLocaleDateString()}</p></div><div className="flex gap-1 flex-shrink-0">{a.is_featured && <span className="text-xs text-orange">⭐</span>}{a.is_trending && <span className="text-xs text-red-400">🔥</span>}</div></div>)}
+          {al ? <div className="text-center py-10 text-gray-500">{t.common.loading}</div> : articles.length === 0 ? <div className="text-center py-10 text-gray-500">{t.common.noContent}</div> : articles.map((a) => <div key={a.id} className="glass border border-white/10 rounded-lg p-4 flex items-center gap-4"><SafeImage src={a.cover_image} fallback="/images/articles/fallback.svg" alt={a.title} className="w-16 h-16 rounded object-cover flex-shrink-0" /><div className="flex-1 min-w-0"><h3 className="text-sm font-semibold text-white line-clamp-1">{a.title}</h3><p className="text-xs text-gray-500">{a.category?.name} • {new Date(a.published_at).toLocaleDateString()}</p></div><div className="flex gap-1 flex-shrink-0">{a.is_featured && <span className="text-xs text-orange">⭐</span>}{a.is_trending && <span className="text-xs text-red-400">🔥</span>}</div></div>)}
           <div className="pt-4 text-xs text-gray-500 text-center">{media.length} media items • {articles.length} articles</div>
         </div>
       )}

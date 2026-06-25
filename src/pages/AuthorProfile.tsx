@@ -4,6 +4,7 @@ import { useAuthor, useArticles } from '../lib/hooks'
 import ArticleCard from '../components/ArticleCard'
 import { AuthorSkeleton, ArticleGridSkeleton, ErrorDisplay } from '../components/Skeletons'
 import SEO from '../components/SEO'
+import SafeImage from '../components/SafeImage'
 export default function AuthorProfile() {
   const { slug } = useParams()
   const { t } = useLang()
@@ -20,7 +21,7 @@ export default function AuthorProfile() {
         <Link to="/authors" className="text-sm text-orange hover:neon-text-orange mb-6 inline-block">← {t.common.back}</Link>
         <div className="glass border border-white/10 rounded-2xl overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-3">
-            <div className="aspect-square md:aspect-auto overflow-hidden">{author.avatar_url && <img src={author.avatar_url} alt={author.name} className="w-full h-full object-cover" />}</div>
+            <div className="aspect-square md:aspect-auto overflow-hidden"><SafeImage src={author.avatar_url} fallback="/images/articles/fallback.svg" alt={author.name} className="w-full h-full object-cover" /></div>
             <div className="md:col-span-2 p-8"><h1 className="font-display text-2xl md:text-3xl font-bold text-white mb-2">{author.name}</h1><p className="text-orange font-medium mb-4">{author.role}</p><p className="text-gray-400 leading-relaxed">{author.bio}</p><div className="mt-4 text-sm text-gray-500">{aa.length} {t.author.articles}</div></div>
           </div>
         </div>

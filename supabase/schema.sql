@@ -60,3 +60,81 @@ CREATE POLICY "creator_profiles_owner_update" ON creator_profiles
   FOR UPDATE TO authenticated
   USING (auth.uid() = id)
   WITH CHECK (auth.uid() = id);
+
+-- XETHKIOZ v3.6 Community Data Layer
+-- Where user content will be stored:
+-- 1) Supabase Auth stores accounts in auth.users.
+-- 2) creator_profiles stores public creator/community profile metadata.
+-- 3) community_posts stores user posts.
+-- 4) community_comments stores comments tied to posts and articles.
+-- 5) community_reactions stores likes/reactions.
+CREATE TABLE IF NOT EXISTS community_posts (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  author_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
+  title text NOT NULL,
+  content text NOT NULL,
+  category text NOT NULL DEFAULT 'general',
+  status text NOT NULL DEFAULT 'published',
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS community_comments (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  author_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
+  post_id uuid REFERENCES community_posts(id) ON DELETE CASCADE,
+  article_id uuid REFERENCES articles(id) ON DELETE CASCADE,
+  content text NOT NULL,
+  status text NOT NULL DEFAULT 'published',
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS community_reactions (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  author_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
+  post_id uuid REFERENCES community_posts(id) ON DELETE CASCADE,
+  article_id uuid REFERENCES articles(id) ON DELETE CASCADE,
+  reaction text NOT NULL DEFAULT 'like',
+  created_at timestamptz NOT NULL DEFAULT now(),
+  UNIQUE(author_id, post_id, article_id, reaction)
+);
+
+CREATE INDEX IF NOT EXISTS idx_community_posts_author ON community_posts(author_id);
+CREATE INDEX IF NOT EXISTS idx_community_posts_status ON community_posts(status);
+CREATE INDEX IF NOT EXISTS idx_community_comments_post ON community_comments(post_id);
+CREATE INDEX IF NOT EXISTS idx_community_comments_article ON community_comments(article_id);
+CREATE INDEX IF NOT EXISTS idx_community_reactions_post ON community_reactions(post_id);
+CREATE INDEX IF NOT EXISTS idx_community_reactions_article ON community_reactions(article_id);
+
+ALTER TABLE community_posts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE community_comments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE community_reactions ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "community_posts_public_read" ON community_posts
+  FOR SELECT TO anon, authenticated
+  USING (status = 'published');
+
+CREATE POLICY "community_posts_owner_insert" ON community_posts
+  FOR INSERT TO authenticated
+  WITH CHECK (auth.uid() = author_id);
+
+CREATE POLICY "community_posts_owner_update" ON community_posts
+  FOR UPDATE TO authenticated
+  USING (auth.uid() = author_id)
+  WITH CHECK (auth.uid() = author_id);
+
+CREATE POLICY "community_comments_public_read" ON community_comments
+  FOR SELECT TO anon, authenticated
+  USING (status = 'published');
+
+CREATE POLICY "community_comments_owner_insert" ON community_comments
+  FOR INSERT TO authenticated
+  WITH CHECK (auth.uid() = author_id);
+
+CREATE POLICY "community_reactions_public_read" ON community_reactions
+  FOR SELECT TO anon, authenticated
+  USING (true);
+
+CREATE POLICY "community_reactions_owner_insert" ON community_reactions
+  FOR INSERT TO authenticated
+  WITH CHECK (auth.uid() = author_id);
