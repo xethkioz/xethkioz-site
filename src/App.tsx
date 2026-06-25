@@ -12,6 +12,7 @@ import ScienceLab from './pages/ScienceLab'
 import News from './pages/News'
 import ArticlePage from './pages/ArticlePage'
 import Streaming from './pages/Streaming'
+import ChatOverlayPage from './pages/ChatOverlayPage'
 import Media from './pages/Media'
 import Community from './pages/Community'
 import CommunityFeature from './pages/CommunityFeature'
@@ -38,6 +39,7 @@ export default function App() {
           <Route path="/news" element={<News />} />
           <Route path="/article/:slug" element={<ArticlePage />} />
           <Route path="/streaming" element={<Streaming />} />
+          <Route path="/streaming/chat-overlay" element={<ChatOverlayPage />} />
           <Route path="/media" element={<Media />} />
           <Route path="/community" element={<Community />} />
           <Route path="/community/:featureSlug" element={<CommunityFeature />} />

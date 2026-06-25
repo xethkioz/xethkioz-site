@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { supabase } from './supabase'
 import type { Article, Category, Stream, MediaItem, SocialLink, Author } from './types'
+import { fallbackArticles, fallbackCategories, fallbackStreams, fallbackMedia, fallbackSocialLinks, fallbackAuthors } from './mockData'
 
 interface QueryState<T> {
   data: T
@@ -76,15 +77,16 @@ export function useArticles(opts?: {
       return query
     })
 
-    if (error) {
-      setState({ data: [], loading: false, error })
-      return
-    }
-
-    let result = (data as Article[]) || []
+    let result = ((data as Article[]) || [])
+    if (error || result.length === 0) result = fallbackArticles
+    if (currentOpts.featured) result = result.filter((a) => a.is_featured)
+    if (currentOpts.trending) result = result.filter((a) => a.is_trending)
+    if (currentOpts.editorsPick) result = result.filter((a) => a.is_editors_pick)
+    if (currentOpts.popular) result = result.filter((a) => a.is_popular)
     if (currentOpts.categorySlug) result = result.filter((a) => a.category?.slug === currentOpts.categorySlug)
     if (currentOpts.portal) result = result.filter((a) => a.category?.portal === currentOpts.portal)
     if (currentOpts.authorSlug) result = result.filter((a) => a.author?.slug === currentOpts.authorSlug)
+    if (currentOpts.limit) result = result.slice(0, currentOpts.limit)
 
     setState({ data: result, loading: false, error: null })
   }, [optsKey])
@@ -120,7 +122,7 @@ export function useArticle(slug?: string) {
         .single()
     )
 
-    setState({ data: data as Article | null, loading: false, error })
+    setState({ data: (data as Article | null) || fallbackArticles.find((a) => a.slug === slug) || null, loading: false, error: null })
   }, [slug])
 
   useEffect(() => {
@@ -140,7 +142,7 @@ export function useCategories(portal?: string) {
       if (portal) query = query.eq('portal', portal)
       return query
     })
-    setState({ data: (data as Category[]) || [], loading: false, error })
+    setState({ data: ((data as Category[]) || []).length ? (data as Category[]) : fallbackCategories.filter((c) => !portal || c.portal === portal), loading: false, error: null })
   }, [portal])
 
   useEffect(() => {
@@ -156,7 +158,7 @@ export function useAuthors() {
   const fetchData = useCallback(async () => {
     setState((s) => ({ ...s, loading: true, error: null }))
     const { data, error } = await withRetry(async () => supabase.from('authors').select('*').order('name'))
-    setState({ data: (data as Author[]) || [], loading: false, error })
+    setState({ data: ((data as Author[]) || []).length ? (data as Author[]) : fallbackAuthors, loading: false, error: null })
   }, [])
 
   useEffect(() => {
@@ -177,7 +179,7 @@ export function useAuthor(slug?: string) {
 
     setState((s) => ({ ...s, loading: true, error: null }))
     const { data, error } = await withRetry(async () => supabase.from('authors').select('*').eq('slug', slug).single())
-    setState({ data: data as Author | null, loading: false, error })
+    setState({ data: (data as Author | null) || fallbackAuthors.find((a) => a.slug === slug) || null, loading: false, error: null })
   }, [slug])
 
   useEffect(() => {
@@ -203,7 +205,13 @@ export function useStreams(opts?: { platform?: string; featured?: boolean; live?
       return query
     })
 
-    setState({ data: (data as Stream[]) || [], loading: false, error })
+    
+    let result = ((data as Stream[]) || [])
+    if (error || result.length === 0) result = fallbackStreams
+    if (currentOpts.platform) result = result.filter((s) => s.platform === currentOpts.platform)
+    if (currentOpts.featured) result = result.filter((s) => s.is_featured)
+    if (currentOpts.live) result = result.filter((s) => s.is_live)
+    setState({ data: result, loading: false, error: null })
   }, [optsKey])
 
   useEffect(() => {
@@ -223,7 +231,11 @@ export function useMedia(type?: string) {
       if (type) query = query.eq('type', type)
       return query
     })
-    setState({ data: (data as MediaItem[]) || [], loading: false, error })
+    
+    let result = ((data as MediaItem[]) || [])
+    if (error || result.length === 0) result = fallbackMedia
+    if (type) result = result.filter((m) => m.type === type)
+    setState({ data: result, loading: false, error: null })
   }, [type])
 
   useEffect(() => {
@@ -239,7 +251,7 @@ export function useSocialLinks() {
   const fetchData = useCallback(async () => {
     setState((s) => ({ ...s, loading: true, error: null }))
     const { data, error } = await withRetry(async () => supabase.from('social_links').select('*').order('sort_order'))
-    setState({ data: (data as SocialLink[]) || [], loading: false, error })
+    setState({ data: ((data as SocialLink[]) || []).length ? (data as SocialLink[]) : fallbackSocialLinks, loading: false, error: null })
   }, [])
 
   useEffect(() => {

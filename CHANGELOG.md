@@ -24,3 +24,21 @@
 - Added clearer signup message explaining email confirmation and spam folder.
 - Added Supabase email redirect target for account confirmation.
 - Updated site version to v3.6.2.
+
+
+## [4.0.0-alpha.1] - 2026-06-25
+
+### Added
+- Chat Overlay visual para streaming y nueva ruta `/streaming/chat-overlay`.
+- Fallback editorial para noticias por sector: gaming, tecnología, ciencia, IA y streaming.
+- Fallback multimedia con miniaturas SVG para videos, streams y overlay.
+- Links sociales reales centralizados en `siteConfig.ts`.
+- Documentación de implementación v4 alpha 1.
+
+### Changed
+- Versión del proyecto actualizada a `4.0.0-alpha.1`.
+- Página Streaming reforzada con accesos a Kick, Twitch y overlay.
+- Páginas de portal reforzadas con bloques introductorios.
+
+### Notes
+- No se incluye `.env`, `.git`, `node_modules` ni `dist` en el paquete entregable.

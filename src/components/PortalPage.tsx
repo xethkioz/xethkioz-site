@@ -22,6 +22,18 @@ export default function PortalPage({ portal, title, emoji, description, accent }
     <div className="animate-fade-in max-w-7xl mx-auto px-4 sm:px-6 py-8">
       <SEO title={title} description={description} />
       <div className="text-center mb-10"><div className="text-5xl mb-3">{emoji}</div><h1 className={`font-display text-3xl md:text-5xl font-bold mb-3 ${at}`}>{title}</h1><p className="text-gray-400 max-w-2xl mx-auto text-sm md:text-base">{description}</p></div>
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+        {[
+          ['Noticias', 'Actualidad curada para la comunidad XETHKIOZ.'],
+          ['Análisis', 'Contexto, opinión y mirada gamer adulta.'],
+          ['Multimedia', 'Imágenes, videos y contenido listo para redes.'],
+        ].map(([h, p]) => (
+          <div key={h} className="glass border border-white/10 rounded-2xl p-5 card-hover">
+            <h2 className="font-display text-lg font-bold text-white mb-2">{h}</h2>
+            <p className="text-sm text-gray-400">{p}</p>
+          </div>
+        ))}
+      </section>
       {catLoading ? <div className="flex justify-center gap-2 mb-10">{[...Array(4)].map((_, i) => <div key={i} className="skeleton h-10 w-24 rounded-full skeleton-shimmer" />)}</div> : categories.length > 0 && (
         <div className="flex flex-wrap justify-center gap-2 mb-10">
           <button onClick={() => setActiveCategory(null)} className={`px-4 py-2 text-sm font-medium rounded-full border transition-all ${!activeCategory ? `${ac} ${ab}` : 'border-white/10 text-gray-400 hover:text-white'}`}>{t.news.all}</button>
