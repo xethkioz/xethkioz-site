@@ -1,4 +1,4 @@
-export interface Category { id: string; name: string; slug: string; description: string | null; icon: string | null; portal: 'gaming' | 'tech' | 'science' | 'streaming' | 'community'; sort_order: number }
+export interface Category { id: string; name: string; slug: string; description: string | null; icon: string | null; portal: 'gaming' | 'tech' | 'science' | 'streaming' | 'community' | 'green-node' | 'ai-lab' | 'creator-studio'; sort_order: number }
 export interface Author { id: string; name: string; slug: string; bio: string | null; avatar_url: string | null; role: string; created_at?: string }
 export interface Article {
   id: string; title: string; slug: string; excerpt: string | null; content: string; cover_image: string | null;
@@ -12,3 +12,25 @@ export interface MediaItem { id: string; title: string; type: 'image' | 'video' 
 export interface SocialLink { id: string; platform: string; handle: string; url: string; followers: string | null; icon: string; sort_order: number }
 export interface ChatRoom { id: string; name: string; icon: string; description: string; color: 'orange' | 'neon' | 'green' | 'red' }
 export interface ChatMessage { id: string; room: string; user: string; role: 'host' | 'mod' | 'member' | 'guest'; text: string; created_at: string }
+
+
+export interface ScienceReport {
+  id: string
+  title: string
+  slug: string
+  summary: string
+  field: 'Astronomía' | 'Medicina' | 'Biotecnología' | 'Física' | 'IA Científica' | 'Ambiente' | 'Espacio'
+  evidence_level: 'Divulgación' | 'Informe' | 'Paper revisado' | 'Preprint' | 'Fuente institucional'
+  source_name: string
+  source_url: string
+  published_at: string
+}
+
+export interface NetworkPortal {
+  id: string
+  name: string
+  path: string
+  status: 'core' | 'formal' | 'hidden' | 'branch' | 'planned'
+  accent: string
+  description: string
+}

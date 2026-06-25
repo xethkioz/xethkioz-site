@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import { LangProvider } from './lib/LangContext'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -26,14 +26,32 @@ import AuthorProfile from './pages/AuthorProfile'
 import Admin from './pages/Admin'
 import CmsStudio from './pages/CmsStudio'
 import LiveChecklist from './pages/LiveChecklist'
+import NewsEngine from './pages/NewsEngine'
+import RolesDashboard from './pages/RolesDashboard'
+import GreenNode from './pages/GreenNode'
+import Network from './pages/Network'
+import ContentSystem from './pages/ContentSystem'
+import FinalQA from './pages/FinalQA'
 import NotFound from './pages/NotFound'
 import ComingSoon from './pages/ComingSoon'
 import FloatingCommunityChat from './components/FloatingCommunityChat'
-export default function App() {
+import WispPortal from './components/WispPortal'
+
+function AppShell() {
+  const location = useLocation()
+  const isGreenNode = location.pathname === '/green-node'
+  const isScienceLab = location.pathname === '/science'
+  const isIsolatedPortal = isGreenNode || isScienceLab
+  const hideMainChrome = isIsolatedPortal
+
   return (
-    <LangProvider>
-      <AnimatedBackground /><Analytics /><ScrollToTop /><Header />
-      <main id="main-content" className="min-h-screen pt-16 md:pt-20">
+    <>
+      {!isGreenNode && <AnimatedBackground />}
+      <Analytics />
+      <ScrollToTop />
+      {!hideMainChrome && <Header />}
+
+      <main id="main-content" className={`min-h-screen ${hideMainChrome ? '' : 'pt-16 md:pt-20'}`}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/gaming" element={<GamingHub />} />
@@ -56,13 +74,29 @@ export default function App() {
           <Route path="/author/:slug" element={<AuthorProfile />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/cms" element={<CmsStudio />} />
+          <Route path="/news-engine" element={<NewsEngine />} />
+          <Route path="/roles" element={<RolesDashboard />} />
+          <Route path="/green-node" element={<GreenNode />} />
+          <Route path="/network" element={<Network />} />
+          <Route path="/content-system" element={<ContentSystem />} />
+          <Route path="/qa" element={<FinalQA />} />
           <Route path="/live-checklist" element={<LiveChecklist />} />
           <Route path="/coming-soon" element={<ComingSoon />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
-      <Footer />
+
+      {!hideMainChrome && <Footer />}
       <FloatingCommunityChat />
+      {!isIsolatedPortal && <WispPortal />}
+    </>
+  )
+}
+
+export default function App() {
+  return (
+    <LangProvider>
+      <AppShell />
     </LangProvider>
   )
 }

@@ -1,8 +1,37 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { useLang } from '../lib/LangContext'
 import Logo from './Logo'
-import type { Lang } from '../lib/i18n'
+import { type Lang } from '../lib/i18n'
+import { useLang } from '../lib/LangContext'
+
+const primaryNav = [
+  { to: '/', labelKey: 'home', fallback: 'Inicio' },
+  { to: '/gaming', labelKey: 'gaming', fallback: 'Gaming & Tech' },
+  { to: '/science', labelKey: null, fallback: 'Science Lab' },
+  { to: '/network', labelKey: null, fallback: 'Network' },
+  { to: '/streaming', labelKey: 'streaming', fallback: 'Streaming' },
+  { to: '/community', labelKey: 'community', fallback: 'Comunidad' },
+]
+
+const moreNav = [
+  { to: '/news', labelKey: 'news', fallback: 'Noticias' },
+  { to: '/tech', labelKey: 'tech', fallback: 'Tech Lab' },
+  { to: '/media', labelKey: 'media', fallback: 'Media' },
+  { to: '/content-system', labelKey: null, fallback: 'Content OS' },
+  { to: '/news-engine', labelKey: null, fallback: 'Fuentes' },
+  { to: '/roles', labelKey: null, fallback: 'Roles' },
+  { to: '/cms', labelKey: null, fallback: 'CMS Studio' },
+  { to: '/qa', labelKey: null, fallback: 'QA' },
+  { to: '/about', labelKey: 'about', fallback: 'About' },
+  { to: '/contact', labelKey: 'contact', fallback: 'Contacto' },
+  { to: '/support', labelKey: null, fallback: 'Apoyar' },
+]
+
+type NavEntry = {
+  to: string
+  labelKey: string | null
+  fallback: string
+}
 
 export default function Header() {
   const { lang, setLang, t } = useLang()
@@ -10,6 +39,7 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [langOpen, setLangOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [moreOpen, setMoreOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const location = useLocation()
 
@@ -24,27 +54,25 @@ export default function Header() {
     setMobileOpen(false)
     setLangOpen(false)
     setSearchOpen(false)
-  }, [location.pathname])
+    setMoreOpen(false)
 
-  const navItems = [
-    { to: '/', label: t.nav.home },
-    { to: '/gaming', label: t.nav.gaming },
-    { to: '/tech', label: t.nav.tech },
-    { to: '/science', label: t.nav.science },
-    { to: '/news', label: t.nav.news },
-    { to: '/streaming', label: t.nav.streaming },
-    { to: '/media', label: t.nav.media },
-    { to: '/cms', label: 'CMS' },
-    { to: '/community', label: t.nav.community },
-    { to: '/about', label: t.nav.about },
-    { to: '/contact', label: t.nav.contact },
-    { to: '/support', label: 'Apoyar' },
-  ]
+    if (location.pathname !== '/green-node') {
+      try {
+        window.sessionStorage.removeItem('xethkioz-green-node-portal-open')
+      } catch {}
+    }
+  }, [location.pathname])
 
   const langLabels: Record<Lang, string> = {
     es: '🇪🇸 ES',
     en: '🇺🇸 EN',
     zh: '🇨🇳 中文',
+  }
+
+  const getLabel = (item: NavEntry) => {
+    if (!item.labelKey) return item.fallback
+    const nav = t.nav as Record<string, string>
+    return nav[item.labelKey] || item.fallback
   }
 
   const handleSearch = (e: React.FormEvent) => {
@@ -53,10 +81,23 @@ export default function Header() {
     if (query) window.location.href = `/news?q=${encodeURIComponent(query)}`
   }
 
+  const navClass = ({ isActive }: { isActive: boolean }) =>
+    `px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
+      isActive ? 'text-orange neon-text-orange bg-orange/5' : 'text-gray-300 hover:text-white hover:bg-white/5'
+    }`
+
+  const renderNavLink = (item: NavEntry) => (
+    <NavLink key={item.to} to={item.to} end={item.to === '/'} className={navClass}>
+      {getLabel(item)}
+    </NavLink>
+  )
+
+  const moreActive = useMemo(() => moreNav.some((item) => location.pathname === item.to), [location.pathname])
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'glass-strong shadow-lg shadow-black/50 border-b border-white/10' : 'bg-ink/70 md:bg-transparent'
+        scrolled ? 'glass-strong shadow-lg shadow-black/50 border-b border-white/10' : 'bg-ink/80 md:bg-ink/35'
       }`}
     >
       <a
@@ -72,21 +113,44 @@ export default function Header() {
             <Logo size="md" className="hover:opacity-90 transition-opacity" />
           </Link>
 
-          <nav className="hidden xl:flex items-center gap-0.5" aria-label="Primary navigation">
-            {navItems.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.to === '/'}
-                className={({ isActive }) =>
-                  `px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
-                    isActive ? 'text-orange neon-text-orange' : 'text-gray-300 hover:text-white hover:bg-white/5'
-                  }`
-                }
+          <nav className="hidden lg:flex items-center gap-1" aria-label="Primary navigation">
+            {primaryNav.map(renderNavLink)}
+
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setMoreOpen((v) => !v)}
+                className={`px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
+                  moreActive || moreOpen ? 'text-neon bg-neon/10' : 'text-gray-300 hover:text-white hover:bg-white/5'
+                }`}
+                aria-expanded={moreOpen}
               >
-                {item.label}
-              </NavLink>
-            ))}
+                Más ▾
+              </button>
+              {moreOpen && (
+                <div className="absolute right-0 mt-3 w-64 overflow-hidden rounded-2xl border border-white/10 bg-ink-300/98 p-2 shadow-2xl shadow-black/70 backdrop-blur-xl">
+                  <p className="px-3 pb-2 pt-1 text-[10px] font-black uppercase tracking-[0.22em] text-gray-500">XETHKIOZ Network</p>
+                  <div className="grid grid-cols-1 gap-1">
+                    {moreNav.map((item) => (
+                      <NavLink
+                        key={item.to}
+                        to={item.to}
+                        className={({ isActive }) =>
+                          `rounded-xl px-3 py-2 text-sm transition-all ${
+                            isActive ? 'bg-orange/15 text-orange' : 'text-gray-300 hover:bg-white/5 hover:text-white'
+                          }`
+                        }
+                      >
+                        {getLabel(item)}
+                      </NavLink>
+                    ))}
+                  </div>
+                  <div className="mt-2 rounded-xl border border-green-400/15 bg-green-400/5 px-3 py-2 text-[11px] text-green-300/75">
+                    Green Node está oculto. Seguí el Wisp verde.
+                  </div>
+                </div>
+              )}
+            </div>
           </nav>
 
           <div className="flex items-center gap-2">
@@ -104,52 +168,36 @@ export default function Header() {
             <div className="relative">
               <button
                 onClick={() => setLangOpen((v) => !v)}
-                className="flex items-center gap-1 px-2.5 py-2 text-sm font-medium text-gray-300 hover:text-white rounded-md hover:bg-white/5 transition-all"
-                aria-label="Change language"
+                className="px-2.5 py-2 text-sm text-gray-300 hover:text-white transition-colors rounded-md hover:bg-white/5"
+                aria-label="Language selector"
                 aria-expanded={langOpen}
               >
                 {langLabels[lang]}
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
               </button>
-
               {langOpen && (
-                <div className="absolute right-0 mt-2 w-32 glass-strong rounded-lg shadow-xl border border-white/10 overflow-hidden z-50">
-                  {(Object.keys(langLabels) as Lang[]).map((language) => (
+                <div className="absolute right-0 top-full mt-2 min-w-[140px] rounded-lg glass-strong border border-white/10 overflow-hidden shadow-xl">
+                  {(['es', 'en', 'zh'] as Lang[]).map((l) => (
                     <button
-                      key={language}
-                      onClick={() => {
-                        setLang(language)
-                        setLangOpen(false)
-                      }}
-                      className={`w-full px-4 py-2.5 text-left text-sm hover:bg-white/10 transition-colors ${
-                        lang === language ? 'text-orange' : 'text-gray-300'
+                      key={l}
+                      onClick={() => { setLang(l); setLangOpen(false) }}
+                      className={`w-full px-4 py-2 text-left text-sm transition-colors ${
+                        lang === l ? 'bg-orange/20 text-orange' : 'text-gray-300 hover:bg-white/5 hover:text-white'
                       }`}
                     >
-                      {langLabels[language]}
+                      {langLabels[l]}
                     </button>
                   ))}
                 </div>
               )}
             </div>
 
-            <Link to="/creator" className="hidden md:inline-flex px-3 py-2 rounded-md text-sm font-semibold text-orange border border-orange/30 hover:bg-orange/10 transition-all">
-              Crear cuenta
-            </Link>
-
-            <Link to="/support" className="hidden md:inline-flex px-3 py-2 rounded-md text-sm font-semibold text-neon border border-neon/30 hover:bg-neon/10 transition-all">
-              Apoyar
-            </Link>
-
             <button
               onClick={() => setMobileOpen((v) => !v)}
-              className="xl:hidden p-2 text-gray-300 hover:text-white rounded-md hover:bg-white/5 transition-colors"
-              aria-label="Menu"
+              className="lg:hidden p-2 text-gray-300 hover:text-white rounded-md hover:bg-white/5"
+              aria-label="Toggle menu"
               aria-expanded={mobileOpen}
-              aria-controls="mobile-navigation"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {mobileOpen ? (
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 ) : (
@@ -161,45 +209,43 @@ export default function Header() {
         </div>
 
         {searchOpen && (
-          <div className="pb-4 animate-fade-in">
-            <form onSubmit={handleSearch} role="search">
-              <label className="sr-only" htmlFor="site-search">
-                {t.search.placeholder}
-              </label>
+          <form onSubmit={handleSearch} className="pb-4 animate-fade-in">
+            <div className="relative">
               <input
-                id="site-search"
                 type="search"
-                autoFocus
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={t.search.placeholder}
-                className="input-field"
+                placeholder="Buscar noticias, gaming, ciencia, IA..."
+                className="input-field pr-12"
+                autoFocus
               />
-            </form>
-          </div>
+              <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-orange hover:text-orange-300">
+                →
+              </button>
+            </div>
+          </form>
         )}
 
         {mobileOpen && (
-          <nav id="mobile-navigation" className="xl:hidden pb-4 animate-fade-in" aria-label="Mobile navigation">
-            <div className="flex flex-col gap-0.5 glass-strong rounded-lg p-3 border border-white/10">
-              {navItems.map((item) => (
+          <nav className="lg:hidden pb-4 animate-fade-in" aria-label="Mobile navigation">
+            <div className="grid grid-cols-2 gap-2">
+              {[...primaryNav, ...moreNav].map((item) => (
                 <NavLink
                   key={item.to}
                   to={item.to}
                   end={item.to === '/'}
                   className={({ isActive }) =>
-                    `px-4 py-2.5 text-sm font-medium rounded-md transition-all ${
-                      isActive ? 'text-orange bg-orange/10' : 'text-gray-300 hover:text-white hover:bg-white/5'
+                    `px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                      isActive ? 'bg-orange/20 text-orange border border-orange/30' : 'text-gray-300 hover:bg-white/5 border border-transparent'
                     }`
                   }
                 >
-                  {item.label}
+                  {getLabel(item)}
                 </NavLink>
               ))}
-              <div className="mt-2 grid grid-cols-1 gap-2 border-t border-white/10 pt-3">
-                <NavLink to="/creator" className="btn-primary text-center text-sm">Crear cuenta / Iniciar sesión</NavLink>
-                <NavLink to="/support" className="btn-secondary text-center text-sm">Patrocinar o donar</NavLink>
-              </div>
+            </div>
+            <div className="mt-3 rounded-xl border border-green-400/15 bg-green-400/5 px-4 py-3 text-xs text-green-300/80">
+              Green Node permanece oculto: buscá el Wisp verde.
             </div>
           </nav>
         )}

@@ -4,6 +4,10 @@ import SEO from '../components/SEO'
 import SafeImage from '../components/SafeImage'
 import { fallbackArticles, fallbackCategories, fallbackMedia } from '../lib/mockData'
 import { SITE_VERSION } from '../lib/siteConfig'
+import DailyNewsSourcesPanel from '../components/DailyNewsSourcesPanel'
+import RoleLadder from '../components/RoleLadder'
+import DatabaseBaselinePanel from '../components/DatabaseBaselinePanel'
+import ContentOpsDashboard from '../components/ContentOpsDashboard'
 
 const checklist = [
   'Título claro y sin clickbait',
@@ -41,7 +45,8 @@ export default function CmsStudio() {
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link to="/admin" className="btn-primary">Ir al Admin protegido</Link>
-              <Link to="/live-checklist" className="btn-secondary">Ver checklist LIVE</Link>
+              <Link to="/content-system" className="btn-secondary">Content OS</Link>
+              <Link to="/live-checklist" className="btn-secondary">Checklist LIVE</Link>
             </div>
           </div>
           <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
@@ -134,6 +139,14 @@ export default function CmsStudio() {
           ))}
         </section>
       )}
+
+
+      <section className="mt-10 space-y-6">
+        <ContentOpsDashboard />
+        <DailyNewsSourcesPanel />
+        <DatabaseBaselinePanel />
+        <RoleLadder />
+      </section>
 
       <section className="mt-10 grid grid-cols-1 md:grid-cols-4 gap-4">
         {categories.slice(0, 8).map((cat) => (

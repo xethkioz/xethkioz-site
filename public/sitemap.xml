@@ -13,4 +13,13 @@
   <url><loc>https://xethkioz.com.ar/about</loc><priority>0.8</priority></url>
   <url><loc>https://xethkioz.com.ar/contact</loc><priority>0.7</priority></url>
   <url><loc>https://xethkioz.com.ar/authors</loc><priority>0.7</priority></url>
+  <url><loc>https://xethkioz.com.ar/network</loc><priority>0.8</priority></url>
+  <url><loc>https://xethkioz.com.ar/news-engine</loc><priority>0.7</priority></url>
+  <url><loc>https://xethkioz.com.ar/content-system</loc><priority>0.7</priority></url>
+  <url><loc>https://xethkioz.com.ar/qa</loc><priority>0.4</priority></url>
+  <url><loc>https://xethkioz.com.ar/roles</loc><priority>0.7</priority></url>
+  <url><loc>https://xethkioz.com.ar/cms</loc><priority>0.6</priority></url>
+  <url><loc>https://xethkioz.com.ar/green-node</loc><priority>0.3</priority></url>
+  <url><loc>https://xethkioz.com.ar/live-checklist</loc><priority>0.5</priority></url>
+  <url><loc>https://xethkioz.com.ar/chat-overlay</loc><priority>0.5</priority></url>
 </urlset>

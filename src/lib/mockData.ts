@@ -12,6 +12,9 @@ export const fallbackCategories: Category[] = [
   { id: 'cat-science', name: 'Ciencia Digital', slug: 'ciencia-digital', description: 'Ciencia, espacio y futuro explicados simple.', icon: '🔬', portal: 'science', sort_order: 1 },
   { id: 'cat-space', name: 'Space', slug: 'space', description: 'Astronomía, exploración espacial y tecnología orbital.', icon: '🚀', portal: 'science', sort_order: 2 },
   { id: 'cat-fake-news', name: 'Fake News', slug: 'fake-news', description: 'Alfabetización digital, verificación y pensamiento crítico.', icon: '🧠', portal: 'science', sort_order: 3 },
+  { id: 'cat-green-node', name: 'Green Node', slug: 'green-node', description: 'Linux, programación, OSINT y ciberseguridad educativa.', icon: '🟢', portal: 'green-node', sort_order: 1 },
+  { id: 'cat-linux', name: 'Linux & Ubuntu', slug: 'linux-ubuntu', description: 'Guías, terminal, distros y cultura open source.', icon: '🐧', portal: 'green-node', sort_order: 2 },
+  { id: 'cat-osint', name: 'OSINT Documental', slug: 'osint-documental', description: 'Análisis responsable de información abierta y verificación.', icon: '🛰️', portal: 'green-node', sort_order: 3 },
   { id: 'cat-streaming', name: 'Streaming', slug: 'streaming', description: 'OBS, Kick, Twitch, YouTube, overlays y directos.', icon: '📺', portal: 'streaming', sort_order: 1 },
   { id: 'cat-community', name: 'Comunidad', slug: 'comunidad', description: 'Chat, rankings, membresías, usuarios y participación.', icon: '💬', portal: 'community', sort_order: 1 },
 ]
@@ -199,4 +202,71 @@ export const starterChatMessages: ChatMessage[] = [
   { id: 'm3', room: 'ia', user: 'Tech Lab', role: 'mod', text: 'La IA puede ayudar a resumir noticias, pero siempre hay que verificar fuentes.', created_at: today },
   { id: 'm4', room: 'science', user: 'Science Lab', role: 'mod', text: 'Nueva sala para ciencia, fake news y pensamiento crítico.', created_at: today },
   { id: 'm5', room: 'streaming', user: 'Stream Desk', role: 'mod', text: 'Probando overlay, escenas y chat para OBS/Kick/Twitch.', created_at: today },
+]
+
+
+export const scienceReports = [
+  {
+    id: 'science-report-001',
+    title: 'IA en medicina: cómo leer avances reales sin caer en titulares exagerados',
+    slug: 'ia-medicina-evidencia',
+    summary: 'Una guía editorial para distinguir estudios preliminares, papers revisados, ensayos clínicos y aplicaciones reales.',
+    field: 'Medicina',
+    evidence_level: 'Informe',
+    source_name: 'Revisión editorial XETHKIOZ Science Lab',
+    source_url: '/science',
+    published_at: '2026-06-25T13:00:00Z',
+  },
+  {
+    id: 'science-report-002',
+    title: 'Starship, Luna y Marte: por qué la exploración espacial vuelve a estar en el centro tecnológico',
+    slug: 'starship-luna-marte',
+    summary: 'Contexto técnico y científico sobre lanzadores reutilizables, costos orbitales y misiones de nueva generación.',
+    field: 'Espacio',
+    evidence_level: 'Fuente institucional',
+    source_name: 'Fuentes espaciales oficiales + análisis XETHKIOZ',
+    source_url: '/science',
+    published_at: '2026-06-25T12:00:00Z',
+  },
+  {
+    id: 'science-report-003',
+    title: 'Fake news científicas: señales para detectar una noticia falsa antes de compartirla',
+    slug: 'fake-news-ciencia',
+    summary: 'Checklist práctico para audiencia general: fuente, evidencia, fecha, autoría, conflicto de interés y consenso.',
+    field: 'IA Científica',
+    evidence_level: 'Divulgación',
+    source_name: 'XETHKIOZ Alfabetización Digital',
+    source_url: '/science',
+    published_at: '2026-06-25T11:00:00Z',
+  },
+]
+
+export const greenNodeEntries = [
+  {
+    id: 'green-node-001',
+    title: 'Ubuntu como puerta de entrada: terminal, paquetes y cultura open source',
+    slug: 'ubuntu-terminal-open-source',
+    excerpt: 'Una guía inicial para entender por qué Linux sigue siendo clave en programación, servidores y seguridad defensiva.',
+    category: 'Linux & Ubuntu',
+    level: 'Visitor',
+    command: 'sudo apt update && sudo apt upgrade',
+  },
+  {
+    id: 'green-node-002',
+    title: 'OSINT responsable: investigar sin invadir, verificar sin acosar',
+    slug: 'osint-responsable',
+    excerpt: 'Principios para analizar información pública con ética, atribución y límites claros.',
+    category: 'OSINT Documental',
+    level: 'Researcher',
+    command: 'whois source && verify --twice',
+  },
+  {
+    id: 'green-node-003',
+    title: 'Teorías, misterios y evidencia: cómo separar documentación de especulación',
+    slug: 'misterios-evidencia',
+    excerpt: 'Green Node permite explorar hipótesis, pero siempre distinguiendo hechos, fuentes y narrativas.',
+    category: 'Conspiracy Research',
+    level: 'Analyst',
+    command: 'grep -R "evidence" /archives',
+  },
 ]

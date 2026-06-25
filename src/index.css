@@ -40,3 +40,159 @@
 .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 @media (max-width: 640px) { .card-hover:hover { transform: none; } }
+
+
+/* XETHKIOZ Network RC1.1 */
+.science-lab-shell {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(56, 189, 248, 0.12), transparent 32%),
+    radial-gradient(circle at 80% 10%, rgba(138, 43, 226, 0.08), transparent 32%),
+    #020617;
+}
+
+.green-node-shell {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(0, 255, 102, 0.12), transparent 34%),
+    linear-gradient(180deg, #000 0%, #020802 45%, #000 100%);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+}
+
+.green-scanlines::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 255, 102, 0.08) 0,
+    rgba(0, 255, 102, 0.08) 1px,
+    transparent 2px,
+    transparent 6px
+  );
+  mix-blend-mode: screen;
+}
+
+.green-node-shell::selection {
+  background: rgba(0, 255, 102, 0.35);
+  color: #d9ffe8;
+}
+
+.green-portal-ring {
+  position: absolute;
+  width: min(78vw, 680px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 255, 102, 0.55);
+  box-shadow:
+    0 0 24px rgba(0, 255, 102, 0.9),
+    inset 0 0 38px rgba(0, 255, 102, 0.55),
+    0 0 120px rgba(0, 255, 102, 0.35);
+  animation: portalOpen 1.45s cubic-bezier(.16,1,.3,1) forwards;
+}
+
+.green-portal-ring-delay {
+  width: min(58vw, 480px);
+  animation-delay: .16s;
+  border-color: rgba(190, 255, 216, 0.65);
+}
+
+@keyframes portalOpen {
+  0% { transform: scale(.18) rotate(0deg); opacity: 0; filter: blur(12px); }
+  35% { opacity: 1; filter: blur(2px); }
+  100% { transform: scale(1.32) rotate(220deg); opacity: .18; filter: blur(0); }
+}
+
+/* RC1.2: wisp access + Green Node terminal polish */
+.green-wisp {
+  animation: wispDrift 5.8s ease-in-out infinite;
+}
+.green-wisp-tail {
+  position: absolute;
+  left: -26px;
+  top: 28px;
+  width: 34px;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(0,255,102,.5), rgba(190,255,216,.92));
+  filter: blur(3px);
+  transform: rotate(-18deg);
+  opacity: .85;
+}
+.green-portal-vortex {
+  position: absolute;
+  width: min(88vw, 760px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    conic-gradient(from 90deg, rgba(0,255,102,.0), rgba(0,255,102,.4), rgba(190,255,216,.85), rgba(0,255,102,.25), rgba(0,0,0,0), rgba(0,255,102,.45), rgba(0,255,102,.0));
+  filter: blur(8px);
+  opacity: .78;
+  animation: portalVortex 1.65s cubic-bezier(.16,1,.3,1) forwards;
+  mask-image: radial-gradient(circle, transparent 35%, #000 37%, #000 56%, transparent 60%);
+}
+@keyframes wispDrift {
+  0%, 100% { transform: translate3d(0,0,0) scale(1); }
+  35% { transform: translate3d(10px,-12px,0) scale(1.04); }
+  68% { transform: translate3d(-6px,6px,0) scale(.98); }
+}
+@keyframes portalVortex {
+  0% { transform: scale(.08) rotate(0deg); opacity: 0; }
+  22% { opacity: .95; }
+  100% { transform: scale(1.55) rotate(540deg); opacity: .12; }
+}
+
+/* RC1.3: Wisp EGG and portal polish */
+.green-wisp::before,
+.green-wisp::after {
+  content: '';
+  position: absolute;
+  inset: -9px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,255,102,.18);
+  animation: wispOrbit 4.2s linear infinite;
+}
+.green-wisp::after {
+  inset: -17px;
+  animation-duration: 6.8s;
+  animation-direction: reverse;
+  border-color: rgba(190,255,216,.12);
+}
+.green-wisp-tail-secondary {
+  left: -18px;
+  top: 38px;
+  width: 25px;
+  opacity: .55;
+  transform: rotate(14deg);
+}
+.green-portal-runes {
+  position: absolute;
+  width: min(82vw, 700px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    repeating-conic-gradient(from 0deg, rgba(0,255,102,.0) 0 7deg, rgba(0,255,102,.28) 8deg 9deg, rgba(0,255,102,0) 10deg 18deg);
+  filter: blur(.5px);
+  opacity: .32;
+  animation: portalRunes 1.7s cubic-bezier(.16,1,.3,1) forwards;
+  mask-image: radial-gradient(circle, transparent 42%, #000 43%, #000 52%, transparent 54%);
+}
+@keyframes wispOrbit {
+  to { transform: rotate(360deg); }
+}
+@keyframes portalRunes {
+  0% { transform: scale(.25) rotate(0deg); opacity: 0; }
+  30% { opacity: .55; }
+  100% { transform: scale(1.25) rotate(-260deg); opacity: .1; }
+}
+@keyframes portalProgress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .green-wisp,
+  .green-wisp::before,
+  .green-wisp::after,
+  .green-portal-ring,
+  .green-portal-vortex,
+  .green-portal-runes { animation: none !important; }
+}

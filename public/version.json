@@ -1,6 +1,7 @@
 {
-  "version": "3.6.2",
-  "release": "Creator Account Hotfix",
-  "buildDate": "2026-06-25",
-  "project": "XETHKIOZ"
+  "version": "4.0.0-rc.1.7",
+  "name": "Content System + Final Network UX QA",
+  "build": "2026-06-25",
+  "stage": "RC",
+  "release": "XETHKIOZ Network Content System + Final QA"
 }

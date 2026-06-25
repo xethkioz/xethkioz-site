@@ -195,3 +195,12 @@ values
 ('version', '{"version":"3.6.4","name":"Auth + Foundation Cleanup"}'),
 ('donations', '{"paypal":"https://www.paypal.com/ncp/payment/5ZYB8NGEGC8AS","mercadopago":"https://link.mercadopago.com.ar/xethkioz","enabled":true}')
 on conflict (key) do update set value = excluded.value, updated_at = now();
+
+-- ============================================================
+-- XETHKIOZ v4.0 RC1.5 baseline note
+-- ============================================================
+-- From this point forward, the canonical additive migration for the network ecosystem is:
+-- supabase/migrations/20260625_rc15_network_database_baseline.sql
+-- It consolidates: network_modules, science_reports/sources, dynamic news attribution,
+-- CMS publication jobs, roles/XP/badges, donor tiers, Green Node unlocks and Wisp events.
+-- Apply the migration after a Supabase backup. Do not drop existing user data.
