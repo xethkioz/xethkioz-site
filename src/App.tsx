@@ -16,6 +16,7 @@ import Media from './pages/Media'
 import Community from './pages/Community'
 import CommunityFeature from './pages/CommunityFeature'
 import CreatorAccount from './pages/CreatorAccount'
+import CreatorDashboard from './pages/CreatorDashboard'
 import About from './pages/About'
 import Contact from './pages/Contact'
 import Support from './pages/Support'
@@ -41,6 +42,7 @@ export default function App() {
           <Route path="/community" element={<Community />} />
           <Route path="/community/:featureSlug" element={<CommunityFeature />} />
           <Route path="/creator" element={<CreatorAccount />} />
+          <Route path="/creator/panel" element={<CreatorDashboard />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/support" element={<Support />} />

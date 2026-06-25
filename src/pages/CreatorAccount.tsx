@@ -1,15 +1,19 @@
-import { FormEvent, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { FormEvent, useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import SEO from '../components/SEO'
 import { supabase } from '../lib/supabase'
 
 type Mode = 'signup' | 'signin'
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
+const SIGNUP_COOLDOWN_MS = 10 * 60 * 1000
+
 export default function CreatorAccount() {
-  const [mode, setMode] = useState<Mode>('signup')
+  const navigate = useNavigate()
+  const [mode, setMode] = useState<Mode>('signin')
   const [status, setStatus] = useState<Status>('idle')
   const [message, setMessage] = useState('')
+  const [alreadyLogged, setAlreadyLogged] = useState(false)
   const [form, setForm] = useState({
     displayName: '',
     username: '',
@@ -18,54 +22,89 @@ export default function CreatorAccount() {
     role: 'Creador de contenido',
   })
 
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session?.user) setAlreadyLogged(true)
+    })
+  }, [])
+
   const update = (field: keyof typeof form, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }))
   }
+
+  const changeMode = (nextMode: Mode) => {
+    setMode(nextMode)
+    setStatus('idle')
+    setMessage('')
+  }
+
+  const cooldownKey = () => `xethkioz_signup_${form.email.trim().toLowerCase()}`
 
   const submit = async (event: FormEvent) => {
     event.preventDefault()
     setStatus('loading')
     setMessage('')
 
+    const email = form.email.trim().toLowerCase()
+    const password = form.password
+
     try {
       if (mode === 'signup') {
+        const lastSignup = Number(localStorage.getItem(cooldownKey()) || '0')
+        const elapsed = Date.now() - lastSignup
+
+        if (lastSignup && elapsed < SIGNUP_COOLDOWN_MS) {
+          const minutes = Math.ceil((SIGNUP_COOLDOWN_MS - elapsed) / 60000)
+          setStatus('error')
+          setMessage(`Ya enviamos una solicitud para este correo. Esperá ${minutes} min antes de volver a intentarlo para evitar correos repetidos.`)
+          return
+        }
+
         const { data, error } = await supabase.auth.signUp({
-          email: form.email,
-          password: form.password,
+          email,
+          password,
           options: {
+            emailRedirectTo: `${window.location.origin}/creator/panel`,
             data: {
-              display_name: form.displayName,
-              username: form.username,
+              display_name: form.displayName.trim(),
+              username: form.username.trim(),
               role: form.role,
             },
           },
         })
 
         if (error) throw error
+        localStorage.setItem(cooldownKey(), String(Date.now()))
 
         if (data.user) {
           await supabase.from('creator_profiles').upsert({
             id: data.user.id,
-            display_name: form.displayName,
-            username: form.username,
-            email: form.email,
+            display_name: form.displayName.trim(),
+            username: form.username.trim(),
+            email,
             role: form.role,
-            status: 'pending',
+            status: data.session ? 'active' : 'pending_email_confirmation',
           })
         }
 
         setStatus('success')
-        setMessage('Cuenta creada. Revisá tu correo para confirmar el acceso si Supabase lo solicita.')
+
+        if (data.session) {
+          setMessage('Cuenta creada e iniciada correctamente. Entrando al panel...')
+          setAlreadyLogged(true)
+          setTimeout(() => navigate('/creator/panel'), 700)
+        } else {
+          setMessage('Cuenta creada. Revisá tu correo y confirmá el acceso. Si cae en Spam, marcá “No es spam”. Evitá tocar Crear cuenta otra vez para no reenviar correos.')
+        }
       } else {
-        const { error } = await supabase.auth.signInWithPassword({
-          email: form.email,
-          password: form.password,
-        })
+        const { error } = await supabase.auth.signInWithPassword({ email, password })
 
         if (error) throw error
 
         setStatus('success')
-        setMessage('Sesión iniciada correctamente. Ya podés volver al panel de comunidad.')
+        setAlreadyLogged(true)
+        setMessage('Sesión iniciada correctamente. Entrando al panel...')
+        setTimeout(() => navigate('/creator/panel'), 500)
       }
     } catch (error) {
       setStatus('error')
@@ -88,23 +127,30 @@ export default function CreatorAccount() {
           Panel de Creador
         </h1>
         <p className="text-gray-400 max-w-2xl mx-auto">
-          Registrá tu perfil para participar en la comunidad, publicar ideas, preparar contenido y activar futuras funciones.
+          Iniciá sesión o registrá tu perfil para participar en la comunidad, preparar contenido y activar futuras funciones.
         </p>
       </div>
+
+      {alreadyLogged && (
+        <div className="glass border border-green-500/30 rounded-2xl p-4 mb-6 text-green-300 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+          <span>Ya tenés una sesión activa en XETHKIOZ.</span>
+          <Link to="/creator/panel" className="btn-primary text-center">Ir al panel</Link>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-start">
         <section className="lg:col-span-3 glass border border-orange/20 rounded-2xl p-6 md:p-8">
           <div className="flex gap-2 mb-6">
             <button
               type="button"
-              onClick={() => setMode('signup')}
+              onClick={() => changeMode('signup')}
               className={`px-4 py-2 rounded-full text-sm font-semibold border transition-all ${mode === 'signup' ? 'border-orange text-orange bg-orange/10' : 'border-white/10 text-gray-400 hover:text-white'}`}
             >
               Crear cuenta
             </button>
             <button
               type="button"
-              onClick={() => setMode('signin')}
+              onClick={() => changeMode('signin')}
               className={`px-4 py-2 rounded-full text-sm font-semibold border transition-all ${mode === 'signin' ? 'border-neon text-neon bg-neon/10' : 'border-white/10 text-gray-400 hover:text-white'}`}
             >
               Iniciar sesión
@@ -114,6 +160,9 @@ export default function CreatorAccount() {
           <form onSubmit={submit} className="space-y-4">
             {mode === 'signup' && (
               <>
+                <div className="rounded-lg border border-orange/30 bg-orange/10 p-3 text-sm text-orange">
+                  Tocá Crear cuenta una sola vez. Si el correo de confirmación cae en Spam, marcá “No es spam” y confirmá desde ahí.
+                </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1.5">Nombre visible</label>
                   <input
@@ -182,8 +231,8 @@ export default function CreatorAccount() {
               </div>
             )}
 
-            <button type="submit" disabled={status === 'loading'} className="btn-primary w-full disabled:opacity-50">
-              {status === 'loading' ? 'Procesando...' : mode === 'signup' ? 'Crear mi cuenta de creador' : 'Entrar al panel'}
+            <button type="submit" disabled={status === 'loading' || (mode === 'signup' && status === 'success')} className="btn-primary w-full disabled:opacity-50">
+              {status === 'loading' ? 'Procesando...' : mode === 'signup' ? status === 'success' ? 'Solicitud enviada' : 'Crear mi cuenta de creador' : 'Entrar al panel'}
             </button>
           </form>
         </section>
@@ -192,9 +241,9 @@ export default function CreatorAccount() {
           <div className="glass border border-white/10 rounded-2xl p-6">
             <h2 className="font-display text-lg font-bold text-white mb-3">Qué se activa con tu cuenta</h2>
             <ul className="space-y-3 text-sm text-gray-400">
-              <li>✅ Perfil de creador preparado para comunidad.</li>
+              <li>✅ Perfil de usuario preparado.</li>
               <li>✅ Base para comentarios, foros y rankings.</li>
-              <li>✅ Futuro acceso a contenido premium y eventos.</li>
+              <li>✅ Futuro acceso a chat flotante y eventos.</li>
               <li>✅ Integración con Supabase Auth.</li>
             </ul>
           </div>
@@ -202,7 +251,7 @@ export default function CreatorAccount() {
           <div className="glass border border-neon/20 rounded-2xl p-6">
             <h2 className="font-display text-lg font-bold text-neon mb-3">Estado</h2>
             <p className="text-sm text-gray-400">
-              Esta es la primera versión funcional del panel. Las funciones sociales avanzadas quedan preparadas para la siguiente fase.
+              v3.6.3: el login abre el panel, permite editar perfil y mejora el control de confirmación por email.
             </p>
             <Link to="/community" className="inline-flex mt-4 text-sm text-orange hover:neon-text-orange">
               Volver a Comunidad →

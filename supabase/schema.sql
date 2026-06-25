@@ -138,3 +138,22 @@ CREATE POLICY "community_reactions_public_read" ON community_reactions
 CREATE POLICY "community_reactions_owner_insert" ON community_reactions
   FOR INSERT TO authenticated
   WITH CHECK (auth.uid() = author_id);
+
+-- XETHKIOZ v3.6.3 Auth/Profile Hotfix
+-- Allows a logged-in user to read their own profile even when email confirmation is pending.
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public'
+      AND tablename = 'creator_profiles'
+      AND policyname = 'creator_profiles_owner_read'
+  ) THEN
+    CREATE POLICY "creator_profiles_owner_read" ON creator_profiles
+      FOR SELECT TO authenticated
+      USING (auth.uid() = id);
+  END IF;
+END $$;
+
+-- Keeps profile usernames easier to manage during early community setup.
+CREATE INDEX IF NOT EXISTS idx_creator_profiles_email ON creator_profiles(email);
