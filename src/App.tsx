@@ -14,6 +14,8 @@ import ArticlePage from './pages/ArticlePage'
 import Streaming from './pages/Streaming'
 import Media from './pages/Media'
 import Community from './pages/Community'
+import CommunityFeature from './pages/CommunityFeature'
+import CreatorAccount from './pages/CreatorAccount'
 import About from './pages/About'
 import Contact from './pages/Contact'
 import Authors from './pages/Authors'
@@ -25,7 +27,7 @@ export default function App() {
   return (
     <LangProvider>
       <AnimatedBackground /><Analytics /><ScrollToTop /><Header />
-      <main className="min-h-screen pt-16 md:pt-18">
+      <main id="main-content" className="min-h-screen pt-16 md:pt-20">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/gaming" element={<GamingHub />} />
@@ -36,6 +38,8 @@ export default function App() {
           <Route path="/streaming" element={<Streaming />} />
           <Route path="/media" element={<Media />} />
           <Route path="/community" element={<Community />} />
+          <Route path="/community/:featureSlug" element={<CommunityFeature />} />
+          <Route path="/creator" element={<CreatorAccount />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/authors" element={<Authors />} />

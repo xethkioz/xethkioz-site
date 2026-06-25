@@ -7,7 +7,7 @@ export default function Footer() {
   const quickLinks = [{ to: '/news', label: t.nav.news }, { to: '/streaming', label: t.nav.streaming }, { to: '/media', label: t.nav.media }, { to: '/community', label: t.nav.community }, { to: '/about', label: t.nav.about }, { to: '/contact', label: t.nav.contact }, { to: '/authors', label: t.author.title }]
   const portals = [{ to: '/gaming', label: t.nav.gaming }, { to: '/tech', label: t.nav.tech }, { to: '/science', label: t.nav.science }]
   const monetization = [t.footer.store, t.footer.affiliateLinks, t.footer.sponsored, t.footer.donations, t.footer.premium, t.footer.podcast]
-  const socials = [{ name: 'Threads', url: 'https://threads.net/@xethkioz' }, { name: 'Instagram', url: 'https://instagram.com/xethkioz' }, { name: 'TikTok', url: 'https://tiktok.com/@xethkioz' }, { name: 'YouTube', url: 'https://youtube.com/@xethkioz' }, { name: 'Twitch', url: 'https://twitch.tv/xethkioz' }, { name: 'Kick', url: 'https://kick.com/xethkioz' }]
+  const socials = [{ name: 'Threads', url: 'https://www.threads.com/@xethkioz' }, { name: 'Instagram', url: 'https://www.instagram.com/xethkioz' }, { name: 'TikTok', url: 'https://www.tiktok.com/@xethkioz0' }, { name: 'YouTube', url: 'https://www.youtube.com/@xethkioz' }, { name: 'Twitch', url: 'https://www.twitch.tv/xethkioz' }, { name: 'Kick', url: 'https://kick.com/xethkioz' }]
   return (
     <footer className="relative mt-20 border-t border-white/10 bg-ink-300">
       <div className="absolute inset-0 grid-bg opacity-20" />

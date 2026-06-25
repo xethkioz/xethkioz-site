@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { supabase } from './supabase'
 import type { Article, Category, Stream, MediaItem, SocialLink, Author } from './types'
 
@@ -9,28 +9,34 @@ interface QueryState<T> {
 }
 
 const MAX_RETRIES = 3
-const RETRY_DELAY = 1000
+const RETRY_DELAY = 800
+
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
 
 async function withRetry<T>(
   operation: () => Promise<{ data: T | null; error: { message: string } | null }>,
   retries = MAX_RETRIES
 ): Promise<{ data: T | null; error: Error | null }> {
   let lastError: Error | null = null
-  for (let attempt = 0; attempt < retries; attempt++) {
+
+  for (let attempt = 0; attempt < retries; attempt += 1) {
     try {
       const result = await operation()
-      if (result.error) {
-        throw new Error(result.error.message)
-      }
+      if (result.error) throw new Error(result.error.message)
       return { data: result.data, error: null }
     } catch (err) {
-      lastError = err instanceof Error ? err : new Error('Unknown error')
-      if (attempt < retries - 1) {
-        await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY * (attempt + 1)))
-      }
+      lastError = err instanceof Error ? err : new Error('Unknown Supabase error')
+      if (attempt < retries - 1) await delay(RETRY_DELAY * (attempt + 1))
     }
   }
+
   return { data: null, error: lastError }
+}
+
+function normalizeSearch(value?: string) {
+  return value?.trim().replace(/[%_,]/g, '')
 }
 
 export function useArticles(opts?: {
@@ -45,49 +51,54 @@ export function useArticles(opts?: {
   search?: string
 }) {
   const [state, setState] = useState<QueryState<Article[]>>({ data: [], loading: true, error: null })
-  const optsRef = useRef(JSON.stringify(opts))
+  const optsKey = useMemo(() => JSON.stringify(opts ?? {}), [opts])
 
   const fetchData = useCallback(async () => {
+    const currentOpts = JSON.parse(optsKey) as NonNullable<typeof opts>
     setState((s) => ({ ...s, loading: true, error: null }))
+
     const { data, error } = await withRetry(async () => {
-      let q = supabase
+      let query = supabase
         .from('articles')
         .select('*, category:categories(*), author:authors(*)')
         .eq('status', 'published')
         .order('published_at', { ascending: false })
 
-      if (opts?.limit) q = q.limit(opts.limit)
-      if (opts?.featured) q = q.eq('is_featured', true)
-      if (opts?.trending) q = q.eq('is_trending', true)
-      if (opts?.editorsPick) q = q.eq('is_editors_pick', true)
-      if (opts?.popular) q = q.eq('is_popular', true)
-      if (opts?.search) q = q.or(`title.ilike.%${opts.search}%,excerpt.ilike.%${opts.search}%`)
+      if (currentOpts.limit) query = query.limit(currentOpts.limit)
+      if (currentOpts.featured) query = query.eq('is_featured', true)
+      if (currentOpts.trending) query = query.eq('is_trending', true)
+      if (currentOpts.editorsPick) query = query.eq('is_editors_pick', true)
+      if (currentOpts.popular) query = query.eq('is_popular', true)
 
-      return q
+      const safeSearch = normalizeSearch(currentOpts.search)
+      if (safeSearch) query = query.or(`title.ilike.%${safeSearch}%,excerpt.ilike.%${safeSearch}%`)
+
+      return query
     })
 
     if (error) {
       setState({ data: [], loading: false, error })
-    } else {
-      let r = (data as Article[]) || []
-      if (opts?.categorySlug) r = r.filter((a) => a.category?.slug === opts.categorySlug)
-      if (opts?.portal) r = r.filter((a) => a.category?.portal === opts.portal)
-      if (opts?.authorSlug) r = r.filter((a) => a.author?.slug === opts.authorSlug)
-      setState({ data: r, loading: false, error: null })
+      return
     }
-  }, [opts])
+
+    let result = (data as Article[]) || []
+    if (currentOpts.categorySlug) result = result.filter((a) => a.category?.slug === currentOpts.categorySlug)
+    if (currentOpts.portal) result = result.filter((a) => a.category?.portal === currentOpts.portal)
+    if (currentOpts.authorSlug) result = result.filter((a) => a.author?.slug === currentOpts.authorSlug)
+
+    setState({ data: result, loading: false, error: null })
+  }, [optsKey])
 
   useEffect(() => {
-    const currentOpts = JSON.stringify(opts)
-    if (currentOpts !== optsRef.current) {
-      optsRef.current = currentOpts
-      fetchData()
-    }
-  }, [fetchData, opts])
+    fetchData()
+  }, [fetchData])
 
-  const retry = useCallback(() => fetchData(), [fetchData])
-
-  return { articles: state.data, loading: state.loading, error: state.error, retry }
+  return {
+    articles: state.data,
+    loading: state.loading,
+    error: state.error,
+    retry: fetchData,
+  }
 }
 
 export function useArticle(slug?: string) {
@@ -98,6 +109,7 @@ export function useArticle(slug?: string) {
       setState({ data: null, loading: false, error: null })
       return
     }
+
     setState((s) => ({ ...s, loading: true, error: null }))
     const { data, error } = await withRetry(async () =>
       supabase
@@ -107,6 +119,7 @@ export function useArticle(slug?: string) {
         .eq('status', 'published')
         .single()
     )
+
     setState({ data: data as Article | null, loading: false, error })
   }, [slug])
 
@@ -114,9 +127,7 @@ export function useArticle(slug?: string) {
     fetchData()
   }, [fetchData])
 
-  const retry = useCallback(() => fetchData(), [fetchData])
-
-  return { article: state.data, loading: state.loading, error: state.error, retry }
+  return { article: state.data, loading: state.loading, error: state.error, retry: fetchData }
 }
 
 export function useCategories(portal?: string) {
@@ -125,9 +136,9 @@ export function useCategories(portal?: string) {
   const fetchData = useCallback(async () => {
     setState((s) => ({ ...s, loading: true, error: null }))
     const { data, error } = await withRetry(async () => {
-      let q = supabase.from('categories').select('*').order('sort_order')
-      if (portal) q = q.eq('portal', portal)
-      return q
+      let query = supabase.from('categories').select('*').order('sort_order')
+      if (portal) query = query.eq('portal', portal)
+      return query
     })
     setState({ data: (data as Category[]) || [], loading: false, error })
   }, [portal])
@@ -136,9 +147,7 @@ export function useCategories(portal?: string) {
     fetchData()
   }, [fetchData])
 
-  const retry = useCallback(() => fetchData(), [fetchData])
-
-  return { categories: state.data, loading: state.loading, error: state.error, retry }
+  return { categories: state.data, loading: state.loading, error: state.error, retry: fetchData }
 }
 
 export function useAuthors() {
@@ -146,9 +155,7 @@ export function useAuthors() {
 
   const fetchData = useCallback(async () => {
     setState((s) => ({ ...s, loading: true, error: null }))
-    const { data, error } = await withRetry(async () =>
-      supabase.from('authors').select('*').order('name')
-    )
+    const { data, error } = await withRetry(async () => supabase.from('authors').select('*').order('name'))
     setState({ data: (data as Author[]) || [], loading: false, error })
   }, [])
 
@@ -156,9 +163,7 @@ export function useAuthors() {
     fetchData()
   }, [fetchData])
 
-  const retry = useCallback(() => fetchData(), [fetchData])
-
-  return { authors: state.data, loading: state.loading, error: state.error, retry }
+  return { authors: state.data, loading: state.loading, error: state.error, retry: fetchData }
 }
 
 export function useAuthor(slug?: string) {
@@ -169,10 +174,9 @@ export function useAuthor(slug?: string) {
       setState({ data: null, loading: false, error: null })
       return
     }
+
     setState((s) => ({ ...s, loading: true, error: null }))
-    const { data, error } = await withRetry(async () =>
-      supabase.from('authors').select('*').eq('slug', slug).single()
-    )
+    const { data, error } = await withRetry(async () => supabase.from('authors').select('*').eq('slug', slug).single())
     setState({ data: data as Author | null, loading: false, error })
   }, [slug])
 
@@ -180,38 +184,33 @@ export function useAuthor(slug?: string) {
     fetchData()
   }, [fetchData])
 
-  const retry = useCallback(() => fetchData(), [fetchData])
-
-  return { author: state.data, loading: state.loading, error: state.error, retry }
+  return { author: state.data, loading: state.loading, error: state.error, retry: fetchData }
 }
 
 export function useStreams(opts?: { platform?: string; featured?: boolean; live?: boolean }) {
   const [state, setState] = useState<QueryState<Stream[]>>({ data: [], loading: true, error: null })
-  const optsRef = useRef(JSON.stringify(opts))
+  const optsKey = useMemo(() => JSON.stringify(opts ?? {}), [opts])
 
   const fetchData = useCallback(async () => {
+    const currentOpts = JSON.parse(optsKey) as NonNullable<typeof opts>
     setState((s) => ({ ...s, loading: true, error: null }))
+
     const { data, error } = await withRetry(async () => {
-      let q = supabase.from('streams').select('*').order('published_at', { ascending: false })
-      if (opts?.platform) q = q.eq('platform', opts.platform)
-      if (opts?.featured) q = q.eq('is_featured', true)
-      if (opts?.live) q = q.eq('is_live', true)
-      return q
+      let query = supabase.from('streams').select('*').order('published_at', { ascending: false })
+      if (currentOpts.platform) query = query.eq('platform', currentOpts.platform)
+      if (currentOpts.featured) query = query.eq('is_featured', true)
+      if (currentOpts.live) query = query.eq('is_live', true)
+      return query
     })
+
     setState({ data: (data as Stream[]) || [], loading: false, error })
-  }, [opts])
+  }, [optsKey])
 
   useEffect(() => {
-    const currentOpts = JSON.stringify(opts)
-    if (currentOpts !== optsRef.current) {
-      optsRef.current = currentOpts
-      fetchData()
-    }
-  }, [fetchData, opts])
+    fetchData()
+  }, [fetchData])
 
-  const retry = useCallback(() => fetchData(), [fetchData])
-
-  return { streams: state.data, loading: state.loading, error: state.error, retry }
+  return { streams: state.data, loading: state.loading, error: state.error, retry: fetchData }
 }
 
 export function useMedia(type?: string) {
@@ -220,9 +219,9 @@ export function useMedia(type?: string) {
   const fetchData = useCallback(async () => {
     setState((s) => ({ ...s, loading: true, error: null }))
     const { data, error } = await withRetry(async () => {
-      let q = supabase.from('media_items').select('*').order('created_at', { ascending: false })
-      if (type) q = q.eq('type', type)
-      return q
+      let query = supabase.from('media_items').select('*').order('created_at', { ascending: false })
+      if (type) query = query.eq('type', type)
+      return query
     })
     setState({ data: (data as MediaItem[]) || [], loading: false, error })
   }, [type])
@@ -231,9 +230,7 @@ export function useMedia(type?: string) {
     fetchData()
   }, [fetchData])
 
-  const retry = useCallback(() => fetchData(), [fetchData])
-
-  return { media: state.data, loading: state.loading, error: state.error, retry }
+  return { media: state.data, loading: state.loading, error: state.error, retry: fetchData }
 }
 
 export function useSocialLinks() {
@@ -241,9 +238,7 @@ export function useSocialLinks() {
 
   const fetchData = useCallback(async () => {
     setState((s) => ({ ...s, loading: true, error: null }))
-    const { data, error } = await withRetry(async () =>
-      supabase.from('social_links').select('*').order('sort_order')
-    )
+    const { data, error } = await withRetry(async () => supabase.from('social_links').select('*').order('sort_order'))
     setState({ data: (data as SocialLink[]) || [], loading: false, error })
   }, [])
 
@@ -251,7 +246,5 @@ export function useSocialLinks() {
     fetchData()
   }, [fetchData])
 
-  const retry = useCallback(() => fetchData(), [fetchData])
-
-  return { socials: state.data, loading: state.loading, error: state.error, retry }
+  return { socials: state.data, loading: state.loading, error: state.error, retry: fetchData }
 }

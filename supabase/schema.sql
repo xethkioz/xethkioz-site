@@ -27,3 +27,36 @@ CREATE POLICY "public_read_media" ON media_items FOR SELECT TO anon, authenticat
 CREATE POLICY "public_read_social" ON social_links FOR SELECT TO anon, authenticated USING (true);
 CREATE POLICY "public_subscribe_newsletter" ON newsletter_subscribers FOR INSERT TO anon, authenticated WITH CHECK (true);
 CREATE POLICY "admin_read_newsletter" ON newsletter_subscribers FOR SELECT TO authenticated USING (true);
+
+-- XETHKIOZ v3.5 Community Creator Profiles
+-- Optional table used by /creator after Supabase Auth signup.
+CREATE TABLE IF NOT EXISTS creator_profiles (
+  id uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  display_name text NOT NULL,
+  username text NOT NULL UNIQUE,
+  email text NOT NULL,
+  role text NOT NULL DEFAULT 'Creador de contenido',
+  status text NOT NULL DEFAULT 'pending',
+  bio text,
+  avatar_url text,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_creator_profiles_username ON creator_profiles(username);
+CREATE INDEX IF NOT EXISTS idx_creator_profiles_status ON creator_profiles(status);
+
+ALTER TABLE creator_profiles ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "creator_profiles_public_read" ON creator_profiles
+  FOR SELECT TO anon, authenticated
+  USING (status IN ('approved', 'active'));
+
+CREATE POLICY "creator_profiles_owner_insert" ON creator_profiles
+  FOR INSERT TO authenticated
+  WITH CHECK (auth.uid() = id);
+
+CREATE POLICY "creator_profiles_owner_update" ON creator_profiles
+  FOR UPDATE TO authenticated
+  USING (auth.uid() = id)
+  WITH CHECK (auth.uid() = id);
