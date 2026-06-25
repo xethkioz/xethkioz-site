@@ -77,7 +77,7 @@ export default function CreatorAccount() {
         localStorage.setItem(cooldownKey(), String(Date.now()))
 
         if (data.user) {
-          await supabase.from('creator_profiles').upsert({
+          await supabase.from('profiles').upsert({
             id: data.user.id,
             display_name: form.displayName.trim(),
             username: form.username.trim(),
@@ -94,7 +94,7 @@ export default function CreatorAccount() {
           setAlreadyLogged(true)
           setTimeout(() => navigate('/creator/panel'), 700)
         } else {
-          setMessage('Cuenta creada. Revisá tu correo y confirmá el acceso. Si cae en Spam, marcá “No es spam”. Evitá tocar Crear cuenta otra vez para no reenviar correos.')
+          setMessage('Cuenta creada. Revisá tu correo y confirmá el acceso antes de iniciar sesión. No vuelvas a tocar Crear cuenta: puede reenviar correos.')
         }
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password })
@@ -251,7 +251,7 @@ export default function CreatorAccount() {
           <div className="glass border border-neon/20 rounded-2xl p-6">
             <h2 className="font-display text-lg font-bold text-neon mb-3">Estado</h2>
             <p className="text-sm text-gray-400">
-              v3.6.3: el login abre el panel, permite editar perfil y mejora el control de confirmación por email.
+              Hotfix v3.6.2: el login ahora redirige al panel y el registro evita múltiples envíos de correo.
             </p>
             <Link to="/community" className="inline-flex mt-4 text-sm text-orange hover:neon-text-orange">
               Volver a Comunidad →

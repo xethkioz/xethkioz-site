@@ -1,5 +1,5 @@
-export const SITE_VERSION = 'v3.6.3'
-export const SITE_RELEASE = 'Profile & Auth Flow Stabilization'
+export const SITE_VERSION = 'v3.6.4'
+export const SITE_RELEASE = 'Auth + Foundation Cleanup'
 export const SITE_BUILD_DATE = '2026-06-25'
 
 export const DONATION_LINKS = {

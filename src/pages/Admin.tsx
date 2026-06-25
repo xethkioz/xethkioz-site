@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLang } from '../lib/LangContext'
 import { useCategories, useAuthors, useArticles, useMedia } from '../lib/hooks'
 import { supabase } from '../lib/supabase'
@@ -12,8 +12,63 @@ export default function Admin() {
   const { media } = useMedia()
   const [tab, setTab] = useState<'article' | 'media' | 'list'>('article')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [authLoading, setAuthLoading] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
   const [af, setAf] = useState({ title: '', slug: '', excerpt: '', content: '', cover_image: '', category_id: '', author_id: '', tags: '', is_featured: false, is_trending: false, is_editors_pick: false, is_popular: false })
   const [mf, setMf] = useState({ title: '', type: 'image', url: '', thumbnail: '', description: '', is_featured: false })
+  useEffect(() => {
+    let active = true
+
+    const checkAdmin = async () => {
+      const { data: sessionData } = await supabase.auth.getSession()
+      const user = sessionData.session?.user
+
+      if (!user) {
+        if (active) {
+          setIsAdmin(false)
+          setAuthLoading(false)
+        }
+        return
+      }
+
+      const { data } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .maybeSingle()
+
+      if (active) {
+        setIsAdmin(data?.role === 'admin')
+        setAuthLoading(false)
+      }
+    }
+
+    checkAdmin()
+    return () => { active = false }
+  }, [])
+
+  if (authLoading) {
+    return (
+      <div className="animate-fade-in max-w-4xl mx-auto px-4 sm:px-6 py-16 text-center">
+        <SEO title="Admin XETHKIOZ" />
+        <div className="text-orange font-display text-xl">Verificando permisos...</div>
+      </div>
+    )
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="animate-fade-in max-w-4xl mx-auto px-4 sm:px-6 py-16 text-center">
+        <SEO title="Acceso restringido" />
+        <div className="glass border border-red-500/30 rounded-2xl p-8">
+          <div className="text-4xl mb-4">🔒</div>
+          <h1 className="font-display text-3xl font-bold text-red-300 mb-3">Acceso restringido</h1>
+          <p className="text-gray-400">Este panel requiere rol de administrador.</p>
+        </div>
+      </div>
+    )
+  }
+
   const slugify = (s: string) => s.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '')
   const hc = (f: string, v: string | boolean) => setAf((p) => ({ ...p, [f]: v, ...(f === 'title' ? { slug: slugify(v as string) } : {}) }))
   const pa = async (e: React.FormEvent) => { e.preventDefault(); setStatus('loading'); try { const { error } = await supabase.from('articles').insert({ title: af.title, slug: af.slug, excerpt: af.excerpt, content: af.content, cover_image: af.cover_image || null, category_id: af.category_id || null, author_id: af.author_id || null, tags: af.tags.split(',').map((t) => t.trim()).filter(Boolean), is_featured: af.is_featured, is_trending: af.is_trending, is_editors_pick: af.is_editors_pick, is_popular: af.is_popular, status: 'published' }); if (error) throw error; setStatus('success'); setAf({ title: '', slug: '', excerpt: '', content: '', cover_image: '', category_id: '', author_id: '', tags: '', is_featured: false, is_trending: false, is_editors_pick: false, is_popular: false }) } catch { setStatus('error') }; setTimeout(() => setStatus('idle'), 5000) }

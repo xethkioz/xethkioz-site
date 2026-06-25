@@ -1,0 +1,286 @@
+LEEME - XETHKIOZ
+Historial y plan maestro desde v3.4 hasta v4.0
+
+Proyecto: XETHKIOZ
+Estado actual de este paquete: v3.6.4 Auth + Foundation Cleanup
+Objetivo general: convertir la web en un ecosistema digital con noticias, comunidad, streaming, IA, administración, usuarios, backups y documentación profesional.
+
+============================================================
+RESUMEN EJECUTIVO
+============================================================
+
+Desde la versión 3.4 hasta la 3.6.x el proyecto pasó de ser una web estática/portal gamer a una base conectada con Supabase, Netlify, GitHub y dominio propio.
+
+Los problemas principales detectados fueron:
+- Doble carpeta Xethkioz dentro del ZIP.
+- Supabase configurado con placeholder.
+- Auth enviando confirmación a localhost.
+- Tablas inconsistentes: creator_profiles vs profiles.
+- Panel admin sin protección real por rol.
+- Falta de documentación centralizada.
+- Falta de migraciones SQL ordenadas.
+- Build y dist mezclados con código fuente.
+- Dependencia de parches manuales.
+
+Este paquete aplica la primera limpieza seria sobre v3.6.2 para dejar una base v3.6.4 estable y preparar v3.7 Foundation.
+
+============================================================
+VERSIÓN 3.4
+============================================================
+
+Tipo: Base visual y estructural.
+
+Se trabajó en:
+- Estructura inicial del portal XETHKIOZ.
+- Identidad visual gamer/tech.
+- Secciones principales de navegación.
+- Home inicial.
+- Preparación de áreas Gaming, Tech, Science, Streaming y Media.
+- Base para SEO y responsive.
+
+Pendiente desde esta versión:
+- Usuarios reales.
+- Panel de administración.
+- Base de datos.
+- Comunidad dinámica.
+- Sistema de noticias administrable.
+
+============================================================
+VERSIÓN 3.5
+============================================================
+
+Tipo: Expansión de portal.
+
+Se incorporó:
+- Mejoras en Home.
+- Portales Gaming Hub, Tech Lab y Science Lab.
+- Estructura de noticias.
+- Página de autores.
+- Multimedia.
+- Streaming.
+- Footer más completo.
+- Mejoras de marca.
+- Primeras bases para monetización, donaciones y sponsors.
+
+Pendiente:
+- Conexión real con backend.
+- Panel admin funcional.
+- Roles.
+- Registro de usuarios.
+
+============================================================
+VERSIÓN 3.5.1 COMMUNITY
+============================================================
+
+Tipo: Comunidad inicial.
+
+Se incorporó:
+- Página Community.
+- Community Feature.
+- Panel de creador conceptual.
+- Secciones para usuarios, creadores y comunidad.
+- CTA para crear cuenta/iniciar sesión.
+- Preparación para funciones futuras.
+
+Problemas:
+- Funciones aún simuladas o incompletas.
+- Sin base de datos real para comunidad.
+- Sin perfiles persistentes.
+
+============================================================
+VERSIÓN 3.6
+============================================================
+
+Tipo: Inicio de Supabase/Auth.
+
+Se incorporó:
+- Supabase como backend.
+- Auth inicial.
+- Creator Account.
+- Creator Dashboard.
+- Registro con email.
+- Confirmación por correo.
+- Inicio de sesión.
+- Primer schema SQL.
+
+Problemas detectados:
+- La URL de Supabase estaba con placeholder.
+- La key estaba con placeholder.
+- No se creaban usuarios reales.
+- Supabase Auth redirigía a localhost.
+- Se usaba creator_profiles en el frontend, pero se decidió migrar a profiles.
+- El admin no verificaba rol real.
+
+============================================================
+VERSIÓN 3.6.1
+============================================================
+
+Tipo: Ajustes de deploy y estabilidad.
+
+Se trabajó en:
+- Control de versión en footer.
+- Corrección de rutas.
+- Verificación de Netlify.
+- Primeras pruebas de Supabase Auth.
+- Ajustes de estructura para subir desde Termux.
+
+Problemas:
+- Seguían existiendo inconsistencias de datos.
+- El repo y la carpeta local no siempre coincidían.
+- El ZIP tenía carpetas duplicadas.
+
+============================================================
+VERSIÓN 3.6.2
+============================================================
+
+Tipo: Hotfix de Creator Account.
+
+Estado base de este paquete.
+
+Incluía:
+- Creator Account con cooldown para evitar múltiples correos.
+- Creator Dashboard.
+- Supabase importado desde src/lib/supabase.ts.
+- Schema inicial con categorías, autores, artículos, streams, media y newsletter.
+
+Problemas heredados:
+- src/lib/supabase.ts seguía usando placeholder si no existía .env.
+- CreatorAccount guardaba en creator_profiles.
+- CreatorDashboard leía creator_profiles.
+- No existía profiles en schema principal.
+- Admin no estaba protegido por rol.
+- Faltaban logs y documentación robusta.
+
+============================================================
+VERSIÓN 3.6.3
+============================================================
+
+Tipo: Reorganización y pruebas.
+
+Se trabajó en:
+- Detección de carpeta duplicada Xethkioz/Xethkioz.
+- Limpieza manual de estructura local.
+- Confirmación de que Netlify desplegaba correctamente.
+- Confirmación de que GitHub recibía commits.
+- Revisión de Supabase URL Configuration.
+- Confirmación de correo ya redirigiendo al dominio correcto.
+
+Problemas:
+- No había documento maestro.
+- No había flujo de migración claro.
+- Seguían mezcladas tablas viejas y nuevas.
+
+============================================================
+VERSIÓN 3.6.4 - AUTH + FOUNDATION CLEANUP
+============================================================
+
+Cambios aplicados en este paquete:
+
+1. Supabase real conectado:
+- src/lib/supabase.ts ahora usa:
+  https://pascicauudfyydzknoop.supabase.co
+- Mantiene soporte para variables VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY.
+- Se elimina la dependencia silenciosa de placeholder.
+
+2. Perfiles unificados:
+- CreatorAccount ahora escribe en public.profiles.
+- CreatorDashboard ahora lee desde public.profiles.
+- Se elimina el uso de creator_profiles en la lógica principal.
+
+3. Admin protegido:
+- /admin ahora verifica sesión.
+- /admin consulta public.profiles.
+- Solo permite acceso si role === 'admin'.
+- Si no hay permisos, muestra acceso restringido.
+
+4. Supabase schema actualizado:
+- Se agrega public.profiles.
+- Se agregan comments.
+- Se agregan chat_messages.
+- Se agregan site_settings.
+- Se mantienen categories, authors, articles, streams, media_items, social_links y newsletter_subscribers.
+- Se habilita RLS.
+- Se agregan políticas básicas de lectura/escritura.
+
+5. Versionado:
+- siteConfig pasa a v3.6.4.
+- Release: Auth + Foundation Cleanup.
+
+6. Documentación:
+- Se crea LEEME.txt.
+- Se crea README_REALIZADO_DESDE_V36.txt.
+- Se crea README_PENDIENTE_DESDE_V36.txt.
+- Se crea docs/MASTER_LOG.md.
+- Se crea docs/DATABASE_LOG.md.
+- Se crea docs/ROADMAP_V4.md.
+
+============================================================
+INSTRUCCIONES DESPUÉS DE SUBIR ESTA VERSIÓN
+============================================================
+
+1. En Supabase, ejecutar supabase/schema.sql.
+2. Confirmar que Authentication > URL Configuration tenga:
+   Site URL: https://xethkioz.com.ar
+   Redirect URLs:
+   https://xethkioz.com.ar/*
+   https://www.xethkioz.com.ar/*
+3. Crear o confirmar usuario xethkioz@gmail.com.
+4. Ejecutar seed admin manual:
+
+insert into public.profiles (id, email, username, display_name, role)
+select id, email, 'xethkioz', 'XETHKIOZ', 'admin'
+from auth.users
+where email = 'xethkioz@gmail.com'
+on conflict (id)
+do update set
+  role = 'admin',
+  username = 'xethkioz',
+  display_name = 'XETHKIOZ',
+  updated_at = now();
+
+5. Probar:
+- /creator
+- /creator/panel
+- /admin
+
+============================================================
+ROADMAP HACIA 4.0
+============================================================
+
+v3.7 Foundation:
+- Reestructurar carpetas.
+- Crear database/migrations.
+- Crear database/seeds.
+- Crear docs completos.
+- Crear sistema de roles más amplio.
+- Preparar admin modular.
+
+v3.8 Admin:
+- Crear dashboard admin completo.
+- CRUD noticias.
+- CRUD videos.
+- CRUD usuarios.
+- Gestión de categorías.
+- Gestión de medios.
+
+v3.9 Comunidad:
+- Comentarios.
+- Reacciones.
+- Chat flotante.
+- Notificaciones.
+- Perfiles públicos.
+- Ranking de usuarios.
+
+v4.0 Stable:
+- Ecosistema estable.
+- Seguridad revisada.
+- SEO final.
+- Backups.
+- Logs.
+- Panel técnico.
+- Documentación completa.
+- Preparación para migrar a VPS/Coolify/Docker si se decide.
+
+============================================================
+FIN
+============================================================
