@@ -1,15 +1,32 @@
-# MASTER_LOG - XETHKIOZ
+# MASTER LOG — XETHKIOZ v4.0
 
-## v3.6.4 Auth + Foundation Cleanup
+Fecha: 2026-06-25
 
-Se tomó como base xethkioz-v3.6.2.zip.
+## Acciones realizadas
 
-Correcciones:
-- Supabase real conectado.
-- Perfiles unificados en public.profiles.
-- Admin protegido por rol.
-- Schema ampliado.
-- Documentación base agregada.
+- Se verificó acceso público al repositorio GitHub.
+- Se recibió proyecto local `Web_GITHUB`.
+- Se preparó paquete limpio v4.0.
+- Se excluyeron dependencias, build, git interno y variables sensibles.
+- Se añadió documentación maestra.
+- Se preparó estructura para database, scripts, templates y roadmap.
 
-Próximo objetivo:
-- v3.7 Foundation.
+## Estado recomendado
+
+Trabajar desde:
+
+```txt
+Web_GITHUB
+```
+
+Rama:
+
+```txt
+release/v4.0
+```
+
+Siguiente rama:
+
+```txt
+feature/v4-audit
+```
