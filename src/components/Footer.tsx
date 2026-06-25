@@ -6,7 +6,7 @@ import { SITE_BUILD_DATE, SITE_RELEASE, SITE_VERSION, SOCIAL_LINKS } from '../li
 export default function Footer() {
   const { t } = useLang()
   const quickLinks = [{ to: '/news', label: t.nav.news }, { to: '/streaming', label: t.nav.streaming }, { to: '/media', label: t.nav.media }, { to: '/community', label: t.nav.community }, { to: '/about', label: t.nav.about }, { to: '/contact', label: t.nav.contact }, { to: '/support', label: 'Apoyar / Sponsors' }, { to: '/authors', label: t.author.title }, { to: '/cms', label: 'CMS Studio' }, { to: '/live-checklist', label: 'Checklist LIVE' }]
-  const portals = [{ to: '/network', label: 'XETHKIOZ Network' }, { to: '/gaming', label: t.nav.gaming }, { to: '/tech', label: t.nav.tech }, { to: '/science', label: t.nav.science }, { to: '/green-node', label: 'Green Node' }]
+  const portals = [{ to: '/network', label: 'XETHKIOZ Network' }, { to: '/gaming', label: t.nav.gaming }, { to: '/tech', label: t.nav.tech }, { to: '/science', label: t.nav.science }, { to: '/ai-lab', label: 'AI Lab' }, { to: '/creator-studio', label: 'Creator Studio' }, { to: '/green-node', label: 'Green Node' }]
   const monetization = [t.footer.store, t.footer.affiliateLinks, t.footer.sponsored, t.footer.donations, t.footer.premium, t.footer.podcast]
   const socials = SOCIAL_LINKS
   return (

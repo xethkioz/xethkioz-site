@@ -1,5 +1,5 @@
-export const SITE_VERSION = 'v4.0.0-rc.1.7'
-export const SITE_RELEASE = 'XETHKIOZ Network Layout Isolation + Green Node Video Polish'
+export const SITE_VERSION = 'v4.0.0-rc.1.8'
+export const SITE_RELEASE = 'XETHKIOZ Network Architecture Cleanup + AI Lab + Creator Studio'
 export const SITE_BUILD_DATE = '2026-06-25'
 export const SITE_DOMAIN = 'https://xethkioz.com.ar'
 
@@ -77,7 +77,7 @@ export const XETHKIOZ_NETWORK_PORTALS = [
   {
     id: 'ai-lab',
     name: 'AI Lab',
-    path: '/tech?focus=ai',
+    path: '/ai-lab',
     status: 'planned',
     accent: 'cyan',
     description: 'Modelos, prompts, automatizaciones y herramientas de IA.'
@@ -94,7 +94,7 @@ export const XETHKIOZ_NETWORK_PORTALS = [
   {
     id: 'creator-studio',
     name: 'Creator Studio',
-    path: '/streaming',
+    path: '/creator-studio',
     status: 'branch',
     accent: 'purple',
     description: 'OBS, Kick, Twitch, YouTube, audio, video y producción de contenido.'
@@ -169,7 +169,7 @@ export const NETWORK_SECTORS_DETAILED = [
     icon: '🤖',
     title: 'AI Lab',
     tone: 'cian / violeta',
-    route: '/tech?focus=ai',
+    route: '/ai-lab',
     status: 'planned',
     priority: 'Media',
     focus: ['Modelos', 'Prompts', 'Automatización', 'Redacción asistida', 'SEO IA'],
@@ -192,7 +192,7 @@ export const NETWORK_SECTORS_DETAILED = [
     icon: '🎥',
     title: 'Creator Studio',
     tone: 'violeta / magenta',
-    route: '/streaming',
+    route: '/creator-studio',
     status: 'branch',
     priority: 'Media',
     focus: ['OBS', 'Kick', 'Twitch', 'YouTube', 'Overlays', 'Audio y video'],
@@ -221,7 +221,7 @@ export const GREEN_NODE_EASTER_EGGS = [
 ]
 
 export const LIVE_INTERNAL_LINKS = [
-  '/', '/news', '/gaming', '/tech', '/science', '/streaming', '/media', '/community', '/network', '/news-engine', '/roles', '/cms', '/live-checklist', '/chat-overlay', '/green-node'
+  '/', '/news', '/gaming', '/tech', '/science', '/ai-lab', '/creator-studio', '/streaming', '/media', '/community', '/network', '/news-engine', '/roles', '/cms', '/live-checklist', '/chat-overlay', '/green-node'
 ] as const
 
 export const SCIENCE_LAB_POLICY = {

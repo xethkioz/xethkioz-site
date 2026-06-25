@@ -32,6 +32,8 @@ import GreenNode from './pages/GreenNode'
 import Network from './pages/Network'
 import ContentSystem from './pages/ContentSystem'
 import FinalQA from './pages/FinalQA'
+import AILab from './pages/AILab'
+import CreatorStudio from './pages/CreatorStudio'
 import NotFound from './pages/NotFound'
 import ComingSoon from './pages/ComingSoon'
 import FloatingCommunityChat from './components/FloatingCommunityChat'
@@ -79,6 +81,8 @@ function AppShell() {
           <Route path="/green-node" element={<GreenNode />} />
           <Route path="/network" element={<Network />} />
           <Route path="/content-system" element={<ContentSystem />} />
+          <Route path="/ai-lab" element={<AILab />} />
+          <Route path="/creator-studio" element={<CreatorStudio />} />
           <Route path="/qa" element={<FinalQA />} />
           <Route path="/live-checklist" element={<LiveChecklist />} />
           <Route path="/coming-soon" element={<ComingSoon />} />

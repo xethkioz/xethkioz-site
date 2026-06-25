@@ -191,3 +191,12 @@
 - Wisp mejorado: aparición menos invasiva, oculto en overlay, keyword secundaria `wisp`.
 - SQL incremental `20260625_rc16_content_system_final_qa.sql`.
 - Versionado actualizado a `v4.0.0-rc.1.6`.
+
+## v4.0.0-rc.1.8 — Network Architecture Cleanup + AI Lab + Creator Studio
+
+- Se agregan rutas `/ai-lab` y `/creator-studio`.
+- Se actualiza el mapa de XETHKIOZ Network para separar IA y producción de contenido como divisiones propias.
+- Se actualiza Header/Footer con accesos más ordenados desde el menú secundario.
+- Se agrega migración SQL `20260625_rc18_network_architecture_cleanup.sql` en `database/migrations` y `supabase/migrations`.
+- Se mantiene Green Node como nodo oculto por Wisp/EGG.
+- Build local validado con `npm run build`.
