@@ -1,4 +1,22 @@
 
+## 7.0.0-clean-restart-alpha.7
+
+- Reconstrucción visual de Home como The Gate.
+- Tres portales funcionales sobre concept visual.
+- Green Wisp funcional como Easter Egg hacia Green Node.
+- Animaciones CSS ligeras para partículas, energía y hover.
+- Mobile fallback para mantener usabilidad.
+
+# V7 Clean Restart Alpha 6 — Global Controls + Visual Recovery
+
+- Controles globales persistentes en todas las rutas.
+- Corregido bug donde ES/EN, audio y cuenta desaparecían en portales.
+- Home reforzada con capa cinematográfica.
+- Portales con efecto vórtice/dark portal más cercano a la dirección aprobada.
+- Sin cambios en SQL/Supabase/CMS.
+
+
+
 ## 7.0.0-clean-restart-alpha.5 — Visual Portal Base
 
 ### Objetivo
@@ -298,3 +316,13 @@
 - Kept Supabase files in the repository for future integration, but removed them from the current public bundle path.
 - Added QA documentation for the Alpha 4 stability pass.
 - Removed the forced Supabase manual chunk from Vite output during Alpha 4 because Supabase is not part of the current public runtime.
+
+
+## XETHKIOZ Fusion Web 1.0
+
+- Se reconstruye la Home como The Gate usando componentes reales, no una imagen estática como interfaz.
+- Se recupera el enfoque Avatar vs Dragón con CSS/HTML liviano como placeholder funcional.
+- Se implementan tres portales reales: Juegos, Ciencia/Tecnología y Fun.
+- Green Wisp vuelve a ser un acceso oculto funcional hacia Green Node.
+- Se conserva el build estable sin agregar SQL, CMS ni Supabase nuevo.
+- Se documenta auditoría de fusión en docs/QA/FUSION_WEB_1_AUDIT.md.
