@@ -1,3 +1,10 @@
+# V7 Clean Restart Alpha 3
+
+- Core de idioma ES/EN completado para áreas visibles principales.
+- Persistencia de idioma en navegador.
+- Portales principales y Green Node usan una única fuente de traducción.
+- Build validado.
+
 
 ## 7.0.0-clean-restart-alpha.2
 

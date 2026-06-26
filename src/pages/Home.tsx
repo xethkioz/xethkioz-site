@@ -1,32 +1,34 @@
 import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
 import Logo from '../components/Logo'
-
-const portals = [
-  {
-    to: '/gaming',
-    title: 'JUEGOS',
-    subtitle: 'Noticias · Guías · Streams · Imágenes',
-    color: 'violet',
-    icon: '🎮',
-  },
-  {
-    to: '/science',
-    title: 'CIENCIA Y TECNOLOGÍA',
-    subtitle: 'Física · Tecnología · IA · Proyectos',
-    color: 'blue',
-    icon: '⚛',
-  },
-  {
-    to: '/fun',
-    title: 'MEMES, OCIO Y DIVERSIÓN',
-    subtitle: 'Memes · Videos · Arte · Humor',
-    color: 'orange',
-    icon: '☻',
-  },
-]
+import { useLang } from '../lib/LangContext'
 
 export default function Home() {
+  const { t } = useLang()
+  const portals = [
+    {
+      to: '/gaming',
+      title: t.v7.portals.games.title,
+      subtitle: t.v7.portals.games.subtitle,
+      color: 'violet',
+      icon: '🎮',
+    },
+    {
+      to: '/science',
+      title: t.v7.portals.science.title,
+      subtitle: t.v7.portals.science.subtitle,
+      color: 'blue',
+      icon: '⚛',
+    },
+    {
+      to: '/fun',
+      title: t.v7.portals.fun.title,
+      subtitle: t.v7.portals.fun.subtitle,
+      color: 'orange',
+      icon: '☻',
+    },
+  ]
+
   return (
     <div className="xeth-core min-h-screen overflow-hidden bg-[#050608] text-white">
       <SEO
@@ -51,12 +53,12 @@ export default function Home() {
             <div className="sword-aura absolute left-[49%] top-[50%] h-2 w-56 origin-left rotate-[-35deg] rounded-full bg-gradient-to-r from-orange via-neon to-transparent shadow-[0_0_28px_rgba(138,46,255,.9)]" />
             <Link
               to="/green-node"
-              aria-label="Acceso oculto Green Wisp"
+              aria-label={t.v7.core.wispLabel}
               className="wisp-home-orb absolute left-[35%] top-[24%] h-20 w-20 rounded-full border border-green-300/30 bg-green-400/10 shadow-[0_0_45px_rgba(50,255,138,.62)] transition hover:scale-110 hover:border-green-200"
             >
               <span className="absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-300 shadow-[0_0_25px_rgba(50,255,138,1)]" />
               <span className="absolute -left-3 bottom-1 h-8 w-14 -rotate-12 rounded-full border-l border-green-300/40 blur-[1px]" />
-              <span className="sr-only">Green Wisp</span>
+              <span className="sr-only">{t.v7.core.wispLabel}</span>
             </Link>
           </div>
 
@@ -65,33 +67,33 @@ export default function Home() {
               <div className="mb-5 max-w-[22rem]">
                 <Logo size="xl" />
               </div>
-              <p className="section-eyebrow text-orange">ECOSISTEMA INTERACTIVO</p>
+              <p className="section-eyebrow text-orange">{t.v7.core.eyebrow}</p>
               <h1 className="mt-4 font-display text-4xl font-black leading-none text-white md:text-6xl">
-                ENTRÁ AL<br />UNIVERSO XETHKIOZ
+                {t.v7.core.title}
               </h1>
               <p className="mt-5 max-w-xl text-sm leading-relaxed text-gray-300 md:text-base">
-                Tres portales principales, una identidad gamer adulta y un secreto verde para quienes miran más allá.
+                {t.v7.core.description}
               </p>
-              <a href="#portales" className="btn-primary mt-6 w-fit">Elegir portal</a>
+              <a href="#portales" className="btn-primary mt-6 w-fit">{t.v7.core.cta}</a>
             </div>
             <div className="hidden items-end justify-end md:flex">
               <div className="max-w-sm rounded-3xl border border-white/10 bg-black/35 p-5 text-right backdrop-blur-md">
-                <p className="font-display text-2xl font-black text-orange">Avatar vs Dragón</p>
-                <p className="mt-2 text-sm text-gray-300">El corazón visual de XETHKIOZ queda preparado para reemplazarse por arte final sin cambiar la experiencia.</p>
+                <p className="font-display text-2xl font-black text-orange">{t.v7.core.sceneTitle}</p>
+                <p className="mt-2 text-sm text-gray-300">{t.v7.core.sceneText}</p>
               </div>
             </div>
           </div>
         </div>
 
         <div id="portales" className="mt-7 text-center">
-          <p className="section-eyebrow mb-4">Elegí tu portal</p>
+          <p className="section-eyebrow mb-4">{t.v7.core.choosePortal}</p>
           <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
             {portals.map((portal) => (
               <Link key={portal.to} to={portal.to} className={`portal-ring-card portal-ring-${portal.color} group`}>
                 <span className="portal-glyph">{portal.icon}</span>
                 <span className="portal-title">{portal.title}</span>
                 <span className="portal-subtitle">{portal.subtitle}</span>
-                <span className="portal-enter">Entrar →</span>
+                <span className="portal-enter">{t.v7.enter}</span>
               </Link>
             ))}
           </div>
