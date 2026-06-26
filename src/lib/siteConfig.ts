@@ -1,4 +1,4 @@
-export const SITE_VERSION = 'v4.0.0-rc.1.9'
+export const SITE_VERSION = 'v4.0.0-rc.2.4'
 export const SITE_RELEASE = 'XETHKIOZ Network Milestones + Data Governance + Community Progression'
 export const SITE_BUILD_DATE = '2026-06-25'
 export const SITE_DOMAIN = 'https://xethkioz.com.ar'
