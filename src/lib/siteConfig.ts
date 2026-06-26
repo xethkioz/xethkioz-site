@@ -1,5 +1,5 @@
-export const SITE_VERSION = 'v4.0.0-rc.1.8'
-export const SITE_RELEASE = 'XETHKIOZ Network Architecture Cleanup + AI Lab + Creator Studio'
+export const SITE_VERSION = 'v4.0.0-rc.1.9'
+export const SITE_RELEASE = 'XETHKIOZ Network Milestones + Data Governance + Community Progression'
 export const SITE_BUILD_DATE = '2026-06-25'
 export const SITE_DOMAIN = 'https://xethkioz.com.ar'
 
@@ -83,6 +83,15 @@ export const XETHKIOZ_NETWORK_PORTALS = [
     description: 'Modelos, prompts, automatizaciones y herramientas de IA.'
   },
 
+
+  {
+    id: 'milestones',
+    name: 'Milestones',
+    path: '/milestones',
+    status: 'control',
+    accent: 'orange',
+    description: 'Plan maestro de progreso: Core Platform, Content Platform, Community, Creator Ecosystem y Production Ready.'
+  },
   {
     id: 'content-os',
     name: 'Content OS',
@@ -176,6 +185,18 @@ export const NETWORK_SECTORS_DETAILED = [
     next: 'Nacer como módulo interno del CMS antes de tener página propia.'
   },
 
+
+  {
+    id: 'milestones',
+    icon: '🗺️',
+    title: 'Milestones',
+    tone: 'naranja / control / roadmap',
+    route: '/milestones',
+    status: 'rc1.9',
+    priority: 'Alta',
+    focus: ['Core Platform', 'Content Platform', 'Community', 'Creator Ecosystem', 'Production Ready'],
+    next: 'Usarlo como tablero maestro para ordenar fixes, SQL, QA y servicios posteriores.'
+  },
   {
     id: 'content-os',
     icon: '🧭',

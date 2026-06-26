@@ -18,6 +18,7 @@ const moreNav = [
   { to: '/tech', labelKey: 'tech', fallback: 'Tech Lab' },
   { to: '/media', labelKey: 'media', fallback: 'Media' },
   { to: '/content-system', labelKey: null, fallback: 'Content OS' },
+  { to: '/milestones', labelKey: null, fallback: 'Milestones' },
   { to: '/ai-lab', labelKey: null, fallback: 'AI Lab' },
   { to: '/creator-studio', labelKey: null, fallback: 'Creator Studio' },
   { to: '/news-engine', labelKey: null, fallback: 'Fuentes' },

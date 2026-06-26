@@ -6,6 +6,9 @@ import NetworkIntegrityPanel from '../components/NetworkIntegrityPanel'
 import DatabaseBaselinePanel from '../components/DatabaseBaselinePanel'
 import ContentOpsDashboard from '../components/ContentOpsDashboard'
 import NetworkFinalQaPanel from '../components/NetworkFinalQaPanel'
+import MilestoneRoadmap from '../components/MilestoneRoadmap'
+import DataGovernanceMatrix from '../components/DataGovernanceMatrix'
+import CommunityProgressionMatrix from '../components/CommunityProgressionMatrix'
 import { networkReadiness, dynamicNewsPipeline } from '../lib/networkBlueprint'
 
 const nextSectors = [
@@ -37,6 +40,7 @@ export default function Network() {
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link to="/content-system" className="btn-primary text-sm">Content OS</Link>
+            <Link to="/milestones" className="btn-secondary text-sm">Milestones</Link>
             <Link to="/news-engine" className="btn-secondary text-sm">Motor de noticias</Link>
             <Link to="/science" className="btn-secondary text-sm">Science Lab</Link>
           </div>
@@ -85,6 +89,9 @@ export default function Network() {
         </div>
       </section>
 
+      <div className="mb-8"><MilestoneRoadmap /></div>
+      <div className="mb-8"><DataGovernanceMatrix /></div>
+      <div className="mb-8"><CommunityProgressionMatrix /></div>
       <div className="mb-8"><ContentOpsDashboard /></div>
       <div className="mb-8"><NetworkIntegrityPanel /></div>
       <div className="mb-8"><DatabaseBaselinePanel /></div>

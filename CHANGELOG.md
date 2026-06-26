@@ -1,3 +1,13 @@
+
+
+## v4.0.0-rc.1.9 — Milestones + Data Governance
+
+- Agrega `/milestones` como tablero maestro de progreso.
+- Integra roadmap operativo en `/network`.
+- Agrega matriz SQL/Data Governance para separar modulos de datos.
+- Agrega matriz de XP, donadores, insignias y moderacion temporal.
+- Agrega migracion `20260625_rc19_milestones_data_governance.sql`.
+- Actualiza version a `v4.0.0-rc.1.9`.
 # Changelog
 
 ## v4.0.0-rc.1.7 — Layout Isolation + Green Node Video Polish
