@@ -1,43 +1,65 @@
-# XETHKIOZ v4.0 Master Project
+# XETHKIOZ Network
 
-**Estado:** paquete de transición hacia XETHKIOZ v4.0  
-**Fecha:** 2026-06-25  
-**Rama recomendada:** `release/v4.0`  
-**Repositorio:** https://github.com/xethkioz/xethkioz-site  
-**Dominio:** https://xethkioz.com.ar
+**Versión actual:** `v4.0.0-rc.2.2`  
+**Estado:** Release Candidate de estabilidad, arquitectura y preparación hacia v4 estable / base v5.
 
-## Objetivo
+XETHKIOZ Network es un ecosistema tecnológico modular con portal principal de Gaming & Tech, Science Lab, Green Node, AI Lab, Creator Studio, CMS, comunidad, chat, roles, XP, Wisp y futura integración de noticias dinámicas.
 
-Convertir XETHKIOZ en un ecosistema profesional para:
+## Módulos principales
 
-- Noticias
-- Gaming
-- Tecnología
-- IA
-- Ciencia
-- Comunidad
-- Streaming
-- CMS propio
-- Administración
-- SEO
-- Automatizaciones
+- `/` — Home principal XETHKIOZ.
+- `/gaming` — Gaming Hub.
+- `/tech` — Tech Lab.
+- `/science` — Science Lab, con enfoque más formal y profesional.
+- `/network` — Hub del ecosistema XETHKIOZ Network.
+- `/green-node` — Sección oculta/experimental de Linux, programación, ciberseguridad defensiva y análisis documental.
+- `/ai-lab` — Laboratorio IA.
+- `/creator-studio` — Centro de creación, streaming y planificación de contenido.
+- `/cms` — CMS Studio.
+- `/content-system` — Content OS.
+- `/roles` — Roles, XP, escalafón y comunidad.
+- `/milestones` — Plan de progreso y gobernanza.
+- `/qa` — Panel de revisión final.
 
-## Estado del paquete
+## Evolución por versiones
 
-Este ZIP contiene una versión limpia del proyecto actual, preparada para iniciar el trabajo v4.0.
+### v3.5 / v3.6 / v3.7
+Base inicial del portal, comunidad, estructura editorial, autenticación y limpieza.
 
-Se excluyeron archivos que no deben distribuirse ni versionarse:
+### v4.0 alpha.4
+Portal PRO Polish + CMS Studio + Live Readiness.
 
-- `node_modules/`
-- `dist/`
-- `.git/`
-- `.env`
-- `.env.local`
-- `*.tsbuildinfo`
+### RC1.1
+Inicio de XETHKIOZ Network, Science Lab y Green Node.
 
-## Instalación
+### RC1.2 - RC1.4
+Pulido de Network, Wisp, Green Node, links, integridad visual y SQL inicial.
 
-```bash
+### RC1.5
+Database Baseline y paneles de revisión.
+
+### RC1.6
+Content System + QA final.
+
+### RC1.7
+Aislamiento de Green Node, video hero y Science Lab formal.
+
+### RC1.8
+AI Lab + Creator Studio.
+
+### RC1.9
+Milestones + Data Governance.
+
+### RC2.0 / RC2.1
+Chat, presencia, Wisp evolucionable y documentación.
+
+### RC2.2
+Fix de estabilidad para evitar pantalla vacía: Safe Boot + Error Boundaries + Supabase tolerante.
+
+## Instalación local
+
+```powershell
+cd "E:\Proyecto Xethkioz\Pagina Web\Web_GITHUB"
 npm install
 npm run build
 npm run dev
@@ -45,14 +67,57 @@ npm run dev
 
 Abrir:
 
-```txt
-http://localhost:5173
+```text
+http://localhost:5173/
 ```
 
-## Próximo paso recomendado
+## Variables de entorno
 
-```bash
-git switch -c feature/v4-audit
+Crear o mantener `.env` con:
+
+```env
+VITE_SUPABASE_URL=https://tu-proyecto.supabase.co
+VITE_SUPABASE_ANON_KEY=tu-anon-key
 ```
 
-Luego comenzar con la auditoría documentada antes de agregar funciones nuevas.
+La app trae fallback de desarrollo, pero producción debe usar variables reales en Netlify.
+
+## Supabase / SQL
+
+Las migraciones están en:
+
+```text
+supabase/migrations/
+database/migrations/
+```
+
+Antes de producción estable se recomienda consolidar una baseline v4 definitiva.
+
+## QA mínimo antes de subir
+
+```powershell
+npm run build
+git status
+```
+
+Rutas a revisar:
+
+```text
+/
+/network
+/gaming
+/tech
+/science
+/green-node
+/ai-lab
+/creator-studio
+/cms
+/content-system
+/roles
+/milestones
+/qa
+```
+
+## Notas de estabilidad RC2.2
+
+El objetivo principal fue evitar que un error de chat, presencia, Supabase Realtime o Wisp deje la web completamente vacía. Cada módulo crítico queda aislado para que el portal principal siga activo.

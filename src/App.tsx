@@ -39,6 +39,7 @@ import NotFound from './pages/NotFound'
 import ComingSoon from './pages/ComingSoon'
 import FloatingCommunityChat from './components/FloatingCommunityChat'
 import WispPortal from './components/WispPortal'
+import AppErrorBoundary from './components/AppErrorBoundary'
 
 function AppShell() {
   const location = useLocation()
@@ -52,10 +53,15 @@ function AppShell() {
       {!isGreenNode && <AnimatedBackground />}
       <Analytics />
       <ScrollToTop />
-      {!hideMainChrome && <Header />}
+      {!hideMainChrome && (
+        <AppErrorBoundary label="Header" compact>
+          <Header />
+        </AppErrorBoundary>
+      )}
 
       <main id="main-content" className={`min-h-screen ${hideMainChrome ? '' : 'pt-16 md:pt-20'}`}>
-        <Routes>
+        <AppErrorBoundary label="Routes">
+          <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/gaming" element={<GamingHub />} />
           <Route path="/tech" element={<TechLab />} />
@@ -89,12 +95,23 @@ function AppShell() {
           <Route path="/live-checklist" element={<LiveChecklist />} />
           <Route path="/coming-soon" element={<ComingSoon />} />
           <Route path="*" element={<NotFound />} />
-        </Routes>
+          </Routes>
+        </AppErrorBoundary>
       </main>
 
-      {!hideMainChrome && <Footer />}
-      <FloatingCommunityChat />
-      {!isIsolatedPortal && <WispPortal />}
+      {!hideMainChrome && (
+        <AppErrorBoundary label="Footer" compact>
+          <Footer />
+        </AppErrorBoundary>
+      )}
+      <AppErrorBoundary label="FloatingCommunityChat" compact>
+        <FloatingCommunityChat />
+      </AppErrorBoundary>
+      {!isIsolatedPortal && (
+        <AppErrorBoundary label="WispPortal" compact>
+          <WispPortal />
+        </AppErrorBoundary>
+      )}
     </>
   )
 }

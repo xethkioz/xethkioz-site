@@ -27,20 +27,39 @@ const WISP_LEVELS = [
   { min: 1400, name: 'Core Entity' },
 ]
 
+function canUseBrowserStorage() {
+  return typeof window !== 'undefined' && !!window.localStorage
+}
+
+function storageGet(key: string) {
+  try { return canUseBrowserStorage() ? window.localStorage.getItem(key) : null } catch { return null }
+}
+
+function storageSet(key: string, value: string) {
+  try { if (canUseBrowserStorage()) window.localStorage.setItem(key, value) } catch {}
+}
+
+function safeRandomId(prefix = 'visitor') {
+  try {
+    if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) return crypto.randomUUID()
+  } catch {}
+  return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`
+}
+
 function getClientId() {
-  let id = window.localStorage.getItem(CLIENT_ID_KEY)
+  let id = storageGet(CLIENT_ID_KEY)
   if (!id) {
-    id = typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : `visitor-${Date.now()}-${Math.random().toString(16).slice(2)}`
-    window.localStorage.setItem(CLIENT_ID_KEY, id)
+    id = safeRandomId('visitor')
+    storageSet(CLIENT_ID_KEY, id)
   }
   return id
 }
 
 export function getDisplayName() {
-  let name = window.localStorage.getItem(DISPLAY_NAME_KEY)
+  let name = storageGet(DISPLAY_NAME_KEY)
   if (!name) {
     name = `Visitante-${Math.floor(1000 + Math.random() * 8999)}`
-    window.localStorage.setItem(DISPLAY_NAME_KEY, name)
+    storageSet(DISPLAY_NAME_KEY, name)
   }
   return name
 }
@@ -57,12 +76,12 @@ function normalizeRole(role: unknown): ChatMessage['role'] {
 
 function normalizeMessage(raw: any): ChatMessage {
   return {
-    id: String(raw.id || `msg-${Date.now()}`),
-    room: String(raw.room || raw.room_id || 'general'),
-    user: String(raw.user || raw.display_name || 'Visitante'),
-    role: normalizeRole(raw.role),
-    text: String(raw.text || raw.body || '').slice(0, 280),
-    created_at: String(raw.created_at || new Date().toISOString()),
+    id: String(raw?.id || `msg-${Date.now()}`),
+    room: String(raw?.room || raw?.room_id || 'general'),
+    user: String(raw?.user || raw?.display_name || 'Visitante'),
+    role: normalizeRole(raw?.role),
+    text: String(raw?.text || raw?.body || '').slice(0, 280),
+    created_at: String(raw?.created_at || new Date().toISOString()),
   }
 }
 
@@ -76,11 +95,19 @@ function uniqueMessages(messages: ChatMessage[]) {
 }
 
 function readLocalMessages(seed: ChatMessage[]) {
-  return uniqueMessages([...seed, ...safeParse<ChatMessage[]>(window.localStorage.getItem(LOCAL_MESSAGES_KEY), [])])
+  return uniqueMessages([...seed, ...safeParse<ChatMessage[]>(storageGet(LOCAL_MESSAGES_KEY), [])])
 }
 
 function writeLocalMessages(messages: ChatMessage[]) {
-  window.localStorage.setItem(LOCAL_MESSAGES_KEY, JSON.stringify(uniqueMessages(messages)))
+  storageSet(LOCAL_MESSAGES_KEY, JSON.stringify(uniqueMessages(messages)))
+}
+
+function createBroadcastChannel(name: string) {
+  try {
+    return typeof window !== 'undefined' && 'BroadcastChannel' in window ? new BroadcastChannel(name) : null
+  } catch {
+    return null
+  }
 }
 
 export function useRealtimeChat(seed: ChatMessage[], activeRoom: string) {
@@ -93,7 +120,7 @@ export function useRealtimeChat(seed: ChatMessage[], activeRoom: string) {
   }, [messages])
 
   useEffect(() => {
-    const bc = 'BroadcastChannel' in window ? new BroadcastChannel(CHAT_CHANNEL) : null
+    const bc = createBroadcastChannel(CHAT_CHANNEL)
     channelRef.current = bc
     if (bc) {
       bc.onmessage = (event) => {
@@ -125,21 +152,27 @@ export function useRealtimeChat(seed: ChatMessage[], activeRoom: string) {
     }
     loadSupabase()
 
-    const realtime = supabase
-      .channel('xeth_chat_messages_public')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'xeth_chat_messages' }, (payload) => {
-        setStatus('realtime')
-        setMessages((current) => uniqueMessages([...current, normalizeMessage(payload.new)]))
-      })
-      .subscribe((state) => {
-        if (state === 'SUBSCRIBED') setStatus((current) => current === 'local' ? 'hybrid' : current)
-      })
+    let realtime: ReturnType<typeof supabase.channel> | null = null
+    try {
+      realtime = supabase
+        .channel('xeth_chat_messages_public')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'xeth_chat_messages' }, (payload) => {
+          setStatus('realtime')
+          setMessages((current) => uniqueMessages([...current, normalizeMessage(payload.new)]))
+        })
+        .subscribe((state) => {
+          if (state === 'SUBSCRIBED') setStatus((current) => current === 'local' ? 'hybrid' : current)
+        })
+    } catch {
+      realtime = null
+      setStatus('local')
+    }
 
     return () => {
       ignore = true
-      bc?.close()
+      try { bc?.close() } catch {}
       window.removeEventListener('storage', storageHandler)
-      supabase.removeChannel(realtime)
+      if (realtime) supabase.removeChannel(realtime)
     }
   }, [seed])
 
@@ -147,7 +180,7 @@ export function useRealtimeChat(seed: ChatMessage[], activeRoom: string) {
     const clean = text.trim().slice(0, 280)
     if (!clean) return
     const message: ChatMessage = {
-      id: typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : `local-${Date.now()}`,
+      id: safeRandomId('local'),
       room: activeRoom,
       user: getDisplayName(),
       role: 'guest',
@@ -156,7 +189,7 @@ export function useRealtimeChat(seed: ChatMessage[], activeRoom: string) {
     }
 
     setMessages((current) => uniqueMessages([...current, message]))
-    channelRef.current?.postMessage(message)
+    try { channelRef.current?.postMessage(message) } catch {}
 
     try {
       const { error } = await supabase.from('xeth_chat_messages').insert({
@@ -177,7 +210,7 @@ export function useRealtimeChat(seed: ChatMessage[], activeRoom: string) {
 }
 
 function getWispData() {
-  const xp = Number(window.localStorage.getItem(WISP_XP_KEY) || '0') || 0
+  const xp = Number(storageGet(WISP_XP_KEY) || '0') || 0
   const levelIndex = WISP_LEVELS.reduce((level, item, index) => xp >= item.min ? index : level, 0)
   const level = levelIndex + 1
   const next = WISP_LEVELS[levelIndex + 1]?.min ?? WISP_LEVELS[levelIndex].min + 800
@@ -187,16 +220,16 @@ function getWispData() {
 }
 
 export function addWispXp(points: number) {
-  const current = Number(window.localStorage.getItem(WISP_XP_KEY) || '0') || 0
+  const current = Number(storageGet(WISP_XP_KEY) || '0') || 0
   const next = Math.max(0, current + points)
-  window.localStorage.setItem(WISP_XP_KEY, String(next))
-  window.dispatchEvent(new CustomEvent('xethkioz:wisp-xp', { detail: next }))
+  storageSet(WISP_XP_KEY, String(next))
+  try { window.dispatchEvent(new CustomEvent('xethkioz:wisp-xp', { detail: next })) } catch {}
   return getWispData()
 }
 
 function readPresence() {
   const now = Date.now()
-  const clients = safeParse<Record<string, { route: string; seen: number }>>(window.localStorage.getItem(PRESENCE_KEY), {})
+  const clients = safeParse<Record<string, { route: string; seen: number }>>(storageGet(PRESENCE_KEY), {})
   return Object.fromEntries(Object.entries(clients).filter(([, value]) => now - value.seen < 18000))
 }
 
@@ -204,7 +237,7 @@ function writePresence(route: string) {
   const id = getClientId()
   const clients = readPresence()
   clients[id] = { route, seen: Date.now() }
-  window.localStorage.setItem(PRESENCE_KEY, JSON.stringify(clients))
+  storageSet(PRESENCE_KEY, JSON.stringify(clients))
   return clients
 }
 
@@ -217,7 +250,7 @@ export function usePresence(route: string): PresenceSnapshot {
 
   useEffect(() => {
     const clientId = getClientId()
-    const bc = 'BroadcastChannel' in window ? new BroadcastChannel(PRESENCE_CHANNEL) : null
+    const bc = createBroadcastChannel(PRESENCE_CHANNEL)
 
     const update = () => {
       const clients = writePresence(route)
@@ -225,7 +258,7 @@ export function usePresence(route: string): PresenceSnapshot {
       const onlineTotal = Math.max(1, Object.keys(clients).length)
       const routeOnline = Math.max(1, Object.values(clients).filter((client) => client.route === route).length)
       setSnapshot({ route, onlineTotal, routeOnline, wispLevel: wisp.level, wispName: wisp.name, energy: wisp.energy })
-      bc?.postMessage({ clientId, route, seen: Date.now() })
+      try { bc?.postMessage({ clientId, route, seen: Date.now() }) } catch {}
     }
 
     const onStorage = (event: StorageEvent) => {
@@ -238,21 +271,24 @@ export function usePresence(route: string): PresenceSnapshot {
     window.addEventListener('storage', onStorage)
     window.addEventListener('xethkioz:wisp-xp', onWispXp as EventListener)
 
-    const realtime = supabase.channel(`presence:${route}`, { config: { presence: { key: clientId } } })
-    realtime.on('presence', { event: 'sync' }, () => {
-      const state = realtime.presenceState()
-      const wisp = getWispData()
-      setSnapshot((current) => ({ ...current, onlineTotal: Math.max(current.onlineTotal, Object.keys(state).length), routeOnline: Math.max(1, Object.keys(state).length), wispLevel: wisp.level, wispName: wisp.name, energy: wisp.energy }))
-    }).subscribe(async (status) => {
-      if (status === 'SUBSCRIBED') await realtime.track({ route, online_at: new Date().toISOString(), name: getDisplayName() })
-    })
+    let realtime: ReturnType<typeof supabase.channel> | null = null
+    try {
+      realtime = supabase.channel(`presence:${route}`, { config: { presence: { key: clientId } } })
+      realtime.on('presence', { event: 'sync' }, () => {
+        const state = realtime?.presenceState() ?? {}
+        const wisp = getWispData()
+        setSnapshot((current) => ({ ...current, onlineTotal: Math.max(current.onlineTotal, Object.keys(state).length), routeOnline: Math.max(1, Object.keys(state).length), wispLevel: wisp.level, wispName: wisp.name, energy: wisp.energy }))
+      }).subscribe(async (status) => {
+        if (status === 'SUBSCRIBED') await realtime?.track({ route, online_at: new Date().toISOString(), name: getDisplayName() })
+      })
+    } catch {}
 
     return () => {
       window.clearInterval(timer)
       window.removeEventListener('storage', onStorage)
       window.removeEventListener('xethkioz:wisp-xp', onWispXp as EventListener)
-      bc?.close()
-      supabase.removeChannel(realtime)
+      try { bc?.close() } catch {}
+      if (realtime) supabase.removeChannel(realtime)
     }
   }, [route])
 

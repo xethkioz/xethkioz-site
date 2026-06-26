@@ -1,3 +1,12 @@
+# Changelog XETHKIOZ
+
+## v4.0.0-rc.2.2 — Stability Render Fix
+- Fix de pantalla vacía: se agrega `AppErrorBoundary` y Safe Boot.
+- Chat/presencia/Wisp quedan aislados para no romper el render principal.
+- Supabase se vuelve tolerante a configuración faltante o inválida.
+- `realtimeCommunity.ts` protege localStorage, BroadcastChannel, Realtime y crypto.
+- Build validado con Vite.
+
 
 ## v4.0.0-rc.2.0 — Realtime Chat + Wisp Evolution
 
