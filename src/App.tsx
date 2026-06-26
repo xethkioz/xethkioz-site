@@ -10,16 +10,20 @@ import FloatingCommunityChat from './components/FloatingCommunityChat'
 import WispPortal from './components/WispPortal'
 import AppErrorBoundary from './components/AppErrorBoundary'
 
-const Home = lazy(() => import('./pages/Home'))
-const GamingHub = lazy(() => import('./pages/GamingHub'))
-const TechLab = lazy(() => import('./pages/TechLab'))
-const ScienceLab = lazy(() => import('./pages/ScienceLab'))
-const News = lazy(() => import('./pages/News'))
-const ArticlePage = lazy(() => import('./pages/ArticlePage'))
-const Streaming = lazy(() => import('./pages/Streaming'))
+import Home from './pages/Home'
+import GamingHub from './pages/GamingHub'
+import TechLab from './pages/TechLab'
+import ScienceLab from './pages/ScienceLab'
+import News from './pages/News'
+import ArticlePage from './pages/ArticlePage'
+import Streaming from './pages/Streaming'
+import Media from './pages/Media'
+import Community from './pages/Community'
+import GreenNode from './pages/GreenNode'
+import Network from './pages/Network'
+import AILab from './pages/AILab'
+
 const ChatOverlayPage = lazy(() => import('./pages/ChatOverlayPage'))
-const Media = lazy(() => import('./pages/Media'))
-const Community = lazy(() => import('./pages/Community'))
 const CommunityFeature = lazy(() => import('./pages/CommunityFeature'))
 const CreatorAccount = lazy(() => import('./pages/CreatorAccount'))
 const CreatorDashboard = lazy(() => import('./pages/CreatorDashboard'))
@@ -33,11 +37,8 @@ const CmsStudio = lazy(() => import('./pages/CmsStudio'))
 const LiveChecklist = lazy(() => import('./pages/LiveChecklist'))
 const NewsEngine = lazy(() => import('./pages/NewsEngine'))
 const RolesDashboard = lazy(() => import('./pages/RolesDashboard'))
-const GreenNode = lazy(() => import('./pages/GreenNode'))
-const Network = lazy(() => import('./pages/Network'))
 const ContentSystem = lazy(() => import('./pages/ContentSystem'))
 const FinalQA = lazy(() => import('./pages/FinalQA'))
-const AILab = lazy(() => import('./pages/AILab'))
 const CreatorStudio = lazy(() => import('./pages/CreatorStudio'))
 const Milestones = lazy(() => import('./pages/Milestones'))
 const NotFound = lazy(() => import('./pages/NotFound'))
@@ -58,22 +59,18 @@ function RouteLoader() {
 function AppShell() {
   const location = useLocation()
   const isGreenNode = location.pathname === '/green-node'
-  const isScienceLab = location.pathname === '/science'
-  const isIsolatedPortal = isGreenNode || isScienceLab
-  const hideMainChrome = isIsolatedPortal
+  const isGreenNodeRoute = isGreenNode
 
   return (
     <>
-      {!isGreenNode && <AnimatedBackground />}
+      <AnimatedBackground />
       <Analytics />
       <ScrollToTop />
-      {!hideMainChrome && (
-        <AppErrorBoundary label="Header" compact>
-          <Header />
-        </AppErrorBoundary>
-      )}
+      <AppErrorBoundary label="Header" compact>
+        <Header />
+      </AppErrorBoundary>
 
-      <main id="main-content" className={`min-h-screen ${hideMainChrome ? '' : 'pt-16 md:pt-20'}`}>
+      <main id="main-content" className={`min-h-screen pt-16 md:pt-20 ${isGreenNodeRoute ? 'green-node-shell' : ''}`}>
         <AppErrorBoundary label="Routes">
           <Suspense fallback={<RouteLoader />}>
             <Routes>
@@ -115,19 +112,15 @@ function AppShell() {
         </AppErrorBoundary>
       </main>
 
-      {!hideMainChrome && (
-        <AppErrorBoundary label="Footer" compact>
-          <Footer />
-        </AppErrorBoundary>
-      )}
+      <AppErrorBoundary label="Footer" compact>
+        <Footer />
+      </AppErrorBoundary>
       <AppErrorBoundary label="FloatingCommunityChat" compact>
         <FloatingCommunityChat />
       </AppErrorBoundary>
-      {!isIsolatedPortal && (
-        <AppErrorBoundary label="WispPortal" compact>
-          <WispPortal />
-        </AppErrorBoundary>
-      )}
+      <AppErrorBoundary label="WispPortal" compact>
+        <WispPortal />
+      </AppErrorBoundary>
     </>
   )
 }

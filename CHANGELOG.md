@@ -1,3 +1,10 @@
+# v4.0.0-rc.3.1 — Stability Recovery
+
+- Estabilización del chat público con persistencia Supabase-first y polling fallback.
+- Rutas principales convertidas a carga directa para evitar secciones frágiles tras deploy/cache.
+- Green Node vuelve al layout general con Header, Footer y WispPortal.
+- Nueva migración Supabase: `20260626_rc31_public_chat_stabilization.sql`.
+
 # Changelog
 
 ## v4.0.0-rc.3.0 — Home Command Center + Green Node Matrix

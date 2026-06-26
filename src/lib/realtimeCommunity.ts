@@ -119,6 +119,31 @@ function writeLocalMessages(messages: ChatMessage[]) {
   storageSet(LOCAL_MESSAGES_KEY, JSON.stringify(uniqueMessages(messages)))
 }
 
+async function fetchRoomMessages(room: string) {
+  if (!isSupabaseConfigured) return []
+  const { data, error } = await supabase
+    .from('xeth_chat_messages')
+    .select('id, room, user, role, text, created_at')
+    .eq('room', room)
+    .order('created_at', { ascending: false })
+    .limit(80)
+  if (error || !data) return []
+  return data.map(normalizeMessage).reverse()
+}
+
+async function insertRoomMessage(message: ChatMessage) {
+  if (!isSupabaseConfigured) return false
+  const { error } = await supabase.from('xeth_chat_messages').insert({
+    id: message.id,
+    room: message.room,
+    user: message.user,
+    role: message.role,
+    text: message.text,
+    created_at: message.created_at,
+  })
+  return !error
+}
+
 function createBroadcastChannel(name: string) {
   try {
     return typeof window !== 'undefined' && 'BroadcastChannel' in window ? new BroadcastChannel(name) : null
@@ -216,22 +241,17 @@ export function useRealtimeChat(seed: ChatMessage[], activeRoom: string) {
     let realtime: ReturnType<typeof supabase.channel> | null = null
 
     const loadSupabaseHistory = async () => {
-      if (!isSupabaseConfigured) return
       try {
-        const { data, error } = await supabase
-          .from('xeth_chat_messages')
-          .select('id, room, user, role, text, created_at')
-          .eq('room', activeRoom)
-          .order('created_at', { ascending: false })
-          .limit(80)
-        if (!ignore && !error && data) {
-          setMessages((current) => uniqueMessages([...current, ...data.map(normalizeMessage)]))
+        const data = await fetchRoomMessages(activeRoom)
+        if (!ignore && data.length) {
+          setMessages((current) => uniqueMessages([...current, ...data]))
           setStatus((current) => current === 'realtime' ? current : 'database')
         }
       } catch {}
     }
 
     loadSupabaseHistory()
+    const poller = window.setInterval(loadSupabaseHistory, 2500)
 
     if (isSupabaseConfigured) {
       try {
@@ -257,6 +277,7 @@ export function useRealtimeChat(seed: ChatMessage[], activeRoom: string) {
 
     return () => {
       ignore = true
+      window.clearInterval(poller)
       if (realtime) supabase.removeChannel(realtime)
     }
   }, [activeRoom, seed])
@@ -278,23 +299,21 @@ export function useRealtimeChat(seed: ChatMessage[], activeRoom: string) {
 
     if (isSupabaseConfigured) {
       try {
-        const broadcast = supabase.channel(`${REALTIME_CHAT_PREFIX}${message.room}`)
-        await broadcast.send({ type: 'broadcast', event: 'message', payload: message })
-        setStatus('realtime')
-        supabase.removeChannel(broadcast)
+        const saved = await insertRoomMessage(message)
+        if (saved) setStatus('database')
       } catch {
         setStatus((current) => current === 'realtime' ? 'realtime' : 'broadcast')
       }
 
       try {
-        const { error } = await supabase.from('xeth_chat_messages').insert({
-          id: message.id,
-          room: message.room,
-          user: message.user,
-          role: message.role,
-          text: message.text,
+        const live = supabase.channel(`${REALTIME_CHAT_PREFIX}${message.room}`)
+        live.subscribe(async (state) => {
+          if (state === 'SUBSCRIBED') {
+            await live.send({ type: 'broadcast', event: 'message', payload: message })
+            setStatus('realtime')
+            supabase.removeChannel(live)
+          }
         })
-        if (!error) setStatus('realtime')
       } catch {}
     }
   }, [])

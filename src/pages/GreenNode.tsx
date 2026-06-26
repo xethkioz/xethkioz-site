@@ -36,12 +36,12 @@ export default function GreenNode() {
         image="/images/articles/xethkioz-cover.svg"
       />
 
-      <header className="fixed left-0 right-0 top-0 z-50 border-b border-green-400/20 bg-black/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6">
+      <div className="border-b border-green-400/20 bg-black/70 backdrop-blur-xl">
+        <div className="mx-auto flex min-h-16 max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <Link to="/" className="font-mono text-sm font-black uppercase tracking-[0.28em] text-green-300 hover:text-green-100">
             ← XETHKIOZ
           </Link>
-          <nav className="hidden items-center gap-2 md:flex" aria-label="Green Node navigation">
+          <nav className="flex flex-wrap items-center gap-2" aria-label="Green Node navigation">
             {nodeNav.map((item) => (
               <a key={item.href} href={item.href} className="rounded-lg border border-green-400/20 bg-green-400/5 px-3 py-2 font-mono text-xs text-green-300 hover:bg-green-400/10">
                 {item.label}
@@ -52,12 +52,12 @@ export default function GreenNode() {
             </Link>
           </nav>
           <span className="rounded-full border border-green-400/20 bg-green-400/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-green-300">
-            isolated mode
+            public matrix
           </span>
         </div>
-      </header>
+      </div>
 
-      <section className="relative min-h-screen overflow-hidden border-b border-green-400/20 pt-16">
+      <section className="relative min-h-screen overflow-hidden border-b border-green-400/20">
         <video
           className="absolute inset-0 h-full w-full object-cover opacity-55 mix-blend-screen"
           src="/videos/green-node-banner.mp4"
