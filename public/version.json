@@ -1,10 +1,10 @@
 {
-  "version": "4.0.0-rc.4.0",
-  "name": "Realtime Community + Daily Loop",
-  "build": "2026-06-25-rc2.4",
+  "version": "4.0.0-rc.4.1",
+  "name": "V7 Foundation UX Consolidation",
+  "build": "2026-06-26-rc4.1",
   "stage": "RC",
-  "release": "XETHKIOZ Network RC1.9 Milestones + Data Governance",
-  "codename": "Content Ready UX Polish",
-  "channel": "RC4 Stability Core",
+  "release": "XETHKIOZ V7 Foundation: Green Wisp + UX Simplification",
+  "codename": "Ethereal Wisp Foundation",
+  "channel": "RC4.1 V7 Foundation",
   "updated": "2026-06-26"
 }

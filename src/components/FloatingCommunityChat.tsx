@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useMemo, useState } from 'react'
+import { FormEvent, useMemo, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { communityRooms, starterChatMessages } from '../lib/mockData'
 import { addWispXp, usePresence, useRealtimeChat } from '../lib/realtimeCommunity'
@@ -57,10 +57,10 @@ export default function FloatingCommunityChat() {
   }
 
   return (
-    <div className="fixed bottom-5 right-5 z-[70] flex flex-col items-end gap-3">
+    <div className="fixed bottom-3 right-3 z-[70] flex flex-col items-end gap-3 sm:bottom-5 sm:right-5">
       {open && (
-        <section className="w-[min(94vw,440px)] overflow-hidden rounded-3xl border border-orange/30 bg-ink-300/95 shadow-[0_0_45px_rgba(255,106,0,0.22)] backdrop-blur-xl animate-fade-in">
-          <div className="relative border-b border-white/10 p-4">
+        <section className="max-h-[76vh] w-[min(94vw,440px)] overflow-hidden rounded-3xl border border-orange/30 bg-ink-300/95 shadow-[0_0_45px_rgba(255,106,0,0.22)] backdrop-blur-xl animate-fade-in sm:max-h-[82vh]">
+          <div className="relative border-b border-white/10 p-3 sm:p-4">
             <div className="absolute inset-0 grid-bg opacity-20" />
             <div className="relative flex items-start justify-between gap-3">
               <div>
@@ -77,8 +77,8 @@ export default function FloatingCommunityChat() {
             </div>
           </div>
 
-          <div className="grid grid-cols-[118px_1fr] min-h-[386px]">
-            <aside className="border-r border-white/10 bg-black/20 p-2 space-y-1">
+          <div className="grid min-h-[0] grid-cols-1 sm:grid-cols-[118px_1fr]">
+            <aside className="hidden border-r border-white/10 bg-black/20 p-2 space-y-1 sm:block">
               {communityRooms.map((r) => (
                 <button key={r.id} onClick={() => setActiveRoom(r.id)} className={`w-full rounded-xl px-2 py-2 text-left text-xs transition-all ${activeRoom === r.id ? 'bg-orange/15 text-orange border border-orange/30' : 'text-gray-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                   <span className="mr-1">{r.icon}</span>{r.name}
@@ -87,12 +87,12 @@ export default function FloatingCommunityChat() {
               <Link to="/community" className="mt-3 block rounded-xl border border-neon/30 bg-neon/10 px-2 py-2 text-center text-[11px] font-bold text-neon hover:bg-neon/20">Ver comunidad</Link>
             </aside>
 
-            <div className="flex min-h-[386px] flex-col">
+            <div className="flex max-h-[54vh] min-h-[320px] flex-col sm:max-h-none sm:min-h-[386px]">
               <div className="border-b border-white/10 p-3">
                 <div className="flex items-center gap-2"><span>{room.icon}</span><h3 className="font-display text-sm font-bold text-white">{room.name}</h3></div>
                 <p className="mt-1 text-[11px] text-gray-500">{room.description}</p>
               </div>
-              <div className="flex-1 space-y-2 overflow-y-auto p-3">
+              <div className="flex-1 space-y-2 overflow-y-auto p-2.5 sm:p-3">
                 {activeMessages.map((m) => (
                   <div key={m.id} className="rounded-xl border border-white/10 bg-white/[0.04] p-2.5">
                     <div className="mb-1 flex items-center justify-between gap-2">
@@ -105,7 +105,7 @@ export default function FloatingCommunityChat() {
                 ))}
               </div>
               <form onSubmit={send} className="border-t border-white/10 p-3">
-                <div className="mb-2 flex gap-1 text-lg" aria-label="Emojis rápidos">
+                <div className="mb-2 hidden gap-1 text-lg sm:flex" aria-label="Emojis rápidos">
                   {['🎮','🔥','🤖','🔬','👑','⚡','🟢'].map((emoji) => <button key={emoji} type="button" onClick={() => setText((v) => `${v}${emoji}`)} className="rounded-md border border-white/10 px-1.5 hover:bg-white/10">{emoji}</button>)}
                 </div>
                 <div className="flex gap-2">
@@ -119,9 +119,9 @@ export default function FloatingCommunityChat() {
         </section>
       )}
 
-      <button onClick={() => setOpen((value) => !value)} className="group flex items-center gap-2 rounded-full border border-orange/40 bg-ink-300/95 px-4 py-3 text-sm font-bold text-white shadow-[0_0_28px_rgba(255,106,0,0.25)] backdrop-blur-xl transition-all hover:border-orange hover:scale-105">
+      <button onClick={() => setOpen((value) => !value)} className="group flex items-center gap-2 rounded-full border border-orange/40 bg-ink-300/95 px-3 py-2.5 text-xs font-bold text-white shadow-[0_0_28px_rgba(255,106,0,0.25)] backdrop-blur-xl transition-all hover:scale-105 hover:border-orange sm:px-4 sm:py-3 sm:text-sm">
         <span className="relative flex h-3 w-3"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-60"/><span className="relative inline-flex h-3 w-3 rounded-full bg-green-400"/></span>
-        💬 Chat · {presence.routeOnline} mirando
+        💬 Chat
       </button>
     </div>
   )

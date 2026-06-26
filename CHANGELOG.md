@@ -1,3 +1,14 @@
+
+## v4.0.0-rc.4.1 — V7 Foundation UX Consolidation
+
+- Reconstrucción limpia del Home como portada editorial y de portales, reduciendo saturación visual.
+- Navegación pública simplificada; herramientas internas agrupadas en Studio.
+- Green Wisp definido como XETHKIOZ en forma etérea con estados por portal.
+- Nuevo `src/lib/greenWispCore.ts` para sostener la evolución visual/narrativa hacia V7.
+- Chat flotante ajustado para móvil para evitar tapar contenido y reducir sensación de crasheo.
+- Green Node optimizado: video pesado oculto en móvil y carga de fondo diferida.
+- Build validado con `npm run build`.
+
 # Changelog
 
 ## v4.0.0-rc.4.0 — Stability Core

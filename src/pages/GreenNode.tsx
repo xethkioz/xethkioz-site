@@ -57,15 +57,15 @@ export default function GreenNode() {
         </div>
       </div>
 
-      <section className="relative min-h-screen overflow-hidden border-b border-green-400/20">
+      <section className="relative min-h-[78vh] overflow-hidden border-b border-green-400/20 md:min-h-screen">
         <video
-          className="absolute inset-0 h-full w-full object-cover opacity-55 mix-blend-screen"
+          className="absolute inset-0 hidden h-full w-full object-cover opacity-45 mix-blend-screen md:block"
           src="/videos/green-node-banner.mp4"
           autoPlay
           loop
           muted
           playsInline
-          preload="metadata"
+          preload="none"
         />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(0,255,102,.18),rgba(0,0,0,.74)_50%,#000_92%)]" />
         <div className="absolute inset-0 green-scanlines" />
@@ -73,12 +73,12 @@ export default function GreenNode() {
 
         <div className="relative mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl grid-cols-1 items-center gap-8 px-4 py-12 md:grid-cols-[1.05fr_.95fr] sm:px-6">
           <div>
-            <p className="font-mono text-xs uppercase tracking-[0.5em] text-green-300">hidden branch / educational mode</p>
+            <p className="font-mono text-xs uppercase tracking-[0.5em] text-green-300">green wisp evolved / educational mode</p>
             <h1 className="mt-5 font-display text-4xl font-black leading-tight text-green-100 md:text-7xl drop-shadow-[0_0_20px_rgba(0,255,102,.75)]">
               {GREEN_NODE_CONFIG.name}
             </h1>
             <p className="mt-5 max-w-2xl font-mono text-sm leading-relaxed text-green-200/80 md:text-base">
-              Programación, Ubuntu, Linux, open source, ciberseguridad defensiva, OSINT responsable y análisis documental de misterios. Este nodo está aislado del portal principal para sentirse como una terminal oculta dentro de XETHKIOZ Network.
+              Programación, Ubuntu, Linux, open source, ciberseguridad defensiva, OSINT responsable y análisis documental de misterios. En este portal, Green Wisp evoluciona: deja de ser una presencia sutil y se convierte en la interfaz viva del laboratorio XETHKIOZ.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <a href="#terminal" className="rounded-lg border border-green-300/40 bg-green-400/10 px-5 py-3 font-mono text-sm font-bold text-green-200 shadow-[0_0_22px_rgba(0,255,102,.25)] hover:bg-green-400/20">Abrir terminal</a>
@@ -180,7 +180,7 @@ export default function GreenNode() {
             <h2 className="font-display text-2xl font-black text-green-100">Easter eggs activos</h2>
             <p className="mt-3 font-mono text-sm text-green-300">sudo truth · whoami · matrix · ubuntu · 42 · greennode · wisp</p>
             <p className="mt-3 text-sm leading-relaxed text-green-100/70">
-              El Wisp verde es la entrada principal. Green Node no vive en el menú común: se descubre, se activa y queda como experiencia paralela.
+              Green Wisp es XETHKIOZ en forma etérea. En Green Node alcanza su forma evolucionada y guía la exploración técnica sin perder el enfoque educativo.
             </p>
           </div>
         </section>
