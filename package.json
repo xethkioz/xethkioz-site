@@ -1,7 +1,7 @@
 {
   "name": "xethkioz",
   "private": true,
-  "version": "4.0.0-rc.1.9",
+  "version": "4.0.0-rc.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",

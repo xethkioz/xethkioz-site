@@ -1,4 +1,14 @@
 
+## v4.0.0-rc.2.0 — Realtime Chat + Wisp Evolution
+
+- Agregado motor de chat híbrido: local multi-pestaña, BroadcastChannel y Supabase Realtime cuando la migración esté aplicada.
+- El chat ahora muestra cuántas personas están mirando la ruta actual y cuántos usuarios hay activos en el ecosistema.
+- El Wisp ahora tiene nivel, energía, nombre evolutivo y gana XP por interacción/chat.
+- Agregada sala Green Node al chat de comunidad.
+- Agregada migración SQL `20260625_rc20_realtime_chat_wisp_evolution.sql` para salas, mensajes, presencia y eventos del Wisp.
+- Preparada la base para presencia por ruta y evolución futura con perfiles reales.
+
+
 
 ## v4.0.0-rc.1.9 — Milestones + Data Governance
 

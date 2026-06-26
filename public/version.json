@@ -1,7 +1,8 @@
 {
-  "version": "4.0.0-rc.1.9",
+  "version": "4.0.0-rc.2.0",
   "name": "Milestones + Data Governance + Community Progression",
-  "build": "2026-06-25",
+  "build": "2026-06-25-rc20",
   "stage": "RC",
-  "release": "XETHKIOZ Network RC1.9 Milestones + Data Governance"
+  "release": "XETHKIOZ Network RC1.9 Milestones + Data Governance",
+  "codename": "Realtime Chat + Wisp Evolution"
 }

@@ -193,6 +193,7 @@ export const communityRooms: ChatRoom[] = [
   { id: 'ia', name: 'IA', icon: '🤖', description: 'Herramientas, automatización y creación.', color: 'green' },
   { id: 'science', name: 'Ciencia', icon: '🔬', description: 'Espacio, medicina, fake news y pensamiento crítico.', color: 'neon' },
   { id: 'streaming', name: 'Streaming', icon: '📺', description: 'OBS, Kick, Twitch, clips y overlays.', color: 'red' },
+  { id: 'green-node', name: 'Green Node', icon: '🟢', description: 'Linux, programación, OSINT educativo y cultura hacker ética.', color: 'green' },
   { id: 'asia', name: 'Asia Gaming', icon: '🌏', description: 'Tendencias de Corea, Japón, China y SEA antes de llegar a LATAM.', color: 'green' },
 ]
 
@@ -202,6 +203,7 @@ export const starterChatMessages: ChatMessage[] = [
   { id: 'm3', room: 'ia', user: 'Tech Lab', role: 'mod', text: 'La IA puede ayudar a resumir noticias, pero siempre hay que verificar fuentes.', created_at: today },
   { id: 'm4', room: 'science', user: 'Science Lab', role: 'mod', text: 'Nueva sala para ciencia, fake news y pensamiento crítico.', created_at: today },
   { id: 'm5', room: 'streaming', user: 'Stream Desk', role: 'mod', text: 'Probando overlay, escenas y chat para OBS/Kick/Twitch.', created_at: today },
+  { id: 'm6', room: 'green-node', user: 'Green Node', role: 'mod', text: 'Canal educativo para Linux, terminal, programación y ciberseguridad defensiva.', created_at: today },
 ]
 
 

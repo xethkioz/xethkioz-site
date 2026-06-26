@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { addWispXp, usePresence } from '../lib/realtimeCommunity'
 
 const ACCESS_DELAY_MS = 1750
 const SECRET_SEQUENCE = 'greennode'
@@ -38,6 +39,7 @@ export default function WispPortal() {
   const navigate = useNavigate()
   const location = useLocation()
   const insideGreenNode = location.pathname === '/green-node'
+  const presence = usePresence(location.pathname)
 
   const position = useMemo(() => routePositions[location.pathname] ?? { bottom: '6rem', left: '1.25rem' }, [location.pathname])
   const signalLabel = discovered ? 'GREEN NODE REMEMBERED' : clicks >= 2 ? 'SIGNAL STABILIZED' : 'UNSTABLE GREEN SIGNAL'
@@ -71,6 +73,7 @@ export default function WispPortal() {
       if (next === SECRET_SEQUENCE || next.endsWith(SECONDARY_SEQUENCE)) {
         window.localStorage.setItem(WISP_DISCOVERY_KEY, 'true')
         setDiscovered(true)
+        addWispXp(42)
         setOpening(true)
       }
     }
@@ -82,6 +85,7 @@ export default function WispPortal() {
     const nextClicks = clicks + 1
     setClicks(nextClicks)
     window.localStorage.setItem(WISP_CLICK_KEY, String(nextClicks))
+    addWispXp(55 + presence.routeOnline * 3)
     setOpening(true)
   }
 
@@ -107,7 +111,7 @@ export default function WispPortal() {
         <span className="green-wisp-tail" />
         <span className="green-wisp-tail green-wisp-tail-secondary" />
         <span className="absolute -left-2 bottom-2 h-1.5 w-1.5 rounded-full bg-green-500/80 blur-[1px] animate-pulse" />
-        {clicks > 0 && <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 rounded-full border border-green-300/30 bg-black/85 px-2 py-0.5 font-mono text-[9px] text-green-300">{clicks}</span>}
+        <span className="absolute -bottom-7 left-1/2 min-w-[88px] -translate-x-1/2 rounded-full border border-green-300/30 bg-black/90 px-2 py-1 text-center font-mono text-[9px] leading-tight text-green-300 shadow-[0_0_14px_rgba(0,255,102,.24)]">{presence.routeOnline} mirando<br/>Lv.{presence.wispLevel} {presence.wispName}</span>
         {discovered && <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full border border-black bg-green-200 shadow-[0_0_12px_rgba(0,255,102,1)]" />}
         <span className="sr-only">Green Node</span>
       </button>
@@ -115,7 +119,7 @@ export default function WispPortal() {
       {hint && !opening && (
         <div className="fixed z-[74] max-w-[245px] rounded-xl border border-green-300/30 bg-black/85 px-4 py-3 font-mono text-[11px] text-green-200 shadow-[0_0_28px_rgba(0,255,102,.18)]" style={{ ...position, transform: 'translate(4.8rem, -0.4rem)' }}>
           <span className="block text-green-400">{signalLabel}</span>
-          {discovered ? 'node remembered · click to reopen' : clicks >= 2 ? 'click to open portal · type greennode' : 'follow the wisp · type greennode or wisp'}
+          {discovered ? `node remembered · ${presence.routeOnline} online here` : clicks >= 2 ? `portal energy ${presence.energy}% · type greennode` : `follow the wisp · ${presence.onlineTotal} online in Network`}
         </div>
       )}
 
@@ -132,7 +136,7 @@ export default function WispPortal() {
             <h2 className="mt-4 font-display text-3xl md:text-6xl font-black text-green-200 drop-shadow-[0_0_18px_rgba(0,255,102,.9)]">
               XETHKIOZ // GREEN NODE
             </h2>
-            <p className="mt-3 font-mono text-sm text-green-400/80">sudo portal --open --clearance=visitor --mode=educational</p>
+            <p className="mt-3 font-mono text-sm text-green-400/80">sudo portal --open --clearance=visitor --watchers={presence.routeOnline} --wisp=lv{presence.wispLevel}</p>
             <div className="mx-auto mt-5 h-1 max-w-sm overflow-hidden rounded-full bg-green-950">
               <span className="block h-full animate-[portalProgress_1.55s_ease-out_forwards] bg-green-300 shadow-[0_0_18px_rgba(0,255,102,1)]" />
             </div>
