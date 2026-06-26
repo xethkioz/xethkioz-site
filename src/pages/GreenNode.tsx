@@ -5,14 +5,17 @@ import GreenNodeCommandConsole from '../components/GreenNodeCommandConsole'
 import { greenNodeAccessLog, greenNodeProtocol } from '../lib/networkBlueprint'
 import { GREEN_NODE_CONFIG } from '../lib/siteConfig'
 import GreenNodeFieldBoard from '../components/GreenNodeFieldBoard'
+import { greenNodeMatrix } from '../lib/editorialModel'
 
 const terminalLines = [
   'booting xethkioz-green-node...',
   'loading ubuntu_kernel_notes.md',
+  'mount /matrix/linux-programming-security --read-only',
   'mount /archives/conspiracy-research --read-only',
   'osint: ethical_mode=true',
   'cybersecurity: defensive_only=true',
   'network.chrome=isolated',
+  'news.rotation=ready_for_cms',
   'access_level: VISITOR',
 ]
 
@@ -104,6 +107,26 @@ export default function GreenNode() {
       <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
         <section id="fields" className="mb-10 rounded-3xl border border-green-400/20 bg-black/60 p-5">
           <GreenNodeFieldBoard />
+        </section>
+
+        <section className="mb-10 rounded-3xl border border-green-400/20 bg-black/60 p-5">
+          <div className="mb-5 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="font-mono text-xs uppercase tracking-[0.35em] text-green-400">technology matrix</p>
+              <h2 className="mt-2 font-display text-2xl font-black text-green-100">Green Node 2.0: matriz de conocimiento</h2>
+            </div>
+            <Link to="/cms" className="rounded-lg border border-green-400/30 bg-green-400/10 px-4 py-2 font-mono text-xs font-bold text-green-200 hover:bg-green-400/20">Conectar con CMS</Link>
+          </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {greenNodeMatrix.map((block) => (
+              <article key={block.group} className="rounded-2xl border border-green-400/15 bg-green-950/10 p-4">
+                <h3 className="font-display text-lg font-black text-green-100">{block.group}</h3>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {block.items.map((item) => <span key={item} className="rounded-full border border-green-400/15 bg-black/30 px-2.5 py-1 font-mono text-[10px] text-green-300">{item}</span>)}
+                </div>
+              </article>
+            ))}
+          </div>
         </section>
 
         <section className="grid grid-cols-1 gap-5 md:grid-cols-3">

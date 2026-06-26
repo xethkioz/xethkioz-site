@@ -1,4 +1,14 @@
-# Changelog XETHKIOZ
+# Changelog
+
+## v4.0.0-rc.3.0 — Home Command Center + Green Node Matrix
+
+- Reestructuración grande de la Home como command center editorial.
+- Agregado modelo centralizado `editorialModel.ts` para KPIs, portales, carriles y matriz Green Node.
+- App migrada a `React.lazy` + `Suspense` para separar bundles por ruta.
+- `ArticleCard` ahora soporta copy localizado por idioma y futuros campos Supabase `title_en/title_zh/excerpt_en/excerpt_zh`.
+- Green Node expandido como matriz técnica: sistemas, programación, infraestructura, seguridad educativa, exploración y contenido.
+- Versión elevada a `v4.0.0-rc.3.0`.
+
 
 ## v4.0.0-rc.2.2 — Stability Render Fix
 - Fix de pantalla vacía: se agrega `AppErrorBoundary` y Safe Boot.

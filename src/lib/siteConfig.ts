@@ -1,6 +1,6 @@
-export const SITE_VERSION = 'v4.0.0-rc.2.4'
-export const SITE_RELEASE = 'XETHKIOZ Network Milestones + Data Governance + Community Progression'
-export const SITE_BUILD_DATE = '2026-06-25'
+export const SITE_VERSION = 'v4.0.0-rc.3.0'
+export const SITE_RELEASE = 'XETHKIOZ Network RC3 Home Command Center + Green Node Matrix + Route Splitting'
+export const SITE_BUILD_DATE = '2026-06-26'
 export const SITE_DOMAIN = 'https://xethkioz.com.ar'
 
 export const DONATION_LINKS = {
