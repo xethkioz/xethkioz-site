@@ -1,165 +1,37 @@
 import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
-import { greenNodeEntries } from '../lib/mockData'
-import GreenNodeCommandConsole from '../components/GreenNodeCommandConsole'
-import { greenNodeAccessLog, greenNodeProtocol } from '../lib/networkBlueprint'
-import { GREEN_NODE_CONFIG } from '../lib/siteConfig'
-import GreenNodeFieldBoard from '../components/GreenNodeFieldBoard'
 
-const terminalLines = [
-  'booting xethkioz-green-node...',
-  'loading ubuntu_kernel_notes.md',
-  'mount /archives/conspiracy-research --read-only',
-  'osint: ethical_mode=true',
-  'cybersecurity: defensive_only=true',
-  'network.chrome=isolated',
-  'access_level: VISITOR',
-]
-
-const nodeNav = [
-  { href: '#terminal', label: 'Terminal' },
-  { href: '#fields', label: 'Módulos' },
-  { href: '#protocol', label: 'Protocolo' },
-  { href: '#access', label: 'Logs' },
+const levels = [
+  ['LVL 1–30', 'El camino inicial', 'Linux, Ubuntu, terminal, emuladores y conceptos básicos para entrar al mundo verde.'],
+  ['LVL 31–60', 'El camino avanzado', 'Desarrollo, scripts, automatización, guías propias y código abierto sin copyright.'],
+  ['LVL 61–100', 'El camino profundo', 'Deep Web y Dark Web con enfoque educativo, privacidad, criptografía, crypto y seguridad.'],
 ]
 
 export default function GreenNode() {
   return (
-    <div className="green-node-shell min-h-screen text-green-100">
-      <SEO
-        title="Green Node"
-        description="XETHKIOZ Green Node: Linux, programación, ciberseguridad educativa, OSINT y misterios documentales con estética hacker cyberpunk."
-        url="/green-node"
-        image="/images/articles/xethkioz-cover.svg"
-      />
-
-      <header className="fixed left-0 right-0 top-0 z-50 border-b border-green-400/20 bg-black/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6">
-          <Link to="/" className="font-mono text-sm font-black uppercase tracking-[0.28em] text-green-300 hover:text-green-100">
-            ← XETHKIOZ
-          </Link>
-          <nav className="hidden items-center gap-2 md:flex" aria-label="Green Node navigation">
-            {nodeNav.map((item) => (
-              <a key={item.href} href={item.href} className="rounded-lg border border-green-400/20 bg-green-400/5 px-3 py-2 font-mono text-xs text-green-300 hover:bg-green-400/10">
-                {item.label}
-              </a>
-            ))}
-            <Link to="/network" className="rounded-lg border border-green-400/20 bg-black px-3 py-2 font-mono text-xs text-green-200 hover:border-green-300">
-              Network
-            </Link>
-          </nav>
-          <span className="rounded-full border border-green-400/20 bg-green-400/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-green-300">
-            isolated mode
-          </span>
+    <div className="green-node-shell min-h-screen bg-black text-green-100">
+      <SEO title="Green Node" description="Portal oculto de XETHKIOZ para Linux, desarrollo, ciberseguridad educativa, privacidad y mundo verde." url="/green-node" />
+      <header className="sticky top-0 z-40 border-b border-green-400/20 bg-black/85 backdrop-blur-xl">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
+          <Link to="/" className="font-mono text-sm font-black uppercase tracking-[0.24em] text-green-300 hover:text-green-100">← Volver al núcleo</Link>
+          <span className="rounded-full border border-green-400/30 bg-green-400/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-green-300">hidden node</span>
         </div>
       </header>
-
-      <section className="relative min-h-screen overflow-hidden border-b border-green-400/20 pt-16">
-        <video
-          className="absolute inset-0 h-full w-full object-cover opacity-55 mix-blend-screen"
-          src="/videos/green-node-banner.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-        />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(0,255,102,.18),rgba(0,0,0,.74)_50%,#000_92%)]" />
-        <div className="absolute inset-0 green-scanlines" />
-        <div className="absolute left-1/2 top-1/2 h-[54vw] max-h-[680px] w-[54vw] max-w-[680px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-green-400/20 shadow-[0_0_120px_rgba(0,255,102,.22),inset_0_0_100px_rgba(0,255,102,.12)]" />
-
-        <div className="relative mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl grid-cols-1 items-center gap-8 px-4 py-12 md:grid-cols-[1.05fr_.95fr] sm:px-6">
-          <div>
-            <p className="font-mono text-xs uppercase tracking-[0.5em] text-green-300">hidden branch / educational mode</p>
-            <h1 className="mt-5 font-display text-4xl font-black leading-tight text-green-100 md:text-7xl drop-shadow-[0_0_20px_rgba(0,255,102,.75)]">
-              {GREEN_NODE_CONFIG.name}
-            </h1>
-            <p className="mt-5 max-w-2xl font-mono text-sm leading-relaxed text-green-200/80 md:text-base">
-              Programación, Ubuntu, Linux, open source, ciberseguridad defensiva, OSINT responsable y análisis documental de misterios. Este nodo está aislado del portal principal para sentirse como una terminal oculta dentro de XETHKIOZ Network.
-            </p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <a href="#terminal" className="rounded-lg border border-green-300/40 bg-green-400/10 px-5 py-3 font-mono text-sm font-bold text-green-200 shadow-[0_0_22px_rgba(0,255,102,.25)] hover:bg-green-400/20">Abrir terminal</a>
-              <Link to="/news-engine" className="rounded-lg border border-green-700/50 bg-black/55 px-5 py-3 font-mono text-sm text-green-300 hover:border-green-300/60">Fuentes externas</Link>
-              <Link to="/network" className="rounded-lg border border-green-700/50 bg-black/55 px-5 py-3 font-mono text-sm text-green-300 hover:border-green-300/60">Volver al Network Hub</Link>
-            </div>
-          </div>
-
-          <div id="terminal" className="rounded-3xl border border-green-400/30 bg-black/85 p-5 shadow-[0_0_45px_rgba(0,255,102,.18)]">
-            <div className="mb-4 flex items-center gap-2 border-b border-green-400/20 pb-3">
-              <span className="h-3 w-3 rounded-full bg-red-500" />
-              <span className="h-3 w-3 rounded-full bg-yellow-400" />
-              <span className="h-3 w-3 rounded-full bg-green-400" />
-              <span className="ml-auto font-mono text-xs text-green-500">visitor@xethkioz:~</span>
-            </div>
-            <div className="space-y-2 font-mono text-sm">
-              {terminalLines.map((line) => (
-                <p key={line}><span className="text-green-500">$</span> <span className="text-green-200">{line}</span></p>
-              ))}
-              <p className="pt-2 text-green-400 animate-pulse">█</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
-        <section id="fields" className="mb-10 rounded-3xl border border-green-400/20 bg-black/60 p-5">
-          <GreenNodeFieldBoard />
+      <main className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_10%,rgba(50,255,138,.18),transparent_30%)]" />
+        <section className="rounded-[2rem] border border-green-400/25 bg-black/70 p-7 shadow-[0_0_80px_rgba(50,255,138,.14)]">
+          <p className="font-mono text-xs uppercase tracking-[0.45em] text-green-300">wisp nexus // green zone</p>
+          <h1 className="mt-4 font-display text-4xl font-black text-green-100 md:text-6xl drop-shadow-[0_0_18px_rgba(50,255,138,.55)]">La Matrix verde de XETHKIOZ</h1>
+          <p className="mt-5 max-w-3xl font-mono text-sm leading-relaxed text-green-100/75 md:text-base">Sección oculta, simplificada y separada del resto. No compite con Gaming, Ciencia o Fun: se descubre tocando el Wisp.</p>
         </section>
-
-        <section className="grid grid-cols-1 gap-5 md:grid-cols-3">
-          {greenNodeEntries.map((entry) => (
-            <article key={entry.id} className="rounded-3xl border border-green-400/20 bg-black/55 p-6 shadow-[0_0_28px_rgba(0,255,102,.08)]">
-              <div className="mb-4 flex items-center justify-between gap-2">
-                <span className="rounded-full border border-green-400/20 bg-green-400/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-green-300">{entry.category}</span>
-                <span className="font-mono text-[10px] text-green-700">node-{entry.id}</span>
-              </div>
-              <h3 className="font-display text-xl font-black text-green-100">{entry.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-green-100/70">{entry.excerpt}</p>
-              <pre className="mt-5 overflow-hidden rounded-2xl border border-green-400/15 bg-green-950/20 p-3 font-mono text-xs text-green-300">{entry.command}</pre>
+        <section className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3">
+          {levels.map(([level, title, text]) => (
+            <article key={level} className="rounded-3xl border border-green-400/20 bg-black/65 p-6 shadow-[0_0_35px_rgba(50,255,138,.08)]">
+              <p className="font-mono text-xs font-black uppercase tracking-[0.26em] text-green-400">{level}</p>
+              <h2 className="mt-3 font-display text-2xl font-black text-green-100">{title}</h2>
+              <p className="mt-3 text-sm leading-relaxed text-green-100/70">{text}</p>
             </article>
           ))}
-        </section>
-
-        <section id="protocol" className="mt-10 grid grid-cols-1 gap-5 lg:grid-cols-[1.05fr_.95fr]">
-          <GreenNodeCommandConsole />
-          <div className="rounded-3xl border border-green-400/20 bg-black/55 p-6">
-            <p className="font-mono text-xs uppercase tracking-[0.35em] text-green-400">green protocol</p>
-            <h2 className="mt-3 font-display text-2xl font-black text-green-100">Reglas para no romper el enfoque</h2>
-            <div className="mt-5 space-y-3">
-              {greenNodeProtocol.map((item) => (
-                <div key={item} className="rounded-2xl border border-green-400/15 bg-green-950/10 p-4 font-mono text-xs leading-relaxed text-green-100/75">
-                  {item}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="access" className="mt-10 grid grid-cols-1 gap-5 lg:grid-cols-3">
-          {greenNodeAccessLog.map((item) => (
-            <div key={item.event} className="rounded-3xl border border-green-400/20 bg-black/55 p-6 shadow-[0_0_28px_rgba(0,255,102,.08)]">
-              <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-green-500">access vector</p>
-              <h3 className="mt-3 font-display text-xl font-black text-green-100">{item.label}</h3>
-              <p className="mt-2 font-mono text-xs text-green-500">{item.event}</p>
-              <p className="mt-3 text-sm leading-relaxed text-green-100/70">{item.detail}</p>
-            </div>
-          ))}
-        </section>
-
-        <section className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2">
-          <div className="rounded-3xl border border-green-400/20 bg-black/55 p-6">
-            <h2 className="font-display text-2xl font-black text-green-100">Audio ambiental</h2>
-            <p className="mt-3 text-sm leading-relaxed text-green-100/70">
-              El enlace de YouTube queda como referencia estética. Para producción se recomienda subir un loop propio o generado por IA sin copyright: drones graves, interferencia, CRT, terminal y suspenso. No se incrusta automáticamente audio externo para evitar copyright y autoplay invasivo.
-            </p>
-          </div>
-          <div className="rounded-3xl border border-green-400/20 bg-black/55 p-6">
-            <h2 className="font-display text-2xl font-black text-green-100">Easter eggs activos</h2>
-            <p className="mt-3 font-mono text-sm text-green-300">sudo truth · whoami · matrix · ubuntu · 42 · greennode · wisp</p>
-            <p className="mt-3 text-sm leading-relaxed text-green-100/70">
-              El Wisp verde es la entrada principal. Green Node no vive en el menú común: se descubre, se activa y queda como experiencia paralela.
-            </p>
-          </div>
         </section>
       </main>
     </div>

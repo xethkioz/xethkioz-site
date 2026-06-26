@@ -1,4 +1,4 @@
-export type Lang = 'es' | 'en' | 'zh'
+export type Lang = 'es' | 'en'
 export const translations = {
   es: {
     slogan: 'Tu portal al futuro del gaming y la tecnología',
@@ -37,25 +37,6 @@ export const translations = {
     admin: { title: 'Admin Panel', subtitle: 'XETHKIOZ content management', newArticle: 'New Article', titleField: 'Title', slugField: 'Slug (URL)', excerptField: 'Excerpt', contentField: 'Content', coverImageField: 'Image URL', categoryField: 'Category', authorField: 'Author', tagsField: 'Tags (comma separated)', featuredField: 'Featured', trendingField: 'Trending', editorsPickField: "Editor's Pick", popularField: 'Popular', publish: 'Publish', publishing: 'Publishing...', published: 'Article published!', error: 'Error publishing', articles: 'Published Articles', mediaUpload: 'Upload Media', mediaTitle: 'Media Title', mediaType: 'Type', mediaUrl: 'Media URL', mediaThumbnail: 'Thumbnail URL', upload: 'Upload', uploaded: 'Media uploaded!' },
     errors: { notFoundTitle: '404 - Page Not Found', notFoundDesc: 'The page you are looking for does not exist or has been moved.', maintenanceTitle: 'Under Maintenance', maintenanceDesc: 'We are improving XETHKIOZ. We will be back soon.', comingSoonTitle: 'Coming Soon', comingSoonDesc: 'This section is under development. Stay tuned!', backHome: 'Back to Home' },
     common: { loading: 'Loading...', noContent: 'Content coming soon', back: 'Back', min: 'min', readTime: 'min read' },
-  },
-  zh: {
-    slogan: '通往游戏与科技未来的门户',
-    nav: { home: '首页', gaming: '游戏中心', tech: '科技实验室', science: '科学实验室', news: '新闻', streaming: '直播', media: '媒体', community: '社区', about: '关于', contact: '联系', admin: '管理' },
-    home: { gamingPortal: 'XETHKIOZ 游戏中心', techPortal: 'XETHKIOZ 科技与科学实验室', enterGaming: '进入游戏中心', enterTech: '进入科技实验室', featured: '精选', trending: '热门', latest: '最新资讯', editorsPicks: '编辑推荐', popular: '热门', viewAll: '查看全部', readMore: '阅读更多', views: '浏览', liveBadge: '直播' },
-    sections: { featuredNews: '精选新闻', trendingNews: '热门新闻', latestNews: '最新新闻', editorsPicks: '编辑推荐', popularArticles: '热门文章', categories: '分类', liveNow: '正在直播', featuredStreams: '精选直播', latestVideos: '最新视频', mediaCenter: '媒体中心', network: 'XETHKIOZ 网络', networkDesc: '加入我们超过160万的全球社区', upcomingReleases: '即将发布', topGames: '热门游戏', social: '社交媒体', newsletter: '订阅通讯', newsletterDesc: '将最新的游戏、科技和科学新闻直接发送到您的邮箱。', newsletterPlaceholder: 'your@email.com', newsletterBtn: '订阅', newsletterSuccess: '感谢订阅！', newsletterError: '出错了。请重试。' },
-    about: { title: '关于 XETHKIOZ', founder: 'XETHKIOZ 创始人', bio: '阿根廷人，游戏玩家，医院工作者，四个孩子的父亲。致力于打造一个专注于游戏、科技和科学的数字媒体项目，为他的家庭和社区创造更美好的未来。', mission: '我们的使命', missionText: 'XETHKIOZ 的愿景是成为游戏、科技和科学领域的国际领先媒体品牌。我们连接一个对数字未来充满热情的全球社区。', values: '我们的价值观' },
-    community: { title: 'XETHKIOZ 社区', desc: '我们社区的未来正在建设中。很快您将享受用户资料、评论、论坛、投票、活动、比赛、会员资格和社区排名。', features: '即将推出的功能', profiles: '用户资料', comments: '评论', forums: '论坛', polls: '投票', events: '活动', contests: '比赛', memberships: '会员', rankings: '社区排名' },
-    contact: { title: '联系我们', desc: '有故事、合作或问题？给我们写信。', name: '姓名', email: '邮箱', message: '消息', send: '发送消息', sent: '消息已发送！我们会尽快回复。' },
-    footer: { tagline: '通往游戏与科技未来的门户', quickLinks: '快速链接', portals: '门户', connect: '连接', rights: '保留所有权利。', future: '即将推出', store: '在线商店', podcast: '播客', courses: '课程', premium: '高级内容', monetization: '变现', affiliateLinks: '联盟链接', sponsored: '赞助文章', donations: '捐赠' },
-    search: { placeholder: '搜索新闻、游戏、科技...', noResults: '未找到结果', results: '结果' },
-    news: { title: 'XETHKIOZ 新闻', subtitle: '游戏、科技和科学的专业新闻中心', all: '全部', relatedArticles: '相关文章', by: '作者', publishedOn: '发布于', tags: '标签', shareArticle: '分享' },
-    media: { title: '媒体中心', images: '图片', videos: '视频', shorts: '短视频', reels: 'Reels', carousels: '轮播', featured: '精选', archive: '存档', library: '媒体库' },
-    streaming: { title: '直播中心', live: '直播', platforms: '平台', highlights: '频道精选', latestStreams: '最新直播' },
-    social: { title: '社交媒体', instagramReels: 'Instagram Reels', youtubeVideos: 'YouTube 视频', tiktokContent: 'TikTok', threadsPosts: 'Threads', kickStreams: 'Kick 直播', twitchStreams: 'Twitch 直播', follow: '关注', views: '浏览' },
-    author: { title: '作者', articles: '文章', viewProfile: '查看资料', articlesBy: '的文章' },
-    admin: { title: '管理面板', subtitle: 'XETHKIOZ 内容管理', newArticle: '新文章', titleField: '标题', slugField: '别名 (URL)', excerptField: '摘要', contentField: '内容', coverImageField: '图片 URL', categoryField: '分类', authorField: '作者', tagsField: '标签 (逗号分隔)', featuredField: '精选', trendingField: '热门', editorsPickField: '编辑推荐', popularField: '热门', publish: '发布', publishing: '发布中...', published: '文章已发布！', error: '发布错误', articles: '已发布文章', mediaUpload: '上传媒体', mediaTitle: '媒体标题', mediaType: '类型', mediaUrl: '媒体 URL', mediaThumbnail: '缩略图 URL', upload: '上传', uploaded: '媒体已上传！' },
-    errors: { notFoundTitle: '404 - 页面未找到', notFoundDesc: '您寻找的页面不存在或已被移动。', maintenanceTitle: '维护中', maintenanceDesc: '我们正在改进 XETHKIOZ。我们很快会回来。', comingSoonTitle: '即将推出', comingSoonDesc: '此部分正在开发中。敬请期待！', backHome: '返回首页' },
-    common: { loading: '加载中...', noContent: '内容即将推出', back: '返回', min: '分钟', readTime: '分钟阅读' },
   },
 } as const
 export type Translation = typeof translations.es

@@ -1,3 +1,15 @@
+
+## 7.0.0-clean-restart-alpha.2
+
+- Pulido de Home sobre Web_GITHUB(25).
+- Header reducido a controles mínimos.
+- Eliminado navbar tradicional de la experiencia principal.
+- Green Wisp ahora funciona como acceso oculto visual sin texto explicativo.
+- Portales principales simplificados: Juegos, Ciencia/Tecnología y Fun.
+- Green Node queda aislado como mundo verde.
+- Idiomas activos reducidos a ES/EN.
+- Build validado con TypeScript + Vite.
+
 # Changelog XETHKIOZ
 
 ## v4.0.0-rc.2.2 — Stability Render Fix

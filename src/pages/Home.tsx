@@ -1,265 +1,102 @@
 import { Link } from 'react-router-dom'
-import { useLang } from '../lib/LangContext'
-import { useArticles, useStreams } from '../lib/hooks'
-import ArticleCard from '../components/ArticleCard'
-import SocialSection from '../components/SocialSection'
-import Logo from '../components/Logo'
 import SEO from '../components/SEO'
-import { ArticleGridSkeleton, ErrorDisplay } from '../components/Skeletons'
-import SafeImage from '../components/SafeImage'
-import NetworkPortalHub from '../components/NetworkPortalHub'
-import ActivityPulsePanel from '../components/ActivityPulsePanel'
+import Logo from '../components/Logo'
+
+const portals = [
+  {
+    to: '/gaming',
+    title: 'JUEGOS',
+    subtitle: 'Noticias · Guías · Streams · Imágenes',
+    color: 'violet',
+    icon: '🎮',
+  },
+  {
+    to: '/science',
+    title: 'CIENCIA Y TECNOLOGÍA',
+    subtitle: 'Física · Tecnología · IA · Proyectos',
+    color: 'blue',
+    icon: '⚛',
+  },
+  {
+    to: '/fun',
+    title: 'MEMES, OCIO Y DIVERSIÓN',
+    subtitle: 'Memes · Videos · Arte · Humor',
+    color: 'orange',
+    icon: '☻',
+  },
+]
 
 export default function Home() {
-  const { t } = useLang()
-
-  const { articles: featured, loading: featuredLoading, error: featuredError, retry: retryFeatured } = useArticles({ featured: true, limit: 5 })
-  const { articles: trending, loading: trendingLoading, error: trendingError, retry: retryTrending } = useArticles({ trending: true, limit: 6 })
-  const { articles: latest, loading: latestLoading } = useArticles({ limit: 8 })
-  const { articles: editorsPicks } = useArticles({ editorsPick: true, limit: 4 })
-  const { articles: popular } = useArticles({ popular: true, limit: 4 })
-  const { streams, loading: streamsLoading } = useStreams({ featured: true })
-
-  const hero = featured[0]
-  const side = featured.slice(1, 5)
-
   return (
-    <div className="animate-fade-in">
-      <SEO />
+    <div className="xeth-core min-h-screen overflow-hidden bg-[#050608] text-white">
+      <SEO
+        title="XETHKIOZ Ecosystem"
+        description="Tres portales, un universo: juegos, ciencia y tecnología, memes y comunidad. El Wisp verde abre el camino oculto."
+        url="/"
+        image="/images/articles/xethkioz-cover.svg"
+      />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8">
-        <NetworkPortalHub />
-      </div>
+      <section className="relative mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-4 py-8 sm:px-6">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_52%_38%,rgba(138,46,255,.24),transparent_32%),radial-gradient(circle_at_82%_28%,rgba(255,122,0,.20),transparent_30%),radial-gradient(circle_at_29%_30%,rgba(50,255,138,.08),transparent_18%)]" />
+        <div className="absolute inset-0 -z-10 opacity-25 grid-bg" />
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
-        <ActivityPulsePanel />
-      </section>
-
-      <section className="relative px-4 pt-10 pb-12 md:pt-14 md:pb-16 overflow-visible">
-        <div className="absolute inset-0 scanline opacity-20 pointer-events-none" />
-        <div className="relative max-w-7xl mx-auto w-full">
-          <div className="text-center mb-8 md:mb-10 animate-fade-up">
-            <div className="flex justify-center mb-5 px-2 overflow-visible">
-              <Logo size="xl" className="animate-glow-pulse max-w-full" />
-            </div>
-            <h1 className="sr-only">XETHKIOZ - Gaming, tecnología, ciencia y streaming</h1>
-            <p className="font-display text-base sm:text-lg md:text-2xl text-gray-300 tracking-wide">
-              🚀 {t.slogan}
-            </p>
-            <div className="mt-4 flex justify-center gap-2" aria-hidden="true">
-              <span className="h-1 w-12 bg-orange rounded-full" />
-              <span className="h-1 w-4 bg-neon rounded-full" />
-              <span className="h-1 w-12 bg-orange rounded-full" />
-            </div>
+        <div className="relative overflow-hidden rounded-[2.2rem] border border-white/10 bg-black/50 shadow-[0_0_90px_rgba(138,46,255,.16)] backdrop-blur-md">
+          <div className="absolute inset-0 bg-[linear-gradient(105deg,rgba(5,6,8,.96),rgba(5,6,8,.58)_45%,rgba(5,6,8,.90))]" />
+          <div className="absolute inset-0 opacity-90">
+            <div className="dragon-shape-core absolute right-[4%] top-[14%] h-72 w-80 rotate-[-10deg] rounded-[48%] border border-orange/25 bg-black/45 shadow-[0_0_80px_rgba(255,122,0,.18)]" />
+            <div className="dragon-neck-core absolute right-[18%] top-[38%] h-44 w-24 rotate-[28deg] rounded-full border border-orange/15 bg-black/35" />
+            <div className="dragon-eye absolute right-[13%] top-[24%] h-5 w-5 rounded-full bg-orange shadow-[0_0_35px_rgba(255,122,0,1)]" />
+            <div className="avatar-core absolute left-[47%] top-[37%] h-36 w-24 -translate-x-1/2 rounded-t-full border border-violet-400/25 bg-gradient-to-b from-[#151827] to-black shadow-[0_0_45px_rgba(138,46,255,.22)]" />
+            <div className="avatar-core-head absolute left-[47%] top-[31%] h-12 w-12 -translate-x-1/2 rounded-full border border-orange/25 bg-[#11131d] shadow-[0_0_28px_rgba(255,122,0,.16)]" />
+            <div className="sword-aura absolute left-[49%] top-[50%] h-2 w-56 origin-left rotate-[-35deg] rounded-full bg-gradient-to-r from-orange via-neon to-transparent shadow-[0_0_28px_rgba(138,46,255,.9)]" />
+            <Link
+              to="/green-node"
+              aria-label="Acceso oculto Green Wisp"
+              className="wisp-home-orb absolute left-[35%] top-[24%] h-20 w-20 rounded-full border border-green-300/30 bg-green-400/10 shadow-[0_0_45px_rgba(50,255,138,.62)] transition hover:scale-110 hover:border-green-200"
+            >
+              <span className="absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-300 shadow-[0_0_25px_rgba(50,255,138,1)]" />
+              <span className="absolute -left-3 bottom-1 h-8 w-14 -rotate-12 rounded-full border-l border-green-300/40 blur-[1px]" />
+              <span className="sr-only">Green Wisp</span>
+            </Link>
           </div>
 
-
-
-          <div className="relative overflow-hidden rounded-3xl border border-orange/25 bg-ink-300 shadow-[0_0_45px_rgba(255,106,0,0.12)] mb-8 animate-fade-up" style={{ animationDelay: '0.08s' }}>
-            <video
-              className="w-full aspect-[16/5] min-h-[160px] max-h-[360px] object-cover opacity-95"
-              src="/videos/xethkioz-pixel-banner.mp4"
-              poster="/images/articles/gaming.svg"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              aria-label="XETHKIOZ pixel art animated banner"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-ink/75 via-transparent to-ink/65 pointer-events-none" />
-            <div className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
-              <div>
-                <p className="section-eyebrow mb-1">XETHKIOZ LIVE WORLD</p>
-                <h2 className="font-display text-xl md:text-3xl font-black text-white drop-shadow-lg">El portal está vivo</h2>
-                <p className="text-xs md:text-sm text-gray-300 max-w-xl">Banner pixel art oficial para acompañar noticias, comunidad y contenido gamer.</p>
+          <div className="relative grid min-h-[500px] grid-cols-1 gap-8 px-6 py-8 md:grid-cols-[.9fr_1.1fr] md:px-10 md:py-12">
+            <div className="flex flex-col justify-center">
+              <div className="mb-5 max-w-[22rem]">
+                <Logo size="xl" />
               </div>
-              <Link to="/community" className="btn-primary self-start md:self-auto text-sm">Entrar a la comunidad</Link>
+              <p className="section-eyebrow text-orange">ECOSISTEMA INTERACTIVO</p>
+              <h1 className="mt-4 font-display text-4xl font-black leading-none text-white md:text-6xl">
+                ENTRÁ AL<br />UNIVERSO XETHKIOZ
+              </h1>
+              <p className="mt-5 max-w-xl text-sm leading-relaxed text-gray-300 md:text-base">
+                Tres portales principales, una identidad gamer adulta y un secreto verde para quienes miran más allá.
+              </p>
+              <a href="#portales" className="btn-primary mt-6 w-fit">Elegir portal</a>
+            </div>
+            <div className="hidden items-end justify-end md:flex">
+              <div className="max-w-sm rounded-3xl border border-white/10 bg-black/35 p-5 text-right backdrop-blur-md">
+                <p className="font-display text-2xl font-black text-orange">Avatar vs Dragón</p>
+                <p className="mt-2 text-sm text-gray-300">El corazón visual de XETHKIOZ queda preparado para reemplazarse por arte final sin cambiar la experiencia.</p>
+              </div>
             </div>
           </div>
+        </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
-            <Link
-              to="/gaming"
-              className="group relative overflow-hidden rounded-2xl glass border-2 border-orange/30 hover:border-orange transition-all duration-500 animate-fade-up min-h-[260px]"
-              style={{ animationDelay: '0.15s' }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-orange/20 via-transparent to-transparent opacity-50 group-hover:opacity-80 transition-opacity" />
-              <div className="absolute -top-20 -right-20 w-40 h-40 bg-orange/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700" />
-              <div className="relative h-full p-6 sm:p-8 md:p-10 flex flex-col">
-                <div className="text-4xl sm:text-5xl mb-4">🎮</div>
-                <h2 className="font-display text-2xl md:text-3xl font-bold text-white mb-3 group-hover:text-orange transition-colors">
-                  {t.home.gamingPortal}
-                </h2>
-                <p className="text-sm text-gray-400 mb-6 leading-relaxed">
-                  Gaming News • Esports • Reviews • MMORPG • Pokémon • LoL • Mobile Legends • Fortnite • GTA • Streaming
-                </p>
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {['Esports', 'LoL', 'Pokémon', 'MLBB', 'Fortnite', 'GTA', 'MMORPG', 'Reviews'].map((tag) => (
-                    <span key={tag} className="tag-orange text-xs">{tag}</span>
-                  ))}
-                </div>
-                <span className="mt-auto inline-flex items-center gap-2 text-orange font-semibold group-hover:gap-3 transition-all">
-                  {t.home.enterGaming}
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
-                </span>
-              </div>
-            </Link>
-
-            <Link
-              to="/tech"
-              className="group relative overflow-hidden rounded-2xl glass border-2 border-neon/30 hover:border-neon transition-all duration-500 animate-fade-up min-h-[260px]"
-              style={{ animationDelay: '0.3s' }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-neon/20 via-transparent to-transparent opacity-50 group-hover:opacity-80 transition-opacity" />
-              <div className="absolute -top-20 -right-20 w-40 h-40 bg-neon/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700" />
-              <div className="relative h-full p-6 sm:p-8 md:p-10 flex flex-col">
-                <div className="text-4xl sm:text-5xl mb-4">🚀</div>
-                <h2 className="font-display text-2xl md:text-3xl font-bold text-white mb-3 group-hover:text-neon transition-colors">
-                  {t.home.techPortal}
-                </h2>
-                <p className="text-sm text-gray-400 mb-6 leading-relaxed">
-                  Artificial Intelligence • Technology • Science • Space • Innovation • Medicine • Future Technology • Discoveries
-                </p>
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {['AI', 'Hardware', 'Space', 'Medicine', 'Biology', 'Physics', 'Innovation', 'Future'].map((tag) => (
-                    <span key={tag} className="tag-purple text-xs">{tag}</span>
-                  ))}
-                </div>
-                <span className="mt-auto inline-flex items-center gap-2 text-neon font-semibold group-hover:gap-3 transition-all">
-                  {t.home.enterTech}
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
-                </span>
-              </div>
-            </Link>
+        <div id="portales" className="mt-7 text-center">
+          <p className="section-eyebrow mb-4">Elegí tu portal</p>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+            {portals.map((portal) => (
+              <Link key={portal.to} to={portal.to} className={`portal-ring-card portal-ring-${portal.color} group`}>
+                <span className="portal-glyph">{portal.icon}</span>
+                <span className="portal-title">{portal.title}</span>
+                <span className="portal-subtitle">{portal.subtitle}</span>
+                <span className="portal-enter">Entrar →</span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
-
-      {featuredError && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-          <ErrorDisplay message={featuredError.message} onRetry={retryFeatured} />
-        </section>
-      )}
-
-      {featuredLoading && !featuredError && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-          <ArticleGridSkeleton count={3} />
-        </section>
-      )}
-
-      {hero && !featuredLoading && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-          <div className="flex items-center justify-between mb-6 gap-4">
-            <div>
-              <p className="section-eyebrow">XETHKIOZ NEWS</p>
-              <h2 className="section-title gradient-text">{t.sections.featuredNews}</h2>
-            </div>
-            <Link to="/news" className="text-sm text-orange hover:neon-text-orange transition-all whitespace-nowrap">
-              {t.home.viewAll} →
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2"><ArticleCard article={hero} variant="hero" /></div>
-            <div className="flex flex-col gap-4">{side.map((a) => <ArticleCard key={a.id} article={a} variant="compact" />)}</div>
-          </div>
-        </section>
-      )}
-
-      {trendingError && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-          <ErrorDisplay message={trendingError.message} onRetry={retryTrending} />
-        </section>
-      )}
-
-      {trendingLoading && !trendingError && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-          <ArticleGridSkeleton count={6} />
-        </section>
-      )}
-
-      {trending.length > 0 && !trendingLoading && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-          <div className="flex items-center justify-between mb-6 gap-4">
-            <h2 className="section-title gradient-text">🔥 {t.sections.trendingNews}</h2>
-            <Link to="/news" className="text-sm text-orange hover:neon-text-orange transition-all whitespace-nowrap">
-              {t.home.viewAll} →
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {trending.map((a) => <ArticleCard key={a.id} article={a} />)}
-          </div>
-        </section>
-      )}
-
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <h2 className="section-title gradient-text mb-6">📰 {t.sections.latestNews}</h2>
-            {latestLoading ? (
-              <ArticleGridSkeleton count={4} />
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {latest.slice(0, 4).map((a) => <ArticleCard key={a.id} article={a} />)}
-              </div>
-            )}
-          </div>
-          {editorsPicks.length > 0 && (
-            <div>
-              <h2 className="section-title gradient-text-purple mb-6">⭐ {t.sections.editorsPicks}</h2>
-              <div className="flex flex-col gap-4">{editorsPicks.map((a) => <ArticleCard key={a.id} article={a} variant="compact" />)}</div>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {(streamsLoading || streams.length > 0) && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-          <div className="flex items-center justify-between mb-6 gap-4">
-            <h2 className="section-title gradient-text">📺 {t.sections.featuredStreams}</h2>
-            <Link to="/streaming" className="text-sm text-orange hover:neon-text-orange transition-all whitespace-nowrap">
-              {t.home.viewAll} →
-            </Link>
-          </div>
-          {streamsLoading ? (
-            <ArticleGridSkeleton count={3} />
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {streams.slice(0, 3).map((s) => (
-                <a key={s.id} href={s.channel_url} target="_blank" rel="noopener noreferrer" className="group relative overflow-hidden rounded-xl news-card card-hover">
-                  <div className="aspect-video overflow-hidden">
-                    <SafeImage
-                      src={s.thumbnail}
-                      fallback="/images/articles/streaming.svg"
-                      alt={s.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                  </div>
-                  {s.is_live && <span className="absolute top-3 left-3 px-2 py-1 text-xs font-bold text-white bg-red-600 rounded animate-pulse">{t.home.liveBadge}</span>}
-                  <span className="absolute top-3 right-3 px-2 py-1 text-xs font-bold text-white bg-black/60 rounded uppercase">{s.platform}</span>
-                  <div className="p-4">
-                    <h3 className="font-display text-sm font-bold text-white group-hover:text-orange transition-colors line-clamp-2">{s.title}</h3>
-                    <p className="text-xs text-gray-500 mt-1">{s.channel_name}</p>
-                  </div>
-                </a>
-              ))}
-            </div>
-          )}
-        </section>
-      )}
-
-      <SocialSection />
-
-      {popular.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-          <h2 className="section-title gradient-text mb-6">📈 {t.sections.popularArticles}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">{popular.map((a) => <ArticleCard key={a.id} article={a} variant="horizontal" />)}</div>
-        </section>
-      )}
     </div>
   )
 }
