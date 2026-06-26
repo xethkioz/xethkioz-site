@@ -25,12 +25,12 @@ export type WispEvent = {
 
 const CLIENT_ID_KEY = 'xethkioz_client_id'
 const DISPLAY_NAME_KEY = 'xethkioz_display_name'
-const LOCAL_MESSAGES_KEY = 'xethkioz_realtime_chat_cache_v4'
+const LOCAL_MESSAGES_KEY = 'xethkioz_realtime_chat_cache_v4_rc4'
 const PRESENCE_KEY = 'xethkioz_presence_clients_v4'
 const WISP_XP_KEY = 'xethkioz_wisp_xp_v2'
-const CHAT_BC_CHANNEL = 'xethkioz-community-chat-v4'
+const CHAT_BC_CHANNEL = 'xethkioz-community-chat-v4-rc4'
 const PRESENCE_BC_CHANNEL = 'xethkioz-presence-v4'
-const REALTIME_CHAT_PREFIX = 'xethkioz:chat:'
+const REALTIME_CHAT_PREFIX = 'xethkioz:chat:rc4:'
 const REALTIME_PRESENCE_CHANNEL = 'xethkioz:presence:global'
 
 const WISP_LEVELS = [
@@ -125,6 +125,7 @@ async function fetchRoomMessages(room: string) {
     .from('xeth_chat_messages')
     .select('id, room, user, role, text, created_at')
     .eq('room', room)
+    .eq('is_deleted', false)
     .order('created_at', { ascending: false })
     .limit(80)
   if (error || !data) return []
@@ -203,6 +204,18 @@ function snapshotFromLocal(route: string, room: string): PresenceSnapshot {
   const routeOnline = Math.max(1, Object.values(clients).filter((client) => client.route === route).length)
   const roomOnline = Math.max(1, Object.values(clients).filter((client) => client.room === room).length)
   return { route, onlineTotal, routeOnline, roomOnline, wispLevel: wisp.level, wispName: wisp.name, energy: wisp.energy, realtime: false }
+}
+
+
+export async function checkPublicChatHealth() {
+  if (!isSupabaseConfigured) return { ok: false, mode: 'local', reason: 'Supabase no configurado en variables VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY.' }
+  try {
+    const { error } = await supabase.from('xeth_chat_messages').select('id').limit(1)
+    if (error) return { ok: false, mode: 'database', reason: error.message }
+    return { ok: true, mode: 'database', reason: 'Tabla xeth_chat_messages accesible.' }
+  } catch (error) {
+    return { ok: false, mode: 'database', reason: error instanceof Error ? error.message : 'Error desconocido.' }
+  }
 }
 
 export function useRealtimeChat(seed: ChatMessage[], activeRoom: string) {

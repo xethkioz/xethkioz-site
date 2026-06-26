@@ -1,3 +1,12 @@
+# Changelog
+
+## v4.0.0-rc.4.0 — Stability Core
+- Chat público vuelve a sala general por defecto para todos los visitantes.
+- Agregado panel de salud del chat en QA.
+- Agregada migración Supabase RC4 para estabilizar lectura/escritura pública.
+- Separada cache local del chat para limpiar estados anteriores.
+- Documentado roadmap limpio RC4 → V7.
+
 # v4.0.0-rc.3.1 — Stability Recovery
 
 - Estabilización del chat público con persistencia Supabase-first y polling fallback.

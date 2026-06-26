@@ -1,9 +1,10 @@
 {
-  "version": "4.0.0-rc.2.4",
+  "version": "4.0.0-rc.4.0",
   "name": "Realtime Community + Daily Loop",
   "build": "2026-06-25-rc2.4",
   "stage": "RC",
   "release": "XETHKIOZ Network RC1.9 Milestones + Data Governance",
   "codename": "Content Ready UX Polish",
-  "channel": "rc"
+  "channel": "RC4 Stability Core",
+  "updated": "2026-06-26"
 }

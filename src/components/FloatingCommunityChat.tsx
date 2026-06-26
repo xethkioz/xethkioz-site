@@ -37,17 +37,13 @@ export default function FloatingCommunityChat() {
   const location = useLocation()
   const isOverlay = location.pathname.includes('chat-overlay')
   const [open, setOpen] = useState(false)
-  const [activeRoom, setActiveRoom] = useState(() => roomForPath(location.pathname))
+  const [activeRoom, setActiveRoom] = useState('general')
   const [text, setText] = useState('')
   const { activeMessages, sendMessage, status } = useRealtimeChat(starterChatMessages, activeRoom)
   const presence = usePresence(location.pathname, activeRoom)
 
   const room = communityRooms.find((r) => r.id === activeRoom) || communityRooms[0]
   const recommendedRoom = useMemo(() => roomForPath(location.pathname), [location.pathname])
-
-  useEffect(() => {
-    setActiveRoom(recommendedRoom)
-  }, [recommendedRoom])
 
   if (isOverlay) return null
 
@@ -71,13 +67,13 @@ export default function FloatingCommunityChat() {
                 <p className="section-eyebrow mb-1">COMUNIDAD EN VIVO</p>
                 <h2 className="font-display text-xl font-black text-white">Chat XETHKIOZ</h2>
                 <p className="text-xs text-gray-400">
-                  {presence.routeOnline} mirando esta página · {presence.roomOnline} en sala · {presence.onlineTotal} online · {modeLabel(status)}
+                  {presence.routeOnline} mirando esta página · {presence.roomOnline} en sala general · {presence.onlineTotal} online · {modeLabel(status)}
                 </p>
               </div>
               <button onClick={() => setOpen(false)} className="rounded-lg border border-white/10 px-2 py-1 text-xs text-gray-400 hover:text-white">Cerrar</button>
             </div>
             <div className="relative mt-3 rounded-2xl border border-green-400/20 bg-green-500/5 p-2 font-mono text-[10px] text-green-200">
-              Wisp Lv.{presence.wispLevel} · {presence.wispName} · energía {presence.energy}% · sala sugerida: {recommendedRoom}
+              Wisp Lv.{presence.wispLevel} · {presence.wispName} · energía {presence.energy}% · sala pública: general · sugerida: {recommendedRoom}
             </div>
           </div>
 
@@ -116,7 +112,7 @@ export default function FloatingCommunityChat() {
                   <input value={text} onChange={(e) => setText(e.target.value)} maxLength={280} placeholder="Escribí en la comunidad..." className="input-field py-2 text-xs" />
                   <button className="btn-primary px-3 py-2 text-xs">Enviar</button>
                 </div>
-                <p className="mt-2 text-[10px] text-gray-600">RC2.4: Realtime global activo cuando Supabase tenga aplicada la migración y Realtime habilitado.</p>
+                <p className="mt-2 text-[10px] text-gray-600">RC4: sala pública general por defecto. Todos los visitantes deben ver el mismo chat si Supabase Realtime está migrado.</p>
               </form>
             </div>
           </div>

@@ -1,5 +1,6 @@
 
 import SEO from '../components/SEO'
+import PublicChatHealthPanel from '../components/PublicChatHealthPanel'
 import NetworkFinalQaPanel from '../components/NetworkFinalQaPanel'
 import DatabaseBaselinePanel from '../components/DatabaseBaselinePanel'
 import LinkAuditPanel from '../components/LinkAuditPanel'
@@ -22,6 +23,7 @@ export default function FinalQA() {
         <NetworkFinalQaPanel />
         <DatabaseBaselinePanel />
         <LinkAuditPanel />
+        <PublicChatHealthPanel />
       </div>
     </div>
   )
