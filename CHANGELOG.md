@@ -238,3 +238,13 @@
 - Agregada migración `20260625_rc23_content_ready_ux_polish.sql`.
 - Actualizada documentación de QA y flujo editorial.
 - Versión preparada para carga progresiva de contenido real.
+
+## v4.0.0-rc.2.4 — Realtime Community + Daily Loop
+
+- Reescritura del chat para usar Supabase Realtime Broadcast por sala.
+- Presencia global con contador por página y sala.
+- Wisp evolucionable con XP y eventos persistibles.
+- Nuevo panel de actividad diaria en Home.
+- SQL RC2.4 para chat, presencia, eventos del Wisp y slots diarios.
+- Limpieza de fallback local para que el sitio no se rompa si Supabase no está disponible.
+

@@ -142,3 +142,20 @@ npm install
 npm run build
 npm run dev
 ```
+
+## Estado actual recomendado
+
+**Versión:** v4.0.0-rc.2.4  
+**Bloque:** Realtime Community + Daily Loop
+
+Esta versión prioriza que la web se sienta viva: chat global preparado con Supabase Realtime, presencia, Wisp evolucionable y un panel diario de actividad/contenido.
+
+### Para activar chat global real
+
+1. Confirmar `.env` con `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY`.
+2. Aplicar `supabase/migrations/20260625_rc24_realtime_community_daily_loop.sql`.
+3. Verificar en Supabase que Realtime esté habilitado.
+4. Probar el chat desde dos navegadores/dispositivos distintos.
+
+Sin Supabase activo, el chat funciona como fallback local/multi-pestaña, pero no será visible para otros usuarios reales.
+

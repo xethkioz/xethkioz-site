@@ -8,6 +8,7 @@ import SEO from '../components/SEO'
 import { ArticleGridSkeleton, ErrorDisplay } from '../components/Skeletons'
 import SafeImage from '../components/SafeImage'
 import NetworkPortalHub from '../components/NetworkPortalHub'
+import ActivityPulsePanel from '../components/ActivityPulsePanel'
 
 export default function Home() {
   const { t } = useLang()
@@ -29,6 +30,10 @@ export default function Home() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8">
         <NetworkPortalHub />
       </div>
+
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+        <ActivityPulsePanel />
+      </section>
 
       <section className="relative px-4 pt-10 pb-12 md:pt-14 md:pb-16 overflow-visible">
         <div className="absolute inset-0 scanline opacity-20 pointer-events-none" />

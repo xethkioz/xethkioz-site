@@ -1,4 +1,4 @@
-import { FormEvent, useMemo, useState } from 'react'
+import { FormEvent, useEffect, useMemo, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { communityRooms, starterChatMessages } from '../lib/mockData'
 import { addWispXp, usePresence, useRealtimeChat } from '../lib/realtimeCommunity'
@@ -26,10 +26,11 @@ function roomForPath(pathname: string) {
   return match?.[1] ?? 'general'
 }
 
-function modeLabel(status: 'local' | 'hybrid' | 'realtime') {
-  if (status === 'realtime') return 'Realtime activo'
-  if (status === 'hybrid') return 'Híbrido: Supabase + navegador'
-  return 'Local multi pestaña'
+function modeLabel(status: 'local' | 'broadcast' | 'database' | 'realtime') {
+  if (status === 'realtime') return 'Realtime global'
+  if (status === 'database') return 'Historial Supabase'
+  if (status === 'broadcast') return 'Broadcast navegador'
+  return 'Local seguro'
 }
 
 export default function FloatingCommunityChat() {
@@ -39,10 +40,14 @@ export default function FloatingCommunityChat() {
   const [activeRoom, setActiveRoom] = useState(() => roomForPath(location.pathname))
   const [text, setText] = useState('')
   const { activeMessages, sendMessage, status } = useRealtimeChat(starterChatMessages, activeRoom)
-  const presence = usePresence(location.pathname)
+  const presence = usePresence(location.pathname, activeRoom)
 
   const room = communityRooms.find((r) => r.id === activeRoom) || communityRooms[0]
   const recommendedRoom = useMemo(() => roomForPath(location.pathname), [location.pathname])
+
+  useEffect(() => {
+    setActiveRoom(recommendedRoom)
+  }, [recommendedRoom])
 
   if (isOverlay) return null
 
@@ -66,7 +71,7 @@ export default function FloatingCommunityChat() {
                 <p className="section-eyebrow mb-1">COMUNIDAD EN VIVO</p>
                 <h2 className="font-display text-xl font-black text-white">Chat XETHKIOZ</h2>
                 <p className="text-xs text-gray-400">
-                  {presence.routeOnline} mirando esta página · {presence.onlineTotal} online · {modeLabel(status)}
+                  {presence.routeOnline} mirando esta página · {presence.roomOnline} en sala · {presence.onlineTotal} online · {modeLabel(status)}
                 </p>
               </div>
               <button onClick={() => setOpen(false)} className="rounded-lg border border-white/10 px-2 py-1 text-xs text-gray-400 hover:text-white">Cerrar</button>
@@ -111,7 +116,7 @@ export default function FloatingCommunityChat() {
                   <input value={text} onChange={(e) => setText(e.target.value)} maxLength={280} placeholder="Escribí en la comunidad..." className="input-field py-2 text-xs" />
                   <button className="btn-primary px-3 py-2 text-xs">Enviar</button>
                 </div>
-                <p className="mt-2 text-[10px] text-gray-600">RC2: BroadcastChannel + Supabase Realtime cuando la migración esté aplicada.</p>
+                <p className="mt-2 text-[10px] text-gray-600">RC2.4: Realtime global activo cuando Supabase tenga aplicada la migración y Realtime habilitado.</p>
               </form>
             </div>
           </div>
