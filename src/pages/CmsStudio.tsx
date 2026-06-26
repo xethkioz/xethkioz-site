@@ -8,6 +8,7 @@ import DailyNewsSourcesPanel from '../components/DailyNewsSourcesPanel'
 import RoleLadder from '../components/RoleLadder'
 import DatabaseBaselinePanel from '../components/DatabaseBaselinePanel'
 import ContentOpsDashboard from '../components/ContentOpsDashboard'
+import EditorialCommandCenter from '../components/EditorialCommandCenter'
 
 const checklist = [
   'Título claro y sin clickbait',
@@ -60,6 +61,10 @@ export default function CmsStudio() {
           </div>
         </div>
       </section>
+
+      <div className="mb-8">
+        <EditorialCommandCenter />
+      </div>
 
       <div className="flex flex-wrap gap-2 mb-6">
         {[

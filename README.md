@@ -121,3 +121,24 @@ Rutas a revisar:
 ## Notas de estabilidad RC2.2
 
 El objetivo principal fue evitar que un error de chat, presencia, Supabase Realtime o Wisp deje la web completamente vacía. Cada módulo crítico queda aislado para que el portal principal siga activo.
+
+## Estado actual — v4.0.0-rc.2.3
+
+**RC2.3 Content Ready UX Polish** consolida la etapa de estabilidad y prepara la carga real de contenido.
+
+### Incluye
+
+- Centro editorial visible en `/cms` y `/content-system`.
+- Prioridades de contenido por portal.
+- Carriles de publicación: noticia rápida, informe profundo, pack streaming y Green Node log.
+- Gates de calidad para revisar antes de publicar.
+- SQL incremental para slots editoriales, lanes y quality gates.
+- Continuidad del fix de render de RC2.2.
+
+### Comandos
+
+```powershell
+npm install
+npm run build
+npm run dev
+```

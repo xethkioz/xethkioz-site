@@ -229,3 +229,12 @@
 - Se agrega migración SQL `20260625_rc18_network_architecture_cleanup.sql` en `database/migrations` y `supabase/migrations`.
 - Se mantiene Green Node como nodo oculto por Wisp/EGG.
 - Build local validado con `npm run build`.
+
+## v4.0.0-rc.2.3 — Content Ready UX Polish
+
+- Agregado `EditorialCommandCenter`.
+- Agregado `editorialPlan.ts`.
+- Integrado el centro editorial en `/cms` y `/content-system`.
+- Agregada migración `20260625_rc23_content_ready_ux_polish.sql`.
+- Actualizada documentación de QA y flujo editorial.
+- Versión preparada para carga progresiva de contenido real.
