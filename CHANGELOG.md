@@ -1,3 +1,25 @@
+
+## 7.0.0-clean-restart-alpha.5 — Visual Portal Base
+
+### Objetivo
+- Establecer la base visual del ecosistema XETHKIOZ antes de agregar nuevas funcionalidades.
+
+### Cambios
+- Home rediseñado como núcleo oscuro de fantasía/sci-fi.
+- Tres portales principales con efecto de portal arcano inspirado en portales MMORPG: Juegos, Ciencia/Tecnología y Fun.
+- Green Wisp integrado como acceso oculto y elemento visual vivo.
+- Dragón simbólico con ojos animados, marca X y atmósfera de portal.
+- Animaciones CSS livianas: vórtice, runas, wisp, brasas y brillo del dragón.
+
+### Restricciones mantenidas
+- Sin CMS nuevo.
+- Sin SQL nuevo.
+- Sin Supabase nuevo.
+- Sin nuevas funciones de comunidad.
+
+### Verificación
+- Pendiente de prueba local por el usuario.
+
 # V7 Clean Restart Alpha 3
 
 - Core de idioma ES/EN completado para áreas visibles principales.
@@ -267,3 +289,12 @@
 - SQL RC2.4 para chat, presencia, eventos del Wisp y slots diarios.
 - Limpieza de fallback local para que el sitio no se rompa si Supabase no está disponible.
 
+
+## 7.0.0-clean-restart-alpha.4 — Stability Scope Lock
+
+- Reduced the public runtime scope to the V7 core routes: Home, Gaming, Science & Technology, Fun, and Green Node.
+- Collapsed legacy public routes into safe redirects instead of exposing unfinished dashboards.
+- Removed public account navigation to avoid loading unfinished admin/CMS flows during the clean restart.
+- Kept Supabase files in the repository for future integration, but removed them from the current public bundle path.
+- Added QA documentation for the Alpha 4 stability pass.
+- Removed the forced Supabase manual chunk from Vite output during Alpha 4 because Supabase is not part of the current public runtime.

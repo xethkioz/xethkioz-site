@@ -37,6 +37,7 @@ export const translations = {
         on: 'ON',
         off: 'OFF',
         account: 'Cuenta',
+        accountPending: 'Cuenta en preparación',
       },
       portals: {
         games: {
@@ -139,6 +140,7 @@ export const translations = {
         on: 'ON',
         off: 'OFF',
         account: 'Account',
+        accountPending: 'Account system in preparation',
       },
       portals: {
         games: {

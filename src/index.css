@@ -254,3 +254,421 @@
 @media (max-width: 768px) {
   .portal-ring-card { min-height: 210px; }
 }
+
+
+/* XETHKIOZ Alpha 5 Visual Base: dark portal ecosystem */
+.xeth-world {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(138,46,255,.20), transparent 34%),
+    radial-gradient(circle at 88% 45%, rgba(255,106,0,.11), transparent 32%),
+    radial-gradient(circle at 18% 58%, rgba(138,46,255,.13), transparent 28%),
+    #050608;
+}
+
+.xeth-world-bg {
+  background:
+    linear-gradient(180deg, rgba(5,6,8,.52), rgba(5,6,8,.96)),
+    radial-gradient(circle at 50% 25%, rgba(138,46,255,.23), transparent 30%),
+    radial-gradient(circle at 50% 72%, rgba(17,24,39,.70), transparent 46%);
+}
+
+.xeth-world-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(138,46,255,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,106,0,.035) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: radial-gradient(circle at 50% 50%, black, transparent 78%);
+}
+
+.xeth-world-fog {
+  background:
+    radial-gradient(ellipse at 50% 80%, rgba(138,46,255,.18), transparent 48%),
+    linear-gradient(90deg, rgba(138,46,255,.12), transparent 28%, transparent 72%, rgba(255,106,0,.11));
+  filter: blur(2px);
+  opacity: .8;
+}
+
+.xeth-rune-noise {
+  background-image:
+    radial-gradient(circle, rgba(255,122,0,.35) 1px, transparent 1.5px),
+    radial-gradient(circle, rgba(138,46,255,.30) 1px, transparent 1.5px);
+  background-position: 0 0, 24px 24px;
+  background-size: 54px 54px;
+  animation: emberDrift 18s linear infinite;
+}
+
+.xeth-citadel {
+  background:
+    linear-gradient(180deg, transparent 0 50%, rgba(0,0,0,.64) 68%, rgba(0,0,0,.95) 100%),
+    radial-gradient(ellipse at 50% 45%, transparent 0 42%, rgba(0,0,0,.82) 73%);
+}
+
+.xeth-main-title {
+  text-shadow:
+    0 0 18px rgba(138,46,255,.42),
+    0 0 38px rgba(255,106,0,.18),
+    0 2px 0 rgba(255,255,255,.10);
+}
+
+.xeth-dragon {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 5%;
+  width: min(54vw, 720px);
+  height: 320px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  opacity: .86;
+}
+
+.xeth-dragon::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  width: 210px;
+  height: 170px;
+  transform: translate(-50%, -50%);
+  border-radius: 44% 44% 38% 38%;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(138,46,255,.32), transparent 26%),
+    linear-gradient(135deg, rgba(14,14,25,.95), rgba(0,0,0,.86));
+  border: 1px solid rgba(138,46,255,.26);
+  box-shadow: 0 0 90px rgba(138,46,255,.28), inset 0 0 50px rgba(0,0,0,.78);
+}
+
+.xeth-dragon-wing {
+  position: absolute;
+  top: 24%;
+  width: 260px;
+  height: 155px;
+  border: 1px solid rgba(138,46,255,.18);
+  background: linear-gradient(135deg, rgba(12,10,20,.28), rgba(0,0,0,.72));
+  box-shadow: inset 0 0 45px rgba(138,46,255,.10);
+  filter: drop-shadow(0 0 28px rgba(138,46,255,.20));
+}
+
+.xeth-dragon-wing.left-wing {
+  left: 2%;
+  transform: skewY(-16deg) rotate(-8deg);
+  border-radius: 82% 18% 58% 25%;
+}
+
+.xeth-dragon-wing.right-wing {
+  right: 2%;
+  transform: skewY(16deg) rotate(8deg);
+  border-radius: 18% 82% 25% 58%;
+}
+
+.xeth-dragon-head {
+  position: absolute;
+  left: 50%;
+  top: 22%;
+  width: 120px;
+  height: 105px;
+  transform: translateX(-50%);
+  clip-path: polygon(50% 0, 72% 22%, 100% 32%, 76% 58%, 66% 100%, 50% 74%, 34% 100%, 24% 58%, 0 32%, 28% 22%);
+  background: linear-gradient(145deg, #111320, #020203);
+  border: 1px solid rgba(255,106,0,.22);
+  box-shadow: 0 0 45px rgba(138,46,255,.28);
+}
+
+.dragon-eye {
+  position: absolute;
+  top: 43px;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #ff7a00;
+  box-shadow: 0 0 14px rgba(255,122,0,1), 0 0 35px rgba(255,106,0,.7);
+  animation: eyePulse 2.5s ease-in-out infinite;
+}
+
+.dragon-eye.left { left: 37px; }
+.dragon-eye.right { right: 37px; }
+
+.dragon-core-mark {
+  position: absolute;
+  left: 50%;
+  top: 51%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 999px;
+  border: 1px solid rgba(138,46,255,.50);
+  color: rgba(255,255,255,.88);
+  font-family: Orbitron, sans-serif;
+  font-weight: 900;
+  font-size: 3rem;
+  text-shadow: 0 0 20px rgba(138,46,255,.9);
+  box-shadow: inset 0 0 28px rgba(138,46,255,.18), 0 0 30px rgba(138,46,255,.32);
+}
+
+.green-wisp-secret {
+  position: absolute;
+  z-index: 30;
+  right: clamp(1.5rem, 9vw, 8rem);
+  top: clamp(7rem, 16vw, 11rem);
+  width: 112px;
+  height: 150px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  filter: drop-shadow(0 0 25px rgba(50,255,138,.75));
+  animation: wispFloat 5.4s ease-in-out infinite;
+}
+
+.green-wisp-secret::before {
+  content: '';
+  position: absolute;
+  width: 95px;
+  height: 126px;
+  border-radius: 55% 55% 42% 42%;
+  background:
+    radial-gradient(circle at 50% 47%, rgba(50,255,138,.72), transparent 22%),
+    radial-gradient(ellipse at 50% 72%, rgba(50,255,138,.22), transparent 58%);
+  border: 1px solid rgba(50,255,138,.42);
+  box-shadow: inset 0 0 35px rgba(50,255,138,.18), 0 0 55px rgba(50,255,138,.45);
+}
+
+.wisp-face {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 18px;
+}
+
+.wisp-face span {
+  width: 12px;
+  height: 16px;
+  border-radius: 999px;
+  background: #dfffe8;
+  box-shadow: 0 0 16px rgba(255,255,255,.95), 0 0 28px rgba(50,255,138,.95);
+}
+
+.wisp-flame {
+  position: absolute;
+  border: 1px solid rgba(50,255,138,.38);
+  border-radius: 999px;
+  filter: blur(.2px);
+}
+
+.wisp-flame.one {
+  width: 76px;
+  height: 130px;
+  transform: rotate(25deg);
+  animation: orbitWisp 7s linear infinite;
+}
+
+.wisp-flame.two {
+  width: 58px;
+  height: 105px;
+  transform: rotate(-32deg);
+  animation: orbitWisp 9s linear reverse infinite;
+}
+
+.wisp-flame.three {
+  width: 126px;
+  height: 58px;
+  transform: rotate(-18deg);
+  animation: orbitWisp 12s linear infinite;
+}
+
+.wow-portal {
+  position: relative;
+  min-height: 330px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: .4rem;
+  padding: 1.25rem 1rem 1.35rem;
+  border-radius: 1.75rem 1.75rem 1.2rem 1.2rem;
+  background: linear-gradient(180deg, rgba(0,0,0,.38), rgba(0,0,0,.86));
+  border: 1px solid rgba(255,255,255,.10);
+  isolation: isolate;
+  transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+}
+
+.wow-portal:hover {
+  transform: translateY(-6px);
+}
+
+.portal-stone-top {
+  position: absolute;
+  inset: 22px 18px auto;
+  height: 62%;
+  border-radius: 999px 999px 32px 32px;
+  border: 8px solid rgba(16,18,26,.88);
+  box-shadow:
+    inset 0 0 28px rgba(255,255,255,.04),
+    0 0 0 1px rgba(255,255,255,.08),
+    0 18px 40px rgba(0,0,0,.55);
+}
+
+.portal-vortex {
+  position: absolute;
+  top: 58px;
+  left: 50%;
+  width: min(68%, 240px);
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle, rgba(0,0,0,.96) 0 20%, transparent 22%),
+    conic-gradient(from 0deg, transparent, currentColor, transparent, currentColor, transparent);
+  opacity: .82;
+  filter: blur(.15px);
+  animation: portalSpin 9s linear infinite;
+}
+
+.portal-vortex::after {
+  content: '';
+  position: absolute;
+  inset: 17%;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(0,0,0,.92), transparent 58%);
+  box-shadow: inset 0 0 42px rgba(0,0,0,.92);
+}
+
+.portal-runes {
+  position: absolute;
+  top: 39px;
+  left: 50%;
+  width: min(76%, 272px);
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  border-radius: 999px 999px 26px 26px;
+  border: 1px dashed currentColor;
+  opacity: .5;
+  animation: runePulse 3s ease-in-out infinite;
+}
+
+.portal-depth {
+  position: absolute;
+  inset: auto 0 0;
+  height: 44%;
+  background: linear-gradient(180deg, transparent, rgba(0,0,0,.80));
+  z-index: -1;
+}
+
+.portal-icon {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  background: rgba(0,0,0,.58);
+  font-size: 1.55rem;
+  box-shadow: 0 0 22px currentColor;
+}
+
+.portal-title {
+  position: relative;
+  z-index: 3;
+  margin-top: .45rem;
+  font-family: Orbitron, sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.35rem);
+  font-weight: 900;
+  line-height: 1.05;
+  text-transform: uppercase;
+  text-align: center;
+  text-shadow: 0 0 18px currentColor;
+}
+
+.portal-subtitle {
+  position: relative;
+  z-index: 3;
+  max-width: 17rem;
+  text-align: center;
+  color: rgba(255,255,255,.78);
+  font-size: .82rem;
+  line-height: 1.35;
+}
+
+.portal-enter {
+  position: relative;
+  z-index: 3;
+  margin-top: .8rem;
+  border: 1px solid currentColor;
+  border-radius: .8rem;
+  padding: .65rem 1.65rem;
+  font-size: .78rem;
+  font-weight: 900;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  background: rgba(0,0,0,.52);
+}
+
+.wow-portal-violet { color: #b95cff; box-shadow: 0 0 45px rgba(138,46,255,.16); }
+.wow-portal-blue { color: #38bdf8; box-shadow: 0 0 45px rgba(56,189,248,.14); }
+.wow-portal-orange { color: #ff7a00; box-shadow: 0 0 45px rgba(255,122,0,.15); }
+
+.wow-portal-violet:hover { border-color: rgba(185,92,255,.65); box-shadow: 0 0 65px rgba(138,46,255,.28); }
+.wow-portal-blue:hover { border-color: rgba(56,189,248,.65); box-shadow: 0 0 65px rgba(56,189,248,.25); }
+.wow-portal-orange:hover { border-color: rgba(255,122,0,.65); box-shadow: 0 0 65px rgba(255,122,0,.25); }
+
+@keyframes portalSpin {
+  to { transform: translateX(-50%) rotate(360deg); }
+}
+
+@keyframes runePulse {
+  0%, 100% { opacity: .28; filter: blur(0); }
+  50% { opacity: .66; filter: blur(.4px); }
+}
+
+@keyframes wispFloat {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-14px) rotate(2deg); }
+}
+
+@keyframes orbitWisp {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes emberDrift {
+  from { background-position: 0 0, 24px 24px; }
+  to { background-position: 54px 54px, 78px 78px; }
+}
+
+@keyframes eyePulse {
+  0%, 100% { transform: scale(1); opacity: .82; }
+  50% { transform: scale(1.45); opacity: 1; }
+}
+
+@media (max-width: 900px) {
+  .xeth-dragon {
+    opacity: .42;
+    width: 92vw;
+    top: 8%;
+  }
+
+  .green-wisp-secret {
+    right: 1.1rem;
+    top: 7rem;
+    width: 74px;
+    height: 98px;
+  }
+
+  .green-wisp-secret::before {
+    width: 64px;
+    height: 86px;
+  }
+
+  .wisp-face { gap: 10px; }
+  .wisp-face span { width: 8px; height: 10px; }
+
+  .wow-portal {
+    min-height: 285px;
+  }
+}
