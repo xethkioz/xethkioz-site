@@ -1,8 +1,8 @@
 {
-  "version": "7.0.0-fusion-alpha.1.7-calendar-fix",
+  "version": "7.0.0-fusion-alpha.1.8-world-gate-v5",
   "channel": "fusion-alpha",
-  "label": "Fusion Alpha 1.6",
+  "label": "Fusion Alpha 1.8",
   "updatedAt": "2026-06-27T00:00:00Z",
-  "codename": "Portal Engine v1 · Goblin Guard",
-  "stage": "Functionality Core · CMS/News/Community/Profile/Progress Preview"
+  "codename": "World Gate V5 · Modular Home",
+  "stage": "World Gate V5 · modular clean home layout"
 }

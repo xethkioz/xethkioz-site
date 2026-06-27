@@ -17,7 +17,6 @@ import ProfileHub from './pages/ProfileHub'
 import News from './pages/News'
 import Community from './pages/Community'
 import CmsStudio from './pages/CmsStudio'
-import CalendarHub from './pages/CalendarHub'
 import NotFound from './pages/NotFound'
 import AppErrorBoundary from './components/AppErrorBoundary'
 
@@ -45,7 +44,6 @@ function AppShell() {
             <Route path="/community" element={<Community />} />
             <Route path="/profile" element={<ProfileHub />} />
             <Route path="/cms" element={<CmsStudio />} />
-            <Route path="/calendar" element={<CalendarHub />} />
             <Route path="/admin" element={<Navigate to="/cms" replace />} />
 
             <Route path="*" element={<NotFound />} />

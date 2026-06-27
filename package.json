@@ -1,7 +1,7 @@
 {
   "name": "xethkioz",
   "private": true,
-  "version": "7.0.0-fusion-alpha.1.7-calendar-fix",
+  "version": "7.0.0-fusion-alpha.1.8-world-gate-v5",
   "type": "module",
   "scripts": {
     "dev": "vite",

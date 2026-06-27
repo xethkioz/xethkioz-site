@@ -30,6 +30,9 @@
   .skeleton { @apply relative overflow-hidden bg-ink-100 rounded-lg; }
   .skeleton::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent); animation: shimmer 2s infinite; }
   .skeleton-shimmer { background: linear-gradient(90deg, rgba(30,30,40,0.5), rgba(50,50,60,0.3), rgba(30,30,40,0.5)); background-size: 200% 100%; animation: shimmer 2s infinite; }
+
+  .panel-cyber { @apply rounded-2xl border border-violet-500/10 bg-fusionSurface-base/90 shadow-[0_18px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl; }
+  .panel-cyber:hover { @apply border-violet-500/20; }
 }
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: #0A0A0F; }
