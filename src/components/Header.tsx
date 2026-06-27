@@ -21,6 +21,7 @@ export default function Header() {
           <Link to="/community">COM</Link>
           <Link to="/profile">XP</Link>
           <Link to="/cms">CMS</Link>
+          <Link to="/calendar">CAL</Link>
         </nav>
         <button
           type="button"
