@@ -22,6 +22,14 @@ export default function Home() {
       ariaLabel: `${t.v7.enter}: ${t.v7.portals.science.title}`,
     },
     {
+      to: '/green-node',
+      title: t.v7.portals.green.title,
+      subtitle: t.v7.portals.green.subtitle,
+      tone: 'green',
+      icon: '◉',
+      ariaLabel: `${t.v7.enter}: ${t.v7.portals.green.title}`,
+    },
+    {
       to: '/fun',
       title: t.v7.portals.fun.title,
       subtitle: t.v7.portals.fun.subtitle,
@@ -34,8 +42,8 @@ export default function Home() {
   return (
     <div className="xeth-core min-h-screen overflow-hidden bg-[#050608] text-white">
       <SEO
-        title="XETHKIOZ Fusion Alpha Live"
-        description="XETHKIOZ Fusion: base live estable con portales funcionales, HUD persistente y Green Wisp como Easter Egg."
+        title="XETHKIOZ Fusion Alpha 1.2 World Gate"
+        description="XETHKIOZ Fusion: World Gate Cyberpunk 3000 con portales funcionales, HUD persistente y Green Wisp como entidad viva."
         url="/"
         image="/images/articles/xethkioz-cover.svg"
       />
@@ -46,7 +54,6 @@ export default function Home() {
         description={t.v7.core.description}
         choosePortal={t.v7.core.choosePortal}
         enterLabel={t.v7.enter}
-        wispLabel={t.v7.core.wispLabel}
         portals={portals}
       />
     </div>

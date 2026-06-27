@@ -1,7 +1,8 @@
 {
-  "version": "7.0.0-fusion-alpha.1.1-media-slots",
+  "version": "7.0.0-fusion-alpha.1.3-global-hud",
   "channel": "fusion-alpha",
-  "label": "Fusion Alpha 0.2 - Structure Cleanup",
+  "label": "Fusion Alpha 1.3 Global HUD",
   "updatedAt": "2026-06-26T23:00:00Z",
-  "codename": "Fusion Alpha 1.1 Media Slots"
+  "codename": "Fusion Alpha 1.1 Media Slots",
+  "stage": "HUD Global Foundation"
 }

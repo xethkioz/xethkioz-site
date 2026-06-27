@@ -21,7 +21,7 @@ export const translations = {
       core: {
         eyebrow: 'Ecosistema interactivo',
         title: 'Entrá al universo XETHKIOZ',
-        description: 'Tres portales principales, una identidad gamer adulta y un secreto verde para quienes miran más allá.',
+        description: 'Cuatro portales vivos, una identidad gamer adulta y un Wisp verde que guía a quienes miran más allá.',
         cta: 'Elegir portal',
         choosePortal: 'Elegí tu portal',
         sceneTitle: 'Avatar vs Dragón',
@@ -38,6 +38,13 @@ export const translations = {
         off: 'OFF',
         account: 'Cuenta',
         accountPending: 'Cuenta en preparación',
+        accountConnected: 'Cuenta conectada',
+        login: 'Ingresar',
+        guest: 'Invitado',
+        volume: 'Volumen XETHKIOZ',
+        systemStatus: 'Estado del sistema XETHKIOZ',
+        stage: 'Etapa',
+        audio: 'Audio',
       },
       portals: {
         games: {
@@ -87,6 +94,7 @@ export const translations = {
         green: {
           title: 'Green Node',
           label: 'Hidden Node',
+          subtitle: 'Linux · Código · Seguridad · Deep Research',
           eyebrow: 'Wisp Nexus // Green Zone',
           heading: 'La Matrix verde de XETHKIOZ',
           description: 'Sección oculta, simplificada y separada del resto. No compite con Gaming, Ciencia o Fun: se descubre tocando el Wisp.',
@@ -124,7 +132,7 @@ export const translations = {
       core: {
         eyebrow: 'Interactive ecosystem',
         title: 'Enter the XETHKIOZ universe',
-        description: 'Three main portals, an adult gaming identity, and a green secret for those who look beyond.',
+        description: 'Four living portals, an adult gaming identity, and a green Wisp guiding those who look beyond.',
         cta: 'Choose portal',
         choosePortal: 'Choose your portal',
         sceneTitle: 'Avatar vs Dragon',
@@ -141,6 +149,13 @@ export const translations = {
         off: 'OFF',
         account: 'Account',
         accountPending: 'Account system in preparation',
+        accountConnected: 'Account connected',
+        login: 'Login',
+        guest: 'Guest',
+        volume: 'XETHKIOZ volume',
+        systemStatus: 'XETHKIOZ system status',
+        stage: 'Stage',
+        audio: 'Audio',
       },
       portals: {
         games: {
@@ -190,6 +205,7 @@ export const translations = {
         green: {
           title: 'Green Node',
           label: 'Hidden Node',
+          subtitle: 'Linux · Código · Seguridad · Deep Research',
           eyebrow: 'Wisp Nexus // Green Zone',
           heading: 'The green Matrix of XETHKIOZ',
           description: 'A hidden, simplified section separated from the rest. It does not compete with Gaming, Science, or Fun: it is discovered by touching the Wisp.',

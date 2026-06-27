@@ -1,7 +1,7 @@
 {
   "name": "xethkioz",
   "private": true,
-  "version": "7.0.0-fusion-alpha.1.1-media-slots",
+  "version": "7.0.0-fusion-alpha.1.3-global-hud",
   "type": "module",
   "scripts": {
     "dev": "vite",

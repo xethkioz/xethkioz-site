@@ -5,13 +5,14 @@ import { FUSION_LABEL } from '../lib/fusionConfig'
 
 export default function Header() {
   const { lang, setLang, t } = useLang()
-  const { soundOn, toggleSound, volume, setVolume } = useHud()
+  const { soundOn, toggleSound, volume, setVolume, account, toggleAccount } = useHud()
   const nextLang: Record<Lang, Lang> = { es: 'en', en: 'es' }
+  const accountText = account.status === 'connected' ? account.name : t.v7.controls.login
 
   return (
     <header className="fixed right-3 top-3 z-50 sm:right-5 sm:top-5" aria-label={t.v7.controls.panel}>
       <div className="xeth-control-panel fusion-hud-panel flex items-center gap-2 rounded-full border border-white/10 bg-black/65 p-1.5 shadow-[0_0_26px_rgba(138,46,255,.16)] backdrop-blur-xl">
-        <span className="hidden rounded-full border border-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-green-200/80 lg:inline-flex" title={FUSION_LABEL}>
+        <span className="hidden rounded-full border border-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-green-200/80 xl:inline-flex" title={FUSION_LABEL}>
           {FUSION_LABEL}
         </span>
         <button
@@ -35,7 +36,7 @@ export default function Header() {
         <label className="fusion-volume-control hidden items-center gap-2 rounded-full border border-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-[0.16em] text-gray-300 md:inline-flex" title={t.v7.controls.soundTitle}>
           <span>{Math.round(volume * 100)}</span>
           <input
-            aria-label="Volumen XETHKIOZ"
+            aria-label={t.v7.controls.volume}
             type="range"
             min="0"
             max="1"
@@ -46,11 +47,12 @@ export default function Header() {
         </label>
         <button
           type="button"
-          className="rounded-full border border-orange/30 px-3 py-2 text-[11px] font-black uppercase tracking-[0.18em] text-orange/90 transition hover:bg-orange/10 focus:outline-none focus:ring-2 focus:ring-orange/40"
-          aria-label={t.v7.controls.account}
-          title={t.v7.controls.accountPending}
+          onClick={toggleAccount}
+          className="fusion-account-button rounded-full border border-orange/30 px-3 py-2 text-[11px] font-black uppercase tracking-[0.18em] text-orange/90 transition hover:bg-orange/10 focus:outline-none focus:ring-2 focus:ring-orange/40"
+          aria-label={account.status === 'connected' ? t.v7.controls.accountConnected : t.v7.controls.login}
+          title={account.status === 'connected' ? t.v7.controls.accountConnected : t.v7.controls.accountPending}
         >
-          {t.v7.controls.account}
+          {accountText}
         </button>
       </div>
     </header>

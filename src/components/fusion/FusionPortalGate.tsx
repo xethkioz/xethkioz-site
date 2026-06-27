@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-export type FusionPortalTone = 'violet' | 'blue' | 'orange'
+export type FusionPortalTone = 'violet' | 'blue' | 'orange' | 'green'
 
 export interface FusionPortalGateProps {
   to: string

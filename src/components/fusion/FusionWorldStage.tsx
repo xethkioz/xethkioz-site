@@ -1,7 +1,6 @@
 import Logo from '../Logo'
 import FusionPortalGate, { type FusionPortalTone } from './FusionPortalGate'
 import FusionStatusRail from './FusionStatusRail'
-import FusionWispEntity from './FusionWispEntity'
 
 export interface FusionWorldPortal {
   to: string
@@ -18,7 +17,6 @@ interface FusionWorldStageProps {
   description: string
   choosePortal: string
   enterLabel: string
-  wispLabel: string
   portals: FusionWorldPortal[]
 }
 
@@ -28,11 +26,10 @@ export default function FusionWorldStage({
   description,
   choosePortal,
   enterLabel,
-  wispLabel,
   portals,
 }: FusionWorldStageProps) {
   return (
-    <section className="fusion-live-stage" aria-label="XETHKIOZ Fusion Gate">
+    <section className="fusion-live-stage" aria-label="XETHKIOZ World Gate">
       <div className="fusion-live-sky" aria-hidden="true" />
       <div className="fusion-live-grid" aria-hidden="true" />
       <div className="fusion-live-smoke fusion-live-smoke-a" aria-hidden="true" />
@@ -45,7 +42,7 @@ export default function FusionWorldStage({
         </div>
       </div>
 
-      <FusionStatusRail items={['Base LIVE segura', 'HUD persistente', 'Sin imagen-UI pegada']} />
+      <FusionStatusRail items={['World Gate activo', 'Cyberpunk 3000', 'Portales reales', 'Sin imagen-UI pegada']} />
 
       <div className="fusion-live-battle" aria-hidden="true">
         <div className="fusion-live-dragon">
@@ -66,8 +63,6 @@ export default function FusionWorldStage({
           <span className="fusion-avatar-sword" />
         </div>
       </div>
-
-      <FusionWispEntity label={wispLabel} state="watching" />
 
       <div className="fusion-stage-copy">
         <p className="section-eyebrow">{eyebrow}</p>

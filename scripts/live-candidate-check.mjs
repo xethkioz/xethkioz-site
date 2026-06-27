@@ -7,8 +7,10 @@ const checks = [
   ['src/components/fusion/FusionWorldStage.tsx', ['fusion-live-stage', 'FusionPortalGate']],
   ['src/components/fusion/FusionPortalGate.tsx', ['wow-portal']],
   ['src/components/fusion/FusionWispEntity.tsx', ['fusion-wisp-entity']],
+  ['src/components/fusion/FusionGlobalWisp.tsx', ['FusionGlobalWisp', 'FusionWispEntity']],
+  ['src/components/fusion/FusionGlobalStatus.tsx', ['FusionGlobalStatus', 'FUSION_STAGE']],
   ['src/components/Header.tsx', ['useHud', 'fusion-hud-panel']],
-  ['src/lib/HudContext.tsx', ['localStorage', 'xethkioz.hud.sound']],
+  ['src/lib/HudContext.tsx', ['localStorage', 'xethkioz.hud.sound', 'xethkioz.hud.account.status']],
 ]
 
 const failures = []

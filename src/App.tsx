@@ -2,6 +2,8 @@ import { Navigate, Routes, Route } from 'react-router-dom'
 import { LangProvider } from './lib/LangContext'
 import { HudProvider } from './lib/HudContext'
 import Header from './components/Header'
+import FusionGlobalStatus from './components/fusion/FusionGlobalStatus'
+import FusionGlobalWisp from './components/fusion/FusionGlobalWisp'
 import ScrollToTop from './components/ScrollToTop'
 import Analytics from './components/Analytics'
 import Home from './pages/Home'
@@ -19,6 +21,8 @@ function AppShell() {
       <ScrollToTop />
       <AppErrorBoundary label="Global Controls" compact>
         <Header />
+        <FusionGlobalStatus />
+        <FusionGlobalWisp />
       </AppErrorBoundary>
 
       <main id="main-content" className="min-h-screen">

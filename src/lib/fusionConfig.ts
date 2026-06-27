@@ -1,6 +1,6 @@
-export const FUSION_VERSION = '7.0.0-fusion-alpha.1.0-live-candidate'
-export const FUSION_LABEL = 'Fusion Alpha 1.0'
-export const FUSION_STAGE = 'Live Candidate · World Gate Foundation'
+export const FUSION_VERSION = '7.0.0-fusion-alpha.1.3-global-hud'
+export const FUSION_LABEL = 'Fusion Alpha 1.3'
+export const FUSION_STAGE = 'Global HUD · Persistent Wisp'
 
 export const PUBLIC_ROUTES = [
   { path: '/', name: 'Home', status: 'public-core', owner: 'core' },
@@ -27,4 +27,6 @@ export const FUSION_GUARDRAILS = [
   'HUD state must be global and persistent, not local to Header only',
   'Home must be composed from React/CSS layers, never from a flattened full-page image',
   'Live candidates must keep all public routes accessible and readable on mobile',
+  'Wisp must remain visible globally through AppShell, not only inside Home',
+  'Login state must be persistent and clearly marked as preview until Auth is connected',
 ] as const

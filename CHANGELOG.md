@@ -1,4 +1,25 @@
 
+## Fusion Alpha 1.3 — Global HUD
+
+- Added persistent global HUD foundation.
+- Added login preview state in HudContext.
+- Added FusionGlobalStatus.
+- Added FusionGlobalWisp.
+- Removed Home-only Wisp duplication.
+- Extended ES/EN strings for HUD, audio, account and system status.
+- Updated audit scripts for HUD/global Wisp guardrails.
+- No SQL or Supabase runtime changes.
+
+# Fusion Alpha 1.2 — World Gate Recovery
+
+- Home rediseñada como World Gate Cyberpunk 3000.
+- Portales visibles: Gaming, Science, Green Node y Fun Portal.
+- FusionPortalGate agrega tono Green.
+- Portales con profundidad, iluminación, runas, vórtices, hover 3D y animaciones livianas.
+- i18n actualizado para cuatro portales y Green Node.
+- Build y auditorías fusion/live validadas.
+
+
 ## Fusion Alpha 0.5 — Core Architecture
 
 - Se agrega contrato central `src/lib/fusionConfig.ts`.

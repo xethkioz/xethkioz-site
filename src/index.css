@@ -1325,3 +1325,382 @@
 @media (prefers-reduced-motion: reduce) {
   .green-node-video { display: none; }
 }
+
+/* Fusion Alpha 1.2 — World Gate Cyberpunk 3000 Recovery */
+.fusion-live-stage {
+  min-height: 100svh;
+  padding: clamp(1rem, 2vw, 2rem);
+  grid-template-rows: auto minmax(360px, 1fr) auto;
+  background:
+    radial-gradient(circle at 50% 14%, rgba(180, 88, 255, .36), transparent 30%),
+    radial-gradient(circle at 78% 30%, rgba(255, 106, 0, .22), transparent 25%),
+    radial-gradient(circle at 25% 38%, rgba(45, 212, 191, .12), transparent 26%),
+    radial-gradient(circle at 50% 102%, rgba(0, 0, 0, .96), #020204 56%),
+    linear-gradient(135deg, #05030a 0%, #090512 44%, #020203 100%);
+}
+.fusion-live-stage::before {
+  inset: clamp(.7rem, 1.4vw, 1.25rem);
+  border-radius: clamp(1.2rem, 2vw, 2.35rem);
+  border-color: rgba(255, 255, 255, .11);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.045), transparent 24%, rgba(0,0,0,.12)),
+    radial-gradient(circle at 50% 20%, rgba(138, 43, 226, .12), transparent 42%);
+  box-shadow:
+    inset 0 0 74px rgba(138,43,226,.18),
+    inset 0 0 130px rgba(0,0,0,.55),
+    0 0 120px rgba(0,0,0,.78);
+}
+.fusion-live-stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background:
+    linear-gradient(90deg, transparent 0 48%, rgba(255,255,255,.06) 50%, transparent 52% 100%),
+    repeating-linear-gradient(to bottom, rgba(255,255,255,.025) 0 1px, transparent 1px 7px);
+  mix-blend-mode: screen;
+  opacity: .35;
+  mask-image: radial-gradient(circle at 50% 45%, #000 0 52%, transparent 82%);
+}
+.fusion-live-sky {
+  opacity: .9;
+  background:
+    radial-gradient(circle at 14% 22%, rgba(255,122,0,.5) 0 1px, transparent 2px),
+    radial-gradient(circle at 28% 14%, rgba(185,92,255,.44) 0 1px, transparent 2px),
+    radial-gradient(circle at 74% 22%, rgba(255,200,126,.45) 0 1px, transparent 2px),
+    radial-gradient(circle at 83% 58%, rgba(50,255,138,.4) 0 1px, transparent 2px),
+    radial-gradient(circle at 50% 30%, rgba(255,255,255,.08), transparent 18%);
+  background-size: 180px 180px, 230px 230px, 260px 260px, 210px 210px, auto;
+  animation: fusionStarPulse 12s ease-in-out infinite;
+}
+.fusion-live-grid {
+  opacity: .54;
+  background-image:
+    linear-gradient(rgba(185,92,255,.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,122,0,.075) 1px, transparent 1px),
+    radial-gradient(circle at 50% 55%, rgba(255,255,255,.09), transparent 1px);
+  background-size: 76px 76px, 76px 76px, 34px 34px;
+  transform: perspective(800px) rotateX(62deg) translateY(11vh) scale(1.4);
+  transform-origin: center bottom;
+  mask-image: linear-gradient(to bottom, transparent 0, #000 42%, transparent 93%);
+  animation: fusionGridCrawl 16s linear infinite;
+}
+.fusion-live-smoke-a,
+.fusion-live-smoke-b {
+  filter: blur(18px);
+  opacity: .75;
+}
+.fusion-stage-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.fusion-stage-header > div {
+  padding: .85rem 1rem;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 1.25rem;
+  background: linear-gradient(135deg, rgba(0,0,0,.42), rgba(12, 7, 20, .2));
+  backdrop-filter: blur(14px);
+  box-shadow: 0 0 46px rgba(138,43,226,.09);
+}
+.fusion-stage-copy {
+  margin-top: clamp(1.2rem, 5vh, 3rem);
+  padding-inline: 1rem;
+}
+.fusion-stage-copy .section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: .65rem;
+  margin-bottom: .4rem;
+  padding: .55rem .9rem;
+  border: 1px solid rgba(255,106,0,.32);
+  border-radius: 999px;
+  background: rgba(0,0,0,.38);
+  box-shadow: 0 0 28px rgba(255,106,0,.12);
+}
+.fusion-stage-copy h1 {
+  letter-spacing: -.1em;
+  background: linear-gradient(100deg, #fff 0%, #e9d5ff 28%, #ff7a00 52%, #b95cff 78%, #fff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 28px rgba(138,43,226,.5));
+}
+.fusion-stage-copy span {
+  color: rgba(255,255,255,.88);
+  text-shadow: 0 0 20px rgba(255,106,0,.24);
+}
+.fusion-stage-copy > p:last-child {
+  max-width: 52rem;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 1.35rem;
+  background: rgba(0,0,0,.28);
+  padding: .85rem 1.1rem;
+  backdrop-filter: blur(10px);
+}
+.fusion-live-battle {
+  z-index: 3;
+  mask-image: radial-gradient(circle at 50% 48%, #000 0 55%, transparent 82%);
+}
+.fusion-live-dragon {
+  top: 8vh;
+  right: clamp(-4rem, 2vw, 2rem);
+  width: min(52vw, 760px);
+  opacity: .88;
+  filter: drop-shadow(0 0 38px rgba(255,106,0,.24)) drop-shadow(0 0 70px rgba(138,43,226,.14));
+}
+.fusion-live-dragon-head {
+  box-shadow: 0 0 34px rgba(255,106,0,.35), inset 0 0 32px rgba(0,0,0,.85);
+}
+.fusion-live-dragon-head i {
+  background: #fef08a;
+  box-shadow: 0 0 14px #ff6a00, 0 0 34px rgba(255,106,0,.95), 0 0 65px rgba(255,200,126,.5);
+}
+.fusion-live-avatar {
+  left: clamp(1.5rem, 8vw, 9rem);
+  bottom: clamp(12rem, 24vh, 17rem);
+  filter: drop-shadow(0 0 32px rgba(138,43,226,.45));
+}
+.fusion-avatar-sword {
+  width: 6%;
+  box-shadow: 0 0 18px rgba(255,255,255,.8), 0 0 38px rgba(255,106,0,.9), 0 0 78px rgba(138,43,226,.54);
+}
+.fusion-stage-portals {
+  margin-top: clamp(1.5rem, 5vh, 3.5rem);
+  padding-bottom: clamp(.5rem, 2vh, 1.25rem);
+}
+.fusion-stage-portals > p {
+  display: table;
+  margin-inline: auto;
+  padding: .55rem 1.1rem;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 999px;
+  background: rgba(0,0,0,.42);
+  backdrop-filter: blur(12px);
+  color: rgba(255,255,255,.84);
+}
+.fusion-stage-portals > div {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(.75rem, 1.35vw, 1.15rem);
+}
+.wow-portal {
+  min-height: clamp(285px, 34vh, 390px);
+  border-radius: 2.2rem 2.2rem 1.15rem 1.15rem;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.045), transparent 18%),
+    radial-gradient(circle at 50% 30%, currentColor, transparent 36%),
+    linear-gradient(180deg, rgba(0,0,0,.28), rgba(0,0,0,.91));
+  border-color: rgba(255,255,255,.13);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.04),
+    0 18px 55px rgba(0,0,0,.5),
+    0 0 55px rgba(138,43,226,.10);
+  transform-style: preserve-3d;
+}
+.wow-portal::before {
+  content: '';
+  position: absolute;
+  inset: 10px;
+  border-radius: inherit;
+  background:
+    linear-gradient(120deg, transparent 0 28%, rgba(255,255,255,.16) 42%, transparent 56% 100%);
+  opacity: .18;
+  transform: translateX(-120%);
+  transition: transform .75s ease;
+  z-index: 4;
+  pointer-events: none;
+}
+.wow-portal::after {
+  content: '';
+  position: absolute;
+  inset: auto 14% 9% 14%;
+  height: 10px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: .22;
+  filter: blur(12px);
+  z-index: 0;
+}
+.wow-portal:hover {
+  transform: translateY(-9px) rotateX(3deg);
+}
+.wow-portal:hover::before { transform: translateX(120%); }
+.portal-stone-top {
+  inset: 18px 14px auto;
+  height: 67%;
+  border-width: 7px;
+  border-color: rgba(21, 22, 32, .94);
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.055), rgba(0,0,0,.15)),
+    repeating-linear-gradient(105deg, rgba(255,255,255,.02) 0 8px, transparent 8px 19px);
+  box-shadow:
+    inset 0 0 35px rgba(255,255,255,.035),
+    inset 0 0 65px rgba(0,0,0,.72),
+    0 0 0 1px rgba(255,255,255,.09),
+    0 24px 45px rgba(0,0,0,.62);
+}
+.portal-vortex {
+  top: 44px;
+  width: min(73%, 252px);
+  background:
+    radial-gradient(circle, rgba(0,0,0,.96) 0 18%, transparent 22%),
+    conic-gradient(from 0deg, transparent 0 8%, currentColor 12%, transparent 18% 27%, currentColor 34%, transparent 42% 58%, currentColor 64%, transparent 72% 100%);
+  opacity: .92;
+  filter: blur(.2px) saturate(1.28);
+  box-shadow: 0 0 34px currentColor, inset 0 0 42px rgba(255,255,255,.06);
+  animation: portalSpin 8.5s linear infinite, portalBreathe 3.8s ease-in-out infinite;
+}
+.portal-runes {
+  top: 25px;
+  width: min(82%, 290px);
+  border-style: solid;
+  border-width: 1px;
+  outline: 1px dashed currentColor;
+  outline-offset: -16px;
+  opacity: .42;
+}
+.portal-icon {
+  width: 48px;
+  height: 48px;
+  backdrop-filter: blur(10px);
+}
+.portal-title {
+  font-size: clamp(1.1rem, 2vw, 1.82rem);
+  letter-spacing: -.045em;
+}
+.portal-subtitle { min-height: 2.25rem; }
+.portal-enter {
+  padding: .58rem 1.15rem;
+  font-size: .68rem;
+}
+.wow-portal-green { color: #33ff99; box-shadow: 0 0 45px rgba(0,255,102,.13); }
+.wow-portal-green:hover { border-color: rgba(51,255,153,.68); box-shadow: 0 0 70px rgba(0,255,102,.25); }
+.wow-portal-green .portal-vortex {
+  background:
+    radial-gradient(circle, rgba(0,0,0,.96) 0 18%, transparent 22%),
+    conic-gradient(from 0deg, transparent, rgba(51,255,153,.9), transparent, rgba(190,255,216,.95), transparent, rgba(0,255,102,.82), transparent);
+}
+.fusion-status-rail {
+  top: clamp(7rem, 16vh, 10rem);
+  background: linear-gradient(135deg, rgba(0,0,0,.54), rgba(12, 7, 20, .28));
+  border-color: rgba(255,255,255,.12);
+}
+.fusion-wisp-entity {
+  top: clamp(7rem, 18vh, 11rem);
+  width: 86px;
+  height: 86px;
+}
+.fusion-wisp-core { width: 54px; height: 54px; }
+.fusion-wisp-eye { top: 21px; }
+.fusion-wisp-eye.left { left: 17px; }
+.fusion-wisp-eye.right { right: 16px; }
+@keyframes fusionStarPulse {
+  0%, 100% { opacity: .68; filter: brightness(.96); }
+  50% { opacity: 1; filter: brightness(1.18); }
+}
+@keyframes fusionGridCrawl {
+  from { background-position: 0 0, 0 0, 0 0; }
+  to { background-position: 0 76px, 76px 0, 34px 34px; }
+}
+@keyframes portalBreathe {
+  0%, 100% { scale: .98; opacity: .72; }
+  50% { scale: 1.04; opacity: .98; }
+}
+@media (max-width: 1180px) {
+  .fusion-stage-portals > div { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fusion-live-dragon { opacity: .48; }
+  .fusion-live-avatar { opacity: .62; }
+}
+@media (max-width: 760px) {
+  .fusion-live-stage { padding-top: 5.85rem; }
+  .fusion-stage-header > div { padding: .65rem .75rem; }
+  .fusion-stage-copy h1 { font-size: clamp(3rem, 18vw, 4.8rem); }
+  .fusion-stage-copy > p:last-child { font-size: .86rem; line-height: 1.55; }
+  .fusion-stage-portals > div { grid-template-columns: 1fr; }
+  .wow-portal { min-height: 245px; }
+  .portal-vortex { top: 34px; width: min(58%, 210px); }
+  .portal-runes { top: 22px; width: min(66%, 230px); }
+  .fusion-wisp-entity { top: 7rem; right: .75rem; width: 58px; height: 58px; }
+  .fusion-wisp-core { width: 36px; height: 36px; }
+}
+
+/* Fusion Alpha 1.3 — Global HUD / status / Wisp layer */
+.fusion-global-wisp {
+  position: fixed;
+  right: clamp(1rem, 3vw, 2.6rem);
+  bottom: clamp(1.2rem, 4vh, 2.4rem);
+  z-index: 48;
+  pointer-events: none;
+}
+.fusion-global-wisp .fusion-wisp-entity {
+  position: relative;
+  inset: auto;
+  width: 78px;
+  height: 78px;
+  pointer-events: auto;
+}
+.fusion-global-status {
+  position: fixed;
+  left: clamp(.8rem, 2vw, 1.4rem);
+  bottom: clamp(.8rem, 2vh, 1.2rem);
+  z-index: 47;
+  width: min(21rem, calc(100vw - 7.5rem));
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 1.25rem;
+  background:
+    linear-gradient(135deg, rgba(0,0,0,.72), rgba(14,8,26,.58)),
+    radial-gradient(circle at 18% 0%, rgba(138,43,226,.18), transparent 52%);
+  padding: .82rem .95rem;
+  backdrop-filter: blur(18px);
+  box-shadow:
+    0 0 34px rgba(0,0,0,.34),
+    inset 0 0 28px rgba(255,255,255,.025);
+  color: rgba(229,231,235,.82);
+}
+.fusion-global-status span {
+  display: block;
+  color: #ff9b3d;
+  font-size: .58rem;
+  font-weight: 1000;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+}
+.fusion-global-status strong {
+  display: block;
+  margin-top: .25rem;
+  color: white;
+  font-family: var(--font-display, inherit);
+  font-size: .94rem;
+  letter-spacing: .02em;
+}
+.fusion-global-status ul {
+  margin-top: .45rem;
+  display: grid;
+  gap: .18rem;
+  font-size: .68rem;
+  line-height: 1.35;
+}
+.fusion-global-status li::before {
+  content: '◈';
+  margin-right: .38rem;
+  color: #33ff99;
+}
+[data-xeth-account='connected'] .fusion-account-button {
+  border-color: rgba(51,255,153,.5);
+  color: #bbf7d0;
+  box-shadow: 0 0 18px rgba(51,255,153,.12);
+}
+@media (max-width: 760px) {
+  .fusion-global-status {
+    display: none;
+  }
+  .fusion-global-wisp {
+    right: .7rem;
+    bottom: .9rem;
+  }
+  .fusion-global-wisp .fusion-wisp-entity {
+    width: 56px;
+    height: 56px;
+  }
+}
