@@ -1,7 +1,7 @@
 {
   "name": "xethkioz",
   "private": true,
-  "version": "7.0.0-fusion-alpha.2.5-consolidated-audit",
+  "version": "7.0.0-fusion-alpha.2.9-interaction-engine",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -27,7 +27,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.5",
-    "react-router-dom": "^6.26.2"
+    "react-router-dom": "^6.26.2",
+    "framer-motion": "^11.18.2"
   },
   "devDependencies": {
     "@types/react": "^18.3.5",

@@ -1,6 +1,8 @@
 {
-  "version": "7.0.0-fusion-alpha.2.5-consolidated-audit",
+  "version": "7.0.0-fusion-alpha.2.6-supabase-client",
   "label": "Fusion Alpha 2.5 Consolidated Audit",
   "stage": "alpha",
-  "channel": "fusion"
+  "channel": "alpha",
+  "codename": "Fusion Alpha 2.6 Supabase Client",
+  "supabaseClient": "src/services/supabaseClient.ts"
 }
