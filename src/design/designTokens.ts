@@ -1,3 +1,18 @@
+export const cyberAnimations = {
+  wisp: {
+    idle: 'animate-[pulse_3s_infinite_ease-in-out]',
+    watching: 'animate-[pulse_2s_infinite_ease-in-out] filter saturate-150',
+    greenMode: 'animate-[ping_1.5s_infinite_cubic-bezier(0,0,0.2,1)] scale-110',
+  },
+  portals: {
+    pulse: 'transition-all duration-500 ease-out hover:scale-[1.02]',
+    glitch: 'hover:animate-[pulse_0.5s_infinite_ease-in-out]',
+  },
+  avatar: {
+    transition: 'transition-transform duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]',
+  },
+} as const
+
 export const designTokens = {
   colors: {
     fusionBg: '#050505',
@@ -54,6 +69,7 @@ export const designTokens = {
     portal: 'transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, box-shadow 0.25s ease',
     wisp: 'transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease',
   },
+  animations: cyberAnimations,
   zIndex: {
     background: 0,
     content: 10,
@@ -67,3 +83,4 @@ export const designTokens = {
 
 export type DesignTokens = typeof designTokens
 export type FusionAccentKey = keyof typeof designTokens.colors.fusionAccent
+export type CyberAnimationTokens = typeof cyberAnimations

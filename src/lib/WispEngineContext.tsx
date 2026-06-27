@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 
-export type WispMood = 'idle' | 'watching' | 'connected' | 'guiding' | 'alert' | 'sleeping'
-export type WispEventType = 'route-watch' | 'portal-hover' | 'green-unlock' | 'system-ready' | 'future-ai'
+export type WispMood = 'idle' | 'watching' | 'connected' | 'guiding' | 'alert' | 'sleeping' | 'GREEN_MODE'
+export type WispEventType = 'route-watch' | 'portal-hover' | 'green-unlock' | 'green-mode' | 'system-ready' | 'future-ai'
 
 export interface WispEvent {
   id: string
@@ -18,6 +18,7 @@ interface WispEngineContextType {
   events: WispEvent[]
   setMood: (mood: WispMood) => void
   setFocusRoute: (route: string) => void
+  activateGreenMode: () => void
   registerEvent: (type: WispEventType, label: string, route?: string) => void
   resetWisp: () => void
 }
@@ -29,7 +30,7 @@ const STORAGE_ENERGY = 'xethkioz.wisp.energy'
 const STORAGE_EVENTS = 'xethkioz.wisp.events'
 const STORAGE_ROUTE = 'xethkioz.wisp.focusRoute'
 
-const validMoods: WispMood[] = ['idle', 'watching', 'connected', 'guiding', 'alert', 'sleeping']
+const validMoods: WispMood[] = ['idle', 'watching', 'connected', 'guiding', 'alert', 'sleeping', 'GREEN_MODE']
 
 const safeMood = (value: string | null): WispMood => (value && validMoods.includes(value as WispMood) ? value as WispMood : 'idle')
 
@@ -81,6 +82,18 @@ export function WispEngineProvider({ children }: { children: ReactNode }) {
     events,
     setMood: (next) => setMoodState(next),
     setFocusRoute: (route) => setFocusRouteState(route),
+    activateGreenMode: () => {
+      setMoodState('GREEN_MODE')
+      setEnergy((current) => Math.min(100, current + 17))
+      const event: WispEvent = {
+        id: `wisp-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        type: 'green-mode',
+        label: 'green-mode:portal-override',
+        route: '/green-node',
+        createdAt: new Date().toISOString(),
+      }
+      setEvents((current) => [event, ...current].slice(0, 6))
+    },
     registerEvent: (type, label, route = focusRoute) => {
       const event: WispEvent = {
         id: `wisp-${Date.now()}-${Math.random().toString(16).slice(2)}`,
@@ -92,6 +105,7 @@ export function WispEngineProvider({ children }: { children: ReactNode }) {
       setEvents((current) => [event, ...current].slice(0, 6))
       setEnergy((current) => Math.min(100, current + (type === 'green-unlock' ? 13 : 4)))
       if (type === 'green-unlock') setMoodState('connected')
+      else if (type === 'green-mode') setMoodState('GREEN_MODE')
       else if (type === 'portal-hover') setMoodState('guiding')
       else if (type === 'system-ready') setMoodState('watching')
     },

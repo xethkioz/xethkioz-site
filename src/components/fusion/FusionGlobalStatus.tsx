@@ -28,7 +28,7 @@ export default function FusionGlobalStatus() {
         <li>{t.v7.controls.stage}: {FUSION_STAGE}</li>
         <li>{t.v7.controls.audio}: {audioMode === 'enabled' ? t.v7.controls.on : t.v7.controls.off}</li>
         <li>{t.v7.controls.account}: {accountLabel}</li>
-        <li>{t.v7.wisp.status}: {t.v7.wisp.states[mood]} · {energy}%</li>
+        <li>{t.v7.wisp.status}: {mood === 'GREEN_MODE' ? 'GREEN_MODE' : t.v7.wisp.states[mood]} · {energy}%</li>
       </ul>
     </aside>
   )

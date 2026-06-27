@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import type { WispMood } from '../../lib/WispEngineContext'
 
 export type FusionWispState = WispMood
-export const FUSION_WISP_STATES: FusionWispState[] = ['idle', 'watching', 'connected', 'guiding', 'alert', 'sleeping']
+export const FUSION_WISP_STATES: FusionWispState[] = ['idle', 'watching', 'connected', 'guiding', 'alert', 'sleeping', 'GREEN_MODE']
 
 export interface FusionWispEntityProps {
   to?: string
@@ -22,11 +22,13 @@ export default function FusionWispEntity({
   message,
   onFocusSignal,
 }: FusionWispEntityProps) {
+  const stateClass = state === 'GREEN_MODE' ? 'green-mode' : state
+
   return (
     <Link
       to={to}
       aria-label={`${label} · ${state}`}
-      className={`fusion-wisp-entity fusion-wisp-${state}`}
+      className={`fusion-wisp-entity fusion-wisp-${stateClass}`}
       title={label}
       onMouseEnter={onFocusSignal}
       onFocus={onFocusSignal}

@@ -79,7 +79,7 @@ export function canEnterPortal(portal: PortalMetadata, context: { wispMood?: str
   if (portal.status !== 'online') return false
   if (portal.unlockCondition === 'always') return true
   if (portal.unlockCondition === 'wispWatching') {
-    return context.wispMood === 'watching' || context.wispMood === 'connected' || context.wispMood === 'guiding'
+    return context.wispMood === 'watching' || context.wispMood === 'connected' || context.wispMood === 'guiding' || context.wispMood === 'GREEN_MODE'
   }
   return false
 }
