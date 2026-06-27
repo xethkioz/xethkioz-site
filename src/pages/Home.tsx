@@ -1,5 +1,5 @@
 import SEO from '../components/SEO'
-import FusionWorldStageV5 from '../components/fusion/FusionWorldStageV5'
+import { WorldGateV5 } from '../engines/world'
 import { useLang } from '../lib/LangContext'
 import { FUSION_LABEL } from '../lib/fusionConfig'
 
@@ -17,7 +17,7 @@ export default function Home() {
         url="/"
         image="/images/articles/xethkioz-cover.svg"
       />
-      <FusionWorldStageV5 />
+      <WorldGateV5 />
     </>
   )
 }

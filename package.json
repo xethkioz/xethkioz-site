@@ -1,7 +1,7 @@
 {
   "name": "xethkioz",
   "private": true,
-  "version": "7.0.0-fusion-alpha.1.8-world-gate-v5",
+  "version": "7.0.0-fusion-alpha.1.9-core-registry",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -18,7 +18,8 @@
     "audit:code": "node scripts/code-structure-review.mjs",
     "audit:media": "node scripts/media-assets-review.mjs",
     "audit:wisp-engine": "node scripts/wisp-engine-check.mjs",
-    "audit:functionality": "node scripts/functionality-core-check.mjs"
+    "audit:functionality": "node scripts/functionality-core-check.mjs",
+    "audit:portal": "node scripts/portal-registry-check.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",

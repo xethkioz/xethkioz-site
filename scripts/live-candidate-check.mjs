@@ -3,9 +3,10 @@ import { join } from 'node:path'
 
 const root = process.cwd()
 const checks = [
-  ['src/pages/Home.tsx', ['FusionWorldStage']],
-  ['src/components/fusion/FusionWorldStage.tsx', ['fusion-live-stage', 'FusionPortalGate']],
-  ['src/components/fusion/FusionPortalGate.tsx', ['wow-portal']],
+  ['src/pages/Home.tsx', ['WorldGateV5']],
+  ['src/components/fusion/FusionWorldStageV5.tsx', ['getPortalRegistry', 'panel-cyber']],
+  ['src/engines/portal/portalRegistry.ts', ['portalRegistry', 'wispWatching']],
+  ['src/design/designTokens.ts', ['designTokens', 'fusionAccent']],
   ['src/components/fusion/FusionWispEntity.tsx', ['fusion-wisp-entity']],
   ['src/components/fusion/FusionGlobalWisp.tsx', ['FusionGlobalWisp', 'FusionWispEntity']],
   ['src/components/fusion/FusionGlobalStatus.tsx', ['FusionGlobalStatus', 'FUSION_STAGE']],

@@ -1,6 +1,6 @@
-export const FUSION_VERSION = '7.0.0-fusion-alpha.1.8-world-gate-v5'
-export const FUSION_LABEL = 'Fusion Alpha 1.8'
-export const FUSION_STAGE = 'World Gate V5 · modular clean home layout'
+export const FUSION_VERSION = '7.0.0-fusion-alpha.1.9-core-registry'
+export const FUSION_LABEL = 'Fusion Alpha 1.9'
+export const FUSION_STAGE = 'Core Registry · design tokens and portal registry'
 
 export const PUBLIC_ROUTES = [
   { path: '/', name: 'Home', status: 'public-core', owner: 'core' },
@@ -41,4 +41,6 @@ export const FUSION_GUARDRAILS = [
   'CMS, news, community, profile and progress features stay mock/local until backend contracts are approved',
   'Dynamic content must be data-driven and i18n-aware before connecting Supabase',
   'Home V5 must keep modular hierarchy: hero, portals, updates, Wisp panel, community status and content signals.',
+  'Portal metadata must come from Portal Registry instead of hardcoded Home arrays.',
+  'New visual constants must be introduced through Design Tokens before being used by components.',
 ] as const

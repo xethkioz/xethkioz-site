@@ -1,29 +1,19 @@
 import { Link } from 'react-router-dom'
-import { getFusionArticles, getFusionCmsQueue, getFusionMissions, type FusionPortalId } from '../../lib/fusionContent'
+import { getFusionArticles, getFusionCmsQueue, getFusionMissions } from '../../lib/fusionContent'
+import { canEnterPortal, getPortalRegistry, type PortalTheme } from '../../engines/portal'
 import { useLang } from '../../lib/LangContext'
 import { useProfileProgress } from '../../lib/ProfileProgressContext'
 import { useWispEngine } from '../../lib/WispEngineContext'
 import { FUSION_LABEL, FUSION_STAGE } from '../../lib/fusionConfig'
 
-type PortalTone = 'gaming' | 'science' | 'green' | 'fun'
-
-interface PortalCard {
-  id: FusionPortalId
-  to: string
-  code: string
-  title: string
-  subtitle: string
-  tone: PortalTone
-}
-
-const toneClass: Record<PortalTone, string> = {
+const toneClass: Record<PortalTheme, string> = {
   gaming: 'hover:border-fusionAccent-tech-primary hover:shadow-glow-tech focus-visible:ring-fusionAccent-tech-primary',
   science: 'hover:border-fusionAccent-science hover:shadow-glow-science focus-visible:ring-fusionAccent-science',
   green: 'hover:border-fusionAccent-greenNode hover:shadow-glow-green focus-visible:ring-fusionAccent-greenNode',
   fun: 'hover:border-fusionAccent-tech-secondary hover:shadow-glow-action focus-visible:ring-fusionAccent-tech-secondary',
 }
 
-const dotClass: Record<PortalTone, string> = {
+const dotClass: Record<PortalTheme, string> = {
   gaming: 'bg-fusionAccent-tech-primary',
   science: 'bg-fusionAccent-science',
   green: 'bg-fusionAccent-greenNode',
@@ -77,12 +67,12 @@ export default function FusionWorldStageV5() {
   const { xp, level } = useProfileProgress()
   const ui = copy[lang]
 
-  const portalCards: PortalCard[] = [
-    { id: 'gaming', to: '/gaming', code: '01 / PORTAL', title: t.v7.portals.games.title, subtitle: t.v7.portals.games.subtitle, tone: 'gaming' },
-    { id: 'science', to: '/science', code: '02 / PORTAL', title: t.v7.portals.science.title, subtitle: t.v7.portals.science.subtitle, tone: 'science' },
-    { id: 'green', to: '/green-node', code: '03 / HIDDEN', title: t.v7.portals.green.title, subtitle: t.v7.portals.green.subtitle, tone: 'green' },
-    { id: 'fun', to: '/fun', code: '04 / PORTAL', title: t.v7.portals.fun.title, subtitle: t.v7.portals.fun.subtitle, tone: 'fun' },
-  ]
+  const portalCards = getPortalRegistry().map((portal) => ({
+    ...portal,
+    title: t.v7.portals[portal.titleKey].title,
+    subtitle: t.v7.portals[portal.titleKey].subtitle,
+    canEnter: canEnterPortal(portal, { wispMood: mood }),
+  }))
 
   const articles = getFusionArticles(lang).slice(0, 3)
   const queue = getFusionCmsQueue(lang).slice(0, 3)
@@ -114,14 +104,14 @@ export default function FusionWorldStageV5() {
                 {portalCards.map((portal) => (
                   <Link
                     key={portal.id}
-                    to={portal.to}
+                    to={portal.route}
                     aria-label={`${t.v7.enter} ${portal.title}`}
-                    onMouseEnter={() => registerEvent('portal-hover', `home-v5:${portal.id}`, portal.to)}
-                    className={`panel-cyber group flex h-36 flex-col justify-between p-4 transition duration-300 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 ${toneClass[portal.tone]}`}
+                    onMouseEnter={() => registerEvent('portal-hover', `home-v5:${portal.id}`, portal.route)}
+                    className={`panel-cyber group flex h-36 flex-col justify-between p-4 transition duration-300 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 ${toneClass[portal.theme]}`}
                   >
                     <span className="flex items-center justify-between font-mono text-xs uppercase tracking-[0.16em] text-gray-500 transition-colors group-hover:text-gray-200">
                       {portal.code}
-                      <span className={`h-2 w-2 rounded-full ${dotClass[portal.tone]} opacity-70 transition group-hover:scale-125`} />
+                      <span className={`h-2 w-2 rounded-full ${dotClass[portal.theme]} opacity-70 transition group-hover:scale-125`} />
                     </span>
                     <span className="space-y-1">
                       <strong className="block text-base font-black uppercase tracking-wide text-white">{portal.title}</strong>
