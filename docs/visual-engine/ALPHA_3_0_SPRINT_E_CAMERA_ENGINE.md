@@ -2,58 +2,65 @@
 
 ## Objetivo
 
-Crear la base matemática del Camera Engine para que el escenario World pueda responder al cursor con profundidad, parallax y tilt sin acoplarse al Core ni a la persistencia.
+Crear una base de cámara virtual centralizada para que el escenario visual pueda reaccionar al movimiento del cursor sin generar re-renderizados innecesarios en React.
 
 ## Archivos agregados
 
 ```txt
-src/engines/world/camera/useWorldCameraMotion.ts
-src/engines/world/camera/index.ts
+src/engines/world/hooks/useCameraMotion.ts
+src/engines/world/hooks/index.ts
 ```
 
-## Archivos modificados
+## Encapsulamiento
+
+No modifica:
 
 ```txt
-src/engines/world/index.ts
+src/providers/
+src/services/
+src/engines/profile/
 ```
 
-## Principios
-
-- No toca `src/providers/`.
-- No toca `src/services/`.
-- No toca `src/engines/profile/`.
-- No toca Supabase.
-- No altera `WorldHeroStage` todavía.
-- Expone MotionValues para evitar re-renders por movimiento del cursor.
-
-## API
+## API principal
 
 ```ts
-const camera = useWorldCameraMotion({ intensity: 1 })
+const camera = useCameraMotion();
+
+camera.setPointerFromEvent(event);
+camera.resetPointer();
+
+camera.mouseX;
+camera.mouseY;
+camera.smoothMouseX;
+camera.smoothMouseY;
 ```
 
-La API devuelve:
+## Integración recomendada en WorldHeroStage
 
-- `stageRef`
-- `onPointerMove`
-- `onPointerLeave`
-- `cameraX`
-- `cameraY`
-- `stageRotateX`
-- `stageRotateY`
-- `backdropX`
-- `backdropY`
-- `foregroundX`
-- `foregroundY`
-- `wispDriftX`
-- `wispDriftY`
+El orquestador del escenario debe capturar el puntero una sola vez:
 
-## Próxima integración
+```tsx
+const camera = useCameraMotion();
 
-El siguiente sprint puede conectar estos valores a:
+<motion.section
+  onPointerMove={camera.setPointerFromEvent}
+  onPointerLeave={camera.resetPointer}
+>
+  ...
+</motion.section>
+```
 
-- `WorldStageBackdrop`
-- `WorldWispMotion`
-- `WorldFloatingRelic`
-- `AvatarRenderer`
-- HUD superior
+## Capas sugeridas
+
+```txt
+backdrop  → movimiento mínimo e invertido
+fog       → desplazamiento suave
+wisp      → deriva atmosférica
+relic     → combinación con hover local
+avatar    → profundidad focal
+hud       → movimiento casi imperceptible
+```
+
+## Rendimiento
+
+El hook trabaja con MotionValues y springs de Framer Motion. Eso permite que el movimiento del cursor se propague a los nodos animados sin usar `useState`, evitando re-renderizados continuos.
