@@ -1,8 +1,6 @@
 {
-  "version": "7.0.0-fusion-alpha.2.0-engine-portals",
-  "channel": "fusion-alpha",
-  "label": "Fusion Alpha 2.0 Engine Portals",
-  "updatedAt": "2026-06-27T11:52:45.617Z",
-  "codename": "World Gate V5 · Modular Home",
-  "stage": "Core Registry"
+  "version": "7.0.0-fusion-alpha.2.1-design-tokens",
+  "label": "Fusion Alpha 2.1 Design Tokens",
+  "stage": "alpha",
+  "channel": "fusion"
 }

@@ -1,3 +1,10 @@
+# Fusion Alpha 2.2 — World Hero Stage
+
+- Updated Section 0 World Hero Stage with RPG avatar actions.
+- Linked role actions to AvatarRenderer poses.
+- Applied official gaming/fun/text DesignSystem tokens to the XETHKIOZ brand gradient.
+- Preserved ES/EN action copy and added transition cleanup.
+
 
 ## Fusion Alpha 1.5 — Wisp Engine + Full Audit
 
