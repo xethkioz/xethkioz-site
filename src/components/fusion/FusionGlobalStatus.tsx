@@ -1,6 +1,7 @@
 import { useLocation } from 'react-router-dom'
 import { useHud } from '../../lib/HudContext'
 import { useLang } from '../../lib/LangContext'
+import { useWispEngine } from '../../lib/WispEngineContext'
 import { FUSION_LABEL, FUSION_STAGE } from '../../lib/fusionConfig'
 
 const routeLabel: Record<string, { es: string; en: string }> = {
@@ -15,6 +16,7 @@ export default function FusionGlobalStatus() {
   const location = useLocation()
   const { lang, t } = useLang()
   const { audioMode, account } = useHud()
+  const { mood, energy } = useWispEngine()
   const current = routeLabel[location.pathname] || { es: 'Nodo desconocido', en: 'Unknown node' }
   const accountLabel = account.status === 'connected' ? account.name : t.v7.controls.guest
 
@@ -26,6 +28,7 @@ export default function FusionGlobalStatus() {
         <li>{t.v7.controls.stage}: {FUSION_STAGE}</li>
         <li>{t.v7.controls.audio}: {audioMode === 'enabled' ? t.v7.controls.on : t.v7.controls.off}</li>
         <li>{t.v7.controls.account}: {accountLabel}</li>
+        <li>{t.v7.wisp.status}: {t.v7.wisp.states[mood]} · {energy}%</li>
       </ul>
     </aside>
   )

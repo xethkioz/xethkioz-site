@@ -28,6 +28,13 @@ export const translations = {
         sceneText: 'El corazón visual de XETHKIOZ queda preparado para arte final sin romper la experiencia.',
         wispLabel: 'Green Wisp',
       },
+      wisp: {
+        status: 'Wisp',
+        idle: 'Observando',
+        guiding: 'Guiando',
+        connected: 'Conectado al Green Node',
+        states: { idle: 'reposo', watching: 'observando', connected: 'conectado', guiding: 'guiando', alert: 'alerta', sleeping: 'durmiendo' },
+      },
       controls: {
         panel: 'Controles XETHKIOZ',
         language: 'Cambiar idioma',
@@ -138,6 +145,13 @@ export const translations = {
         sceneTitle: 'Avatar vs Dragon',
         sceneText: 'The visual heart of XETHKIOZ is ready for final artwork without breaking the experience.',
         wispLabel: 'Green Wisp',
+      },
+      wisp: {
+        status: 'Wisp',
+        idle: 'Watching',
+        guiding: 'Guiding',
+        connected: 'Connected to Green Node',
+        states: { idle: 'idle', watching: 'watching', connected: 'connected', guiding: 'guiding', alert: 'alert', sleeping: 'sleeping' },
       },
       controls: {
         panel: 'XETHKIOZ controls',

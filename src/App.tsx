@@ -1,6 +1,7 @@
 import { Navigate, Routes, Route } from 'react-router-dom'
 import { LangProvider } from './lib/LangContext'
 import { HudProvider } from './lib/HudContext'
+import { WispEngineProvider } from './lib/WispEngineContext'
 import Header from './components/Header'
 import FusionGlobalStatus from './components/fusion/FusionGlobalStatus'
 import FusionGlobalWisp from './components/fusion/FusionGlobalWisp'
@@ -52,7 +53,9 @@ export default function App() {
   return (
     <LangProvider>
       <HudProvider>
-        <AppShell />
+        <WispEngineProvider>
+          <AppShell />
+        </WispEngineProvider>
       </HudProvider>
     </LangProvider>
   )

@@ -1,4 +1,15 @@
 
+## Fusion Alpha 1.5 — Wisp Engine + Full Audit
+
+- Added `WispEngineContext` with persistent Wisp mood, energy, focus route and event trail.
+- Expanded `FusionWispEntity` states for future AI/event integration.
+- Connected global Wisp to route changes, account status and interaction signals.
+- Added Wisp state/energy to the global status panel.
+- Added `audit:code`, `audit:media` and `audit:wisp-engine`.
+- Generated code/route/structure, visual/audio object and SQL review reports.
+- No SQL execution, no Supabase runtime changes, no real audio engine yet.
+
+
 ## Fusion Alpha 1.3 — Global HUD
 
 - Added persistent global HUD foundation.

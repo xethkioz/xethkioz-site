@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useWispEngine } from '../../lib/WispEngineContext'
 import { Link } from 'react-router-dom'
 
 export type FusionPortalTone = 'violet' | 'blue' | 'orange' | 'green'
@@ -25,7 +26,13 @@ export default function FusionPortalGate({
   panels = [],
 }: FusionPortalGateProps) {
   const [greenAwake, setGreenAwake] = useState(false)
+  const { registerEvent } = useWispEngine()
   const isGreen = tone === 'green'
+  const awakenGreen = () => {
+    if (!isGreen) return
+    awakenGreen()
+    registerEvent('green-unlock', 'duende-mirando', to)
+  }
 
   return (
     <Link
@@ -33,12 +40,12 @@ export default function FusionPortalGate({
       className={`wow-portal wow-portal-${tone} ${isGreen ? 'wow-portal-guarded' : ''} ${greenAwake ? 'is-goblin-looking' : ''} group`}
       aria-label={ariaLabel || `${enterLabel}: ${title}`}
       aria-disabled={isGreen && !greenAwake}
-      onMouseEnter={() => isGreen && setGreenAwake(true)}
-      onFocus={() => isGreen && setGreenAwake(true)}
+      onMouseEnter={awakenGreen}
+      onFocus={awakenGreen}
       onClick={(event) => {
         if (isGreen && !greenAwake) {
           event.preventDefault()
-          setGreenAwake(true)
+          awakenGreen()
         }
       }}
     >

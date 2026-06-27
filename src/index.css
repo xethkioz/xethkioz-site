@@ -1913,3 +1913,85 @@
   .portal-gold-fountain i,
   .goblin-face i { animation: none !important; }
 }
+
+/* Fusion Alpha 1.5 — Wisp Engine */
+.fusion-wisp-signal {
+  position: absolute;
+  inset: 7px;
+  border-radius: 999px;
+  background: conic-gradient(from 90deg, transparent, rgba(0,255,102,.45), rgba(190,255,216,.75), transparent 72%);
+  filter: blur(10px);
+  opacity: .42;
+  animation: fusionWispSignal 6s linear infinite;
+}
+.fusion-wisp-meter {
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  width: 46px;
+  height: 4px;
+  transform: translateX(-50%);
+  overflow: hidden;
+  border-radius: 999px;
+  border: 1px solid rgba(0,255,102,.35);
+  background: rgba(0,0,0,.55);
+}
+.fusion-wisp-meter i {
+  display: block;
+  width: var(--wisp-energy, 37%);
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(0,255,102,.35), rgba(190,255,216,.95));
+  box-shadow: 0 0 12px rgba(0,255,102,.6);
+}
+.fusion-wisp-bubble {
+  position: absolute;
+  right: 66px;
+  top: 6px;
+  max-width: 150px;
+  min-width: 92px;
+  border-radius: 16px 16px 4px 16px;
+  border: 1px solid rgba(0,255,102,.22);
+  background: rgba(0,0,0,.72);
+  padding: .45rem .6rem;
+  color: rgba(217,255,232,.92);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 10px;
+  line-height: 1.25;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  box-shadow: 0 0 22px rgba(0,255,102,.15);
+  opacity: 0;
+  transform: translateX(8px) scale(.96);
+  transition: opacity .25s ease, transform .25s ease;
+  pointer-events: none;
+}
+.fusion-global-wisp:hover .fusion-wisp-bubble,
+.fusion-global-wisp:focus-within .fusion-wisp-bubble {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+.fusion-wisp-guiding .fusion-wisp-core {
+  box-shadow: 0 0 24px rgba(0,255,102,.95), 0 0 58px rgba(0,255,102,.42), inset 0 0 18px rgba(190,255,216,.75);
+}
+.fusion-wisp-alert .fusion-wisp-core {
+  box-shadow: 0 0 30px rgba(255,106,0,.85), 0 0 70px rgba(255,106,0,.38), inset 0 0 18px rgba(255,220,170,.75);
+}
+.fusion-wisp-sleeping {
+  opacity: .72;
+  filter: saturate(.6);
+}
+.fusion-wisp-sleeping .fusion-wisp-eye {
+  height: 2px;
+  border-radius: 999px;
+}
+@keyframes fusionWispSignal {
+  to { transform: rotate(360deg); }
+}
+@media (max-width: 640px) {
+  .fusion-wisp-bubble { display: none; }
+  .fusion-wisp-meter { width: 34px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fusion-wisp-signal { animation: none !important; }
+}

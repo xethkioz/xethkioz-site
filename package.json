@@ -1,7 +1,7 @@
 {
   "name": "xethkioz",
   "private": true,
-  "version": "7.0.0-fusion-alpha.1.4-portal-engine",
+  "version": "7.0.0-fusion-alpha.1.5-wisp-engine-audit",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -14,7 +14,10 @@
     "audit:fusion": "node scripts/fusion-safety-check.mjs",
     "audit:wisp": "node scripts/wisp-entity-check.mjs",
     "audit:hud": "node scripts/hud-persistence-check.mjs",
-    "audit:live": "node scripts/live-candidate-check.mjs"
+    "audit:live": "node scripts/live-candidate-check.mjs",
+    "audit:code": "node scripts/code-structure-review.mjs",
+    "audit:media": "node scripts/media-assets-review.mjs",
+    "audit:wisp-engine": "node scripts/wisp-engine-check.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",

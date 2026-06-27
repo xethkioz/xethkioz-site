@@ -1,6 +1,6 @@
-export const FUSION_VERSION = '7.0.0-fusion-alpha.1.4-portal-engine'
-export const FUSION_LABEL = 'Fusion Alpha 1.4'
-export const FUSION_STAGE = 'Portal Engine · Green Goblin Guard'
+export const FUSION_VERSION = '7.0.0-fusion-alpha.1.5-wisp-engine-audit'
+export const FUSION_LABEL = 'Fusion Alpha 1.5'
+export const FUSION_STAGE = 'Wisp Engine · Code/Media/SQL Audit'
 
 export const PUBLIC_ROUTES = [
   { path: '/', name: 'Home', status: 'public-core', owner: 'core' },
@@ -31,4 +31,7 @@ export const FUSION_GUARDRAILS = [
   'Login state must be persistent and clearly marked as preview until Auth is connected',
   'Portal Engine must expose visual identity, panel hints, transition behavior, and accessible navigation per portal',
   'Green Node access remains a Wisp/Goblin Easter Egg and must not become a normal menu shortcut',
+  'Wisp Engine must expose persistent state, events, energy and future AI integration hooks',
+  'Visual and audio assets must be inventoried before being promoted to Live',
+  'SQL remains audit-only until migrations are consolidated and approved',
 ] as const
