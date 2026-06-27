@@ -1,6 +1,2 @@
-export {
-  useCameraMotion,
-  type CameraMotionConfig,
-  type CameraMotionController,
-  type CameraParallaxLayer,
-} from "./useCameraMotion";
+export { useCameraMotion } from './useCameraMotion'
+export type { WorldCameraMotion } from './useCameraMotion'

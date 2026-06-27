@@ -1,11 +1,13 @@
 import { memo, type PointerEvent, type ReactNode, useCallback } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import type { WorldCameraMotion } from '../hooks'
 import { worldMotionVariants, worldTransitions } from './worldMotionVariants'
 
 export type WorldFloatingRelicProps = {
   children: ReactNode
   className?: string
   disabled?: boolean
+  camera?: WorldCameraMotion
   /** Multiplicador para la fuerza del parallax. Recomendado: 10 a 15. */
   intensity?: number
 }
@@ -24,18 +26,14 @@ const normalizePointerPosition = (event: PointerEvent<HTMLDivElement>) => {
 }
 
 /**
- * Alpha 3.0 / Sprint D — Floating Relic.
- *
- * Encapsulated premium relic container:
- * - pointer-normalized parallax and tilt
- * - violet idle glow shifting to controlled orange action glow on hover
- * - dynamic projected floor shadow
- * - memoized boundary to avoid re-render pressure while backdrop/wisps animate
+ * Alpha 3.0 / Sprint D + E — Floating Relic.
+ * Combines global Camera Engine parallax with local pointer tilt.
  */
 function WorldFloatingRelicComponent({
   children,
   className = '',
   disabled = false,
+  camera,
   intensity = 12,
 }: WorldFloatingRelicProps) {
   const safeIntensity = clamp(intensity, 4, 18)
@@ -44,6 +42,14 @@ function WorldFloatingRelicComponent({
   const pointerX = useMotionValue(0)
   const pointerY = useMotionValue(0)
   const hoverProgress = useMotionValue(0)
+
+  const fallbackCameraX = useMotionValue(0)
+  const fallbackCameraY = useMotionValue(0)
+  const sourceCameraX = camera?.smoothX ?? fallbackCameraX
+  const sourceCameraY = camera?.smoothY ?? fallbackCameraY
+
+  const cameraX = useTransform(sourceCameraX, [-1, 1], [-18, 18])
+  const cameraY = useTransform(sourceCameraY, [-1, 1], [-10, 10])
 
   const springX = useSpring(pointerX, hoverSpring)
   const springY = useSpring(pointerY, hoverSpring)
@@ -63,15 +69,12 @@ function WorldFloatingRelicComponent({
     ],
   )
 
-  const ambientShadow = useTransform(
-    [springX, springHover],
-    ([x, hover]) => {
-      const offsetX = Number(x) * 18
-      const blur = 28 + Number(hover) * 18
-      const opacity = 0.2 + Number(hover) * 0.18
-      return `${offsetX}px 26px ${blur}px rgba(0,0,0,${opacity})`
-    },
-  )
+  const ambientShadow = useTransform([springX, springHover], ([x, hover]) => {
+    const offsetX = Number(x) * 18
+    const blur = 28 + Number(hover) * 18
+    const opacity = 0.2 + Number(hover) * 0.18
+    return `${offsetX}px 26px ${blur}px rgba(0,0,0,${opacity})`
+  })
 
   const floorShadowX = useTransform(springX, [-1, 1], [-18, 18])
   const floorShadowOpacity = useTransform(springHover, [0, 1], [0.2, 0.38])
@@ -101,55 +104,40 @@ function WorldFloatingRelicComponent({
   }, [hoverProgress, pointerX, pointerY])
 
   return (
-    <motion.div
-      className="relative inline-flex [perspective:960px]"
-      style={{ y: translateY }}
-    >
-      <motion.div
-        variants={worldMotionVariants.relic}
-        initial="initial"
-        animate="enter"
-        exit="exit"
-        whileHover={disabled ? undefined : 'hover'}
-        whileTap={disabled ? undefined : 'tap'}
-        className={`relative inline-flex select-none items-center justify-center overflow-hidden rounded-2xl border border-violet-500/10 bg-[#16141F]/90 p-4 text-slate-100 backdrop-blur-xl [transform-style:preserve-3d] [will-change:transform,filter] ${disabled ? 'pointer-events-none opacity-60' : 'cursor-pointer'} ${className}`}
-        role={disabled ? 'img' : 'button'}
-        tabIndex={disabled ? -1 : 0}
-        onPointerEnter={handlePointerEnter}
-        onPointerMove={handlePointerMove}
-        onPointerLeave={handlePointerLeave}
-        style={{
-          rotateX,
-          rotateY,
-          scale,
-          filter: glowFilter,
-          boxShadow: ambientShadow,
-        }}
-      >
+    <motion.div className="relative inline-flex [perspective:960px] will-change-transform" style={{ x: cameraX, y: cameraY }}>
+      <motion.div className="relative inline-flex" style={{ y: translateY }}>
+        <motion.div
+          variants={worldMotionVariants.relic}
+          initial="initial"
+          animate="enter"
+          exit="exit"
+          whileHover={disabled ? undefined : 'hover'}
+          whileTap={disabled ? undefined : 'tap'}
+          className={`relative inline-flex select-none items-center justify-center overflow-hidden rounded-2xl border border-violet-500/10 bg-[#16141F]/90 p-4 text-slate-100 backdrop-blur-xl [transform-style:preserve-3d] [will-change:transform,filter] ${disabled ? 'pointer-events-none opacity-60' : 'cursor-pointer'} ${className}`}
+          role={disabled ? 'img' : 'button'}
+          tabIndex={disabled ? -1 : 0}
+          onPointerEnter={handlePointerEnter}
+          onPointerMove={handlePointerMove}
+          onPointerLeave={handlePointerLeave}
+          style={{ rotateX, rotateY, scale, filter: glowFilter, boxShadow: ambientShadow }}
+        >
+          <motion.span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 -z-10 rounded-2xl bg-gradient-to-br from-violet-500/22 via-transparent to-orange-500/16 blur-xl"
+            style={{ opacity: orangeAuraOpacity }}
+          />
+
+          <span aria-hidden="true" className="pointer-events-none absolute inset-px rounded-2xl bg-[linear-gradient(135deg,rgba(139,92,246,0.14),transparent_42%,rgba(249,115,22,0.10))]" />
+          <span aria-hidden="true" className="pointer-events-none absolute left-3 right-3 top-0 h-px bg-gradient-to-r from-transparent via-violet-300/35 to-transparent" />
+          <span className="relative z-10 [transform:translateZ(28px)]">{children}</span>
+        </motion.div>
+
         <motion.span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 -z-10 rounded-2xl bg-gradient-to-br from-violet-500/22 via-transparent to-orange-500/16 blur-xl"
-          style={{ opacity: orangeAuraOpacity }}
+          className="pointer-events-none absolute -bottom-5 left-1/2 h-6 w-4/5 -translate-x-1/2 rounded-full bg-black blur-2xl"
+          style={{ x: floorShadowX, opacity: floorShadowOpacity, scaleX: floorShadowScale }}
         />
-
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-px rounded-2xl bg-[linear-gradient(135deg,rgba(139,92,246,0.14),transparent_42%,rgba(249,115,22,0.10))]"
-        />
-
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute left-3 right-3 top-0 h-px bg-gradient-to-r from-transparent via-violet-300/35 to-transparent"
-        />
-
-        <span className="relative z-10 [transform:translateZ(28px)]">{children}</span>
       </motion.div>
-
-      <motion.span
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-5 left-1/2 h-6 w-4/5 -translate-x-1/2 rounded-full bg-black blur-2xl"
-        style={{ x: floorShadowX, opacity: floorShadowOpacity, scaleX: floorShadowScale }}
-      />
     </motion.div>
   )
 }

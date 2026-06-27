@@ -1,149 +1,66 @@
-import { useCallback, useMemo } from "react";
-import {
-  type MotionValue,
-  motionValue,
-  useSpring,
-  useTransform,
-} from "framer-motion";
+import type { PointerEvent } from 'react'
+import { useCallback } from 'react'
+import { type MotionValue, useMotionValue, useSpring } from 'framer-motion'
+import { worldTransitions } from '../components/worldMotionVariants'
 
-export type CameraMotionConfig = {
-  /**
-   * Spring stiffness for the global camera motion.
-   * Higher values react faster.
-   */
-  stiffness?: number;
+export type WorldCameraMotion = {
+  mouseX: MotionValue<number>
+  mouseY: MotionValue<number>
+  smoothX: MotionValue<number>
+  smoothY: MotionValue<number>
+  /** Backward-compatible aliases for previous camera draft patches. */
+  smoothMouseX: MotionValue<number>
+  smoothMouseY: MotionValue<number>
+  setPointerFromEvent: (event: PointerEvent<HTMLElement>) => void
+  resetPointer: () => void
+}
 
-  /**
-   * Spring damping for cinematic smoothing.
-   * Higher values reduce oscillation.
-   */
-  damping?: number;
-
-  /**
-   * Spring mass for subtle premium camera inertia.
-   */
-  mass?: number;
-
-  /**
-   * Hard clamp for normalized pointer coordinates.
-   * Default keeps values between -1 and 1.
-   */
-  clamp?: number;
-};
-
-export type CameraParallaxLayer = "backdrop" | "fog" | "wisp" | "relic" | "avatar" | "hud";
-
-export type CameraMotionController = {
-  mouseX: MotionValue<number>;
-  mouseY: MotionValue<number>;
-  smoothMouseX: MotionValue<number>;
-  smoothMouseY: MotionValue<number>;
-  setPointerFromEvent: (event: React.PointerEvent<HTMLElement>) => void;
-  resetPointer: () => void;
-  getParallaxStyle: (
-    layer: CameraParallaxLayer,
-    factor?: number
-  ) => {
-    x: MotionValue<number>;
-    y: MotionValue<number>;
-  };
-};
-
-const DEFAULT_CONFIG: Required<CameraMotionConfig> = {
-  stiffness: 90,
-  damping: 26,
-  mass: 0.8,
-  clamp: 1,
-};
-
-const DEFAULT_LAYER_FACTORS: Record<CameraParallaxLayer, number> = {
-  backdrop: -8,
-  fog: -14,
-  wisp: 18,
-  relic: 26,
-  avatar: 34,
-  hud: 4,
-};
-
-const clampValue = (value: number, limit: number) => {
-  return Math.max(-limit, Math.min(limit, value));
-};
+const clampNormalized = (value: number) => Math.max(-1, Math.min(1, value))
 
 /**
- * Camera Engine Foundation.
+ * Alpha 3.0 / Sprint E — Camera Engine.
  *
- * Centralizes normalized pointer coordinates as MotionValues.
- * Updating the pointer does not trigger React re-renders; Framer Motion
- * pushes changes directly to animated nodes.
+ * Centralizes normalized pointer coordinates using Framer MotionValues.
+ * Pointer updates do not use React state, so the visual parallax pipeline can
+ * run on animated style bindings without forcing React re-renders.
  */
-export function useCameraMotion(config: CameraMotionConfig = {}): CameraMotionController {
-  const resolvedConfig = useMemo(
-    () => ({
-      ...DEFAULT_CONFIG,
-      ...config,
-    }),
-    [config]
-  );
+export function useCameraMotion(): WorldCameraMotion {
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
 
-  const mouseX = useMemo(() => motionValue(0), []);
-  const mouseY = useMemo(() => motionValue(0), []);
-
-  const smoothMouseX = useSpring(mouseX, {
-    stiffness: resolvedConfig.stiffness,
-    damping: resolvedConfig.damping,
-    mass: resolvedConfig.mass,
-  });
-
-  const smoothMouseY = useSpring(mouseY, {
-    stiffness: resolvedConfig.stiffness,
-    damping: resolvedConfig.damping,
-    mass: resolvedConfig.mass,
-  });
+  const smoothX = useSpring(mouseX, worldTransitions.default)
+  const smoothY = useSpring(mouseY, worldTransitions.default)
 
   const setPointerFromEvent = useCallback(
-    (event: React.PointerEvent<HTMLElement>) => {
-      const rect = event.currentTarget.getBoundingClientRect();
+    (event: PointerEvent<HTMLElement>) => {
+      const bounds = event.currentTarget.getBoundingClientRect()
 
-      if (rect.width === 0 || rect.height === 0) {
-        return;
-      }
+      if (bounds.width <= 0 || bounds.height <= 0) return
 
-      const localX = event.clientX - rect.left;
-      const localY = event.clientY - rect.top;
+      const relativeX = (event.clientX - bounds.left) / bounds.width
+      const relativeY = (event.clientY - bounds.top) / bounds.height
 
-      const normalizedX = (localX / rect.width) * 2 - 1;
-      const normalizedY = (localY / rect.height) * 2 - 1;
-
-      mouseX.set(clampValue(normalizedX, resolvedConfig.clamp));
-      mouseY.set(clampValue(normalizedY, resolvedConfig.clamp));
+      mouseX.set(clampNormalized(relativeX * 2 - 1))
+      mouseY.set(clampNormalized(relativeY * 2 - 1))
     },
-    [mouseX, mouseY, resolvedConfig.clamp]
-  );
+    [mouseX, mouseY],
+  )
 
   const resetPointer = useCallback(() => {
-    mouseX.set(0);
-    mouseY.set(0);
-  }, [mouseX, mouseY]);
-
-  const getParallaxStyle = useCallback(
-    (layer: CameraParallaxLayer, factor?: number) => {
-      const resolvedFactor = factor ?? DEFAULT_LAYER_FACTORS[layer];
-
-      return {
-        x: useTransform(smoothMouseX, [-1, 1], [-resolvedFactor, resolvedFactor]),
-        y: useTransform(smoothMouseY, [-1, 1], [-resolvedFactor, resolvedFactor]),
-      };
-    },
-    [smoothMouseX, smoothMouseY]
-  );
+    mouseX.set(0)
+    mouseY.set(0)
+  }, [mouseX, mouseY])
 
   return {
     mouseX,
     mouseY,
-    smoothMouseX,
-    smoothMouseY,
+    smoothX,
+    smoothY,
+    smoothMouseX: smoothX,
+    smoothMouseY: smoothY,
     setPointerFromEvent,
     resetPointer,
-    getParallaxStyle,
-  };
+  }
 }
+
+export default useCameraMotion
