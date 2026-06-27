@@ -1,5 +1,6 @@
-import { Navigate, Routes, Route, useLocation } from 'react-router-dom'
+import { Navigate, Routes, Route } from 'react-router-dom'
 import { LangProvider } from './lib/LangContext'
+import { HudProvider } from './lib/HudContext'
 import Header from './components/Header'
 import ScrollToTop from './components/ScrollToTop'
 import Analytics from './components/Analytics'
@@ -12,19 +13,13 @@ import NotFound from './pages/NotFound'
 import AppErrorBoundary from './components/AppErrorBoundary'
 
 function AppShell() {
-  const location = useLocation()
-  const isolatedRoutes = ['/gaming', '/science', '/fun', '/green-node']
-  const isIsolatedRoute = isolatedRoutes.includes(location.pathname)
-
   return (
     <>
       <Analytics />
       <ScrollToTop />
-      {!isIsolatedRoute && (
-        <AppErrorBoundary label="Header" compact>
-          <Header />
-        </AppErrorBoundary>
-      )}
+      <AppErrorBoundary label="Global Controls" compact>
+        <Header />
+      </AppErrorBoundary>
 
       <main id="main-content" className="min-h-screen">
         <AppErrorBoundary label="Routes">
@@ -52,7 +47,9 @@ function AppShell() {
 export default function App() {
   return (
     <LangProvider>
-      <AppShell />
+      <HudProvider>
+        <AppShell />
+      </HudProvider>
     </LangProvider>
   )
 }

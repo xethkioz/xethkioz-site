@@ -1,4 +1,13 @@
 
+## Fusion Alpha 0.5 — Core Architecture
+
+- Se agrega contrato central `src/lib/fusionConfig.ts`.
+- Se agrega auditoría de arquitectura con `npm run audit:architecture`.
+- Se documentan rutas públicas, redirects legacy, componentes globales y páginas internas/legado.
+- Se actualiza versión a `7.0.0-fusion-alpha.0.5`.
+- No se modifican SQL, Supabase runtime ni visual principal.
+
+
 ## 7.0.0-clean-restart-alpha.5 — Visual Portal Base
 
 ### Objetivo
@@ -298,3 +307,87 @@
 - Kept Supabase files in the repository for future integration, but removed them from the current public bundle path.
 - Added QA documentation for the Alpha 4 stability pass.
 - Removed the forced Supabase manual chunk from Vite output during Alpha 4 because Supabase is not part of the current public runtime.
+
+
+## 7.0.0-fusion-alpha.0.1 — Baseline
+
+- Se congela Alpha 5 como base estable de XETHKIOZ Fusion.
+- Se descarta Fusion Web 1.0 como base visual.
+- Se documenta la regla de no usar imágenes pegadas como interfaz.
+- Se mantiene build estable sin SQL nuevo.
+
+## 7.0.0-fusion-alpha.0.2 — Structure Cleanup
+
+- Fixed global controls visibility across all public portal routes.
+- Kept Home visual baseline unchanged.
+- Updated package and public version metadata.
+- Added structure audit and notes.
+- No SQL, Supabase, CMS, or visual overhaul included.
+
+## 7.0.0-fusion-alpha.0.3 — Inventory & Safety Lock
+
+- Se congela base estable posterior a Fusion Alpha 0.2.
+- Se agrega inventario de arquitectura para rutas/componentes/SQL.
+- Se agrega script `npm run audit:inventory`.
+- Se documenta regla de seguridad: assets visuales no deben reemplazar UI funcional.
+- No se aplican cambios SQL ni Supabase.
+
+## 7.0.0-fusion-alpha.0.4 — SQL & Data Safety Audit
+
+- Added SQL inventory script: `npm run audit:sql`.
+- Generated SQL classification report.
+- Confirmed no SQL migrations are applied in this phase.
+- Kept Home and visual layer unchanged.
+- Preserved Fusion Alpha baseline stability.
+
+
+
+## Fusion Alpha 0.6 — Design System Foundation
+
+- Agregado contrato inicial `src/lib/designSystem.ts`.
+- Agregados componentes reutilizables `FusionShell`, `FusionHero`, `FusionFeatureGrid` y `FusionLevelGrid`.
+- Migrados Gaming Hub, Science Lab, Fun Portal y Green Node a la nueva base de componentes.
+- Versión actualizada a `7.0.0-fusion-alpha.0.6`.
+- Build validado sin errores.
+
+## Fusion Alpha 0.7 — Revision Safety + Portal Component Foundation
+
+- Versión actualizada a `7.0.0-fusion-alpha.0.7`.
+- Agregado `FusionPortalGate` como componente reutilizable para los portales de la Home.
+- Home migrada parcialmente al nuevo componente sin rediseño fuerte.
+- Agregado `npm run audit:fusion` con guardrails críticos del ecosistema.
+- Build y auditorías validadas.
+
+## Fusion Alpha 0.8 — Wisp Entity Foundation
+
+- Agregado componente reutilizable `FusionWispEntity`.
+- Home deja de hardcodear el Wisp.
+- Agregado `npm run audit:wisp`.
+- Documentada arquitectura inicial del Wisp como entidad del ecosistema.
+- Sin cambios en SQL, Supabase runtime ni CMS.
+
+
+## 7.0.0-fusion-alpha.0.9 — Persistent HUD Foundation
+
+- Added global HUD context for sound state and volume foundation.
+- Header no longer owns local-only sound state.
+- Added persistent `xethkioz.hud.sound` and `xethkioz.hud.volume` storage keys.
+- Added `npm run audit:hud`.
+- No SQL, Supabase runtime, or heavy visual rewrite.
+
+
+## Fusion Alpha 1.0 — Live Candidate
+
+- Home reconstruida como World Gate por capas React/CSS.
+- Agregado FusionWorldStage.
+- Agregado FusionStatusRail.
+- Portales siguen siendo componentes reales, sin imagen plana como UI.
+- Wisp continúa como entidad reusable.
+- Agregado audit:live.
+- Build y auditorías completas OK.
+
+
+## Fusion Alpha 1.1 — Media Slots
+- Integrado video ambiental para Green Web/Nexus.
+- Green Node mantiene arquitectura funcional y video como capa decorativa.
+- Preparado flujo para integrar portada principal cuando el asset esté disponible.

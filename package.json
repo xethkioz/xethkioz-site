@@ -1,13 +1,20 @@
 {
   "name": "xethkioz",
   "private": true,
-  "version": "7.0.0-clean-restart-alpha.5",
+  "version": "7.0.0-fusion-alpha.1.1-media-slots",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "audit:tree": "node scripts/print-tree.mjs"
+    "audit:tree": "node scripts/print-tree.mjs",
+    "audit:inventory": "node scripts/project-inventory.mjs",
+    "audit:sql": "node scripts/sql-inventory.mjs",
+    "audit:architecture": "node scripts/architecture-audit.mjs",
+    "audit:fusion": "node scripts/fusion-safety-check.mjs",
+    "audit:wisp": "node scripts/wisp-entity-check.mjs",
+    "audit:hud": "node scripts/hud-persistence-check.mjs",
+    "audit:live": "node scripts/live-candidate-check.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",

@@ -672,3 +672,656 @@
     min-height: 285px;
   }
 }
+
+/* Fusion Alpha 0.6: Design System Foundation */
+.fusion-page {
+  background: #050608;
+  background-image:
+    radial-gradient(circle at 18% 0%, rgba(138, 43, 226, .12), transparent 30%),
+    radial-gradient(circle at 78% 15%, rgba(255, 106, 0, .08), transparent 28%),
+    linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.7));
+}
+.fusion-page-header { border-color: rgba(255,255,255,.09); }
+.fusion-page-pill,
+.fusion-back-link { color: rgba(255,255,255,.76); border-color: rgba(255,255,255,.14); }
+.fusion-hero {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(255,255,255,.12);
+  box-shadow: 0 0 70px rgba(0,0,0,.32);
+}
+.fusion-hero::before {
+  content: '';
+  position: absolute;
+  inset: -30%;
+  background: radial-gradient(circle, currentColor, transparent 62%);
+  opacity: .08;
+  filter: blur(36px);
+  pointer-events: none;
+}
+.fusion-hero h1,
+.fusion-feature-card h2,
+.fusion-level-card h2 { position: relative; }
+.fusion-hero p:not(.section-eyebrow),
+.fusion-feature-card p,
+.fusion-level-card p:not(.fusion-level-kicker) { color: rgba(255,255,255,.72); }
+.fusion-feature-card,
+.fusion-level-card {
+  border-color: rgba(255,255,255,.12);
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+.fusion-feature-card:hover,
+.fusion-level-card:hover {
+  transform: translateY(-3px);
+  border-color: currentColor;
+  box-shadow: 0 0 34px rgba(255,255,255,.06);
+}
+.fusion-tone-gaming { color: #c084fc; }
+.fusion-tone-gaming .fusion-page-header,
+.fusion-tone-gaming .fusion-hero,
+.fusion-tone-gaming .fusion-feature-card { border-color: rgba(192, 132, 252, .22); }
+.fusion-tone-gaming .fusion-page-pill,
+.fusion-tone-gaming .fusion-back-link,
+.fusion-tone-gaming .fusion-hero-eyebrow,
+.fusion-tone-gaming .fusion-feature-card h2 { color: #c084fc; }
+.fusion-tone-gaming .fusion-hero { box-shadow: 0 0 70px rgba(138, 46, 255, .16); }
+.fusion-tone-science { color: #7dd3fc; }
+.fusion-tone-science .fusion-page-header,
+.fusion-tone-science .fusion-hero,
+.fusion-tone-science .fusion-feature-card { border-color: rgba(125, 211, 252, .22); }
+.fusion-tone-science .fusion-page-pill,
+.fusion-tone-science .fusion-back-link,
+.fusion-tone-science .fusion-hero-eyebrow,
+.fusion-tone-science .fusion-feature-card h2 { color: #7dd3fc; }
+.fusion-tone-science .fusion-hero { box-shadow: 0 0 70px rgba(14, 165, 233, .14); }
+.fusion-tone-fun { color: #fb923c; }
+.fusion-tone-fun .fusion-page-header,
+.fusion-tone-fun .fusion-hero,
+.fusion-tone-fun .fusion-feature-card { border-color: rgba(251, 146, 60, .22); }
+.fusion-tone-fun .fusion-page-pill,
+.fusion-tone-fun .fusion-back-link,
+.fusion-tone-fun .fusion-hero-eyebrow,
+.fusion-tone-fun .fusion-feature-card h2 { color: #fb923c; }
+.fusion-tone-fun .fusion-hero { box-shadow: 0 0 70px rgba(255, 106, 0, .13); }
+.fusion-tone-green {
+  color: #86efac;
+  background-image:
+    radial-gradient(circle at 50% 0%, rgba(0,255,102,.12), transparent 34%),
+    linear-gradient(180deg, #000 0%, #020802 45%, #000 100%);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+}
+.fusion-tone-green .fusion-page-header,
+.fusion-tone-green .fusion-hero,
+.fusion-tone-green .fusion-level-card { border-color: rgba(74, 222, 128, .24); }
+.fusion-tone-green .fusion-page-pill,
+.fusion-tone-green .fusion-back-link,
+.fusion-tone-green .fusion-hero-eyebrow,
+.fusion-tone-green .fusion-level-kicker { color: #4ade80; }
+.fusion-tone-green .fusion-hero h1,
+.fusion-tone-green .fusion-level-card h2 { color: #dcfce7; text-shadow: 0 0 18px rgba(50,255,138,.44); }
+.fusion-tone-green .fusion-hero { box-shadow: 0 0 80px rgba(50,255,138,.14); }
+
+/* Fusion Alpha 0.8: Wisp Entity Foundation */
+.fusion-wisp-entity {
+  position: absolute;
+  right: clamp(1.5rem, 6vw, 5rem);
+  top: clamp(8rem, 22vh, 13rem);
+  z-index: 30;
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  color: #00ff66;
+  outline: none;
+  animation: fusionWispDrift 6.4s ease-in-out infinite;
+  transform-origin: center;
+  transition: transform .28s ease, filter .28s ease;
+}
+.fusion-wisp-entity:hover,
+.fusion-wisp-entity:focus-visible {
+  transform: translateY(-6px) scale(1.08);
+  filter: drop-shadow(0 0 18px rgba(0,255,102,.75));
+}
+.fusion-wisp-core {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px 999px 999px 40%;
+  background:
+    radial-gradient(circle at 35% 28%, rgba(255,255,255,.95), transparent 9%),
+    radial-gradient(circle at 55% 55%, rgba(190,255,216,.96), rgba(0,255,102,.88) 42%, rgba(0,90,42,.88) 74%, rgba(0,0,0,.9));
+  box-shadow:
+    0 0 18px rgba(0,255,102,.95),
+    0 0 44px rgba(0,255,102,.45),
+    inset 0 -8px 18px rgba(0,0,0,.45);
+  transform: rotate(-10deg);
+}
+.fusion-wisp-eye {
+  position: absolute;
+  top: 17px;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: #001f0d;
+  box-shadow: 0 0 6px rgba(0,0,0,.8);
+}
+.fusion-wisp-eye.left { left: 14px; }
+.fusion-wisp-eye.right { right: 13px; }
+.fusion-wisp-orbit {
+  position: absolute;
+  inset: 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,255,102,.22);
+  box-shadow: 0 0 14px rgba(0,255,102,.16);
+  animation: fusionWispOrbit 5.8s linear infinite;
+}
+.fusion-wisp-orbit-two {
+  inset: 0;
+  border-color: rgba(190,255,216,.14);
+  animation-duration: 8.2s;
+  animation-direction: reverse;
+}
+.fusion-wisp-tail {
+  position: absolute;
+  left: 5px;
+  bottom: 14px;
+  width: 34px;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(0,255,102,.42), rgba(190,255,216,.82));
+  filter: blur(3px);
+  transform: rotate(-24deg);
+  opacity: .86;
+}
+.fusion-wisp-tail-two {
+  left: 14px;
+  bottom: 8px;
+  width: 24px;
+  opacity: .5;
+  transform: rotate(18deg);
+}
+.fusion-wisp-sparks {
+  position: absolute;
+  inset: -10px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 15% 28%, rgba(0,255,102,.9) 0 2px, transparent 3px),
+    radial-gradient(circle at 78% 18%, rgba(190,255,216,.8) 0 1px, transparent 2px),
+    radial-gradient(circle at 86% 78%, rgba(0,255,102,.65) 0 2px, transparent 3px),
+    radial-gradient(circle at 28% 86%, rgba(190,255,216,.7) 0 1px, transparent 2px);
+  opacity: .72;
+  animation: fusionWispSpark 3.6s ease-in-out infinite;
+}
+.fusion-wisp-watching .fusion-wisp-core {
+  box-shadow:
+    0 0 22px rgba(0,255,102,1),
+    0 0 58px rgba(0,255,102,.55),
+    inset 0 -8px 18px rgba(0,0,0,.45);
+}
+.fusion-wisp-connected .fusion-wisp-orbit {
+  border-color: rgba(190,255,216,.38);
+}
+@keyframes fusionWispDrift {
+  0%, 100% { translate: 0 0; }
+  33% { translate: 10px -14px; }
+  66% { translate: -7px 8px; }
+}
+@keyframes fusionWispOrbit {
+  to { transform: rotate(360deg); }
+}
+@keyframes fusionWispSpark {
+  0%, 100% { opacity: .42; transform: scale(.92) rotate(0deg); }
+  50% { opacity: .92; transform: scale(1.08) rotate(18deg); }
+}
+@media (max-width: 720px) {
+  .fusion-wisp-entity {
+    right: 1.1rem;
+    top: 7.8rem;
+    width: 56px;
+    height: 56px;
+  }
+  .fusion-wisp-core { width: 34px; height: 34px; }
+  .fusion-wisp-eye { top: 13px; width: 4px; height: 4px; }
+  .fusion-wisp-eye.left { left: 11px; }
+  .fusion-wisp-eye.right { right: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fusion-wisp-entity,
+  .fusion-wisp-orbit,
+  .fusion-wisp-sparks { animation: none !important; }
+}
+
+/* Fusion Alpha 0.9: persistent HUD foundation */
+.fusion-hud-panel {
+  max-width: calc(100vw - 1.5rem);
+}
+.fusion-volume-control input[type='range'] {
+  width: 72px;
+  accent-color: #ff6a00;
+}
+[data-xeth-sound='enabled'] .fusion-hud-panel {
+  box-shadow:
+    0 0 20px rgba(255, 106, 0, 0.18),
+    0 0 34px rgba(138, 43, 226, 0.14);
+}
+@media (max-width: 420px) {
+  .fusion-hud-panel {
+    transform: scale(.9);
+    transform-origin: top right;
+  }
+}
+
+/* Fusion Alpha 1.0 — Live Candidate World Gate */
+.fusion-live-stage {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  isolation: isolate;
+  padding: clamp(1rem, 2.4vw, 2rem);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background:
+    radial-gradient(circle at 50% 16%, rgba(138,43,226,.34), transparent 30%),
+    radial-gradient(circle at 72% 42%, rgba(255,106,0,.2), transparent 24%),
+    radial-gradient(circle at 22% 72%, rgba(138,43,226,.18), transparent 28%),
+    linear-gradient(180deg, #06060a 0%, #090610 45%, #020203 100%);
+}
+.fusion-live-stage::before {
+  content: '';
+  position: absolute;
+  inset: 1.1rem;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 2rem;
+  box-shadow: inset 0 0 48px rgba(138,43,226,.12), 0 0 90px rgba(0,0,0,.65);
+  pointer-events: none;
+  z-index: -1;
+}
+.fusion-live-sky,
+.fusion-live-grid,
+.fusion-live-smoke {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -2;
+}
+.fusion-live-sky {
+  background:
+    radial-gradient(circle at 47% 28%, rgba(255,255,255,.06) 0 1px, transparent 2px),
+    radial-gradient(circle at 52% 22%, rgba(255,106,0,.07), transparent 22%),
+    radial-gradient(circle at 50% 55%, rgba(0,0,0,.08), rgba(0,0,0,.6) 62%);
+  background-size: 180px 180px, auto, auto;
+}
+.fusion-live-grid {
+  opacity: .22;
+  background-image:
+    linear-gradient(rgba(138,43,226,.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,106,0,.12) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(circle at center, #000 0 45%, transparent 74%);
+}
+.fusion-live-smoke-a {
+  background: radial-gradient(circle at 25% 68%, rgba(138,43,226,.19), transparent 28%);
+  animation: fusionSmokeDrift 13s ease-in-out infinite;
+}
+.fusion-live-smoke-b {
+  background: radial-gradient(circle at 76% 68%, rgba(255,106,0,.13), transparent 26%);
+  animation: fusionSmokeDrift 15s ease-in-out infinite reverse;
+}
+.fusion-stage-header {
+  position: relative;
+  z-index: 6;
+  width: min(100%, 1500px);
+  margin: 0 auto;
+  padding: .3rem clamp(.2rem, 1vw, 1rem) 0;
+}
+.fusion-stage-header p {
+  margin-top: .7rem;
+  max-width: 34rem;
+  color: rgba(255,255,255,.7);
+  font-size: .7rem;
+  font-weight: 900;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+}
+.fusion-stage-copy {
+  position: relative;
+  z-index: 5;
+  width: min(100%, 820px);
+  margin: clamp(2rem, 8vh, 5.5rem) auto 0;
+  text-align: center;
+}
+.fusion-stage-copy h1 {
+  margin-top: .75rem;
+  font-size: clamp(3.2rem, 10vw, 8.5rem);
+  line-height: .82;
+  font-weight: 1000;
+  letter-spacing: -.08em;
+  text-shadow:
+    0 0 16px rgba(255,106,0,.45),
+    0 0 52px rgba(138,43,226,.48),
+    0 12px 32px rgba(0,0,0,.8);
+}
+.fusion-stage-copy span {
+  display: block;
+  margin-top: .85rem;
+  color: rgba(255,255,255,.82);
+  font-family: var(--font-display, inherit);
+  text-transform: uppercase;
+  letter-spacing: clamp(.16em, 1.4vw, .48em);
+  font-weight: 900;
+  font-size: clamp(.72rem, 1.6vw, 1rem);
+}
+.fusion-stage-copy > p:last-child {
+  margin: 1.15rem auto 0;
+  max-width: 44rem;
+  color: rgba(229,231,235,.86);
+  font-size: clamp(.92rem, 1.5vw, 1.05rem);
+  line-height: 1.75;
+}
+.fusion-live-battle {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.fusion-live-dragon {
+  position: absolute;
+  right: max(2vw, 1rem);
+  top: 12vh;
+  width: min(48vw, 680px);
+  aspect-ratio: 1.35;
+  filter: drop-shadow(0 0 35px rgba(255,106,0,.22));
+  opacity: .92;
+}
+.fusion-live-dragon-wing {
+  position: absolute;
+  top: 26%;
+  width: 48%;
+  height: 52%;
+  border: 1px solid rgba(255,106,0,.32);
+  background: linear-gradient(135deg, rgba(255,106,0,.16), rgba(138,43,226,.1) 54%, transparent);
+  clip-path: polygon(0 88%, 18% 8%, 86% 52%, 100% 100%, 58% 80%);
+  animation: fusionWingPulse 6.4s ease-in-out infinite;
+}
+.fusion-live-dragon-wing.wing-left { left: 7%; transform: rotate(-10deg) scaleX(-1); }
+.fusion-live-dragon-wing.wing-right { right: 4%; transform: rotate(10deg); }
+.fusion-live-dragon-neck {
+  position: absolute;
+  right: 28%;
+  top: 34%;
+  width: 28%;
+  height: 16%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(20,12,28,.1), rgba(255,106,0,.23), rgba(20,12,28,.2));
+  transform: rotate(-9deg);
+  box-shadow: 0 0 28px rgba(255,106,0,.16);
+}
+.fusion-live-dragon-head {
+  position: absolute;
+  right: 14%;
+  top: 28%;
+  width: 18%;
+  aspect-ratio: 1.08;
+  border-radius: 44% 56% 52% 48%;
+  background: radial-gradient(circle at 55% 45%, rgba(255,106,0,.3), rgba(20,12,28,.9) 58%, rgba(0,0,0,.9));
+  border: 1px solid rgba(255,106,0,.22);
+  transform: rotate(-10deg);
+}
+.fusion-live-dragon-head::before,
+.fusion-live-dragon-head::after {
+  content: '';
+  position: absolute;
+  top: -18%;
+  width: 38%;
+  height: 34%;
+  background: rgba(255,106,0,.24);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+.fusion-live-dragon-head::before { left: 7%; transform: rotate(-18deg); }
+.fusion-live-dragon-head::after { right: 2%; transform: rotate(22deg); }
+.fusion-live-dragon-head i {
+  position: absolute;
+  top: 45%;
+  width: 10px;
+  height: 6px;
+  border-radius: 999px;
+  background: #ffdd88;
+  box-shadow: 0 0 12px #ff6a00, 0 0 22px rgba(255,106,0,.8);
+  animation: fusionEyeGlow 2.8s ease-in-out infinite;
+}
+.fusion-live-dragon-head .eye-left { left: 32%; }
+.fusion-live-dragon-head .eye-right { right: 24%; }
+.fusion-live-dragon-breath {
+  position: absolute;
+  right: 0;
+  top: 43%;
+  width: 22%;
+  height: 10%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255,106,0,.32), transparent);
+  filter: blur(10px);
+  animation: fusionBreathPulse 4.4s ease-in-out infinite;
+}
+.fusion-live-avatar {
+  position: absolute;
+  left: clamp(1.5rem, 9vw, 10rem);
+  bottom: clamp(10rem, 21vh, 15rem);
+  width: min(24vw, 270px);
+  min-width: 150px;
+  aspect-ratio: .68;
+  opacity: .94;
+}
+.fusion-avatar-aura {
+  position: absolute;
+  inset: -22%;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(138,43,226,.28), transparent 58%);
+  filter: blur(12px);
+  animation: fusionAuraPulse 4s ease-in-out infinite;
+}
+.fusion-avatar-core {
+  position: absolute;
+  left: 35%;
+  bottom: 12%;
+  width: 30%;
+  height: 62%;
+  border-radius: 36% 36% 18% 18%;
+  background: linear-gradient(180deg, rgba(255,106,0,.32), rgba(138,43,226,.52) 46%, rgba(10,8,18,.96));
+  box-shadow: 0 0 28px rgba(138,43,226,.5);
+}
+.fusion-avatar-hood {
+  position: absolute;
+  left: 33%;
+  top: 18%;
+  width: 34%;
+  aspect-ratio: 1;
+  border-radius: 50% 50% 42% 42%;
+  background: radial-gradient(circle at 50% 42%, rgba(112,220,255,.8) 0 7%, rgba(255,106,0,.18) 8% 18%, rgba(8,7,14,.98) 48%);
+  border: 1px solid rgba(255,106,0,.22);
+}
+.fusion-avatar-sword {
+  position: absolute;
+  left: 60%;
+  top: 2%;
+  width: 5%;
+  height: 82%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,106,0,.75), rgba(138,43,226,.25));
+  box-shadow: 0 0 18px rgba(255,106,0,.9), 0 0 42px rgba(138,43,226,.4);
+  transform: rotate(38deg);
+  transform-origin: 50% 90%;
+  animation: fusionSwordHum 3.6s ease-in-out infinite;
+}
+.fusion-stage-portals {
+  position: relative;
+  z-index: 8;
+  width: min(100%, 1240px);
+  margin: clamp(2rem, 8vh, 5rem) auto 0;
+}
+.fusion-stage-portals > p {
+  margin-bottom: 1rem;
+  text-align: center;
+  color: rgba(255,255,255,.72);
+  font-size: .72rem;
+  font-weight: 1000;
+  letter-spacing: .35em;
+  text-transform: uppercase;
+}
+.fusion-stage-portals > div {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2.2vw, 1.6rem);
+}
+.fusion-status-rail {
+  position: absolute;
+  left: clamp(1rem, 3vw, 2rem);
+  top: clamp(7.5rem, 19vh, 12rem);
+  z-index: 6;
+  width: min(17rem, 42vw);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 1.4rem;
+  background: rgba(0,0,0,.42);
+  padding: 1rem;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 0 42px rgba(0,0,0,.28);
+}
+.fusion-status-kicker {
+  display: block;
+  color: #ff9b3d;
+  font-size: .63rem;
+  font-weight: 1000;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+}
+.fusion-status-rail strong {
+  display: block;
+  margin-top: .45rem;
+  color: white;
+  line-height: 1.25;
+  font-family: var(--font-display, inherit);
+}
+.fusion-status-rail ul {
+  margin-top: .8rem;
+  display: grid;
+  gap: .35rem;
+  color: rgba(229,231,235,.78);
+  font-size: .75rem;
+}
+.fusion-status-rail li::before {
+  content: '◇';
+  color: #8a2be2;
+  margin-right: .45rem;
+}
+.fusion-page .fusion-status-rail {
+  position: relative;
+  inset: auto;
+  width: min(100%, 42rem);
+  margin: 1.2rem 0 1.6rem;
+}
+.fusion-page-header {
+  padding-right: min(40vw, 29rem);
+}
+@keyframes fusionSmokeDrift {
+  0%, 100% { transform: translate3d(0,0,0) scale(1); opacity: .74; }
+  50% { transform: translate3d(1.8rem,-.8rem,0) scale(1.08); opacity: .95; }
+}
+@keyframes fusionWingPulse {
+  0%, 100% { filter: brightness(.9); opacity: .74; }
+  50% { filter: brightness(1.2); opacity: .94; }
+}
+@keyframes fusionEyeGlow {
+  0%, 100% { opacity: .72; transform: scaleX(1); }
+  50% { opacity: 1; transform: scaleX(1.35); }
+}
+@keyframes fusionBreathPulse {
+  0%, 100% { opacity: .18; transform: translateX(0) scaleX(.75); }
+  50% { opacity: .78; transform: translateX(1rem) scaleX(1.18); }
+}
+@keyframes fusionAuraPulse {
+  0%, 100% { opacity: .55; transform: scale(.92); }
+  50% { opacity: .95; transform: scale(1.08); }
+}
+@keyframes fusionSwordHum {
+  0%, 100% { filter: brightness(.95); }
+  50% { filter: brightness(1.35); }
+}
+@media (max-width: 1100px) {
+  .fusion-live-dragon { right: -10vw; opacity: .42; }
+  .fusion-live-avatar { opacity: .42; }
+  .fusion-status-rail { display: none; }
+  .fusion-page-header { padding-right: 0; }
+}
+@media (max-width: 820px) {
+  .fusion-live-stage { padding-top: 5.75rem; }
+  .fusion-stage-header p { font-size: .58rem; letter-spacing: .18em; }
+  .fusion-stage-copy { margin-top: 2rem; }
+  .fusion-stage-portals > div { grid-template-columns: 1fr; }
+  .fusion-live-dragon,
+  .fusion-live-avatar { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fusion-live-smoke,
+  .fusion-live-dragon-wing,
+  .fusion-live-dragon-head i,
+  .fusion-live-dragon-breath,
+  .fusion-avatar-aura,
+  .fusion-avatar-sword { animation: none !important; }
+}
+
+
+/* Fusion Alpha 1.1: Green Web video layer */
+.green-node-video-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #000;
+}
+.green-node-video-layer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(0,255,118,.18), transparent 28%),
+    linear-gradient(180deg, rgba(0,0,0,.38), rgba(0,0,0,.86) 72%, rgba(0,0,0,.96));
+}
+.green-node-video-layer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background:
+    repeating-linear-gradient(to bottom, rgba(0,255,102,.06) 0 1px, transparent 1px 6px),
+    linear-gradient(90deg, rgba(0,255,102,.10), transparent 22%, transparent 78%, rgba(0,255,102,.08));
+  mix-blend-mode: screen;
+  opacity: .56;
+}
+.green-node-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .34;
+  filter: saturate(1.25) contrast(1.08) brightness(.74);
+  transform: scale(1.02);
+}
+.fusion-page.fusion-tone-green {
+  position: relative;
+  isolation: isolate;
+  background: #000;
+}
+.fusion-page.fusion-tone-green > .fusion-page-header,
+.fusion-page.fusion-tone-green > main {
+  position: relative;
+  z-index: 5;
+}
+@media (max-width: 768px) {
+  .green-node-video { opacity: .22; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .green-node-video { display: none; }
+}

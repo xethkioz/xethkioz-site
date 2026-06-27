@@ -1,15 +1,19 @@
-import { useState } from 'react'
 import { type Lang } from '../lib/i18n'
 import { useLang } from '../lib/LangContext'
+import { useHud } from '../lib/HudContext'
+import { FUSION_LABEL } from '../lib/fusionConfig'
 
 export default function Header() {
   const { lang, setLang, t } = useLang()
-  const [soundOn, setSoundOn] = useState(false)
+  const { soundOn, toggleSound, volume, setVolume } = useHud()
   const nextLang: Record<Lang, Lang> = { es: 'en', en: 'es' }
 
   return (
     <header className="fixed right-3 top-3 z-50 sm:right-5 sm:top-5" aria-label={t.v7.controls.panel}>
-      <div className="xeth-control-panel flex items-center gap-2 rounded-full border border-white/10 bg-black/65 p-1.5 shadow-[0_0_26px_rgba(138,46,255,.16)] backdrop-blur-xl">
+      <div className="xeth-control-panel fusion-hud-panel flex items-center gap-2 rounded-full border border-white/10 bg-black/65 p-1.5 shadow-[0_0_26px_rgba(138,46,255,.16)] backdrop-blur-xl">
+        <span className="hidden rounded-full border border-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-green-200/80 lg:inline-flex" title={FUSION_LABEL}>
+          {FUSION_LABEL}
+        </span>
         <button
           type="button"
           onClick={() => setLang(nextLang[lang])}
@@ -21,13 +25,25 @@ export default function Header() {
         </button>
         <button
           type="button"
-          onClick={() => setSoundOn((value) => !value)}
+          onClick={toggleSound}
           className="rounded-full border border-white/10 px-3 py-2 text-[11px] font-black uppercase tracking-[0.18em] text-gray-100 transition hover:border-neon hover:text-neon focus:outline-none focus:ring-2 focus:ring-neon/50"
           aria-label={soundOn ? t.v7.controls.soundOff : t.v7.controls.soundOn}
           title={t.v7.controls.soundTitle}
         >
           {soundOn ? t.v7.controls.on : t.v7.controls.off}
         </button>
+        <label className="fusion-volume-control hidden items-center gap-2 rounded-full border border-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-[0.16em] text-gray-300 md:inline-flex" title={t.v7.controls.soundTitle}>
+          <span>{Math.round(volume * 100)}</span>
+          <input
+            aria-label="Volumen XETHKIOZ"
+            type="range"
+            min="0"
+            max="1"
+            step="0.05"
+            value={volume}
+            onChange={(event) => setVolume(Number(event.target.value))}
+          />
+        </label>
         <button
           type="button"
           className="rounded-full border border-orange/30 px-3 py-2 text-[11px] font-black uppercase tracking-[0.18em] text-orange/90 transition hover:bg-orange/10 focus:outline-none focus:ring-2 focus:ring-orange/40"
