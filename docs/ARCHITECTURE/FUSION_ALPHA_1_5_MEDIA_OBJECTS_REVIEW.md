@@ -1,6 +1,6 @@
 # Fusion Alpha 1.5 Visual / Audio Objects Review
 
-Generated: 2026-06-27T13:05:26.329Z
+Generated: 2026-06-27T21:16:57.277Z
 
 ## Asset summary
 - Total media assets: 70
@@ -10,9 +10,9 @@ Generated: 2026-06-27T13:05:26.329Z
 - By extension: png=1, svg=65, webp=1, mp4=3
 
 ## Video assets
-- public/videos/green-node-banner.mp4
-- public/videos/green-wisp-nexus.mp4
-- public/videos/xethkioz-pixel-banner.mp4
+- public\videos\green-node-banner.mp4
+- public\videos\green-wisp-nexus.mp4
+- public\videos\xethkioz-pixel-banner.mp4
 
 ## Audio assets
 - No real audio files detected yet. HUD audio is a persistent preview state only.
