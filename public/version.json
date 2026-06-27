@@ -1,8 +1,8 @@
 {
-  "version": "7.0.0-fusion-alpha.1.9-core-registry",
+  "version": "7.0.0-fusion-alpha.2.0-engine-portals",
   "channel": "fusion-alpha",
-  "label": "Fusion Alpha 1.9",
-  "updatedAt": "2026-06-27T00:00:00Z",
+  "label": "Fusion Alpha 2.0 Engine Portals",
+  "updatedAt": "2026-06-27T11:52:45.617Z",
   "codename": "World Gate V5 · Modular Home",
   "stage": "Core Registry"
 }

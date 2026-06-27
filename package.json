@@ -1,7 +1,7 @@
 {
   "name": "xethkioz",
   "private": true,
-  "version": "7.0.0-fusion-alpha.1.10-wisp-avatar-green-gateway",
+  "version": "7.0.0-fusion-alpha.2.0-engine-portals",
   "type": "module",
   "scripts": {
     "dev": "vite",

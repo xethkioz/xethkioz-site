@@ -7,6 +7,7 @@ import { useLang } from '../../lib/LangContext'
 import { useProfileProgress } from '../../lib/ProfileProgressContext'
 import { useWisp } from '../../providers/WispProvider'
 import { FUSION_LABEL, FUSION_STAGE } from '../../lib/fusionConfig'
+import WorldHeroStage from './WorldHeroStage'
 
 const toneClass: Record<PortalTheme, string> = {
   gaming: 'hover:border-fusionAccent-tech-primary hover:shadow-glow-tech focus-visible:ring-fusionAccent-tech-primary',
@@ -98,17 +99,12 @@ export default function WorldGateV5() {
       <div className="pointer-events-none fixed inset-0 z-0 bg-[linear-gradient(rgba(139,92,246,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,126,41,0.025)_1px,transparent_1px)] bg-[size:56px_56px] opacity-70" />
 
       <main className="relative z-10 mx-auto flex max-w-7xl flex-col gap-12 px-4 pb-12 pt-24 sm:px-6 lg:px-8">
-        <section className="flex flex-col items-center gap-6 py-12 text-center md:py-20" aria-labelledby="world-gate-title">
-          <p className="rounded-full border border-fusionAccent-tech-primary/20 bg-fusionSurface-base/70 px-4 py-2 text-[11px] font-black uppercase tracking-[0.28em] text-fusionAccent-tech-primary shadow-glow-tech-subtle">
+        <div className="flex flex-col gap-4">
+          <p className="mx-auto rounded-full border border-fusionAccent-tech-primary/20 bg-fusionSurface-base/70 px-4 py-2 text-center text-[11px] font-black uppercase tracking-[0.28em] text-fusionAccent-tech-primary shadow-glow-tech-subtle">
             {FUSION_LABEL} · {FUSION_STAGE}
           </p>
-          <h1 id="world-gate-title" className="bg-gradient-to-r from-white via-gray-200 to-fusionAccent-tech-primary bg-clip-text text-4xl font-black uppercase tracking-[0.16em] text-transparent drop-shadow-[0_0_10px_rgba(139,92,246,0.15)] md:text-6xl">
-            XETHKIOZ
-          </h1>
-          <p className="max-w-2xl font-mono text-sm uppercase tracking-[0.22em] text-fusionAccent-tech-secondary md:text-base">
-            {ui.quote}
-          </p>
-        </section>
+          <WorldHeroStage />
+        </div>
 
         <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
           <div className="flex flex-col gap-8 lg:col-span-8">
