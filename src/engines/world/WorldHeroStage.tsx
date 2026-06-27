@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { AnimatePresence, motion, useMotionValue, useTransform } from 'framer-motion'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { AnimatePresence, LayoutGroup, LazyMotion, MotionConfig, domMax, motion, useMotionValue, useTransform } from 'framer-motion'
 import { AvatarRenderer, type AvatarPoseId } from '../profile/AvatarRenderer'
 import { useLang } from '../../lib/LangContext'
 import { WorldFloatingRelic, WorldStageBackdrop, WorldWispMotion } from './components'
@@ -91,9 +91,23 @@ function getWispState(actionId: RoleActionId) {
   return 'idle'
 }
 
+const WORLD_STAGE_LAYOUT_GROUP_ID = 'xethkioz-alpha-3-world-stage'
+const WORLD_WISP_PARTICLE_COUNT = 32
+const WORLD_WISP_SEED_FACTOR = 97
+
+const worldMotionConfig = {
+  transition: {
+    type: 'spring',
+    stiffness: 180,
+    damping: 22,
+    mass: 0.9,
+  },
+} as const
+
 export function WorldHeroStage() {
   const { lang } = useLang()
   const camera = useCameraMotion()
+  const { resetPointer, setPointerFromEvent } = camera
   const roleActions = useMemo(() => roleActionCopy[lang], [lang])
   const [activeActionId, setActiveActionId] = useState<RoleActionId>('walk')
   const [isChanging, setIsChanging] = useState(false)
@@ -101,6 +115,7 @@ export function WorldHeroStage() {
 
   const activeAction = useMemo(() => getActionById(roleActions, activeActionId), [activeActionId, roleActions])
   const wispState = getWispState(activeAction.id)
+  const wispSeed = useMemo(() => activeAction.pose * WORLD_WISP_SEED_FACTOR, [activeAction.pose])
 
   const fallbackX = useMotionValue(0)
   const fallbackY = useMotionValue(0)
@@ -117,7 +132,7 @@ export function WorldHeroStage() {
     }
   }, [])
 
-  function handleActionChange(action: RoleAction) {
+  const handleActionChange = useCallback((action: RoleAction) => {
     if (transitionTimer.current) {
       window.clearTimeout(transitionTimer.current)
     }
@@ -125,16 +140,29 @@ export function WorldHeroStage() {
     setIsChanging(true)
     setActiveActionId(action.id)
     transitionTimer.current = window.setTimeout(() => setIsChanging(false), 320)
-  }
+  }, [])
+
+  const handleStagePointerMove = useCallback(
+    (event: React.PointerEvent<HTMLElement>) => {
+      setPointerFromEvent(event)
+    },
+    [setPointerFromEvent],
+  )
+
+  const handleStagePointerLeave = useCallback(() => {
+    resetPointer()
+  }, [resetPointer])
 
   return (
-    <WorldStageBackdrop
-      camera={camera}
-      labelId="world-gate-title"
-      theme="gaming"
-      onPointerMove={camera.setPointerFromEvent}
-      onPointerLeave={camera.resetPointer}
-    >
+    <LazyMotion features={domMax}>
+      <MotionConfig {...worldMotionConfig}>
+        <WorldStageBackdrop
+          camera={camera}
+          labelId="world-gate-title"
+          theme="gaming"
+          onPointerMove={handleStagePointerMove}
+          onPointerLeave={handleStagePointerLeave}
+        >
       <motion.div className="relative z-10 mt-6 flex select-none flex-col items-center gap-2 text-center" style={{ x: hudX, y: hudY }}>
         <h1
           id="world-gate-title"
@@ -149,14 +177,15 @@ export function WorldHeroStage() {
         </p>
       </motion.div>
 
-      <div className="relative z-10 flex w-full max-w-5xl flex-col items-center justify-center gap-8 py-2 lg:flex-row">
+      <LayoutGroup id={WORLD_STAGE_LAYOUT_GROUP_ID}>
+        <div className="relative z-10 flex w-full max-w-5xl flex-col items-center justify-center gap-8 py-2 lg:flex-row">
         <motion.div className="relative flex flex-col items-center gap-2 will-change-transform" style={{ x: avatarX, y: avatarY }}>
           <WorldWispMotion
             camera={camera}
             state={wispState}
             size="lg"
-            seed={activeAction.pose * 97}
-            particleCount={32}
+            seed={wispSeed}
+            particleCount={WORLD_WISP_PARTICLE_COUNT}
             className="absolute -right-6 -top-4 z-20"
           />
 
@@ -204,8 +233,11 @@ export function WorldHeroStage() {
             ))}
           </div>
         </motion.div>
-      </div>
-    </WorldStageBackdrop>
+        </div>
+      </LayoutGroup>
+        </WorldStageBackdrop>
+      </MotionConfig>
+    </LazyMotion>
   )
 }
 

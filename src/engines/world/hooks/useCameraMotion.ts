@@ -1,5 +1,5 @@
 import type { PointerEvent } from 'react'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { type MotionValue, useMotionValue, useSpring } from 'framer-motion'
 import { worldTransitions } from '../components/worldMotionVariants'
 
@@ -51,16 +51,19 @@ export function useCameraMotion(): WorldCameraMotion {
     mouseY.set(0)
   }, [mouseX, mouseY])
 
-  return {
-    mouseX,
-    mouseY,
-    smoothX,
-    smoothY,
-    smoothMouseX: smoothX,
-    smoothMouseY: smoothY,
-    setPointerFromEvent,
-    resetPointer,
-  }
+  return useMemo(
+    () => ({
+      mouseX,
+      mouseY,
+      smoothX,
+      smoothY,
+      smoothMouseX: smoothX,
+      smoothMouseY: smoothY,
+      setPointerFromEvent,
+      resetPointer,
+    }),
+    [mouseX, mouseY, smoothX, smoothY, setPointerFromEvent, resetPointer],
+  )
 }
 
 export default useCameraMotion
