@@ -2,6 +2,7 @@ import { Navigate, Routes, Route } from 'react-router-dom'
 import { LangProvider } from './lib/LangContext'
 import { HudProvider } from './lib/HudContext'
 import { WispEngineProvider } from './lib/WispEngineContext'
+import { ProfileProgressProvider } from './lib/ProfileProgressContext'
 import Header from './components/Header'
 import FusionGlobalStatus from './components/fusion/FusionGlobalStatus'
 import FusionGlobalWisp from './components/fusion/FusionGlobalWisp'
@@ -12,6 +13,10 @@ import GamingHub from './pages/GamingHub'
 import ScienceLab from './pages/ScienceLab'
 import FunPortal from './pages/FunPortal'
 import GreenNode from './pages/GreenNode'
+import ProfileHub from './pages/ProfileHub'
+import News from './pages/News'
+import Community from './pages/Community'
+import CmsStudio from './pages/CmsStudio'
 import NotFound from './pages/NotFound'
 import AppErrorBoundary from './components/AppErrorBoundary'
 
@@ -35,11 +40,11 @@ function AppShell() {
             <Route path="/fun" element={<FunPortal />} />
             <Route path="/green-node" element={<GreenNode />} />
 
-            {/* Legacy public routes are intentionally collapsed during the V7 clean restart. */}
-            <Route path="/news" element={<Navigate to="/gaming" replace />} />
-            <Route path="/community" element={<Navigate to="/fun" replace />} />
-            <Route path="/admin" element={<Navigate to="/" replace />} />
-            <Route path="/cms" element={<Navigate to="/" replace />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/community" element={<Community />} />
+            <Route path="/profile" element={<ProfileHub />} />
+            <Route path="/cms" element={<CmsStudio />} />
+            <Route path="/admin" element={<Navigate to="/cms" replace />} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>
@@ -54,7 +59,9 @@ export default function App() {
     <LangProvider>
       <HudProvider>
         <WispEngineProvider>
-          <AppShell />
+          <ProfileProgressProvider>
+            <AppShell />
+          </ProfileProgressProvider>
         </WispEngineProvider>
       </HudProvider>
     </LangProvider>

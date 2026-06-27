@@ -432,3 +432,10 @@
 - Mejora profundidad, partículas, runas y hover 3D.
 - Agrega Green Node con duende mágico y fuente de oro como acceso especial.
 - Mantiene HUD global, Wisp global, SQL y Supabase sin cambios.
+
+
+## Fusion Alpha 1.6 — Functionality Core
+- Added CMS/News/Community/Profile/Progress preview modules.
+- Added dynamic i18n content engine and local profile progression.
+- Added `/news`, `/community`, `/profile`, `/cms` routes.
+- Added audit:functionality guardrail.

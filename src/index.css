@@ -1995,3 +1995,225 @@
 @media (prefers-reduced-motion: reduce) {
   .fusion-wisp-signal { animation: none !important; }
 }
+
+
+/* Fusion Alpha 1.6 — Functionality Core */
+.fusion-hud-nav a {
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 999px;
+  padding: .45rem .55rem;
+  color: rgba(255,255,255,.72);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .14em;
+  transition: border-color .2s ease, color .2s ease, background .2s ease;
+}
+.fusion-hud-nav a:hover {
+  color: #ff9f1c;
+  border-color: rgba(255,159,28,.45);
+  background: rgba(255,159,28,.08);
+}
+.fusion-functionality {
+  position: relative;
+}
+.fusion-system-panel {
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(138,46,255,.14), transparent 34%),
+    linear-gradient(145deg, rgba(8,10,16,.78), rgba(0,0,0,.52));
+  box-shadow: 0 24px 70px rgba(0,0,0,.32), inset 0 0 0 1px rgba(255,255,255,.03);
+  padding: 1.25rem;
+  backdrop-filter: blur(18px);
+}
+.fusion-tone-science .fusion-system-panel {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(59,130,246,.15), transparent 34%),
+    linear-gradient(145deg, rgba(8,12,20,.78), rgba(0,0,0,.52));
+}
+.fusion-tone-fun .fusion-system-panel {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255,159,28,.16), transparent 34%),
+    linear-gradient(145deg, rgba(18,10,4,.78), rgba(0,0,0,.52));
+}
+.fusion-tone-green .fusion-system-panel {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(50,255,138,.14), transparent 34%),
+    linear-gradient(145deg, rgba(0,18,10,.78), rgba(0,0,0,.52));
+}
+.fusion-panel-kicker {
+  color: rgba(255,255,255,.55);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+}
+.fusion-system-panel h2 {
+  margin-top: .35rem;
+  font-family: var(--font-display, inherit);
+  font-size: clamp(1.25rem, 2vw, 2rem);
+  font-weight: 1000;
+  letter-spacing: -.03em;
+}
+.fusion-system-panel p {
+  margin-top: .6rem;
+  color: rgba(255,255,255,.66);
+  font-size: .9rem;
+  line-height: 1.65;
+}
+.fusion-system-stack {
+  display: grid;
+  gap: 1rem;
+}
+.fusion-content-list {
+  margin-top: 1rem;
+  display: grid;
+  gap: 1rem;
+}
+.fusion-content-item {
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 22px;
+  padding: 1rem;
+  background: rgba(0,0,0,.3);
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.fusion-content-item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,.22);
+  box-shadow: 0 18px 46px rgba(0,0,0,.28);
+}
+.fusion-content-meta,
+.fusion-content-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+  align-items: center;
+  justify-content: space-between;
+}
+.fusion-content-meta span,
+.fusion-content-footer span,
+.fusion-cms-list span {
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 999px;
+  padding: .28rem .5rem;
+  color: rgba(255,255,255,.62);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.fusion-content-item h3 {
+  margin-top: .8rem;
+  font-size: 1.15rem;
+  font-weight: 950;
+}
+.fusion-content-item p {
+  margin-top: .45rem;
+}
+.fusion-content-footer {
+  margin-top: .9rem;
+}
+.fusion-content-footer button,
+.fusion-panel-link,
+.fusion-portal-choice button,
+.fusion-mission-list button {
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 999px;
+  background: rgba(255,255,255,.04);
+  color: rgba(255,255,255,.82);
+  font-size: 11px;
+  font-weight: 950;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: .55rem .75rem;
+  transition: transform .18s ease, border-color .18s ease, background .18s ease;
+}
+.fusion-content-footer button:hover,
+.fusion-panel-link:hover,
+.fusion-portal-choice button:hover,
+.fusion-mission-list button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255,159,28,.45);
+  background: rgba(255,159,28,.08);
+}
+.fusion-profile-meter {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 18px;
+  padding: .8rem;
+  background: linear-gradient(90deg, rgba(138,46,255,.13), rgba(255,159,28,.09));
+}
+.fusion-profile-meter span,
+.fusion-profile-meter strong {
+  font-weight: 1000;
+  letter-spacing: .12em;
+}
+.fusion-portal-choice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+  margin-top: .85rem;
+}
+.fusion-portal-choice button.active,
+.fusion-mission-list button.completed {
+  border-color: rgba(50,255,138,.48);
+  background: rgba(50,255,138,.08);
+  color: #adffc9;
+}
+.fusion-panel-link {
+  display: inline-flex;
+  margin-top: 1rem;
+  text-decoration: none;
+}
+.fusion-mission-list {
+  display: grid;
+  gap: .65rem;
+  margin-top: 1rem;
+}
+.fusion-mission-list button {
+  display: grid;
+  gap: .25rem;
+  width: 100%;
+  border-radius: 18px;
+  text-align: left;
+  padding: .85rem;
+}
+.fusion-mission-list small,
+.fusion-cms-list small {
+  color: rgba(255,255,255,.58);
+  font-size: 12px;
+  line-height: 1.45;
+  letter-spacing: normal;
+  text-transform: none;
+}
+.fusion-mission-list strong {
+  color: #ff9f1c;
+}
+.fusion-cms-list {
+  display: grid;
+  gap: .75rem;
+  margin-top: 1rem;
+}
+.fusion-cms-list div {
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 18px;
+  padding: .8rem;
+  background: rgba(0,0,0,.25);
+}
+.fusion-cms-list strong {
+  display: block;
+  margin-top: .45rem;
+  font-size: .9rem;
+}
+@media (max-width: 760px) {
+  .fusion-functionality {
+    padding-bottom: 6rem;
+  }
+  .fusion-system-panel {
+    border-radius: 22px;
+  }
+}
+

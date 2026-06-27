@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { type Lang } from '../lib/i18n'
 import { useLang } from '../lib/LangContext'
 import { useHud } from '../lib/HudContext'
@@ -15,6 +16,12 @@ export default function Header() {
         <span className="hidden rounded-full border border-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-green-200/80 xl:inline-flex" title={FUSION_LABEL}>
           {FUSION_LABEL}
         </span>
+        <nav className="fusion-hud-nav hidden items-center gap-1 lg:flex" aria-label="Fusion quick nav">
+          <Link to="/news">NEWS</Link>
+          <Link to="/community">COM</Link>
+          <Link to="/profile">XP</Link>
+          <Link to="/cms">CMS</Link>
+        </nav>
         <button
           type="button"
           onClick={() => setLang(nextLang[lang])}

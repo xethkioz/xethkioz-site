@@ -1,6 +1,7 @@
 import SEO from '../components/SEO'
 import FusionFeatureGrid from '../components/fusion/FusionFeatureGrid'
 import FusionHero from '../components/fusion/FusionHero'
+import FusionContentPanel from '../components/fusion/FusionContentPanel'
 import FusionShell from '../components/fusion/FusionShell'
 import FusionStatusRail from '../components/fusion/FusionStatusRail'
 import { useLang } from '../lib/LangContext'
@@ -16,6 +17,7 @@ export default function GamingHub() {
         <FusionStatusRail items={['Noticias por plataforma', 'Guías con moderación', 'Embeds para streams']} />
         <FusionFeatureGrid tone="gaming" items={portal.sections} columns={2} />
       </main>
+      <FusionContentPanel tone="gaming" portal="gaming" />
     </FusionShell>
   )
 }

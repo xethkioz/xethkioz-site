@@ -1,7 +1,7 @@
 {
   "name": "xethkioz",
   "private": true,
-  "version": "7.0.0-fusion-alpha.1.5-wisp-engine-audit",
+  "version": "7.0.0-fusion-alpha.1.6-functionality-core",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -17,7 +17,8 @@
     "audit:live": "node scripts/live-candidate-check.mjs",
     "audit:code": "node scripts/code-structure-review.mjs",
     "audit:media": "node scripts/media-assets-review.mjs",
-    "audit:wisp-engine": "node scripts/wisp-engine-check.mjs"
+    "audit:wisp-engine": "node scripts/wisp-engine-check.mjs",
+    "audit:functionality": "node scripts/functionality-core-check.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",

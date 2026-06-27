@@ -1,5 +1,6 @@
 import SEO from '../components/SEO'
 import FusionHero from '../components/fusion/FusionHero'
+import FusionContentPanel from '../components/fusion/FusionContentPanel'
 import FusionLevelGrid from '../components/fusion/FusionLevelGrid'
 import FusionShell from '../components/fusion/FusionShell'
 import FusionStatusRail from '../components/fusion/FusionStatusRail'
@@ -22,6 +23,7 @@ export default function GreenNode() {
         <FusionStatusRail items={['Acceso oculto por Wisp', 'Enfoque educativo', 'Separado del universo principal']} />
         <FusionLevelGrid tone="green" levels={portal.levels} />
       </main>
+      <FusionContentPanel tone="green" portal="green" />
     </FusionShell>
   )
 }

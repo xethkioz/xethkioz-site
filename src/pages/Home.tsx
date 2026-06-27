@@ -46,7 +46,7 @@ export default function Home() {
   return (
     <div className="xeth-core min-h-screen overflow-hidden bg-[#050608] text-white">
       <SEO
-        title="XETHKIOZ Fusion Alpha 1.4 Portal Engine"
+        title="XETHKIOZ Fusion Alpha 1.6 Functionality Core"
         description="XETHKIOZ Fusion: World Gate Cyberpunk 3000 con portales funcionales, HUD persistente y Green Wisp como entidad viva."
         url="/"
         image="/images/articles/xethkioz-cover.svg"

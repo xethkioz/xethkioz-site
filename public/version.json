@@ -1,8 +1,8 @@
 {
-  "version": "7.0.0-fusion-alpha.1.4-portal-engine",
+  "version": "7.0.0-fusion-alpha.1.6-functionality-core",
   "channel": "fusion-alpha",
-  "label": "Fusion Alpha 1.4 Portal Engine",
+  "label": "Fusion Alpha 1.6",
   "updatedAt": "2026-06-27T00:00:00Z",
   "codename": "Portal Engine v1 · Goblin Guard",
-  "stage": "Portal Engine Foundation"
+  "stage": "Functionality Core · CMS/News/Community/Profile/Progress Preview"
 }

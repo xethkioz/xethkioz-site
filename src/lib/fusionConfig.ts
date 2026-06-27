@@ -1,6 +1,6 @@
-export const FUSION_VERSION = '7.0.0-fusion-alpha.1.5-wisp-engine-audit'
-export const FUSION_LABEL = 'Fusion Alpha 1.5'
-export const FUSION_STAGE = 'Wisp Engine · Code/Media/SQL Audit'
+export const FUSION_VERSION = '7.0.0-fusion-alpha.1.6-functionality-core'
+export const FUSION_LABEL = 'Fusion Alpha 1.6'
+export const FUSION_STAGE = 'Functionality Core · CMS/News/Community/Profile/Progress Preview'
 
 export const PUBLIC_ROUTES = [
   { path: '/', name: 'Home', status: 'public-core', owner: 'core' },
@@ -8,6 +8,10 @@ export const PUBLIC_ROUTES = [
   { path: '/science', name: 'Science Lab', status: 'public-portal', owner: 'science' },
   { path: '/fun', name: 'Fun Portal', status: 'public-portal', owner: 'fun' },
   { path: '/green-node', name: 'Green Node', status: 'hidden-portal', owner: 'wisp' },
+  { path: '/news', name: 'News Engine', status: 'preview-module', owner: 'content' },
+  { path: '/community', name: 'Community Engine', status: 'preview-module', owner: 'community' },
+  { path: '/profile', name: 'Profile Hub', status: 'preview-module', owner: 'community' },
+  { path: '/cms', name: 'CMS Studio', status: 'preview-module', owner: 'editorial' },
 ] as const
 
 export const LEGACY_ROUTE_REDIRECTS = [
@@ -34,4 +38,6 @@ export const FUSION_GUARDRAILS = [
   'Wisp Engine must expose persistent state, events, energy and future AI integration hooks',
   'Visual and audio assets must be inventoried before being promoted to Live',
   'SQL remains audit-only until migrations are consolidated and approved',
+  'CMS, news, community, profile and progress features stay mock/local until backend contracts are approved',
+  'Dynamic content must be data-driven and i18n-aware before connecting Supabase',
 ] as const

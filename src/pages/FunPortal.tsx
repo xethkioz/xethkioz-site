@@ -1,6 +1,7 @@
 import SEO from '../components/SEO'
 import FusionFeatureGrid from '../components/fusion/FusionFeatureGrid'
 import FusionHero from '../components/fusion/FusionHero'
+import FusionContentPanel from '../components/fusion/FusionContentPanel'
 import FusionShell from '../components/fusion/FusionShell'
 import FusionStatusRail from '../components/fusion/FusionStatusRail'
 import { useLang } from '../lib/LangContext'
@@ -16,6 +17,7 @@ export default function FunPortal() {
         <FusionStatusRail items={['Memes +12', 'Videos cortos', 'Creaciones digitales']} />
         <FusionFeatureGrid tone="fun" items={portal.sections} columns={3} />
       </main>
+      <FusionContentPanel tone="fun" portal="fun" />
     </FusionShell>
   )
 }
