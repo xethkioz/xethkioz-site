@@ -412,3 +412,12 @@
 - Integrado video ambiental para Green Web/Nexus.
 - Green Node mantiene arquitectura funcional y video como capa decorativa.
 - Preparado flujo para integrar portada principal cuando el asset esté disponible.
+
+
+## Fusion Alpha 1.4 — Portal Engine
+
+- Refuerza identidad visual propia por portal.
+- Agrega panel hints por sección en el World Gate.
+- Mejora profundidad, partículas, runas y hover 3D.
+- Agrega Green Node con duende mágico y fuente de oro como acceso especial.
+- Mantiene HUD global, Wisp global, SQL y Supabase sin cambios.

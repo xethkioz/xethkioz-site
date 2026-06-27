@@ -1,6 +1,6 @@
-export const FUSION_VERSION = '7.0.0-fusion-alpha.1.3-global-hud'
-export const FUSION_LABEL = 'Fusion Alpha 1.3'
-export const FUSION_STAGE = 'Global HUD · Persistent Wisp'
+export const FUSION_VERSION = '7.0.0-fusion-alpha.1.4-portal-engine'
+export const FUSION_LABEL = 'Fusion Alpha 1.4'
+export const FUSION_STAGE = 'Portal Engine · Green Goblin Guard'
 
 export const PUBLIC_ROUTES = [
   { path: '/', name: 'Home', status: 'public-core', owner: 'core' },
@@ -29,4 +29,6 @@ export const FUSION_GUARDRAILS = [
   'Live candidates must keep all public routes accessible and readable on mobile',
   'Wisp must remain visible globally through AppShell, not only inside Home',
   'Login state must be persistent and clearly marked as preview until Auth is connected',
+  'Portal Engine must expose visual identity, panel hints, transition behavior, and accessible navigation per portal',
+  'Green Node access remains a Wisp/Goblin Easter Egg and must not become a normal menu shortcut',
 ] as const

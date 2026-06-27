@@ -12,6 +12,7 @@ export default function Home() {
       tone: 'violet',
       icon: '🎮',
       ariaLabel: `${t.v7.enter}: ${t.v7.portals.games.title}`,
+      panels: t.v7.portals.games.sections.map((section) => section[0]),
     },
     {
       to: '/science',
@@ -20,6 +21,7 @@ export default function Home() {
       tone: 'blue',
       icon: '⚛',
       ariaLabel: `${t.v7.enter}: ${t.v7.portals.science.title}`,
+      panels: t.v7.portals.science.sections.map((section) => section[0]),
     },
     {
       to: '/green-node',
@@ -28,6 +30,7 @@ export default function Home() {
       tone: 'green',
       icon: '◉',
       ariaLabel: `${t.v7.enter}: ${t.v7.portals.green.title}`,
+      panels: t.v7.portals.green.levels.map((level) => level[1]),
     },
     {
       to: '/fun',
@@ -36,13 +39,14 @@ export default function Home() {
       tone: 'orange',
       icon: '☻',
       ariaLabel: `${t.v7.enter}: ${t.v7.portals.fun.title}`,
+      panels: t.v7.portals.fun.sections.map((section) => section[0]),
     },
   ]
 
   return (
     <div className="xeth-core min-h-screen overflow-hidden bg-[#050608] text-white">
       <SEO
-        title="XETHKIOZ Fusion Alpha 1.2 World Gate"
+        title="XETHKIOZ Fusion Alpha 1.4 Portal Engine"
         description="XETHKIOZ Fusion: World Gate Cyberpunk 3000 con portales funcionales, HUD persistente y Green Wisp como entidad viva."
         url="/"
         image="/images/articles/xethkioz-cover.svg"

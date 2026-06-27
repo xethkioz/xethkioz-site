@@ -9,6 +9,7 @@ export interface FusionWorldPortal {
   tone: FusionPortalTone
   icon: string
   ariaLabel: string
+  panels?: string[]
 }
 
 interface FusionWorldStageProps {
@@ -84,6 +85,7 @@ export default function FusionWorldStage({
               icon={portal.icon}
               enterLabel={enterLabel}
               ariaLabel={portal.ariaLabel}
+              panels={portal.panels}
             />
           ))}
         </div>
