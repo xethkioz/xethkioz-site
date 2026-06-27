@@ -1,7 +1,7 @@
 import { Navigate, Routes, Route } from 'react-router-dom'
 import { LangProvider } from './lib/LangContext'
 import { HudProvider } from './lib/HudContext'
-import { WispEngineProvider } from './lib/WispEngineContext'
+import { WispProvider } from './providers/WispProvider'
 import { ProfileProgressProvider } from './lib/ProfileProgressContext'
 import Header from './components/Header'
 import FusionGlobalStatus from './components/fusion/FusionGlobalStatus'
@@ -58,11 +58,11 @@ export default function App() {
   return (
     <LangProvider>
       <HudProvider>
-        <WispEngineProvider>
+        <WispProvider>
           <ProfileProgressProvider>
             <AppShell />
           </ProfileProgressProvider>
-        </WispEngineProvider>
+        </WispProvider>
       </HudProvider>
     </LangProvider>
   )

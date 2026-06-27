@@ -206,15 +206,39 @@ export default function WorldGateV5() {
 
 function GreenModeOverlay({ active, label }: { active: boolean; label: string }) {
   return (
-    <div className={`pointer-events-none fixed inset-0 z-[500] flex flex-col items-center justify-center overflow-hidden transition-all duration-1000 ease-in-out ${active ? 'bg-black/90 opacity-100 backdrop-blur-lg' : 'bg-transparent opacity-0 backdrop-blur-none'}`} aria-hidden={!active}>
+    <div
+      className={`fixed inset-0 z-[500] flex flex-col items-center justify-center overflow-hidden transition-all duration-1000 ease-in-out ${
+        active
+          ? 'pointer-events-auto bg-black/95 opacity-100 backdrop-blur-md'
+          : 'pointer-events-none bg-transparent opacity-0 backdrop-blur-none'
+      }`}
+      aria-hidden={!active}
+      role={active ? 'dialog' : undefined}
+      aria-modal={active ? true : undefined}
+      aria-label={active ? 'XETHKIOZ Green Matrix Gateway' : undefined}
+    >
       {active && (
-        <div className="flex flex-col items-center gap-6 text-center">
+        <div className="relative flex min-h-[340px] w-full max-w-xl flex-col items-center justify-center gap-6 px-6 text-center">
           <div className="green-portal-vortex" />
           <div className="green-portal-runes" />
           <div className="green-portal-ring" />
           <div className="green-portal-ring green-portal-ring-delay" />
-          <div className="relative h-32 w-32 animate-spin rounded-full border-4 border-dashed border-fusionAccent-greenNode drop-shadow-[0_0_15px_#22c55e]" />
-          <p className="relative z-10 font-mono text-sm uppercase tracking-[0.24em] text-fusionAccent-greenNode">{label}</p>
+
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(50,255,138,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(50,255,138,0.06)_1px,transparent_1px)] bg-[size:24px_24px] opacity-40 [mask-image:radial-gradient(circle_at_center,black,transparent_70%)]" />
+          <div className="pointer-events-none absolute h-64 w-64 rounded-full border border-fusionAccent-greenNode/20 shadow-glow-green" />
+
+          <div className="relative z-10 flex h-36 w-36 items-center justify-center">
+            <div className="absolute inset-0 rounded-full border-4 border-dashed border-fusionAccent-greenNode/80 drop-shadow-[0_0_15px_#32FF8A] animate-spin" />
+            <div className="absolute inset-5 rounded-full border border-fusionAccent-greenNode/40 shadow-glow-green animate-pulse" />
+            <div className="h-16 w-16 rounded-full bg-fusionAccent-greenNode/10 shadow-[0_0_40px_rgba(50,255,138,0.65)]" />
+          </div>
+
+          <div className="relative z-10 flex flex-col items-center gap-2">
+            <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-fusionAccent-greenNode/70">
+              ANILLO_UMBRAL // MATRIX_VERDE
+            </p>
+            <p className="max-w-lg font-mono text-sm uppercase tracking-[0.24em] text-fusionAccent-greenNode">{label}</p>
+          </div>
         </div>
       )}
     </div>

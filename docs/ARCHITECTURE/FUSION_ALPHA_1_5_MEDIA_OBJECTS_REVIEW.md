@@ -1,13 +1,13 @@
 # Fusion Alpha 1.5 Visual / Audio Objects Review
 
-Generated: 2026-06-27T09:03:57.350Z
+Generated: 2026-06-27T12:39:26.956Z
 
 ## Asset summary
-- Total media assets: 69
-- Images/SVG: 66
+- Total media assets: 70
+- Images/SVG: 67
 - Videos: 3
 - Audio files: 0
-- By extension: svg=65, webp=1, mp4=3
+- By extension: png=1, svg=65, webp=1, mp4=3
 
 ## Video assets
 - public/videos/green-node-banner.mp4

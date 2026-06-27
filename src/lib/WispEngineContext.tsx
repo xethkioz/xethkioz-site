@@ -32,7 +32,7 @@ const STORAGE_ROUTE = 'xethkioz.wisp.focusRoute'
 
 const validMoods: WispMood[] = ['idle', 'watching', 'connected', 'guiding', 'alert', 'sleeping', 'GREEN_MODE']
 
-const safeMood = (value: string | null): WispMood => (value && validMoods.includes(value as WispMood) ? value as WispMood : 'idle')
+const safeMood = (value: string | null): WispMood => (value && validMoods.includes(value as WispMood) ? value as WispMood : 'watching')
 
 const readEnergy = () => {
   if (typeof window === 'undefined') return 37
@@ -52,7 +52,7 @@ const readEvents = (): WispEvent[] => {
 }
 
 export function WispEngineProvider({ children }: { children: ReactNode }) {
-  const [mood, setMoodState] = useState<WispMood>(() => (typeof window === 'undefined' ? 'idle' : safeMood(window.localStorage.getItem(STORAGE_MOOD))))
+  const [mood, setMoodState] = useState<WispMood>(() => (typeof window === 'undefined' ? 'watching' : safeMood(window.localStorage.getItem(STORAGE_MOOD))))
   const [energy, setEnergy] = useState<number>(readEnergy)
   const [events, setEvents] = useState<WispEvent[]>(readEvents)
   const [focusRoute, setFocusRouteState] = useState<string>(() => (typeof window === 'undefined' ? '/' : window.localStorage.getItem(STORAGE_ROUTE) || '/'))

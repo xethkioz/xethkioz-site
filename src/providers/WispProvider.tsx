@@ -1,25 +1,81 @@
-import { useMemo, type ReactNode } from 'react'
-import { WispEngineProvider, useWispEngine, type WispMood } from '../lib/WispEngineContext'
+import { createContext, useContext, useMemo, type ReactNode } from 'react'
+import { WispEngineProvider, useWispEngine, type WispEventType, type WispMood } from '../lib/WispEngineContext'
 
-export type WispState = WispMood
+export type WispState = 'IDLE' | 'WATCHING' | 'CONNECTED' | 'GREEN_MODE'
+
+type WispContextType = {
+  state: WispState
+  mood: WispMood
+  energy: number
+  focusRoute: string
+  events: ReturnType<typeof useWispEngine>['events']
+  setWispState: (state: WispState) => void
+  triggerGreenPortal: () => void
+  setState: (state: WispState) => void
+  setMood: (mood: WispMood) => void
+  activateGreenMode: () => void
+  registerEvent: (type: WispEventType, label: string, route?: string) => void
+  resetWisp: () => void
+}
+
+const WispContext = createContext<WispContextType | undefined>(undefined)
+
+const stateToMood: Record<WispState, WispMood> = {
+  IDLE: 'idle',
+  WATCHING: 'watching',
+  CONNECTED: 'connected',
+  GREEN_MODE: 'GREEN_MODE',
+}
+
+function moodToState(mood: WispMood): WispState {
+  if (mood === 'GREEN_MODE') return 'GREEN_MODE'
+  if (mood === 'connected') return 'CONNECTED'
+  if (mood === 'watching' || mood === 'guiding') return 'WATCHING'
+  return 'IDLE'
+}
+
+function WispBridge({ children }: { children: ReactNode }) {
+  const engine = useWispEngine()
+
+  const value = useMemo<WispContextType>(() => {
+    const setWispState = (nextState: WispState) => {
+      engine.setMood(stateToMood[nextState])
+    }
+
+    const triggerGreenPortal = () => {
+      engine.registerEvent('green-mode', 'wisp-provider:green-portal-trigger', '/green-node')
+      engine.activateGreenMode()
+    }
+
+    return {
+      state: moodToState(engine.mood),
+      mood: engine.mood,
+      energy: engine.energy,
+      focusRoute: engine.focusRoute,
+      events: engine.events,
+      setWispState,
+      triggerGreenPortal,
+      setState: setWispState,
+      setMood: engine.setMood,
+      activateGreenMode: triggerGreenPortal,
+      registerEvent: engine.registerEvent,
+      resetWisp: engine.resetWisp,
+    }
+  }, [engine])
+
+  return <WispContext.Provider value={value}>{children}</WispContext.Provider>
+}
 
 export function WispProvider({ children }: { children: ReactNode }) {
-  return <WispEngineProvider>{children}</WispEngineProvider>
+  return (
+    <WispEngineProvider>
+      <WispBridge>{children}</WispBridge>
+    </WispEngineProvider>
+  )
 }
 
 export function useWisp() {
-  const engine = useWispEngine()
-
-  return useMemo(() => ({
-    state: engine.mood,
-    mood: engine.mood,
-    energy: engine.energy,
-    events: engine.events,
-    focusRoute: engine.focusRoute,
-    setState: engine.setMood,
-    setMood: engine.setMood,
-    activateGreenMode: engine.activateGreenMode,
-    registerEvent: engine.registerEvent,
-    resetWisp: engine.resetWisp,
-  }), [engine])
+  const context = useContext(WispContext)
+  if (!context) throw new Error('useWisp debe ser utilizado dentro de WispProvider')
+  return context
 }
