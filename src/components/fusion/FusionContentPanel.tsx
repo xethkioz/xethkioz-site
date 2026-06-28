@@ -17,42 +17,6 @@ const portalToneById: Record<FusionPortalId, FusionTone> = {
   green: 'green',
 }
 
-const selectablePortals: FusionPortalId[] = ['gaming', 'science', 'fun']
-
-const modeCopy = {
-  es: {
-    newsKicker: 'Motor editorial',
-    communityKicker: 'Sistema comunidad',
-    cmsKicker: 'CMS Studio',
-    profileKicker: 'Perfil jugador',
-    newsTitle: 'Noticias listas para publicar',
-    communityTitle: 'Misiones y actividad de comunidad',
-    cmsTitle: 'Cola editorial del CMS',
-    profileTitle: 'Perfil, XP y progreso',
-    account: 'Cuenta',
-  },
-  en: {
-    newsKicker: 'Editorial engine',
-    communityKicker: 'Community system',
-    cmsKicker: 'CMS Studio',
-    profileKicker: 'Player profile',
-    newsTitle: 'News ready to publish',
-    communityTitle: 'Community missions and activity',
-    cmsTitle: 'CMS editorial queue',
-    profileTitle: 'Profile, XP and progress',
-    account: 'Account',
-  },
-} as const
-
-function getPanelIntro(mode: FusionContentPanelProps['mode'], hasPortal: boolean, ui: { dynamicContent: string; portalContent: string; latestContent: string }, local: typeof modeCopy.es) {
-  if (hasPortal) return { kicker: ui.dynamicContent, title: ui.portalContent }
-  if (mode === 'news') return { kicker: local.newsKicker, title: local.newsTitle }
-  if (mode === 'community') return { kicker: local.communityKicker, title: local.communityTitle }
-  if (mode === 'cms') return { kicker: local.cmsKicker, title: local.cmsTitle }
-  if (mode === 'profile') return { kicker: local.profileKicker, title: local.profileTitle }
-  return { kicker: ui.dynamicContent, title: ui.latestContent }
-}
-
 export default function FusionContentPanel({ tone, portal, mode = 'portal' }: FusionContentPanelProps) {
   const { lang, t } = useLang()
   const { completedMissionIds, toggleMission, xp, level, profile, setFavoritePortal } = useProfileProgress()
@@ -61,17 +25,16 @@ export default function FusionContentPanel({ tone, portal, mode = 'portal' }: Fu
   const missions = getFusionMissions(lang)
   const cmsQueue = getFusionCmsQueue(lang)
   const ui = t.v7.functionality
-  const local = modeCopy[lang]
-  const intro = getPanelIntro(mode, Boolean(portal), ui, local)
-  const visibleArticles = portal ? articles : allArticles
+  const panelKicker = mode === 'news' ? ui.newsEngine : mode === 'community' ? ui.communityEngine : mode === 'cms' ? ui.cmsEngine : mode === 'profile' ? ui.profileEngine : ui.dynamicContent
+  const panelTitle = portal ? ui.portalContent : ui.latestContent
 
   return (
     <section className={`fusion-functionality ${fusionToneClass[tone]} mx-auto mt-8 grid max-w-7xl grid-cols-1 gap-5 px-4 pb-12 sm:px-6 xl:grid-cols-3`}>
       <article className="fusion-system-panel xl:col-span-2">
-        <div className="fusion-panel-kicker">{intro.kicker}</div>
-        <h2>{intro.title}</h2>
+        <div className="fusion-panel-kicker">{panelKicker}</div>
+        <h2>{panelTitle}</h2>
         <div className="fusion-content-list">
-          {visibleArticles.map((article) => (
+          {(portal ? articles : allArticles).map((article) => (
             <div key={article.id} className={`fusion-content-item ${fusionToneClass[portalToneById[article.portal]]}`}>
               <div className="fusion-content-meta">
                 <span>{article.category}</span>
@@ -102,14 +65,14 @@ export default function FusionContentPanel({ tone, portal, mode = 'portal' }: Fu
             <strong>{xp} XP</strong>
           </div>
           <div className="fusion-portal-choice">
-            {selectablePortals.map((id) => (
+            {(['gaming', 'science', 'fun'] as FusionPortalId[]).map((id) => (
               <button key={id} type="button" className={profile.favoritePortal === id ? 'active' : ''} onClick={() => setFavoritePortal(id)}>
                 {id}
               </button>
             ))}
           </div>
           <Link to="/profile" className="fusion-panel-link">{ui.openProfile}</Link>
-          <Link to="/login" className="fusion-panel-link">{local.account}</Link>
+          <Link to="/login" className="fusion-panel-link">Cuenta</Link>
         </article>
 
         <article className="fusion-system-panel">
