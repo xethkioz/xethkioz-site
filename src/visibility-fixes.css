@@ -1,0 +1,6 @@
+/* XETHKIOZ visibility fixes
+   Green area must not be shown as a normal public portal card.
+   Access remains possible only through the Wisp flow handled in React. */
+#world-gates-heading + p + div > a:nth-child(3) {
+  display: none;
+}
