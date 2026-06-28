@@ -1,4 +1,5 @@
 import { Navigate, Routes, Route } from 'react-router-dom'
+import { Analytics as VercelAnalytics } from '@vercel/analytics/react'
 import { LangProvider } from './lib/LangContext'
 import { HudProvider } from './lib/HudContext'
 import { WispProvider } from './providers/WispProvider'
@@ -29,6 +30,7 @@ function AppShell() {
   return (
     <>
       <Analytics />
+      <VercelAnalytics />
       <ScrollToTop />
       <AppErrorBoundary label="Global Controls" compact>
         <Header />
