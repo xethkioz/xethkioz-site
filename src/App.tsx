@@ -1,5 +1,6 @@
 import { Navigate, Routes, Route } from 'react-router-dom'
 import { Analytics as VercelAnalytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import { LangProvider } from './lib/LangContext'
 import { HudProvider } from './lib/HudContext'
 import { GREEN_NODE_UNLOCK_KEY, WispProvider } from './providers/WispProvider'
@@ -37,6 +38,7 @@ function AppShell() {
     <>
       <Analytics />
       <VercelAnalytics />
+      <SpeedInsights />
       <ScrollToTop />
       <AppErrorBoundary label="Global Controls" compact>
         <Header />
