@@ -12,12 +12,12 @@ interface SEOProps {
 }
 
 const SITE = 'XETHKIOZ'
-const SITE_URL = 'https://xethkioz.com.ar'
-const DESC = 'Tu portal al futuro del gaming y la tecnología. Gaming, esports, tecnología, ciencia, streaming e inteligencia artificial.'
+const SITE_URL = 'https://www.xethkioz.com.ar'
+const DESC = 'Portal gamer y tecnológico con noticias, comunidad, streaming, IA, ciencia y cultura digital.'
 
 function absoluteUrl(value: string) {
   if (!value) return SITE_URL
-  if (value.startsWith('http')) return value
+  if (value.startsWith('http')) return value.replace('https://xethkioz.com.ar', SITE_URL)
   return `${SITE_URL}${value.startsWith('/') ? value : `/${value}`}`
 }
 
@@ -32,7 +32,7 @@ export default function SEO({
   tags,
 }: SEOProps) {
   const fullTitle = title ? `${title} | ${SITE}` : `${SITE} - Gaming, Tech & Streaming`
-  const canonical = url ? absoluteUrl(url) : (typeof window !== 'undefined' ? window.location.href : SITE_URL)
+  const canonical = url ? absoluteUrl(url) : SITE_URL
   const imageUrl = absoluteUrl(image)
 
   return (
