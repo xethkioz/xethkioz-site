@@ -18,6 +18,7 @@ import ProfileHub from './pages/ProfileHub'
 import News from './pages/News'
 import Community from './pages/Community'
 import CmsStudio from './pages/CmsStudio'
+import AccountAccess from './pages/AccountAccess'
 import NotFound from './pages/NotFound'
 import AppErrorBoundary from './components/AppErrorBoundary'
 import { WorldRuntimeIntegration, WorldRuntimeProvider } from './engines/world/runtime'
@@ -50,6 +51,9 @@ function AppShell() {
             <Route path="/news" element={<News />} />
             <Route path="/community" element={<Community />} />
             <Route path="/profile" element={<ProfileHub />} />
+            <Route path="/login" element={<AccountAccess />} />
+            <Route path="/account" element={<AccountAccess />} />
+            <Route path="/register" element={<Navigate to="/login" replace />} />
             <Route path="/cms" element={<CmsStudio />} />
             <Route path="/admin" element={<Navigate to="/cms" replace />} />
 
