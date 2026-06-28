@@ -35,7 +35,7 @@ const copy = {
     communityStatus: 'COMUNIDAD_STATUS',
     online: 'ONLINE',
     connectedUsers: 'Usuarios conectados',
-    hiddenDimension: '// Buscar dimensión oculta _',
+    hiddenDimension: '// Dimensión oculta enlazada al Wisp _',
     contentSignal: 'Señales de contenido',
     cmsQueue: 'Cola editorial',
     missions: 'Misiones activas',
@@ -54,7 +54,7 @@ const copy = {
     communityStatus: 'COMMUNITY_STATUS',
     online: 'ONLINE',
     connectedUsers: 'Connected users',
-    hiddenDimension: '// Search hidden dimension _',
+    hiddenDimension: '// Hidden dimension bound to Wisp _',
     contentSignal: 'Content signals',
     cmsQueue: 'Editorial queue',
     missions: 'Active missions',
@@ -67,7 +67,7 @@ export default function FusionWorldStageV5() {
   const { xp, level } = useProfileProgress()
   const ui = copy[lang]
 
-  const portalCards = getPortalRegistry().map((portal) => ({
+  const portalCards = getPortalRegistry().filter((portal) => !portal.hidden).map((portal) => ({
     ...portal,
     title: t.v7.portals[portal.titleKey].title,
     subtitle: t.v7.portals[portal.titleKey].subtitle,
@@ -100,7 +100,7 @@ export default function FusionWorldStageV5() {
           <div className="flex flex-col gap-8 lg:col-span-8">
             <section className="flex flex-col gap-4" aria-labelledby="world-gates-heading">
               <SectionHeading id="world-gates-heading" tone="tech" label={ui.portalsTitle} />
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {portalCards.map((portal) => (
                   <Link
                     key={portal.id}
@@ -175,9 +175,9 @@ export default function FusionWorldStageV5() {
                 <span className="font-mono font-bold text-white">{level} / {xp}</span>
               </div>
               <div className="mt-2 border-t border-fusionSurface-muted pt-3 text-center">
-                <Link to="/green-node" className="font-mono text-[11px] uppercase tracking-[0.22em] text-fusionAccent-secret transition hover:text-fusionAccent-greenNode hover:underline">
+                <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-fusionAccent-secret">
                   {ui.hiddenDimension}
-                </Link>
+                </span>
               </div>
             </section>
 
