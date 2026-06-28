@@ -4,8 +4,8 @@
 
 [build.environment]
   NODE_VERSION = "20"
-  NODE_ENV = "production"
-  NPM_FLAGS = "--no-fund"
+  NPM_FLAGS = "--no-fund --include=dev"
+  NPM_CONFIG_PRODUCTION = "false"
 
 [context.production]
   command = "npm run deploy:check"
