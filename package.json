@@ -32,8 +32,11 @@
     "audit:security-hardening": "node scripts/security-hardening-check.mjs",
     "audit:production-ready": "node scripts/production-ready-check.mjs",
     "audit:env": "node scripts/env-ready-check.mjs",
-    "deploy:check": "npm run audit:env && npm run audit:production-ready && npm run build && npm audit --omit=dev",
-    "audit:package-clean": "XETHKIOZ_STRICT_PACKAGE_AUDIT=1 node scripts/production-ready-check.mjs"
+    "deploy:check": "npm run verify && npm audit --omit=dev",
+    "audit:package-clean": "XETHKIOZ_STRICT_PACKAGE_AUDIT=1 node scripts/production-ready-check.mjs",
+    "typecheck": "tsc -b --pretty false",
+    "verify": "npm run audit:env && npm run audit:production-ready && npm run build",
+    "ci:check": "npm ci && npm run deploy:check"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",
