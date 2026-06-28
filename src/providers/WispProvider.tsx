@@ -3,6 +3,8 @@ import { WispEngineProvider, useWispEngine, type WispEventType, type WispMood } 
 
 export type WispState = 'IDLE' | 'WATCHING' | 'CONNECTED' | 'GREEN_MODE'
 
+export const GREEN_NODE_UNLOCK_KEY = 'xethkioz.greenNodeUnlocked'
+
 type WispContextType = {
   state: WispState
   mood: WispMood
@@ -34,6 +36,11 @@ function moodToState(mood: WispMood): WispState {
   return 'IDLE'
 }
 
+function unlockGreenNode() {
+  if (typeof window === 'undefined') return
+  window.sessionStorage.setItem(GREEN_NODE_UNLOCK_KEY, String(Date.now()))
+}
+
 function WispBridge({ children }: { children: ReactNode }) {
   const engine = useWispEngine()
 
@@ -43,6 +50,7 @@ function WispBridge({ children }: { children: ReactNode }) {
     }
 
     const triggerGreenPortal = () => {
+      unlockGreenNode()
       engine.registerEvent('green-mode', 'wisp-provider:green-portal-trigger', '/green-node')
       engine.activateGreenMode()
     }
