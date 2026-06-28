@@ -1,11 +1,13 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { isSupabaseConfigured, supabase } from '../services/supabaseClient'
 
 export type HudAudioMode = 'muted' | 'enabled'
-export type HudAccountStatus = 'guest' | 'connected'
+export type HudAccountStatus = 'guest' | 'connected' | 'loading'
 
 export interface HudAccountState {
   status: HudAccountStatus
   name: string
+  email?: string
 }
 
 interface HudContextType {
@@ -45,6 +47,13 @@ const readStoredAccount = (): HudAccountState => {
   return { status, name }
 }
 
+function accountFromSupabaseUser(user: { email?: string; user_metadata?: Record<string, unknown> } | null): HudAccountState {
+  if (!user) return { status: 'guest', name: 'XETHKIOZ' }
+  const rawName = user.user_metadata?.display_name || user.user_metadata?.username
+  const name = typeof rawName === 'string' && rawName.trim() ? rawName.trim() : user.email?.split('@')[0] || 'XETHKIOZ'
+  return { status: 'connected', name, email: user.email }
+}
+
 export function HudProvider({ children }: { children: ReactNode }) {
   const [soundOn, setSoundOn] = useState<boolean>(readStoredSound)
   const [volume, setVolumeState] = useState<number>(readStoredVolume)
@@ -61,10 +70,31 @@ export function HudProvider({ children }: { children: ReactNode }) {
   }, [volume])
 
   useEffect(() => {
-    window.localStorage.setItem(STORAGE_ACCOUNT_STATUS, account.status)
+    window.localStorage.setItem(STORAGE_ACCOUNT_STATUS, account.status === 'connected' ? 'connected' : 'guest')
     window.localStorage.setItem(STORAGE_ACCOUNT_NAME, account.name)
     document.documentElement.dataset.xethAccount = account.status
   }, [account])
+
+  useEffect(() => {
+    if (!isSupabaseConfigured) return undefined
+    let active = true
+
+    setAccount((current) => ({ ...current, status: current.status === 'connected' ? 'connected' : 'loading' }))
+
+    supabase.auth.getSession().then(({ data }) => {
+      if (!active) return
+      setAccount(accountFromSupabaseUser(data.session?.user ?? null))
+    })
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setAccount(accountFromSupabaseUser(session?.user ?? null))
+    })
+
+    return () => {
+      active = false
+      listener.subscription.unsubscribe()
+    }
+  }, [])
 
   const value = useMemo<HudContextType>(() => ({
     soundOn,
@@ -73,7 +103,13 @@ export function HudProvider({ children }: { children: ReactNode }) {
     account,
     toggleSound: () => setSoundOn((current) => !current),
     setVolume: (next) => setVolumeState(Math.min(1, Math.max(0, next))),
-    toggleAccount: () => setAccount((current) => ({ ...current, status: current.status === 'connected' ? 'guest' : 'connected' })),
+    toggleAccount: () => {
+      if (account.status === 'connected' && isSupabaseConfigured) {
+        void supabase.auth.signOut().then(() => setAccount({ status: 'guest', name: 'XETHKIOZ' }))
+        return
+      }
+      if (typeof window !== 'undefined') window.location.assign('/login')
+    },
     setAccountName: (next) => setAccount((current) => ({ ...current, name: next.trim() || current.name })),
   }), [soundOn, volume, account])
 
