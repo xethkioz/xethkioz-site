@@ -17,22 +17,63 @@ const portalToneById: Record<FusionPortalId, FusionTone> = {
   green: 'green',
 }
 
+const selectablePortals: FusionPortalId[] = ['gaming', 'science', 'fun']
+
+const modeCopy = {
+  es: {
+    newsKicker: 'Motor editorial',
+    communityKicker: 'Sistema comunidad',
+    cmsKicker: 'CMS Studio',
+    profileKicker: 'Perfil jugador',
+    newsTitle: 'Noticias listas para publicar',
+    communityTitle: 'Misiones y actividad de comunidad',
+    cmsTitle: 'Cola editorial del CMS',
+    profileTitle: 'Perfil, XP y progreso',
+    continue: 'Continuar',
+    account: 'Cuenta',
+  },
+  en: {
+    newsKicker: 'Editorial engine',
+    communityKicker: 'Community system',
+    cmsKicker: 'CMS Studio',
+    profileKicker: 'Player profile',
+    newsTitle: 'News ready to publish',
+    communityTitle: 'Community missions and activity',
+    cmsTitle: 'CMS editorial queue',
+    profileTitle: 'Profile, XP and progress',
+    continue: 'Continue',
+    account: 'Account',
+  },
+} as const
+
+function getPanelIntro(mode: FusionContentPanelProps['mode'], portal: FusionPortalId | undefined, ui: ReturnType<typeof useLang>['t']['v7']['functionality'], local: typeof modeCopy.es) {
+  if (portal) return { kicker: ui.dynamicContent, title: ui.portalContent }
+  if (mode === 'news') return { kicker: local.newsKicker, title: local.newsTitle }
+  if (mode === 'community') return { kicker: local.communityKicker, title: local.communityTitle }
+  if (mode === 'cms') return { kicker: local.cmsKicker, title: local.cmsTitle }
+  if (mode === 'profile') return { kicker: local.profileKicker, title: local.profileTitle }
+  return { kicker: ui.dynamicContent, title: ui.latestContent }
+}
+
 export default function FusionContentPanel({ tone, portal, mode = 'portal' }: FusionContentPanelProps) {
   const { lang, t } = useLang()
   const { completedMissionIds, toggleMission, xp, level, profile, setFavoritePortal } = useProfileProgress()
   const articles = getFusionArticles(lang, portal)
-  const allArticles = getFusionArticles(lang)
+  const allArticles = getFusionArticles(lang).filter((article) => article.portal !== 'green')
   const missions = getFusionMissions(lang)
   const cmsQueue = getFusionCmsQueue(lang)
   const ui = t.v7.functionality
+  const local = modeCopy[lang]
+  const intro = getPanelIntro(mode, portal, ui, local)
+  const visibleArticles = portal ? articles : allArticles
 
   return (
     <section className={`fusion-functionality ${fusionToneClass[tone]} mx-auto mt-8 grid max-w-7xl grid-cols-1 gap-5 px-4 pb-12 sm:px-6 xl:grid-cols-3`}>
       <article className="fusion-system-panel xl:col-span-2">
-        <div className="fusion-panel-kicker">{mode === 'news' ? ui.newsEngine : ui.dynamicContent}</div>
-        <h2>{portal ? ui.portalContent : ui.latestContent}</h2>
+        <div className="fusion-panel-kicker">{intro.kicker}</div>
+        <h2>{intro.title}</h2>
         <div className="fusion-content-list">
-          {(portal ? articles : allArticles).map((article) => (
+          {visibleArticles.map((article) => (
             <div key={article.id} className={`fusion-content-item ${fusionToneClass[portalToneById[article.portal]]}`}>
               <div className="fusion-content-meta">
                 <span>{article.category}</span>
@@ -63,13 +104,14 @@ export default function FusionContentPanel({ tone, portal, mode = 'portal' }: Fu
             <strong>{xp} XP</strong>
           </div>
           <div className="fusion-portal-choice">
-            {(['gaming', 'science', 'fun', 'green'] as FusionPortalId[]).map((id) => (
+            {selectablePortals.map((id) => (
               <button key={id} type="button" className={profile.favoritePortal === id ? 'active' : ''} onClick={() => setFavoritePortal(id)}>
                 {id}
               </button>
             ))}
           </div>
           <Link to="/profile" className="fusion-panel-link">{ui.openProfile}</Link>
+          <Link to="/login" className="fusion-panel-link">{local.account}</Link>
         </article>
 
         <article className="fusion-system-panel">
