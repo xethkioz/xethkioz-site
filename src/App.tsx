@@ -2,7 +2,7 @@ import { Navigate, Routes, Route } from 'react-router-dom'
 import { Analytics as VercelAnalytics } from '@vercel/analytics/react'
 import { LangProvider } from './lib/LangContext'
 import { HudProvider } from './lib/HudContext'
-import { WispProvider } from './providers/WispProvider'
+import { GREEN_NODE_UNLOCK_KEY, WispProvider } from './providers/WispProvider'
 import { ProfileProgressProvider } from './lib/ProfileProgressContext'
 import Header from './components/Header'
 import FusionGlobalStatus from './components/fusion/FusionGlobalStatus'
@@ -27,6 +27,11 @@ import { WorldOrchestratorProvider } from './engines/world/orchestrator'
 import { WorldThemeProvider } from './engines/world/theme'
 import { LightingEngineProvider } from './engines/world/lighting'
 
+function GreenNodeGate() {
+  const unlocked = typeof window !== 'undefined' && Boolean(window.sessionStorage.getItem(GREEN_NODE_UNLOCK_KEY))
+  return unlocked ? <GreenNode /> : <Navigate to="/" replace />
+}
+
 function AppShell() {
   return (
     <>
@@ -46,7 +51,7 @@ function AppShell() {
             <Route path="/gaming" element={<GamingHub />} />
             <Route path="/science" element={<ScienceLab />} />
             <Route path="/fun" element={<FunPortal />} />
-            <Route path="/green-node" element={<GreenNode />} />
+            <Route path="/green-node" element={<GreenNodeGate />} />
 
             <Route path="/news" element={<News />} />
             <Route path="/community" element={<Community />} />
