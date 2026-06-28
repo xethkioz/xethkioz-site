@@ -10,6 +10,8 @@ const accentClasses: Record<string, string> = {
   purple: 'border-neon/30 bg-neon/10 text-neon',
 }
 
+const visiblePortals = XETHKIOZ_NETWORK_PORTALS.filter((portal) => portal.status !== 'hidden')
+
 export default function NetworkPortalHub() {
   return (
     <section className="my-10 rounded-3xl border border-white/10 bg-ink-300/80 p-5 md:p-7 shadow-[0_0_44px_rgba(138,43,226,0.10)]">
@@ -25,7 +27,7 @@ export default function NetworkPortalHub() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {XETHKIOZ_NETWORK_PORTALS.map((portal) => (
+        {visiblePortals.map((portal) => (
           <Link
             key={portal.id}
             to={portal.path}
@@ -37,7 +39,6 @@ export default function NetworkPortalHub() {
                 <span className={`rounded-full border px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] ${accentClasses[portal.accent] || accentClasses.orange}`}>
                   {portal.status}
                 </span>
-                {portal.id === 'green-node' && <span className="text-green-300 animate-pulse">✦ hidden</span>}
               </div>
               <h3 className="font-display text-xl font-black text-white group-hover:text-orange">{portal.name}</h3>
               <p className="mt-2 text-sm leading-relaxed text-gray-400">{portal.description}</p>
