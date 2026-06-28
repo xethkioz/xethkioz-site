@@ -29,7 +29,6 @@ const modeCopy = {
     communityTitle: 'Misiones y actividad de comunidad',
     cmsTitle: 'Cola editorial del CMS',
     profileTitle: 'Perfil, XP y progreso',
-    continue: 'Continuar',
     account: 'Cuenta',
   },
   en: {
@@ -41,13 +40,12 @@ const modeCopy = {
     communityTitle: 'Community missions and activity',
     cmsTitle: 'CMS editorial queue',
     profileTitle: 'Profile, XP and progress',
-    continue: 'Continue',
     account: 'Account',
   },
 } as const
 
-function getPanelIntro(mode: FusionContentPanelProps['mode'], portal: FusionPortalId | undefined, ui: ReturnType<typeof useLang>['t']['v7']['functionality'], local: typeof modeCopy.es) {
-  if (portal) return { kicker: ui.dynamicContent, title: ui.portalContent }
+function getPanelIntro(mode: FusionContentPanelProps['mode'], hasPortal: boolean, ui: { dynamicContent: string; portalContent: string; latestContent: string }, local: typeof modeCopy.es) {
+  if (hasPortal) return { kicker: ui.dynamicContent, title: ui.portalContent }
   if (mode === 'news') return { kicker: local.newsKicker, title: local.newsTitle }
   if (mode === 'community') return { kicker: local.communityKicker, title: local.communityTitle }
   if (mode === 'cms') return { kicker: local.cmsKicker, title: local.cmsTitle }
@@ -64,7 +62,7 @@ export default function FusionContentPanel({ tone, portal, mode = 'portal' }: Fu
   const cmsQueue = getFusionCmsQueue(lang)
   const ui = t.v7.functionality
   const local = modeCopy[lang]
-  const intro = getPanelIntro(mode, portal, ui, local)
+  const intro = getPanelIntro(mode, Boolean(portal), ui, local)
   const visibleArticles = portal ? articles : allArticles
 
   return (
