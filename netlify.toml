@@ -1,6 +1,20 @@
 [build]
-  command = "npm run build"
+  command = "npm run deploy:check"
   publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NODE_ENV = "production"
+  NPM_FLAGS = "--no-fund"
+
+[context.production]
+  command = "npm run deploy:check"
+
+[context.deploy-preview]
+  command = "npm run deploy:check"
+
+[context.branch-deploy]
+  command = "npm run deploy:check"
 
 [[redirects]]
   from = "/*"
@@ -14,8 +28,14 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Content-Security-Policy = "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; media-src 'self' https: blob:; connect-src 'self' https://pascicauudfyydzknoop.supabase.co wss://pascicauudfyydzknoop.supabase.co; manifest-src 'self'; worker-src 'self' blob:"
 
 [[headers]]
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/videos/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"

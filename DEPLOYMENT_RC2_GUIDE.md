@@ -114,3 +114,21 @@ git push origin main
 ```
 
 Netlify desplegará producción desde `main`.
+
+
+## RC2 Infrastructure Automation
+
+Netlify y GitHub Actions deben ejecutar el mismo contrato:
+
+```bash
+npm run deploy:check
+```
+
+Variables obligatorias en Netlify y GitHub Actions:
+
+```txt
+VITE_SUPABASE_URL
+VITE_SUPABASE_ANON_KEY
+```
+
+Nunca configurar `SUPABASE_SERVICE_ROLE_KEY` en el frontend.
