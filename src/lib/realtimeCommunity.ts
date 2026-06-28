@@ -84,19 +84,23 @@ function safeParse<T>(value: string | null, fallback: T): T {
   try { return JSON.parse(value) as T } catch { return fallback }
 }
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null
+
 function normalizeRole(role: unknown): ChatMessage['role'] {
   if (role === 'host' || role === 'mod' || role === 'member' || role === 'guest') return role
   return 'guest'
 }
 
-function normalizeMessage(raw: any): ChatMessage {
+function normalizeMessage(raw: unknown): ChatMessage {
+  const record = isRecord(raw) ? raw : {}
   return {
-    id: String(raw?.id || `msg-${Date.now()}`),
-    room: String(raw?.room || raw?.room_id || 'general'),
-    user: String(raw?.user || raw?.display_name || raw?.username || 'Visitante'),
-    role: normalizeRole(raw?.role),
-    text: String(raw?.text || raw?.body || raw?.message || '').slice(0, 280),
-    created_at: String(raw?.created_at || new Date().toISOString()),
+    id: String(record.id || `msg-${Date.now()}`),
+    room: String(record.room || record.room_id || 'general'),
+    user: String(record.user || record.display_name || record.username || 'Visitante'),
+    role: normalizeRole(record.role),
+    text: String(record.text || record.body || record.message || '').slice(0, 280),
+    created_at: String(record.created_at || new Date().toISOString()),
   }
 }
 

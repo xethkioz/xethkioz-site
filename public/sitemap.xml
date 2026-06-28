@@ -1,31 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://xethkioz.com.ar/</loc><priority>1.0</priority></url>
-  <url><loc>https://xethkioz.com.ar/gaming</loc><priority>0.9</priority></url>
-  <url><loc>https://xethkioz.com.ar/tech</loc><priority>0.9</priority></url>
-  <url><loc>https://xethkioz.com.ar/science</loc><priority>0.8</priority></url>
-  <url><loc>https://xethkioz.com.ar/news</loc><priority>0.9</priority></url>
-  <url><loc>https://xethkioz.com.ar/streaming</loc><priority>0.8</priority></url>
-  <url><loc>https://xethkioz.com.ar/media</loc><priority>0.8</priority></url>
-  <url><loc>https://xethkioz.com.ar/community</loc><priority>0.8</priority></url>
-  <url><loc>https://xethkioz.com.ar/creator</loc><priority>0.7</priority></url>
-  <url><loc>https://xethkioz.com.ar/support</loc><priority>0.8</priority></url>
-  <url><loc>https://xethkioz.com.ar/about</loc><priority>0.8</priority></url>
-  <url><loc>https://xethkioz.com.ar/contact</loc><priority>0.7</priority></url>
-  <url><loc>https://xethkioz.com.ar/authors</loc><priority>0.7</priority></url>
-  <url><loc>https://xethkioz.com.ar/network</loc><priority>0.8</priority></url>
-  <url><loc>https://xethkioz.com.ar/news-engine</loc><priority>0.7</priority></url>
-  <url><loc>https://xethkioz.com.ar/content-system</loc><priority>0.7</priority></url>
-  <url><loc>https://xethkioz.com.ar/qa</loc><priority>0.4</priority></url>
-  <url><loc>https://xethkioz.com.ar/roles</loc><priority>0.7</priority></url>
-  <url><loc>https://xethkioz.com.ar/cms</loc><priority>0.6</priority></url>
-  <url><loc>https://xethkioz.com.ar/green-node</loc><priority>0.3</priority></url>
-  <url><loc>https://xethkioz.com.ar/live-checklist</loc><priority>0.5</priority></url>
-  <url><loc>https://xethkioz.com.ar/chat-overlay</loc><priority>0.5</priority></url>
-
   <url>
-    <loc>https://xethkioz.com.ar/milestones</loc>
+    <loc>https://xethkioz.com.ar/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://xethkioz.com.ar/gaming</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://xethkioz.com.ar/news</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://xethkioz.com.ar/science</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xethkioz.com.ar/community</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xethkioz.com.ar/fun</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://xethkioz.com.ar/green-node</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
   </url>
 </urlset>

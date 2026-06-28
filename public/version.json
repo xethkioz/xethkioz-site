@@ -1,8 +1,9 @@
 {
-  "version": "7.0.0-fusion-alpha.2.6-supabase-client",
-  "label": "Fusion Alpha 2.5 Consolidated Audit",
-  "stage": "alpha",
-  "channel": "alpha",
-  "codename": "Fusion Alpha 2.6 Supabase Client",
-  "supabaseClient": "src/services/supabaseClient.ts"
+  "version": "7.0.0-fusion-rc-live.1",
+  "label": "RC-Live Final Candidate",
+  "stage": "release-candidate",
+  "channel": "rc-live",
+  "codename": "XETHKIOZ Web RC-Live Final Candidate",
+  "buildDate": "2026-06-28",
+  "sourcePackage": "XETHKIOZ_WEB_RC_LIVE_FINAL_CANDIDATE_CLEAN_PATCHED_2026-06-28"
 }
