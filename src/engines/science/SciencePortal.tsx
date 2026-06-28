@@ -12,46 +12,46 @@ interface GlobalNewsFeed {
 
 const feed: Record<'es' | 'en', GlobalNewsFeed[]> = {
   es: [
-    { id: 1, source: 'MIT Tech Review', title: 'Nuevos avances en computación cuántica topológica', category: 'TECNOLOGÍA', timeAgo: '2h' },
-    { id: 2, source: 'CERN News', title: 'Simulación de alta precisión revela comportamientos inusuales en partículas', category: 'CIENCIA', timeAgo: '5h' },
-    { id: 3, source: 'OpenAI Blog', title: 'Optimizando el uso de GPUs locales en modelos masivos de inferencia', category: 'IA', timeAgo: '1d' },
-    { id: 4, source: 'NASA Space', title: 'El telescopio espacial capta firmas atmosféricas en exoplanetas cercanos', category: 'CIENCIA', timeAgo: '2d' },
+    { id: 1, source: 'Science Lab', title: 'IA aplicada: cómo separar hype, evidencia y utilidad real', category: 'IA', timeAgo: 'Base' },
+    { id: 2, source: 'XETHKIOZ', title: 'Ciencia para gamers: hardware, espacio, salud digital y futuro', category: 'CIENCIA', timeAgo: 'Base' },
+    { id: 3, source: 'Tech Watch', title: 'GPUs, modelos locales y consumo energético en contenido con IA', category: 'TECNOLOGÍA', timeAgo: 'Base' },
+    { id: 4, source: 'Research Desk', title: 'Método de lectura: fuente, evidencia, contexto y conclusión', category: 'CIENCIA', timeAgo: 'Base' },
   ],
   en: [
-    { id: 1, source: 'MIT Tech Review', title: 'New advances in topological quantum computing', category: 'TECNOLOGÍA', timeAgo: '2h' },
-    { id: 2, source: 'CERN News', title: 'High-precision simulation reveals unusual particle behavior', category: 'CIENCIA', timeAgo: '5h' },
-    { id: 3, source: 'OpenAI Blog', title: 'Optimizing local GPU usage for massive inference models', category: 'IA', timeAgo: '1d' },
-    { id: 4, source: 'NASA Space', title: 'Space telescope captures atmospheric signatures on nearby exoplanets', category: 'CIENCIA', timeAgo: '2d' },
+    { id: 1, source: 'Science Lab', title: 'Applied AI: separating hype, evidence and real utility', category: 'IA', timeAgo: 'Base' },
+    { id: 2, source: 'XETHKIOZ', title: 'Science for gamers: hardware, space, digital health and the future', category: 'CIENCIA', timeAgo: 'Base' },
+    { id: 3, source: 'Tech Watch', title: 'GPUs, local models and energy use in AI-assisted content', category: 'TECNOLOGÍA', timeAgo: 'Base' },
+    { id: 4, source: 'Research Desk', title: 'Reading method: source, evidence, context and conclusion', category: 'CIENCIA', timeAgo: 'Base' },
   ],
 }
 
 const copy = {
   es: {
     back: '⏴ Volver al Núcleo',
-    label: 'FUSION_ALPHA_2.0 // PORTAL_SCIENCE',
-    title: 'Conocimiento sin ruido',
-    subtitle: 'Área clara con administrador especializado, separada del contenido gamer y del ocio.',
-    feedTitle: '// Global Tech & Science Feed // Panel Rotativo',
-    research: '// Investigaciones Validadas',
-    contribute: '// Aportar Proyecto',
-    evidence: 'Evidencia: Documented',
-    project: 'Implementación de Redes Neuronales Convolucionales en Hardware Local',
-    placeholder: 'Título del Proyecto',
-    submit: 'Enviar a Revisión',
+    label: 'XETHKIOZ // SCIENCE_LAB',
+    title: 'Ciencia, IA y tecnología sin ruido',
+    subtitle: 'Un sector separado del gaming para explicar avances reales con contexto, evidencia y lectura simple para la comunidad.',
+    feedTitle: '// Radar editorial de Ciencia & IA',
+    research: '// Línea de investigación inicial',
+    contribute: '// Participar del laboratorio',
+    evidence: 'Estado: Base editorial',
+    project: 'Cómo usar IA, hardware y fuentes confiables para crear noticias responsables en XETHKIOZ.',
+    ctaNews: 'Ver noticias',
+    ctaAccount: 'Crear cuenta',
     source: 'Fuente',
   },
   en: {
     back: '⏴ Back to Core',
-    label: 'FUSION_ALPHA_2.0 // PORTAL_SCIENCE',
-    title: 'Knowledge without noise',
-    subtitle: 'A clear area with specialized administration, separated from gaming and entertainment content.',
-    feedTitle: '// Global Tech & Science Feed // Rotating Panel',
-    research: '// Validated Research',
-    contribute: '// Submit Project',
-    evidence: 'Evidence: Documented',
-    project: 'Convolutional Neural Networks on Local Hardware',
-    placeholder: 'Project Title',
-    submit: 'Send to Review',
+    label: 'XETHKIOZ // SCIENCE_LAB',
+    title: 'Science, AI and technology without noise',
+    subtitle: 'A sector separated from gaming to explain real advances with context, evidence and clear community reading.',
+    feedTitle: '// Science & AI editorial radar',
+    research: '// Initial research line',
+    contribute: '// Join the lab',
+    evidence: 'Status: Editorial base',
+    project: 'How to use AI, hardware and reliable sources to create responsible news for XETHKIOZ.',
+    ctaNews: 'Read news',
+    ctaAccount: 'Create account',
     source: 'Source',
   },
 } as const
@@ -99,9 +99,9 @@ export function SciencePortal() {
           </section>
           <section className="flex flex-col gap-4">
             <h2 className="font-mono text-xs uppercase tracking-[0.22em] text-gray-500">{ui.contribute}</h2>
-            <div className="panel-cyber flex flex-col gap-4 p-6 opacity-50">
-              <input type="text" placeholder={ui.placeholder} disabled className="w-full rounded border border-fusionSurface-muted bg-fusionBg p-2 font-mono text-xs" />
-              <button type="button" disabled className="w-full border border-fusionSurface-muted bg-fusionSurface-base py-2 font-mono text-xs uppercase tracking-[0.22em] text-gray-400">{ui.submit}</button>
+            <div className="panel-cyber flex flex-col gap-3 p-6">
+              <Link to="/news" className="btn-secondary rounded-xl px-4 py-3 text-center text-xs uppercase tracking-[0.18em]">{ui.ctaNews}</Link>
+              <Link to="/login" className="rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-center font-mono text-xs uppercase tracking-[0.18em] text-gray-200 transition hover:border-fusionAccent-science hover:text-fusionAccent-science">{ui.ctaAccount}</Link>
             </div>
           </section>
         </div>
