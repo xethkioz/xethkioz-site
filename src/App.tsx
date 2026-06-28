@@ -19,6 +19,11 @@ import Community from './pages/Community'
 import CmsStudio from './pages/CmsStudio'
 import NotFound from './pages/NotFound'
 import AppErrorBoundary from './components/AppErrorBoundary'
+import { WorldRuntimeIntegration, WorldRuntimeProvider } from './engines/world/runtime'
+import { WorldStateProvider } from './engines/world/state'
+import { WorldOrchestratorProvider } from './engines/world/orchestrator'
+import { WorldThemeProvider } from './engines/world/theme'
+import { LightingEngineProvider } from './engines/world/lighting'
 
 function AppShell() {
   return (
@@ -56,14 +61,25 @@ function AppShell() {
 
 export default function App() {
   return (
-    <LangProvider>
-      <HudProvider>
-        <WispProvider>
-          <ProfileProgressProvider>
-            <AppShell />
-          </ProfileProgressProvider>
-        </WispProvider>
-      </HudProvider>
-    </LangProvider>
+    <WorldRuntimeProvider>
+      <WorldStateProvider>
+        <WorldOrchestratorProvider>
+          <WorldThemeProvider>
+            <LightingEngineProvider>
+              <LangProvider>
+                <HudProvider>
+                  <WispProvider>
+                    <ProfileProgressProvider>
+                      <WorldRuntimeIntegration />
+                      <AppShell />
+                    </ProfileProgressProvider>
+                  </WispProvider>
+                </HudProvider>
+              </LangProvider>
+            </LightingEngineProvider>
+          </WorldThemeProvider>
+        </WorldOrchestratorProvider>
+      </WorldStateProvider>
+    </WorldRuntimeProvider>
   )
 }

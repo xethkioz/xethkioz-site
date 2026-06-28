@@ -122,12 +122,58 @@ const newItems: NewCalendarItemPayload[] = [
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null
 
+const isCalendarPriority = (value: unknown): value is CalendarPriority =>
+  value === 'low' || value === 'medium' || value === 'high'
+
+const isCalendarKind = (value: unknown): value is CalendarAppointment['kind'] =>
+  value === 'content' || value === 'stream' || value === 'system' || value === 'community'
+
 const safeParsePayload = (raw: string): CalendarDragPayload | NewCalendarItemPayload | null => {
   try {
     const parsed: unknown = JSON.parse(raw)
     if (!isRecord(parsed)) return null
-    if (parsed.isExisting === true && typeof parsed.id === 'string') return parsed as unknown as CalendarDragPayload
-    if (parsed.isExisting === false && typeof parsed.title === 'string') return parsed as unknown as NewCalendarItemPayload
+    if (
+      parsed.isExisting === true &&
+      typeof parsed.id === 'string' &&
+      typeof parsed.title === 'string' &&
+      typeof parsed.description === 'string' &&
+      typeof parsed.dateKey === 'string' &&
+      (parsed.columnId === 'backlog' || parsed.columnId === 'today' || parsed.columnId === 'tomorrow' || parsed.columnId === 'week') &&
+      typeof parsed.startTime === 'string' &&
+      typeof parsed.xp === 'number' &&
+      isCalendarPriority(parsed.priority) &&
+      isCalendarKind(parsed.kind)
+    ) {
+      return {
+        isExisting: true,
+        id: parsed.id,
+        title: parsed.title,
+        description: parsed.description,
+        dateKey: parsed.dateKey,
+        columnId: parsed.columnId,
+        startTime: parsed.startTime,
+        xp: parsed.xp,
+        priority: parsed.priority,
+        kind: parsed.kind,
+      } satisfies CalendarDragPayload
+    }
+    if (
+      parsed.isExisting === false &&
+      typeof parsed.title === 'string' &&
+      typeof parsed.description === 'string' &&
+      isCalendarKind(parsed.kind) &&
+      isCalendarPriority(parsed.priority) &&
+      typeof parsed.xp === 'number'
+    ) {
+      return {
+        isExisting: false,
+        title: parsed.title,
+        description: parsed.description,
+        kind: parsed.kind,
+        priority: parsed.priority,
+        xp: parsed.xp,
+      } satisfies NewCalendarItemPayload
+    }
     return null
   } catch {
     return null

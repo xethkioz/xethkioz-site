@@ -1,7 +1,7 @@
 {
   "name": "xethkioz",
   "private": true,
-  "version": "7.0.0-fusion-alpha.2.9-interaction-engine",
+  "version": "7.0.0-fusion-rc-live.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -20,24 +20,38 @@
     "audit:media": "node scripts/media-assets-review.mjs",
     "audit:wisp-engine": "node scripts/wisp-engine-check.mjs",
     "audit:functionality": "node scripts/functionality-core-check.mjs",
-    "audit:portal": "node scripts/portal-registry-check.mjs"
+    "audit:portal": "node scripts/portal-registry-check.mjs",
+    "audit:runtime": "node scripts/runtime-integration-check.mjs",
+    "audit:visual-runtime": "node scripts/visual-runtime-sandbox-check.mjs",
+    "audit:shader-pipeline": "node scripts/shader-pipeline-sandbox-check.mjs",
+    "audit:news-factory": "node scripts/news-factory-check.mjs",
+    "audit:eventbus-telemetry": "node scripts/eventbus-telemetry-check.mjs",
+    "audit:supabase-hydration": "node scripts/supabase-hydration-check.mjs",
+    "audit:auth-nexus": "node scripts/auth-nexus-check.mjs",
+    "audit:latency-glitch-bridge": "node scripts/latency-glitch-bridge-check.mjs",
+    "audit:security-hardening": "node scripts/security-hardening-check.mjs",
+    "audit:production-ready": "node scripts/production-ready-check.mjs",
+    "audit:env": "node scripts/env-ready-check.mjs",
+    "deploy:check": "npm run audit:env && npm run audit:production-ready && npm run build && npm audit --omit=dev",
+    "audit:package-clean": "XETHKIOZ_STRICT_PACKAGE_AUDIT=1 node scripts/production-ready-check.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",
+    "framer-motion": "^11.18.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.5",
-    "react-router-dom": "^6.26.2",
-    "framer-motion": "^11.18.2"
+    "react-router-dom": "^6.26.2"
   },
   "devDependencies": {
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.1",
+    "@vitejs/plugin-react": "^6.0.3",
     "autoprefixer": "^10.4.20",
+    "esbuild": "^0.28.1",
     "postcss": "^8.4.45",
     "tailwindcss": "^3.4.10",
     "typescript": "^5.5.3",
-    "vite": "^5.4.3"
+    "vite": "^8.1.0"
   }
 }

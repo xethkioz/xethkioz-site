@@ -1,9 +1,9 @@
 # Fusion Alpha 1.5 Code / Routes / Structure Review
 
-Generated: 2026-06-27T13:05:26.410Z
+Generated: 2026-06-28T05:37:13.273Z
 
 ## Summary
-- Source TS/TSX files: 132
+- Source TS/TSX files: 175
 - Page route files: 36
 - Component files: 48
 - Fusion engine components: 13

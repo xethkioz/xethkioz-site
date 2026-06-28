@@ -1,0 +1,18 @@
+Add these exports to src/engines/world/runtime/index.ts:
+
+export {
+  WORLD_SCHEDULER_PHASES,
+  WorldScheduler,
+  createWorldScheduler,
+  type WorldSchedulerFrameContext,
+  type WorldSchedulerOptions,
+  type WorldSchedulerPhase,
+  type WorldSchedulerSnapshot,
+  type WorldSchedulerTask,
+} from "./worldScheduler";
+
+export {
+  createWorldSchedulerController,
+  useWorldScheduler,
+  type WorldSchedulerController,
+} from "./useWorldScheduler";
