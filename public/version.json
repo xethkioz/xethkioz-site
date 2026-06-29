@@ -1,9 +1,17 @@
 {
-  "version": "7.0.0-fusion-rc-live.1",
-  "label": "RC-Live Final Candidate",
+  "version": "7.0.0-fusion-rc4",
+  "label": "RC4 Validated Candidate",
   "stage": "release-candidate",
-  "channel": "rc-live",
-  "codename": "XETHKIOZ Web RC-Live Final Candidate",
-  "buildDate": "2026-06-28",
-  "sourcePackage": "XETHKIOZ_WEB_RC_LIVE_FINAL_CANDIDATE_CLEAN_PATCHED_2026-06-28"
+  "channel": "rc4",
+  "codename": "XETHKIOZ Fusion Platform RC4",
+  "buildDate": "2026-06-29",
+  "sourcePackage": "XETHKIOZ_FUSION_PLATFORM_RC4_VALIDATED_2026-06-29",
+  "validation": {
+    "localDeployCheck": "PASS",
+    "productionReadyAudit": "PASS",
+    "viteBuild": "PASS",
+    "npmAudit": "0 vulnerabilities",
+    "modulesTransformed": 427,
+    "vercelProduction": "READY"
+  }
 }
