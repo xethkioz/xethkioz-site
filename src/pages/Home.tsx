@@ -269,7 +269,7 @@ export default function Home() {
 
 function PortalCard({ portal }: { portal: Portal }) {
   return (
-    <Link to={portal.route} className="group block">
+    <Link to={portal.route} className="group block" aria-label={portal.button}>
       <article
         className={[
           'relative mx-auto h-[420px] w-full max-w-[420px] overflow-hidden rounded-[44%] ring-4 md:h-[460px] xl:h-[500px]',
@@ -279,34 +279,17 @@ function PortalCard({ portal }: { portal: Portal }) {
         ].join(' ')}
       >
         <img
-          className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-110"
+          className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.055]"
           src={portal.poster}
           alt={portal.title}
           loading="lazy"
         />
 
-        <div className="absolute inset-0 bg-black/22" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_34%,rgba(0,0,0,0.76)_82%)]" />
+        <div className="absolute inset-0 rounded-[44%] bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(0,0,0,0.46)_100%)] opacity-75 transition duration-300 group-hover:opacity-45" />
         <div className="absolute inset-0 rounded-[44%] ring-1 ring-white/20" />
+        <div className="pointer-events-none absolute inset-4 rounded-[42%] border border-white/10 opacity-0 transition duration-300 group-hover:opacity-100" />
 
-        <div className="absolute inset-x-0 top-7 z-10 flex justify-center">
-          <div className="grid h-16 w-16 place-items-center rounded-full border border-white/20 bg-black/35 text-3xl backdrop-blur-md">
-            {portal.icon}
-          </div>
-        </div>
-
-        <div className="absolute inset-x-7 bottom-8 z-10 text-center">
-          <h2 className={`text-3xl font-black uppercase italic leading-[0.95] tracking-[0.04em] drop-shadow-[0_0_12px_rgba(0,0,0,0.85)] ${portal.text}`}>
-            {portal.title}
-          </h2>
-          <p className="mt-3 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-white/90">
-            {portal.subtitle}
-          </p>
-
-          <div className="mt-7 rounded-xl border border-current bg-black/40 px-5 py-3 font-mono text-xs font-black uppercase tracking-[0.16em] backdrop-blur-md transition group-hover:bg-white/10">
-            {portal.button}
-          </div>
-        </div>
+        <span className="sr-only">{portal.button}</span>
       </article>
     </Link>
   )
