@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { Navigate, Routes, Route } from 'react-router-dom'
+import { Navigate, Routes, Route, useLocation } from 'react-router-dom'
 import { Analytics as VercelAnalytics } from '@vercel/analytics/react'
 import { LangProvider } from './lib/LangContext'
 import { HudProvider } from './lib/HudContext'
@@ -53,16 +53,21 @@ function RouteFallback() {
 }
 
 function AppShell() {
+  const location = useLocation()
+  const isCmsRoute = location.pathname === '/cms' || location.pathname.startsWith('/cms/')
+
   return (
     <>
       <Analytics />
       <VercelAnalytics />
       <ScrollToTop />
-      <AppErrorBoundary label="Global Controls" compact>
-        <Header />
-        <FusionGlobalStatus />
-        <FusionGlobalWisp />
-      </AppErrorBoundary>
+      {!isCmsRoute && (
+        <AppErrorBoundary label="Global Controls" compact>
+          <Header />
+          <FusionGlobalStatus />
+          <FusionGlobalWisp />
+        </AppErrorBoundary>
+      )}
 
       <main id="main-content" className="min-h-screen">
         <AppErrorBoundary label="Routes">
