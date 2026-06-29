@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { Navigate, Routes, Route } from 'react-router-dom'
+import { Navigate, Routes, Route, useLocation } from 'react-router-dom'
 import { Analytics as VercelAnalytics } from '@vercel/analytics/react'
 import { LangProvider } from './lib/LangContext'
 import { HudProvider } from './lib/HudContext'
@@ -16,6 +16,7 @@ import { WorldStateProvider } from './engines/world/state'
 import { WorldOrchestratorProvider } from './engines/world/orchestrator'
 import { WorldThemeProvider } from './engines/world/theme'
 import { LightingEngineProvider } from './engines/world/lighting'
+import { AdminGuard } from './cms/guards'
 
 const Home = lazy(() => import('./pages/Home'))
 const GamingHub = lazy(() => import('./pages/GamingHub'))
@@ -26,6 +27,11 @@ const ProfileHub = lazy(() => import('./pages/ProfileHub'))
 const News = lazy(() => import('./pages/News'))
 const Community = lazy(() => import('./pages/Community'))
 const CmsStudio = lazy(() => import('./pages/CmsStudio'))
+const CmsLayout = lazy(() => import('./cms/layout/CmsLayout'))
+const CmsDashboard = lazy(() => import('./cms/routes/CmsDashboard'))
+const CmsGenerate = lazy(() => import('./cms/routes/CmsGenerate'))
+const CmsNewsEditor = lazy(() => import('./cms/routes/CmsNewsEditor'))
+const CmsNewsList = lazy(() => import('./cms/routes/CmsNewsList'))
 const AccountAccess = lazy(() => import('./pages/AccountAccess'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
@@ -47,16 +53,21 @@ function RouteFallback() {
 }
 
 function AppShell() {
+  const location = useLocation()
+  const isCmsRoute = location.pathname === '/cms' || location.pathname.startsWith('/cms/')
+
   return (
     <>
       <Analytics />
       <VercelAnalytics />
       <ScrollToTop />
-      <AppErrorBoundary label="Global Controls" compact>
-        <Header />
-        <FusionGlobalStatus />
-        <FusionGlobalWisp />
-      </AppErrorBoundary>
+      {!isCmsRoute && (
+        <AppErrorBoundary label="Global Controls" compact>
+          <Header />
+          <FusionGlobalStatus />
+          <FusionGlobalWisp />
+        </AppErrorBoundary>
+      )}
 
       <main id="main-content" className="min-h-screen">
         <AppErrorBoundary label="Routes">
@@ -73,7 +84,21 @@ function AppShell() {
               <Route path="/login" element={<AccountAccess />} />
               <Route path="/account" element={<AccountAccess />} />
               <Route path="/register" element={<Navigate to="/login" replace />} />
-              <Route path="/cms" element={<CmsStudio />} />
+              <Route
+                path="/cms"
+                element={
+                  <AdminGuard>
+                    <CmsLayout />
+                  </AdminGuard>
+                }
+              >
+                <Route index element={<CmsDashboard />} />
+                <Route path="generate" element={<CmsGenerate />} />
+                <Route path="news" element={<CmsNewsList />} />
+                <Route path="news/new" element={<CmsNewsEditor />} />
+                <Route path="news/:id" element={<CmsNewsEditor />} />
+              </Route>
+              <Route path="/cms-legacy" element={<CmsStudio />} />
               <Route path="/admin" element={<Navigate to="/cms" replace />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
