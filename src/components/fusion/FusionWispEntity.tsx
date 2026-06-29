@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react'
+import type { CSSProperties, MouseEvent } from 'react'
 import { Link } from 'react-router-dom'
 import type { WispMood } from '../../lib/WispEngineContext'
 
@@ -12,6 +12,7 @@ export interface FusionWispEntityProps {
   energy?: number
   message?: string
   onFocusSignal?: () => void
+  onActivate?: () => void
 }
 
 export default function FusionWispEntity({
@@ -21,8 +22,14 @@ export default function FusionWispEntity({
   energy = 37,
   message,
   onFocusSignal,
+  onActivate,
 }: FusionWispEntityProps) {
   const stateClass = state === 'GREEN_MODE' ? 'green-mode' : state
+
+  const handleClick = (_event: MouseEvent<HTMLAnchorElement>) => {
+    onActivate?.()
+    onFocusSignal?.()
+  }
 
   return (
     <Link
@@ -32,6 +39,7 @@ export default function FusionWispEntity({
       title={label}
       onMouseEnter={onFocusSignal}
       onFocus={onFocusSignal}
+      onClick={handleClick}
       style={{ '--wisp-energy': `${energy}%` } as CSSProperties}
     >
       <span className="fusion-wisp-orbit fusion-wisp-orbit-one" aria-hidden="true" />
