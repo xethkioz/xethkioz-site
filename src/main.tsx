@@ -6,6 +6,7 @@ import App from './App'
 import NexusChatWidget from './components/nexus/NexusChatWidget'
 import './index.css'
 import './visibility-fixes.css'
+import './xethkioz-redesign.css'
 
 const rootElement = document.getElementById('root')
 
