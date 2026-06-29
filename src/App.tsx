@@ -54,13 +54,14 @@ function RouteFallback() {
 function AppShell() {
   const location = useLocation()
   const isCmsRoute = location.pathname === '/cms' || location.pathname.startsWith('/cms/')
+  const isHomeRoute = location.pathname === '/'
 
   return (
     <>
       <Analytics />
       <VercelAnalytics />
       <ScrollToTop />
-      {!isCmsRoute && (
+      {!isCmsRoute && !isHomeRoute && (
         <AppErrorBoundary label="Global Controls" compact>
           <Header />
           <FusionGlobalWisp />
@@ -104,7 +105,7 @@ function AppShell() {
         </AppErrorBoundary>
       </main>
 
-      {!isCmsRoute && <Footer />}
+      {!isCmsRoute && !isHomeRoute && <Footer />}
     </>
   )
 }
