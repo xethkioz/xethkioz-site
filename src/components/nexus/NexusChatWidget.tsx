@@ -23,7 +23,8 @@ declare global {
   interface Window { io?: NexusFactory }
 }
 
-const CHAT_URL = (import.meta.env.VITE_NEXUS_CHAT_URL as string | undefined)?.replace(/\/$/, '')
+const DEFAULT_CHAT_URL = 'https://xethkioz-nexus-chat.onrender.com'
+const CHAT_URL = ((import.meta.env.VITE_NEXUS_CHAT_URL as string | undefined) || DEFAULT_CHAT_URL).replace(/\/$/, '')
 const rooms = ['global', 'gaming', 'tech', 'green-zone']
 
 function cleanNickname(value: string) {
