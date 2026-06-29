@@ -6,12 +6,12 @@ import { HudProvider } from './lib/HudContext'
 import { GREEN_NODE_UNLOCK_KEY, WispProvider } from './providers/WispProvider'
 import { ProfileProgressProvider } from './lib/ProfileProgressContext'
 import Header from './components/Header'
-import FusionGlobalStatus from './components/fusion/FusionGlobalStatus'
+import Footer from './components/Footer'
 import FusionGlobalWisp from './components/fusion/FusionGlobalWisp'
 import ScrollToTop from './components/ScrollToTop'
 import Analytics from './components/Analytics'
 import AppErrorBoundary from './components/AppErrorBoundary'
-import { WorldRuntimeIntegration, WorldRuntimeProvider } from './engines/world/runtime'
+import { WorldRuntimeProvider } from './engines/world/runtime'
 import { WorldStateProvider } from './engines/world/state'
 import { WorldOrchestratorProvider } from './engines/world/orchestrator'
 import { WorldThemeProvider } from './engines/world/theme'
@@ -43,10 +43,9 @@ function GreenNodeGate() {
 function RouteFallback() {
   return (
     <section className="mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center px-6 text-center">
-      <div className="rounded-3xl border border-purple-500 bg-slate-950 px-8 py-6">
-        <p className="text-xs uppercase tracking-widest text-orange-300">XETHKIOZ</p>
-        <h1 className="mt-3 text-2xl font-black text-white md:text-3xl">Cargando portal</h1>
-        <p className="mt-2 text-sm text-purple-100">Preparando la experiencia...</p>
+      <div className="rounded-3xl border border-purple-500/40 bg-[#0A0A0F] px-8 py-6 shadow-[0_0_20px_rgba(139,92,246,.22)]">
+        <p className="font-mono text-xs uppercase tracking-widest text-[#FF6B1A]">XETHKIOZ</p>
+        <h1 className="mt-3 text-2xl font-black text-white md:text-3xl">Cargando sección</h1>
       </div>
     </section>
   )
@@ -64,12 +63,11 @@ function AppShell() {
       {!isCmsRoute && (
         <AppErrorBoundary label="Global Controls" compact>
           <Header />
-          <FusionGlobalStatus />
           <FusionGlobalWisp />
         </AppErrorBoundary>
       )}
 
-      <main id="main-content" className="min-h-screen">
+      <main id="main-content" className="min-h-screen bg-[#0A0A0F]">
         <AppErrorBoundary label="Routes">
           <Suspense fallback={<RouteFallback />}>
             <Routes>
@@ -105,6 +103,8 @@ function AppShell() {
           </Suspense>
         </AppErrorBoundary>
       </main>
+
+      {!isCmsRoute && <Footer />}
     </>
   )
 }
@@ -120,7 +120,6 @@ export default function App() {
                 <HudProvider>
                   <WispProvider>
                     <ProfileProgressProvider>
-                      <WorldRuntimeIntegration />
                       <AppShell />
                     </ProfileProgressProvider>
                   </WispProvider>

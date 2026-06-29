@@ -1,0 +1,183 @@
+html {
+  scroll-behavior: auto !important;
+}
+
+body {
+  background-attachment: scroll !important;
+  overscroll-behavior-y: none;
+}
+
+#root {
+  isolation: isolate;
+}
+
+.xk-page {
+  min-height: 100svh;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.16), transparent 34%),
+    radial-gradient(circle at 12% 80%, rgba(50, 255, 138, 0.10), transparent 30%),
+    #0A0A0F;
+  color: #F0F0F5;
+  contain: paint;
+}
+
+.xk-card,
+.xk-section-panel,
+.xk-footer-clean,
+.xk-header-clean {
+  contain: layout paint style;
+}
+
+.xk-card,
+.xk-section-panel {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.xk-card:hover {
+  will-change: transform;
+}
+
+.xk-pixel {
+  image-rendering: pixelated;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  text-shadow: 2px 2px 0 rgba(0,0,0,.9);
+}
+
+.xk-blueprint {
+  background-image:
+    linear-gradient(rgba(59,130,246,.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59,130,246,.09) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.xk-wisp {
+  position: fixed;
+  left: 8vw;
+  top: 55vh;
+  z-index: 70;
+  width: 56px;
+  height: 56px;
+  border: 0;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 40% 35%, #fff 0 8%, #B9FFE0 10% 16%, #32FF8A 18% 35%, rgba(139,92,246,.85) 42%, transparent 70%);
+  box-shadow: 0 0 20px rgba(50,255,138,.75), 0 0 46px rgba(139,92,246,.5);
+  cursor: pointer;
+  animation: xk-wisp-drift 22s ease-in-out infinite alternate;
+  will-change: transform, filter;
+  transform: translateZ(0);
+}
+
+.xk-wisp::before,
+.xk-wisp::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border: 1px solid rgba(50,255,138,.35);
+  border-radius: inherit;
+  animation: xk-wisp-orbit 9s linear infinite;
+}
+
+.xk-wisp::after {
+  inset: 10px -22px -4px 22px;
+  border: 0;
+  background: linear-gradient(90deg, rgba(50,255,138,.45), transparent);
+  filter: blur(5px);
+  animation: none;
+}
+
+.xk-wisp-portal {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 69;
+  opacity: 0;
+  background: radial-gradient(circle at var(--portal-x, 50%) var(--portal-y, 50%), rgba(50,255,138,.28), transparent 28%);
+  transition: opacity .35s ease;
+}
+
+.xk-wisp-portal.is-open {
+  opacity: 1;
+}
+
+.xk-green-shell {
+  min-height: 100svh;
+  isolation: isolate;
+  background: #000;
+  color: #D8FFE8;
+  overflow-x: hidden;
+}
+
+.xk-green-shell::before {
+  content: '';
+  position: fixed;
+  inset: -4px;
+  z-index: -2;
+  background:
+    radial-gradient(circle at 50% 10%, rgba(50,255,138,.20), transparent 32%),
+    repeating-linear-gradient(0deg, rgba(50,255,138,.045) 0 1px, transparent 1px 7px),
+    #000;
+  filter: hue-rotate(10deg) saturate(1.4);
+}
+
+.xk-green-frame {
+  position: relative;
+  border: 1px solid rgba(50,255,138,.55);
+  box-shadow: 0 0 24px rgba(50,255,138,.24), inset 0 0 18px rgba(50,255,138,.06);
+}
+
+.xk-green-frame::before,
+.xk-green-frame::after {
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  inset: -2px;
+  border: 1px solid rgba(50,255,138,.25);
+  filter: hue-rotate(80deg);
+  transform: translate3d(2px, 0, 0);
+  opacity: .5;
+}
+
+.xk-green-content {
+  position: relative;
+  z-index: 2;
+  filter: none !important;
+  backdrop-filter: none !important;
+}
+
+@keyframes xk-wisp-drift {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  28% { transform: translate3d(74vw, -38vh, 0) scale(1.08); }
+  54% { transform: translate3d(62vw, 28vh, 0) scale(.96); }
+  78% { transform: translate3d(22vw, -22vh, 0) scale(1.04); }
+  100% { transform: translate3d(76vw, 18vh, 0) scale(1); }
+}
+
+@keyframes xk-wisp-orbit {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .xk-wisp {
+    width: 48px;
+    height: 48px;
+    animation-duration: 28s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .xk-wisp {
+    left: auto;
+    right: 88px;
+    top: auto;
+    bottom: 22px;
+  }
+}
