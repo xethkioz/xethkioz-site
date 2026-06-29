@@ -1,110 +1,136 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import SEO from '../components/SEO'
+import { useWisp } from '../providers/WispProvider'
 
-type SectionId = 'gaming' | 'science' | 'fun'
+type PortalTone = 'games' | 'science' | 'fun'
 
-const sections: Array<{
-  id: SectionId
+type PortalNode = {
+  tone: PortalTone
   title: string
+  kicker: string
   route: string
-  palette: string
-  eyebrow: string
+  cta: string
   description: string
-  points: string[]
-  cardClass: string
-}> = [
+  scene: 'gamer' | 'planet' | 'urban'
+}
+
+const portals: PortalNode[] = [
   {
-    id: 'gaming',
-    title: 'Juegos',
+    tone: 'games',
+    title: 'GAMES',
+    kicker: 'Cyber Gamer District',
     route: '/gaming',
-    palette: 'Rojo • Morado • Verde',
-    eyebrow: 'PIXEL MODE',
-    description: 'Noticias, comunidades, guías, MMORPG, esports y radar gamer con estética pixel art premium.',
-    points: ['Gaming Hub limpio', 'Rutas reparadas', 'Diseño arcade legible'],
-    cardClass: 'border-red-500/40 bg-[linear-gradient(135deg,rgba(239,68,68,.18),rgba(139,92,246,.12),rgba(50,255,138,.08))]',
+    cta: 'ENTRAR AL PORTAL',
+    description: 'Noticias, juegos, builds, streams y comunidad gamer.',
+    scene: 'gamer',
   },
   {
-    id: 'science',
-    title: 'Tecnología/Ciencia',
+    tone: 'science',
+    title: 'SCIENCE & TECHNOLOGY',
+    kicker: 'Quantum Core Lab',
     route: '/science',
-    palette: 'Azul • Morado • Verde',
-    eyebrow: 'DATA TERMINAL',
-    description: 'Tecnología, IA, ciencia y análisis con diseño frío, técnico y calculador.',
-    points: ['Blueprint UI', 'Contenido verificable', 'Menos ruido visual'],
-    cardClass: 'border-blue-400/40 bg-[linear-gradient(135deg,rgba(59,130,246,.18),rgba(139,92,246,.12),rgba(50,255,138,.07))]',
+    cta: 'ABRIR NÚCLEO',
+    description: 'IA, ciencia, hardware, datos y pensamiento crítico.',
+    scene: 'planet',
   },
   {
-    id: 'fun',
-    title: 'Memes',
+    tone: 'fun',
+    title: 'FUN / MEMES',
+    kicker: 'Neon Chaos Alley',
     route: '/fun',
-    palette: 'Amarillo • Morado • Verde',
-    eyebrow: 'JAJA.EXE',
-    description: 'Cosas graciosas, memes, clips y descansos visuales sin ensuciar la experiencia principal.',
-    points: ['Humor controlado', 'Animación sutil', 'Formato social'],
-    cardClass: 'border-yellow-300/40 bg-[linear-gradient(135deg,rgba(234,179,8,.18),rgba(139,92,246,.12),rgba(50,255,138,.08))]',
+    cta: 'ACTIVAR PORTAL',
+    description: 'Memes, clips, humor y contenido social.',
+    scene: 'urban',
   },
 ]
 
+const stats = ['+25K XETHKIOZERS', '1,248 NOTICIAS', '+3.6K CONTENIDO', '24/7 SISTEMA SEGURO']
+
 export default function Home() {
-  const [active, setActive] = useState<SectionId>('gaming')
-  const activeSection = sections.find((section) => section.id === active) || sections[0]
+  const { triggerGreenPortal } = useWisp()
+  const navigate = useNavigate()
+
+  const touchWisp = () => {
+    triggerGreenPortal()
+    window.setTimeout(() => navigate('/green-node'), 520)
+  }
 
   return (
     <>
       <SEO
-        title="XETHKIOZ Web v1.0 · Juegos, Tecnología/Ciencia y Memes"
-        description="XETHKIOZ Web v1.0 rediseñada: tres secciones principales, navegación limpia, Wisp orgánico y Green Node aislado."
+        title="XETHKIOZ Web v1.0 · Nexus Portals"
+        description="Interfaz de portales de XETHKIOZ con Games, Science & Technology, Fun/Memes y Green Wisp."
         url="/"
         image="/images/articles/xethkioz-cover.svg"
       />
-      <div className="xk-page">
-        <section className="mx-auto flex min-h-[calc(100svh-140px)] max-w-7xl flex-col justify-center gap-10 px-4 py-10 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-3xl text-center">
-            <p className="font-mono text-[11px] uppercase tracking-[0.34em] text-[#32FF8A]">XETHKIOZ WEB v1.0</p>
-            <h1 className="mt-4 text-4xl font-black uppercase tracking-[0.18em] text-white md:text-6xl">Tres mundos. Una marca.</h1>
-            <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-gray-400 md:text-base">
-              Entrada directa al ecosistema: más rápido, más claro y sin paneles de debug en producción.
+      <div className="xk-aaa-stage min-h-[100svh] overflow-hidden px-4 pb-28 pt-32 text-white md:px-8 lg:pl-24 lg:pr-8">
+        <div className="xk-smoke-layer" aria-hidden="true" />
+        <main className="relative z-10 mx-auto grid min-h-[calc(100svh-220px)] max-w-[1660px] grid-cols-1 items-center gap-8 xl:grid-cols-[1fr_320px]">
+          <section className="flex flex-col gap-8">
+            <div className="max-w-4xl">
+              <p className="font-mono text-[11px] font-black uppercase tracking-[0.38em] text-[#32FF8A]">XETHKIOZ NEXUS // PORTAL UI</p>
+              <h1 className="mt-4 max-w-5xl text-4xl font-black uppercase leading-[0.95] tracking-[0.08em] text-white drop-shadow-[0_0_28px_rgba(139,92,246,.35)] md:text-6xl xl:text-7xl">
+                Gaming Is My Passion
+              </h1>
+              <p className="mt-5 max-w-2xl font-mono text-xs uppercase tracking-[0.22em] text-[#FFB16D] md:text-sm">
+                Beyond The Game · Choose your portal
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+              {portals.map((portal) => (
+                <PortalNodeCard key={portal.title} portal={portal} />
+              ))}
+            </div>
+          </section>
+
+          <aside className="xk-wisp-module justify-self-center xl:justify-self-end" aria-label="Green Wisp Nexus">
+            <div className="xk-wisp-module-grid" aria-hidden="true" />
+            <p className="font-mono text-[10px] uppercase tracking-[0.34em] text-[#32FF8A]/70">GREEN WISP</p>
+            <div className="xk-green-wisp-orb my-8" aria-hidden="true"><span /></div>
+            <p className="max-w-[250px] text-center font-mono text-[11px] uppercase leading-relaxed tracking-[0.18em] text-[#B9FFD1]/80">
+              Una señal verde se mueve entre mundos. El acceso oculto responde a los curiosos.
             </p>
-          </div>
+            <button type="button" onClick={touchWisp} className="xk-wisp-touch mt-7">
+              TOCAR AL WISP
+              <small>SOLO PARA CURIOSOS</small>
+            </button>
+          </aside>
+        </main>
 
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-            {sections.map((section) => {
-              const isActive = active === section.id
-              return (
-                <button
-                  key={section.id}
-                  type="button"
-                  onClick={() => setActive(section.id)}
-                  className={`xk-card group min-h-[260px] rounded-3xl border p-5 text-left transition-transform duration-200 hover:-translate-y-1 ${section.cardClass} ${isActive ? 'shadow-[0_0_28px_rgba(139,92,246,.24)]' : 'opacity-85'}`}
-                  aria-expanded={isActive}
-                >
-                  <span className="font-mono text-[10px] font-black uppercase tracking-[0.28em] text-[#FF6B1A]">{section.eyebrow}</span>
-                  <h2 className="mt-6 text-3xl font-black uppercase tracking-[0.12em] text-white">{section.title}</h2>
-                  <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.18em] text-gray-300">{section.palette}</p>
-                  <p className="mt-5 text-sm leading-relaxed text-gray-300">{section.description}</p>
-                  {isActive && (
-                    <div className="mt-6 rounded-2xl border border-white/10 bg-black/35 p-4">
-                      <ul className="space-y-2 text-xs text-gray-300">
-                        {section.points.map((point) => <li key={point}>▸ {point}</li>)}
-                      </ul>
-                    </div>
-                  )}
-                </button>
-              )
-            })}
+        <section className="xk-bottom-stats" aria-label="Estadísticas XETHKIOZ">
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            {stats.map((item) => <span key={item}>{item}</span>)}
           </div>
-
-          <div className="xk-section-panel mx-auto w-full max-w-4xl rounded-3xl border border-white/10 bg-black/35 p-5 text-center shadow-[0_0_18px_rgba(139,92,246,.12)]">
-            <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-gray-500">Sección seleccionada</p>
-            <h2 className="mt-2 text-2xl font-black uppercase tracking-[0.14em] text-white">{activeSection.title}</h2>
-            <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-gray-400">{activeSection.description}</p>
-            <Link to={activeSection.route} className="mt-5 inline-flex rounded-full border border-[#8B5CF6]/60 bg-[#8B5CF6]/10 px-5 py-3 font-mono text-xs font-black uppercase tracking-[0.18em] text-white transition hover:border-[#FF6B1A] hover:text-[#FF6B1A] hover:shadow-[0_0_16px_rgba(255,107,26,.3)]">
-              Abrir {activeSection.title}
-            </Link>
-          </div>
+          <p>© 2026 Alexis Ivan Diaz Sellanes Santajulia. XETHKIOZ Web v1.0. Todos los derechos reservados.</p>
         </section>
       </div>
     </>
   )
+}
+
+function PortalNodeCard({ portal }: { portal: PortalNode }) {
+  return (
+    <Link to={portal.route} className={`xk-portal-node xk-portal-${portal.tone}`} aria-label={`${portal.cta} ${portal.title}`}>
+      <div className="xk-portal-aura" />
+      <div className="xk-portal-ring" />
+      <div className="xk-portal-inner"><PortalScene scene={portal.scene} /></div>
+      <div className="xk-portal-copy">
+        <p>{portal.kicker}</p>
+        <h2>{portal.title}</h2>
+        <span>{portal.description}</span>
+        <strong>{portal.cta}</strong>
+      </div>
+    </Link>
+  )
+}
+
+function PortalScene({ scene }: { scene: PortalNode['scene'] }) {
+  if (scene === 'planet') {
+    return <div className="xk-scene-planet" aria-hidden="true"><span className="orbit one" /><span className="orbit two" /><span className="core" /></div>
+  }
+  if (scene === 'urban') {
+    return <div className="xk-scene-urban" aria-hidden="true"><span className="sun" /><span className="tower a" /><span className="tower b" /><span className="tower c" /></div>
+  }
+  return <div className="xk-scene-gamer" aria-hidden="true"><span className="city a" /><span className="city b" /><span className="avatar" /><span className="head" /><span className="visor" /></div>
 }
