@@ -8,6 +8,7 @@ import { ProfileProgressProvider } from './lib/ProfileProgressContext'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import FusionGlobalWisp from './components/fusion/FusionGlobalWisp'
+import NexusChatWidget from './components/nexus/NexusChatWidget'
 import ScrollToTop from './components/ScrollToTop'
 import Analytics from './components/Analytics'
 import AppErrorBoundary from './components/AppErrorBoundary'
@@ -106,6 +107,7 @@ function AppShell() {
       </main>
 
       {!isCmsRoute && !isHomeRoute && <Footer />}
+      {!isCmsRoute && <NexusChatWidget />}
     </>
   )
 }
