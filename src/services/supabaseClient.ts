@@ -9,13 +9,18 @@ const FALLBACK_SUPABASE_ANON_KEY = 'placeholder-anon-key-for-local-fallback-only
 const isValidSupabaseUrl = (value?: string): value is string =>
   Boolean(value && /^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(value));
 
-const isValidAnonKey = (value?: string): value is string =>
-  Boolean(
-    value &&
-      value.length > 80 &&
-      !value.toLowerCase().includes('placeholder') &&
-      !value.toLowerCase().includes('your-anon-key')
-  );
+const isValidAnonKey = (value?: string): value is string => {
+  if (!value) return false;
+
+  const normalized = value.trim();
+  const lower = normalized.toLowerCase();
+
+  if (lower.includes('placeholder') || lower.includes('your-anon-key')) return false;
+
+  // Supabase now supports short publishable keys such as sb_publishable_*.
+  // Older projects may still expose long JWT anon keys beginning with eyJ.
+  return normalized.startsWith('sb_publishable_') || (normalized.startsWith('eyJ') && normalized.length > 80);
+};
 
 export const isSupabaseConfigured =
   isValidSupabaseUrl(SUPABASE_URL) && isValidAnonKey(SUPABASE_ANON_KEY);
