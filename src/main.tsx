@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import App from './App'
+import NexusChatWidget from './components/nexus/NexusChatWidget'
 import './index.css'
 import './visibility-fixes.css'
 
@@ -18,6 +19,18 @@ function renderBootError(message: string) {
         <pre style="white-space:pre-wrap;margin-top:18px;background:#050507;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px;color:#ffb4b4;font-size:12px;">${message}</pre>
       </section>
     </main>`
+}
+
+function mountNexusChat() {
+  if (window.location.pathname === '/cms' || window.location.pathname.startsWith('/cms/')) return
+  const nexusRoot = document.createElement('div')
+  nexusRoot.id = 'xethkioz-nexus-chat-root'
+  document.body.appendChild(nexusRoot)
+  createRoot(nexusRoot).render(
+    <StrictMode>
+      <NexusChatWidget />
+    </StrictMode>,
+  )
 }
 
 window.addEventListener('error', (event) => {
@@ -39,6 +52,7 @@ try {
       </HelmetProvider>
     </StrictMode>,
   )
+  mountNexusChat()
 } catch (error) {
   const message = error instanceof Error ? error.message : String(error)
   renderBootError(message)
