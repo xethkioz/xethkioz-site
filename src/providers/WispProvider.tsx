@@ -15,6 +15,7 @@ type WispContextType = {
   triggerGreenPortal: () => void
   setState: (state: WispState) => void
   setMood: (mood: WispMood) => void
+  setFocusRoute: (route: string) => void
   activateGreenMode: () => void
   registerEvent: (type: WispEventType, label: string, route?: string) => void
   resetWisp: () => void
@@ -51,7 +52,8 @@ function WispBridge({ children }: { children: ReactNode }) {
 
     const triggerGreenPortal = () => {
       unlockGreenNode()
-      engine.registerEvent('green-mode', 'wisp-provider:green-portal-trigger', '/green-node')
+      engine.registerEvent('green-unlock', 'wisp-provider:green-zone-unlock', '/green-node')
+      engine.registerEvent('green-mode', 'wisp-provider:green-zone-trigger', '/green-node')
       engine.activateGreenMode()
     }
 
@@ -65,6 +67,7 @@ function WispBridge({ children }: { children: ReactNode }) {
       triggerGreenPortal,
       setState: setWispState,
       setMood: engine.setMood,
+      setFocusRoute: engine.setFocusRoute,
       activateGreenMode: triggerGreenPortal,
       registerEvent: engine.registerEvent,
       resetWisp: engine.resetWisp,
