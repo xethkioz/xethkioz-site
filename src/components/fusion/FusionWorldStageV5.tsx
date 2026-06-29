@@ -5,6 +5,7 @@ import { useLang } from '../../lib/LangContext'
 import { useProfileProgress } from '../../lib/ProfileProgressContext'
 import { useWispEngine } from '../../lib/WispEngineContext'
 import { FUSION_LABEL, FUSION_STAGE } from '../../lib/fusionConfig'
+import XethkiozHeroBanner from '../media/XethkiozHeroBanner'
 
 const toneClass: Record<PortalTheme, string> = {
   gaming: 'hover:border-fusionAccent-tech-primary hover:shadow-glow-tech focus-visible:ring-fusionAccent-tech-primary',
@@ -26,12 +27,12 @@ const copy = {
     portalsTitle: 'World Gates / Acceso Ecosistema',
     updatesTitle: 'Noticias Destacadas & Actualizaciones',
     systemCore: 'SYSTEM_CORE',
-    release: 'V5.0.0_INIT',
-    updateHeadline: 'Refactorización de Nodos en Marcha',
-    updateText: 'Centralizando la lógica de versiones, paneles y contenido dinámico para conservar funcionalidad sin saturar la vista principal.',
+    release: 'V7.0_RC3_LIVE',
+    updateHeadline: 'Núcleo público sincronizado',
+    updateText: 'RC3 quedó vivo en Vercel. RC4 inicia limpieza pública, Wisp real, banner del ecosistema y rediseño funcional por etapas.',
     wispEngine: 'WISP_ENGINE_v1.0',
     wispStatus: 'WISP: Watching',
-    wispText: 'Navegando, leyendo señales y optimizando el flujo del ecosistema.',
+    wispText: 'Navegando, leyendo señales y protegiendo la entrada oculta a Green Zone.',
     communityStatus: 'COMUNIDAD_STATUS',
     online: 'ONLINE',
     connectedUsers: 'Usuarios conectados',
@@ -45,12 +46,12 @@ const copy = {
     portalsTitle: 'World Gates / Ecosystem Access',
     updatesTitle: 'Featured News & Updates',
     systemCore: 'SYSTEM_CORE',
-    release: 'V5.0.0_INIT',
-    updateHeadline: 'Node Refactor in Progress',
-    updateText: 'Centralizing version, panel and dynamic content logic to preserve functionality without saturating the main view.',
+    release: 'V7.0_RC3_LIVE',
+    updateHeadline: 'Public core synchronized',
+    updateText: 'RC3 is live on Vercel. RC4 starts public cleanup, real Wisp access, ecosystem banner and functional redesign by stages.',
     wispEngine: 'WISP_ENGINE_v1.0',
     wispStatus: 'WISP: Watching',
-    wispText: 'Navigating, reading signals and optimizing the ecosystem flow.',
+    wispText: 'Navigating, reading signals and protecting the hidden entrance to Green Zone.',
     communityStatus: 'COMMUNITY_STATUS',
     online: 'ONLINE',
     connectedUsers: 'Connected users',
@@ -95,6 +96,8 @@ export default function FusionWorldStageV5() {
             {ui.quote}
           </p>
         </section>
+
+        <XethkiozHeroBanner />
 
         <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
           <div className="flex flex-col gap-8 lg:col-span-8">
