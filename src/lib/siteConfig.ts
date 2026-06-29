@@ -1,6 +1,6 @@
-export const SITE_VERSION = 'v4.0.0-rc.2.4'
-export const SITE_RELEASE = 'XETHKIOZ Network Milestones + Data Governance + Community Progression'
-export const SITE_BUILD_DATE = '2026-06-25'
+export const SITE_VERSION = 'v7.0-rc3-live'
+export const SITE_RELEASE = 'RC4 Public Cleanup + Wisp Green Zone + Media Banner'
+export const SITE_BUILD_DATE = '2026-06-29'
 export const SITE_DOMAIN = 'https://xethkioz.com.ar'
 
 export const DONATION_LINKS = {
@@ -40,7 +40,6 @@ export const CONTENT_SECTIONS = {
   streaming: ['Kick', 'Twitch', 'YouTube', 'Shorts', 'OBS', 'Clips'],
 }
 
-
 export const XETHKIOZ_NETWORK_PORTALS = [
   {
     id: 'gaming-tech',
@@ -77,17 +76,15 @@ export const XETHKIOZ_NETWORK_PORTALS = [
   {
     id: 'ai-lab',
     name: 'AI Lab',
-    path: '/ai-lab',
+    path: '/science',
     status: 'planned',
     accent: 'cyan',
     description: 'Modelos, prompts, automatizaciones y herramientas de IA.'
   },
-
-
   {
     id: 'milestones',
     name: 'Milestones',
-    path: '/milestones',
+    path: '/news',
     status: 'control',
     accent: 'orange',
     description: 'Plan maestro de progreso: Core Platform, Content Platform, Community, Creator Ecosystem y Production Ready.'
@@ -95,7 +92,7 @@ export const XETHKIOZ_NETWORK_PORTALS = [
   {
     id: 'content-os',
     name: 'Content OS',
-    path: '/content-system',
+    path: '/news',
     status: 'branch',
     accent: 'orange',
     description: 'Sistema editorial que separa noticias propias, radar externo, informes, videos, comunidad y SEO.'
@@ -103,7 +100,7 @@ export const XETHKIOZ_NETWORK_PORTALS = [
   {
     id: 'creator-studio',
     name: 'Creator Studio',
-    path: '/creator-studio',
+    path: '/fun',
     status: 'branch',
     accent: 'purple',
     description: 'OBS, Kick, Twitch, YouTube, audio, video y producción de contenido.'
@@ -111,13 +108,13 @@ export const XETHKIOZ_NETWORK_PORTALS = [
 ] as const
 
 export const GREEN_NODE_CONFIG = {
-  name: 'XETHKIOZ // GREEN NODE',
+  name: 'XETHKIOZ // GREEN ZONE',
   slug: 'green-node',
   path: '/green-node',
   accessLabel: '>_',
   safetyNote: 'Contenido educativo y documental. Ciberseguridad defensiva, programación, Linux y análisis crítico de misterios. No se promueve actividad ilegal ni se presentan hipótesis como hechos.',
-  musicReference: 'Usar audio propio/IA sin copyright; el enlace de YouTube queda solo como referencia estética.',
-  youtubeReference: 'https://www.youtube.com/watch?v=AijCmiLi544',
+  musicReference: 'Usar audio propio/IA sin copyright. No exponer referencias externas como parte de la interfaz pública.',
+  youtubeReference: '',
   accessMethods: ['wisp-click', 'terminal-command', 'future-secret-keyword'],
 }
 
@@ -125,10 +122,9 @@ export const VERIFIED_LINKS = [
   { area: 'Dominio', label: 'Web oficial', url: SITE_DOMAIN, status: 'confirmed' },
   { area: 'Gaming & Tech', label: 'Portal Gaming', url: '/gaming', status: 'internal' },
   { area: 'Science Lab', label: 'Portal Ciencia', url: '/science', status: 'internal' },
-  { area: 'Network', label: 'Mapa del ecosistema', url: '/network', status: 'internal' },
-  { area: 'Content OS', label: 'Sistema editorial', url: '/content-system', status: 'internal' },
-  { area: 'QA', label: 'Revisión final', url: '/qa', status: 'internal' },
-  { area: 'Green Node', label: 'Acceso oculto por Wisp', url: '/green-node', status: 'hidden' },
+  { area: 'Fun Portal', label: 'Portal Fun', url: '/fun', status: 'internal' },
+  { area: 'Community', label: 'Comunidad', url: '/community', status: 'internal' },
+  { area: 'Green Zone', label: 'Acceso oculto por Wisp', url: '/green-node', status: 'hidden' },
   { area: 'Streaming', label: 'Twitch', url: STREAM_LINKS.twitch, status: 'confirmed' },
   { area: 'Streaming', label: 'Kick', url: STREAM_LINKS.kick, status: 'confirmed' },
   { area: 'Redes', label: 'Instagram', url: 'https://www.instagram.com/xethkioz', status: 'confirmed' },
@@ -136,8 +132,6 @@ export const VERIFIED_LINKS = [
   { area: 'Redes', label: 'TikTok principal', url: 'https://www.tiktok.com/@xethkioz0', status: 'confirmed' },
   { area: 'Redes', label: 'TikTok Asia', url: 'https://www.tiktok.com/@xethkioz.asia', status: 'confirmed' },
 ] as const
-
-
 
 export const NETWORK_SECTORS_DETAILED = [
   {
@@ -165,7 +159,7 @@ export const NETWORK_SECTORS_DETAILED = [
   {
     id: 'green-node',
     icon: '🟢',
-    title: 'Green Node',
+    title: 'Green Zone',
     tone: 'verde neón / negro / glitch',
     route: '/green-node',
     status: 'hidden-egg',
@@ -178,20 +172,18 @@ export const NETWORK_SECTORS_DETAILED = [
     icon: '🤖',
     title: 'AI Lab',
     tone: 'cian / violeta',
-    route: '/ai-lab',
+    route: '/science',
     status: 'planned',
     priority: 'Media',
     focus: ['Modelos', 'Prompts', 'Automatización', 'Redacción asistida', 'SEO IA'],
     next: 'Nacer como módulo interno del CMS antes de tener página propia.'
   },
-
-
   {
     id: 'milestones',
     icon: '🗺️',
     title: 'Milestones',
     tone: 'naranja / control / roadmap',
-    route: '/milestones',
+    route: '/news',
     status: 'rc1.9',
     priority: 'Alta',
     focus: ['Core Platform', 'Content Platform', 'Community', 'Creator Ecosystem', 'Production Ready'],
@@ -202,7 +194,7 @@ export const NETWORK_SECTORS_DETAILED = [
     icon: '🧭',
     title: 'Content OS',
     tone: 'naranja / documentación / QA',
-    route: '/content-system',
+    route: '/news',
     status: 'rc1.6',
     priority: 'Alta',
     focus: ['Noticias propias', 'Radar externo', 'Science reports', 'Videos', 'SEO', 'QA'],
@@ -213,7 +205,7 @@ export const NETWORK_SECTORS_DETAILED = [
     icon: '🎥',
     title: 'Creator Studio',
     tone: 'violeta / magenta',
-    route: '/creator-studio',
+    route: '/fun',
     status: 'branch',
     priority: 'Media',
     focus: ['OBS', 'Kick', 'Twitch', 'YouTube', 'Overlays', 'Audio y video'],
@@ -233,7 +225,7 @@ export const NETWORK_SECTORS_DETAILED = [
 ] as const
 
 export const GREEN_NODE_EASTER_EGGS = [
-  { trigger: 'click-wisp', label: 'Wisp flotante', effect: 'Abre portal verde y redirige a /green-node', state: 'activo' },
+  { trigger: 'click-wisp', label: 'Wisp flotante', effect: 'Abre Green Zone y redirige a /green-node', state: 'activo' },
   { trigger: 'greennode', label: 'Secuencia secreta', effect: 'Escribiendo greennode en cualquier página se activa el portal', state: 'activo' },
   { trigger: 'sudo truth', label: 'Terminal EGG', effect: 'Activa respuesta documental: truth requires evidence', state: 'activo mock' },
   { trigger: 'matrix', label: 'Glitch EGG', effect: 'Prepara modo visual hacker / scanlines', state: 'activo mock' },
@@ -242,7 +234,7 @@ export const GREEN_NODE_EASTER_EGGS = [
 ]
 
 export const LIVE_INTERNAL_LINKS = [
-  '/', '/news', '/gaming', '/tech', '/science', '/ai-lab', '/creator-studio', '/streaming', '/media', '/community', '/network', '/news-engine', '/roles', '/cms', '/live-checklist', '/chat-overlay', '/green-node'
+  '/', '/news', '/gaming', '/science', '/fun', '/community', '/profile', '/login', '/account', '/cms', '/green-node'
 ] as const
 
 export const SCIENCE_LAB_POLICY = {
@@ -252,7 +244,6 @@ export const SCIENCE_LAB_POLICY = {
   allowedEvidence: ['paper revisado', 'preprint', 'comunicado institucional', 'informe técnico', 'divulgación', 'opinión editorial marcada'],
   rule: 'No publicar afirmaciones científicas como absolutas si la evidencia es preliminar o especulativa.',
 }
-
 
 export const DATABASE_BASELINE_MODULES = [
   { table: 'profiles', purpose: 'Identidad única del usuario en toda la red.', status: 'core' },
@@ -271,7 +262,7 @@ export const RC15_REVIEW_CHECKLIST = [
   'No publicar LIVE sin ejecutar npm run build en Windows local.',
   'No subir .env, node_modules, dist ni tsconfig.tsbuildinfo.',
   'Aplicar migraciones SQL en Supabase solo después de backup.',
-  'Verificar rutas internas principales: /, /network, /science, /green-node, /cms, /roles, /news-engine.',
-  'Mantener Green Node como experiencia educativa/documental, no como guía ofensiva.',
+  'Verificar rutas internas principales: /, /gaming, /science, /fun, /community, /profile, /login, /account, /cms y acceso Wisp a /green-node.',
+  'Mantener Green Zone como experiencia educativa/documental, no como guía ofensiva.',
   'Mantener Science Lab con tono formal, fuentes y evidencia.',
 ] as const
