@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type CSSProperties, type MouseEvent } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useHud } from '../../lib/HudContext'
 import { useWisp } from '../../providers/WispProvider'
@@ -33,7 +33,7 @@ export default function FusionGlobalWisp() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname, account.status])
 
-  const openPortal = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const openPortal = (event: MouseEvent<HTMLButtonElement>) => {
     const rect = event.currentTarget.getBoundingClientRect()
     setPortalPoint({ x: `${rect.left + rect.width / 2}px`, y: `${rect.top + rect.height / 2}px` })
     setPortalOpen(true)
@@ -45,7 +45,7 @@ export default function FusionGlobalWisp() {
     <>
       <div
         className={`xk-wisp-portal ${portalOpen ? 'is-open' : ''}`}
-        style={{ '--portal-x': portalPoint.x, '--portal-y': portalPoint.y } as React.CSSProperties}
+        style={{ '--portal-x': portalPoint.x, '--portal-y': portalPoint.y } as CSSProperties}
         aria-hidden="true"
       />
       <button
