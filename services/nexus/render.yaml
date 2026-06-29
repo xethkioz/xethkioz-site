@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: xethkioz-nexus-chat
+    runtime: node
+    rootDir: services/nexus
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: CLIENT_ORIGINS
+        value: https://xethkioz.com.ar,https://www.xethkioz.com.ar
+      - key: TRANSLATION_PROVIDER
+        value: mymemory
+      - key: HUGGINGFACE_MODEL
+        value: mistralai/Mistral-7B-Instruct-v0.3
+      - key: HUGGINGFACE_API_KEY
+        sync: false
