@@ -1,10 +1,8 @@
-import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
-import { useLang } from '../../lib/LangContext'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useHud } from '../../lib/HudContext'
-import { useWisp, type WispState } from '../../providers/WispProvider'
+import { useWisp } from '../../providers/WispProvider'
 import type { WispMood } from '../../lib/WispEngineContext'
-import FusionWispEntity from './FusionWispEntity'
 
 const routeMood: Record<string, WispMood> = {
   '/': 'watching',
@@ -14,21 +12,13 @@ const routeMood: Record<string, WispMood> = {
   '/green-node': 'GREEN_MODE',
 }
 
-const moodToState: Record<WispMood, WispState> = {
-  idle: 'IDLE',
-  watching: 'WATCHING',
-  connected: 'CONNECTED',
-  guiding: 'WATCHING',
-  alert: 'WATCHING',
-  sleeping: 'IDLE',
-  GREEN_MODE: 'GREEN_MODE',
-}
-
 export default function FusionGlobalWisp() {
-  const { t } = useLang()
   const { account } = useHud()
-  const { mood, energy, setMood, setFocusRoute, registerEvent, triggerGreenPortal } = useWisp()
+  const { setMood, setFocusRoute, registerEvent, triggerGreenPortal } = useWisp()
+  const [portalOpen, setPortalOpen] = useState(false)
+  const [portalPoint, setPortalPoint] = useState({ x: '50%', y: '50%' })
   const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const nextMood = location.pathname === '/green-node'
@@ -43,22 +33,31 @@ export default function FusionGlobalWisp() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname, account.status])
 
-  const message = location.pathname === '/green-node'
-    ? t.v7.wisp.connected
-    : mood === 'guiding'
-      ? t.v7.wisp.guiding
-      : t.v7.wisp.idle
+  const openPortal = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect()
+    setPortalPoint({ x: `${rect.left + rect.width / 2}px`, y: `${rect.top + rect.height / 2}px` })
+    setPortalOpen(true)
+    triggerGreenPortal()
+    window.setTimeout(() => navigate('/green-node'), 720)
+  }
 
   return (
-    <div className="fusion-global-wisp" aria-label={t.v7.core.wispLabel} data-wisp-state={moodToState[mood]}>
-      <FusionWispEntity
-        label={t.v7.core.wispLabel}
-        state={mood}
-        energy={energy}
-        message={message}
-        onFocusSignal={() => registerEvent('portal-hover', 'wisp-focus', location.pathname)}
-        onActivate={triggerGreenPortal}
+    <>
+      <div
+        className={`xk-wisp-portal ${portalOpen ? 'is-open' : ''}`}
+        style={{ '--portal-x': portalPoint.x, '--portal-y': portalPoint.y } as React.CSSProperties}
+        aria-hidden="true"
       />
-    </div>
+      <button
+        type="button"
+        className="xk-wisp"
+        onClick={openPortal}
+        onMouseEnter={() => registerEvent('portal-hover', 'wisp-organic-hover', location.pathname)}
+        aria-label="Abrir portal Wisp hacia Green Node"
+        title="Wisp"
+      >
+        <span className="sr-only">Wisp</span>
+      </button>
+    </>
   )
 }
