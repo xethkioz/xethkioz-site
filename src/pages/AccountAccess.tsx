@@ -1,5 +1,5 @@
-import { useMemo, useState, type FormEvent } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import SEO from '../components/SEO'
 import { isSupabaseConfigured, supabase } from '../services/supabaseClient'
 import { useHud } from '../lib/HudContext'
@@ -11,8 +11,16 @@ function getErrorMessage(error: unknown) {
   return 'No se pudo completar la operación. Revisá los datos e intentá otra vez.'
 }
 
+function getSafeRedirect(value: string | null) {
+  if (!value || !value.startsWith('/') || value.startsWith('//')) return '/profile'
+  return value
+}
+
 export default function AccountAccess() {
   const { account, toggleAccount } = useHud()
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const redirectTo = useMemo(() => getSafeRedirect(searchParams.get('redirect')), [searchParams])
   const [mode, setMode] = useState<AuthMode>('signup')
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
@@ -28,8 +36,13 @@ export default function AccountAccess() {
   const passwordsMatch = !isSignup || password === confirmPassword
   const canSubmit = isSupabaseConfigured && emailReady && passwordReady && passwordsMatch && !loading
 
+  useEffect(() => {
+    if (account.email && !email) setEmail(account.email)
+  }, [account.email, email])
+
   const statusLabel = useMemo(() => {
     if (!isSupabaseConfigured) return 'Supabase no está configurado en producción.'
+    if (account.status === 'loading') return 'Buscando sesión activa...'
     if (account.status === 'connected') return `Sesión activa: ${account.name}`
     return 'Listo para crear cuenta o iniciar sesión.'
   }, [account.name, account.status])
@@ -80,6 +93,7 @@ export default function AccountAccess() {
 
         if (data.session) {
           setMessage('Cuenta creada. Sesión iniciada correctamente.')
+          window.setTimeout(() => navigate(redirectTo, { replace: true }), 650)
         } else {
           setMessage('Cuenta creada. Si Supabase exige confirmación, revisá tu correo para activar el acceso.')
         }
@@ -91,6 +105,7 @@ export default function AccountAccess() {
 
         if (signInError) throw signInError
         setMessage('Sesión iniciada correctamente.')
+        window.setTimeout(() => navigate(redirectTo, { replace: true }), 650)
       }
     } catch (caughtError) {
       setError(getErrorMessage(caughtError))
@@ -106,7 +121,7 @@ export default function AccountAccess() {
         <section className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1fr_420px]">
           <div className="panel-cyber flex flex-col justify-center border-l-2 border-l-orange p-8">
             <p className="font-mono text-xs font-black uppercase tracking-[0.28em] text-orange">XETHKIOZ_ACCOUNT_CORE</p>
-            <h1 className="mt-4 text-4xl font-black uppercase tracking-wider text-white md:text-5xl">Crear cuenta XETHKIOZ</h1>
+            <h1 className="mt-4 text-4xl font-black uppercase tracking-wider text-white md:text-5xl">Cuenta XETHKIOZ</h1>
             <p className="mt-4 max-w-2xl text-sm leading-relaxed text-gray-400">
               Acceso base para perfiles, XP, comunidad, CMS futuro y funciones con IA. La autenticación usa Supabase Auth y no expone claves privadas en el navegador.
             </p>
@@ -136,6 +151,21 @@ export default function AccountAccess() {
             </div>
 
             <p className="rounded-xl border border-white/10 bg-black/30 p-3 text-xs text-gray-400">{statusLabel}</p>
+
+            {account.status === 'connected' && (
+              <div className="rounded-2xl border border-green-400/30 bg-green-400/10 p-4 text-sm text-green-100">
+                <p className="font-bold">Ya estás dentro del ecosistema.</p>
+                <p className="mt-1 text-green-100/75">{account.email ?? account.name}</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <Link to="/profile" className="rounded-full bg-green-300 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-black">
+                    Ir al perfil
+                  </Link>
+                  <button type="button" onClick={toggleAccount} className="rounded-full border border-green-300/40 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-green-100">
+                    Cerrar sesión
+                  </button>
+                </div>
+              </div>
+            )}
 
             {isSignup && (
               <label className="flex flex-col gap-2 text-xs font-bold uppercase tracking-[0.16em] text-gray-400">
@@ -201,16 +231,6 @@ export default function AccountAccess() {
             >
               {loading ? 'Procesando...' : isSignup ? 'Crear cuenta' : 'Ingresar'}
             </button>
-
-            {account.status === 'connected' && (
-              <button
-                type="button"
-                onClick={toggleAccount}
-                className="rounded-full border border-white/10 px-5 py-3 text-sm font-black uppercase tracking-[0.2em] text-gray-300 transition hover:border-red-400 hover:text-red-200"
-              >
-                Cerrar sesión
-              </button>
-            )}
 
             <Link to="/" className="text-center font-mono text-xs uppercase tracking-[0.18em] text-gray-500 transition hover:text-orange">
               Volver al núcleo
