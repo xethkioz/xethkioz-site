@@ -26,6 +26,7 @@ const FunPortal = lazy(() => import('./pages/FunPortal'))
 const GreenNode = lazy(() => import('./pages/GreenNode'))
 const ProfileHub = lazy(() => import('./pages/ProfileHub'))
 const News = lazy(() => import('./pages/News'))
+const NewsArticle = lazy(() => import('./pages/NewsArticle'))
 const Community = lazy(() => import('./pages/Community'))
 const CmsStudio = lazy(() => import('./pages/CmsStudio'))
 const CmsLayout = lazy(() => import('./cms/layout/CmsLayout'))
@@ -79,6 +80,7 @@ function AppShell() {
               <Route path="/fun" element={<FunPortal />} />
               <Route path="/green-node" element={<GreenNodeGate />} />
               <Route path="/news" element={<News />} />
+              <Route path="/news/:slug" element={<NewsArticle />} />
               <Route path="/community" element={<Community />} />
               <Route path="/profile" element={<ProfileHub />} />
               <Route path="/login" element={<AccountAccess />} />

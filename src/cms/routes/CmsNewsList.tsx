@@ -78,11 +78,16 @@ export default function CmsNewsList() {
         <div>
           <p className="text-xs font-black uppercase tracking-[0.3em] text-orange-300">Noticias</p>
           <h2 className="mt-3 text-3xl font-black">Listado editorial real</h2>
-          <p className="mt-2 text-sm text-purple-100">Lee borradores y publicaciones desde Supabase.</p>
+          <p className="mt-2 text-sm text-purple-100">Lee borradores y publicaciones desde Supabase. Las publicadas aparecen en /news.</p>
         </div>
-        <Link to="/cms/generate" className="rounded-full bg-orange px-5 py-3 text-center text-xs font-black uppercase tracking-[0.18em] text-black transition hover:shadow-glow-action">
-          Nueva noticia
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link to="/news" className="rounded-full border border-purple-400/40 px-5 py-3 text-center text-xs font-black uppercase tracking-[0.18em] text-purple-100 transition hover:bg-purple-500/10">
+            Ver feed público
+          </Link>
+          <Link to="/cms/generate" className="rounded-full bg-orange px-5 py-3 text-center text-xs font-black uppercase tracking-[0.18em] text-black transition hover:shadow-glow-action">
+            Nueva noticia
+          </Link>
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-4">
@@ -117,6 +122,11 @@ export default function CmsNewsList() {
                 <Link to={`/cms/news/${article.id}`} className="rounded-full border border-purple-400/40 px-4 py-2 text-center font-black uppercase tracking-[0.16em] text-purple-100 transition hover:bg-purple-500/10">
                   Editar
                 </Link>
+                {article.status === 'published' ? (
+                  <Link to={`/news/${article.slug}`} className="rounded-full border border-orange-400/40 px-4 py-2 text-center font-black uppercase tracking-[0.16em] text-orange-100 transition hover:bg-orange-500/10">
+                    Ver pública
+                  </Link>
+                ) : null}
               </div>
             </div>
           </article>
