@@ -247,9 +247,7 @@ export default function Home() {
 
             <FloatingWisp
               title={t.wispTitle}
-              text={t.wispText}
-              button={t.wispBtn}
-              note={t.wispNote}
+              ariaLabel={t.navWisp}
               onClick={openWisp}
             />
 
@@ -297,31 +295,45 @@ function PortalCard({ portal }: { portal: Portal }) {
 
 function FloatingWisp({
   title,
-  text,
-  button,
-  note,
+  ariaLabel,
   onClick,
 }: {
   title: string
-  text: string
-  button: string
-  note: string
+  ariaLabel: string
   onClick: () => void
 }) {
   return (
-    <div className="pointer-events-none absolute right-0 top-[18%] z-20 hidden xl:flex 2xl:right-6">
-      <aside className="pointer-events-auto relative flex w-[260px] flex-col items-center rounded-[1.75rem] border border-green-500/35 bg-black/28 px-6 py-5 text-center shadow-[0_0_42px_rgba(34,197,94,0.22)] backdrop-blur-md">
-        <div className="absolute inset-0 rounded-[1.75rem] bg-[radial-gradient(circle_at_center,rgba(34,197,94,0.15),transparent_62%)]" />
-        <p className="relative z-10 font-mono text-[10px] font-black uppercase tracking-[0.34em] text-green-300">{title}</p>
-        <img src="/assets/green-wisp.png" alt="Green Wisp" className="animate-float relative z-10 my-5 h-28 w-28 object-contain drop-shadow-[0_0_45px_rgba(34,197,94,0.95)]" draggable={false} />
-        <p className="relative z-10 text-sm leading-relaxed text-white/75">{text}</p>
+    <div className="pointer-events-none absolute right-[2%] top-[17%] z-20 hidden xl:block 2xl:right-[4%]">
+      <aside className="relative h-[290px] w-[290px]">
+        <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(34,197,94,0.22),transparent_58%)] blur-sm motion-safe:animate-pulse" />
+        <div className="absolute inset-6 rounded-full border border-green-300/15 shadow-[0_0_55px_rgba(34,197,94,0.22)] motion-safe:animate-[spin_18s_linear_infinite]" />
+        <div className="absolute inset-12 rounded-full border border-green-400/20 shadow-[inset_0_0_32px_rgba(34,197,94,0.18)] motion-safe:animate-[spin_28s_linear_infinite_reverse]" />
+        <div className="absolute left-1/2 top-1/2 h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-400/10 blur-3xl motion-safe:animate-pulse" />
+
+        <span className="absolute left-12 top-16 h-1.5 w-1.5 rounded-full bg-green-200 shadow-[0_0_18px_rgba(134,239,172,1)] motion-safe:animate-ping" />
+        <span className="absolute right-14 top-24 h-2 w-2 rounded-full bg-emerald-300 shadow-[0_0_20px_rgba(52,211,153,1)] motion-safe:animate-pulse" />
+        <span className="absolute bottom-20 left-20 h-1 w-1 rounded-full bg-lime-200 shadow-[0_0_16px_rgba(217,249,157,1)] motion-safe:animate-ping" />
+        <span className="absolute bottom-24 right-16 h-1.5 w-1.5 rounded-full bg-green-300 shadow-[0_0_18px_rgba(134,239,172,1)] motion-safe:animate-pulse" />
+
+        <p className="absolute inset-x-0 top-6 z-10 text-center font-mono text-[10px] font-black uppercase tracking-[0.34em] text-green-300/90 drop-shadow-[0_0_16px_rgba(34,197,94,0.85)]">
+          {title}
+        </p>
+
+        <img
+          src="/assets/green-wisp.png"
+          alt="Green Wisp"
+          className="animate-float absolute left-1/2 top-[46%] z-10 h-36 w-36 -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow-[0_0_32px_rgba(34,197,94,1)]"
+          draggable={false}
+        />
+
         <button
           type="button"
           onClick={onClick}
-          className="relative z-10 mt-5 rounded-xl border border-green-400/60 bg-green-500/15 px-5 py-3 font-mono text-xs font-black uppercase tracking-[0.16em] text-green-100 shadow-[0_0_28px_rgba(34,197,94,0.45)] transition hover:scale-105 hover:bg-green-500/25 hover:shadow-[0_0_50px_rgba(34,197,94,0.85)]"
+          aria-label={ariaLabel}
+          className="pointer-events-auto absolute bottom-9 left-1/2 z-20 grid h-10 w-10 -translate-x-1/2 place-items-center rounded-full border border-green-300/25 bg-green-400/10 text-green-200/70 shadow-[0_0_22px_rgba(34,197,94,0.35)] backdrop-blur-sm transition hover:scale-110 hover:border-green-200/70 hover:bg-green-400/20 hover:text-green-50 hover:shadow-[0_0_42px_rgba(34,197,94,0.85)] focus:outline-none focus:ring-2 focus:ring-green-300/70"
         >
-          {button}
-          <span className="mt-1 block text-[9px] text-yellow-300">{note}</span>
+          <span aria-hidden="true" className="text-lg leading-none">✦</span>
+          <span className="sr-only">{ariaLabel}</span>
         </button>
       </aside>
     </div>
