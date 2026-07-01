@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import SEO from '../components/SEO'
 import FusionShell from '../components/fusion/FusionShell'
 import { useLang } from '../lib/LangContext'
+import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import {
   fetchPublishedNewsBySlug,
   formatPublicNewsDate,
@@ -16,19 +17,21 @@ const copy = {
     back: 'Volver a noticias',
     loading: 'Cargando noticia...',
     notFound: 'No se encontró la noticia publicada.',
-    source: 'Fuente',
-    sources: 'Fuentes',
+    source: 'Fuente original',
+    sources: 'Fuentes originales',
     published: 'Publicado',
     ai: 'Contenido asistido por IA',
+    external: 'Radar externo curado',
   },
   en: {
     back: 'Back to news',
     loading: 'Loading article...',
     notFound: 'Published article not found.',
-    source: 'Source',
-    sources: 'Sources',
+    source: 'Original source',
+    sources: 'Original sources',
     published: 'Published',
     ai: 'AI-assisted content',
+    external: 'Curated external radar',
   },
 } as const
 
@@ -59,6 +62,7 @@ export default function NewsArticle() {
   const ui = copy[lang]
   const labels = publicNewsCategoryLabels[lang]
   const [article, setArticle] = useState<PublicNewsArticle | null>(null)
+  const [isExternal, setIsExternal] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -75,9 +79,11 @@ export default function NewsArticle() {
       setLoading(true)
       setError(null)
       try {
-        const nextArticle = await fetchPublishedNewsBySlug(slug)
+        const externalArticle = getCuratedExternalNews().find((item) => item.slug === slug) ?? null
+        const nextArticle = externalArticle ?? await fetchPublishedNewsBySlug(slug)
         if (active) {
           setArticle(nextArticle)
+          setIsExternal(Boolean(externalArticle))
           setError(nextArticle ? null : ui.notFound)
         }
       } catch (caughtError) {
@@ -108,6 +114,7 @@ export default function NewsArticle() {
             <div className="flex flex-wrap items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-400">
               <span className="rounded-full border border-orange-400/40 px-3 py-1 text-orange-200">{labels[article.category]}</span>
               <span>{ui.published}: {formatPublicNewsDate(article.published_at ?? article.created_at, lang)}</span>
+              {isExternal ? <span className="rounded-full border border-orange-400/35 px-3 py-1 text-orange-100">{ui.external}</span> : null}
               {article.ai_generated ? <span className="rounded-full border border-violet-400/35 px-3 py-1 text-violet-100">{ui.ai}</span> : null}
             </div>
 
