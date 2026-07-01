@@ -4,6 +4,7 @@ const navItems = [
   { to: '/cms', label: 'Dashboard', description: 'Resumen editorial', end: true },
   { to: '/cms/generate', label: 'Nueva noticia', description: 'Crear borrador' },
   { to: '/cms/news', label: 'Noticias', description: 'Borradores y publicadas' },
+  { to: '/cms/review', label: 'Revisión', description: 'Aprobar o pedir ajustes' },
   { to: '/cms/news/new', label: 'Editor', description: 'Editor base' },
   { to: '/cms/ads', label: 'Publicidades', description: 'Sponsors y banners' },
 ]
