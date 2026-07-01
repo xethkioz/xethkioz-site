@@ -4,6 +4,7 @@ import SEO from '../components/SEO'
 import FusionHero from '../components/fusion/FusionHero'
 import FusionShell from '../components/fusion/FusionShell'
 import { useLang } from '../lib/LangContext'
+import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import {
   fetchPublishedNews,
   formatPublicNewsDate,
@@ -19,37 +20,46 @@ type Filter = PublicNewsCategory | 'all'
 const copy = {
   es: {
     seoTitle: 'Noticias · XETHKIOZ',
-    seoDescription: 'Noticias publicadas por el CMS de XETHKIOZ.',
-    eyebrow: 'NEWS_ENGINE // PUBLIC_FEED',
-    heading: 'Noticias publicadas',
-    description: 'Feed público conectado a Supabase. Todo lo aprobado en el CMS aparece acá automáticamente.',
-    statusReady: 'CMS público conectado',
-    statusSetup: 'Supabase no configurado: el feed público queda en modo espera.',
-    loading: 'Cargando noticias publicadas...',
-    emptyTitle: 'Todavía no hay noticias publicadas',
-    emptyText: 'Publicá un artículo desde /cms/news o ejecutá el seed demo en Supabase para probar el flujo completo.',
-    read: 'Leer noticia',
+    seoDescription: 'Radar público de noticias, memes y tecnología curado por XETHKIOZ.',
+    eyebrow: 'NEWS_ENGINE // HYBRID_FEED',
+    heading: 'Radar XETHKIOZ',
+    description: 'Feed híbrido: noticias propias del CMS + radar externo curado con fuente visible. Lectura ampliada dentro de XETHKIOZ y link a la fuente original.',
+    statusReady: 'CMS + radar externo activo',
+    statusSetup: 'Radar externo activo. Supabase queda como capa editorial opcional.',
+    loading: 'Cargando radar público...',
+    emptyTitle: 'Todavía no hay contenido publicado',
+    emptyText: 'El radar externo debería mostrar contenido aunque Supabase no responda. Revisar build si esto aparece.',
+    read: 'Leer ampliada',
     ai: 'IA',
     sources: 'fuentes',
     published: 'Publicado',
   },
   en: {
     seoTitle: 'News · XETHKIOZ',
-    seoDescription: 'News published by the XETHKIOZ CMS.',
-    eyebrow: 'NEWS_ENGINE // PUBLIC_FEED',
-    heading: 'Published news',
-    description: 'Public feed connected to Supabase. Every CMS-approved article appears here automatically.',
-    statusReady: 'Public CMS connected',
-    statusSetup: 'Supabase not configured: public feed is waiting.',
-    loading: 'Loading published news...',
-    emptyTitle: 'No published news yet',
-    emptyText: 'Publish an article from /cms/news or run the demo seed in Supabase to test the full flow.',
-    read: 'Read article',
+    seoDescription: 'XETHKIOZ curated public radar for news, memes and technology.',
+    eyebrow: 'NEWS_ENGINE // HYBRID_FEED',
+    heading: 'XETHKIOZ Radar',
+    description: 'Hybrid feed: CMS articles plus curated external radar with visible sources. Expanded reading inside XETHKIOZ and link to original source.',
+    statusReady: 'CMS + external radar active',
+    statusSetup: 'External radar active. Supabase remains optional editorial layer.',
+    loading: 'Loading public radar...',
+    emptyTitle: 'No published content yet',
+    emptyText: 'The external radar should show content even if Supabase is unavailable. Check build if this appears.',
+    read: 'Read expanded',
     ai: 'AI',
     sources: 'sources',
     published: 'Published',
   },
 } as const
+
+function mergeUniqueArticles(primary: PublicNewsArticle[], fallback: PublicNewsArticle[]) {
+  const seen = new Set<string>()
+  return [...fallback, ...primary].filter((article) => {
+    if (seen.has(article.slug)) return false
+    seen.add(article.slug)
+    return true
+  })
+}
 
 export default function News() {
   const { lang, t } = useLang()
@@ -66,13 +76,14 @@ export default function News() {
     async function loadNews() {
       setLoading(true)
       setError(null)
+      const curatedArticles = getCuratedExternalNews(filter)
       try {
         const nextArticles = await fetchPublishedNews(filter)
-        if (active) setArticles(nextArticles)
+        if (active) setArticles(mergeUniqueArticles(nextArticles, curatedArticles))
       } catch (caughtError) {
         if (active) {
-          setError(caughtError instanceof Error ? caughtError.message : 'No se pudo cargar el feed público.')
-          setArticles([])
+          setError(caughtError instanceof Error ? caughtError.message : 'No se pudo cargar Supabase. Mostrando radar externo.')
+          setArticles(curatedArticles)
         }
       } finally {
         if (active) setLoading(false)
@@ -121,9 +132,9 @@ export default function News() {
         </section>
 
         {loading ? <p className="mt-8 rounded-3xl border border-violet-500/20 bg-white/[0.04] p-5 text-violet-100">{ui.loading}</p> : null}
-        {error ? <p className="mt-8 rounded-3xl border border-red-500/30 bg-red-500/10 p-5 text-red-200">{error}</p> : null}
+        {error ? <p className="mt-8 rounded-3xl border border-yellow-500/30 bg-yellow-500/10 p-5 text-yellow-100">{error}</p> : null}
 
-        {!loading && !error && articles.length === 0 ? (
+        {!loading && articles.length === 0 ? (
           <article className="mt-8 rounded-[2rem] border border-orange-400/25 bg-orange-500/10 p-8 text-orange-50">
             <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-orange-200">EMPTY_FEED</p>
             <h2 className="mt-3 text-3xl font-black uppercase">{ui.emptyTitle}</h2>
