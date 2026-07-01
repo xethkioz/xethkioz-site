@@ -1,7 +1,22 @@
 -- XETHKIOZ roles + chat identity hardening
 -- Safe to run manually in Supabase SQL Editor.
+-- Compatible with older profiles schemas that may not yet have subscription_tier.
 
--- 1) Expand role enum for future panel permissions.
+create extension if not exists pgcrypto;
+
+-- 1) Ensure required enum types exist.
+do $$
+begin
+  if not exists (select 1 from pg_type where typname = 'xethkioz_subscription_tier') then
+    create type public.xethkioz_subscription_tier as enum ('BASIC', 'CREATOR', 'ARCHITECT');
+  end if;
+
+  if not exists (select 1 from pg_type where typname = 'xethkioz_user_role') then
+    create type public.xethkioz_user_role as enum ('GUEST', 'USER', 'CONTRIBUTOR', 'EDITOR', 'MODERATOR', 'ADMIN');
+  end if;
+end $$;
+
+-- 2) Expand role enum when it already existed with older values.
 do $$
 begin
   if exists (select 1 from pg_type where typname = 'xethkioz_user_role') then
@@ -28,7 +43,33 @@ begin
   end if;
 end $$;
 
--- 2) Helper roles.
+-- 3) Ensure profiles has the expected columns.
+-- This fixes older installs where subscription_tier was missing.
+do $$
+begin
+  if exists (
+    select 1 from information_schema.tables
+    where table_schema = 'public' and table_name = 'profiles'
+  ) then
+    if not exists (
+      select 1 from information_schema.columns
+      where table_schema = 'public' and table_name = 'profiles' and column_name = 'subscription_tier'
+    ) then
+      alter table public.profiles
+        add column subscription_tier public.xethkioz_subscription_tier not null default 'BASIC';
+    end if;
+
+    if not exists (
+      select 1 from information_schema.columns
+      where table_schema = 'public' and table_name = 'profiles' and column_name = 'role'
+    ) then
+      alter table public.profiles
+        add column role public.xethkioz_user_role not null default 'GUEST';
+    end if;
+  end if;
+end $$;
+
+-- 4) Helper roles.
 create or replace function public.xethkioz_has_role(allowed_roles text[])
 returns boolean
 language sql
@@ -73,13 +114,14 @@ set search_path = public
 as $$
   select public.xethkioz_has_role(array['CONTRIBUTOR','EDITOR','MODERATOR','ADMIN'])
     or exists (
-      select 1 from public.profiles
+      select 1
+      from public.profiles
       where id = auth.uid()
-        and subscription_tier in ('CREATOR','ARCHITECT')
+        and subscription_tier::text in ('CREATOR','ARCHITECT')
     );
 $$;
 
--- 3) Reserved XETHKIOZ display names for chat.
+-- 5) Reserved XETHKIOZ display names for chat.
 create or replace function public.xethkioz_normalize_identity(value text)
 returns text
 language sql
@@ -102,7 +144,7 @@ as $$
       or public.xethkioz_normalize_identity(value) = 'xeth';
 $$;
 
--- 4) Rebuild chat insert policy with reserved-name protection.
+-- 6) Rebuild chat insert policy with reserved-name protection.
 alter table if exists public.chat_messages enable row level security;
 
 drop policy if exists "chat_messages_public_insert" on public.chat_messages;
