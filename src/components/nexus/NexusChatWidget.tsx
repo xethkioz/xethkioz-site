@@ -1,5 +1,7 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { useLang } from '../../lib/LangContext'
+import { authNexusService } from '../../services/auth/authNexusService'
+import type { XethkiozAuthorizedSession } from '../../services/auth/authSchema'
 import { isSupabaseConfigured, supabase } from '../../services/supabaseClient'
 
 type NexusMessage = {
@@ -53,6 +55,7 @@ const copy = {
     localReady: 'Modo local activo. Para chat compartido hay que activar Supabase Realtime.',
     setup: 'Supabase no está configurado en producción.',
     sendError: 'No se pudo enviar al chat global. Se guardó localmente.',
+    reservedName: 'Nombre reservado. Solo el administrador puede usar XETHKIOZ o variantes similares.',
     status: {
       setup: 'SETUP',
       syncing: 'SINCRONIZANDO',
@@ -71,6 +74,7 @@ const copy = {
     localReady: 'Local mode active. Enable Supabase Realtime for shared chat.',
     setup: 'Supabase is not configured in production.',
     sendError: 'Could not send to global chat. Saved locally.',
+    reservedName: 'Reserved name. Only the administrator can use XETHKIOZ or similar variants.',
     status: {
       setup: 'SETUP',
       syncing: 'SYNCING',
@@ -81,8 +85,32 @@ const copy = {
   },
 } as const
 
+function normalizeIdentity(value: string) {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/0/g, 'o')
+    .replace(/1/g, 'i')
+    .replace(/3/g, 'e')
+    .replace(/[^a-zA-Z0-9]/g, '')
+    .toLowerCase()
+}
+
+function isReservedXethkiozName(value: string) {
+  const normalized = normalizeIdentity(value)
+  return normalized.includes('xethkioz') || normalized.includes('xethkios') || normalized.includes('xethkio') || normalized === 'xeth' || normalized.startsWith('xethk')
+}
+
 function cleanNickname(value: string) {
   return value.replace(/[^\p{L}\p{N}_\-. ]/gu, '').trim().slice(0, 32) || 'Visitante'
+}
+
+function resolveSafeNickname(value: string, session: XethkiozAuthorizedSession | null) {
+  const clean = cleanNickname(value)
+  const isAdmin = session?.role === 'ADMIN'
+  if (isReservedXethkiozName(clean) && !isAdmin) return { nickname: 'Visitante', reserved: true }
+  if (isReservedXethkiozName(clean) && isAdmin) return { nickname: 'XETHKIOZ', reserved: false }
+  return { nickname: clean, reserved: false }
 }
 
 function cleanText(value: string) {
@@ -141,14 +169,28 @@ export default function NexusChatWidget() {
   const [nickname, setNickname] = useState(() => (typeof window === 'undefined' ? 'Visitante' : window.localStorage.getItem('xethkioz.nexus.nickname') || 'Visitante'))
   const [draft, setDraft] = useState('')
   const [status, setStatus] = useState<ChatStatus>(isSupabaseConfigured ? 'syncing' : 'local')
+  const [session, setSession] = useState<XethkiozAuthorizedSession | null>(() => authNexusService.getSnapshot())
+  const [reservedWarning, setReservedWarning] = useState<string | null>(null)
   const [messages, setMessages] = useState<NexusMessage[]>(() => {
     const local = readLocalMessages()
     return local.length ? local : [systemMessage(isSupabaseConfigured ? copy.es.empty : copy.es.localReady, 'general')]
   })
 
   useEffect(() => {
-    if (typeof window !== 'undefined') window.localStorage.setItem('xethkioz.nexus.nickname', cleanNickname(nickname))
-  }, [nickname])
+    const stopAuthListener = authNexusService.startAuthStateListener()
+    const unsubscribe = authNexusService.onChange(setSession)
+    void authNexusService.hydrateCurrentSession().catch(() => undefined)
+    return () => {
+      unsubscribe()
+      stopAuthListener()
+    }
+  }, [])
+
+  const nicknameResolution = useMemo(() => resolveSafeNickname(nickname, session), [nickname, session])
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') window.localStorage.setItem('xethkioz.nexus.nickname', nicknameResolution.nickname)
+  }, [nicknameResolution.nickname])
 
   useEffect(() => {
     persistLocalMessages(messages)
@@ -192,14 +234,10 @@ export default function NexusChatWidget() {
 
     const channel = supabase
       .channel(`xethkioz-nexus-chat-${room}`)
-      .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'chat_messages', filter: `room_id=eq.${room}` },
-        (payload) => {
-          const next = rowToMessage(payload.new as ChatMessageRow)
-          setMessages((current) => addUniqueMessage(current, next))
-        },
-      )
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages', filter: `room_id=eq.${room}` }, (payload) => {
+        const next = rowToMessage(payload.new as ChatMessageRow)
+        setMessages((current) => addUniqueMessage(current, next))
+      })
       .subscribe((nextStatus) => {
         if (!active) return
         if (nextStatus === 'SUBSCRIBED') setStatus('online')
@@ -217,7 +255,15 @@ export default function NexusChatWidget() {
     const text = cleanText(draft)
     if (!text) return
 
-    const safeNickname = cleanNickname(nickname)
+    const safeNickname = nicknameResolution.nickname
+    if (nicknameResolution.reserved) {
+      setReservedWarning(t.reservedName)
+      setNickname('Visitante')
+      setMessages((current) => addUniqueMessage(current, systemMessage(t.reservedName, room)))
+      return
+    }
+
+    setReservedWarning(null)
     setDraft('')
 
     if (!isSupabaseConfigured) {
@@ -228,7 +274,7 @@ export default function NexusChatWidget() {
 
     const { data, error } = await supabase
       .from('chat_messages')
-      .insert({ room_id: room, user_id: null, display_name: safeNickname, role: 'guest', body: text })
+      .insert({ room_id: room, user_id: session?.userId ?? null, display_name: safeNickname, role: session?.role === 'ADMIN' ? 'member' : 'guest', body: text })
       .select('id, room_id, display_name, role, body, created_at')
       .single()
 
@@ -255,16 +301,15 @@ export default function NexusChatWidget() {
                 <p className="text-[10px] uppercase tracking-[0.32em] text-[#FF6B1A]">XETHKIOZ</p>
                 <h2 className="mt-1 text-lg font-black uppercase tracking-[0.18em] text-white">{t.title}</h2>
               </div>
-              <span className={`rounded-full border px-2 py-1 text-[10px] uppercase ${status === 'online' ? 'border-[#32FF8A]/40 text-[#32FF8A]' : status === 'error' ? 'border-red-400/40 text-red-200' : 'border-yellow-300/30 text-yellow-200'}`}>
-                {t.status[status]}
-              </span>
+              <span className={`rounded-full border px-2 py-1 text-[10px] uppercase ${status === 'online' ? 'border-[#32FF8A]/40 text-[#32FF8A]' : status === 'error' ? 'border-red-400/40 text-red-200' : 'border-yellow-300/30 text-yellow-200'}`}>{t.status[status]}</span>
             </div>
             <div className="mt-4 grid grid-cols-[1fr_auto] gap-2">
-              <input value={nickname} onChange={(event) => setNickname(event.target.value)} className="rounded-xl border border-white/10 bg-black/45 px-3 py-2 text-xs text-white outline-none focus:border-[#8B5CF6]" placeholder={t.nickname} />
+              <input value={nickname} onChange={(event) => { setNickname(event.target.value); setReservedWarning(null) }} className="rounded-xl border border-white/10 bg-black/45 px-3 py-2 text-xs text-white outline-none focus:border-[#8B5CF6]" placeholder={t.nickname} />
               <select value={room} onChange={(event) => setRoom(event.target.value)} className="rounded-xl border border-white/10 bg-black/45 px-3 py-2 text-xs text-white outline-none focus:border-[#FF6B1A]">
                 {rooms.map((item) => <option key={item.id} value={item.id}>{item[lang].toUpperCase()}</option>)}
               </select>
             </div>
+            {reservedWarning ? <p className="mt-2 rounded-xl border border-red-400/25 bg-red-500/10 px-3 py-2 text-[10px] leading-relaxed text-red-100">{reservedWarning}</p> : null}
           </header>
           <div className="grid gap-3 p-3">
             <div className="max-h-[340px] space-y-3 overflow-y-auto rounded-2xl border border-white/10 bg-black/35 p-3">
