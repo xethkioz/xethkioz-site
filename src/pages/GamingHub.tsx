@@ -2,101 +2,40 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
 import { useLang } from '../lib/LangContext'
+import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
+import { formatPublicNewsDate } from '../services/news/publicNewsService'
 
-type NewsItem = { title: string; summary: string; tag: string }
-type SectionBlock = { id: string; title: string; text: string; items: NewsItem[] }
+type SectionBlock = { id: string; title: string; text: string }
 
-const content: Record<'es' | 'en', { title: string; description: string; back: string; news: string; community: string; open: string; blocks: SectionBlock[] }> = {
+const content: Record<'es' | 'en', { title: string; description: string; back: string; news: string; community: string; open: string; articleTitle: string; read: string; blocks: SectionBlock[] }> = {
   es: {
     title: 'Juegos',
-    description: 'Radar gamer, guías, builds y Asia Gaming con noticias de prueba categorizadas.',
+    description: 'Radar gamer real con lanzamientos, industria, precios, plataformas y lecturas ampliadas.',
     back: 'Volver',
     news: 'Noticias',
     community: 'Comunidad',
     open: 'Abrir sección',
+    articleTitle: 'Radar gamer // noticias reales',
+    read: 'Leer completa',
     blocks: [
-      {
-        id: 'radar',
-        title: 'Radar gamer',
-        text: 'Noticias rápidas, lanzamientos, MMORPG, esports y juegos para stream.',
-        items: [
-          { title: 'MMORPG de mundo abierto ganan espacio en LATAM', summary: 'Tendencia demo para probar cómo se listan lanzamientos, servidores y betas regionales.', tag: 'MMORPG' },
-          { title: 'El calendario gamer concentra estrenos fuertes', summary: 'Bloque preparado para publicar fechas, plataformas y ventanas de lanzamiento.', tag: 'Lanzamientos' },
-          { title: 'Los juegos cooperativos vuelven al radar', summary: 'Nota de prueba para medir interés en experiencias PvE, survival y raids casuales.', tag: 'Co-op' },
-          { title: 'Battle royale y extracción compiten por streamers', summary: 'Entrada demo para comparar retención, clips y comunidad.', tag: 'Streaming' },
-          { title: 'Mobile competitivo crece por comunidad', summary: 'Artículo de prueba para cubrir Mobile Legends, Wild Rift y torneos rápidos.', tag: 'Mobile' },
-        ],
-      },
-      {
-        id: 'guides',
-        title: 'Guías y builds',
-        text: 'Espacio preparado para guías, tops, comparativas y builds por comunidad.',
-        items: [
-          { title: 'Build inicial para jugadores que vuelven', summary: 'Formato demo para guías simples: equipo recomendado, rol y errores comunes.', tag: 'Build' },
-          { title: 'Top de clases para empezar sin frustrarse', summary: 'Plantilla para rankings por dificultad, utilidad y estilo de juego.', tag: 'Top' },
-          { title: 'Guía rápida de optimización gráfica', summary: 'Contenido de prueba para FPS, latencia, escalado y calidad visual.', tag: 'PC' },
-          { title: 'Cómo armar una party equilibrada', summary: 'Modelo de guía para tanques, soportes, daño y coordinación básica.', tag: 'Co-op' },
-          { title: 'Comparativa: consola, PC y mobile', summary: 'Bloque demo para explicar ventajas, costos y experiencia real.', tag: 'Comparativa' },
-        ],
-      },
-      {
-        id: 'asia',
-        title: 'Asia Gaming',
-        text: 'Señales de Corea, Japón, China y SEA para LATAM antes de que exploten.',
-        items: [
-          { title: 'Corea marca tendencia en RPG online', summary: 'Demo para cubrir betas, publishers y señales tempranas del mercado asiático.', tag: 'Corea' },
-          { title: 'China empuja nuevos mundos de fantasía', summary: 'Entrada de prueba para videojuegos con estética wuxia, acción y mundo abierto.', tag: 'China' },
-          { title: 'Japón mantiene fuerte el RPG de autor', summary: 'Contenido demo para lanzamientos, remasters y sagas clásicas.', tag: 'Japón' },
-          { title: 'SEA acelera el mobile esports', summary: 'Nota de prueba para torneos, comunidades y títulos de alto alcance.', tag: 'SEA' },
-          { title: 'LATAM mira cada vez más al gaming asiático', summary: 'Artículo demo para conectar tendencias orientales con audiencia hispanohablante.', tag: 'LATAM' },
-        ],
-      },
+      { id: 'radar', title: 'Radar gamer', text: 'Noticias rápidas, lanzamientos, MMORPG, esports y juegos para stream.' },
+      { id: 'guides', title: 'Guías y builds', text: 'Espacio preparado para guías, tops, comparativas y builds por comunidad.' },
+      { id: 'asia', title: 'Asia Gaming', text: 'Señales de Corea, Japón, China y SEA para LATAM antes de que exploten.' },
     ],
   },
   en: {
     title: 'Games',
-    description: 'Gaming radar, guides, builds and Asia Gaming with categorized test news.',
+    description: 'Real gaming radar with releases, industry moves, prices, platforms and expanded reading.',
     back: 'Back',
     news: 'News',
     community: 'Community',
     open: 'Open section',
+    articleTitle: 'Gaming radar // real news',
+    read: 'Read full article',
     blocks: [
-      {
-        id: 'radar',
-        title: 'Gaming radar',
-        text: 'Quick news, releases, MMORPGs, esports and stream-ready games.',
-        items: [
-          { title: 'Open-world MMORPGs gain traction in LATAM', summary: 'Demo trend to test releases, servers and regional beta coverage.', tag: 'MMORPG' },
-          { title: 'The gaming calendar stacks major releases', summary: 'Block prepared for dates, platforms and launch windows.', tag: 'Releases' },
-          { title: 'Co-op games return to the radar', summary: 'Test note to measure interest in PvE, survival and casual raids.', tag: 'Co-op' },
-          { title: 'Battle royale and extraction compete for streamers', summary: 'Demo entry to compare retention, clips and community interest.', tag: 'Streaming' },
-          { title: 'Competitive mobile grows through community', summary: 'Test article for Mobile Legends, Wild Rift and fast tournaments.', tag: 'Mobile' },
-        ],
-      },
-      {
-        id: 'guides',
-        title: 'Guides and builds',
-        text: 'Prepared space for guides, tops, comparisons and community builds.',
-        items: [
-          { title: 'Starter build for returning players', summary: 'Demo guide format: recommended gear, role and common mistakes.', tag: 'Build' },
-          { title: 'Best classes to start without frustration', summary: 'Ranking template by difficulty, utility and playstyle.', tag: 'Top' },
-          { title: 'Quick graphics optimization guide', summary: 'Test content for FPS, latency, scaling and visual quality.', tag: 'PC' },
-          { title: 'How to build a balanced party', summary: 'Guide model for tanks, supports, damage and basic coordination.', tag: 'Co-op' },
-          { title: 'Comparison: console, PC and mobile', summary: 'Demo block to explain advantages, costs and real experience.', tag: 'Comparison' },
-        ],
-      },
-      {
-        id: 'asia',
-        title: 'Asia Gaming',
-        text: 'Signals from Korea, Japan, China and SEA for LATAM before they explode.',
-        items: [
-          { title: 'Korea sets the pace in online RPGs', summary: 'Demo for betas, publishers and early Asian market signals.', tag: 'Korea' },
-          { title: 'China pushes new fantasy worlds', summary: 'Test entry for wuxia-inspired action and open-world games.', tag: 'China' },
-          { title: 'Japan keeps author-driven RPGs strong', summary: 'Demo content for releases, remasters and classic franchises.', tag: 'Japan' },
-          { title: 'SEA accelerates mobile esports', summary: 'Test note for tournaments, communities and high-reach titles.', tag: 'SEA' },
-          { title: 'LATAM looks more at Asian gaming', summary: 'Demo article connecting Eastern trends with Spanish-speaking audiences.', tag: 'LATAM' },
-        ],
-      },
+      { id: 'radar', title: 'Gaming radar', text: 'Quick news, releases, MMORPGs, esports and stream-ready games.' },
+      { id: 'guides', title: 'Guides and builds', text: 'Prepared space for guides, tops, comparisons and community builds.' },
+      { id: 'asia', title: 'Asia Gaming', text: 'Signals from Korea, Japan, China and SEA for LATAM before they explode.' },
     ],
   },
 }
@@ -106,6 +45,7 @@ export default function GamingHub() {
   const t = content[lang]
   const [activeId, setActiveId] = useState(t.blocks[0].id)
   const active = t.blocks.find((block) => block.id === activeId) ?? t.blocks[0]
+  const articles = getCuratedExternalNews('gaming')
 
   return (
     <>
@@ -132,13 +72,14 @@ export default function GamingHub() {
           </div>
 
           <section className="mt-8 rounded-[2rem] border border-[#32FF8A]/30 bg-black/65 p-5 md:p-7">
-            <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#32FF8A]/70">{active.title} // 5 demo news</p>
-            <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-              {active.items.map((item) => (
-                <article key={item.title} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                  <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-red-300">{item.tag}</span>
-                  <h3 className="mt-3 text-base font-black uppercase text-white">{item.title}</h3>
-                  <p className="mt-3 text-xs leading-relaxed text-gray-300">{item.summary}</p>
+            <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#32FF8A]/70">{t.articleTitle}</p>
+            <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {articles.map((article) => (
+                <article key={article.slug} className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 transition hover:-translate-y-1 hover:border-orange-300/40">
+                  <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-red-300">{formatPublicNewsDate(article.published_at ?? article.created_at, lang)}</span>
+                  <h3 className="mt-3 text-lg font-black uppercase text-white">{article.title}</h3>
+                  <p className="mt-3 text-xs leading-relaxed text-gray-300">{article.summary}</p>
+                  <Link to={`/news/${article.slug}`} className="mt-5 inline-flex rounded-full border border-orange-400/40 px-4 py-2 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-orange-100 hover:bg-orange-500/10">{t.read}</Link>
                 </article>
               ))}
             </div>
