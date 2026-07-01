@@ -1,5 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { authNexusService } from '../../services/auth/authNexusService'
+import type { XethkiozAuthorizedSession } from '../../services/auth/authSchema'
 import { supabase } from '../../services/supabaseClient'
 
 type NewsStatus = 'draft' | 'review' | 'published' | 'archived'
@@ -18,6 +20,7 @@ type EditableNewsArticle = {
 
 export default function CmsNewsEditor() {
   const { id } = useParams()
+  const [session, setSession] = useState<XethkiozAuthorizedSession | null>(() => authNexusService.getSnapshot())
   const [article, setArticle] = useState<EditableNewsArticle | null>(null)
   const [title, setTitle] = useState('')
   const [summary, setSummary] = useState('')
@@ -29,6 +32,18 @@ export default function CmsNewsEditor() {
   const [message, setMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const isNew = !id
+  const isAdmin = session?.role === 'ADMIN'
+  const canEdit = Boolean(session?.permissions.canAccessCms || session?.permissions.canInsertArticles || isAdmin)
+
+  useEffect(() => {
+    const stopAuthListener = authNexusService.startAuthStateListener()
+    const unsubscribe = authNexusService.onChange(setSession)
+    void authNexusService.hydrateCurrentSession().catch(() => undefined)
+    return () => {
+      unsubscribe()
+      stopAuthListener()
+    }
+  }, [])
 
   useEffect(() => {
     let active = true
@@ -72,6 +87,10 @@ export default function CmsNewsEditor() {
 
   async function updateArticle(nextStatus = status, nextReviewStatus = reviewStatus, publishNow = false) {
     if (!id || !article) return
+    if (!canEdit) {
+      setError('No tenés permisos para editar esta noticia.')
+      return
+    }
 
     const cleanTitle = title.trim()
     if (!cleanTitle) {
@@ -79,21 +98,27 @@ export default function CmsNewsEditor() {
       return
     }
 
+    const requestedStatus = publishNow || nextStatus === 'published'
+    const safeStatus: NewsStatus = requestedStatus && !isAdmin ? 'review' : nextStatus
+    const safeReviewStatus: ReviewStatus = requestedStatus && !isAdmin ? 'pending' : nextReviewStatus
+
     setSaving(true)
     setError(null)
     setMessage(null)
 
-    const publishedAt = publishNow || (nextStatus === 'published' && !article.published_at)
+    const publishedAt = isAdmin && (publishNow || (safeStatus === 'published' && !article.published_at))
       ? new Date().toISOString()
-      : article.published_at
+      : safeStatus === 'published'
+        ? article.published_at
+        : null
 
     const { error: updateError } = await supabase
       .from('news_articles')
       .update({
         title: cleanTitle,
         summary: summary.trim() || null,
-        status: nextStatus,
-        review_status: nextReviewStatus,
+        status: safeStatus,
+        review_status: safeReviewStatus,
         editor_notes: editorNotes.trim() || null,
         published_at: publishedAt,
       })
@@ -102,15 +127,15 @@ export default function CmsNewsEditor() {
     if (updateError) {
       setError(updateError.message)
     } else {
-      setMessage(nextStatus === 'published' ? 'Noticia publicada correctamente.' : 'Noticia actualizada correctamente.')
-      setStatus(nextStatus)
-      setReviewStatus(nextReviewStatus)
+      setMessage(safeStatus === 'published' ? 'Noticia publicada correctamente.' : 'Noticia enviada/guardada para revisión.')
+      setStatus(safeStatus)
+      setReviewStatus(safeReviewStatus)
       setArticle((current) => current ? {
         ...current,
         title: cleanTitle,
         summary: summary.trim() || null,
-        status: nextStatus,
-        review_status: nextReviewStatus,
+        status: safeStatus,
+        review_status: safeReviewStatus,
         editor_notes: editorNotes.trim() || null,
         published_at: publishedAt,
       } : current)
@@ -121,10 +146,18 @@ export default function CmsNewsEditor() {
 
   async function handleSave(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    await updateArticle()
+    await updateArticle(status === 'published' && !isAdmin ? 'review' : status, reviewStatus)
+  }
+
+  async function handleSubmitForReview() {
+    await updateArticle('review', 'pending', false)
   }
 
   async function handlePublishNow() {
+    if (!isAdmin) {
+      setError('Solo un administrador puede aprobar y publicar directamente.')
+      return
+    }
     await updateArticle('published', 'approved', true)
   }
 
@@ -133,12 +166,8 @@ export default function CmsNewsEditor() {
       <section className="rounded-3xl border border-purple-500/20 bg-black/35 p-6 text-white shadow-2xl shadow-purple-950/20">
         <p className="text-xs font-black uppercase tracking-[0.3em] text-orange-300">Editor</p>
         <h2 className="mt-3 text-3xl font-black">Nuevo artículo</h2>
-        <p className="mt-3 max-w-3xl text-sm leading-6 text-purple-100">
-          Para mantener trazabilidad, la creación inicial se hace desde el generador editorial.
-        </p>
-        <Link to="/cms/generate" className="mt-6 inline-flex rounded-full bg-orange px-5 py-3 text-xs font-black uppercase tracking-[0.18em] text-black">
-          Ir al generador
-        </Link>
+        <p className="mt-3 max-w-3xl text-sm leading-6 text-purple-100">Para mantener trazabilidad, la creación inicial se hace desde el generador editorial.</p>
+        <Link to="/cms/generate" className="mt-6 inline-flex rounded-full bg-orange px-5 py-3 text-xs font-black uppercase tracking-[0.18em] text-black">Ir al generador</Link>
       </section>
     )
   }
@@ -147,9 +176,8 @@ export default function CmsNewsEditor() {
     <section className="rounded-3xl border border-purple-500/20 bg-black/35 p-6 text-white shadow-2xl shadow-purple-950/20">
       <p className="text-xs font-black uppercase tracking-[0.3em] text-orange-300">Editor</p>
       <h2 className="mt-3 text-3xl font-black">Editar artículo</h2>
-      <p className="mt-3 max-w-3xl text-sm leading-6 text-purple-100">
-        Revisión rápida de borradores generados antes de publicarlos.
-      </p>
+      <p className="mt-3 max-w-3xl text-sm leading-6 text-purple-100">Moderadores y editores pueden guardar/enviar a revisión. Solo ADMIN puede aprobar, publicar o eliminar.</p>
+      <p className="mt-3 rounded-2xl border border-white/10 bg-white/[0.04] p-4 text-xs text-purple-100">Rol actual: <strong>{session?.role ?? 'GUEST'}</strong></p>
 
       {loading ? <p className="mt-6 rounded-2xl border border-purple-500/20 bg-white/[0.04] p-5 text-purple-100">Cargando noticia...</p> : null}
       {error ? <p className="mt-6 rounded-2xl border border-red-500/30 bg-red-500/10 p-5 text-red-200">{error}</p> : null}
@@ -159,61 +187,26 @@ export default function CmsNewsEditor() {
           <div className="rounded-2xl border border-purple-500/20 bg-white/[0.03] p-5 text-sm text-purple-100">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-purple-200">Slug</p>
             <p className="mt-2 font-mono text-xs">{article.slug}</p>
-            {article.status === 'published' ? (
-              <Link to={`/news/${article.slug}`} className="mt-4 inline-flex rounded-full border border-orange-400/40 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-orange-100 transition hover:bg-orange-500/10">
-                Ver pública
-              </Link>
-            ) : null}
+            {article.status === 'published' ? <Link to={`/news/${article.slug}`} className="mt-4 inline-flex rounded-full border border-orange-400/40 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-orange-100 transition hover:bg-orange-500/10">Ver pública</Link> : null}
           </div>
 
-          <label className="space-y-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200">
-            Título
-            <input value={title} onChange={(event) => setTitle(event.target.value)} required className="w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300" />
-          </label>
-
-          <label className="space-y-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200">
-            Resumen
-            <textarea value={summary} onChange={(event) => setSummary(event.target.value)} rows={4} className="w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300" />
-          </label>
+          <label className="space-y-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200">Título<input value={title} onChange={(event) => setTitle(event.target.value)} required className="w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300" /></label>
+          <label className="space-y-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200">Resumen<textarea value={summary} onChange={(event) => setSummary(event.target.value)} rows={4} className="w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300" /></label>
 
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="space-y-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200">
-              Estado
-              <select value={status} onChange={(event) => setStatus(event.target.value as NewsStatus)} className="w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300">
-                <option value="draft">Borrador</option>
-                <option value="review">En revisión</option>
-                <option value="published">Publicada</option>
-                <option value="archived">Archivada</option>
-              </select>
-            </label>
-
-            <label className="space-y-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200">
-              Revisión
-              <select value={reviewStatus} onChange={(event) => setReviewStatus(event.target.value as ReviewStatus)} className="w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300">
-                <option value="pending">Pendiente</option>
-                <option value="approved">Aprobada</option>
-                <option value="rejected">Rechazada</option>
-              </select>
-            </label>
+            <label className="space-y-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200">Estado<select value={status} onChange={(event) => setStatus(event.target.value as NewsStatus)} className="w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300"><option value="draft">Borrador</option><option value="review">En revisión</option>{isAdmin ? <option value="published">Publicada</option> : null}<option value="archived">Archivada</option></select></label>
+            <label className="space-y-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200">Revisión<select value={reviewStatus} onChange={(event) => setReviewStatus(event.target.value as ReviewStatus)} disabled={!isAdmin} className="w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300 disabled:opacity-60"><option value="pending">Pendiente</option>{isAdmin ? <option value="approved">Aprobada</option> : null}<option value="rejected">Rechazada</option></select></label>
           </div>
 
-          <label className="space-y-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200">
-            Notas editoriales
-            <textarea value={editorNotes} onChange={(event) => setEditorNotes(event.target.value)} rows={4} className="w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300" />
-          </label>
+          <label className="space-y-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200">Notas editoriales<textarea value={editorNotes} onChange={(event) => setEditorNotes(event.target.value)} rows={4} className="w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300" /></label>
 
           {message ? <p className="rounded-2xl border border-green-400/30 bg-green-400/10 p-4 text-green-100">{message}</p> : null}
 
           <div className="flex flex-wrap gap-3">
-            <button disabled={saving} type="submit" className="rounded-full bg-orange px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-black transition hover:shadow-glow-action disabled:opacity-40">
-              {saving ? 'Guardando...' : 'Guardar cambios'}
-            </button>
-            <button disabled={saving} type="button" onClick={handlePublishNow} className="rounded-full border border-green-400/50 bg-green-400/10 px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-green-100 transition hover:bg-green-400/20 disabled:opacity-40">
-              Publicar ahora
-            </button>
-            <Link to="/cms/news" className="rounded-full border border-purple-400/40 px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-purple-100 transition hover:bg-purple-500/10">
-              Volver al listado
-            </Link>
+            <button disabled={saving || !canEdit} type="submit" className="rounded-full bg-orange px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-black transition hover:shadow-glow-action disabled:opacity-40">{saving ? 'Guardando...' : 'Guardar cambios'}</button>
+            <button disabled={saving || !canEdit} type="button" onClick={handleSubmitForReview} className="rounded-full border border-blue-400/50 bg-blue-400/10 px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-blue-100 transition hover:bg-blue-400/20 disabled:opacity-40">Enviar a revisión</button>
+            {isAdmin ? <button disabled={saving} type="button" onClick={handlePublishNow} className="rounded-full border border-green-400/50 bg-green-400/10 px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-green-100 transition hover:bg-green-400/20 disabled:opacity-40">Publicar ahora</button> : null}
+            <Link to="/cms/news" className="rounded-full border border-purple-400/40 px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-purple-100 transition hover:bg-purple-500/10">Volver al listado</Link>
           </div>
         </form>
       ) : null}
