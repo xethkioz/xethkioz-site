@@ -5,6 +5,7 @@ const navItems = [
   { to: '/cms/generate', label: 'Nueva noticia', description: 'Crear borrador' },
   { to: '/cms/news', label: 'Noticias', description: 'Borradores y publicadas' },
   { to: '/cms/news/new', label: 'Editor', description: 'Editor base' },
+  { to: '/cms/ads', label: 'Publicidades', description: 'Sponsors y banners' },
 ]
 
 export default function CmsSidebar() {
