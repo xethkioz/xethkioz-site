@@ -3,7 +3,6 @@ import { Link, useParams } from 'react-router-dom'
 import SEO from '../components/SEO'
 import FusionShell from '../components/fusion/FusionShell'
 import { useLang } from '../lib/LangContext'
-import { isSupabaseConfigured, supabase } from '../services/supabaseClient'
 import {
   fetchPublishedNewsBySlug,
   formatPublicNewsDate,
@@ -11,12 +10,6 @@ import {
   type PublicNewsArticle,
   type PublicNewsContentBlock,
 } from '../services/news/publicNewsService'
-
-type Engagement = {
-  views: number
-  hype: number
-  useful: number
-}
 
 const copy = {
   es: {
@@ -27,10 +20,6 @@ const copy = {
     sources: 'Fuentes',
     published: 'Publicado',
     ai: 'Contenido asistido por IA',
-    views: 'vistas',
-    hype: 'Hype',
-    useful: 'Útil',
-    engagementPending: 'Interacciones pendientes de activar en Supabase.',
   },
   en: {
     back: 'Back to news',
@@ -40,10 +29,6 @@ const copy = {
     sources: 'Sources',
     published: 'Published',
     ai: 'AI-assisted content',
-    views: 'views',
-    hype: 'Hype',
-    useful: 'Useful',
-    engagementPending: 'Engagement pending Supabase activation.',
   },
 } as const
 
@@ -68,37 +53,12 @@ function renderContentBlock(block: PublicNewsContentBlock, index: number) {
   return <p key={`${block.type}-${index}`} className="mt-5 text-base leading-8 text-slate-200">{block.text}</p>
 }
 
-function readReacted(articleId: string, metric: 'hype' | 'useful') {
-  if (typeof window === 'undefined') return false
-  return window.localStorage.getItem(`xethkioz.news.reaction.${articleId}.${metric}`) === '1'
-}
-
-function markReacted(articleId: string, metric: 'hype' | 'useful') {
-  if (typeof window === 'undefined') return
-  window.localStorage.setItem(`xethkioz.news.reaction.${articleId}.${metric}`, '1')
-}
-
-async function incrementEngagement(articleId: string, metric: 'views' | 'hype' | 'useful') {
-  if (!isSupabaseConfigured) return null
-  const { data, error } = await supabase.rpc('increment_news_article_engagement', {
-    target_article_id: articleId,
-    target_metric: metric,
-  })
-  if (error) throw error
-  const row = Array.isArray(data) ? data[0] : data
-  if (!row) return null
-  return { views: Number(row.views ?? 0), hype: Number(row.hype ?? 0), useful: Number(row.useful ?? 0) } satisfies Engagement
-}
-
 export default function NewsArticle() {
   const { slug } = useParams()
   const { lang } = useLang()
   const ui = copy[lang]
   const labels = publicNewsCategoryLabels[lang]
   const [article, setArticle] = useState<PublicNewsArticle | null>(null)
-  const [engagement, setEngagement] = useState<Engagement | null>(null)
-  const [engagementReady, setEngagementReady] = useState(true)
-  const [reacted, setReacted] = useState({ hype: false, useful: false })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -119,7 +79,6 @@ export default function NewsArticle() {
         if (active) {
           setArticle(nextArticle)
           setError(nextArticle ? null : ui.notFound)
-          if (nextArticle) setReacted({ hype: readReacted(nextArticle.id, 'hype'), useful: readReacted(nextArticle.id, 'useful') })
         }
       } catch (caughtError) {
         if (active) setError(caughtError instanceof Error ? caughtError.message : ui.notFound)
@@ -134,43 +93,6 @@ export default function NewsArticle() {
       active = false
     }
   }, [slug, ui.notFound])
-
-  useEffect(() => {
-    if (!article) return
-    let active = true
-
-    async function registerView() {
-      try {
-        const sessionKey = `xethkioz.news.view.${article.id}`
-        const shouldCountView = typeof window === 'undefined' || window.sessionStorage.getItem(sessionKey) !== '1'
-        const nextEngagement = shouldCountView
-          ? await incrementEngagement(article.id, 'views')
-          : null
-        if (typeof window !== 'undefined' && shouldCountView) window.sessionStorage.setItem(sessionKey, '1')
-        if (active && nextEngagement) setEngagement(nextEngagement)
-      } catch {
-        if (active) setEngagementReady(false)
-      }
-    }
-
-    void registerView()
-
-    return () => {
-      active = false
-    }
-  }, [article])
-
-  async function handleReaction(metric: 'hype' | 'useful') {
-    if (!article || reacted[metric]) return
-    try {
-      const nextEngagement = await incrementEngagement(article.id, metric)
-      markReacted(article.id, metric)
-      setReacted((current) => ({ ...current, [metric]: true }))
-      if (nextEngagement) setEngagement(nextEngagement)
-    } catch {
-      setEngagementReady(false)
-    }
-  }
 
   return (
     <FusionShell tone="science" backLabel={ui.back} label="XETHKIOZ NEWS">
@@ -187,21 +109,10 @@ export default function NewsArticle() {
               <span className="rounded-full border border-orange-400/40 px-3 py-1 text-orange-200">{labels[article.category]}</span>
               <span>{ui.published}: {formatPublicNewsDate(article.published_at ?? article.created_at, lang)}</span>
               {article.ai_generated ? <span className="rounded-full border border-violet-400/35 px-3 py-1 text-violet-100">{ui.ai}</span> : null}
-              {engagement ? <span>{engagement.views} {ui.views}</span> : null}
             </div>
 
             <h1 className="mt-6 text-4xl font-black uppercase leading-[0.95] tracking-[-0.04em] md:text-6xl">{article.title}</h1>
             {article.summary ? <p className="mt-5 border-l-2 border-orange-300 pl-5 text-lg leading-8 text-slate-200">{article.summary}</p> : null}
-
-            <div className="mt-6 flex flex-wrap gap-3">
-              <button type="button" disabled={reacted.hype} onClick={() => void handleReaction('hype')} className="rounded-full border border-orange-400/40 bg-orange-500/10 px-4 py-2 font-mono text-xs font-black uppercase tracking-[0.16em] text-orange-100 transition hover:bg-orange-500/20 disabled:opacity-55">
-                🔥 {ui.hype} {engagement ? engagement.hype : ''}
-              </button>
-              <button type="button" disabled={reacted.useful} onClick={() => void handleReaction('useful')} className="rounded-full border border-emerald-400/40 bg-emerald-500/10 px-4 py-2 font-mono text-xs font-black uppercase tracking-[0.16em] text-emerald-100 transition hover:bg-emerald-500/20 disabled:opacity-55">
-                ✅ {ui.useful} {engagement ? engagement.useful : ''}
-              </button>
-              {!engagementReady ? <span className="rounded-full border border-yellow-400/30 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.16em] text-yellow-100">{ui.engagementPending}</span> : null}
-            </div>
 
             <section className="mt-8 border-t border-white/10 pt-4">
               {article.content.length ? article.content.map(renderContentBlock) : <p className="text-slate-300">{article.summary}</p>}
