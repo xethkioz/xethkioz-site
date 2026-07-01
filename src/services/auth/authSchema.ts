@@ -1,12 +1,10 @@
 /**
- * XETHKIOZ Alpha 3.6 Auth Nexus contracts.
- *
- * Framework-free identity model shared by Supabase, EventBus and UI.
- * Keep this file deterministic: no React imports, no DOM access, no shader state.
+ * XETHKIOZ Auth Nexus contracts.
+ * Shared identity and permission model for Supabase, EventBus, CMS and UI.
  */
 
 export type XethkiozSubscriptionTier = 'BASIC' | 'CREATOR' | 'ARCHITECT'
-export type XethkiozUserRole = 'GUEST' | 'CONTRIBUTOR' | 'ADMIN'
+export type XethkiozUserRole = 'GUEST' | 'USER' | 'CONTRIBUTOR' | 'EDITOR' | 'MODERATOR' | 'ADMIN'
 
 export interface ProfileRow {
   id: string
@@ -32,7 +30,17 @@ export interface ProfileUpdate {
 
 export interface AuthPermissionSet {
   readonly canReadPublicArticles: boolean
+  readonly canAccessProfilePanel: boolean
+  readonly canAccessCms: boolean
   readonly canInsertArticles: boolean
+  readonly canEditOwnDrafts: boolean
+  readonly canEditAnyArticle: boolean
+  readonly canSubmitForReview: boolean
+  readonly canApproveArticles: boolean
+  readonly canPublishArticles: boolean
+  readonly canDeleteArticles: boolean
+  readonly canManageAds: boolean
+  readonly canModerateChat: boolean
   readonly canModifyCategories: boolean
   readonly canDispatchCriticalShaderEvents: boolean
 }
@@ -68,7 +76,7 @@ export const DEFAULT_GUEST_PROFILE = Object.freeze({
 } satisfies Pick<ProfileRow, 'subscription_tier' | 'role'>)
 
 export const SUBSCRIPTION_TIERS = Object.freeze(['BASIC', 'CREATOR', 'ARCHITECT'] as const)
-export const USER_ROLES = Object.freeze(['GUEST', 'CONTRIBUTOR', 'ADMIN'] as const)
+export const USER_ROLES = Object.freeze(['GUEST', 'USER', 'CONTRIBUTOR', 'EDITOR', 'MODERATOR', 'ADMIN'] as const)
 
 export function isSubscriptionTier(value: string): value is XethkiozSubscriptionTier {
   return SUBSCRIPTION_TIERS.includes(value as XethkiozSubscriptionTier)
@@ -78,16 +86,27 @@ export function isUserRole(value: string): value is XethkiozUserRole {
   return USER_ROLES.includes(value as XethkiozUserRole)
 }
 
-export function resolvePermissions(
-  subscriptionTier: XethkiozSubscriptionTier,
-  role: XethkiozUserRole,
-): AuthPermissionSet {
+export function resolvePermissions(subscriptionTier: XethkiozSubscriptionTier, role: XethkiozUserRole): AuthPermissionSet {
+  const isUser = role !== 'GUEST'
+  const isContributor = role === 'CONTRIBUTOR' || role === 'EDITOR' || role === 'MODERATOR' || role === 'ADMIN'
+  const isEditor = role === 'EDITOR' || role === 'MODERATOR' || role === 'ADMIN'
+  const isModerator = role === 'MODERATOR' || role === 'ADMIN'
   const isAdmin = role === 'ADMIN'
-  const isCreator = subscriptionTier === 'CREATOR' || subscriptionTier === 'ARCHITECT'
+  const isCreatorTier = subscriptionTier === 'CREATOR' || subscriptionTier === 'ARCHITECT'
 
   return Object.freeze({
     canReadPublicArticles: true,
-    canInsertArticles: isCreator || isAdmin,
+    canAccessProfilePanel: isUser || isContributor || isEditor || isModerator || isAdmin,
+    canAccessCms: isContributor || isCreatorTier || isAdmin,
+    canInsertArticles: isContributor || isCreatorTier || isAdmin,
+    canEditOwnDrafts: isContributor || isCreatorTier || isAdmin,
+    canEditAnyArticle: isEditor || isAdmin,
+    canSubmitForReview: isContributor || isCreatorTier || isAdmin,
+    canApproveArticles: isAdmin,
+    canPublishArticles: isAdmin,
+    canDeleteArticles: isAdmin,
+    canManageAds: isAdmin,
+    canModerateChat: isModerator || isAdmin,
     canModifyCategories: isAdmin,
     canDispatchCriticalShaderEvents: isAdmin || subscriptionTier === 'ARCHITECT',
   } satisfies AuthPermissionSet)
@@ -119,7 +138,6 @@ export function createAuthorizedSession(input: {
   } satisfies XethkiozAuthorizedSession)
 }
 
-
 export function isAuthorizedSessionPayload(value: unknown): value is XethkiozAuthorizedSession {
   if (!value || typeof value !== 'object') return false
   const candidate = value as Partial<XethkiozAuthorizedSession>
@@ -138,17 +156,9 @@ export function isAuthorizedSessionPayload(value: unknown): value is XethkiozAut
 export function mapAuthErrorForUser(error: unknown): string {
   const message = error instanceof Error ? error.message : String(error)
   const normalized = message.toLowerCase()
-  if (normalized.includes('invalid login') || normalized.includes('invalid credentials')) {
-    return 'Credenciales inválidas. Revisá el email y la contraseña.'
-  }
-  if (normalized.includes('email not confirmed')) {
-    return 'La cuenta todavía no fue confirmada. Revisá tu email.'
-  }
-  if (normalized.includes('network') || normalized.includes('fetch') || normalized.includes('timeout')) {
-    return 'No se pudo conectar con el Nexus. Probá de nuevo en unos segundos.'
-  }
-  if (normalized.includes('profile')) {
-    return 'La sesión inició, pero no se pudo cargar el perfil. Reintentá en unos segundos.'
-  }
+  if (normalized.includes('invalid login') || normalized.includes('invalid credentials')) return 'Credenciales inválidas. Revisá el email y la contraseña.'
+  if (normalized.includes('email not confirmed')) return 'La cuenta todavía no fue confirmada. Revisá tu email.'
+  if (normalized.includes('network') || normalized.includes('fetch') || normalized.includes('timeout')) return 'No se pudo conectar con el Nexus. Probá de nuevo en unos segundos.'
+  if (normalized.includes('profile')) return 'La sesión inició, pero no se pudo cargar el perfil. Reintentá en unos segundos.'
   return 'No se pudo completar la operación de autenticación.'
 }
