@@ -34,6 +34,7 @@ const CmsDashboard = lazy(() => import('./cms/routes/CmsDashboard'))
 const CmsGenerate = lazy(() => import('./cms/routes/CmsGenerate'))
 const CmsNewsEditor = lazy(() => import('./cms/routes/CmsNewsEditor'))
 const CmsNewsList = lazy(() => import('./cms/routes/CmsNewsList'))
+const CmsAdsManager = lazy(() => import('./cms/routes/CmsAdsManager'))
 const AccountAccess = lazy(() => import('./pages/AccountAccess'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
@@ -99,6 +100,7 @@ function AppShell() {
                 <Route path="news" element={<CmsNewsList />} />
                 <Route path="news/new" element={<CmsNewsEditor />} />
                 <Route path="news/:id" element={<CmsNewsEditor />} />
+                <Route path="ads" element={<CmsAdsManager />} />
               </Route>
               <Route path="/cms-legacy" element={<CmsStudio />} />
               <Route path="/admin" element={<Navigate to="/cms" replace />} />
