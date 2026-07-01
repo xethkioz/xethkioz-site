@@ -63,6 +63,191 @@ export const publicNewsCategoryLabels = {
   },
 } as const
 
+const TEST_24H_UNTIL = '2026-07-02T00:00:00.000Z'
+const TEST_24H_PUBLISHED_AT = '2026-06-30T21:00:00.000Z'
+
+const publicTestArticles: PublicNewsArticle[] = [
+  {
+    id: 'test-24h-gaming-001',
+    slug: 'test-24h-gaming-radar-juegos-comunidad',
+    title: 'TEST 24H · Radar gamer: juegos para probar la portada pública',
+    summary: 'Publicación de prueba para validar que la sección Gaming aparece correctamente durante el test público de 24 horas.',
+    content: [
+      { type: 'heading', text: 'Objetivo del test' },
+      { type: 'paragraph', text: 'Esta entrada valida el flujo público de noticias gaming dentro de XETHKIOZ. No es una noticia comercial ni una promoción externa.' },
+      { type: 'list', text: 'Validar portada /news; validar filtro Gaming; validar apertura de artículo; validar lectura mobile' },
+    ],
+    category: 'gaming',
+    status: 'published',
+    published_at: TEST_24H_PUBLISHED_AT,
+    tags: ['test24h', 'gaming', 'xethkioz'],
+    source_urls: [],
+    ai_generated: false,
+    created_at: TEST_24H_PUBLISHED_AT,
+  },
+  {
+    id: 'test-24h-gaming-002',
+    slug: 'test-24h-gaming-builds-guias-stream',
+    title: 'TEST 24H · Guías y builds: plantilla para futuros tops',
+    summary: 'Entrada demo para probar cómo se verán futuras guías, builds, comparativas y tops de comunidad.',
+    content: [
+      { type: 'heading', text: 'Guías listas para evolucionar' },
+      { type: 'paragraph', text: 'Este bloque prueba el formato de guías rápidas dentro del ecosistema, con estructura simple y clara para lectura pública.' },
+      { type: 'list', text: 'Título fuerte; resumen corto; etiquetas; lectura individual' },
+    ],
+    category: 'gaming',
+    status: 'published',
+    published_at: TEST_24H_PUBLISHED_AT,
+    tags: ['test24h', 'builds', 'gaming'],
+    source_urls: [],
+    ai_generated: false,
+    created_at: TEST_24H_PUBLISHED_AT,
+  },
+  {
+    id: 'test-24h-community-001',
+    slug: 'test-24h-memes-cuando-el-build-pasa',
+    title: 'TEST 24H · Meme: cuando el build pasa en Vercel',
+    summary: 'Publicación de humor interno para probar la rama Memes / Comunidad sin mezclarla con noticias serias.',
+    content: [
+      { type: 'heading', text: 'Humor de desarrollo' },
+      { type: 'paragraph', text: 'Cuando el deploy queda en verde después de varios ajustes, el Wisp deja de mirar desde la esquina y te da el visto bueno.' },
+      { type: 'quote', text: 'Build verde, café frío, pero la web vive.' },
+    ],
+    category: 'community',
+    status: 'published',
+    published_at: TEST_24H_PUBLISHED_AT,
+    tags: ['test24h', 'memes', 'comunidad'],
+    source_urls: [],
+    ai_generated: false,
+    created_at: TEST_24H_PUBLISHED_AT,
+  },
+  {
+    id: 'test-24h-community-002',
+    slug: 'test-24h-memes-wisp-no-era-boton',
+    title: 'TEST 24H · Meme: el Wisp no era botón, era destino',
+    summary: 'Entrada de prueba para validar tono humorístico, lore interno y navegación pública.',
+    content: [
+      { type: 'heading', text: 'Lore liviano del ecosistema' },
+      { type: 'paragraph', text: 'El Wisp funciona como guiño visual dentro de la marca. Esta publicación prueba cómo se verá el humor narrativo dentro del feed público.' },
+    ],
+    category: 'community',
+    status: 'published',
+    published_at: TEST_24H_PUBLISHED_AT,
+    tags: ['test24h', 'wisp', 'meme'],
+    source_urls: [],
+    ai_generated: false,
+    created_at: TEST_24H_PUBLISHED_AT,
+  },
+  {
+    id: 'test-24h-science-001',
+    slug: 'test-24h-ciencia-verificacion-y-fuentes',
+    title: 'TEST 24H · Ciencia: verificar antes de compartir',
+    summary: 'Publicación de prueba para validar la categoría Ciencia con enfoque de pensamiento crítico.',
+    content: [
+      { type: 'heading', text: 'Ciencia dentro de XETHKIOZ' },
+      { type: 'paragraph', text: 'Este formato separa hipótesis, fuente, dato y opinión para evitar confundir rumor con información validada.' },
+      { type: 'list', text: 'Fuente; contexto; límite; conclusión' },
+    ],
+    category: 'science',
+    status: 'published',
+    published_at: TEST_24H_PUBLISHED_AT,
+    tags: ['test24h', 'ciencia', 'verificacion'],
+    source_urls: [],
+    ai_generated: false,
+    created_at: TEST_24H_PUBLISHED_AT,
+  },
+  {
+    id: 'test-24h-ai-001',
+    slug: 'test-24h-ia-publicador-editorial',
+    title: 'TEST 24H · IA: publicador editorial con revisión humana',
+    summary: 'Entrada demo para validar la categoría IA y el futuro flujo de generación + revisión + publicación.',
+    content: [
+      { type: 'heading', text: 'IA con control editorial' },
+      { type: 'paragraph', text: 'El objetivo es que la IA ayude a preparar borradores, pero que la publicación final mantenga revisión humana y coherencia de marca.' },
+    ],
+    category: 'ai',
+    status: 'published',
+    published_at: TEST_24H_PUBLISHED_AT,
+    tags: ['test24h', 'ia', 'cms'],
+    source_urls: [],
+    ai_generated: true,
+    created_at: TEST_24H_PUBLISHED_AT,
+  },
+  {
+    id: 'test-24h-tech-001',
+    slug: 'test-24h-tecnologia-vercel-supabase',
+    title: 'TEST 24H · Tecnología: Vercel + Supabase en producción',
+    summary: 'Publicación técnica de prueba para validar el estado del stack web y su lectura pública.',
+    content: [
+      { type: 'heading', text: 'Stack web bajo prueba' },
+      { type: 'paragraph', text: 'Este artículo valida el flujo público del stack React, Vite, Vercel y Supabase sin exponer variables privadas.' },
+      { type: 'list', text: 'React; Vite; Vercel; Supabase; CMS' },
+    ],
+    category: 'tech',
+    status: 'published',
+    published_at: TEST_24H_PUBLISHED_AT,
+    tags: ['test24h', 'tech', 'vercel'],
+    source_urls: [],
+    ai_generated: false,
+    created_at: TEST_24H_PUBLISHED_AT,
+  },
+  {
+    id: 'test-24h-green-001',
+    slug: 'test-24h-green-node-privacidad-basica',
+    title: 'TEST 24H · Green Node: privacidad básica para creadores',
+    summary: 'Entrada de prueba para validar la rama Green Node con contenido educativo y defensivo.',
+    content: [
+      { type: 'heading', text: 'Green Node educativo' },
+      { type: 'paragraph', text: 'Este bloque prueba contenido de privacidad, backups y buenas prácticas defensivas para creadores.' },
+    ],
+    category: 'green',
+    status: 'published',
+    published_at: TEST_24H_PUBLISHED_AT,
+    tags: ['test24h', 'green-node', 'privacidad'],
+    source_urls: [],
+    ai_generated: false,
+    created_at: TEST_24H_PUBLISHED_AT,
+  },
+  {
+    id: 'test-24h-programming-001',
+    slug: 'test-24h-programacion-documentar-para-ias',
+    title: 'TEST 24H · Programación: documentar para que otra IA entienda',
+    summary: 'Entrada demo para validar contenido de programación, documentación y continuidad entre herramientas.',
+    content: [
+      { type: 'heading', text: 'Documentación como fuente de verdad' },
+      { type: 'paragraph', text: 'Cada bloque técnico debe dejar claro qué se hizo, qué falta y qué no se debe tocar para mantener continuidad.' },
+    ],
+    category: 'programming',
+    status: 'published',
+    published_at: TEST_24H_PUBLISHED_AT,
+    tags: ['test24h', 'programacion', 'docs'],
+    source_urls: [],
+    ai_generated: false,
+    created_at: TEST_24H_PUBLISHED_AT,
+  },
+]
+
+function isTest24hActive() {
+  return Date.now() < new Date(TEST_24H_UNTIL).getTime()
+}
+
+function getPublicTestArticles(category?: PublicNewsCategory | 'all') {
+  if (!isTest24hActive()) return []
+  if (category && category !== 'all') return publicTestArticles.filter((article) => article.category === category)
+  return publicTestArticles
+}
+
+function mergeArticles(primary: PublicNewsArticle[], fallback: PublicNewsArticle[], limit: number) {
+  const seen = new Set<string>()
+  return [...fallback, ...primary]
+    .filter((article) => {
+      if (seen.has(article.slug)) return false
+      seen.add(article.slug)
+      return true
+    })
+    .slice(0, limit)
+}
+
 export function isPublicNewsCategory(value: string): value is PublicNewsCategory {
   return publicNewsCategories.includes(value as PublicNewsCategory)
 }
@@ -122,7 +307,8 @@ export function formatPublicNewsDate(value: string | null | undefined, lang: 'es
 }
 
 export async function fetchPublishedNews(category?: PublicNewsCategory | 'all', limit = 36): Promise<PublicNewsArticle[]> {
-  if (!isSupabaseConfigured) return []
+  const testArticles = getPublicTestArticles(category)
+  if (!isSupabaseConfigured) return testArticles.slice(0, limit)
 
   let query = supabase
     .from('news_articles')
@@ -135,11 +321,18 @@ export async function fetchPublishedNews(category?: PublicNewsCategory | 'all', 
   if (category && category !== 'all') query = query.eq('category', category)
 
   const { data, error } = await query
-  if (error) throw error
-  return ((data ?? []) as RawNewsArticle[]).map(normalizePublicNewsArticle)
+  if (error) {
+    if (testArticles.length) return testArticles.slice(0, limit)
+    throw error
+  }
+
+  const cmsArticles = ((data ?? []) as RawNewsArticle[]).map(normalizePublicNewsArticle)
+  return mergeArticles(cmsArticles, testArticles, limit)
 }
 
 export async function fetchPublishedNewsBySlug(slug: string): Promise<PublicNewsArticle | null> {
+  const testArticle = getPublicTestArticles().find((article) => article.slug === slug)
+  if (testArticle) return testArticle
   if (!isSupabaseConfigured) return null
 
   const { data, error } = await supabase
