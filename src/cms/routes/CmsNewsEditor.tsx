@@ -70,43 +70,62 @@ export default function CmsNewsEditor() {
     }
   }, [id])
 
-  async function handleSave(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+  async function updateArticle(nextStatus = status, nextReviewStatus = reviewStatus, publishNow = false) {
     if (!id || !article) return
+
+    const cleanTitle = title.trim()
+    if (!cleanTitle) {
+      setError('El título no puede quedar vacío.')
+      return
+    }
 
     setSaving(true)
     setError(null)
     setMessage(null)
 
-    const shouldPublishNow = status === 'published' && !article.published_at
+    const publishedAt = publishNow || (nextStatus === 'published' && !article.published_at)
+      ? new Date().toISOString()
+      : article.published_at
+
     const { error: updateError } = await supabase
       .from('news_articles')
       .update({
-        title: title.trim(),
+        title: cleanTitle,
         summary: summary.trim() || null,
-        status,
-        review_status: reviewStatus,
+        status: nextStatus,
+        review_status: nextReviewStatus,
         editor_notes: editorNotes.trim() || null,
-        published_at: shouldPublishNow ? new Date().toISOString() : article.published_at,
+        published_at: publishedAt,
       })
       .eq('id', id)
 
     if (updateError) {
       setError(updateError.message)
     } else {
-      setMessage('Noticia actualizada correctamente.')
+      setMessage(nextStatus === 'published' ? 'Noticia publicada correctamente.' : 'Noticia actualizada correctamente.')
+      setStatus(nextStatus)
+      setReviewStatus(nextReviewStatus)
       setArticle((current) => current ? {
         ...current,
-        title: title.trim(),
+        title: cleanTitle,
         summary: summary.trim() || null,
-        status,
-        review_status: reviewStatus,
+        status: nextStatus,
+        review_status: nextReviewStatus,
         editor_notes: editorNotes.trim() || null,
-        published_at: shouldPublishNow ? new Date().toISOString() : current.published_at,
+        published_at: publishedAt,
       } : current)
     }
 
     setSaving(false)
+  }
+
+  async function handleSave(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    await updateArticle()
+  }
+
+  async function handlePublishNow() {
+    await updateArticle('published', 'approved', true)
   }
 
   if (isNew) {
@@ -140,6 +159,11 @@ export default function CmsNewsEditor() {
           <div className="rounded-2xl border border-purple-500/20 bg-white/[0.03] p-5 text-sm text-purple-100">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-purple-200">Slug</p>
             <p className="mt-2 font-mono text-xs">{article.slug}</p>
+            {article.status === 'published' ? (
+              <Link to={`/news/${article.slug}`} className="mt-4 inline-flex rounded-full border border-orange-400/40 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-orange-100 transition hover:bg-orange-500/10">
+                Ver pública
+              </Link>
+            ) : null}
           </div>
 
           <label className="space-y-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200">
@@ -183,6 +207,9 @@ export default function CmsNewsEditor() {
           <div className="flex flex-wrap gap-3">
             <button disabled={saving} type="submit" className="rounded-full bg-orange px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-black transition hover:shadow-glow-action disabled:opacity-40">
               {saving ? 'Guardando...' : 'Guardar cambios'}
+            </button>
+            <button disabled={saving} type="button" onClick={handlePublishNow} className="rounded-full border border-green-400/50 bg-green-400/10 px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-green-100 transition hover:bg-green-400/20 disabled:opacity-40">
+              Publicar ahora
             </button>
             <Link to="/cms/news" className="rounded-full border border-purple-400/40 px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-purple-100 transition hover:bg-purple-500/10">
               Volver al listado
