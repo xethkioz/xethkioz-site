@@ -21,6 +21,7 @@ export type PublicNewsArticle = {
   source_urls: string[]
   ai_generated: boolean
   created_at: string
+  cover_image_url?: string | null
 }
 
 type RawNewsArticle = {
@@ -220,95 +221,63 @@ const publicTestArticles: PublicNewsArticle[] = [
     category: 'programming',
     status: 'published',
     published_at: TEST_24H_PUBLISHED_AT,
-    tags: ['test24h', 'programacion', 'docs'],
+    tags: ['test24h', 'programacion', 'documentacion'],
     source_urls: [],
     ai_generated: false,
     created_at: TEST_24H_PUBLISHED_AT,
   },
 ]
 
-function isTest24hActive() {
-  return Date.now() < new Date(TEST_24H_UNTIL).getTime()
+function normalizeContent(content: unknown): PublicNewsContentBlock[] {
+  if (!Array.isArray(content)) return []
+  return content
+    .filter((block): block is Partial<PublicNewsContentBlock> => Boolean(block) && typeof block === 'object')
+    .map((block) => ({
+      type: block.type === 'heading' || block.type === 'list' || block.type === 'quote' ? block.type : 'paragraph',
+      text: typeof block.text === 'string' ? block.text : '',
+    }))
+    .filter((block) => block.text.trim().length > 0)
 }
 
-function getPublicTestArticles(category?: PublicNewsCategory | 'all') {
-  if (!isTest24hActive()) return []
-  if (category && category !== 'all') return publicTestArticles.filter((article) => article.category === category)
-  return publicTestArticles
+function normalizeCategory(value: string): PublicNewsCategory {
+  if (publicNewsCategories.includes(value as PublicNewsCategory)) return value as PublicNewsCategory
+  return 'community'
 }
 
-function mergeArticles(primary: PublicNewsArticle[], fallback: PublicNewsArticle[], limit: number) {
-  const seen = new Set<string>()
-  return [...fallback, ...primary]
-    .filter((article) => {
-      if (seen.has(article.slug)) return false
-      seen.add(article.slug)
-      return true
-    })
-    .slice(0, limit)
-}
-
-export function isPublicNewsCategory(value: string): value is PublicNewsCategory {
-  return publicNewsCategories.includes(value as PublicNewsCategory)
-}
-
-export function normalizePublicNewsCategory(value: string | null | undefined): PublicNewsCategory {
-  if (!value) return 'gaming'
-  if (value === 'ia') return 'ai'
-  if (value === 'hardware') return 'tech'
-  if (value === 'deals') return 'gaming'
-  return isPublicNewsCategory(value) ? value : 'gaming'
-}
-
-function normalizeContent(value: unknown): PublicNewsContentBlock[] {
-  if (!Array.isArray(value)) return []
-  return value
-    .map((block) => {
-      if (!block || typeof block !== 'object') return null
-      const candidate = block as Partial<PublicNewsContentBlock>
-      const type = candidate.type === 'heading' || candidate.type === 'list' || candidate.type === 'quote' ? candidate.type : 'paragraph'
-      const text = typeof candidate.text === 'string' ? candidate.text.trim() : ''
-      if (!text) return null
-      return { type, text } satisfies PublicNewsContentBlock
-    })
-    .filter((block): block is PublicNewsContentBlock => Boolean(block))
-}
-
-function normalizeStringArray(value: unknown): string[] {
-  return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string' && item.trim().length > 0) : []
-}
-
-export function normalizePublicNewsArticle(row: RawNewsArticle): PublicNewsArticle {
+function mapRawArticle(article: RawNewsArticle): PublicNewsArticle {
   return {
-    id: row.id,
-    slug: row.slug,
-    title: row.title,
-    summary: row.summary,
-    content: normalizeContent(row.content),
-    category: normalizePublicNewsCategory(row.category),
-    status: row.status,
-    published_at: row.published_at,
-    tags: normalizeStringArray(row.tags),
-    source_urls: normalizeStringArray(row.source_urls),
-    ai_generated: Boolean(row.ai_generated),
-    created_at: row.created_at,
+    id: article.id,
+    slug: article.slug,
+    title: article.title,
+    summary: article.summary,
+    content: normalizeContent(article.content),
+    category: normalizeCategory(article.category),
+    status: article.status,
+    published_at: article.published_at,
+    tags: article.tags ?? [],
+    source_urls: article.source_urls ?? [],
+    ai_generated: Boolean(article.ai_generated),
+    created_at: article.created_at,
+    cover_image_url: null,
   }
 }
 
-export function formatPublicNewsDate(value: string | null | undefined, lang: 'es' | 'en') {
-  if (!value) return lang === 'es' ? 'Sin fecha' : 'No date'
+export const isPublicNewsSupabaseConfigured = isSupabaseConfigured
+
+export function formatPublicNewsDate(value: string, locale: 'es' | 'en' = 'es') {
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return value
-  return new Intl.DateTimeFormat(lang === 'es' ? 'es-AR' : 'en-US', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  }).format(date)
+  return new Intl.DateTimeFormat(locale === 'es' ? 'es-AR' : 'en-US', { dateStyle: 'medium' }).format(date)
 }
 
-export async function fetchPublishedNews(category?: PublicNewsCategory | 'all', limit = 36): Promise<PublicNewsArticle[]> {
-  const testArticles = getPublicTestArticles(category)
-  if (!isSupabaseConfigured) return testArticles.slice(0, limit)
+export function getPublicTestArticles() {
+  const now = Date.now()
+  if (now > new Date(TEST_24H_UNTIL).getTime()) return []
+  return publicTestArticles
+}
+
+export async function fetchPublishedNews(category?: PublicNewsCategory | 'all') {
+  if (!isSupabaseConfigured) return getPublicTestArticles()
 
   let query = supabase
     .from('news_articles')
@@ -316,24 +285,17 @@ export async function fetchPublishedNews(category?: PublicNewsCategory | 'all', 
     .eq('status', 'published')
     .order('published_at', { ascending: false, nullsFirst: false })
     .order('created_at', { ascending: false })
-    .limit(limit)
+    .limit(60)
 
   if (category && category !== 'all') query = query.eq('category', category)
 
   const { data, error } = await query
-  if (error) {
-    if (testArticles.length) return testArticles.slice(0, limit)
-    throw error
-  }
-
-  const cmsArticles = ((data ?? []) as RawNewsArticle[]).map(normalizePublicNewsArticle)
-  return mergeArticles(cmsArticles, testArticles, limit)
+  if (error) throw error
+  return [...(data ?? []).map((article) => mapRawArticle(article as RawNewsArticle)), ...getPublicTestArticles()]
 }
 
-export async function fetchPublishedNewsBySlug(slug: string): Promise<PublicNewsArticle | null> {
-  const testArticle = getPublicTestArticles().find((article) => article.slug === slug)
-  if (testArticle) return testArticle
-  if (!isSupabaseConfigured) return null
+export async function fetchPublishedNewsBySlug(slug: string) {
+  if (!isSupabaseConfigured) return getPublicTestArticles().find((article) => article.slug === slug) ?? null
 
   const { data, error } = await supabase
     .from('news_articles')
@@ -343,7 +305,6 @@ export async function fetchPublishedNewsBySlug(slug: string): Promise<PublicNews
     .maybeSingle()
 
   if (error) throw error
-  return data ? normalizePublicNewsArticle(data as RawNewsArticle) : null
+  if (!data) return getPublicTestArticles().find((article) => article.slug === slug) ?? null
+  return mapRawArticle(data as RawNewsArticle)
 }
-
-export { isSupabaseConfigured as isPublicNewsSupabaseConfigured }
