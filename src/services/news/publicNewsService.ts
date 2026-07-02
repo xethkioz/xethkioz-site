@@ -228,12 +228,17 @@ const publicTestArticles: PublicNewsArticle[] = [
   },
 ]
 
+function normalizeContentType(value: unknown): PublicNewsContentBlock['type'] {
+  if (value === 'heading' || value === 'list' || value === 'quote') return value
+  return 'paragraph'
+}
+
 function normalizeContent(content: unknown): PublicNewsContentBlock[] {
   if (!Array.isArray(content)) return []
   return content
-    .filter((block): block is Partial<PublicNewsContentBlock> => Boolean(block) && typeof block === 'object')
-    .map((block) => ({
-      type: block.type === 'heading' || block.type === 'list' || block.type === 'quote' ? block.type : 'paragraph',
+    .filter((block): block is Record<string, unknown> => Boolean(block) && typeof block === 'object')
+    .map((block): PublicNewsContentBlock => ({
+      type: normalizeContentType(block.type),
       text: typeof block.text === 'string' ? block.text : '',
     }))
     .filter((block) => block.text.trim().length > 0)
