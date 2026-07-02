@@ -114,18 +114,24 @@ export default function NewsArticle() {
         {error ? <p className="mt-8 rounded-3xl border border-red-500/30 bg-red-500/10 p-5 text-red-200">{error}</p> : null}
         {article ? (
           <article className="mt-8 overflow-hidden rounded-[2rem] border border-violet-500/25 bg-[#0B0A0F] p-4 shadow-[0_0_70px_rgba(124,58,237,.18)] sm:p-6 md:p-9">
-            <div className="mb-7 overflow-hidden rounded-[1.5rem] border border-orange-400/25 bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,.28),transparent_34%),linear-gradient(135deg,rgba(124,58,237,.2),rgba(0,0,0,.9))] p-5 md:p-8">
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="grid h-14 w-14 place-items-center rounded-2xl border border-white/15 bg-black/45 text-3xl md:h-16 md:w-16">{getArticleMark(article)}</div>
-                  <div>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-orange-200">{labels[article.category]}</p>
-                    <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-300">{ui.sourceLabel}: {getSourceHost(article)}</p>
-                  </div>
-                </div>
-                <span className="hidden rounded-full border border-white/10 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-300 sm:inline-flex">{formatPublicNewsDate(article.published_at ?? article.created_at, lang)}</span>
+            {article.cover_image_url ? (
+              <div className="mb-7 overflow-hidden rounded-[1.5rem] border border-orange-400/25 bg-black/40">
+                <img src={article.cover_image_url} alt={article.title} className="w-full object-cover" loading="lazy" />
               </div>
-            </div>
+            ) : (
+              <div className="mb-7 overflow-hidden rounded-[1.5rem] border border-orange-400/25 bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,.28),transparent_34%),linear-gradient(135deg,rgba(124,58,237,.2),rgba(0,0,0,.9))] p-5 md:p-8">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="grid h-14 w-14 place-items-center rounded-2xl border border-white/15 bg-black/45 text-3xl md:h-16 md:w-16">{getArticleMark(article)}</div>
+                    <div>
+                      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-orange-200">{labels[article.category]}</p>
+                      <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-300">{ui.sourceLabel}: {getSourceHost(article)}</p>
+                    </div>
+                  </div>
+                  <span className="hidden rounded-full border border-white/10 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-300 sm:inline-flex">{formatPublicNewsDate(article.published_at ?? article.created_at, lang)}</span>
+                </div>
+              </div>
+            )}
 
             <div className="flex flex-wrap items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-400">
               <span className="rounded-full border border-orange-400/40 px-3 py-1 text-orange-200">{labels[article.category]}</span>
