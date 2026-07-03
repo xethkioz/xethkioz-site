@@ -84,6 +84,14 @@ function getArticleMark(article: PublicNewsArticle) {
 }
 
 function ArticleThumb({ article, large = false }: { article: PublicNewsArticle; large?: boolean }) {
+  if (article.cover_image_url) {
+    return (
+      <div className={`overflow-hidden rounded-2xl border border-orange-400/25 bg-black/50 ${large ? 'h-72 md:h-96' : 'h-44'}`}>
+        <img src={article.cover_image_url} alt={article.title} loading="lazy" className="h-full w-full object-cover" />
+      </div>
+    )
+  }
+
   return (
     <div className={`overflow-hidden rounded-2xl border border-orange-400/25 bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,.25),transparent_36%),linear-gradient(135deg,rgba(124,58,237,.18),rgba(0,0,0,.86))] ${large ? 'p-6 md:p-8' : 'p-4'}`}>
       <div className="flex items-center gap-3">
