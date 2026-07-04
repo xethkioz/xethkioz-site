@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
+import PublicAdSlot from '../components/ads/PublicAdSlot'
 import { useLang } from '../lib/LangContext'
 import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import { formatPublicNewsDate } from '../services/news/publicNewsService'
@@ -85,6 +86,10 @@ export default function GreenNode() {
                   ))}
                 </div>
               </section>
+
+              <div className="mt-8">
+                <PublicAdSlot slotId="section-sidebar" fallbackLabel="XETHKIOZ GREEN NODE SPONSOR" />
+              </div>
 
               <div className="mt-8 rounded-2xl border border-[#32FF8A]/25 bg-black/70 p-5 font-mono text-xs leading-relaxed text-[#B9FFD1]">{t.status}</div>
 
