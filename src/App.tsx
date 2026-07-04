@@ -8,6 +8,7 @@ import { ProfileProgressProvider } from './lib/ProfileProgressContext'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import FusionGlobalWisp from './components/fusion/FusionGlobalWisp'
+import NexusChatWidget from './components/nexus/NexusChatWidget'
 import ScrollToTop from './components/ScrollToTop'
 import Analytics from './components/Analytics'
 import AppErrorBoundary from './components/AppErrorBoundary'
@@ -25,6 +26,7 @@ const FunPortal = lazy(() => import('./pages/FunPortal'))
 const GreenNode = lazy(() => import('./pages/GreenNode'))
 const ProfileHub = lazy(() => import('./pages/ProfileHub'))
 const News = lazy(() => import('./pages/News'))
+const NewsArticle = lazy(() => import('./pages/NewsArticle'))
 const Community = lazy(() => import('./pages/Community'))
 const CmsStudio = lazy(() => import('./pages/CmsStudio'))
 const CmsLayout = lazy(() => import('./cms/layout/CmsLayout'))
@@ -32,7 +34,11 @@ const CmsDashboard = lazy(() => import('./cms/routes/CmsDashboard'))
 const CmsGenerate = lazy(() => import('./cms/routes/CmsGenerate'))
 const CmsNewsEditor = lazy(() => import('./cms/routes/CmsNewsEditor'))
 const CmsNewsList = lazy(() => import('./cms/routes/CmsNewsList'))
+const CmsReviewQueue = lazy(() => import('./cms/routes/CmsReviewQueue'))
+const CmsUsersPanel = lazy(() => import('./cms/routes/CmsUsersPanel'))
+const CmsAdsManager = lazy(() => import('./cms/routes/CmsAdsManager'))
 const AccountAccess = lazy(() => import('./pages/AccountAccess'))
+const ConfirmEmail = lazy(() => import('./pages/ConfirmEmail'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
 function GreenNodeGate() {
@@ -54,13 +60,14 @@ function RouteFallback() {
 function AppShell() {
   const location = useLocation()
   const isCmsRoute = location.pathname === '/cms' || location.pathname.startsWith('/cms/')
+  const isHomeRoute = location.pathname === '/'
 
   return (
     <>
       <Analytics />
       <VercelAnalytics />
       <ScrollToTop />
-      {!isCmsRoute && (
+      {!isCmsRoute && !isHomeRoute && (
         <AppErrorBoundary label="Global Controls" compact>
           <Header />
           <FusionGlobalWisp />
@@ -77,10 +84,12 @@ function AppShell() {
               <Route path="/fun" element={<FunPortal />} />
               <Route path="/green-node" element={<GreenNodeGate />} />
               <Route path="/news" element={<News />} />
+              <Route path="/news/:slug" element={<NewsArticle />} />
               <Route path="/community" element={<Community />} />
               <Route path="/profile" element={<ProfileHub />} />
               <Route path="/login" element={<AccountAccess />} />
               <Route path="/account" element={<AccountAccess />} />
+              <Route path="/confirm-email" element={<ConfirmEmail />} />
               <Route path="/register" element={<Navigate to="/login" replace />} />
               <Route
                 path="/cms"
@@ -95,6 +104,9 @@ function AppShell() {
                 <Route path="news" element={<CmsNewsList />} />
                 <Route path="news/new" element={<CmsNewsEditor />} />
                 <Route path="news/:id" element={<CmsNewsEditor />} />
+                <Route path="review" element={<CmsReviewQueue />} />
+                <Route path="users" element={<CmsUsersPanel />} />
+                <Route path="ads" element={<CmsAdsManager />} />
               </Route>
               <Route path="/cms-legacy" element={<CmsStudio />} />
               <Route path="/admin" element={<Navigate to="/cms" replace />} />
@@ -105,6 +117,8 @@ function AppShell() {
       </main>
 
       {!isCmsRoute && <Footer />}
+      {!isCmsRoute && !isHomeRoute && <Footer />}
+      {!isCmsRoute && <NexusChatWidget />}
     </>
   )
 }

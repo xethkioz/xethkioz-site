@@ -1,6 +1,7 @@
 html {
   scroll-behavior: auto !important;
 }
+html { scroll-behavior: auto !important; }
 
 body {
   background: #0A0A0F !important;
@@ -10,6 +11,23 @@ body {
 
 #root {
   isolation: isolate;
+#root { isolation: isolate; }
+
+@keyframes float {
+  0% { transform: translateY(0) scale(1); filter: brightness(1); }
+  50% { transform: translateY(-15px) scale(1.04); filter: brightness(1.18); }
+  100% { transform: translateY(0) scale(1); filter: brightness(1); }
+}
+
+.animate-float { animation: float 3s ease-in-out infinite; }
+
+.xk-noise {
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px),
+    radial-gradient(circle at 70% 60%, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px),
+    linear-gradient(115deg, rgba(255, 255, 255, 0.025), transparent 45%);
+  background-size: 80px 80px, 130px 130px, 100% 100%;
+  mix-blend-mode: screen;
 }
 
 .xk-page {
@@ -68,6 +86,7 @@ body {
 .xk-header-clean,
 .xk-aaa-header,
 .xk-left-launcher {
+.xk-aaa-header {
   contain: layout paint style;
 }
 
@@ -75,6 +94,7 @@ body {
 .xk-section-panel,
 .xk-portal-node,
 .xk-wisp-module {
+.xk-section-panel {
   transform: translateZ(0);
   backface-visibility: hidden;
 }
@@ -369,4 +389,87 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+.xk-pixel {
+  image-rendering: pixelated;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  text-shadow: 2px 2px 0 rgba(0,0,0,.9);
+}
+
+.xk-blueprint {
+  background-image:
+    linear-gradient(rgba(59,130,246,.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59,130,246,.09) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.xk-wisp { display: none; }
+
+.xk-wisp-portal {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 69;
+  opacity: 0;
+  background: radial-gradient(circle at var(--portal-x, 50%) var(--portal-y, 50%), rgba(50,255,138,.28), transparent 28%);
+  transition: opacity .35s ease;
+}
+
+.xk-wisp-portal.is-open { opacity: 1; }
+
+.xk-green-shell {
+  min-height: 100svh;
+  isolation: isolate;
+  background: #000;
+  color: #D8FFE8;
+  overflow-x: hidden;
+}
+
+.xk-green-shell::before {
+  content: '';
+  position: fixed;
+  inset: -4px;
+  z-index: -2;
+  background:
+    radial-gradient(circle at 50% 10%, rgba(50,255,138,.20), transparent 32%),
+    repeating-linear-gradient(0deg, rgba(50,255,138,.045) 0 1px, transparent 1px 7px),
+    #000;
+  filter: hue-rotate(10deg) saturate(1.4);
+}
+
+.xk-green-frame {
+  position: relative;
+  border: 1px solid rgba(50,255,138,.55);
+  box-shadow: 0 0 24px rgba(50,255,138,.24), inset 0 0 18px rgba(50,255,138,.06);
+}
+
+.xk-green-frame::before,
+.xk-green-frame::after {
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  inset: -2px;
+  border: 1px solid rgba(50,255,138,.25);
+  filter: hue-rotate(80deg);
+  transform: translate3d(2px, 0, 0);
+  opacity: .5;
+}
+
+.xk-green-content {
+  position: relative;
+  z-index: 2;
+  filter: none !important;
+  backdrop-filter: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  video,
+  *,
+  *::before,
+  *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

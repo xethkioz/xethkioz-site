@@ -168,18 +168,36 @@ export class AuthNexusService {
       throw wrapped
     }
 
-    // The canonical creation path is the Supabase handle_new_user trigger.
-    // If the profile is temporarily absent because of replication/timing, do
-    // not attempt a privilege-bearing client write here. Fall back to BASIC/GUEST
-    // for this client session and let the database trigger/admin repair source of truth.
     const timestamp = new Date().toISOString()
-    return Object.freeze({
+    const fallbackProfile = Object.freeze({
       id: userId,
       subscription_tier: DEFAULT_GUEST_PROFILE.subscription_tier,
       role: DEFAULT_GUEST_PROFILE.role,
       created_at: timestamp,
       updated_at: timestamp,
     } satisfies ProfileRow)
+
+    // Canonical path: public.handle_new_user() creates the profile after signup.
+    // Recovery path: if the trigger has not run yet, RLS allows the signed-in user
+    // to insert only their own BASIC/GUEST row. This avoids a broken login state.
+    const { data: inserted, error: insertError } = await (this.client as any)
+      .from('profiles')
+      .insert({
+        id: userId,
+        subscription_tier: DEFAULT_GUEST_PROFILE.subscription_tier,
+        role: DEFAULT_GUEST_PROFILE.role,
+      })
+      .select('*')
+      .maybeSingle()
+
+    if (inserted) return inserted
+
+    if (insertError) {
+      console.warn('[AuthNexusService] Profile recovery insert skipped:', insertError.message)
+      return fallbackProfile
+    }
+
+    return fallbackProfile
   }
 
   private publishSession(session: XethkiozAuthorizedSession | null): void {
