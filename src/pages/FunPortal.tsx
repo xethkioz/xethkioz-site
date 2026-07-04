@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
+import PublicAdSlot from '../components/ads/PublicAdSlot'
 import { useLang } from '../lib/LangContext'
 import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import { formatPublicNewsDate } from '../services/news/publicNewsService'
@@ -83,6 +84,10 @@ export default function FunPortal() {
               ))}
             </div>
           </section>
+
+          <div className="mt-8">
+            <PublicAdSlot slotId="section-sidebar" fallbackLabel="XETHKIOZ FUN SPONSOR" />
+          </div>
 
           <Link to="/" className="mt-8 inline-flex rounded-full border border-yellow-300/40 px-4 py-3 font-mono text-xs uppercase tracking-[0.18em] text-yellow-100 transition hover:border-[#32FF8A] hover:text-[#32FF8A]">{t.back}</Link>
         </div>
