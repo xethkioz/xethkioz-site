@@ -116,6 +116,47 @@ export default function CmsAdsManager() {
     setForm((current) => ({ ...current, [field]: value }))
   }
 
+  function applyPreset(kind: 'stream' | 'news' | 'community') {
+    const presets = {
+      stream: {
+        slot_id: 'stream-banner',
+        sponsor_name: 'XETHKIOZ',
+        title: 'XETHKIOZ en vivo',
+        description: 'Streams, gaming, tecnología y comunidad. Activá este banner cuando estés por salir en Twitch, Kick o YouTube.',
+        target_url: 'https://www.twitch.tv/xethkioz',
+        image_url: '/ads/xethkioz-stream-banner.svg',
+        status: 'draft' as AdStatus,
+        starts_at: '',
+        ends_at: '',
+      },
+      news: {
+        slot_id: 'news-inline',
+        sponsor_name: 'XETHKIOZ',
+        title: 'Radar XETHKIOZ actualizado',
+        description: 'Noticias gaming, IA, tecnología, memes y comunidad con lectura ampliada y fuente visible.',
+        target_url: 'https://xethkioz.com.ar/news',
+        image_url: '/ads/xethkioz-stream-banner.svg',
+        status: 'draft' as AdStatus,
+        starts_at: '',
+        ends_at: '',
+      },
+      community: {
+        slot_id: 'section-sidebar',
+        sponsor_name: 'XETHKIOZ',
+        title: 'Sumate a la comunidad XETHKIOZ',
+        description: 'Gaming Is My Passion • Beyond The Game. Comunidad, noticias, tecnología y directos.',
+        target_url: 'https://xethkioz.com.ar/community',
+        image_url: '/ads/xethkioz-stream-banner.svg',
+        status: 'draft' as AdStatus,
+        starts_at: '',
+        ends_at: '',
+      },
+    }
+
+    setEditingId(null)
+    setForm(presets[kind])
+  }
+
   function startEdit(campaign: AdCampaign) {
     setEditingId(campaign.id)
     setForm({
@@ -230,6 +271,15 @@ export default function CmsAdsManager() {
       {error ? <p className="rounded-3xl border border-red-500/30 bg-red-500/10 p-5 text-red-200">{error}</p> : null}
       {message ? <p className="rounded-3xl border border-green-500/30 bg-green-500/10 p-5 text-green-100">{message}</p> : null}
 
+      <div className="rounded-3xl border border-orange-400/20 bg-orange-500/10 p-5">
+        <p className="text-xs font-black uppercase tracking-[0.25em] text-orange-200">Presets internos</p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <button type="button" onClick={() => applyPreset('stream')} className="rounded-full border border-orange-400/40 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-orange-100 transition hover:bg-orange-500/10">Stream banner</button>
+          <button type="button" onClick={() => applyPreset('news')} className="rounded-full border border-purple-400/40 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-purple-100 transition hover:bg-purple-500/10">News inline</button>
+          <button type="button" onClick={() => applyPreset('community')} className="rounded-full border border-green-400/40 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-green-100 transition hover:bg-green-500/10">Comunidad</button>
+        </div>
+      </div>
+
       <form onSubmit={submitCampaign} className="rounded-3xl border border-purple-500/20 bg-black/35 p-6">
         <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
@@ -246,7 +296,7 @@ export default function CmsAdsManager() {
           <label className="grid gap-2 text-xs font-black uppercase tracking-[0.16em] text-purple-200 xl:col-span-2">Descripción<textarea value={form.description} onChange={(event) => updateForm('description', event.target.value)} rows={3} className="rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300" placeholder="Texto corto de campaña" /></label>
           <label className="grid gap-2 text-xs font-black uppercase tracking-[0.16em] text-purple-200">Estado<select value={form.status} onChange={(event) => updateForm('status', event.target.value as AdStatus)} className="rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300">{statusOptions.map((status) => <option key={status} value={status}>{status.toUpperCase()}</option>)}</select></label>
           <label className="grid gap-2 text-xs font-black uppercase tracking-[0.16em] text-purple-200">Link destino<input value={form.target_url} onChange={(event) => updateForm('target_url', event.target.value)} className="rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300" placeholder="https://..." /></label>
-          <label className="grid gap-2 text-xs font-black uppercase tracking-[0.16em] text-purple-200">Imagen/banner URL<input value={form.image_url} onChange={(event) => updateForm('image_url', event.target.value)} className="rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300" placeholder="https://..." /></label>
+          <label className="grid gap-2 text-xs font-black uppercase tracking-[0.16em] text-purple-200">Imagen/banner URL<input value={form.image_url} onChange={(event) => updateForm('image_url', event.target.value)} className="rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300" placeholder="/ads/xethkioz-stream-banner.svg" /></label>
           <label className="grid gap-2 text-xs font-black uppercase tracking-[0.16em] text-purple-200">Inicio<input type="datetime-local" value={form.starts_at} onChange={(event) => updateForm('starts_at', event.target.value)} className="rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300" /></label>
           <label className="grid gap-2 text-xs font-black uppercase tracking-[0.16em] text-purple-200">Fin<input type="datetime-local" value={form.ends_at} onChange={(event) => updateForm('ends_at', event.target.value)} className="rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300" /></label>
         </fieldset>
