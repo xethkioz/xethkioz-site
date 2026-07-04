@@ -37,7 +37,7 @@ const CmsNewsList = lazy(() => import('./cms/routes/CmsNewsList'))
 const CmsReviewQueue = lazy(() => import('./cms/routes/CmsReviewQueue'))
 const CmsUsersPanel = lazy(() => import('./cms/routes/CmsUsersPanel'))
 const CmsAdsManager = lazy(() => import('./cms/routes/CmsAdsManager'))
-const AccountAccess = lazy(() => import('./pages/AccountAccess'))
+const AccountAccess = lazy(() => import('./pages/AccountAccessStable'))
 const ConfirmEmail = lazy(() => import('./pages/ConfirmEmail'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
@@ -90,7 +90,7 @@ function AppShell() {
               <Route path="/login" element={<AccountAccess />} />
               <Route path="/account" element={<AccountAccess />} />
               <Route path="/confirm-email" element={<ConfirmEmail />} />
-              <Route path="/register" element={<Navigate to="/login" replace />} />
+              <Route path="/register" element={<Navigate to="/account" replace />} />
               <Route
                 path="/cms"
                 element={
