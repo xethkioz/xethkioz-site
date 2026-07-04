@@ -73,25 +73,27 @@ export function useAdminSession(): AdminSessionState {
       setLoading(false)
     }
 
-    async function loadSession() {
-      if (!isSupabaseConfigured) {
-        if (active) {
-          setUser(null)
-          setRole('GUEST')
-          setTier('BASIC')
-          setLoading(false)
-        }
-        return
+    if (!isSupabaseConfigured) {
+      setUser(null)
+      setRole('GUEST')
+      setTier('BASIC')
+      setLoading(false)
+      return () => {
+        active = false
       }
-
-      const { data } = await supabase.auth.getUser()
-      await applyUser(data.user ?? null)
     }
 
-    void loadSession()
+    supabase.auth.getSession().then(({ data }) => {
+      if (!active) return
+      void applyUser(data.session?.user ?? null)
+    })
 
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      void applyUser(session?.user ?? null)
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT') {
+        void applyUser(null)
+        return
+      }
+      if (session?.user) void applyUser(session.user)
     })
 
     return () => {
