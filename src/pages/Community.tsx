@@ -1,4 +1,5 @@
 import SEO from '../components/SEO'
+import PublicAdSlot from '../components/ads/PublicAdSlot'
 import FusionContentPanel from '../components/fusion/FusionContentPanel'
 import FusionHero from '../components/fusion/FusionHero'
 import FusionShell from '../components/fusion/FusionShell'
@@ -11,6 +12,9 @@ export default function Community() {
       <SEO title={t.v7.functionality.communityEngine} description={t.v7.functionality.communityDescription} url="/community" />
       <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
         <FusionHero tone="fun" eyebrow={t.v7.functionality.progressSystem} heading={t.v7.functionality.communityEngine} description={t.v7.functionality.communityDescription} />
+        <div className="mt-8">
+          <PublicAdSlot slotId="stream-banner" fallbackLabel="XETHKIOZ LIVE / STREAM" />
+        </div>
       </main>
       <FusionContentPanel tone="fun" mode="community" />
     </FusionShell>
