@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
+import PublicAdSlot from '../components/ads/PublicAdSlot'
 import FusionHero from '../components/fusion/FusionHero'
 import FusionShell from '../components/fusion/FusionShell'
 import { useLang } from '../lib/LangContext'
@@ -194,6 +195,10 @@ export default function News() {
             </div>
           </article>
         ) : null}
+
+        <div className="mt-8">
+          <PublicAdSlot slotId="news-inline" fallbackLabel="XETHKIOZ NEWS SPONSOR" />
+        </div>
 
         {remainingArticles.length > 0 ? (
           <section className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
