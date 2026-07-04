@@ -38,6 +38,7 @@ const CmsReviewQueue = lazy(() => import('./cms/routes/CmsReviewQueue'))
 const CmsUsersPanel = lazy(() => import('./cms/routes/CmsUsersPanel'))
 const CmsAdsManager = lazy(() => import('./cms/routes/CmsAdsManager'))
 const AccountAccess = lazy(() => import('./pages/AccountAccess'))
+const ConfirmEmail = lazy(() => import('./pages/ConfirmEmail'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
 function GreenNodeGate() {
@@ -88,6 +89,7 @@ function AppShell() {
               <Route path="/profile" element={<ProfileHub />} />
               <Route path="/login" element={<AccountAccess />} />
               <Route path="/account" element={<AccountAccess />} />
+              <Route path="/confirm-email" element={<ConfirmEmail />} />
               <Route path="/register" element={<Navigate to="/login" replace />} />
               <Route
                 path="/cms"
