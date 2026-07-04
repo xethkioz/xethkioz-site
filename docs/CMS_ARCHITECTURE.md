@@ -1,14 +1,15 @@
 # CMS ARCHITECTURE — XETHKIOZ Professional CMS
 
 Base: `v7.0.0-fusion-rc4 + News Engine scaffold`  
-PR objetivo: `#10 feat(cms) scaffold base + admin routing`  
-Rama: `feature/cms-scaffold-base`
+Estado actual: `CMS scaffold + news listing foundation`
 
 ## Estado
 
-Este documento define la primera entrega del CMS profesional de XETHKIOZ.
+Este documento define la evolución incremental del CMS profesional de XETHKIOZ.
 
-PR #10 no incluye editor real, integración con `/api/generate-news`, tests unitarios ni dependencias nuevas. Su objetivo es crear la columna vertebral segura del CMS.
+PR #10 creó la columna vertebral del CMS: rutas protegidas, layout, guard admin y placeholders.
+
+PR #11 profesionaliza el listado editorial conectado a `news_articles`, sin introducir dependencias nuevas ni mutaciones destructivas.
 
 ## Alcance de PR #10
 
@@ -28,10 +29,30 @@ No incluye:
 - Editor visual.
 - LLM.
 - Nuevas dependencias.
-- Dashboard con datos reales.
 - Consumo real de `/api/generate-news`.
 
-## Rutas
+## Alcance de PR #11
+
+Incluye:
+
+- Lectura real de `news_articles` desde Supabase.
+- Estadísticas editoriales por estado.
+- Filtro por estado: `all`, `draft`, `review`, `published`, `archived`.
+- Filtro por categoría derivado de los artículos cargados.
+- Búsqueda local por título, resumen, slug o categoría.
+- Paginación local de 10 resultados por página.
+- Enlaces a editor y vista pública cuando corresponde.
+
+No incluye:
+
+- Mutaciones de estado.
+- Publicar/despublicar.
+- Eliminar o archivar.
+- Editor por bloques.
+- LLM.
+- Dependencias nuevas.
+
+## Rutas CMS
 
 ```txt
 /cms
@@ -39,6 +60,9 @@ No incluye:
 /cms/news
 /cms/news/new
 /cms/news/:id
+/cms/review
+/cms/users
+/cms/ads
 /cms-legacy
 ```
 
@@ -57,7 +81,7 @@ El guard valida:
 ## Roadmap CMS incremental
 
 1. PR #10 — scaffold + rutas protegidas.
-2. PR #11 — listado real de noticias.
+2. PR #11 — listado real de noticias con filtros y paginación.
 3. PR #12 — editor por bloques.
 4. PR #13 — UI que consume `/api/generate-news`.
 5. PR #14 — workflow editorial.
@@ -67,4 +91,4 @@ El guard valida:
 
 ## Decisión técnica
 
-Vitest no está instalado en el stack actual. Por lo tanto, PR #10 no incluye tests. La infraestructura de testing debe agregarse luego con actualización correcta de `package-lock.json`.
+Vitest no está instalado en el stack actual. La infraestructura de testing debe agregarse luego con actualización correcta de `package-lock.json`.
