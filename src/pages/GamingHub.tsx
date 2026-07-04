@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
+import PublicAdSlot from '../components/ads/PublicAdSlot'
 import { useLang } from '../lib/LangContext'
 import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import { formatPublicNewsDate } from '../services/news/publicNewsService'
@@ -84,6 +85,10 @@ export default function GamingHub() {
               ))}
             </div>
           </section>
+
+          <div className="mt-8">
+            <PublicAdSlot slotId="section-sidebar" fallbackLabel="XETHKIOZ GAMING SPONSOR" />
+          </div>
 
           <div className="mt-8 flex flex-wrap gap-3 font-mono text-xs uppercase tracking-[0.18em]">
             <Link to="/" className="rounded-full border border-white/10 px-4 py-3 text-gray-300 hover:border-[#32FF8A] hover:text-[#32FF8A]">{t.back}</Link>
