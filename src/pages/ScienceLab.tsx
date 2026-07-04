@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
+import PublicAdSlot from '../components/ads/PublicAdSlot'
 import { useLang } from '../lib/LangContext'
 import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import { formatPublicNewsDate } from '../services/news/publicNewsService'
@@ -82,6 +83,10 @@ export default function ScienceLab() {
               ))}
             </div>
           </section>
+
+          <div className="mt-8">
+            <PublicAdSlot slotId="section-sidebar" fallbackLabel="XETHKIOZ TECH SPONSOR" />
+          </div>
 
           <div className="mt-8 rounded-3xl border border-[#32FF8A]/25 bg-black/45 p-5 font-mono text-xs leading-relaxed text-gray-300">{t.status}</div>
           <Link to="/" className="mt-8 inline-flex rounded-full border border-blue-300/40 px-4 py-3 font-mono text-xs uppercase tracking-[0.18em] text-blue-100 transition hover:border-[#32FF8A] hover:text-[#32FF8A]">{t.back}</Link>
