@@ -48,7 +48,7 @@ export default function AdminGuard({ children }: AdminGuardProps) {
 
   if (!ready) return <CmsNotConfiguredState />
   if (loading) return <CmsLoadingState />
-  if (!user) return <Navigate to={`/login?redirect=${encodeURIComponent(location.pathname)}`} replace />
+  if (!user) return <Navigate to={`/account?mode=signin&redirect=${encodeURIComponent(location.pathname)}`} replace />
   if (!canAccessCms) return <CmsForbiddenState />
 
   return <>{children}</>
