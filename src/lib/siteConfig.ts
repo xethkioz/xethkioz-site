@@ -1,6 +1,6 @@
-export const SITE_VERSION = 'v7.0-rc3-live'
-export const SITE_RELEASE = 'RC4 Public Cleanup + Wisp Green Zone + Media Banner'
-export const SITE_BUILD_DATE = '2026-06-29'
+export const SITE_VERSION = 'v7.0.0-fusion-rc-live.1'
+export const SITE_RELEASE = 'Web Ops Cleanup + Stable Auth Build'
+export const SITE_BUILD_DATE = '2026-07-06'
 export const SITE_DOMAIN = 'https://xethkioz.com.ar'
 
 export const DONATION_LINKS = {
@@ -184,7 +184,7 @@ export const NETWORK_SECTORS_DETAILED = [
     title: 'Milestones',
     tone: 'naranja / control / roadmap',
     route: '/news',
-    status: 'rc1.9',
+    status: 'roadmap',
     priority: 'Alta',
     focus: ['Core Platform', 'Content Platform', 'Community', 'Creator Ecosystem', 'Production Ready'],
     next: 'Usarlo como tablero maestro para ordenar fixes, SQL, QA y servicios posteriores.'
@@ -195,7 +195,7 @@ export const NETWORK_SECTORS_DETAILED = [
     title: 'Content OS',
     tone: 'naranja / documentación / QA',
     route: '/news',
-    status: 'rc1.6',
+    status: 'editorial-foundation',
     priority: 'Alta',
     focus: ['Noticias propias', 'Radar externo', 'Science reports', 'Videos', 'SEO', 'QA'],
     next: 'Conectar CMS real, cola editorial y automatizaciones controladas.'
@@ -256,13 +256,4 @@ export const DATABASE_BASELINE_MODULES = [
   { table: 'chat_rooms / chat_messages', purpose: 'Comunidad y futuro Supabase Realtime.', status: 'realtime-ready' },
   { table: 'xp_events / achievements', purpose: 'Escalafón, insignias, reputación y moderación temporal.', status: 'community' },
   { table: 'cms_publication_jobs', purpose: 'Borradores, programación, revisión y publicación.', status: 'admin' },
-] as const
-
-export const RC15_REVIEW_CHECKLIST = [
-  'No publicar LIVE sin ejecutar npm run build en Windows local.',
-  'No subir .env, node_modules, dist ni tsconfig.tsbuildinfo.',
-  'Aplicar migraciones SQL en Supabase solo después de backup.',
-  'Verificar rutas internas principales: /, /gaming, /science, /fun, /community, /profile, /login, /account, /cms y acceso Wisp a /green-node.',
-  'Mantener Green Zone como experiencia educativa/documental, no como guía ofensiva.',
-  'Mantener Science Lab con tono formal, fuentes y evidencia.',
 ] as const
