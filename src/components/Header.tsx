@@ -19,7 +19,7 @@ const rail = [
 
 export default function Header() {
   const { lang, setLang } = useLang()
-  const { account, toggleAccount } = useHud()
+  const { account } = useHud()
   const { triggerGreenPortal } = useWisp()
   const navigate = useNavigate()
 
@@ -27,6 +27,9 @@ export default function Header() {
   const openGreen = () => {
     triggerGreenPortal()
     window.setTimeout(() => navigate('/green-node'), 420)
+  }
+  const openAccount = () => {
+    navigate(account.status === 'connected' ? '/profile' : '/account?mode=signin')
   }
 
   return (
@@ -63,7 +66,7 @@ export default function Header() {
             <button type="button" onClick={switchLang} className="rounded-full border border-white/10 bg-white/[0.035] px-3 py-2 text-white transition hover:border-[#8B5CF6] hover:text-[#8B5CF6]">
               {lang.toUpperCase()}
             </button>
-            <button type="button" onClick={toggleAccount} className="rounded-full border border-[#FF6B1A]/40 bg-[#FF6B1A]/10 px-3 py-2 text-[#FFB47A] transition hover:border-[#FF6B1A] hover:text-white">
+            <button type="button" onClick={openAccount} className="rounded-full border border-[#FF6B1A]/40 bg-[#FF6B1A]/10 px-3 py-2 text-[#FFB47A] transition hover:border-[#FF6B1A] hover:text-white">
               {account.status === 'connected' ? account.name : 'LOGIN'}
             </button>
           </div>
