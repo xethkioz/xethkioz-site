@@ -257,3 +257,14 @@ export const DATABASE_BASELINE_MODULES = [
   { table: 'xp_events / achievements', purpose: 'Escalafón, insignias, reputación y moderación temporal.', status: 'community' },
   { table: 'cms_publication_jobs', purpose: 'Borradores, programación, revisión y publicación.', status: 'admin' },
 ] as const
+
+export const RC15_REVIEW_CHECKLIST = [
+  'Variables Supabase configuradas sin exponer secretos.',
+  'Migraciones revisadas antes de aplicarse en producción.',
+  'Roles admin/editor definidos antes de habilitar CMS real.',
+  'RLS validado antes de activar escritura pública o Realtime.',
+  'Auth, perfil y cuenta probados desde navegador limpio.',
+  'Rutas críticas revisadas después de cada deploy.',
+  'Logs de Vercel revisados antes de cerrar la tarea.',
+  'Backlog actualizado con próximos pasos operativos.',
+] as const
