@@ -19,7 +19,7 @@
     "audit:code": "node scripts/code-structure-review.mjs",
     "audit:media": "node scripts/media-assets-review.mjs",
     "audit:wisp-engine": "node scripts/wisp-engine-check.mjs",
-    "audit:functionality": "node scripts/functionality-core-check.mjs",
+    "audit: functionality": "node scripts/functionality-core-check.mjs",
     "audit:portal": "node scripts/portal-registry-check.mjs",
     "audit:runtime": "node scripts/runtime-integration-check.mjs",
     "audit:visual-runtime": "node scripts/visual-runtime-sandbox-check.mjs",
@@ -48,7 +48,6 @@
     "react-router-dom": "^6.26.2"
   },
   "devDependencies": {
-    "@types/node": "^24.0.15",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^6.0.3",
