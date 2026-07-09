@@ -180,15 +180,14 @@ Después del deploy:
 - Producción en Vercel: activa.
 - Dominio principal: activo.
 - Alias `www`: activo.
-- Últimos errores detectados: builds fallidos por TypeScript en funciones API y tipos Node faltantes.
-- Corrección preparada: agregar `@types/node` como devDependency para funciones server-side que usan `process.env`.
+- Últimos errores detectados: builds fallidos por TypeScript en funciones API que usan `process.env`.
+- Corrección preparada: tipado local mínimo en `api/node-env.d.ts`, sin agregar dependencias nuevas ni tocar `package-lock.json`.
 - Documentación anterior: actualizada desde v4/rc2 hacia v7 live.
 
 ## Siguiente etapa recomendada
 
 1. Mergear esta rama solo si el preview/deploy build queda correcto.
-2. Ordenar `package-lock.json` desde instalación local o CI confiable si el lock queda desfasado.
-3. Auditar `/api` completo.
-4. Revisar seguridad de `admin-auth-link`.
-5. Consolidar CMS + Supabase con roles reales.
-6. Crear tablero de issues por módulo: Auth, CMS, Content OS, Community, Green Node, SEO, Ads, Streaming.
+2. Auditar `/api` completo.
+3. Revisar seguridad de `admin-auth-link`.
+4. Consolidar CMS + Supabase con roles reales.
+5. Crear tablero de issues por módulo: Auth, CMS, Content OS, Community, Green Node, SEO, Ads, Streaming.
