@@ -40,25 +40,26 @@ Corrección:
 - `SITE_BUILD_DATE` actualizado a `2026-07-06`.
 - Estados internos antiguos `rc1.x` en sectores de control pasaron a nombres operativos actuales.
 
-### 3. Build serverless con tipos Node
+### 3. Build serverless con `process.env`
 
-Vercel registró fallos por `process.env` en archivos API TypeScript. Esos archivos usan variables de entorno server-side, por lo que necesitan tipos Node disponibles durante el build.
+Vercel registró fallos por `process.env` en archivos API TypeScript.
 
 Corrección:
 
-- Se agregó `@types/node` a `devDependencies`.
+- Se agregó `api/node-env.d.ts` con tipado local mínimo para funciones serverless.
+- No se agregaron dependencias nuevas.
+- No se modificó `package-lock.json`.
 
 ## Pendientes no tocados todavía
 
 Estos puntos requieren revisión adicional antes de tocar producción:
 
-1. `package-lock.json` debe regenerarse con `npm install` o CI si GitHub/Vercel marca lock desfasado.
-2. Revisar seguridad de `api/admin-auth-link.ts`.
-3. Auditar `api/generate-news/index.ts` para límites, permisos y logs.
-4. Confirmar configuración real de variables en Vercel.
-5. Revisar Supabase RLS antes de activar comunidad real/realtime.
-6. Confirmar CMS admin con usuario real.
-7. Revisar si Netlify todavía se usa o queda solo como fallback histórico.
+1. Revisar seguridad de `api/admin-auth-link.ts`.
+2. Auditar `api/generate-news/index.ts` para límites, permisos y logs.
+3. Confirmar configuración real de variables en Vercel cuando se hagan cambios de entorno.
+4. Revisar Supabase RLS antes de activar comunidad real/realtime.
+5. Confirmar CMS admin con usuario real después de cada deploy importante.
+6. Revisar si Netlify todavía se usa o queda solo como fallback histórico.
 
 ## Orden recomendado de trabajo
 
