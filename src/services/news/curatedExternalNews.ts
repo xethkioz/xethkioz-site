@@ -2,18 +2,18 @@ import type { PublicNewsArticle, PublicNewsCategory } from './publicNewsService'
 
 const PUBLISHED_AT = '2026-07-01T11:30:00.000Z'
 const RADAR_UPDATE_AT = '2026-07-02T17:20:00.000Z'
-const ARGENTINA_UPDATE_AT = '2026-07-03T23:20:00.000Z'
+const ARGENTINA_UPDATE_AT = '2026-07-08T17:30:00.000Z'
 
 export const curatedExternalNews: PublicNewsArticle[] = [
   {
-    id: 'curated-argentina-duendes-2026-07-03',
-    slug: 'fun-argentina-octavos-gracias-duendes',
-    title: 'Fun/Mundial · Argentina a octavos: gracias a los duendes',
-    summary: 'Argentina ganó, avanzó a octavos y la comunidad XETHKIOZ lo celebra con fe, sufrimiento y un meme original sin usar escudos ni imágenes oficiales.',
+    id: 'curated-argentina-duendes-2026-07-08',
+    slug: 'fun-argentina-mundial-duendes-cuartos',
+    title: 'Fun/Mundial · Argentina sigue viva: gracias a los duendes',
+    summary: 'Argentina volvió a sobrevivir en modo Mundial y la comunidad XETHKIOZ lo celebra con fe, sufrimiento y un meme original sin escudos ni imágenes oficiales.',
     content: [
       { type: 'heading', text: 'ES · Ganar también es sobrevivir' },
-      { type: 'paragraph', text: 'Argentina pasó de fase y la lectura emocional es simple: se ganó con sufrimiento, con energía de Mundial y con esa mezcla argentina de análisis táctico, cábala y “por favor que termine ya”. Para XETHKIOZ, este tipo de momento entra perfecto en Comunidad/Fun porque no es solamente resultado: es cultura de internet, chat explotado, memes, ansiedad colectiva y celebración compartida.' },
-      { type: 'paragraph', text: 'El cruce siguiente será contra Egipto, así que el modo Mundial sigue activo. La idea no es copiar imágenes oficiales ni usar escudos: la pieza visual es original, con bandera estilizada, duendes propios y estética XETHKIOZ. Si la suerte existe, que haga deploy en producción antes del próximo partido.' },
+      { type: 'paragraph', text: 'Argentina sigue viva en el Mundial y la lectura emocional es simple: se ganó con sufrimiento, con energía de eliminación directa y con esa mezcla argentina de análisis táctico, cábala y “por favor que termine ya”. Para XETHKIOZ, este tipo de momento entra perfecto en Comunidad/Fun porque no es solamente resultado: es cultura de internet, chat explotado, memes, ansiedad colectiva y celebración compartida.' },
+      { type: 'paragraph', text: 'La actualización deja la pieza como radar vivo: primero el festejo por pasar de fase, después la confirmación de que la Selección sigue avanzando en una fase donde cada partido parece una prueba de estrés. La idea no es copiar imágenes oficiales ni usar escudos: la pieza visual es original, con bandera estilizada, duendes propios y estética XETHKIOZ.' },
       { type: 'quote', text: 'Análisis táctico final: fe, sufrimiento y los duendes haciendo QA en el área chica.' },
       { type: 'heading', text: 'EN · Community angle' },
       { type: 'paragraph', text: 'Argentina moving on is more than a scoreline for the community. It becomes a shared internet moment: nerves, memes, lucky rituals, match chat and the feeling that every knockout game is a live server stress test.' },
@@ -22,10 +22,10 @@ export const curatedExternalNews: PublicNewsArticle[] = [
     status: 'published',
     published_at: ARGENTINA_UPDATE_AT,
     tags: ['argentina', 'mundial', 'duendes', 'meme', 'comunidad'],
-    source_urls: ['https://elpais.com/argentina/2026-07-03/argentina-cabo-verde-en-vivo-partido-de-dieciseisavos-del-mundial-2026.html', 'https://www.reuters.com/sports/soccer/messi-extends-world-cup-record-he-starts-argentina-against-cape-verde-2026-07-03/'],
+    source_urls: ['https://www.reuters.com/sports/soccer/argentina-survive-another-scare-finding-strength-adversity-2026-07-08/', 'https://as.com/futbol/mundial/la-remontada-de-los-dioses-f202607-n/'],
     ai_generated: false,
     created_at: ARGENTINA_UPDATE_AT,
-    cover_image_url: '/news/memes/argentina-duendes-octavos.svg',
+    cover_image_url: '/news/memes/argentina-duendes-cuartos.svg',
   },
   {
     id: 'curated-tech-gourmet-2026-07-02',
