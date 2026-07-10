@@ -1,161 +1,193 @@
 # XETHKIOZ Network
 
-**Versión actual:** `v4.0.0-rc.2.2`  
-**Estado:** Release Candidate de estabilidad, arquitectura y preparación hacia v4 estable / base v5.
+**Versión actual:** `v7.0.0-fusion-rc-live.1`  
+**Estado:** producción activa con flujo de revisión controlado.  
+**Última revisión operativa:** `2026-07-06`  
+**Dominio principal:** `https://xethkioz.com.ar`  
+**Dominio público:** `https://www.xethkioz.com.ar`
 
-XETHKIOZ Network es un ecosistema tecnológico modular con portal principal de Gaming & Tech, Science Lab, Green Node, AI Lab, Creator Studio, CMS, comunidad, chat, roles, XP, Wisp y futura integración de noticias dinámicas.
+XETHKIOZ Network es el ecosistema web modular de la marca XETHKIOZ. Reúne portal gamer/tech, noticias, comunidad, perfiles, CMS, streaming, Science Lab, Green Node, Wisp, módulos editoriales y futuras automatizaciones con Supabase.
 
-## Módulos principales
+## Estado de producción
 
-- `/` — Home principal XETHKIOZ.
-- `/gaming` — Gaming Hub.
-- `/tech` — Tech Lab.
-- `/science` — Science Lab, con enfoque más formal y profesional.
-- `/network` — Hub del ecosistema XETHKIOZ Network.
-- `/green-node` — Sección oculta/experimental de Linux, programación, ciberseguridad defensiva y análisis documental.
-- `/ai-lab` — Laboratorio IA.
-- `/creator-studio` — Centro de creación, streaming y planificación de contenido.
-- `/cms` — CMS Studio.
-- `/content-system` — Content OS.
-- `/roles` — Roles, XP, escalafón y comunidad.
-- `/milestones` — Plan de progreso y gobernanza.
-- `/qa` — Panel de revisión final.
+- Hosting principal actual: Vercel.
+- Framework: React + Vite + TypeScript.
+- Backend/API: funciones serverless en `/api`.
+- Base de datos/auth: Supabase.
+- Build esperado: `npm run build`.
+- Verificación completa: `npm run verify`.
+- Deploy hardening: `npm run deploy:check`.
 
-## Evolución por versiones
+La web debe tratarse como proyecto vivo. Los cambios de infraestructura, auth, CMS, Supabase, rutas públicas o seguridad deben pasar por rama de revisión antes de mergear a `main`.
 
-### v3.5 / v3.6 / v3.7
-Base inicial del portal, comunidad, estructura editorial, autenticación y limpieza.
+## Módulos públicos y rutas principales
 
-### v4.0 alpha.4
-Portal PRO Polish + CMS Studio + Live Readiness.
+| Ruta | Módulo | Estado |
+| --- | --- | --- |
+| `/` | Home principal | Activo |
+| `/news` | Noticias / Content OS | Activo |
+| `/gaming` | Gaming & Technology | Activo |
+| `/science` | Science Lab | Activo |
+| `/fun` | Creator / Fun Portal | Activo |
+| `/community` | Comunidad | Activo |
+| `/profile` | Perfil / estado de cuenta | Activo |
+| `/account` | Acceso estable de cuenta | Activo |
+| `/login` | Alias de acceso | Activo |
+| `/confirm-email` | Confirmación de email | Activo |
+| `/cms` | CMS protegido | Activo bajo guard |
+| `/green-node` | Green Node oculto | Activo con gate |
 
-### RC1.1
-Inicio de XETHKIOZ Network, Science Lab y Green Node.
+## Módulos internos preparados
 
-### RC1.2 - RC1.4
-Pulido de Network, Wisp, Green Node, links, integridad visual y SQL inicial.
+- Gaming & Technology.
+- Science Lab.
+- Green Node / Green Zone.
+- Asia Gaming.
+- AI Lab.
+- Content OS.
+- Creator Studio.
+- Community OS.
+- Wisp / easter eggs.
+- CMS editorial.
+- Supabase Realtime preparado para chat/comunidad.
 
-### RC1.5
-Database Baseline y paneles de revisión.
-
-### RC1.6
-Content System + QA final.
-
-### RC1.7
-Aislamiento de Green Node, video hero y Science Lab formal.
-
-### RC1.8
-AI Lab + Creator Studio.
-
-### RC1.9
-Milestones + Data Governance.
-
-### RC2.0 / RC2.1
-Chat, presencia, Wisp evolucionable y documentación.
-
-### RC2.2
-Fix de estabilidad para evitar pantalla vacía: Safe Boot + Error Boundaries + Supabase tolerante.
-
-## Instalación local
-
-```powershell
-cd "E:\Proyecto Xethkioz\Pagina Web\Web_GITHUB"
-npm install
-npm run build
-npm run dev
-```
-
-Abrir:
+## Stack técnico
 
 ```text
-http://localhost:5173/
+React 18
+Vite
+TypeScript
+TailwindCSS
+React Router
+React Helmet Async
+Supabase JS
+Vercel Analytics
+Vercel Serverless Functions
 ```
 
-## Variables de entorno
+## Scripts principales
 
-Crear o mantener `.env` con:
+```bash
+npm run dev
+npm run build
+npm run typecheck
+npm run verify
+npm run deploy:check
+```
+
+## Auditorías internas disponibles
+
+```bash
+npm run audit:env
+npm run audit:production-ready
+npm run audit:security-hardening
+npm run audit:runtime
+npm run audit:portal
+npm run audit:news-factory
+npm run audit:auth-nexus
+npm run audit:supabase-hydration
+```
+
+## Variables de entorno requeridas
+
+### Frontend público
 
 ```env
-VITE_SUPABASE_URL=https://tu-proyecto.supabase.co
-VITE_SUPABASE_ANON_KEY=tu-anon-key
+VITE_SUPABASE_URL=
+VITE_SUPABASE_ANON_KEY=
 ```
 
-La app trae fallback de desarrollo, pero producción debe usar variables reales en Netlify.
+### API/serverless
+
+```env
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+XETHKIOZ_ADMIN_RECOVERY_TOKEN=
+```
+
+Regla: nunca commitear claves reales. Las claves deben vivir en Vercel/Netlify/Supabase según corresponda.
 
 ## Supabase / SQL
 
-Las migraciones están en:
+Las migraciones y baselines están en:
 
 ```text
 supabase/migrations/
 database/migrations/
 ```
 
-Antes de producción estable se recomienda consolidar una baseline v4 definitiva.
+Prioridad actual:
 
-## QA mínimo antes de subir
+1. Confirmar auth estable.
+2. Confirmar perfiles/admin roles.
+3. Confirmar CMS protegido.
+4. Revisar tablas editoriales.
+5. Activar Realtime solo después de validar reglas RLS.
 
-```powershell
-npm run build
-git status
-```
+## Política de cambios
 
-Rutas a revisar:
+### Permitido directo en rama de revisión
 
-```text
-/
-/network
-/gaming
-/tech
-/science
-/green-node
-/ai-lab
-/creator-studio
-/cms
-/content-system
-/roles
-/milestones
-/qa
-```
+- Documentación.
+- Metadatos de versión.
+- Fixes de build/typecheck.
+- Limpieza de estados obsoletos.
+- Checklists operativos.
 
-## Notas de estabilidad RC2.2
+### Requiere revisión antes de mergear
 
-El objetivo principal fue evitar que un error de chat, presencia, Supabase Realtime o Wisp deje la web completamente vacía. Cada módulo crítico queda aislado para que el portal principal siga activo.
+- Cambios en auth.
+- Cambios en CMS.
+- Cambios en Supabase/RLS.
+- Cambios en rutas públicas.
+- Cambios en headers/CSP.
+- Cambios visuales grandes.
+- Cambios que toquen funciones serverless.
 
-## Estado actual — v4.0.0-rc.2.3
+### No hacer sin respaldo
 
-**RC2.3 Content Ready UX Polish** consolida la etapa de estabilidad y prepara la carga real de contenido.
+- Borrar migraciones.
+- Borrar rutas públicas.
+- Modificar claves o secretos.
+- Mover dominio/alias.
+- Cambiar providers globales sin test.
 
-### Incluye
+## Deploy checklist
 
-- Centro editorial visible en `/cms` y `/content-system`.
-- Prioridades de contenido por portal.
-- Carriles de publicación: noticia rápida, informe profundo, pack streaming y Green Node log.
-- Gates de calidad para revisar antes de publicar.
-- SQL incremental para slots editoriales, lanes y quality gates.
-- Continuidad del fix de render de RC2.2.
+Antes de producción:
 
-### Comandos
-
-```powershell
+```bash
 npm install
-npm run build
-npm run dev
+npm run verify
+npm run deploy:check
 ```
 
-## Estado actual recomendado
+Después del deploy:
 
-**Versión:** v4.0.0-rc.2.4  
-**Bloque:** Realtime Community + Daily Loop
+- Revisar `/`.
+- Revisar `/account`.
+- Revisar `/profile`.
+- Revisar `/news`.
+- Revisar `/gaming`.
+- Revisar `/science`.
+- Revisar `/community`.
+- Revisar `/cms` con usuario admin.
+- Revisar consola del navegador.
+- Revisar logs de Vercel.
 
-Esta versión prioriza que la web se sienta viva: chat global preparado con Supabase Realtime, presencia, Wisp evolucionable y un panel diario de actividad/contenido.
+## Estado operativo al 2026-07-06
 
-### Para activar chat global real
+- Producción en Vercel: activa.
+- Dominio principal: activo.
+- Alias `www`: activo.
+- Últimos errores detectados: builds fallidos por TypeScript en funciones API que usan `process.env`.
+- Corrección preparada: tipado local mínimo en `api/node-env.d.ts`, sin agregar dependencias nuevas ni tocar `package-lock.json`.
+- Documentación anterior: actualizada desde v4/rc2 hacia v7 live.
 
-1. Confirmar `.env` con `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY`.
-2. Aplicar `supabase/migrations/20260625_rc24_realtime_community_daily_loop.sql`.
-3. Verificar en Supabase que Realtime esté habilitado.
-4. Probar el chat desde dos navegadores/dispositivos distintos.
+## Siguiente etapa recomendada
 
-Sin Supabase activo, el chat funciona como fallback local/multi-pestaña, pero no será visible para otros usuarios reales.
-
+1. Mergear esta rama solo si el preview/deploy build queda correcto.
+2. Auditar `/api` completo.
+3. Revisar seguridad de `admin-auth-link`.
+4. Consolidar CMS + Supabase con roles reales.
+5. Crear tablero de issues por módulo: Auth, CMS, Content OS, Community, Green Node, SEO, Ads, Streaming.
