@@ -1,4 +1,12 @@
 User-agent: *
 Allow: /
+Disallow: /cms
+Disallow: /cms/
+Disallow: /cms-legacy
+Disallow: /account
+Disallow: /login
+Disallow: /register
+Disallow: /green-node
+Disallow: /api/
 
-Sitemap: https://xethkioz.com.ar/sitemap.xml
+Sitemap: https://www.xethkioz.com.ar/sitemap.xml
