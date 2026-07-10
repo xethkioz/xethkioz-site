@@ -34,8 +34,10 @@ const WINDOW_MS = 60_000
 const USER_LIMIT = 10
 const IP_LIMIT = 30
 const IDEMPOTENCY_MS = 5 * 60_000
+const MAX_IDEMPOTENCY_KEY_LENGTH = 128
 
 function json(res: any, status: number, body: unknown) {
+  res.setHeader('Cache-Control', 'no-store, max-age=0')
   res.status(status).json(body)
 }
 
@@ -72,34 +74,41 @@ function isValidUrl(value: string) {
   }
 }
 
-function validateBody(body: GenerateNewsRequest) {
+function validateBody(body: unknown) {
   const details: string[] = []
 
-  if (!body || typeof body !== 'object') details.push('Body must be a JSON object')
-  if (!body.category || !allowedCategories.includes(body.category)) details.push('Invalid category')
-  if (!body.topic || typeof body.topic !== 'string' || body.topic.trim().length < 3 || body.topic.length > 200) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return ['Body must be a JSON object']
+  }
+
+  const value = body as GenerateNewsRequest
+
+  if (!value.category || !allowedCategories.includes(value.category)) details.push('Invalid category')
+  if (!value.topic || typeof value.topic !== 'string' || value.topic.trim().length < 3 || value.topic.length > 200) {
     details.push('Topic is required and must be between 3 and 200 chars')
   }
-  if (body.title && (typeof body.title !== 'string' || body.title.length > 220)) details.push('Invalid title')
-  if (body.summary && (typeof body.summary !== 'string' || body.summary.length > 500)) details.push('Invalid summary')
-  if (body.language && !allowedLanguages.includes(body.language)) details.push('Invalid language')
-  if (body.tags && (!Array.isArray(body.tags) || body.tags.length > 10 || body.tags.some((tag) => typeof tag !== 'string' || tag.length > 40))) {
+  if (value.title && (typeof value.title !== 'string' || value.title.length > 220)) details.push('Invalid title')
+  if (value.summary && (typeof value.summary !== 'string' || value.summary.length > 500)) details.push('Invalid summary')
+  if (value.language && !allowedLanguages.includes(value.language)) details.push('Invalid language')
+  if (value.useLLM === true) details.push('LLM generation is not available in phase 1')
+  if (value.tags && (!Array.isArray(value.tags) || value.tags.length > 10 || value.tags.some((tag) => typeof tag !== 'string' || tag.trim().length === 0 || tag.length > 40))) {
     details.push('Invalid tags')
   }
   if (
-    body.source_urls &&
-    (!Array.isArray(body.source_urls) || body.source_urls.length > 20 || body.source_urls.some((url) => typeof url !== 'string' || !isValidUrl(url)))
+    value.source_urls &&
+    (!Array.isArray(value.source_urls) || value.source_urls.length > 20 || value.source_urls.some((url) => typeof url !== 'string' || !isValidUrl(url)))
   ) {
     details.push('Invalid source_urls')
   }
   if (
-    body.content &&
-    (!Array.isArray(body.content) ||
-      body.content.length > 20 ||
-      body.content.some((block) =>
+    value.content &&
+    (!Array.isArray(value.content) ||
+      value.content.length > 20 ||
+      value.content.some((block) =>
         !block ||
         !['paragraph', 'heading', 'list', 'quote'].includes(block.type) ||
         typeof block.text !== 'string' ||
+        block.text.trim().length === 0 ||
         block.text.length > 1500,
       ))
   ) {
@@ -148,10 +157,21 @@ function checkRateLimit(key: string, limit: number) {
   return { ok: true, retryAfter: 0 }
 }
 
+function cleanupBuckets() {
+  const now = Date.now()
+  for (const [key, value] of rateBucket.entries()) {
+    if (value.resetAt <= now) rateBucket.delete(key)
+  }
+  for (const [key, value] of idempotencyBucket.entries()) {
+    if (value.expiresAt <= now) idempotencyBucket.delete(key)
+  }
+}
+
 function getBearerToken(req: any) {
   const header = req.headers.authorization || req.headers.Authorization
   if (!header || typeof header !== 'string' || !header.startsWith('Bearer ')) return null
-  return header.slice('Bearer '.length).trim()
+  const token = header.slice('Bearer '.length).trim()
+  return token.length > 0 && token.length <= 8192 ? token : null
 }
 
 function getClientIp(req: any) {
@@ -168,13 +188,14 @@ function isAdmin(user: any) {
 
 export default async function handler(req: any, res: any) {
   const traceId = getTraceId()
+  cleanupBuckets()
 
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST')
     return json(res, 405, { error: 'METHOD_NOT_ALLOWED' })
   }
 
-  const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL
+  const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
   if (!supabaseUrl || !serviceRoleKey) {
@@ -198,19 +219,25 @@ export default async function handler(req: any, res: any) {
   const ipRate = checkRateLimit(`ip:${ip}`, IP_LIMIT)
 
   if (!userRate.ok || !ipRate.ok) {
-    return json(res, 429, { error: 'RATE_LIMITED', retryAfter: Math.max(userRate.retryAfter, ipRate.retryAfter) })
+    const retryAfter = Math.max(userRate.retryAfter, ipRate.retryAfter)
+    res.setHeader('Retry-After', String(retryAfter))
+    return json(res, 429, { error: 'RATE_LIMITED', retryAfter })
   }
 
-  const idempotencyKey = req.headers['idempotency-key']
-  if (typeof idempotencyKey === 'string' && idempotencyKey.length > 0) {
+  const rawIdempotencyKey = req.headers['idempotency-key']
+  const idempotencyKey = typeof rawIdempotencyKey === 'string' ? rawIdempotencyKey.trim() : ''
+  if (idempotencyKey.length > MAX_IDEMPOTENCY_KEY_LENGTH) {
+    return json(res, 400, { error: 'VALIDATION_ERROR', details: ['Idempotency-Key is too long'] })
+  }
+  if (idempotencyKey) {
     const cached = idempotencyBucket.get(`${userId}:${idempotencyKey}`)
     if (cached && cached.expiresAt > Date.now()) return json(res, 201, cached.response)
   }
 
-  const body = req.body as GenerateNewsRequest
-  const validationErrors = validateBody(body)
+  const validationErrors = validateBody(req.body)
   if (validationErrors.length > 0) return json(res, 400, { error: 'VALIDATION_ERROR', details: validationErrors })
 
+  const body = req.body as GenerateNewsRequest
   const category = body.category as NewsCategory
   const language = body.language || 'es'
   const rawTopic = sanitizeText((body.topic || '').trim())
@@ -219,7 +246,11 @@ export default async function handler(req: any, res: any) {
   const baseSlug = slugify(title || rawTopic)
   const slug = baseSlug || `news-${Date.now().toString(36)}`
 
-  const { data: existingSlug } = await supabase.from('news_articles').select('id').eq('slug', slug).maybeSingle()
+  const { data: existingSlug, error: slugLookupError } = await supabase.from('news_articles').select('id').eq('slug', slug).maybeSingle()
+  if (slugLookupError) {
+    console.error('[generate-news:slug-check]', traceId, slugLookupError)
+    return json(res, 500, { error: 'INTERNAL_ERROR', traceId })
+  }
   if (existingSlug) {
     return json(res, 409, { error: 'SLUG_CONFLICT', suggestion: `${slug}-${Date.now().toString(36).slice(-4)}` })
   }
@@ -236,9 +267,9 @@ export default async function handler(req: any, res: any) {
     category,
     author_id: userId,
     status: 'draft',
-    tags: body.tags || [],
+    tags: (body.tags || []).map((tag) => sanitizeText(tag)),
     source_urls: body.source_urls || [],
-    ai_generated: Boolean(body.useLLM),
+    ai_generated: false,
     review_status: 'pending',
     metrics: {},
   }
@@ -254,12 +285,16 @@ export default async function handler(req: any, res: any) {
     return json(res, 500, { error: 'INTERNAL_ERROR', traceId })
   }
 
-  await supabase.from('news_audit_log').insert({
+  const { error: auditError } = await supabase.from('news_audit_log').insert({
     article_id: article.id,
     actor_id: userId,
     action: 'generate_news_draft',
-    payload: { category, sourceCount: payload.source_urls.length, aiGenerated: payload.ai_generated },
+    payload: { category, sourceCount: payload.source_urls.length, aiGenerated: false },
   })
+
+  if (auditError) {
+    console.error('[generate-news:audit-log]', traceId, auditError)
+  }
 
   const response = {
     id: article.id,
@@ -269,7 +304,7 @@ export default async function handler(req: any, res: any) {
     createdAt: article.created_at,
   }
 
-  if (typeof idempotencyKey === 'string' && idempotencyKey.length > 0) {
+  if (idempotencyKey) {
     idempotencyBucket.set(`${userId}:${idempotencyKey}`, { expiresAt: Date.now() + IDEMPOTENCY_MS, response })
   }
 
