@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import SEO from '../components/SEO'
 import { useWisp } from '../providers/WispProvider'
@@ -13,6 +14,12 @@ type Portal = {
   shadow: string
   text: string
   button: string
+}
+
+type DataSavingConnection = {
+  saveData?: boolean
+  addEventListener?: (type: 'change', listener: () => void) => void
+  removeEventListener?: (type: 'change', listener: () => void) => void
 }
 
 const copy = {
@@ -141,11 +148,33 @@ const sideItems = [
   { to: '/fun', icon: '☻' },
 ]
 
+function useAmbientVideoEnabled() {
+  const [enabled, setEnabled] = useState(false)
+
+  useEffect(() => {
+    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const connection = (navigator as Navigator & { connection?: DataSavingConnection }).connection
+    const syncPreference = () => setEnabled(!motionPreference.matches && !connection?.saveData)
+
+    syncPreference()
+    motionPreference.addEventListener('change', syncPreference)
+    connection?.addEventListener?.('change', syncPreference)
+
+    return () => {
+      motionPreference.removeEventListener('change', syncPreference)
+      connection?.removeEventListener?.('change', syncPreference)
+    }
+  }, [])
+
+  return enabled
+}
+
 export default function Home() {
   const navigate = useNavigate()
   const { triggerGreenPortal } = useWisp()
   const { lang, setLang } = useLang()
   const t = copy[lang]
+  const videoEnabled = useAmbientVideoEnabled()
 
   const openWisp = () => {
     triggerGreenPortal()
@@ -162,15 +191,24 @@ export default function Home() {
       />
 
       <section className="relative min-h-[100svh] overflow-hidden bg-[#0A0A0F] text-white">
-        <video
-          className="fixed inset-0 -z-50 h-full w-full object-cover"
-          src="/assets/bg-dragon-animated.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
+        <div
+          className="fixed inset-0 -z-50 h-full w-full bg-cover bg-center"
+          style={{ backgroundImage: "url('/assets/bg-dragon-poster.webp')" }}
+          aria-hidden="true"
         />
+        {videoEnabled && (
+          <video
+            className="fixed inset-0 -z-50 h-full w-full object-cover"
+            src="/assets/bg-dragon-animated.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            poster="/assets/bg-dragon-poster.webp"
+            aria-hidden="true"
+          />
+        )}
 
         <div className="fixed inset-0 -z-40 bg-black/65" />
         <div className="fixed inset-0 -z-30 bg-[radial-gradient(circle_at_30%_30%,rgba(139,92,246,0.16),transparent_30%),radial-gradient(circle_at_75%_35%,rgba(34,197,94,0.10),transparent_24%),radial-gradient(circle_at_center,transparent_35%,#0A0A0F_92%)]" />
