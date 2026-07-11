@@ -34,6 +34,8 @@ const runtimeBridge = read('src/engines/world/sandbox/RuntimeBridge.ts')
 const perf = read('src/engines/world/sandbox/PerformanceMonitor.ts')
 const shaderManager = read('src/engines/world/sandbox/ShaderManager.ts')
 const contracts = read('src/engines/world/sandbox/portalEventContracts.ts')
+const appShell = read('src/App.tsx')
+const mainEntry = read('src/main.tsx')
 
 check('RC-Live version stamped', pkg.version.includes('rc-live'))
 check('production audit script registered', pkg.scripts['audit:production-ready'] === 'node scripts/production-ready-check.mjs')
@@ -52,6 +54,12 @@ check('runtime bridge validates portal payload', runtimeBridge.includes('Ignored
 check('shader manager supports networkLatency uniform', read('src/engines/world/sandbox/shaderContracts.ts').includes('networkLatency') && shaderManager.includes('setRuntimeUniformProfile'))
 check('performance monitor has latency timeout', perf.includes('withTimeout') && perf.includes('Latency probe timeout'))
 check('performance monitor throttles critical reports', perf.includes('lastCriticalDropReportAt'))
+check(
+  'Nexus chat mounts once through the lazy App shell',
+  appShell.includes("const NexusChatWidget = lazy(() => import('./components/nexus/NexusChatWidget'))")
+    && !mainEntry.includes("import NexusChatWidget from './components/nexus/NexusChatWidget'")
+    && !mainEntry.includes('mountNexusChat'),
+)
 const strictPackageAudit = process.env.XETHKIOZ_STRICT_PACKAGE_AUDIT === '1'
 if (strictPackageAudit) {
   check('no env files packaged', !exists('.env') && !exists('.env.local') && !exists('.env.production'))
