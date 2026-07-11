@@ -6,6 +6,7 @@ type SafeImageProps = {
   className?: string
   fallback?: string
   loading?: 'lazy' | 'eager'
+  fetchPriority?: 'high' | 'low' | 'auto'
 }
 
 export const IMAGE_FALLBACK = '/images/articles/fallback.svg'
@@ -32,7 +33,14 @@ export function cleanImageUrl(src?: string | null, fallback = IMAGE_FALLBACK) {
   return src
 }
 
-export default function SafeImage({ src, alt, className = '', fallback = IMAGE_FALLBACK, loading = 'lazy' }: SafeImageProps) {
+export default function SafeImage({
+  src,
+  alt,
+  className = '',
+  fallback = IMAGE_FALLBACK,
+  loading = 'lazy',
+  fetchPriority = 'auto',
+}: SafeImageProps) {
   const safeSrc = cleanImageUrl(src, fallback)
 
   const handleError = (event: SyntheticEvent<HTMLImageElement>) => {
@@ -47,6 +55,8 @@ export default function SafeImage({ src, alt, className = '', fallback = IMAGE_F
       alt={alt}
       className={className}
       loading={loading}
+      decoding="async"
+      fetchPriority={fetchPriority}
       onError={handleError}
     />
   )
