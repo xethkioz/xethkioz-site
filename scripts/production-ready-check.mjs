@@ -36,6 +36,7 @@ const shaderManager = read('src/engines/world/sandbox/ShaderManager.ts')
 const contracts = read('src/engines/world/sandbox/portalEventContracts.ts')
 const appShell = read('src/App.tsx')
 const mainEntry = read('src/main.tsx')
+const home = read('src/pages/Home.tsx')
 
 check('RC-Live version stamped', pkg.version.includes('rc-live'))
 check('production audit script registered', pkg.scripts['audit:production-ready'] === 'node scripts/production-ready-check.mjs')
@@ -59,6 +60,17 @@ check(
   appShell.includes("const NexusChatWidget = lazy(() => import('./components/nexus/NexusChatWidget'))")
     && !mainEntry.includes("import NexusChatWidget from './components/nexus/NexusChatWidget'")
     && !mainEntry.includes('mountNexusChat'),
+)
+check(
+  'Home ambient video honors motion and data preferences',
+  home.includes("matchMedia('(prefers-reduced-motion: reduce)')")
+    && home.includes('connection?.saveData')
+    && home.includes('videoEnabled &&'),
+)
+check(
+  'Home ambient video has a static poster fallback',
+  exists('public/assets/bg-dragon-poster.webp')
+    && home.includes('/assets/bg-dragon-poster.webp'),
 )
 const strictPackageAudit = process.env.XETHKIOZ_STRICT_PACKAGE_AUDIT === '1'
 if (strictPackageAudit) {
