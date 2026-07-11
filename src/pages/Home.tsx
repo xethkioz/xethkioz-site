@@ -34,7 +34,11 @@ const copy = {
     wispBtn: 'Tocar al Wisp',
     wispNote: 'Solo para curiosos',
     login: 'Login',
-    search: 'Buscar',
+    news: 'Abrir radar de noticias',
+    switchLanguage: 'Cambiar a inglés',
+    primaryNav: 'Navegación principal',
+    launcher: 'Accesos rápidos XETHKIOZ',
+    portalsLabel: 'Portales XETHKIOZ',
     navHome: 'HOME',
     navGames: 'JUEGOS',
     navScience: 'CIENCIA & TECH',
@@ -92,7 +96,11 @@ const copy = {
     wispBtn: 'Touch the Wisp',
     wispNote: 'Only for the curious',
     login: 'Login',
-    search: 'Search',
+    news: 'Open news radar',
+    switchLanguage: 'Switch to Spanish',
+    primaryNav: 'Primary navigation',
+    launcher: 'XETHKIOZ quick links',
+    portalsLabel: 'XETHKIOZ portals',
     navHome: 'HOME',
     navGames: 'GAMES',
     navScience: 'SCIENCE & TECH',
@@ -181,6 +189,14 @@ export default function Home() {
     window.setTimeout(() => navigate('/green-node'), 450)
   }
 
+  const scrollToPortals = () => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    document.getElementById('portals')?.scrollIntoView({
+      behavior: reduceMotion ? 'auto' : 'smooth',
+      block: 'start',
+    })
+  }
+
   return (
     <>
       <SEO
@@ -214,10 +230,15 @@ export default function Home() {
         <div className="fixed inset-0 -z-30 bg-[radial-gradient(circle_at_30%_30%,rgba(139,92,246,0.16),transparent_30%),radial-gradient(circle_at_75%_35%,rgba(34,197,94,0.10),transparent_24%),radial-gradient(circle_at_center,transparent_35%,#0A0A0F_92%)]" />
         <div className="xk-noise fixed inset-0 -z-20 opacity-[0.17]" />
 
-        <LeftLauncher onWisp={openWisp} />
+        <LeftLauncher
+          onWisp={openWisp}
+          label={t.launcher}
+          itemLabels={[t.navHome, t.navGames, t.navScience, t.navFun]}
+          wispLabel={t.navWisp}
+        />
 
         <header className="relative z-30 flex items-center justify-between px-5 py-5 md:px-10 lg:px-14">
-          <Link to="/" className="group">
+          <Link to="/" className="group" aria-label="XETHKIOZ Home">
             <div className="text-4xl font-black italic tracking-tight md:text-5xl">
               <span className="bg-gradient-to-br from-orange-500 via-orange-300 to-purple-500 bg-clip-text text-transparent drop-shadow-[0_0_22px_rgba(255,107,26,0.65)]">
                 X
@@ -231,12 +252,13 @@ export default function Home() {
             </p>
           </Link>
 
-          <nav className="hidden rounded-full border border-white/10 bg-black/30 px-3 py-2 backdrop-blur-xl lg:flex">
-            <Link to="/" className="rounded-full px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-white/80 transition hover:bg-white/10 hover:text-orange-300">{t.navHome}</Link>
+          <nav className="hidden rounded-full border border-white/10 bg-black/30 px-3 py-2 backdrop-blur-xl lg:flex" aria-label={t.primaryNav}>
+            <Link to="/" aria-current="page" className="rounded-full px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-white/80 transition hover:bg-white/10 hover:text-orange-300">{t.navHome}</Link>
             <Link to="/gaming" className="rounded-full px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-white/80 transition hover:bg-white/10 hover:text-orange-300">{t.navGames}</Link>
             <Link to="/science" className="rounded-full px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-white/80 transition hover:bg-white/10 hover:text-orange-300">{t.navScience}</Link>
             <Link to="/fun" className="rounded-full px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-white/80 transition hover:bg-white/10 hover:text-orange-300">{t.navFun}</Link>
             <button
+              type="button"
               onClick={openWisp}
               className="rounded-full px-5 py-3 font-mono text-xs font-black uppercase tracking-[0.18em] text-green-300 transition hover:bg-green-400/10 hover:shadow-[0_0_20px_rgba(34,197,94,0.6)]"
             >
@@ -245,9 +267,11 @@ export default function Home() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <button aria-label={t.search} className="hidden h-11 w-11 place-items-center rounded-xl border border-white/10 bg-black/30 backdrop-blur-xl transition hover:border-orange-400/60 hover:shadow-[0_0_20px_rgba(251,146,60,0.4)] md:grid">⌕</button>
+            <Link to="/news" aria-label={t.news} className="hidden h-11 w-11 place-items-center rounded-xl border border-white/10 bg-black/30 backdrop-blur-xl transition hover:border-orange-400/60 hover:shadow-[0_0_20px_rgba(251,146,60,0.4)] md:grid">⌕</Link>
             <button
+              type="button"
               onClick={() => setLang(lang === 'es' ? 'en' : 'es')}
+              aria-label={t.switchLanguage}
               className="rounded-xl border border-white/10 bg-black/30 px-4 py-3 font-mono text-xs font-bold uppercase tracking-[0.16em] backdrop-blur-xl transition hover:border-purple-400"
             >
               {lang.toUpperCase()}
@@ -261,7 +285,7 @@ export default function Home() {
           </div>
         </header>
 
-        <main className="relative z-20 mx-auto max-w-[1720px] px-5 pb-40 pt-6 md:px-10 lg:px-14">
+        <div className="relative z-20 mx-auto max-w-[1720px] px-5 pb-40 pt-6 md:px-10 lg:px-14">
           <div className="relative min-h-[calc(100svh-190px)]">
             <section className="max-w-[760px] pt-8 lg:pt-12">
               <p className="font-mono text-xs font-black uppercase tracking-[0.38em] text-green-300 drop-shadow-[0_0_14px_rgba(34,197,94,0.8)]">
@@ -276,7 +300,8 @@ export default function Home() {
               <p className="mt-5 max-w-xl text-base leading-relaxed text-white/75 md:text-lg">{t.subtitle}</p>
 
               <button
-                onClick={() => document.getElementById('portals')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                type="button"
+                onClick={scrollToPortals}
                 className="mt-8 rounded-xl border border-orange-400/60 bg-orange-500/10 px-7 py-4 font-mono text-sm font-black uppercase tracking-[0.18em] text-orange-300 shadow-[0_0_28px_rgba(251,146,60,0.28)] transition hover:scale-[1.03] hover:bg-orange-500/20 hover:shadow-[0_0_45px_rgba(251,146,60,0.55)]"
               >
                 {t.cta}
@@ -289,13 +314,13 @@ export default function Home() {
               onClick={openWisp}
             />
 
-            <section id="portals" className="mt-12 grid grid-cols-1 items-end gap-8 md:mt-16 md:grid-cols-3 xl:mt-10 xl:pr-[340px] 2xl:pr-[380px]">
+            <section id="portals" aria-label={t.portalsLabel} className="mt-12 grid grid-cols-1 items-end gap-8 md:mt-16 md:grid-cols-3 xl:mt-10 xl:pr-[340px] 2xl:pr-[380px]">
               {t.portals.map((portal) => (
                 <PortalCard key={portal.title} portal={portal} />
               ))}
             </section>
           </div>
-        </main>
+        </div>
 
         <StatsBar stats={[t.statsUsers, t.statsNews, t.statsContent, t.statsSecure]} copyright={t.copyright} />
       </section>
@@ -305,7 +330,7 @@ export default function Home() {
 
 function PortalCard({ portal }: { portal: Portal }) {
   return (
-    <Link to={portal.route} className="group block" aria-label={portal.button}>
+    <Link to={portal.route} className="group block" aria-label={`${portal.button.replace(' →', '')}: ${portal.title}`}>
       <article
         className={[
           'relative mx-auto h-[420px] w-full max-w-[420px] overflow-hidden rounded-[44%] ring-4 md:h-[460px] xl:h-[500px]',
@@ -378,13 +403,25 @@ function FloatingWisp({
   )
 }
 
-function LeftLauncher({ onWisp }: { onWisp: () => void }) {
+function LeftLauncher({
+  onWisp,
+  label,
+  itemLabels,
+  wispLabel,
+}: {
+  onWisp: () => void
+  label: string
+  itemLabels: readonly string[]
+  wispLabel: string
+}) {
   return (
-    <aside className="fixed left-4 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-3 rounded-[1.6rem] border border-white/10 bg-black/35 p-2 shadow-[0_0_30px_rgba(139,92,246,0.25)] backdrop-blur-xl md:flex">
-      {sideItems.map((item) => (
+    <nav className="fixed left-4 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-3 rounded-[1.6rem] border border-white/10 bg-black/35 p-2 shadow-[0_0_30px_rgba(139,92,246,0.25)] backdrop-blur-xl md:flex" aria-label={label}>
+      {sideItems.map((item, index) => (
         <Link
           key={item.to}
           to={item.to}
+          aria-label={itemLabels[index]}
+          aria-current={item.to === '/' ? 'page' : undefined}
           className="grid h-12 w-12 place-items-center rounded-2xl border border-white/10 bg-black/40 text-xl text-white/75 transition hover:border-purple-400 hover:text-purple-200 hover:shadow-[0_0_22px_rgba(139,92,246,0.65)]"
         >
           {item.icon}
@@ -394,11 +431,12 @@ function LeftLauncher({ onWisp }: { onWisp: () => void }) {
       <button
         type="button"
         onClick={onWisp}
+        aria-label={wispLabel}
         className="grid h-12 w-12 place-items-center rounded-2xl border border-green-500/40 bg-green-500/10 text-xl text-green-300 transition hover:border-green-300 hover:shadow-[0_0_25px_rgba(34,197,94,0.8)]"
       >
         ✦
       </button>
-    </aside>
+    </nav>
   )
 }
 

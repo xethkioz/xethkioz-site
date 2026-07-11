@@ -72,6 +72,14 @@ check(
   exists('public/assets/bg-dragon-poster.webp')
     && home.includes('/assets/bg-dragon-poster.webp'),
 )
+check(
+  'Home exposes accessible navigation semantics',
+  !home.includes('<main className="relative z-20')
+    && home.includes('aria-label={itemLabels[index]}')
+    && home.includes("portal.button.replace(' →', '')")
+    && home.includes('to="/news"')
+    && home.includes("behavior: reduceMotion ? 'auto' : 'smooth'"),
+)
 const strictPackageAudit = process.env.XETHKIOZ_STRICT_PACKAGE_AUDIT === '1'
 if (strictPackageAudit) {
   check('no env files packaged', !exists('.env') && !exists('.env.local') && !exists('.env.production'))
