@@ -5,10 +5,6 @@ import { LangProvider } from './lib/LangContext'
 import { HudProvider } from './lib/HudContext'
 import { GREEN_NODE_UNLOCK_KEY, WispProvider } from './providers/WispProvider'
 import { ProfileProgressProvider } from './lib/ProfileProgressContext'
-import Header from './components/Header'
-import Footer from './components/Footer'
-import FusionGlobalWisp from './components/fusion/FusionGlobalWisp'
-import NexusChatWidget from './components/nexus/NexusChatWidget'
 import ScrollToTop from './components/ScrollToTop'
 import Analytics from './components/Analytics'
 import AppErrorBoundary from './components/AppErrorBoundary'
@@ -18,6 +14,11 @@ import { WorldOrchestratorProvider } from './engines/world/orchestrator'
 import { WorldThemeProvider } from './engines/world/theme'
 import { LightingEngineProvider } from './engines/world/lighting'
 import { AdminGuard } from './cms/guards'
+
+const Header = lazy(() => import('./components/Header'))
+const Footer = lazy(() => import('./components/Footer'))
+const FusionGlobalWisp = lazy(() => import('./components/fusion/FusionGlobalWisp'))
+const NexusChatWidget = lazy(() => import('./components/nexus/NexusChatWidget'))
 
 const Home = lazy(() => import('./pages/Home'))
 const GamingHub = lazy(() => import('./pages/GamingHub'))
@@ -69,8 +70,10 @@ function AppShell() {
       <ScrollToTop />
       {!isCmsRoute && !isHomeRoute && (
         <AppErrorBoundary label="Global Controls" compact>
-          <Header />
-          <FusionGlobalWisp />
+          <Suspense fallback={null}>
+            <Header />
+            <FusionGlobalWisp />
+          </Suspense>
         </AppErrorBoundary>
       )}
 
@@ -116,8 +119,16 @@ function AppShell() {
         </AppErrorBoundary>
       </main>
 
-      {!isCmsRoute && !isHomeRoute && <Footer />}
-      {!isCmsRoute && <NexusChatWidget />}
+      {!isCmsRoute && !isHomeRoute && (
+        <Suspense fallback={null}>
+          <Footer />
+        </Suspense>
+      )}
+      {!isCmsRoute && (
+        <Suspense fallback={null}>
+          <NexusChatWidget />
+        </Suspense>
+      )}
     </>
   )
 }
