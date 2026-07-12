@@ -24,6 +24,7 @@ const Home = lazy(() => import('./pages/Home'))
 const GamingHub = lazy(() => import('./pages/GamingHub'))
 const ScienceLab = lazy(() => import('./pages/ScienceLab'))
 const FunPortal = lazy(() => import('./pages/FunPortal'))
+const WebCreation = lazy(() => import('./pages/WebCreation'))
 const GreenNode = lazy(() => import('./pages/GreenNode'))
 const ProfileHub = lazy(() => import('./pages/ProfileHub'))
 const News = lazy(() => import('./pages/News'))
@@ -38,6 +39,8 @@ const CmsNewsList = lazy(() => import('./cms/routes/CmsNewsList'))
 const CmsReviewQueue = lazy(() => import('./cms/routes/CmsReviewQueue'))
 const CmsUsersPanel = lazy(() => import('./cms/routes/CmsUsersPanel'))
 const CmsAdsManager = lazy(() => import('./cms/routes/CmsAdsManager'))
+const CmsWebServicesManager = lazy(() => import('./cms/routes/CmsWebServicesManager'))
+const CmsWebQuotes = lazy(() => import('./cms/routes/CmsWebQuotes'))
 const AccountAccess = lazy(() => import('./pages/AccountAccessStable'))
 const ConfirmEmail = lazy(() => import('./pages/ConfirmEmail'))
 const NotFound = lazy(() => import('./pages/NotFound'))
@@ -85,6 +88,8 @@ function AppShell() {
               <Route path="/gaming" element={<GamingHub />} />
               <Route path="/science" element={<ScienceLab />} />
               <Route path="/fun" element={<FunPortal />} />
+              <Route path="/creacion-web" element={<WebCreation />} />
+              <Route path="/web-creation" element={<Navigate to="/creacion-web" replace />} />
               <Route path="/green-node" element={<GreenNodeGate />} />
               <Route path="/news" element={<News />} />
               <Route path="/news/:slug" element={<NewsArticle />} />
@@ -110,6 +115,8 @@ function AppShell() {
                 <Route path="review" element={<CmsReviewQueue />} />
                 <Route path="users" element={<CmsUsersPanel />} />
                 <Route path="ads" element={<CmsAdsManager />} />
+                <Route path="web-services" element={<CmsWebServicesManager />} />
+                <Route path="web-quotes" element={<CmsWebQuotes />} />
               </Route>
               <Route path="/cms-legacy" element={<CmsStudio />} />
               <Route path="/admin" element={<Navigate to="/cms" replace />} />

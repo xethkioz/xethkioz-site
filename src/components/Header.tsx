@@ -8,6 +8,7 @@ const nav = [
   { to: '/gaming', label: 'GAMES' },
   { to: '/science', label: 'SCIENCE & TECH' },
   { to: '/fun', label: 'FUN' },
+  { to: '/creacion-web', label: 'CREACIÓN WEB' },
 ]
 
 const rail = [
@@ -15,6 +16,7 @@ const rail = [
   { to: '/gaming', label: 'Juegos', icon: '🎮' },
   { to: '/science', label: 'Ciencia', icon: '◈' },
   { to: '/fun', label: 'Memes', icon: '☻' },
+  { to: '/creacion-web', label: 'Creación web', icon: '▣' },
 ]
 
 export default function Header() {

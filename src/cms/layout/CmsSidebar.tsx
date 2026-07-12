@@ -8,6 +8,8 @@ const navItems = [
   { to: '/cms/news/new', label: 'Editor', description: 'Editor base' },
   { to: '/cms/users', label: 'Usuarios', description: 'Roles y permisos' },
   { to: '/cms/ads', label: 'Publicidades', description: 'Sponsors y banners' },
+  { to: '/cms/web-services', label: 'Creación Web', description: 'Propuestas e imágenes' },
+  { to: '/cms/web-quotes', label: 'Presupuestos', description: 'Consultas comerciales' },
 ]
 
 export default function CmsSidebar() {

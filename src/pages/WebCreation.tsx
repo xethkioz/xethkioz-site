@@ -1,0 +1,459 @@
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
+import { Link } from 'react-router-dom'
+import SafeImage from '../components/SafeImage'
+import SEO from '../components/SEO'
+import { useLang } from '../lib/LangContext'
+import { loadPublishedWebServices } from '../services/webServices'
+import type { WebServiceOffer } from '../types/webServices'
+
+type QuoteForm = {
+  serviceId: string
+  name: string
+  email: string
+  whatsapp: string
+  businessName: string
+  projectType: string
+  budgetRange: string
+  contactPreference: string
+  details: string
+  consent: boolean
+  companyWebsite: string
+}
+
+type SubmitState =
+  | { status: 'idle'; message: '' }
+  | { status: 'submitting'; message: string }
+  | { status: 'success'; message: string }
+  | { status: 'error'; message: string }
+
+const emptyForm: QuoteForm = {
+  serviceId: '',
+  name: '',
+  email: '',
+  whatsapp: '',
+  businessName: '',
+  projectType: 'landing',
+  budgetRange: 'to-define',
+  contactPreference: 'email',
+  details: '',
+  consent: false,
+  companyWebsite: '',
+}
+
+const copy = {
+  es: {
+    eyebrow: 'XETHKIOZ · CREACIÓN WEB',
+    title: 'Tu próxima página no debería parecerse a todas las demás.',
+    intro: 'Diseñamos experiencias web con identidad, velocidad y una estrategia clara para transformar visitas en oportunidades reales.',
+    heroPrimary: 'Ver propuestas',
+    heroSecondary: 'Pedir presupuesto',
+    backHome: 'Volver al inicio',
+    heroBadge: 'Diseño + desarrollo + acompañamiento',
+    catalogEyebrow: 'Soluciones visuales',
+    catalogTitle: 'Elegí una base. La hacemos completamente tuya.',
+    catalogText: 'Estas imágenes son referencias de estilo: cada proyecto se adapta a la marca, el contenido y los objetivos del cliente.',
+    fallbackNotice: 'Catálogo temporal',
+    featured: 'Destacada',
+    included: 'Incluye',
+    processEyebrow: 'Cómo trabajamos',
+    processTitle: 'Un proceso claro, sin perder la magia.',
+    process: [
+      ['01 · Descubrimiento', 'Entendemos tu proyecto, audiencia, contenido y objetivo comercial.'],
+      ['02 · Diseño', 'Definimos estructura, identidad visual y experiencia responsive antes de construir.'],
+      ['03 · Desarrollo', 'Implementamos, probamos rendimiento, accesibilidad, formularios y SEO base.'],
+      ['04 · Lanzamiento', 'Publicamos, verificamos el recorrido completo y dejamos una base preparada para crecer.'],
+    ],
+    quoteEyebrow: 'Contanos tu idea',
+    quoteTitle: 'Recibí un presupuesto pensado para tu proyecto.',
+    quoteText: 'Completá estos datos y revisamos alcance, tiempos y necesidades. No es una respuesta automática: analizamos cada consulta.',
+    service: 'Propuesta de referencia',
+    servicePlaceholder: 'Quiero orientación',
+    name: 'Nombre y apellido',
+    email: 'Email',
+    whatsapp: 'WhatsApp (opcional)',
+    business: 'Marca, negocio o proyecto (opcional)',
+    projectType: 'Tipo de proyecto',
+    budget: 'Rango de inversión',
+    contact: 'Preferencia de contacto',
+    details: '¿Qué necesitás construir?',
+    detailsPlaceholder: 'Contanos qué hacés, qué secciones imaginás, si ya tenés logo/contenido y qué resultado esperás de la página.',
+    consent: 'Acepto que XETHKIOZ use estos datos únicamente para responder esta solicitud de presupuesto.',
+    submit: 'Enviar solicitud',
+    submitting: 'Enviando…',
+    success: 'Solicitud recibida. Te vamos a contactar con los próximos pasos.',
+    genericError: 'No pudimos enviar la solicitud. Revisá los datos e intentá nuevamente.',
+    projectTypes: [
+      ['landing', 'Landing page'],
+      ['corporate', 'Sitio profesional / corporativo'],
+      ['ecommerce', 'Tienda online'],
+      ['portfolio', 'Portfolio / marca personal'],
+      ['redesign', 'Rediseño de un sitio existente'],
+      ['other', 'Otro / necesito orientación'],
+    ],
+    budgets: [
+      ['to-define', 'Necesito definirlo con ustedes'],
+      ['starter', 'Proyecto inicial'],
+      ['growth', 'Proyecto de crecimiento'],
+      ['advanced', 'Proyecto avanzado / integraciones'],
+    ],
+    contacts: [['email', 'Email'], ['whatsapp', 'WhatsApp'], ['either', 'Cualquiera de los dos']],
+    privacy: 'Tus datos no se publican ni se comparten en el catálogo.',
+  },
+  en: {
+    eyebrow: 'XETHKIOZ · WEB CREATION',
+    title: 'Your next website should not look like everyone else’s.',
+    intro: 'We design web experiences with identity, speed and a clear strategy to turn visits into real opportunities.',
+    heroPrimary: 'Explore solutions',
+    heroSecondary: 'Request a quote',
+    backHome: 'Back to home',
+    heroBadge: 'Design + development + support',
+    catalogEyebrow: 'Visual solutions',
+    catalogTitle: 'Choose a starting point. We make it completely yours.',
+    catalogText: 'These images are style references: every project is tailored to the client’s brand, content and goals.',
+    fallbackNotice: 'Temporary catalog',
+    featured: 'Featured',
+    included: 'Includes',
+    processEyebrow: 'How we work',
+    processTitle: 'A clear process without losing the magic.',
+    process: [
+      ['01 · Discovery', 'We understand your project, audience, content and commercial goal.'],
+      ['02 · Design', 'We define structure, visual identity and responsive experience before building.'],
+      ['03 · Development', 'We implement and test performance, accessibility, forms and baseline SEO.'],
+      ['04 · Launch', 'We publish, verify the complete journey and leave a foundation ready to grow.'],
+    ],
+    quoteEyebrow: 'Tell us your idea',
+    quoteTitle: 'Get a quote designed around your project.',
+    quoteText: 'Share the essentials and we will review scope, timing and needs. This is not an automated response: every inquiry is assessed.',
+    service: 'Reference solution',
+    servicePlaceholder: 'I need guidance',
+    name: 'Full name',
+    email: 'Email',
+    whatsapp: 'WhatsApp (optional)',
+    business: 'Brand, business or project (optional)',
+    projectType: 'Project type',
+    budget: 'Investment range',
+    contact: 'Contact preference',
+    details: 'What do you need to build?',
+    detailsPlaceholder: 'Tell us what you do, the sections you imagine, whether you already have a logo/content and what result you expect.',
+    consent: 'I agree that XETHKIOZ may use this information only to respond to this quote request.',
+    submit: 'Send request',
+    submitting: 'Sending…',
+    success: 'Request received. We will contact you with the next steps.',
+    genericError: 'We could not send the request. Check the information and try again.',
+    projectTypes: [
+      ['landing', 'Landing page'],
+      ['corporate', 'Professional / corporate site'],
+      ['ecommerce', 'Online store'],
+      ['portfolio', 'Portfolio / personal brand'],
+      ['redesign', 'Existing site redesign'],
+      ['other', 'Other / I need guidance'],
+    ],
+    budgets: [
+      ['to-define', 'I need help defining it'],
+      ['starter', 'Starter project'],
+      ['growth', 'Growth project'],
+      ['advanced', 'Advanced project / integrations'],
+    ],
+    contacts: [['email', 'Email'], ['whatsapp', 'WhatsApp'], ['either', 'Either one']],
+    privacy: 'Your information is never published or shared in the catalog.',
+  },
+} as const
+
+function scrollTo(id: string) {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  document.getElementById(id)?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' })
+}
+
+export default function WebCreation() {
+  const { lang } = useLang()
+  const t = copy[lang]
+  const [offers, setOffers] = useState<WebServiceOffer[]>([])
+  const [catalogNotice, setCatalogNotice] = useState<string | null>(null)
+  const [catalogLoading, setCatalogLoading] = useState(true)
+  const [form, setForm] = useState<QuoteForm>(emptyForm)
+  const [submitState, setSubmitState] = useState<SubmitState>({ status: 'idle', message: '' })
+
+  useEffect(() => {
+    let active = true
+
+    loadPublishedWebServices().then((result) => {
+      if (!active) return
+      setOffers(result.offers)
+      setCatalogNotice(result.notice)
+      setForm((current) => current.serviceId ? current : { ...current, serviceId: result.offers[0]?.id ?? '' })
+      setCatalogLoading(false)
+    })
+
+    return () => {
+      active = false
+    }
+  }, [])
+
+  const selectedOffer = useMemo(
+    () => offers.find((offer) => offer.id === form.serviceId) ?? null,
+    [form.serviceId, offers],
+  )
+
+  function updateForm<Key extends keyof QuoteForm>(field: Key, value: QuoteForm[Key]) {
+    setForm((current) => ({ ...current, [field]: value }))
+    if (submitState.status !== 'idle') setSubmitState({ status: 'idle', message: '' })
+  }
+
+  function chooseOffer(offer: WebServiceOffer) {
+    updateForm('serviceId', offer.id)
+    scrollTo('presupuesto')
+  }
+
+  async function submitQuote(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setSubmitState({ status: 'submitting', message: t.submitting })
+
+    try {
+      const response = await fetch('/api/web-quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          serviceId: selectedOffer?.id ?? null,
+          serviceSlug: selectedOffer?.slug ?? null,
+          name: form.name,
+          email: form.email,
+          whatsapp: form.whatsapp,
+          businessName: form.businessName,
+          projectType: form.projectType,
+          budgetRange: form.budgetRange,
+          contactPreference: form.contactPreference,
+          details: form.details,
+          consent: form.consent,
+          companyWebsite: form.companyWebsite,
+          source: '/creacion-web',
+        }),
+      })
+
+      const payload = await response.json().catch(() => null) as { ok?: boolean; error?: string } | null
+      if (!response.ok || !payload?.ok) throw new Error(payload?.error || 'REQUEST_FAILED')
+
+      setSubmitState({ status: 'success', message: t.success })
+      setForm((current) => ({
+        ...emptyForm,
+        serviceId: current.serviceId,
+        projectType: current.projectType,
+        budgetRange: current.budgetRange,
+      }))
+    } catch {
+      setSubmitState({ status: 'error', message: t.genericError })
+    }
+  }
+
+  const heroOffer = offers[0]
+
+  return (
+    <div className="min-h-screen overflow-hidden bg-[#07070c] text-white">
+      <SEO
+        title={lang === 'es' ? 'Creación Web · Diseño y desarrollo a medida' : 'Web Creation · Custom design and development'}
+        description={lang === 'es'
+          ? 'Diseño y desarrollo de páginas web, landing pages, tiendas online y sitios profesionales con presupuesto personalizado.'
+          : 'Design and development of websites, landing pages, online stores and professional sites with a custom quote.'}
+        url="/creacion-web"
+        image="/web-services/landing-premium.svg"
+      />
+
+      <section className="relative isolate px-5 pb-24 pt-36 md:px-10 md:pt-44 lg:px-14">
+        <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_18%_18%,rgba(255,106,0,.18),transparent_28%),radial-gradient(circle_at_82%_22%,rgba(139,92,246,.24),transparent_31%),linear-gradient(180deg,#08070d_0%,#0c0914_70%,#07070c_100%)]" />
+        <div className="xk-noise absolute inset-0 -z-10 opacity-[0.12]" aria-hidden="true" />
+
+        <div className="mx-auto grid max-w-[1500px] items-center gap-14 xl:grid-cols-[0.92fr_1.08fr]">
+          <div>
+            <Link to="/" className="inline-flex items-center gap-2 font-mono text-xs font-black uppercase tracking-[0.2em] text-purple-200 transition hover:text-orange-300">
+              <span aria-hidden="true">←</span> {t.backHome}
+            </Link>
+            <p className="mt-10 font-mono text-xs font-black uppercase tracking-[0.34em] text-orange-300">{t.eyebrow}</p>
+            <h1 className="mt-5 max-w-4xl text-5xl font-black leading-[0.96] tracking-[-0.045em] sm:text-6xl lg:text-7xl">
+              {t.title}
+            </h1>
+            <p className="mt-7 max-w-2xl text-base leading-8 text-white/70 md:text-lg">{t.intro}</p>
+
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <button type="button" onClick={() => scrollTo('propuestas')} className="rounded-full bg-gradient-to-r from-orange-500 to-orange-300 px-7 py-4 font-mono text-xs font-black uppercase tracking-[0.18em] text-black shadow-[0_0_34px_rgba(255,106,0,.28)] transition hover:scale-[1.02] hover:shadow-[0_0_52px_rgba(255,106,0,.48)]">
+                {t.heroPrimary} →
+              </button>
+              <button type="button" onClick={() => scrollTo('presupuesto')} className="rounded-full border border-purple-400/50 bg-purple-500/10 px-7 py-4 font-mono text-xs font-black uppercase tracking-[0.18em] text-purple-100 transition hover:border-purple-300 hover:bg-purple-500/20">
+                {t.heroSecondary}
+              </button>
+            </div>
+
+            <p className="mt-8 inline-flex rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-white/60">
+              {t.heroBadge}
+            </p>
+          </div>
+
+          <div className="relative">
+            <div className="absolute -inset-8 rounded-[3rem] bg-gradient-to-br from-orange-500/15 via-purple-500/20 to-cyan-400/10 blur-3xl" aria-hidden="true" />
+            <div className="relative overflow-hidden rounded-[2rem] border border-white/15 bg-black/55 p-2 shadow-[0_40px_120px_rgba(0,0,0,.65)] backdrop-blur-xl sm:p-3">
+              <div className="flex h-9 items-center gap-2 border-b border-white/10 px-3" aria-hidden="true">
+                <span className="h-2.5 w-2.5 rounded-full bg-orange-400" />
+                <span className="h-2.5 w-2.5 rounded-full bg-purple-400" />
+                <span className="h-2.5 w-2.5 rounded-full bg-cyan-400" />
+                <span className="ml-3 h-3 flex-1 rounded-full bg-white/[0.06]" />
+              </div>
+              <SafeImage
+                src={heroOffer?.image_url}
+                fallback="/web-services/landing-premium.svg"
+                alt={heroOffer?.image_alt ?? 'Ejemplo de una página web creada por XETHKIOZ'}
+                loading="eager"
+                fetchPriority="high"
+                className="aspect-[12/7.6] w-full rounded-[1.35rem] object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="propuestas" className="scroll-mt-28 px-5 py-24 md:px-10 lg:px-14">
+        <div className="mx-auto max-w-[1500px]">
+          <div className="max-w-3xl">
+            <p className="font-mono text-xs font-black uppercase tracking-[0.3em] text-purple-300">{t.catalogEyebrow}</p>
+            <h2 className="mt-4 text-4xl font-black tracking-[-0.035em] md:text-6xl">{t.catalogTitle}</h2>
+            <p className="mt-5 text-base leading-7 text-white/65 md:text-lg">{t.catalogText}</p>
+          </div>
+
+          {catalogNotice ? (
+            <p className="mt-8 max-w-3xl rounded-2xl border border-orange-400/25 bg-orange-400/[0.07] px-5 py-4 text-sm leading-6 text-orange-100">
+              <strong className="mr-2 font-black uppercase tracking-[0.12em]">{t.fallbackNotice}:</strong>{catalogNotice}
+            </p>
+          ) : null}
+
+          {catalogLoading ? (
+            <div className="mt-12 grid gap-7 lg:grid-cols-3" aria-label="Cargando propuestas">
+              {[0, 1, 2].map((item) => <div key={item} className="h-[580px] animate-pulse rounded-[2rem] border border-white/10 bg-white/[0.035]" />)}
+            </div>
+          ) : (
+            <div className="mt-12 grid gap-7 lg:grid-cols-3">
+              {offers.map((offer) => (
+                <article key={offer.id} className="group flex overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-white/[0.065] to-white/[0.025] shadow-[0_28px_80px_rgba(0,0,0,.32)] transition hover:-translate-y-1 hover:border-purple-400/40">
+                  <div className="flex w-full flex-col">
+                    <div className="relative overflow-hidden border-b border-white/10">
+                      <SafeImage src={offer.image_url} fallback="/web-services/landing-premium.svg" alt={offer.image_alt} className="aspect-[12/7.4] w-full object-cover transition duration-700 group-hover:scale-[1.035]" />
+                      {offer.featured ? <span className="absolute left-4 top-4 rounded-full border border-orange-300/40 bg-black/70 px-3 py-2 font-mono text-[9px] font-black uppercase tracking-[0.18em] text-orange-200 backdrop-blur">{t.featured}</span> : null}
+                    </div>
+                    <div className="flex flex-1 flex-col p-6 md:p-7">
+                      {offer.eyebrow ? <p className="font-mono text-[10px] font-black uppercase tracking-[0.24em] text-orange-300">{offer.eyebrow}</p> : null}
+                      <h3 className="mt-3 text-3xl font-black tracking-[-0.025em]">{offer.title}</h3>
+                      <p className="mt-4 text-sm leading-6 text-white/65">{offer.summary}</p>
+                      <p className="mt-5 font-mono text-xs font-black uppercase tracking-[0.14em] text-purple-200">{offer.price_label}</p>
+                      {offer.delivery_label ? <p className="mt-2 text-xs text-white/45">{offer.delivery_label}</p> : null}
+                      <div className="mt-6 border-t border-white/10 pt-5">
+                        <p className="font-mono text-[10px] font-black uppercase tracking-[0.22em] text-white/45">{t.included}</p>
+                        <ul className="mt-4 space-y-3 text-sm text-white/70">
+                          {offer.features.map((feature) => <li key={feature} className="flex gap-3"><span className="text-orange-300" aria-hidden="true">◆</span><span>{feature}</span></li>)}
+                        </ul>
+                      </div>
+                      <button type="button" onClick={() => chooseOffer(offer)} className="mt-8 w-full rounded-full border border-purple-400/45 bg-purple-500/10 px-5 py-4 font-mono text-xs font-black uppercase tracking-[0.16em] text-purple-100 transition hover:border-orange-300 hover:bg-orange-400/10 hover:text-orange-100">
+                        {offer.cta_label} →
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section className="border-y border-white/10 bg-white/[0.025] px-5 py-24 md:px-10 lg:px-14">
+        <div className="mx-auto max-w-[1500px]">
+          <p className="font-mono text-xs font-black uppercase tracking-[0.3em] text-orange-300">{t.processEyebrow}</p>
+          <h2 className="mt-4 max-w-3xl text-4xl font-black tracking-[-0.035em] md:text-6xl">{t.processTitle}</h2>
+          <ol className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            {t.process.map(([title, description]) => (
+              <li key={title} className="rounded-[1.75rem] border border-white/10 bg-black/25 p-6">
+                <h3 className="font-mono text-xs font-black uppercase tracking-[0.16em] text-purple-200">{title}</h3>
+                <p className="mt-4 text-sm leading-6 text-white/60">{description}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section id="presupuesto" className="scroll-mt-28 px-5 py-24 md:px-10 lg:px-14">
+        <div className="mx-auto grid max-w-[1500px] gap-12 xl:grid-cols-[0.72fr_1.28fr]">
+          <div>
+            <p className="font-mono text-xs font-black uppercase tracking-[0.3em] text-purple-300">{t.quoteEyebrow}</p>
+            <h2 className="mt-4 text-4xl font-black tracking-[-0.035em] md:text-6xl">{t.quoteTitle}</h2>
+            <p className="mt-6 max-w-xl text-base leading-8 text-white/65">{t.quoteText}</p>
+            <div className="mt-8 rounded-[1.75rem] border border-orange-400/20 bg-orange-400/[0.055] p-6">
+              <p className="font-mono text-[10px] font-black uppercase tracking-[0.22em] text-orange-200">Privacidad</p>
+              <p className="mt-3 text-sm leading-6 text-orange-50/70">{t.privacy}</p>
+            </div>
+          </div>
+
+          <form onSubmit={submitQuote} className="rounded-[2rem] border border-white/12 bg-gradient-to-br from-purple-500/[0.08] via-black/40 to-orange-500/[0.055] p-6 shadow-[0_35px_100px_rgba(0,0,0,.45)] md:p-9">
+            <div className="grid gap-5 md:grid-cols-2">
+              <label className="grid gap-2 text-xs font-black uppercase tracking-[0.14em] text-purple-100 md:col-span-2">
+                {t.service}
+                <select value={form.serviceId} onChange={(event) => updateForm('serviceId', event.target.value)} className="min-h-12 rounded-2xl border border-white/12 bg-[#0d0b14] px-4 py-3 text-sm font-medium normal-case tracking-normal text-white outline-none transition focus:border-orange-300">
+                  <option value="">{t.servicePlaceholder}</option>
+                  {offers.map((offer) => <option key={offer.id} value={offer.id}>{offer.title}</option>)}
+                </select>
+              </label>
+
+              <label className="grid gap-2 text-xs font-black uppercase tracking-[0.14em] text-purple-100">
+                {t.name}
+                <input required minLength={2} maxLength={80} autoComplete="name" value={form.name} onChange={(event) => updateForm('name', event.target.value)} className="min-h-12 rounded-2xl border border-white/12 bg-[#0d0b14] px-4 py-3 text-sm font-medium normal-case tracking-normal text-white outline-none transition placeholder:text-white/25 focus:border-orange-300" />
+              </label>
+              <label className="grid gap-2 text-xs font-black uppercase tracking-[0.14em] text-purple-100">
+                {t.email}
+                <input required type="email" maxLength={254} autoComplete="email" value={form.email} onChange={(event) => updateForm('email', event.target.value)} className="min-h-12 rounded-2xl border border-white/12 bg-[#0d0b14] px-4 py-3 text-sm font-medium normal-case tracking-normal text-white outline-none transition placeholder:text-white/25 focus:border-orange-300" />
+              </label>
+              <label className="grid gap-2 text-xs font-black uppercase tracking-[0.14em] text-purple-100">
+                {t.whatsapp}
+                <input type="tel" maxLength={40} autoComplete="tel" value={form.whatsapp} onChange={(event) => updateForm('whatsapp', event.target.value)} className="min-h-12 rounded-2xl border border-white/12 bg-[#0d0b14] px-4 py-3 text-sm font-medium normal-case tracking-normal text-white outline-none transition placeholder:text-white/25 focus:border-orange-300" placeholder="+54 9 …" />
+              </label>
+              <label className="grid gap-2 text-xs font-black uppercase tracking-[0.14em] text-purple-100">
+                {t.business}
+                <input maxLength={120} autoComplete="organization" value={form.businessName} onChange={(event) => updateForm('businessName', event.target.value)} className="min-h-12 rounded-2xl border border-white/12 bg-[#0d0b14] px-4 py-3 text-sm font-medium normal-case tracking-normal text-white outline-none transition placeholder:text-white/25 focus:border-orange-300" />
+              </label>
+              <label className="grid gap-2 text-xs font-black uppercase tracking-[0.14em] text-purple-100">
+                {t.projectType}
+                <select value={form.projectType} onChange={(event) => updateForm('projectType', event.target.value)} className="min-h-12 rounded-2xl border border-white/12 bg-[#0d0b14] px-4 py-3 text-sm font-medium normal-case tracking-normal text-white outline-none transition focus:border-orange-300">
+                  {t.projectTypes.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                </select>
+              </label>
+              <label className="grid gap-2 text-xs font-black uppercase tracking-[0.14em] text-purple-100">
+                {t.budget}
+                <select value={form.budgetRange} onChange={(event) => updateForm('budgetRange', event.target.value)} className="min-h-12 rounded-2xl border border-white/12 bg-[#0d0b14] px-4 py-3 text-sm font-medium normal-case tracking-normal text-white outline-none transition focus:border-orange-300">
+                  {t.budgets.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                </select>
+              </label>
+              <label className="grid gap-2 text-xs font-black uppercase tracking-[0.14em] text-purple-100 md:col-span-2">
+                {t.contact}
+                <select value={form.contactPreference} onChange={(event) => updateForm('contactPreference', event.target.value)} className="min-h-12 rounded-2xl border border-white/12 bg-[#0d0b14] px-4 py-3 text-sm font-medium normal-case tracking-normal text-white outline-none transition focus:border-orange-300">
+                  {t.contacts.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                </select>
+              </label>
+              <label className="grid gap-2 text-xs font-black uppercase tracking-[0.14em] text-purple-100 md:col-span-2">
+                {t.details}
+                <textarea required minLength={20} maxLength={2000} rows={7} value={form.details} onChange={(event) => updateForm('details', event.target.value)} placeholder={t.detailsPlaceholder} className="rounded-2xl border border-white/12 bg-[#0d0b14] px-4 py-3 text-sm font-medium leading-6 normal-case tracking-normal text-white outline-none transition placeholder:text-white/25 focus:border-orange-300" />
+              </label>
+            </div>
+
+            <div className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+              <label>Company website<input tabIndex={-1} autoComplete="off" value={form.companyWebsite} onChange={(event) => updateForm('companyWebsite', event.target.value)} /></label>
+            </div>
+
+            <label className="mt-6 flex items-start gap-3 text-sm leading-6 text-white/65">
+              <input required type="checkbox" checked={form.consent} onChange={(event) => updateForm('consent', event.target.checked)} className="mt-1 h-4 w-4 accent-orange-500" />
+              <span>{t.consent}</span>
+            </label>
+
+            {submitState.status === 'error' ? <p role="alert" className="mt-5 rounded-2xl border border-red-400/30 bg-red-400/10 px-5 py-4 text-sm text-red-100">{submitState.message}</p> : null}
+            {submitState.status === 'success' ? <p role="status" className="mt-5 rounded-2xl border border-orange-300/35 bg-orange-300/10 px-5 py-4 text-sm text-orange-50">{submitState.message}</p> : null}
+
+            <button disabled={submitState.status === 'submitting'} type="submit" className="mt-7 w-full rounded-full bg-gradient-to-r from-orange-500 to-orange-300 px-7 py-4 font-mono text-xs font-black uppercase tracking-[0.18em] text-black shadow-[0_0_34px_rgba(255,106,0,.25)] transition hover:scale-[1.01] hover:shadow-[0_0_50px_rgba(255,106,0,.42)] disabled:cursor-wait disabled:opacity-60">
+              {submitState.status === 'submitting' ? t.submitting : `${t.submit} →`}
+            </button>
+          </form>
+        </div>
+      </section>
+    </div>
+  )
+}

@@ -12,6 +12,8 @@ type DashboardStats = {
   profiles: number
   adSlots: number
   adCampaigns: number
+  webOffers: number
+  webQuotes: number
 }
 
 type DbCheck = {
@@ -32,6 +34,8 @@ const emptyStats: DashboardStats = {
   profiles: 0,
   adSlots: 0,
   adCampaigns: 0,
+  webOffers: 0,
+  webQuotes: 0,
 }
 
 async function countByStatus(status?: string) {
@@ -103,6 +107,8 @@ export default function CmsDashboard() {
           checkTable('Mensajes chat', 'chat_messages'),
           checkTable('Slots de ads', 'ads_slots'),
           checkTable('Campañas ads', 'ads_campaigns'),
+          checkTable('Propuestas web', 'web_service_offers'),
+          checkTable('Presupuestos web', 'web_quote_requests'),
         ])
 
         const [total, draft, review, published, chatRooms, chatMessages] = await Promise.all([
@@ -117,10 +123,12 @@ export default function CmsDashboard() {
         const profiles = checks.find((check) => check.table === 'profiles')?.count ?? 0
         const adSlots = checks.find((check) => check.table === 'ads_slots')?.count ?? 0
         const adCampaigns = checks.find((check) => check.table === 'ads_campaigns')?.count ?? 0
+        const webOffers = checks.find((check) => check.table === 'web_service_offers')?.count ?? 0
+        const webQuotes = checks.find((check) => check.table === 'web_quote_requests')?.count ?? 0
 
         if (active) {
           setDbChecks(checks)
-          setStats({ total, draft, review, published, chatRooms, chatMessages, profiles, adSlots, adCampaigns })
+          setStats({ total, draft, review, published, chatRooms, chatMessages, profiles, adSlots, adCampaigns, webOffers, webQuotes })
         }
       } catch (caughtError) {
         if (active) setError(caughtError instanceof Error ? caughtError.message : 'No se pudieron cargar métricas del CMS.')
@@ -156,6 +164,8 @@ export default function CmsDashboard() {
     { label: 'Mensajes chat', value: stats.chatMessages, hint: 'chat_messages' },
     { label: 'Slots ads', value: stats.adSlots, hint: 'ads_slots' },
     { label: 'Campañas ads', value: stats.adCampaigns, hint: 'ads_campaigns' },
+    { label: 'Propuestas web', value: stats.webOffers, hint: 'web_service_offers' },
+    { label: 'Presupuestos web', value: stats.webQuotes, hint: 'web_quote_requests' },
     { label: 'Deploy', value: 'VERCEL', hint: 'main production' },
   ]
 
@@ -180,6 +190,8 @@ export default function CmsDashboard() {
           <Link to="/cms/review" className="rounded-full border border-yellow-400/40 px-5 py-3 text-xs font-black uppercase tracking-[0.18em] text-yellow-100 transition hover:bg-yellow-500/10">Cola revisión</Link>
           <Link to="/cms/users" className="rounded-full border border-emerald-400/40 px-5 py-3 text-xs font-black uppercase tracking-[0.18em] text-emerald-100 transition hover:bg-emerald-500/10">Usuarios</Link>
           <Link to="/cms/ads" className="rounded-full border border-orange-400/40 px-5 py-3 text-xs font-black uppercase tracking-[0.18em] text-orange-100 transition hover:bg-orange-500/10">Ads</Link>
+          <Link to="/cms/web-services" className="rounded-full border border-orange-400/40 px-5 py-3 text-xs font-black uppercase tracking-[0.18em] text-orange-100 transition hover:bg-orange-500/10">Creación web</Link>
+          <Link to="/cms/web-quotes" className="rounded-full border border-purple-400/40 px-5 py-3 text-xs font-black uppercase tracking-[0.18em] text-purple-100 transition hover:bg-purple-500/10">Presupuestos</Link>
           <Link to="/news" className="rounded-full border border-purple-400/40 px-5 py-3 text-xs font-black uppercase tracking-[0.18em] text-purple-100 transition hover:bg-purple-500/10">Feed público</Link>
           <button type="button" onClick={clearLocalChat} className="rounded-full border border-emerald-400/40 px-5 py-3 text-xs font-black uppercase tracking-[0.18em] text-emerald-100 transition hover:bg-emerald-500/10">Limpiar chat local</button>
         </div>
