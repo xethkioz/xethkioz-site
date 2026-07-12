@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Landing premium</title>
+  <desc id="desc">Mockup de una landing page creativa con hero, llamada a la acción y métricas.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#090611"/>
+      <stop offset="0.55" stop-color="#17102b"/>
+      <stop offset="1" stop-color="#2a0f08"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#ff7a00"/>
+      <stop offset="1" stop-color="#9d4dff"/>
+    </linearGradient>
+    <radialGradient id="orb">
+      <stop stop-color="#c084fc" stop-opacity=".9"/>
+      <stop offset=".45" stop-color="#7c3aed" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#7c3aed" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="760" rx="48" fill="url(#bg)"/>
+  <circle cx="1030" cy="135" r="240" fill="#8b5cf6" opacity=".12" filter="url(#shadow)"/>
+  <circle cx="170" cy="690" r="220" fill="#ff6a00" opacity=".13" filter="url(#shadow)"/>
+  <rect x="70" y="58" width="1060" height="644" rx="28" fill="#0c0b13" stroke="#ffffff" stroke-opacity=".18" stroke-width="2"/>
+  <rect x="70" y="58" width="1060" height="62" rx="28" fill="#17141f"/>
+  <rect x="70" y="92" width="1060" height="28" fill="#17141f"/>
+  <circle cx="111" cy="89" r="8" fill="#ff6a00"/>
+  <circle cx="139" cy="89" r="8" fill="#a855f7"/>
+  <circle cx="167" cy="89" r="8" fill="#38bdf8"/>
+  <rect x="440" y="78" width="320" height="23" rx="12" fill="#ffffff" opacity=".07"/>
+  <text x="107" y="173" fill="#ffffff" font-family="Arial, sans-serif" font-size="24" font-weight="800" letter-spacing="3">NOVA/ONE</text>
+  <g fill="#c4b5fd" font-family="Arial, sans-serif" font-size="13" font-weight="700">
+    <text x="715" y="171">SERVICIOS</text>
+    <text x="819" y="171">PROYECTOS</text>
+    <text x="928" y="171">CONTACTO</text>
+  </g>
+  <rect x="1000" y="147" width="94" height="35" rx="18" fill="url(#accent)"/>
+  <text x="1020" y="170" fill="#0a0711" font-family="Arial, sans-serif" font-size="12" font-weight="900">EMPEZAR</text>
+  <text x="108" y="250" fill="#ff9b4a" font-family="Arial, sans-serif" font-size="14" font-weight="800" letter-spacing="4">ESTRATEGIA + DISEÑO</text>
+  <text x="105" y="330" fill="#ffffff" font-family="Arial, sans-serif" font-size="67" font-weight="900">IDEAS QUE</text>
+  <text x="105" y="398" fill="url(#accent)" font-family="Arial, sans-serif" font-size="67" font-weight="900">SE HACEN VER.</text>
+  <text x="109" y="445" fill="#d8d2e5" font-family="Arial, sans-serif" font-size="18">Experiencias digitales claras, rápidas y memorables.</text>
+  <rect x="108" y="480" width="186" height="52" rx="26" fill="url(#accent)"/>
+  <text x="142" y="512" fill="#0b0712" font-family="Arial, sans-serif" font-size="14" font-weight="900">VER PROYECTOS →</text>
+  <rect x="315" y="480" width="160" height="52" rx="26" fill="none" stroke="#ffffff" stroke-opacity=".25"/>
+  <text x="352" y="512" fill="#ffffff" font-family="Arial, sans-serif" font-size="14" font-weight="700">CONOCERNOS</text>
+  <circle cx="870" cy="368" r="210" fill="url(#orb)"/>
+  <path d="M790 220c72-27 170 19 190 98 22 84-37 177-127 187-84 9-164-53-169-139-4-64 38-124 106-146Z" fill="#ffffff" opacity=".08" stroke="#c084fc" stroke-opacity=".55" stroke-width="2"/>
+  <path d="M742 395c74-66 182-71 268-12" fill="none" stroke="#ff7a00" stroke-width="7" stroke-linecap="round" opacity=".8"/>
+  <circle cx="810" cy="318" r="11" fill="#ff7a00"/>
+  <circle cx="932" cy="282" r="8" fill="#c084fc"/>
+  <circle cx="976" cy="429" r="13" fill="#38bdf8"/>
+  <g transform="translate(106 594)">
+    <rect width="985" height="70" rx="18" fill="#ffffff" opacity=".045" stroke="#ffffff" stroke-opacity=".1"/>
+    <g fill="#ffffff" font-family="Arial, sans-serif">
+      <text x="28" y="30" font-size="22" font-weight="900">42+</text><text x="28" y="50" font-size="10" opacity=".55">PROYECTOS</text>
+      <text x="246" y="30" font-size="22" font-weight="900">98%</text><text x="246" y="50" font-size="10" opacity=".55">SATISFACCIÓN</text>
+      <text x="464" y="30" font-size="22" font-weight="900">24H</text><text x="464" y="50" font-size="10" opacity=".55">RESPUESTA</text>
+      <text x="683" y="30" font-size="22" font-weight="900">AAA</text><text x="683" y="50" font-size="10" opacity=".55">EXPERIENCIA</text>
+      <text x="886" y="30" font-size="22" font-weight="900">∞</text><text x="886" y="50" font-size="10" opacity=".55">IDEAS</text>
+    </g>
+  </g>
+</svg>

@@ -104,6 +104,14 @@ export const XETHKIOZ_NETWORK_PORTALS = [
     status: 'branch',
     accent: 'purple',
     description: 'OBS, Kick, Twitch, YouTube, audio, video y producción de contenido.'
+  },
+  {
+    id: 'web-creation',
+    name: 'Creación Web',
+    path: '/creacion-web',
+    status: 'commercial',
+    accent: 'orange',
+    description: 'Diseño y desarrollo de landing pages, tiendas online y sitios profesionales con presupuesto personalizado.'
   }
 ] as const
 
@@ -124,6 +132,7 @@ export const VERIFIED_LINKS = [
   { area: 'Science Lab', label: 'Portal Ciencia', url: '/science', status: 'internal' },
   { area: 'Fun Portal', label: 'Portal Fun', url: '/fun', status: 'internal' },
   { area: 'Community', label: 'Comunidad', url: '/community', status: 'internal' },
+  { area: 'Creación Web', label: 'Servicios web', url: '/creacion-web', status: 'internal' },
   { area: 'Green Zone', label: 'Acceso oculto por Wisp', url: '/green-node', status: 'hidden' },
   { area: 'Streaming', label: 'Twitch', url: STREAM_LINKS.twitch, status: 'confirmed' },
   { area: 'Streaming', label: 'Kick', url: STREAM_LINKS.kick, status: 'confirmed' },
@@ -234,7 +243,7 @@ export const GREEN_NODE_EASTER_EGGS = [
 ]
 
 export const LIVE_INTERNAL_LINKS = [
-  '/', '/news', '/gaming', '/science', '/fun', '/community', '/profile', '/login', '/account', '/cms', '/green-node'
+  '/', '/news', '/gaming', '/science', '/fun', '/creacion-web', '/community', '/profile', '/login', '/account', '/cms', '/green-node'
 ] as const
 
 export const SCIENCE_LAB_POLICY = {
@@ -256,6 +265,8 @@ export const DATABASE_BASELINE_MODULES = [
   { table: 'chat_rooms / chat_messages', purpose: 'Comunidad y futuro Supabase Realtime.', status: 'realtime-ready' },
   { table: 'xp_events / achievements', purpose: 'Escalafón, insignias, reputación y moderación temporal.', status: 'community' },
   { table: 'cms_publication_jobs', purpose: 'Borradores, programación, revisión y publicación.', status: 'admin' },
+  { table: 'web_service_offers', purpose: 'Catálogo público administrable de creación web.', status: 'commercial' },
+  { table: 'web_quote_requests', purpose: 'Solicitudes privadas de presupuesto y seguimiento comercial.', status: 'private-admin' },
 ] as const
 
 export const RC15_REVIEW_CHECKLIST = [

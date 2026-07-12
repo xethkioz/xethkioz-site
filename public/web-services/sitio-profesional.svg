@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Sitio profesional</title>
+  <desc id="desc">Mockup de un sitio corporativo moderno con servicios, indicadores y equipo.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#070a12"/><stop offset="1" stop-color="#14122a"/></linearGradient>
+    <linearGradient id="hero" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#101a35"/><stop offset="1" stop-color="#40206d"/></linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#ff7a00"/><stop offset="1" stop-color="#a855f7"/></linearGradient>
+  </defs>
+  <rect width="1200" height="760" rx="48" fill="url(#bg)"/>
+  <rect x="62" y="50" width="1076" height="660" rx="30" fill="#f6f7fb"/>
+  <rect x="62" y="50" width="1076" height="66" rx="30" fill="#10131c"/>
+  <rect x="62" y="85" width="1076" height="31" fill="#10131c"/>
+  <circle cx="100" cy="82" r="8" fill="#ff6a00"/><circle cx="128" cy="82" r="8" fill="#8b5cf6"/><circle cx="156" cy="82" r="8" fill="#38bdf8"/>
+  <text x="98" y="165" fill="#171923" font-family="Arial, sans-serif" font-size="25" font-weight="900">AXIS</text>
+  <text x="161" y="165" fill="#8b5cf6" font-family="Arial, sans-serif" font-size="25" font-weight="900">STUDIO</text>
+  <g fill="#514c5d" font-family="Arial, sans-serif" font-size="13" font-weight="700"><text x="623" y="162">SOLUCIONES</text><text x="738" y="162">NOSOTROS</text><text x="843" y="162">CASOS</text></g>
+  <rect x="939" y="139" width="157" height="44" rx="22" fill="url(#accent)"/>
+  <text x="970" y="166" fill="#ffffff" font-family="Arial, sans-serif" font-size="12" font-weight="900">HABLEMOS →</text>
+  <rect x="92" y="203" width="1015" height="266" rx="28" fill="url(#hero)"/>
+  <text x="128" y="250" fill="#ff9b4a" font-family="Arial, sans-serif" font-size="12" font-weight="900" letter-spacing="3">ESTRATEGIA DIGITAL</text>
+  <text x="124" y="310" fill="#ffffff" font-family="Arial, sans-serif" font-size="48" font-weight="900">Construimos confianza</text>
+  <text x="124" y="362" fill="#ffffff" font-family="Arial, sans-serif" font-size="48" font-weight="900">antes del primer contacto.</text>
+  <text x="128" y="406" fill="#d8d5e4" font-family="Arial, sans-serif" font-size="16">Diseño, tecnología y contenido para marcas que quieren crecer.</text>
+  <circle cx="934" cy="334" r="95" fill="#ffffff" opacity=".06" stroke="#c084fc" stroke-opacity=".55" stroke-width="2"/>
+  <circle cx="934" cy="334" r="56" fill="#ff7a00" opacity=".25"/>
+  <path d="M898 337l24 24 53-64" fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="92" y="518" fill="#1d202a" font-family="Arial, sans-serif" font-size="25" font-weight="900">Una plataforma, múltiples resultados</text>
+  <g transform="translate(92 548)">
+    <g><rect width="236" height="128" rx="18" fill="#ffffff" stroke="#dedfe7"/><circle cx="34" cy="34" r="17" fill="#ff7a00" opacity=".16"/><path d="M27 34h14M34 27v14" stroke="#ff7a00" stroke-width="3"/><text x="20" y="78" fill="#252832" font-family="Arial, sans-serif" font-size="15" font-weight="900">Estrategia</text><text x="20" y="103" fill="#716b79" font-family="Arial, sans-serif" font-size="11">Objetivos claros y medibles</text></g>
+    <g transform="translate(260)"><rect width="236" height="128" rx="18" fill="#ffffff" stroke="#dedfe7"/><circle cx="34" cy="34" r="17" fill="#8b5cf6" opacity=".16"/><rect x="27" y="27" width="14" height="14" rx="3" fill="none" stroke="#8b5cf6" stroke-width="3"/><text x="20" y="78" fill="#252832" font-family="Arial, sans-serif" font-size="15" font-weight="900">Experiencia</text><text x="20" y="103" fill="#716b79" font-family="Arial, sans-serif" font-size="11">Simple en cada dispositivo</text></g>
+    <g transform="translate(520)"><rect width="236" height="128" rx="18" fill="#ffffff" stroke="#dedfe7"/><circle cx="34" cy="34" r="17" fill="#38bdf8" opacity=".18"/><path d="M26 40l8-12 8 12" fill="none" stroke="#0ea5e9" stroke-width="3"/><text x="20" y="78" fill="#252832" font-family="Arial, sans-serif" font-size="15" font-weight="900">Rendimiento</text><text x="20" y="103" fill="#716b79" font-family="Arial, sans-serif" font-size="11">Velocidad que convierte</text></g>
+    <g transform="translate(780)"><rect width="236" height="128" rx="18" fill="#ffffff" stroke="#dedfe7"/><circle cx="34" cy="34" r="17" fill="#f97316" opacity=".16"/><path d="M27 41V29h14v12M31 36h6" fill="none" stroke="#f97316" stroke-width="3"/><text x="20" y="78" fill="#252832" font-family="Arial, sans-serif" font-size="15" font-weight="900">Crecimiento</text><text x="20" y="103" fill="#716b79" font-family="Arial, sans-serif" font-size="11">Una base lista para escalar</text></g>
+  </g>
+</svg>

@@ -27,7 +27,7 @@ const copy = {
     eyebrow: 'Bienvenido al ecosistema',
     titleTop: 'EL GAMING',
     titleBottom: 'ES MI PASIÓN',
-    subtitle: 'Tres portales. Un universo. Miles de historias por descubrir.',
+    subtitle: 'Tres portales, un estudio creativo y miles de historias por descubrir.',
     cta: 'Explorar ecosistema →',
     wispTitle: 'GREEN WISP',
     wispText: 'Soy tu guía. Hay secretos que solo los curiosos encuentran.',
@@ -43,7 +43,14 @@ const copy = {
     navGames: 'JUEGOS',
     navScience: 'CIENCIA & TECH',
     navFun: 'DIVERSIÓN',
+    navWeb: 'CREACIÓN WEB',
     navWisp: 'WISP NEXUS',
+    webEyebrow: 'NUEVA LÍNEA · CREACIÓN WEB',
+    webTitle: 'Tu idea también puede tener su propio universo.',
+    webText: 'Diseño y desarrollo de landing pages, tiendas online y sitios profesionales con identidad, velocidad y presupuesto personalizado.',
+    webCta: 'Explorar creación web →',
+    webNote: 'Propuestas visuales · Presupuesto privado · Diseño responsive',
+    webImageAlt: 'Ejemplo visual de una landing page premium creada por XETHKIOZ',
     statsUsers: '+25K XETHKIOZERS',
     statsNews: '1,248 NOTICIAS',
     statsContent: '+3.6K CONTENIDO',
@@ -89,7 +96,7 @@ const copy = {
     eyebrow: 'Welcome to the ecosystem',
     titleTop: 'GAMING IS',
     titleBottom: 'MY PASSION',
-    subtitle: 'Three portals. One universe. Thousands of stories waiting to be discovered.',
+    subtitle: 'Three portals, one creative studio and thousands of stories waiting to be discovered.',
     cta: 'Explore ecosystem →',
     wispTitle: 'GREEN WISP',
     wispText: 'I am your guide. There are secrets that only the curious can find.',
@@ -105,7 +112,14 @@ const copy = {
     navGames: 'GAMES',
     navScience: 'SCIENCE & TECH',
     navFun: 'FUN',
+    navWeb: 'WEB CREATION',
     navWisp: 'WISP NEXUS',
+    webEyebrow: 'NEW LINE · WEB CREATION',
+    webTitle: 'Your idea can have a universe of its own.',
+    webText: 'Design and development of landing pages, online stores and professional sites with identity, speed and a custom quote.',
+    webCta: 'Explore web creation →',
+    webNote: 'Visual proposals · Private quote · Responsive design',
+    webImageAlt: 'Visual example of a premium landing page created by XETHKIOZ',
     statsUsers: '+25K XETHKIOZERS',
     statsNews: '1,248 NEWS',
     statsContent: '+3.6K CONTENT',
@@ -154,6 +168,7 @@ const sideItems = [
   { to: '/gaming', icon: '🎮' },
   { to: '/science', icon: '⚛' },
   { to: '/fun', icon: '☻' },
+  { to: '/creacion-web', icon: '▣' },
 ]
 
 function useAmbientVideoEnabled() {
@@ -201,7 +216,7 @@ export default function Home() {
     <>
       <SEO
         title="XETHKIOZ Web v1.0 · Ecosistema"
-        description="Web inmersiva de XETHKIOZ con portales ovalados, Green Wisp y navegación AAA."
+        description="Ecosistema inmersivo XETHKIOZ con gaming, ciencia, diversión, Green Wisp y creación de páginas web a medida."
         url="/"
         image="/assets/xethkioz-cover.png"
       />
@@ -233,7 +248,7 @@ export default function Home() {
         <LeftLauncher
           onWisp={openWisp}
           label={t.launcher}
-          itemLabels={[t.navHome, t.navGames, t.navScience, t.navFun]}
+          itemLabels={[t.navHome, t.navGames, t.navScience, t.navFun, t.navWeb]}
           wispLabel={t.navWisp}
         />
 
@@ -257,6 +272,7 @@ export default function Home() {
             <Link to="/gaming" className="rounded-full px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-white/80 transition hover:bg-white/10 hover:text-orange-300">{t.navGames}</Link>
             <Link to="/science" className="rounded-full px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-white/80 transition hover:bg-white/10 hover:text-orange-300">{t.navScience}</Link>
             <Link to="/fun" className="rounded-full px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-white/80 transition hover:bg-white/10 hover:text-orange-300">{t.navFun}</Link>
+            <Link to="/creacion-web" className="rounded-full px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-orange-200 transition hover:bg-orange-400/10 hover:text-orange-100">{t.navWeb}</Link>
             <button
               type="button"
               onClick={openWisp}
@@ -288,7 +304,7 @@ export default function Home() {
         <div className="relative z-20 mx-auto max-w-[1720px] px-5 pb-40 pt-6 md:px-10 lg:px-14">
           <div className="relative min-h-[calc(100svh-190px)]">
             <section className="max-w-[760px] pt-8 lg:pt-12">
-              <p className="font-mono text-xs font-black uppercase tracking-[0.38em] text-green-300 drop-shadow-[0_0_14px_rgba(34,197,94,0.8)]">
+              <p className="font-mono text-xs font-black uppercase tracking-[0.38em] text-orange-300 drop-shadow-[0_0_14px_rgba(251,146,60,0.72)]">
                 {t.eyebrow}
               </p>
 
@@ -308,6 +324,14 @@ export default function Home() {
               </button>
             </section>
 
+            <CompactWispPortal
+              title={t.wispTitle}
+              text={t.wispText}
+              button={t.wispBtn}
+              note={t.wispNote}
+              onClick={openWisp}
+            />
+
             <FloatingWisp
               title={t.wispTitle}
               ariaLabel={t.navWisp}
@@ -319,12 +343,104 @@ export default function Home() {
                 <PortalCard key={portal.title} portal={portal} />
               ))}
             </section>
+
+            <WebCreationFeature
+              eyebrow={t.webEyebrow}
+              title={t.webTitle}
+              text={t.webText}
+              cta={t.webCta}
+              note={t.webNote}
+              imageAlt={t.webImageAlt}
+            />
           </div>
         </div>
 
         <StatsBar stats={[t.statsUsers, t.statsNews, t.statsContent, t.statsSecure]} copyright={t.copyright} />
       </section>
     </>
+  )
+}
+
+function CompactWispPortal({
+  title,
+  text,
+  button,
+  note,
+  onClick,
+}: {
+  title: string
+  text: string
+  button: string
+  note: string
+  onClick: () => void
+}) {
+  return (
+    <aside className="relative mt-12 overflow-hidden rounded-[2rem] border border-[#32FF8A]/30 bg-black/55 p-5 shadow-[0_0_36px_rgba(50,255,138,.16)] backdrop-blur-xl xl:hidden" aria-label={title}>
+      <div className="absolute -right-12 -top-12 h-44 w-44 rounded-full bg-[#32FF8A]/10 blur-3xl" aria-hidden="true" />
+      <div className="relative flex items-center gap-5">
+        <button
+          type="button"
+          onClick={onClick}
+          aria-label={button}
+          className="group relative grid h-24 w-24 shrink-0 place-items-center rounded-full border border-[#32FF8A]/25 bg-[#32FF8A]/[0.07] shadow-[inset_0_0_24px_rgba(50,255,138,.12),0_0_30px_rgba(50,255,138,.18)] transition hover:scale-105 hover:border-[#32FF8A]/70 focus:outline-none focus:ring-2 focus:ring-[#32FF8A]/70 sm:h-28 sm:w-28"
+        >
+          <span className="absolute inset-2 rounded-full border border-[#32FF8A]/15 motion-safe:animate-[spin_16s_linear_infinite]" aria-hidden="true" />
+          <img src="/assets/green-wisp.png" alt="" className="animate-float h-16 w-16 object-contain drop-shadow-[0_0_22px_rgba(50,255,138,.9)] sm:h-20 sm:w-20" draggable={false} />
+        </button>
+        <div className="min-w-0">
+          <p className="font-mono text-[10px] font-black uppercase tracking-[0.26em] text-[#32FF8A]">{title}</p>
+          <p className="mt-2 text-sm leading-6 text-white/70">{text}</p>
+          <button type="button" onClick={onClick} className="mt-3 font-mono text-[10px] font-black uppercase tracking-[0.18em] text-[#32FF8A] transition hover:text-white">
+            {button} →
+          </button>
+        </div>
+      </div>
+      <p className="relative mt-4 border-t border-[#32FF8A]/15 pt-3 text-center font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-[#32FF8A]/55">{note}</p>
+    </aside>
+  )
+}
+
+function WebCreationFeature({
+  eyebrow,
+  title,
+  text,
+  cta,
+  note,
+  imageAlt,
+}: {
+  eyebrow: string
+  title: string
+  text: string
+  cta: string
+  note: string
+  imageAlt: string
+}) {
+  return (
+    <section className="relative mt-20 overflow-hidden rounded-[2.4rem] border border-orange-400/25 bg-gradient-to-br from-orange-500/[0.09] via-purple-500/[0.09] to-black/55 p-6 shadow-[0_32px_100px_rgba(0,0,0,.48)] md:p-9 lg:p-12" aria-labelledby="web-creation-home-title">
+      <div className="absolute -left-20 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-orange-500/10 blur-3xl" aria-hidden="true" />
+      <div className="absolute -right-20 top-1/3 h-80 w-80 rounded-full bg-purple-500/15 blur-3xl" aria-hidden="true" />
+      <div className="relative grid items-center gap-10 xl:grid-cols-[0.8fr_1.2fr]">
+        <div>
+          <p className="font-mono text-[10px] font-black uppercase tracking-[0.3em] text-orange-300">{eyebrow}</p>
+          <h2 id="web-creation-home-title" className="mt-4 max-w-2xl text-4xl font-black leading-[1.02] tracking-[-0.04em] md:text-6xl">{title}</h2>
+          <p className="mt-5 max-w-xl text-sm leading-7 text-white/70 md:text-base">{text}</p>
+          <Link to="/creacion-web" className="mt-7 inline-flex rounded-full bg-gradient-to-r from-orange-500 to-orange-300 px-6 py-4 font-mono text-xs font-black uppercase tracking-[0.16em] text-black shadow-[0_0_28px_rgba(255,106,0,.28)] transition hover:scale-[1.02] hover:shadow-[0_0_45px_rgba(255,106,0,.48)]">
+            {cta}
+          </Link>
+          <p className="mt-5 font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-purple-200/65">{note}</p>
+        </div>
+
+        <Link to="/creacion-web" className="group relative block overflow-hidden rounded-[1.75rem] border border-white/15 bg-black/60 p-2 shadow-[0_25px_70px_rgba(0,0,0,.5)]" aria-label={cta}>
+          <div className="flex h-8 items-center gap-2 border-b border-white/10 px-3" aria-hidden="true">
+            <span className="h-2 w-2 rounded-full bg-orange-400" />
+            <span className="h-2 w-2 rounded-full bg-purple-400" />
+            <span className="h-2 w-2 rounded-full bg-cyan-400" />
+            <span className="ml-2 h-2 flex-1 rounded-full bg-white/[0.06]" />
+          </div>
+          <img src="/web-services/landing-premium.svg" alt={imageAlt} loading="lazy" decoding="async" className="aspect-[12/7.6] w-full rounded-[1.2rem] object-cover transition duration-700 group-hover:scale-[1.025]" />
+        </Link>
+      </div>
+    </section>
   )
 }
 

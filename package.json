@@ -30,6 +30,7 @@
     "audit:auth-nexus": "node scripts/auth-nexus-check.mjs",
     "audit:latency-glitch-bridge": "node scripts/latency-glitch-bridge-check.mjs",
     "audit:security-hardening": "node scripts/security-hardening-check.mjs",
+    "audit:web-services": "node scripts/web-services-check.mjs",
     "audit:production-ready": "node scripts/production-ready-check.mjs",
     "audit:env": "node scripts/env-ready-check.mjs",
     "deploy:check": "npm run verify && npm audit --omit=dev",

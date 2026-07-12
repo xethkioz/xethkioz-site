@@ -7,6 +7,7 @@ export const PUBLIC_ROUTES = [
   { path: '/gaming', name: 'Gaming Hub', status: 'public-portal', owner: 'games' },
   { path: '/science', name: 'Science Lab', status: 'public-portal', owner: 'science' },
   { path: '/fun', name: 'Fun Portal', status: 'public-portal', owner: 'fun' },
+  { path: '/creacion-web', name: 'Creación Web', status: 'public-service', owner: 'commercial' },
   { path: '/green-node', name: 'Green Node', status: 'hidden-portal', owner: 'wisp' },
   { path: '/news', name: 'News Engine', status: 'preview-module', owner: 'content' },
   { path: '/community', name: 'Community Engine', status: 'preview-module', owner: 'community' },

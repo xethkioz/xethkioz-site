@@ -102,6 +102,7 @@ runNodeAudit('eventbus telemetry audit', 'scripts/eventbus-telemetry-check.mjs')
 runNodeAudit('shader pipeline audit', 'scripts/shader-pipeline-sandbox-check.mjs')
 runNodeAudit('visual runtime audit', 'scripts/visual-runtime-sandbox-check.mjs')
 runNodeAudit('news factory audit', 'scripts/news-factory-check.mjs')
+runNodeAudit('web services audit', 'scripts/web-services-check.mjs')
 
 let failed = 0
 for (const item of checks) {

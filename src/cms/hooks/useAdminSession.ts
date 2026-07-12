@@ -13,6 +13,7 @@ type AdminSessionState = {
   canPublish: boolean
   canDelete: boolean
   canManageAds: boolean
+  canManageWebServices: boolean
   canModerate: boolean
   loading: boolean
   ready: boolean
@@ -28,8 +29,7 @@ function normalizeRole(value: unknown): CmsRole {
 function hasMetadataAdminRole(user: User | null) {
   if (!user) return false
   const appRole = String(user.app_metadata?.role ?? '').toLowerCase()
-  const userRole = String(user.user_metadata?.role ?? '').toLowerCase()
-  return appRole === 'admin' || userRole === 'admin'
+  return appRole === 'admin'
 }
 
 async function resolveProfileAccess(user: User | null) {
@@ -123,6 +123,7 @@ export function useAdminSession(): AdminSessionState {
     canPublish: isAdmin,
     canDelete: isAdmin,
     canManageAds: isAdmin,
+    canManageWebServices: isAdmin,
     canModerate: isModerator,
     loading,
     ready: isSupabaseConfigured,
