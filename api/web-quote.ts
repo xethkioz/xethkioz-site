@@ -1,8 +1,11 @@
-import { createClient } from '@supabase/supabase-js'
-
 type RateEntry = {
   count: number
   resetAt: number
+}
+
+type EdgeResult = {
+  status: number
+  payload: { ok?: boolean; error?: string; retryAfter?: number; requestId?: string; provider?: string }
 }
 
 const rateBucket = new Map<string, RateEntry>()
@@ -10,14 +13,20 @@ const WINDOW_MS = 15 * 60_000
 const IP_LIMIT = 5
 const EMAIL_LIMIT = 3
 const MAX_BODY_BYTES = 32_000
+const EDGE_TIMEOUT_MS = 10_000
 
 const allowedProjectTypes = new Set(['landing', 'corporate', 'ecommerce', 'portfolio', 'redesign', 'other'])
 const allowedBudgetRanges = new Set(['to-define', 'starter', 'growth', 'advanced'])
 const allowedContactPreferences = new Set(['email', 'whatsapp', 'either'])
+const allowedEdgeErrors = new Set(['INVALID_REQUEST', 'WHATSAPP_REQUIRED', 'PAYLOAD_TOO_LARGE', 'RATE_LIMITED', 'METHOD_NOT_ALLOWED', 'SERVICE_UNAVAILABLE'])
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
 function getSupabaseUrl() {
   return process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || ''
+}
+
+function getSupabasePublicKey() {
+  return process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || ''
 }
 
 function getClientIp(request: any) {
@@ -66,13 +75,56 @@ function json(response: any, status: number, payload: unknown) {
   response.status(status).json(payload)
 }
 
+async function invokeQuoteEdge(method: 'GET' | 'POST', payload: unknown, clientIp: string): Promise<EdgeResult> {
+  const supabaseUrl = getSupabaseUrl()
+  const publicKey = getSupabasePublicKey()
+  if (!supabaseUrl || !publicKey) return { status: 503, payload: { ok: false, error: 'SERVICE_UNAVAILABLE' } }
+
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), EDGE_TIMEOUT_MS)
+
+  try {
+    const edgeResponse = await fetch(`${supabaseUrl}/functions/v1/submit-web-quote`, {
+      method,
+      headers: {
+        apikey: publicKey,
+        Authorization: `Bearer ${publicKey}`,
+        'Content-Type': 'application/json',
+        'X-Client-IP': clientIp,
+        'X-XETHKIOZ-Proxy': 'vercel-web-quote-v1',
+      },
+      body: method === 'POST' ? JSON.stringify(payload) : undefined,
+      signal: controller.signal,
+    })
+
+    const edgePayload = await edgeResponse.json().catch(() => ({ ok: false, error: 'SERVICE_UNAVAILABLE' }))
+    return { status: edgeResponse.status, payload: edgePayload }
+  } finally {
+    clearTimeout(timeout)
+  }
+}
+
 export default async function handler(request: any, response: any) {
   response.setHeader('Cache-Control', 'no-store, max-age=0')
   response.setHeader('X-Content-Type-Options', 'nosniff')
   response.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin')
 
+  if (request.method === 'GET') {
+    try {
+      const result = await invokeQuoteEdge('GET', null, getClientIp(request))
+      const healthy = result.status === 200 && result.payload?.ok === true
+      json(response, healthy ? 200 : 503, healthy
+        ? { ok: true, provider: result.payload.provider || 'supabase-edge' }
+        : { ok: false, error: 'SERVICE_UNAVAILABLE' })
+    } catch (error) {
+      console.error('[web-quote] Edge health check failed', error)
+      json(response, 503, { ok: false, error: 'SERVICE_UNAVAILABLE' })
+    }
+    return
+  }
+
   if (request.method !== 'POST') {
-    response.setHeader('Allow', 'POST')
+    response.setHeader('Allow', 'GET, POST')
     json(response, 405, { ok: false, error: 'METHOD_NOT_ALLOWED' })
     return
   }
@@ -135,62 +187,33 @@ export default async function handler(request: any, response: any) {
     return
   }
 
-  const supabaseUrl = getSupabaseUrl()
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-  if (!supabaseUrl || !serviceRoleKey) {
-    console.error('[web-quote] Missing server-side Supabase configuration')
-    json(response, 500, { ok: false, error: 'SERVICE_UNAVAILABLE' })
-    return
-  }
-
-  const admin = createClient(supabaseUrl, serviceRoleKey, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  })
-
-  const cutoff = new Date(Date.now() - WINDOW_MS).toISOString()
-  const { count: recentRequestCount, error: countError } = await admin
-    .from('web_quote_requests')
-    .select('id', { count: 'exact', head: true })
-    .eq('email', email)
-    .gte('created_at', cutoff)
-
-  if (countError) {
-    console.error('[web-quote] Durable rate-limit check failed', { code: countError.code, message: countError.message })
-    json(response, 500, { ok: false, error: 'SERVICE_UNAVAILABLE' })
-    return
-  }
-
-  if ((recentRequestCount ?? 0) >= EMAIL_LIMIT) {
-    response.setHeader('Retry-After', String(Math.ceil(WINDOW_MS / 1000)))
-    json(response, 429, { ok: false, error: 'RATE_LIMITED' })
-    return
-  }
-
-  const { data, error } = await admin
-    .from('web_quote_requests')
-    .insert({
-      service_id: serviceId,
-      service_slug: serviceSlug,
+  try {
+    const result = await invokeQuoteEdge('POST', {
+      serviceId,
+      serviceSlug,
       name,
       email,
       whatsapp,
-      business_name: businessName,
-      project_type: projectType,
-      budget_range: budgetRange,
-      contact_preference: contactPreference,
+      businessName,
+      projectType,
+      budgetRange,
+      contactPreference,
       details,
-      status: 'new',
+      consent,
+      companyWebsite: '',
       source: '/creacion-web',
-      consent_at: new Date().toISOString(),
-    })
-    .select('id')
-    .single()
+    }, ip)
 
-  if (error) {
-    console.error('[web-quote] Insert failed', { code: error.code, message: error.message })
-    json(response, 500, { ok: false, error: 'SERVICE_UNAVAILABLE' })
-    return
+    if (result.status === 201 && result.payload?.ok && result.payload.requestId) {
+      json(response, 201, { ok: true, requestId: result.payload.requestId })
+      return
+    }
+
+    const safeError = allowedEdgeErrors.has(String(result.payload?.error)) ? result.payload.error : 'SERVICE_UNAVAILABLE'
+    if (result.status === 429 && result.payload.retryAfter) response.setHeader('Retry-After', String(result.payload.retryAfter))
+    json(response, result.status >= 400 && result.status < 500 ? result.status : 502, { ok: false, error: safeError })
+  } catch (error) {
+    console.error('[web-quote] Edge proxy failed', error)
+    json(response, 502, { ok: false, error: 'SERVICE_UNAVAILABLE' })
   }
-
-  json(response, 201, { ok: true, requestId: data.id })
 }
