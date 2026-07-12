@@ -17,6 +17,9 @@ const adminSession = read('src/cms/hooks/useAdminSession.ts')
 const migration = read('supabase/migrations/20260712124949_web_services_foundation.sql')
 const securityFollowup = read('supabase/migrations/20260712125209_web_services_security_followup.sql')
 const sitemap = read('public/sitemap.xml')
+const webCreationHtml = read('creacion-web.html')
+const viteConfig = read('vite.config.ts')
+const vercelConfig = read('vercel.json')
 
 check('public web creation route exists', app.includes('path="/creacion-web"') && app.includes("import('./pages/WebCreation')"))
 check('home exposes the web creation feature', home.includes('<WebCreationFeature') && home.includes('to="/creacion-web"'))
@@ -37,6 +40,9 @@ check('web-service foreign keys are indexed', securityFollowup.includes('web_quo
 check('admin authorization ignores user_metadata', adminSession.includes('app_metadata?.role') && !adminSession.includes('user_metadata?.role'))
 check('catalog assets exist', ['landing-premium.svg', 'tienda-digital.svg', 'sitio-profesional.svg'].every((file) => exists(`public/web-services/${file}`)))
 check('public route is included in sitemap', sitemap.includes('/creacion-web'))
+check('web creation has crawlable static metadata', webCreationHtml.includes('<title>Creación Web') && webCreationHtml.includes('rel="canonical" href="https://www.xethkioz.com.ar/creacion-web"') && webCreationHtml.includes('"@type": "Service"'))
+check('web creation is emitted as a dedicated HTML entry', viteConfig.includes("webCreation: resolve(process.cwd(), 'creacion-web.html')"))
+check('production routes web creation to its dedicated HTML', vercelConfig.includes('"source": "/creacion-web", "destination": "/creacion-web.html"'))
 
 let failed = 0
 for (const [name, ok] of checks) {

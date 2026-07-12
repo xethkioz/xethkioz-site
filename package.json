@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "npm run typecheck && vite build",
     "preview": "vite preview",
     "audit": "node scripts/audit.js",
     "audit:tree": "node scripts/print-tree.mjs",
@@ -35,7 +35,7 @@
     "audit:env": "node scripts/env-ready-check.mjs",
     "deploy:check": "npm run verify && npm audit --omit=dev",
     "audit:package-clean": "XETHKIOZ_STRICT_PACKAGE_AUDIT=1 node scripts/production-ready-check.mjs",
-    "typecheck": "tsc -b --pretty false",
+    "typecheck": "tsc -b --pretty false && tsc -p tsconfig.api.json --pretty false",
     "verify": "npm run audit:env && npm run audit:production-ready && npm run build",
     "ci:check": "npm ci && npm run deploy:check"
   },
@@ -49,6 +49,7 @@
     "react-router-dom": "^6.26.2"
   },
   "devDependencies": {
+    "@types/node": "^22.20.1",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^6.0.3",
