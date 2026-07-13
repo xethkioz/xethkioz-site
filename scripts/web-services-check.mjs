@@ -41,6 +41,9 @@ check('admin authorization ignores user_metadata', adminSession.includes('app_me
 check('catalog assets exist', ['landing-premium.svg', 'tienda-digital.svg', 'sitio-profesional.svg'].every((file) => exists(`public/web-services/${file}`)))
 check('public route is included in sitemap', sitemap.includes('/creacion-web'))
 check('web creation has crawlable static metadata', webCreationHtml.includes('<title>Creación Web') && webCreationHtml.includes('rel="canonical" href="https://www.xethkioz.com.ar/creacion-web"') && webCreationHtml.includes('"@type": "Service"'))
+check('web creation uses a raster social preview', exists('public/web-services/creacion-web-og.png') && fs.statSync(path.join(root, 'public/web-services/creacion-web-og.png')).size > 10000 && webCreationHtml.includes('/web-services/creacion-web-og.png') && webCreationHtml.includes('content="1200"') && webCreationHtml.includes('content="630"'))
+check('quote flow is mobile-friendly and actionable', page.includes('type QuoteStep = 1 | 2') && page.includes('continueQuote') && page.includes('required={form.contactPreference') && page.includes('messages[code]'))
+check('commercial objections are covered accessibly', page.includes('t.faqs.map') && page.includes('<details') && page.includes('<summary'))
 check('web creation is emitted as a dedicated HTML entry', viteConfig.includes("webCreation: resolve(process.cwd(), 'creacion-web.html')"))
 check('production routes web creation to its dedicated HTML', vercelConfig.includes('"source": "/creacion-web", "destination": "/creacion-web.html"'))
 

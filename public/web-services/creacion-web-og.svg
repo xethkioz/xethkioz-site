@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Creación Web XETHKIOZ</title>
+  <desc id="desc">Portada social de XETHKIOZ para el servicio de diseño y desarrollo de páginas web.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#07070c"/>
+      <stop offset="0.58" stop-color="#120b20"/>
+      <stop offset="1" stop-color="#211008"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#ff6b1a"/>
+      <stop offset="0.48" stop-color="#ff9a52"/>
+      <stop offset="1" stop-color="#a855f7"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#17102b"/>
+      <stop offset="1" stop-color="#0b0a13"/>
+    </linearGradient>
+    <radialGradient id="purpleGlow">
+      <stop stop-color="#8b5cf6" stop-opacity=".52"/>
+      <stop offset="1" stop-color="#8b5cf6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="orangeGlow">
+      <stop stop-color="#ff6b1a" stop-opacity=".42"/>
+      <stop offset="1" stop-color="#ff6b1a" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+    <clipPath id="screenClip">
+      <rect x="0" y="0" width="420" height="430" rx="28"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#background)"/>
+  <circle cx="1050" cy="82" r="340" fill="url(#purpleGlow)"/>
+  <circle cx="86" cy="640" r="330" fill="url(#orangeGlow)"/>
+  <path d="M0 540C220 490 420 590 650 535s370-36 550 14v81H0Z" fill="#ffffff" opacity=".018"/>
+  <g opacity=".12">
+    <path d="M70 72h480M70 104h390M70 136h435" stroke="#ffffff" stroke-width="1" stroke-dasharray="3 16"/>
+    <path d="M70 500h520M70 532h420" stroke="#ffffff" stroke-width="1" stroke-dasharray="3 16"/>
+  </g>
+
+  <g transform="translate(66 58)">
+    <rect width="218" height="40" rx="20" fill="#ffffff" opacity=".06" stroke="#ffffff" stroke-opacity=".14"/>
+    <circle cx="24" cy="20" r="6" fill="#ff6b1a"/>
+    <text x="42" y="26" fill="#ffffff" font-family="Arial, sans-serif" font-size="16" font-weight="900" letter-spacing="3">XETHKIOZ</text>
+  </g>
+
+  <text x="68" y="165" fill="#ff9a52" font-family="Arial, sans-serif" font-size="16" font-weight="900" letter-spacing="5">CREACIÓN WEB</text>
+  <text x="64" y="246" fill="#ffffff" font-family="Arial, sans-serif" font-size="72" font-weight="900" letter-spacing="-3">TU IDEA.</text>
+  <text x="64" y="321" fill="#ffffff" font-family="Arial, sans-serif" font-size="72" font-weight="900" letter-spacing="-3">SU PROPIO</text>
+  <text x="64" y="396" fill="url(#brand)" font-family="Arial, sans-serif" font-size="72" font-weight="900" letter-spacing="-3">UNIVERSO.</text>
+  <text x="69" y="444" fill="#d7d1df" font-family="Arial, sans-serif" font-size="19">Diseño, desarrollo y estrategia para transformar</text>
+  <text x="69" y="472" fill="#d7d1df" font-family="Arial, sans-serif" font-size="19">visitas en oportunidades reales.</text>
+
+  <g transform="translate(66 512)">
+    <rect width="480" height="52" rx="26" fill="#ffffff" opacity=".055" stroke="#ffffff" stroke-opacity=".15"/>
+    <circle cx="28" cy="26" r="7" fill="#a855f7"/>
+    <text x="48" y="32" fill="#ffffff" font-family="Arial, sans-serif" font-size="13" font-weight="900" letter-spacing="2">RESPONSIVE  ·  RÁPIDO  ·  A MEDIDA</text>
+  </g>
+
+  <g transform="translate(718 92) rotate(2 210 215)">
+    <rect x="-18" y="-18" width="456" height="466" rx="44" fill="#8b5cf6" opacity=".16" filter="url(#shadow)"/>
+    <g clip-path="url(#screenClip)">
+      <rect width="420" height="430" rx="28" fill="url(#screen)" stroke="#ffffff" stroke-opacity=".22" stroke-width="2"/>
+      <rect width="420" height="54" fill="#17141f"/>
+      <circle cx="28" cy="27" r="6" fill="#ff6b1a"/>
+      <circle cx="49" cy="27" r="6" fill="#a855f7"/>
+      <circle cx="70" cy="27" r="6" fill="#38bdf8"/>
+      <rect x="118" y="18" width="185" height="18" rx="9" fill="#ffffff" opacity=".07"/>
+
+      <text x="28" y="94" fill="#ffffff" font-family="Arial, sans-serif" font-size="15" font-weight="900" letter-spacing="2">NOVA/ONE</text>
+      <rect x="327" y="76" width="65" height="28" rx="14" fill="url(#brand)"/>
+      <text x="343" y="94" fill="#09070e" font-family="Arial, sans-serif" font-size="9" font-weight="900">START</text>
+      <text x="28" y="144" fill="#ff9a52" font-family="Arial, sans-serif" font-size="9" font-weight="900" letter-spacing="3">IDEAS QUE CONVIERTEN</text>
+      <text x="26" y="192" fill="#ffffff" font-family="Arial, sans-serif" font-size="37" font-weight="900">CREÁ ALGO</text>
+      <text x="26" y="233" fill="url(#brand)" font-family="Arial, sans-serif" font-size="37" font-weight="900">IMPOSIBLE</text>
+      <text x="28" y="267" fill="#cbc5d5" font-family="Arial, sans-serif" font-size="12">Una experiencia digital con identidad propia.</text>
+      <rect x="28" y="292" width="132" height="38" rx="19" fill="url(#brand)"/>
+      <text x="49" y="316" fill="#09070e" font-family="Arial, sans-serif" font-size="10" font-weight="900">VER PROYECTOS →</text>
+
+      <circle cx="334" cy="222" r="96" fill="url(#purpleGlow)"/>
+      <circle cx="334" cy="222" r="55" fill="#ffffff" opacity=".055" stroke="#c084fc" stroke-opacity=".55"/>
+      <path d="M298 230c31-42 68-47 101-8" fill="none" stroke="#ff7a00" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="316" cy="199" r="7" fill="#ff7a00"/>
+      <circle cx="363" cy="184" r="6" fill="#38bdf8"/>
+
+      <g transform="translate(28 360)">
+        <rect width="364" height="48" rx="15" fill="#ffffff" opacity=".045" stroke="#ffffff" stroke-opacity=".1"/>
+        <text x="18" y="21" fill="#ffffff" font-family="Arial, sans-serif" font-size="13" font-weight="900">01</text>
+        <text x="18" y="36" fill="#ffffff" opacity=".48" font-family="Arial, sans-serif" font-size="7">ESTRATEGIA</text>
+        <text x="108" y="21" fill="#ffffff" font-family="Arial, sans-serif" font-size="13" font-weight="900">02</text>
+        <text x="108" y="36" fill="#ffffff" opacity=".48" font-family="Arial, sans-serif" font-size="7">DISEÑO</text>
+        <text x="198" y="21" fill="#ffffff" font-family="Arial, sans-serif" font-size="13" font-weight="900">03</text>
+        <text x="198" y="36" fill="#ffffff" opacity=".48" font-family="Arial, sans-serif" font-size="7">DESARROLLO</text>
+        <text x="288" y="21" fill="#ffffff" font-family="Arial, sans-serif" font-size="13" font-weight="900">04</text>
+        <text x="288" y="36" fill="#ffffff" opacity=".48" font-family="Arial, sans-serif" font-size="7">LANZAMIENTO</text>
+      </g>
+    </g>
+  </g>
+
+  <rect x="0" y="618" width="1200" height="12" fill="url(#brand)"/>
+</svg>
