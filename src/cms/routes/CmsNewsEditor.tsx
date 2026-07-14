@@ -16,6 +16,8 @@ type EditableNewsArticle = {
   review_status: ReviewStatus
   editor_notes: string | null
   published_at: string | null
+  cover_image_url: string | null
+  cover_image_alt: string | null
 }
 
 export default function CmsNewsEditor() {
@@ -27,6 +29,8 @@ export default function CmsNewsEditor() {
   const [status, setStatus] = useState<NewsStatus>('draft')
   const [reviewStatus, setReviewStatus] = useState<ReviewStatus>('pending')
   const [editorNotes, setEditorNotes] = useState('')
+  const [coverImageUrl, setCoverImageUrl] = useState('')
+  const [coverImageAlt, setCoverImageAlt] = useState('')
   const [loading, setLoading] = useState(Boolean(id))
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
@@ -55,7 +59,7 @@ export default function CmsNewsEditor() {
 
       const { data, error: queryError } = await supabase
         .from('news_articles')
-        .select('id, slug, title, summary, status, review_status, editor_notes, published_at')
+        .select('id, slug, title, summary, status, review_status, editor_notes, published_at, cover_image_url, cover_image_alt')
         .eq('id', id)
         .maybeSingle()
 
@@ -73,6 +77,8 @@ export default function CmsNewsEditor() {
         setStatus(row.status)
         setReviewStatus(row.review_status)
         setEditorNotes(row.editor_notes ?? '')
+        setCoverImageUrl(row.cover_image_url ?? '')
+        setCoverImageAlt(row.cover_image_alt ?? '')
       }
 
       setLoading(false)
@@ -95,6 +101,16 @@ export default function CmsNewsEditor() {
     const cleanTitle = title.trim()
     if (!cleanTitle) {
       setError('El título no puede quedar vacío.')
+      return
+    }
+    const cleanCoverImageUrl = coverImageUrl.trim()
+    const cleanCoverImageAlt = coverImageAlt.trim()
+    if (cleanCoverImageUrl && !/^(https:\/\/|\/)/.test(cleanCoverImageUrl)) {
+      setError('La portada debe usar una URL HTTPS o una ruta interna que comience con /.')
+      return
+    }
+    if (cleanCoverImageUrl && !cleanCoverImageAlt) {
+      setError('Agregá un texto alternativo para que la portada sea accesible.')
       return
     }
 
@@ -120,6 +136,8 @@ export default function CmsNewsEditor() {
         status: safeStatus,
         review_status: safeReviewStatus,
         editor_notes: editorNotes.trim() || null,
+        cover_image_url: cleanCoverImageUrl || null,
+        cover_image_alt: cleanCoverImageUrl ? cleanCoverImageAlt : null,
         published_at: publishedAt,
       })
       .eq('id', id)
@@ -138,6 +156,8 @@ export default function CmsNewsEditor() {
         review_status: safeReviewStatus,
         editor_notes: editorNotes.trim() || null,
         published_at: publishedAt,
+        cover_image_url: cleanCoverImageUrl || null,
+        cover_image_alt: cleanCoverImageUrl ? cleanCoverImageAlt : null,
       } : current)
     }
 
@@ -192,6 +212,17 @@ export default function CmsNewsEditor() {
 
           <label className="space-y-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200">Título<input value={title} onChange={(event) => setTitle(event.target.value)} required className="w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300" /></label>
           <label className="space-y-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200">Resumen<textarea value={summary} onChange={(event) => setSummary(event.target.value)} rows={4} className="w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300" /></label>
+
+          <div className="grid gap-4 rounded-2xl border border-orange-400/20 bg-orange-500/[0.04] p-5 md:grid-cols-[1fr_12rem]">
+            <div className="grid gap-4">
+              <label className="space-y-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200">Imagen de portada<input type="url" value={coverImageUrl} onChange={(event) => setCoverImageUrl(event.target.value)} placeholder="https://... o /images/..." className="w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300" /></label>
+              <label className="space-y-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200">Texto alternativo<input value={coverImageAlt} onChange={(event) => setCoverImageAlt(event.target.value)} maxLength={240} placeholder="Qué muestra la imagen" className="w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300" /></label>
+              <p className="text-xs normal-case leading-5 tracking-normal text-purple-200/75">Usá una imagen horizontal, idealmente 1600 × 900. El texto alternativo es obligatorio cuando hay portada.</p>
+            </div>
+            <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/40">
+              {coverImageUrl ? <img src={coverImageUrl} alt={coverImageAlt || 'Vista previa de portada'} className="aspect-video h-full w-full object-cover" /> : <div className="grid aspect-video h-full place-items-center p-4 text-center text-xs text-purple-200/60">Vista previa</div>}
+            </div>
+          </div>
 
           <div className="grid gap-4 md:grid-cols-2">
             <label className="space-y-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200">Estado<select value={status} onChange={(event) => setStatus(event.target.value as NewsStatus)} className="w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300"><option value="draft">Borrador</option><option value="review">En revisión</option>{isAdmin ? <option value="published">Publicada</option> : null}<option value="archived">Archivada</option></select></label>

@@ -22,6 +22,7 @@ export type PublicNewsArticle = {
   ai_generated: boolean
   created_at: string
   cover_image_url?: string | null
+  cover_image_alt?: string | null
 }
 
 type RawNewsArticle = {
@@ -37,6 +38,8 @@ type RawNewsArticle = {
   source_urls: string[] | null
   ai_generated: boolean | null
   created_at: string
+  cover_image_url: string | null
+  cover_image_alt: string | null
 }
 
 export const publicNewsCategories = ['gaming', 'tech', 'science', 'ai', 'community', 'green', 'programming'] as const
@@ -263,7 +266,8 @@ function mapRawArticle(article: RawNewsArticle): PublicNewsArticle {
     source_urls: article.source_urls ?? [],
     ai_generated: Boolean(article.ai_generated),
     created_at: article.created_at,
-    cover_image_url: null,
+    cover_image_url: article.cover_image_url,
+    cover_image_alt: article.cover_image_alt,
   }
 }
 
@@ -286,7 +290,7 @@ export async function fetchPublishedNews(category?: PublicNewsCategory | 'all') 
 
   let query = supabase
     .from('news_articles')
-    .select('id, slug, title, summary, content, category, status, published_at, tags, source_urls, ai_generated, created_at')
+    .select('id, slug, title, summary, content, category, status, published_at, tags, source_urls, ai_generated, created_at, cover_image_url, cover_image_alt')
     .eq('status', 'published')
     .order('published_at', { ascending: false, nullsFirst: false })
     .order('created_at', { ascending: false })
@@ -304,7 +308,7 @@ export async function fetchPublishedNewsBySlug(slug: string) {
 
   const { data, error } = await supabase
     .from('news_articles')
-    .select('id, slug, title, summary, content, category, status, published_at, tags, source_urls, ai_generated, created_at')
+    .select('id, slug, title, summary, content, category, status, published_at, tags, source_urls, ai_generated, created_at, cover_image_url, cover_image_alt')
     .eq('slug', slug)
     .eq('status', 'published')
     .maybeSingle()

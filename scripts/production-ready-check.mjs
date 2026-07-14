@@ -37,6 +37,9 @@ const contracts = read('src/engines/world/sandbox/portalEventContracts.ts')
 const appShell = read('src/App.tsx')
 const mainEntry = read('src/main.tsx')
 const home = read('src/pages/Home.tsx')
+const publicNews = read('src/pages/News.tsx')
+const greenNode = read('src/pages/GreenNode.tsx')
+const redesignCss = read('src/xethkioz-redesign.css')
 
 check('RC-Live version stamped', pkg.version.includes('rc-live'))
 check('production audit script registered', pkg.scripts['audit:production-ready'] === 'node scripts/production-ready-check.mjs')
@@ -79,6 +82,29 @@ check(
     && home.includes("portal.button.replace(' →', '')")
     && home.includes('to="/news"')
     && home.includes("behavior: reduceMotion ? 'auto' : 'smooth'"),
+)
+check(
+  'News supports searchable, shareable and progressive discovery',
+  publicNews.includes('useSearchParams')
+    && publicNews.includes('filteredArticles')
+    && publicNews.includes('activeTopics')
+    && publicNews.includes('setVisibleCount')
+    && publicNews.includes("next.set('category', category)"),
+)
+check(
+  'Green Node opens real learning paths and published technical news',
+  greenNode.includes('active.steps.map')
+    && greenNode.includes('fetchPublishedNews')
+    && greenNode.includes('xk-green-core')
+    && greenNode.includes('/news?category='),
+)
+check(
+  'Home portals use accessible reduced-motion-safe energy effects',
+  home.includes('xk-home-portal')
+    && home.includes('xk-portal-orbit')
+    && redesignCss.includes('@keyframes portal-breathe')
+    && redesignCss.includes('.xk-portal-particle')
+    && redesignCss.includes('@media (prefers-reduced-motion: reduce)'),
 )
 const strictPackageAudit = process.env.XETHKIOZ_STRICT_PACKAGE_AUDIT === '1'
 if (strictPackageAudit) {
