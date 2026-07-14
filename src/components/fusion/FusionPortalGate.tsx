@@ -30,7 +30,7 @@ export default function FusionPortalGate({
   const isGreen = tone === 'green'
   const awakenGreen = () => {
     if (!isGreen) return
-    awakenGreen()
+    setGreenAwake(true)
     registerEvent('green-unlock', 'duende-mirando', to)
   }
 

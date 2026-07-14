@@ -492,28 +492,44 @@ function WebCreationFeature({
 }
 
 function PortalCard({ portal }: { portal: Portal }) {
+  const tone = portal.route === '/gaming' ? 'violet' : portal.route === '/science' ? 'cyan' : 'orange'
+
   return (
-    <Link to={portal.route} className="group block" aria-label={`${portal.button.replace(' →', '')}: ${portal.title}`}>
+    <Link to={portal.route} className="group block rounded-[44%] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 focus-visible:ring-offset-4 focus-visible:ring-offset-black" aria-label={`${portal.button.replace(' →', '')}: ${portal.title}`}>
       <article
         className={[
+          `xk-home-portal xk-home-portal-${tone}`,
           'relative mx-auto h-[420px] w-full max-w-[420px] overflow-hidden rounded-[44%] ring-4 md:h-[460px] xl:h-[500px]',
           portal.ring,
           portal.shadow,
-          'bg-black/25 transition-all duration-300 ease-out hover:scale-[1.035]',
+          'bg-black/25 transition-all duration-500 ease-out group-hover:scale-[1.035]',
         ].join(' ')}
       >
-        <img
-          className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.055]"
+        <span className="xk-portal-aura" aria-hidden="true" />
+        <span className="xk-portal-orbit" aria-hidden="true" />
+        <span className="xk-portal-orbit xk-portal-orbit-reverse" aria-hidden="true" />
+        <span className="xk-portal-scan" aria-hidden="true" />
+        <span className="xk-portal-particle xk-portal-particle-1" aria-hidden="true" />
+        <span className="xk-portal-particle xk-portal-particle-2" aria-hidden="true" />
+        <span className="xk-portal-particle xk-portal-particle-3" aria-hidden="true" />
+
+        <SafeImage
+          className="absolute inset-0 h-full w-full object-cover transition duration-1000 group-hover:scale-[1.075] group-hover:saturate-125"
           src={portal.poster}
           alt={portal.title}
           loading="lazy"
+          fallback="/images/articles/fallback.svg"
         />
 
-        <div className="absolute inset-0 rounded-[44%] bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(0,0,0,0.46)_100%)] opacity-75 transition duration-300 group-hover:opacity-45" />
+        <div className="absolute inset-0 rounded-[44%] bg-[radial-gradient(ellipse_at_center,transparent_42%,rgba(0,0,0,0.78)_100%)] opacity-75 transition duration-500 group-hover:opacity-45" />
         <div className="absolute inset-0 rounded-[44%] ring-1 ring-white/20" />
-        <div className="pointer-events-none absolute inset-4 rounded-[42%] border border-white/10 opacity-0 transition duration-300 group-hover:opacity-100" />
+        <div className="pointer-events-none absolute inset-4 rounded-[42%] border border-white/10 opacity-40 transition duration-500 group-hover:inset-3 group-hover:opacity-100" />
 
-        <span className="sr-only">{portal.button}</span>
+        <div className="absolute inset-x-8 bottom-9 z-20 translate-y-2 text-center transition duration-500 group-hover:translate-y-0">
+          <p className={`font-mono text-[9px] font-black uppercase tracking-[0.26em] ${portal.text}`}>{portal.subtitle}</p>
+          <h2 className="mt-2 text-2xl font-black uppercase tracking-[0.08em] text-white drop-shadow-[0_0_20px_rgba(0,0,0,.95)] md:text-3xl">{portal.title}</h2>
+          <span className="mt-3 inline-flex rounded-full border border-white/20 bg-black/45 px-4 py-2 font-mono text-[9px] font-black uppercase tracking-[0.16em] text-white/80 opacity-80 backdrop-blur-md transition group-hover:border-white/40 group-hover:text-white">{portal.button}</span>
+        </div>
       </article>
     </Link>
   )

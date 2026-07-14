@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
+import SafeImage from '../components/SafeImage'
 import SEO from '../components/SEO'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
 import FusionHero from '../components/fusion/FusionHero'
@@ -17,6 +18,7 @@ import {
 } from '../services/news/publicNewsService'
 
 type Filter = PublicNewsCategory | 'all'
+const INITIAL_VISIBLE_ARTICLES = 10
 
 const copy = {
   es: {
@@ -35,6 +37,16 @@ const copy = {
     sources: 'fuentes',
     published: 'Publicado',
     source: 'Fuente',
+    search: 'Buscar por título, tema o fuente',
+    searchLabel: 'Buscar noticias',
+    clearSearch: 'Limpiar búsqueda',
+    results: 'resultados',
+    topics: 'Temas activos',
+    noResultsTitle: 'No encontramos noticias con esos filtros',
+    noResultsText: 'Probá otra palabra o volvé a ver todas las categorías.',
+    showMore: 'Cargar más noticias',
+    showing: 'Mostrando',
+    of: 'de',
   },
   en: {
     seoTitle: 'News · XETHKIOZ',
@@ -52,15 +64,29 @@ const copy = {
     sources: 'sources',
     published: 'Published',
     source: 'Source',
+    search: 'Search by title, topic or source',
+    searchLabel: 'Search news',
+    clearSearch: 'Clear search',
+    results: 'results',
+    topics: 'Active topics',
+    noResultsTitle: 'No news matched those filters',
+    noResultsText: 'Try another keyword or return to all categories.',
+    showMore: 'Load more news',
+    showing: 'Showing',
+    of: 'of',
   },
 } as const
 
 function mergeUniqueArticles(primary: PublicNewsArticle[], fallback: PublicNewsArticle[]) {
   const seen = new Set<string>()
-  return [...fallback, ...primary].filter((article) => {
+  return [...primary, ...fallback].filter((article) => {
     if (seen.has(article.slug)) return false
     seen.add(article.slug)
     return true
+  }).sort((left, right) => {
+    const leftDate = new Date(left.published_at ?? left.created_at).getTime()
+    const rightDate = new Date(right.published_at ?? right.created_at).getTime()
+    return (Number.isFinite(rightDate) ? rightDate : 0) - (Number.isFinite(leftDate) ? leftDate : 0)
   })
 }
 
@@ -88,7 +114,7 @@ function ArticleThumb({ article, large = false }: { article: PublicNewsArticle; 
   if (article.cover_image_url) {
     return (
       <div className={`overflow-hidden rounded-2xl border border-orange-400/25 bg-black/50 ${large ? 'h-72 md:h-96' : 'h-44'}`}>
-        <img src={article.cover_image_url} alt={article.title} loading="lazy" className="h-full w-full object-cover" />
+        <SafeImage src={article.cover_image_url} alt={article.cover_image_alt || article.title} loading="lazy" fallback="/images/articles/fallback.svg" className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.035]" />
       </div>
     )
   }
@@ -110,7 +136,13 @@ export default function News() {
   const { lang, t } = useLang()
   const ui = copy[lang]
   const labels = publicNewsCategoryLabels[lang]
-  const [filter, setFilter] = useState<Filter>('all')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const requestedCategory = searchParams.get('category')
+  const filter: Filter = requestedCategory && publicNewsCategories.includes(requestedCategory as PublicNewsCategory)
+    ? requestedCategory as PublicNewsCategory
+    : 'all'
+  const [query, setQuery] = useState('')
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_ARTICLES)
   const [articles, setArticles] = useState<PublicNewsArticle[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -142,8 +174,40 @@ export default function News() {
     }
   }, [filter])
 
-  const featured = articles[0] ?? null
-  const remainingArticles = useMemo(() => articles.slice(featured ? 1 : 0), [articles, featured])
+  useEffect(() => {
+    setVisibleCount(INITIAL_VISIBLE_ARTICLES)
+  }, [filter, query])
+
+  const filteredArticles = useMemo(() => {
+    const needle = query.trim().toLocaleLowerCase(lang === 'es' ? 'es-AR' : 'en-US')
+    if (!needle) return articles
+    return articles.filter((article) => [
+      article.title,
+      article.summary ?? '',
+      article.tags.join(' '),
+      getSourceHost(article),
+      labels[article.category],
+    ].join(' ').toLocaleLowerCase(lang === 'es' ? 'es-AR' : 'en-US').includes(needle))
+  }, [articles, lang, labels, query])
+
+  const visibleArticles = filteredArticles.slice(0, visibleCount)
+  const featured = visibleArticles[0] ?? null
+  const remainingArticles = visibleArticles.slice(featured ? 1 : 0)
+  const activeTopics = useMemo(() => {
+    const counts = new Map<string, number>()
+    articles.forEach((article) => article.tags.forEach((tag) => {
+      const normalized = tag.trim()
+      if (normalized) counts.set(normalized, (counts.get(normalized) ?? 0) + 1)
+    }))
+    return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 7)
+  }, [articles])
+
+  function selectFilter(category: Filter) {
+    const next = new URLSearchParams(searchParams)
+    if (category === 'all') next.delete('category')
+    else next.set('category', category)
+    setSearchParams(next, { replace: true })
+  }
 
   return (
     <FusionShell tone="science" backLabel={t.v7.backCore} label={t.v7.functionality.newsEngine}>
@@ -160,11 +224,30 @@ export default function News() {
             <Link to="/cms/news" className="rounded-full border border-orange-400/40 px-4 py-3 text-center font-mono text-xs font-black uppercase tracking-[0.18em] text-orange-200 transition hover:bg-orange-500/10">CMS</Link>
           </div>
 
-          <div className="mt-6 flex flex-wrap gap-2">
+          <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+            <div className="relative">
+              <label htmlFor="news-search" className="sr-only">{ui.searchLabel}</label>
+              <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-orange-300" aria-hidden="true">⌕</span>
+              <input id="news-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={ui.search} className="min-h-12 w-full rounded-full border border-white/10 bg-black/45 py-3 pl-11 pr-12 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-orange-300" />
+              {query ? <button type="button" onClick={() => setQuery('')} aria-label={ui.clearSearch} className="absolute right-3 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full text-slate-400 transition hover:bg-white/10 hover:text-white">×</button> : null}
+            </div>
+            <p role="status" className="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-400">{filteredArticles.length} {ui.results}</p>
+          </div>
+
+          <div className="mt-5 flex flex-wrap gap-2">
             {(['all', ...publicNewsCategories] as Filter[]).map((category) => (
-              <button key={category} type="button" onClick={() => setFilter(category)} className={`rounded-full border px-4 py-2 font-mono text-[11px] font-black uppercase tracking-[0.16em] transition ${filter === category ? 'border-orange-300 bg-orange-500/15 text-orange-100' : 'border-white/10 text-slate-400 hover:border-violet-300 hover:text-white'}`}>{labels[category]}</button>
+              <button key={category} type="button" onClick={() => selectFilter(category)} aria-pressed={filter === category} className={`rounded-full border px-4 py-2 font-mono text-[11px] font-black uppercase tracking-[0.16em] transition ${filter === category ? 'border-orange-300 bg-orange-500/15 text-orange-100' : 'border-white/10 text-slate-400 hover:border-violet-300 hover:text-white'}`}>{labels[category]}</button>
             ))}
           </div>
+
+          {activeTopics.length ? (
+            <div className="mt-5 border-t border-white/10 pt-5">
+              <p className="font-mono text-[9px] font-black uppercase tracking-[0.22em] text-violet-200/70">{ui.topics}</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {activeTopics.map(([topic, count]) => <button key={topic} type="button" onClick={() => setQuery(topic)} className="rounded-full border border-violet-400/20 bg-violet-500/[0.06] px-3 py-1.5 text-[10px] font-bold text-violet-100 transition hover:border-orange-300/40 hover:text-orange-100">#{topic} <span className="text-white/35">{count}</span></button>)}
+              </div>
+            </div>
+          ) : null}
         </section>
 
         {loading ? <p className="mt-8 rounded-3xl border border-violet-500/20 bg-white/[0.04] p-5 text-violet-100">{ui.loading}</p> : null}
@@ -178,8 +261,17 @@ export default function News() {
           </article>
         ) : null}
 
+        {!loading && articles.length > 0 && filteredArticles.length === 0 ? (
+          <article className="mt-8 rounded-[2rem] border border-violet-400/25 bg-violet-500/[0.07] p-8 text-violet-50">
+            <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet-200">NO_RESULTS</p>
+            <h2 className="mt-3 text-3xl font-black uppercase">{ui.noResultsTitle}</h2>
+            <p className="mt-3 max-w-3xl text-sm leading-6 text-violet-50/75">{ui.noResultsText}</p>
+            <button type="button" onClick={() => { setQuery(''); selectFilter('all') }} className="mt-6 rounded-full border border-orange-300/40 px-5 py-3 font-mono text-xs font-black uppercase tracking-[0.16em] text-orange-100">{labels.all}</button>
+          </article>
+        ) : null}
+
         {featured ? (
-          <article className="mt-8 overflow-hidden rounded-[2rem] border border-orange-400/30 bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,.18),transparent_34%),linear-gradient(135deg,rgba(124,58,237,.16),rgba(0,0,0,.76))] p-5 text-white shadow-[0_0_50px_rgba(249,115,22,.12)] md:p-8">
+          <article className="group mt-8 overflow-hidden rounded-[2rem] border border-orange-400/30 bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,.18),transparent_34%),linear-gradient(135deg,rgba(124,58,237,.16),rgba(0,0,0,.76))] p-5 text-white shadow-[0_0_50px_rgba(249,115,22,.12)] md:p-8">
             <ArticleThumb article={featured} large />
             <div className="mt-5 flex flex-wrap items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] text-orange-200">
               <span className="rounded-full border border-orange-400/40 px-3 py-1">{labels[featured.category]}</span>
@@ -203,7 +295,7 @@ export default function News() {
         {remainingArticles.length > 0 ? (
           <section className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {remainingArticles.map((article) => (
-              <article key={article.id} className="rounded-[1.5rem] border border-violet-500/20 bg-white/[0.04] p-4 text-white transition hover:-translate-y-1 hover:border-orange-300/40 hover:bg-white/[0.06] md:p-5">
+              <article key={article.id} className="group rounded-[1.5rem] border border-violet-500/20 bg-white/[0.04] p-4 text-white transition hover:-translate-y-1 hover:border-orange-300/40 hover:bg-white/[0.06] md:p-5">
                 <ArticleThumb article={article} />
                 <div className="mt-4 flex flex-wrap items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-slate-400">
                   <span className="text-orange-300">{labels[article.category]}</span>
@@ -216,6 +308,13 @@ export default function News() {
               </article>
             ))}
           </section>
+        ) : null}
+
+        {filteredArticles.length > visibleArticles.length ? (
+          <div className="mt-8 text-center">
+            <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500">{ui.showing} {visibleArticles.length} {ui.of} {filteredArticles.length}</p>
+            <button type="button" onClick={() => setVisibleCount((current) => current + 9)} className="rounded-full border border-orange-300/40 bg-orange-500/[0.08] px-6 py-3 font-mono text-xs font-black uppercase tracking-[0.18em] text-orange-100 transition hover:border-orange-200 hover:bg-orange-500/15 hover:shadow-[0_0_28px_rgba(249,115,22,.2)]">{ui.showMore} ↓</button>
+          </div>
         ) : null}
       </main>
     </FusionShell>

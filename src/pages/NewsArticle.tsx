@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import SEO from '../components/SEO'
+import SafeImage from '../components/SafeImage'
 import FusionShell from '../components/fusion/FusionShell'
 import { useLang } from '../lib/LangContext'
 import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
@@ -107,7 +108,7 @@ export default function NewsArticle() {
 
   return (
     <FusionShell tone="science" backLabel={ui.back} label="XETHKIOZ NEWS">
-      <SEO title={article ? `${article.title} · XETHKIOZ` : 'Noticia · XETHKIOZ'} description={article?.summary ?? ui.notFound} url={slug ? `/news/${slug}` : '/news'} />
+      <SEO title={article ? `${article.title} · XETHKIOZ` : 'Noticia · XETHKIOZ'} description={article?.summary ?? ui.notFound} image={article?.cover_image_url ?? undefined} url={slug ? `/news/${slug}` : '/news'} />
       <main className="mx-auto max-w-5xl px-4 py-10 text-white sm:px-6 md:py-12">
         <Link to="/news" className="font-mono text-xs font-black uppercase tracking-[0.18em] text-orange-300 transition hover:text-orange-100">← {ui.back}</Link>
         {loading ? <p className="mt-8 rounded-3xl border border-violet-500/20 bg-white/[0.04] p-5 text-violet-100">{ui.loading}</p> : null}
@@ -116,7 +117,7 @@ export default function NewsArticle() {
           <article className="mt-8 overflow-hidden rounded-[2rem] border border-violet-500/25 bg-[#0B0A0F] p-4 shadow-[0_0_70px_rgba(124,58,237,.18)] sm:p-6 md:p-9">
             {article.cover_image_url ? (
               <div className="mb-7 overflow-hidden rounded-[1.5rem] border border-orange-400/25 bg-black/40">
-                <img src={article.cover_image_url} alt={article.title} className="w-full object-cover" loading="lazy" />
+                <SafeImage src={article.cover_image_url} fallback="/images/articles/fallback.svg" alt={article.cover_image_alt || article.title} className="w-full object-cover" loading="eager" />
               </div>
             ) : (
               <div className="mb-7 overflow-hidden rounded-[1.5rem] border border-orange-400/25 bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,.28),transparent_34%),linear-gradient(135deg,rgba(124,58,237,.2),rgba(0,0,0,.9))] p-5 md:p-8">
