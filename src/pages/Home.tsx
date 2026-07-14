@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import SafeImage from '../components/SafeImage'
 import SEO from '../components/SEO'
+import { fallbackWebServiceOffers } from '../data/webServiceFallbacks'
 import { useWisp } from '../providers/WispProvider'
 import { useLang } from '../lib/LangContext'
+import type { WebServiceOffer } from '../types/webServices'
 
 type Portal = {
   title: string
@@ -51,6 +54,7 @@ const copy = {
     webCta: 'Explorar creación web →',
     webNote: 'Propuestas visuales · Presupuesto privado · Diseño responsive',
     webImageAlt: 'Ejemplo visual de una landing page premium creada por XETHKIOZ',
+    webFeaturedLabel: 'Propuesta destacada',
     statsUsers: '+25K XETHKIOZERS',
     statsNews: '1,248 NOTICIAS',
     statsContent: '+3.6K CONTENIDO',
@@ -120,6 +124,7 @@ const copy = {
     webCta: 'Explore web creation →',
     webNote: 'Visual proposals · Private quote · Responsive design',
     webImageAlt: 'Visual example of a premium landing page created by XETHKIOZ',
+    webFeaturedLabel: 'Featured solution',
     statsUsers: '+25K XETHKIOZERS',
     statsNews: '1,248 NEWS',
     statsContent: '+3.6K CONTENT',
@@ -192,12 +197,36 @@ function useAmbientVideoEnabled() {
   return enabled
 }
 
+function useFeaturedWebService() {
+  const [offer, setOffer] = useState<WebServiceOffer>(fallbackWebServiceOffers[0])
+
+  useEffect(() => {
+    let active = true
+
+    import('../services/webServices')
+      .then(({ loadFeaturedWebService }) => loadFeaturedWebService())
+      .then((nextOffer) => {
+        if (active) setOffer(nextOffer)
+      })
+      .catch(() => {
+        // The static featured offer remains available if the CMS cannot be reached.
+      })
+
+    return () => {
+      active = false
+    }
+  }, [])
+
+  return offer
+}
+
 export default function Home() {
   const navigate = useNavigate()
   const { triggerGreenPortal } = useWisp()
   const { lang, setLang } = useLang()
   const t = copy[lang]
   const videoEnabled = useAmbientVideoEnabled()
+  const featuredWebOffer = useFeaturedWebService()
 
   const openWisp = () => {
     triggerGreenPortal()
@@ -351,6 +380,8 @@ export default function Home() {
               cta={t.webCta}
               note={t.webNote}
               imageAlt={t.webImageAlt}
+              featuredLabel={t.webFeaturedLabel}
+              offer={featuredWebOffer}
             />
           </div>
         </div>
@@ -407,6 +438,8 @@ function WebCreationFeature({
   cta,
   note,
   imageAlt,
+  featuredLabel,
+  offer,
 }: {
   eyebrow: string
   title: string
@@ -414,6 +447,8 @@ function WebCreationFeature({
   cta: string
   note: string
   imageAlt: string
+  featuredLabel: string
+  offer: WebServiceOffer
 }) {
   return (
     <section className="relative mt-20 overflow-hidden rounded-[2.4rem] border border-orange-400/25 bg-gradient-to-br from-orange-500/[0.09] via-purple-500/[0.09] to-black/55 p-6 shadow-[0_32px_100px_rgba(0,0,0,.48)] md:p-9 lg:p-12" aria-labelledby="web-creation-home-title">
@@ -430,14 +465,26 @@ function WebCreationFeature({
           <p className="mt-5 font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-purple-200/65">{note}</p>
         </div>
 
-        <Link to="/creacion-web" className="group relative block overflow-hidden rounded-[1.75rem] border border-white/15 bg-black/60 p-2 shadow-[0_25px_70px_rgba(0,0,0,.5)]" aria-label={cta}>
+        <Link to="/creacion-web" className="group relative block overflow-hidden rounded-[1.75rem] border border-white/15 bg-black/60 p-2 shadow-[0_25px_70px_rgba(0,0,0,.5)]" aria-label={`${cta}: ${offer.title}`}>
           <div className="flex h-8 items-center gap-2 border-b border-white/10 px-3" aria-hidden="true">
             <span className="h-2 w-2 rounded-full bg-orange-400" />
             <span className="h-2 w-2 rounded-full bg-purple-400" />
             <span className="h-2 w-2 rounded-full bg-cyan-400" />
             <span className="ml-2 h-2 flex-1 rounded-full bg-white/[0.06]" />
           </div>
-          <img src="/web-services/landing-premium.svg" alt={imageAlt} loading="lazy" decoding="async" className="aspect-[12/7.6] w-full rounded-[1.2rem] object-cover transition duration-700 group-hover:scale-[1.025]" />
+          <div className="overflow-hidden rounded-[1.2rem]">
+            <SafeImage src={offer.image_url} fallback="/web-services/landing-premium.svg" alt={offer.image_alt || imageAlt} className="aspect-[12/7.6] w-full object-cover transition duration-700 group-hover:scale-[1.025]" />
+          </div>
+          <div className="grid gap-3 px-3 py-4 sm:grid-cols-[1fr_auto] sm:items-end sm:px-4">
+            <div className="min-w-0">
+              <p className="font-mono text-[9px] font-black uppercase tracking-[0.18em] text-orange-300">{featuredLabel}</p>
+              <p className="mt-1 truncate text-base font-black text-white">{offer.title}</p>
+            </div>
+            <div className="sm:text-right">
+              <p className="text-sm font-black text-purple-100">{offer.price_label}</p>
+              {offer.delivery_label ? <p className="mt-1 text-[10px] text-white/45">{offer.delivery_label}</p> : null}
+            </div>
+          </div>
         </Link>
       </div>
     </section>
