@@ -29,6 +29,23 @@ export type WebServiceCatalogResult = {
   notice: string | null
 }
 
+export async function loadFeaturedWebService(): Promise<WebServiceOffer> {
+  const fallback = fallbackWebServiceOffers[0]
+
+  if (!isSupabaseConfigured) return fallback
+
+  const { data, error } = await supabase
+    .from('web_service_offers')
+    .select(publicOfferFields)
+    .eq('status', 'published')
+    .order('featured', { ascending: false })
+    .order('sort_order', { ascending: true })
+    .limit(1)
+    .overrideTypes<WebServiceOffer[], { merge: false }>()
+
+  return !error && data?.[0] ? data[0] : fallback
+}
+
 export async function loadPublishedWebServices(): Promise<WebServiceCatalogResult> {
   if (!isSupabaseConfigured) {
     return {
