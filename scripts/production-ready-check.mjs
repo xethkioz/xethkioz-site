@@ -137,6 +137,15 @@ check(
     && cmsNewsEditor.includes('acceptedCoverTypes'),
 )
 check(
+  'News CMS exposes live editorial and SEO quality previews',
+  cmsNewsEditor.includes('QUALITY_GATE')
+    && cmsNewsEditor.includes('editorialChecks')
+    && cmsNewsEditor.includes('Canonical preview')
+    && cmsNewsEditor.includes('1.91/1')
+    && cmsNewsEditor.includes('news-title-guidance')
+    && cmsNewsEditor.includes('news-summary-guidance'),
+)
+check(
   'Green Node opens real learning paths and published technical news',
   greenNode.includes('active.steps.map')
     && greenNode.includes('fetchPublishedNews')
