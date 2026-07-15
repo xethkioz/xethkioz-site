@@ -26,6 +26,7 @@ check('public web creation route exists', app.includes('path="/creacion-web"') &
 check('home exposes the web creation feature', home.includes('<WebCreationFeature') && home.includes('to="/creacion-web"'))
 check('home featured proposal follows the published CMS catalog', home.includes('useFeaturedWebService') && home.includes('offer={featuredWebOffer}') && home.includes('offer.image_url') && service.includes('loadFeaturedWebService') && service.includes(".eq('status', 'published')") && service.includes(".order('featured', { ascending: false })"))
 check('Wisp remains hidden on mobile', !home.includes('<CompactWispPortal') && home.includes('hidden h-[360px]') && home.includes('xl:block'))
+check('home portal cards stay proportional without duplicated copy', home.includes('aspect-[0.875]') && home.includes('md:grid-cols-3') && !home.includes('absolute inset-x-8 bottom-9'))
 check('Green Node remains gated', app.includes('function GreenNodeGate') && app.includes('path="/green-node" element={<GreenNodeGate />}'))
 check('catalog is data-driven with fallback', page.includes('loadPublishedWebServices') && page.includes('offers.map'))
 check('quote form posts to server API', page.includes("fetch('/api/web-quote'") && page.includes('companyWebsite'))

@@ -450,6 +450,10 @@ body {
   .xk-home-horizontal-title{white-space:normal;font-size:3.25rem;line-height:.9}.xk-home-portal-deck{border-radius:1.5rem;padding:.65rem}.xk-home-portal-deck::after{font-size:.42rem;letter-spacing:.12em}
 }
 
+@media (hover: none) and (pointer: coarse) {
+  .xk-home-launcher { display:none !important; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-float,
   .xk-portal-aura,
