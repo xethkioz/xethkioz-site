@@ -332,7 +332,7 @@ export default function Home() {
 
         <div className="relative z-20 mx-auto max-w-[1720px] px-5 pb-40 pt-2 md:px-10 lg:px-14">
           <div className="relative min-h-[calc(100svh-190px)]">
-            <section className="xk-home-manifesto pt-4 xl:pr-[310px]">
+            <section className="xk-home-manifesto pt-4 xl:min-h-[320px] xl:pr-[300px]">
               <p className="font-mono text-xs font-black uppercase tracking-[0.38em] text-orange-300 drop-shadow-[0_0_14px_rgba(251,146,60,0.72)]">
                 {t.eyebrow}
               </p>
@@ -342,7 +342,7 @@ export default function Home() {
                 <span className="bg-gradient-to-r from-orange-400 via-purple-400 to-violet-700 bg-clip-text text-transparent drop-shadow-[0_0_34px_rgba(139,92,246,0.65)]">{t.titleBottom}</span>
               </h1>
 
-              <div className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-center">
+              <div className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-center xl:max-w-[920px]">
                 <p className="max-w-xl text-base leading-relaxed text-white/75 md:text-lg">{t.subtitle}</p>
                 <button type="button" onClick={scrollToPortals} className="shrink-0 rounded-xl border border-orange-400/60 bg-orange-500/10 px-6 py-3 font-mono text-xs font-black uppercase tracking-[0.18em] text-orange-300 shadow-[0_0_28px_rgba(251,146,60,0.28)] transition hover:scale-[1.03] hover:bg-orange-500/20 hover:shadow-[0_0_45px_rgba(251,146,60,0.55)]">{t.cta}</button>
               </div>
@@ -484,7 +484,7 @@ function FloatingWisp({
   onClick: () => void
 }) {
   return (
-    <div className="pointer-events-none absolute right-[1%] top-0 z-20 hidden h-[360px] w-[285px] xl:block 2xl:right-[2%]">
+    <div className="pointer-events-none absolute right-[1%] top-0 z-20 hidden h-[300px] w-[250px] xl:block 2xl:right-[2%]">
       <span className="xk-home-specter-energy" aria-hidden="true" />
       <button type="button" onClick={onClick} aria-label={ariaLabel} className="xk-home-specter pointer-events-auto absolute inset-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#32FF8A]">
         <SafeImage src="/assets/identity/wisp-digital-specter-v1.webp" fallback="/images/articles/tech.svg" alt="" className="h-full w-full object-contain drop-shadow-[0_0_22px_rgba(50,255,138,.52)]" />
