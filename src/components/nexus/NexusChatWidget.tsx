@@ -51,6 +51,7 @@ const copy = {
     input: 'Mensaje para la comunidad',
     send: 'Enviar',
     open: 'Abrir XETHKIOZ Nexus Chat',
+    close: 'Cerrar XETHKIOZ Nexus Chat',
     empty: 'Sala lista. Escribí el primer mensaje.',
     localReady: 'Modo local activo. Para chat compartido hay que activar Supabase Realtime.',
     setup: 'Supabase no está configurado en producción.',
@@ -70,6 +71,7 @@ const copy = {
     input: 'Message for the community',
     send: 'Send',
     open: 'Open XETHKIOZ Nexus Chat',
+    close: 'Close XETHKIOZ Nexus Chat',
     empty: 'Room ready. Send the first message.',
     localReady: 'Local mode active. Enable Supabase Realtime for shared chat.',
     setup: 'Supabase is not configured in production.',
@@ -292,9 +294,9 @@ export default function NexusChatWidget() {
   const visibleMessages = messages.filter((message) => message.room === room || message.type === 'system').slice(-80)
 
   return (
-    <div className="fixed bottom-5 right-5 z-[75] font-mono text-[#F0F0F5]">
+    <div className="fixed bottom-[max(.75rem,env(safe-area-inset-bottom))] right-3 z-[75] font-mono text-[#F0F0F5] sm:bottom-5 sm:right-5">
       {open && (
-        <section className="mb-4 w-[calc(100vw-2.5rem)] max-w-[390px] overflow-hidden rounded-3xl border border-[#8B5CF6]/60 bg-[#0A0A0F]/95 shadow-[0_0_10px_#8B5CF6,0_18px_80px_rgba(0,0,0,0.65)] backdrop-blur-xl" aria-label="XETHKIOZ Nexus Chat">
+        <section id="nexus-chat-panel" className="mb-4 w-[calc(100vw-2.5rem)] max-w-[390px] overflow-hidden rounded-3xl border border-[#8B5CF6]/60 bg-[#0A0A0F]/95 shadow-[0_0_10px_#8B5CF6,0_18px_80px_rgba(0,0,0,0.65)] backdrop-blur-xl" aria-label="XETHKIOZ Nexus Chat">
           <header className="border-b border-[#8B5CF6]/30 bg-gradient-to-r from-[#8B5CF6]/20 via-black/40 to-[#FF6B1A]/15 p-4">
             <div className="flex items-center justify-between gap-3">
               <div>
@@ -328,7 +330,7 @@ export default function NexusChatWidget() {
           </div>
         </section>
       )}
-      <button type="button" onClick={() => setOpen((current) => !current)} className="ml-auto flex h-16 w-16 items-center justify-center rounded-full border border-[#8B5CF6]/70 bg-[#0A0A0F] text-xl shadow-[0_0_10px_#8B5CF6,0_0_32px_rgba(255,107,26,0.22)] transition hover:scale-105 hover:border-[#FF6B1A] hover:text-[#FF6B1A]" aria-expanded={open} aria-label={t.open}>N</button>
+      <button type="button" onClick={() => setOpen((current) => !current)} className="ml-auto flex h-11 w-11 items-center justify-center rounded-full border border-[#8B5CF6]/60 bg-[#0A0A0F]/90 text-sm shadow-[0_0_8px_#8B5CF6,0_0_22px_rgba(255,107,26,0.18)] opacity-85 transition hover:scale-105 hover:border-[#FF6B1A] hover:text-[#FF6B1A] hover:opacity-100 focus-visible:opacity-100 sm:h-16 sm:w-16 sm:text-xl sm:opacity-100" aria-controls="nexus-chat-panel" aria-expanded={open} aria-label={open ? t.close : t.open}>N</button>
     </div>
   )
 }

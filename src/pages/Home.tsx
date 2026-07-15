@@ -353,7 +353,7 @@ export default function Home() {
               onClick={openWisp}
             />
 
-            <section id="portals" aria-label={t.portalsLabel} className="xk-home-portal-deck mt-8 grid grid-cols-1 items-stretch gap-5 p-3 md:p-4 lg:grid-cols-3 xl:mt-7">
+            <section id="portals" aria-label={t.portalsLabel} className="xk-home-portal-deck mt-8 grid grid-cols-1 items-stretch gap-4 p-2.5 md:grid-cols-3 md:gap-3 md:p-4 xl:mt-7 xl:gap-5">
               {t.portals.map((portal) => (
                 <PortalCard key={portal.title} portal={portal} />
               ))}
@@ -398,18 +398,18 @@ function WebCreationFeature({
   offer: WebServiceOffer
 }) {
   return (
-    <section className="relative mt-20 overflow-hidden rounded-[2.4rem] border border-orange-400/25 bg-gradient-to-br from-orange-500/[0.09] via-purple-500/[0.09] to-black/55 p-6 shadow-[0_32px_100px_rgba(0,0,0,.48)] md:p-9 lg:p-12" aria-labelledby="web-creation-home-title">
+    <section className="relative mt-14 overflow-hidden rounded-[1.75rem] border border-orange-400/25 bg-gradient-to-br from-orange-500/[0.09] via-purple-500/[0.09] to-black/55 p-5 shadow-[0_32px_100px_rgba(0,0,0,.48)] sm:p-6 md:mt-20 md:rounded-[2.4rem] md:p-9 lg:p-12" aria-labelledby="web-creation-home-title">
       <div className="absolute -left-20 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-orange-500/10 blur-3xl" aria-hidden="true" />
       <div className="absolute -right-20 top-1/3 h-80 w-80 rounded-full bg-purple-500/15 blur-3xl" aria-hidden="true" />
       <div className="relative grid items-center gap-10 xl:grid-cols-[0.8fr_1.2fr]">
         <div>
           <p className="font-mono text-[10px] font-black uppercase tracking-[0.3em] text-orange-300">{eyebrow}</p>
-          <h2 id="web-creation-home-title" className="mt-4 max-w-2xl text-4xl font-black leading-[1.02] tracking-[-0.04em] md:text-6xl">{title}</h2>
-          <p className="mt-5 max-w-xl text-sm leading-7 text-white/70 md:text-base">{text}</p>
-          <Link to="/creacion-web" className="mt-7 inline-flex rounded-full bg-gradient-to-r from-orange-500 to-orange-300 px-6 py-4 font-mono text-xs font-black uppercase tracking-[0.16em] text-black shadow-[0_0_28px_rgba(255,106,0,.28)] transition hover:scale-[1.02] hover:shadow-[0_0_45px_rgba(255,106,0,.48)]">
+          <h2 id="web-creation-home-title" className="mt-4 max-w-2xl text-[2rem] font-black leading-[1.02] tracking-[-0.04em] sm:text-4xl md:text-6xl">{title}</h2>
+          <p className="mt-5 max-w-xl text-sm leading-6 text-white/70 md:text-base md:leading-7">{text}</p>
+          <Link to="/creacion-web" className="mt-6 inline-flex rounded-full bg-gradient-to-r from-orange-500 to-orange-300 px-5 py-3.5 font-mono text-[10px] font-black uppercase tracking-[0.14em] text-black shadow-[0_0_28px_rgba(255,106,0,.28)] transition hover:scale-[1.02] hover:shadow-[0_0_45px_rgba(255,106,0,.48)] sm:px-6 sm:py-4 sm:text-xs sm:tracking-[0.16em]">
             {cta}
           </Link>
-          <p className="mt-5 font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-purple-200/65">{note}</p>
+          <p className="mt-5 font-mono text-[8px] font-bold uppercase leading-5 tracking-[0.14em] text-purple-200/65 sm:text-[9px] sm:tracking-[0.18em]">{note}</p>
         </div>
 
         <Link to="/creacion-web" className="group relative block overflow-hidden rounded-[1.75rem] border border-white/15 bg-black/60 p-2 shadow-[0_25px_70px_rgba(0,0,0,.5)]" aria-label={`${cta}: ${offer.title}`}>
@@ -446,7 +446,7 @@ function PortalCard({ portal }: { portal: Portal }) {
       <article
         className={[
           `xk-home-portal xk-home-portal-${tone}`,
-          'relative mx-auto h-[520px] w-full max-w-none overflow-hidden rounded-t-[42%] rounded-b-[2rem] ring-2 md:h-[560px] xl:h-[620px]',
+          'relative mx-auto aspect-[0.875] w-full max-w-none overflow-hidden rounded-t-[42%] rounded-b-[1.6rem] ring-2 md:rounded-b-[1.35rem] xl:rounded-b-[2rem]',
           portal.ring,
           portal.shadow,
           'bg-black/25 transition-all duration-500 ease-out group-hover:scale-[1.035]',
@@ -468,15 +468,9 @@ function PortalCard({ portal }: { portal: Portal }) {
           fallback="/images/articles/fallback.svg"
         />
 
-        <div className="absolute inset-0 rounded-[44%] bg-[radial-gradient(ellipse_at_center,transparent_42%,rgba(0,0,0,0.78)_100%)] opacity-75 transition duration-500 group-hover:opacity-45" />
-        <div className="absolute inset-0 rounded-[44%] ring-1 ring-white/20" />
-        <div className="pointer-events-none absolute inset-4 rounded-[42%] border border-white/10 opacity-40 transition duration-500 group-hover:inset-3 group-hover:opacity-100" />
-
-        <div className="absolute inset-x-8 bottom-9 z-20 translate-y-2 text-center transition duration-500 group-hover:translate-y-0">
-          <p className={`font-mono text-[9px] font-black uppercase tracking-[0.26em] ${portal.text}`}>{portal.subtitle}</p>
-          <h2 className="mt-2 text-2xl font-black uppercase tracking-[0.08em] text-white drop-shadow-[0_0_20px_rgba(0,0,0,.95)] md:text-3xl">{portal.title}</h2>
-          <span className="mt-3 inline-flex rounded-full border border-white/20 bg-black/45 px-4 py-2 font-mono text-[9px] font-black uppercase tracking-[0.16em] text-white/80 opacity-80 backdrop-blur-md transition group-hover:border-white/40 group-hover:text-white">{portal.button}</span>
-        </div>
+        <div className="absolute inset-0 rounded-[inherit] bg-[radial-gradient(ellipse_at_center,transparent_48%,rgba(0,0,0,0.6)_100%)] opacity-55 transition duration-500 group-hover:opacity-30" />
+        <div className="absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-white/20" />
+        <div className="pointer-events-none absolute inset-3 rounded-t-[40%] rounded-b-[1.15rem] border border-white/10 opacity-35 transition duration-500 group-hover:inset-2 group-hover:opacity-80 md:inset-2 xl:inset-4" />
       </article>
     </Link>
   )
@@ -511,7 +505,7 @@ function LeftLauncher({
   wispLabel: string
 }) {
   return (
-    <nav className="fixed left-4 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-3 rounded-[1.6rem] border border-white/10 bg-black/35 p-2 shadow-[0_0_30px_rgba(139,92,246,0.25)] backdrop-blur-xl md:flex" aria-label={label}>
+    <nav className="xk-home-launcher fixed left-4 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-3 rounded-[1.6rem] border border-white/10 bg-black/35 p-2 shadow-[0_0_30px_rgba(139,92,246,0.25)] backdrop-blur-xl md:flex" aria-label={label}>
       {sideItems.map((item, index) => (
         <Link
           key={item.to}
