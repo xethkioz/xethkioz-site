@@ -129,8 +129,8 @@ export default function GreenNode() {
                 <p className="font-mono text-[11px] uppercase tracking-[0.34em] text-[#32FF8A]/70">BLACK_ARCHIVE // WISP_INFECTION_ACCEPTED</p>
                 <button onClick={() => setLang(lang === 'es' ? 'en' : 'es')} className="rounded-full border border-[#32FF8A]/50 px-4 py-2 font-mono text-xs font-black uppercase tracking-[0.18em] text-[#D8FFE8] transition hover:bg-[#32FF8A]/10">{lang.toUpperCase()}</button>
               </div>
-              <div className="mt-6 grid items-center gap-8 lg:grid-cols-[1fr_auto]">
-                <div>
+              <div className="mt-6">
+                <div className="xk-occult-copy">
                   <p className="xk-occult-eyebrow">DOSSIER 13 / REALITY BREACH</p>
                   <h1 className="xk-occult-title">{t.title}</h1>
                   <p className="mt-5 max-w-3xl font-mono text-sm leading-relaxed text-[#B9FFD1] md:text-base">{t.description}</p>
@@ -138,11 +138,6 @@ export default function GreenNode() {
                     <span className="rounded-full border border-[#32FF8A]/35 bg-[#32FF8A]/[0.07] px-3 py-2 text-[#32FF8A]">● {t.liveSignal}</span>
                     <span className="rounded-full border border-white/10 px-3 py-2 text-[#B9FFD1]/65">{t.sync}</span>
                   </div>
-                </div>
-                <div className="xk-green-core xk-infected-core" aria-hidden="true">
-                  <span className="xk-green-core-ring" />
-                  <span className="xk-green-core-ring xk-green-core-ring-delayed" />
-                  <span className="xk-core-demon"><i /><i /><b /></span>
                 </div>
               </div>
 

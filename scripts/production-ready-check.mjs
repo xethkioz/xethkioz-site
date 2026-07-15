@@ -88,6 +88,13 @@ check(
     && home.includes('videoEnabled &&'),
 )
 check(
+  'Home uses the current infected Wisp identity without legacy duplication',
+  home.includes('xk-home-infected-card')
+    && home.includes('green-node-occult-malware-v1.webp')
+    && home.includes('WISP // INFECTED')
+    && !home.includes('/assets/green-wisp.png'),
+)
+check(
   'Home ambient video has a static poster fallback',
   exists('public/assets/bg-dragon-poster.webp')
     && home.includes('/assets/bg-dragon-poster.webp'),
@@ -149,7 +156,7 @@ check(
   'Green Node opens real learning paths and published technical news',
   greenNode.includes('active.steps.map')
     && greenNode.includes('fetchPublishedNews')
-    && greenNode.includes('xk-green-core')
+    && greenNode.includes('xk-occult-copy')
     && greenNode.includes('green-node-occult-malware-v1.webp')
     && greenNode.includes('PROTOCOLO DE VERDAD')
     && greenNode.includes('/news?category='),

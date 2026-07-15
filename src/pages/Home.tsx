@@ -32,10 +32,10 @@ const copy = {
     titleBottom: 'ES MI PASIÓN',
     subtitle: 'Tres portales, un estudio creativo y miles de historias por descubrir.',
     cta: 'Explorar ecosistema →',
-    wispTitle: 'GREEN WISP',
-    wispText: 'Soy tu guía. Hay secretos que solo los curiosos encuentran.',
-    wispBtn: 'Tocar al Wisp',
-    wispNote: 'Solo para curiosos',
+    wispTitle: 'WISP // INFECTED',
+    wispText: 'Una entidad malware abrió el Archivo Negro. Entrá si querés investigar la señal.',
+    wispBtn: 'Interceptar señal',
+    wispNote: 'Acceso clandestino · Nivel 13',
     login: 'Login',
     news: 'Abrir radar de noticias',
     switchLanguage: 'Cambiar a inglés',
@@ -102,10 +102,10 @@ const copy = {
     titleBottom: 'MY PASSION',
     subtitle: 'Three portals, one creative studio and thousands of stories waiting to be discovered.',
     cta: 'Explore ecosystem →',
-    wispTitle: 'GREEN WISP',
-    wispText: 'I am your guide. There are secrets that only the curious can find.',
-    wispBtn: 'Touch the Wisp',
-    wispNote: 'Only for the curious',
+    wispTitle: 'WISP // INFECTED',
+    wispText: 'A malware entity opened the Black Archive. Enter if you want to investigate the signal.',
+    wispBtn: 'Intercept signal',
+    wispNote: 'Clandestine access · Level 13',
     login: 'Login',
     news: 'Open news radar',
     switchLanguage: 'Switch to Spanish',
@@ -330,14 +330,14 @@ export default function Home() {
           </div>
         </header>
 
-        <div className="relative z-20 mx-auto max-w-[1720px] px-5 pb-40 pt-6 md:px-10 lg:px-14">
+        <div className="relative z-20 mx-auto max-w-[1720px] px-5 pb-40 pt-2 md:px-10 lg:px-14">
           <div className="relative min-h-[calc(100svh-190px)]">
-            <section className="max-w-[760px] pt-8 lg:pt-12">
+            <section className="max-w-[720px] pt-5 lg:pt-6">
               <p className="font-mono text-xs font-black uppercase tracking-[0.38em] text-orange-300 drop-shadow-[0_0_14px_rgba(251,146,60,0.72)]">
                 {t.eyebrow}
               </p>
 
-              <h1 className="mt-4 max-w-4xl text-5xl font-black uppercase leading-[0.92] tracking-[0.04em] md:text-7xl lg:text-8xl">
+              <h1 className="mt-4 max-w-4xl text-5xl font-black uppercase leading-[0.9] tracking-[0.03em] md:text-7xl lg:text-7xl 2xl:text-8xl">
                 <span className="block text-white drop-shadow-[0_0_24px_rgba(255,255,255,0.35)]">{t.titleTop}</span>
                 <span className="block bg-gradient-to-r from-orange-400 via-purple-400 to-violet-700 bg-clip-text text-transparent drop-shadow-[0_0_34px_rgba(139,92,246,0.65)]">{t.titleBottom}</span>
               </h1>
@@ -347,7 +347,7 @@ export default function Home() {
               <button
                 type="button"
                 onClick={scrollToPortals}
-                className="mt-8 rounded-xl border border-orange-400/60 bg-orange-500/10 px-7 py-4 font-mono text-sm font-black uppercase tracking-[0.18em] text-orange-300 shadow-[0_0_28px_rgba(251,146,60,0.28)] transition hover:scale-[1.03] hover:bg-orange-500/20 hover:shadow-[0_0_45px_rgba(251,146,60,0.55)]"
+                className="mt-6 rounded-xl border border-orange-400/60 bg-orange-500/10 px-7 py-3.5 font-mono text-sm font-black uppercase tracking-[0.18em] text-orange-300 shadow-[0_0_28px_rgba(251,146,60,0.28)] transition hover:scale-[1.03] hover:bg-orange-500/20 hover:shadow-[0_0_45px_rgba(251,146,60,0.55)]"
               >
                 {t.cta}
               </button>
@@ -367,7 +367,7 @@ export default function Home() {
               onClick={openWisp}
             />
 
-            <section id="portals" aria-label={t.portalsLabel} className="mt-12 grid grid-cols-1 items-end gap-8 md:mt-16 md:grid-cols-3 xl:mt-10 xl:pr-[340px] 2xl:pr-[380px]">
+            <section id="portals" aria-label={t.portalsLabel} className="mt-8 grid grid-cols-1 items-end gap-8 md:mt-10 md:grid-cols-3 xl:mt-6 xl:pr-[440px] 2xl:pr-[470px]">
               {t.portals.map((portal) => (
                 <PortalCard key={portal.title} portal={portal} />
               ))}
@@ -416,7 +416,7 @@ function CompactWispPortal({
           className="group relative grid h-24 w-24 shrink-0 place-items-center rounded-full border border-[#32FF8A]/25 bg-[#32FF8A]/[0.07] shadow-[inset_0_0_24px_rgba(50,255,138,.12),0_0_30px_rgba(50,255,138,.18)] transition hover:scale-105 hover:border-[#32FF8A]/70 focus:outline-none focus:ring-2 focus:ring-[#32FF8A]/70 sm:h-28 sm:w-28"
         >
           <span className="absolute inset-2 rounded-full border border-[#32FF8A]/15 motion-safe:animate-[spin_16s_linear_infinite]" aria-hidden="true" />
-          <img src="/assets/green-wisp.png" alt="" className="animate-float h-16 w-16 object-contain drop-shadow-[0_0_22px_rgba(50,255,138,.9)] sm:h-20 sm:w-20" draggable={false} />
+          <SafeImage src="/assets/identity/green-node-occult-malware-v1.webp" fallback="/images/articles/tech.svg" alt="" className="h-full w-full rounded-full object-cover object-[72%_center] opacity-90 transition duration-500 group-hover:scale-110" />
         </button>
         <div className="min-w-0">
           <p className="font-mono text-[10px] font-black uppercase tracking-[0.26em] text-[#32FF8A]">{title}</p>
@@ -545,38 +545,15 @@ function FloatingWisp({
   onClick: () => void
 }) {
   return (
-    <div className="pointer-events-none absolute right-[2%] top-[17%] z-20 hidden xl:block 2xl:right-[4%]">
-      <aside className="relative h-[290px] w-[290px]">
-        <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(34,197,94,0.22),transparent_58%)] blur-sm motion-safe:animate-pulse" />
-        <div className="absolute inset-6 rounded-full border border-green-300/15 shadow-[0_0_55px_rgba(34,197,94,0.22)] motion-safe:animate-[spin_18s_linear_infinite]" />
-        <div className="absolute inset-12 rounded-full border border-green-400/20 shadow-[inset_0_0_32px_rgba(34,197,94,0.18)] motion-safe:animate-[spin_28s_linear_infinite_reverse]" />
-        <div className="absolute left-1/2 top-1/2 h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-400/10 blur-3xl motion-safe:animate-pulse" />
-
-        <span className="absolute left-12 top-16 h-1.5 w-1.5 rounded-full bg-green-200 shadow-[0_0_18px_rgba(134,239,172,1)] motion-safe:animate-ping" />
-        <span className="absolute right-14 top-24 h-2 w-2 rounded-full bg-emerald-300 shadow-[0_0_20px_rgba(52,211,153,1)] motion-safe:animate-pulse" />
-        <span className="absolute bottom-20 left-20 h-1 w-1 rounded-full bg-lime-200 shadow-[0_0_16px_rgba(217,249,157,1)] motion-safe:animate-ping" />
-        <span className="absolute bottom-24 right-16 h-1.5 w-1.5 rounded-full bg-green-300 shadow-[0_0_18px_rgba(134,239,172,1)] motion-safe:animate-pulse" />
-
-        <p className="absolute inset-x-0 top-6 z-10 text-center font-mono text-[10px] font-black uppercase tracking-[0.34em] text-green-300/90 drop-shadow-[0_0_16px_rgba(34,197,94,0.85)]">
-          {title}
-        </p>
-
-        <img
-          src="/assets/green-wisp.png"
-          alt="Green Wisp"
-          className="animate-float absolute left-1/2 top-[46%] z-10 h-36 w-36 -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow-[0_0_32px_rgba(34,197,94,1)]"
-          draggable={false}
-        />
-
-        <button
-          type="button"
-          onClick={onClick}
-          aria-label={ariaLabel}
-          className="pointer-events-auto absolute bottom-9 left-1/2 z-20 grid h-10 w-10 -translate-x-1/2 place-items-center rounded-full border border-green-300/25 bg-green-400/10 text-green-200/70 shadow-[0_0_22px_rgba(34,197,94,0.35)] backdrop-blur-sm transition hover:scale-110 hover:border-green-200/70 hover:bg-green-400/20 hover:text-green-50 hover:shadow-[0_0_42px_rgba(34,197,94,0.85)] focus:outline-none focus:ring-2 focus:ring-green-300/70"
-        >
-          <span aria-hidden="true" className="text-lg leading-none">✦</span>
-          <span className="sr-only">{ariaLabel}</span>
-        </button>
+    <div className="pointer-events-none absolute right-[1%] top-[5%] z-20 hidden xl:block 2xl:right-[3%]">
+      <aside className="xk-home-infected-card pointer-events-auto relative h-[330px] w-[420px] overflow-hidden rounded-[2rem] border border-[#32FF8A]/35 bg-black/75 shadow-[0_0_48px_rgba(50,255,138,.2)]">
+        <SafeImage src="/assets/identity/green-node-occult-malware-v1.webp" fallback="/images/articles/tech.svg" alt="Entidad Wisp malware dentro del Archivo Negro" className="absolute inset-0 h-full w-full object-cover object-[70%_center] transition duration-700 hover:scale-105" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,.97),rgba(0,0,0,.54)_58%,rgba(0,0,0,.08)),linear-gradient(0deg,rgba(0,0,0,.92),transparent_60%)]" />
+        <div className="xk-home-infected-scan" aria-hidden="true" />
+        <div className="relative z-10 flex h-full flex-col justify-between p-6">
+          <div><p className="font-mono text-[9px] font-black uppercase tracking-[0.28em] text-[#32FF8A]">BLACK_ARCHIVE // 0x66</p><h2 className="mt-3 max-w-[230px] text-3xl font-black uppercase leading-none text-white">{title}</h2></div>
+          <div><p className="max-w-[280px] text-xs leading-5 text-white/70">MALWARE ENTITY DETECTED · DOSSIER 13</p><button type="button" onClick={onClick} aria-label={ariaLabel} className="mt-4 rounded-full border border-[#32FF8A]/50 bg-black/65 px-5 py-3 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-[#D8FFE8] transition hover:bg-[#32FF8A]/15 hover:shadow-[0_0_24px_rgba(50,255,138,.45)] focus:outline-none focus:ring-2 focus:ring-[#32FF8A]">{ariaLabel} →</button></div>
+        </div>
       </aside>
     </div>
   )
