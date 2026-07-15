@@ -65,7 +65,7 @@ const copy = {
         title: 'JUEGOS',
         subtitle: 'Noticias · Guías · Videos · Imágenes',
         route: '/gaming',
-        poster: '/assets/portal-games-poster.png',
+        poster: '/assets/portal-games-clean-v1.webp',
         icon: '🎮',
         ring: 'ring-purple-500/90',
         shadow: 'shadow-[0_0_70px_rgba(139,92,246,0.75)] hover:shadow-[0_0_105px_rgba(139,92,246,0.95)]',
@@ -76,7 +76,7 @@ const copy = {
         title: 'CIENCIA Y TECNOLOGÍA',
         subtitle: 'Física · Tecnología · IA · Proyectos',
         route: '/science',
-        poster: '/assets/portal-science-poster.png',
+        poster: '/assets/portal-science-clean-v1.webp',
         icon: '⚛',
         ring: 'ring-cyan-400/90',
         shadow: 'shadow-[0_0_70px_rgba(34,211,238,0.78)] hover:shadow-[0_0_110px_rgba(34,211,238,0.98)]',
@@ -87,7 +87,7 @@ const copy = {
         title: 'DIVERSIÓN',
         subtitle: 'Memes · Videos · Arte · Humor',
         route: '/fun',
-        poster: '/assets/portal-fun-poster.png',
+        poster: '/assets/portal-fun-clean-v1.webp',
         icon: '☻',
         ring: 'ring-orange-400/90',
         shadow: 'shadow-[0_0_70px_rgba(251,146,60,0.78)] hover:shadow-[0_0_110px_rgba(251,146,60,0.98)]',
@@ -135,7 +135,7 @@ const copy = {
         title: 'GAMES',
         subtitle: 'News · Guides · Videos · Images',
         route: '/gaming',
-        poster: '/assets/portal-games-poster.png',
+        poster: '/assets/portal-games-clean-v1.webp',
         icon: '🎮',
         ring: 'ring-purple-500/90',
         shadow: 'shadow-[0_0_70px_rgba(139,92,246,0.75)] hover:shadow-[0_0_105px_rgba(139,92,246,0.95)]',
@@ -146,7 +146,7 @@ const copy = {
         title: 'SCIENCE & TECHNOLOGY',
         subtitle: 'Physics · Technology · AI · Projects',
         route: '/science',
-        poster: '/assets/portal-science-poster.png',
+        poster: '/assets/portal-science-clean-v1.webp',
         icon: '⚛',
         ring: 'ring-cyan-400/90',
         shadow: 'shadow-[0_0_70px_rgba(34,211,238,0.78)] hover:shadow-[0_0_110px_rgba(34,211,238,0.98)]',
@@ -157,7 +157,7 @@ const copy = {
         title: 'FUN',
         subtitle: 'Memes · Videos · Art · Humor',
         route: '/fun',
-        poster: '/assets/portal-fun-poster.png',
+        poster: '/assets/portal-fun-clean-v1.webp',
         icon: '☻',
         ring: 'ring-orange-400/90',
         shadow: 'shadow-[0_0_70px_rgba(251,146,60,0.78)] hover:shadow-[0_0_110px_rgba(251,146,60,0.98)]',
@@ -442,35 +442,15 @@ function PortalCard({ portal }: { portal: Portal }) {
   const tone = portal.route === '/gaming' ? 'violet' : portal.route === '/science' ? 'cyan' : 'orange'
 
   return (
-    <Link to={portal.route} className={`xk-home-portal-shell xk-home-portal-shell-${tone} group block rounded-[2rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 focus-visible:ring-offset-4 focus-visible:ring-offset-black`} aria-label={`${portal.button.replace(' →', '')}: ${portal.title}`}>
-      <article
-        className={[
-          `xk-home-portal xk-home-portal-${tone}`,
-          'relative z-[1] mx-auto aspect-[0.875] w-full max-w-none overflow-hidden rounded-t-[42%] rounded-b-[1.6rem] ring-2 md:rounded-b-[1.35rem] xl:rounded-b-[2rem]',
-          portal.ring,
-          portal.shadow,
-          'bg-black/25 transition-all duration-500 ease-out group-hover:scale-[1.035]',
-        ].join(' ')}
-      >
-        <span className="xk-portal-aura" aria-hidden="true" />
-        <span className="xk-portal-orbit" aria-hidden="true" />
-        <span className="xk-portal-orbit xk-portal-orbit-reverse" aria-hidden="true" />
-        <span className="xk-portal-scan" aria-hidden="true" />
-        <span className="xk-portal-particle xk-portal-particle-1" aria-hidden="true" />
-        <span className="xk-portal-particle xk-portal-particle-2" aria-hidden="true" />
-        <span className="xk-portal-particle xk-portal-particle-3" aria-hidden="true" />
-
+    <Link to={portal.route} className={`xk-home-portal-shell xk-home-portal-shell-${tone} group block rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 focus-visible:ring-offset-4 focus-visible:ring-offset-black`} aria-label={`${portal.button.replace(' →', '')}: ${portal.title}`}>
+      <article className="xk-home-portal-clean relative z-[1] mx-auto aspect-square w-full max-w-none transition duration-500 ease-out group-hover:scale-[1.035]">
         <SafeImage
-          className="absolute inset-0 h-full w-full object-cover transition duration-1000 group-hover:scale-[1.075] group-hover:saturate-125"
+          className="xk-home-portal-image absolute inset-0 h-full w-full object-contain transition duration-1000 group-hover:scale-[1.045] group-hover:saturate-125"
           src={portal.poster}
           alt={portal.title}
           loading="lazy"
           fallback="/images/articles/fallback.svg"
         />
-
-        <div className="absolute inset-0 rounded-[inherit] bg-[radial-gradient(ellipse_at_center,transparent_48%,rgba(0,0,0,0.6)_100%)] opacity-55 transition duration-500 group-hover:opacity-30" />
-        <div className="absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-white/20" />
-        <div className="pointer-events-none absolute inset-3 rounded-t-[40%] rounded-b-[1.15rem] border border-white/10 opacity-35 transition duration-500 group-hover:inset-2 group-hover:opacity-80 md:inset-2 xl:inset-4" />
       </article>
     </Link>
   )
