@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useHud } from '../lib/HudContext'
 import { useLang } from '../lib/LangContext'
 import { useWisp } from '../providers/WispProvider'
@@ -38,9 +38,9 @@ export default function Header() {
     <>
       <aside className="fixed left-4 top-1/2 z-[72] hidden -translate-y-1/2 flex-col gap-3 rounded-[2rem] border border-white/10 bg-black/45 p-2 shadow-[0_0_34px_rgba(139,92,246,.22)] backdrop-blur-xl md:flex" aria-label="XETHKIOZ launcher">
         {rail.map((item) => (
-          <Link key={item.to} to={item.to} className="grid h-12 w-12 place-items-center rounded-2xl border border-white/10 bg-white/[0.035] text-lg text-white transition hover:border-[#8B5CF6] hover:shadow-[0_0_18px_rgba(139,92,246,.55)]" title={item.label}>
+          <NavLink key={item.to} to={item.to} aria-label={item.label} className={({ isActive }) => `grid h-12 w-12 place-items-center rounded-2xl border bg-white/[0.035] text-lg text-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 ${isActive ? 'border-[#FF6B1A] shadow-[0_0_18px_rgba(255,107,26,.5)]' : 'border-white/10 hover:border-[#8B5CF6] hover:shadow-[0_0_18px_rgba(139,92,246,.55)]'}`} title={item.label}>
             {item.icon}
-          </Link>
+          </NavLink>
         ))}
         <button type="button" onClick={openGreen} className="grid h-12 w-12 place-items-center rounded-2xl border border-[#32FF8A]/35 bg-[#32FF8A]/10 text-lg text-[#32FF8A] transition hover:border-[#32FF8A] hover:shadow-[0_0_20px_rgba(50,255,138,.65)]" title="Green Node">
           ✦
@@ -55,9 +55,9 @@ export default function Header() {
 
           <nav className="hidden justify-self-center rounded-full border border-white/10 bg-black/35 px-2 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-gray-300 lg:flex" aria-label="Top nav">
             {nav.map((item) => (
-              <Link key={item.to} to={item.to} className="rounded-full px-4 py-2 transition hover:bg-[#8B5CF6]/15 hover:text-white hover:shadow-[0_0_14px_rgba(139,92,246,.35)]">
+              <NavLink key={item.to} to={item.to} className={({ isActive }) => `rounded-full px-4 py-2 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 ${isActive ? 'bg-[#8B5CF6]/20 text-white shadow-[0_0_14px_rgba(139,92,246,.35)]' : 'hover:bg-[#8B5CF6]/15 hover:text-white'}`}>
                 {item.label}
-              </Link>
+              </NavLink>
             ))}
             <button type="button" onClick={openGreen} className="rounded-full px-4 py-2 text-[#32FF8A] transition hover:bg-[#32FF8A]/10 hover:shadow-[0_0_14px_rgba(50,255,138,.45)]">
               WISP NEXUS
@@ -74,6 +74,15 @@ export default function Header() {
           </div>
         </div>
       </header>
+
+      <nav className="xk-mobile-dock" aria-label="Navegación móvil principal">
+        {rail.map((item) => (
+          <NavLink key={item.to} to={item.to} aria-label={item.label} className={({ isActive }) => isActive ? 'is-active' : undefined}>
+            <span aria-hidden="true">{item.icon}</span>
+            <small>{item.label}</small>
+          </NavLink>
+        ))}
+      </nav>
     </>
   )
 }

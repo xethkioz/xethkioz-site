@@ -36,6 +36,7 @@ const perf = read('src/engines/world/sandbox/PerformanceMonitor.ts')
 const shaderManager = read('src/engines/world/sandbox/ShaderManager.ts')
 const contracts = read('src/engines/world/sandbox/portalEventContracts.ts')
 const appShell = read('src/App.tsx')
+const header = read('src/components/Header.tsx')
 const mainEntry = read('src/main.tsx')
 const home = read('src/pages/Home.tsx')
 const publicNews = read('src/pages/News.tsx')
@@ -108,6 +109,15 @@ check(
     && publicNews.includes("next.set('category', category)")
     && publicNews.includes("next.set('q', cleanValue)")
     && publicNews.includes('snap-mandatory'),
+)
+check(
+  'Navigation is keyboard and mobile accessible',
+  appShell.includes('xk-skip-link')
+    && appShell.includes('RouteAccessibility')
+    && appShell.includes('tabIndex={-1}')
+    && header.includes('xk-mobile-dock')
+    && header.includes('<NavLink')
+    && redesignCss.includes('.xk-mobile-dock a:focus-visible'),
 )
 check(
   'News RLS is role-scoped and avoids repeated auth evaluation',
