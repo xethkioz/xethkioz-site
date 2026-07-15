@@ -150,6 +150,8 @@ check(
   greenNode.includes('active.steps.map')
     && greenNode.includes('fetchPublishedNews')
     && greenNode.includes('xk-green-core')
+    && greenNode.includes('green-node-occult-malware-v1.webp')
+    && greenNode.includes('PROTOCOLO DE VERDAD')
     && greenNode.includes('/news?category='),
 )
 check(
@@ -178,6 +180,15 @@ check(
     && home.includes('xk-portal-orbit')
     && redesignCss.includes('@keyframes portal-breathe')
     && redesignCss.includes('.xk-portal-particle')
+    && redesignCss.includes('@media (prefers-reduced-motion: reduce)'),
+)
+check(
+  'Wisp exposes a desktop-only malware demon identity',
+  appShell.includes('FusionGlobalWisp')
+    && read('src/components/fusion/FusionGlobalWisp.tsx').includes('xk-wisp-horn')
+    && read('src/components/fusion/FusionGlobalWisp.tsx').includes('xk-wisp-code')
+    && redesignCss.includes('@keyframes wisp-virus-glitch')
+    && redesignCss.includes('@media (min-width: 768px)')
     && redesignCss.includes('@media (prefers-reduced-motion: reduce)'),
 )
 const strictPackageAudit = process.env.XETHKIOZ_STRICT_PACKAGE_AUDIT === '1'
