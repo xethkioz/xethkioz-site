@@ -184,17 +184,22 @@ check(
     && redesignCss.includes('.xk-manga-tabs'),
 )
 check(
-  'Home portals use accessible reduced-motion-safe energy effects',
-  home.includes('xk-home-portal')
-    && home.includes('xk-home-portal-shell')
-    && home.includes('xk-portal-orbit')
-    && home.includes('aspect-[0.875]')
+  'Home portals use clean transparent worlds with reduced-motion-safe energy',
+  home.includes('xk-home-portal-shell')
+    && home.includes('xk-home-portal-clean')
+    && home.includes('portal-games-clean-v1.webp')
+    && home.includes('portal-science-clean-v1.webp')
+    && home.includes('portal-fun-clean-v1.webp')
+    && exists('public/assets/portal-games-clean-v1.webp')
+    && exists('public/assets/portal-science-clean-v1.webp')
+    && exists('public/assets/portal-fun-clean-v1.webp')
+    && home.includes('aspect-square')
     && home.includes('md:grid-cols-3')
     && !home.includes('absolute inset-x-8 bottom-9')
-    && redesignCss.includes('@keyframes portal-breathe')
     && redesignCss.includes('@keyframes portal-mist-pulse')
     && redesignCss.includes('.xk-home-portal-shell::before')
-    && redesignCss.includes('.xk-portal-particle')
+    && redesignCss.includes('.xk-home-portal-image')
+    && redesignCss.includes('mask-image:radial-gradient')
     && redesignCss.includes('@media (hover: none) and (pointer: coarse)')
     && redesignCss.includes('@media (prefers-reduced-motion: reduce)'),
 )

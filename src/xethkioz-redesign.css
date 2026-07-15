@@ -16,24 +16,8 @@ body {
 
 .animate-float { animation: float 3s ease-in-out infinite; }
 
-@keyframes portal-breathe {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: .34; }
-  50% { transform: translate3d(0, -5px, 0) scale(1.08); opacity: .7; }
-}
-
 @keyframes portal-orbit {
   to { transform: rotate(360deg); }
-}
-
-@keyframes portal-scan {
-  0% { transform: translateY(-130%); opacity: 0; }
-  18%, 76% { opacity: .32; }
-  100% { transform: translateY(680%); opacity: 0; }
-}
-
-@keyframes portal-particle {
-  0%, 100% { transform: translate3d(0, 8px, 0) scale(.7); opacity: .18; }
-  50% { transform: translate3d(5px, -18px, 0) scale(1.2); opacity: .95; }
 }
 
 @keyframes portal-mist-pulse {
@@ -68,76 +52,8 @@ body {
 .xk-home-portal-shell::before { content:'';position:absolute;inset:-13% -18% -19%;z-index:-1;pointer-events:none;border-radius:48%;background:radial-gradient(ellipse at 50% 46%,rgba(var(--portal-rgb),.62),rgba(var(--portal-rgb),.27) 38%,rgba(var(--portal-rgb),.08) 58%,transparent 75%);filter:blur(44px) saturate(1.4);opacity:.9;animation:portal-mist-pulse 6.8s ease-in-out infinite; }
 .xk-home-portal-shell::after { content:'';position:absolute;inset:-7% -14% -13%;z-index:-2;pointer-events:none;border-radius:50%;background:conic-gradient(from 35deg,transparent 0 13%,rgba(var(--portal-rgb),.42) 22%,transparent 35% 57%,rgba(var(--portal-rgb),.32) 68%,transparent 82%);filter:blur(24px);opacity:.52;-webkit-mask-image:radial-gradient(ellipse,#0000 34%,#000 51%,#0000 76%);mask-image:radial-gradient(ellipse,#0000 34%,#000 51%,#0000 76%);animation:portal-orbit 34s linear infinite; }
 
-.xk-home-portal {
-  --portal-rgb: 139, 92, 246;
-  isolation: isolate;
-  transform: translateZ(0);
-  box-shadow: inset 0 0 46px rgba(var(--portal-rgb), .1);
-}
-
-.xk-home-portal-cyan { --portal-rgb: 34, 211, 238; }
-.xk-home-portal-orange { --portal-rgb: 251, 146, 60; }
-
-.xk-portal-aura {
-  position: absolute;
-  inset: 8%;
-  z-index: 1;
-  border-radius: 45%;
-  background: radial-gradient(circle, rgba(var(--portal-rgb), .34), transparent 66%);
-  filter: blur(18px);
-  animation: portal-breathe 5.4s ease-in-out infinite;
-}
-
-.xk-portal-orbit {
-  position: absolute;
-  inset: 5%;
-  z-index: 12;
-  border-radius: 45%;
-  border: 1px dashed rgba(var(--portal-rgb), .32);
-  animation: portal-orbit 22s linear infinite;
-}
-
-.xk-portal-orbit-reverse {
-  inset: 10%;
-  border-style: solid;
-  border-color: rgba(255, 255, 255, .12) transparent rgba(var(--portal-rgb), .24);
-  animation-direction: reverse;
-  animation-duration: 31s;
-}
-
-.xk-portal-scan {
-  position: absolute;
-  left: 10%;
-  right: 10%;
-  top: 10%;
-  z-index: 14;
-  height: 12%;
-  border-radius: 999px;
-  background: linear-gradient(180deg, transparent, rgba(var(--portal-rgb), .25), transparent);
-  filter: blur(4px);
-  animation: portal-scan 7s ease-in-out infinite;
-}
-
-.xk-portal-particle {
-  position: absolute;
-  z-index: 15;
-  height: 5px;
-  width: 5px;
-  border-radius: 50%;
-  background: rgb(var(--portal-rgb));
-  box-shadow: 0 0 16px rgba(var(--portal-rgb), .95);
-  animation: portal-particle 3.8s ease-in-out infinite;
-}
-
-.xk-portal-particle-1 { left: 20%; top: 28%; }
-.xk-portal-particle-2 { right: 18%; top: 43%; animation-delay: -1.4s; animation-duration: 4.7s; }
-.xk-portal-particle-3 { left: 33%; bottom: 27%; animation-delay: -2.6s; animation-duration: 5.2s; }
-
-.xk-home-portal:hover .xk-portal-aura,
-.group:focus-visible .xk-portal-aura {
-  opacity: .95;
-  filter: blur(12px);
-}
+.xk-home-portal-clean { isolation:isolate;transform:translateZ(0); }
+.xk-home-portal-image { filter:drop-shadow(0 0 22px rgba(var(--portal-rgb),.82)) drop-shadow(0 0 62px rgba(var(--portal-rgb),.34));-webkit-mask-image:radial-gradient(ellipse at center,#000 0 80%,rgba(0,0,0,.94) 87%,rgba(0,0,0,.42) 94%,transparent 100%);mask-image:radial-gradient(ellipse at center,#000 0 80%,rgba(0,0,0,.94) 87%,rgba(0,0,0,.42) 94%,transparent 100%); }
 
 .xk-noise {
   background-image:
@@ -467,10 +383,7 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .animate-float,
-  .xk-portal-aura,
-  .xk-portal-orbit,
-  .xk-portal-scan,
-  .xk-portal-particle,
+  .xk-home-portal-shell,
   .xk-green-matrix,
   .xk-green-core-ring,
   video,
