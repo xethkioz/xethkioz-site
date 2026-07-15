@@ -51,6 +51,17 @@ export default function CmsNewsEditor() {
   const isNew = !id
   const isAdmin = session?.role === 'ADMIN'
   const canEdit = Boolean(session?.permissions.canAccessCms || session?.permissions.canInsertArticles || isAdmin)
+  const cleanTitleLength = title.trim().length
+  const cleanSummaryLength = summary.trim().length
+  const publicUrl = article ? `https://www.xethkioz.com.ar/news/${article.slug}` : 'https://www.xethkioz.com.ar/news/...'
+  const editorialChecks = [
+    { label: 'Título claro (35–70 caracteres)', pass: cleanTitleLength >= 35 && cleanTitleLength <= 70 },
+    { label: 'Resumen SEO (120–165 caracteres)', pass: cleanSummaryLength >= 120 && cleanSummaryLength <= 165 },
+    { label: 'Portada configurada', pass: Boolean(coverImageUrl.trim()) },
+    { label: 'Portada accesible', pass: Boolean(coverImageAlt.trim()) },
+    { label: 'Revisión editorial aprobada', pass: reviewStatus === 'approved' },
+  ]
+  const passedChecks = editorialChecks.filter((check) => check.pass).length
 
   useEffect(() => {
     const stopAuthListener = authNexusService.startAuthStateListener()
@@ -270,8 +281,8 @@ export default function CmsNewsEditor() {
             {article.status === 'published' ? <Link to={`/news/${article.slug}`} className="mt-4 inline-flex rounded-full border border-orange-400/40 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-orange-100 transition hover:bg-orange-500/10">Ver pública</Link> : null}
           </div>
 
-          <label className="space-y-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200">Título<input value={title} onChange={(event) => setTitle(event.target.value)} required className="w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300" /></label>
-          <label className="space-y-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200">Resumen<textarea value={summary} onChange={(event) => setSummary(event.target.value)} rows={4} className="w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300" /></label>
+          <label className="space-y-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200">Título<span className={`float-right font-mono tracking-normal ${cleanTitleLength >= 35 && cleanTitleLength <= 70 ? 'text-green-300' : 'text-orange-300'}`}>{cleanTitleLength}/70</span><input value={title} onChange={(event) => setTitle(event.target.value)} required maxLength={120} aria-describedby="news-title-guidance" className="w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300" /><span id="news-title-guidance" className="block normal-case tracking-normal text-purple-200/65">Ideal para buscadores: entre 35 y 70 caracteres.</span></label>
+          <label className="space-y-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200">Resumen<span className={`float-right font-mono tracking-normal ${cleanSummaryLength >= 120 && cleanSummaryLength <= 165 ? 'text-green-300' : 'text-orange-300'}`}>{cleanSummaryLength}/165</span><textarea value={summary} onChange={(event) => setSummary(event.target.value)} rows={4} maxLength={320} aria-describedby="news-summary-guidance" className="w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300" /><span id="news-summary-guidance" className="block normal-case tracking-normal text-purple-200/65">Ideal para Google y redes: entre 120 y 165 caracteres.</span></label>
 
           <div className="grid gap-4 rounded-2xl border border-orange-400/20 bg-orange-500/[0.04] p-5 md:grid-cols-[1fr_12rem]">
             <div className="grid gap-4">
@@ -284,6 +295,33 @@ export default function CmsNewsEditor() {
               {coverImageUrl ? <SafeImage src={coverImageUrl} fallback="/images/articles/fallback.svg" alt={coverImageAlt || 'Vista previa de portada'} className="aspect-video h-full w-full object-cover" /> : <div className="grid aspect-video h-full place-items-center p-4 text-center text-xs text-purple-200/60">Vista previa</div>}
             </div>
           </div>
+
+          <section className="grid gap-5 rounded-3xl border border-[#32FF8A]/20 bg-[radial-gradient(circle_at_100%_0%,rgba(50,255,138,.09),transparent_38%),rgba(0,0,0,.35)] p-5 xl:grid-cols-[.75fr_1.25fr]" aria-labelledby="editorial-quality-title">
+            <div>
+              <div className="flex items-center justify-between gap-3">
+                <div><p className="font-mono text-[10px] font-black uppercase tracking-[0.22em] text-[#32FF8A]">QUALITY_GATE</p><h3 id="editorial-quality-title" className="mt-2 text-xl font-black uppercase text-white">Control editorial</h3></div>
+                <strong className="rounded-full border border-[#32FF8A]/30 bg-[#32FF8A]/10 px-3 py-2 font-mono text-xs text-[#32FF8A]">{passedChecks}/{editorialChecks.length}</strong>
+              </div>
+              <ul className="mt-5 grid gap-2">
+                {editorialChecks.map((check) => <li key={check.label} className={`flex items-center gap-3 rounded-xl border px-3 py-2 text-xs ${check.pass ? 'border-green-400/20 bg-green-400/[0.06] text-green-100' : 'border-white/10 bg-white/[0.025] text-purple-100/65'}`}><span aria-hidden="true">{check.pass ? '✓' : '○'}</span>{check.label}<span className="sr-only">: {check.pass ? 'completo' : 'pendiente'}</span></li>)}
+              </ul>
+              <p className="mt-4 text-xs leading-5 text-purple-200/65">La publicación sigue bajo control del ADMIN. Esta guía previene títulos cortados, resúmenes débiles e imágenes sin descripción.</p>
+            </div>
+
+            <div className="grid gap-4">
+              <div className="rounded-2xl border border-white/10 bg-white p-4 text-[#202124] shadow-xl">
+                <p className="truncate text-xs text-[#202124]">XETHKIOZ › news › {article.slug}</p>
+                <p className="mt-1 line-clamp-1 text-xl text-[#1a0dab]">{title.trim() || 'Título de la noticia · XETHKIOZ'}</p>
+                <p className="mt-1 line-clamp-2 text-sm leading-5 text-[#4d5156]">{summary.trim() || 'El resumen aparecerá aquí para anticipar cómo se verá la noticia en los resultados de búsqueda.'}</p>
+              </div>
+
+              <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-xl">
+                {coverImageUrl ? <SafeImage src={coverImageUrl} fallback="/images/articles/fallback.svg" alt="" className="aspect-[1.91/1] w-full object-cover" /> : <div className="grid aspect-[1.91/1] place-items-center bg-[linear-gradient(135deg,#201337,#0A0A0F)] font-mono text-xs uppercase tracking-[0.2em] text-purple-200/60">Vista social sin portada</div>}
+                <div className="p-4"><p className="font-mono text-[9px] uppercase tracking-[0.18em] text-purple-300">XETHKIOZ.COM.AR</p><h4 className="mt-2 line-clamp-2 text-lg font-black text-white">{title.trim() || 'Título para compartir en redes'}</h4><p className="mt-2 line-clamp-2 text-xs leading-5 text-gray-400">{summary.trim() || 'Resumen de la publicación para redes sociales.'}</p></div>
+              </div>
+              <p className="break-all font-mono text-[9px] text-purple-200/45">Canonical preview: {publicUrl}</p>
+            </div>
+          </section>
 
           <div className="grid gap-4 md:grid-cols-2">
             <label className="space-y-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200">Estado<select value={status} onChange={(event) => setStatus(event.target.value as NewsStatus)} className="w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300"><option value="draft">Borrador</option><option value="review">En revisión</option>{isAdmin ? <option value="published">Publicada</option> : null}<option value="archived">Archivada</option></select></label>
