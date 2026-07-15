@@ -141,7 +141,7 @@ export default function News() {
   const filter: Filter = requestedCategory && publicNewsCategories.includes(requestedCategory as PublicNewsCategory)
     ? requestedCategory as PublicNewsCategory
     : 'all'
-  const [query, setQuery] = useState('')
+  const [query, setQuery] = useState(() => searchParams.get('q') ?? '')
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_ARTICLES)
   const [articles, setArticles] = useState<PublicNewsArticle[]>([])
   const [loading, setLoading] = useState(true)
@@ -209,6 +209,15 @@ export default function News() {
     setSearchParams(next, { replace: true })
   }
 
+  function updateQuery(value: string) {
+    setQuery(value)
+    const next = new URLSearchParams(searchParams)
+    const cleanValue = value.trim()
+    if (cleanValue) next.set('q', cleanValue)
+    else next.delete('q')
+    setSearchParams(next, { replace: true })
+  }
+
   return (
     <FusionShell tone="science" backLabel={t.v7.backCore} label={t.v7.functionality.newsEngine}>
       <SEO title={ui.seoTitle} description={ui.seoDescription} url="/news" />
@@ -228,23 +237,23 @@ export default function News() {
             <div className="relative">
               <label htmlFor="news-search" className="sr-only">{ui.searchLabel}</label>
               <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-orange-300" aria-hidden="true">⌕</span>
-              <input id="news-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={ui.search} className="min-h-12 w-full rounded-full border border-white/10 bg-black/45 py-3 pl-11 pr-12 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-orange-300" />
-              {query ? <button type="button" onClick={() => setQuery('')} aria-label={ui.clearSearch} className="absolute right-3 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full text-slate-400 transition hover:bg-white/10 hover:text-white">×</button> : null}
+              <input id="news-search" type="search" value={query} onChange={(event) => updateQuery(event.target.value)} placeholder={ui.search} className="min-h-12 w-full rounded-full border border-white/10 bg-black/45 py-3 pl-11 pr-12 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-orange-300" />
+              {query ? <button type="button" onClick={() => updateQuery('')} aria-label={ui.clearSearch} className="absolute right-3 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full text-slate-400 transition hover:bg-white/10 hover:text-white">×</button> : null}
             </div>
             <p role="status" className="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-400">{filteredArticles.length} {ui.results}</p>
           </div>
 
-          <div className="mt-5 flex flex-wrap gap-2">
+          <div className="-mx-5 mt-5 flex snap-x snap-mandatory gap-2 overflow-x-auto px-5 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
             {(['all', ...publicNewsCategories] as Filter[]).map((category) => (
-              <button key={category} type="button" onClick={() => selectFilter(category)} aria-pressed={filter === category} className={`rounded-full border px-4 py-2 font-mono text-[11px] font-black uppercase tracking-[0.16em] transition ${filter === category ? 'border-orange-300 bg-orange-500/15 text-orange-100' : 'border-white/10 text-slate-400 hover:border-violet-300 hover:text-white'}`}>{labels[category]}</button>
+              <button key={category} type="button" onClick={() => selectFilter(category)} aria-pressed={filter === category} className={`shrink-0 snap-start rounded-full border px-4 py-2 font-mono text-[11px] font-black uppercase tracking-[0.16em] transition ${filter === category ? 'border-orange-300 bg-orange-500/15 text-orange-100' : 'border-white/10 text-slate-400 hover:border-violet-300 hover:text-white'}`}>{labels[category]}</button>
             ))}
           </div>
 
           {activeTopics.length ? (
             <div className="mt-5 border-t border-white/10 pt-5">
               <p className="font-mono text-[9px] font-black uppercase tracking-[0.22em] text-violet-200/70">{ui.topics}</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {activeTopics.map(([topic, count]) => <button key={topic} type="button" onClick={() => setQuery(topic)} className="rounded-full border border-violet-400/20 bg-violet-500/[0.06] px-3 py-1.5 text-[10px] font-bold text-violet-100 transition hover:border-orange-300/40 hover:text-orange-100">#{topic} <span className="text-white/35">{count}</span></button>)}
+              <div className="-mx-5 mt-3 flex snap-x gap-2 overflow-x-auto px-5 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
+                {activeTopics.map(([topic, count]) => <button key={topic} type="button" onClick={() => updateQuery(topic)} className="shrink-0 snap-start rounded-full border border-violet-400/20 bg-violet-500/[0.06] px-3 py-1.5 text-[10px] font-bold text-violet-100 transition hover:border-orange-300/40 hover:text-orange-100">#{topic} <span className="text-white/35">{count}</span></button>)}
               </div>
             </div>
           ) : null}

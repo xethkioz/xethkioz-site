@@ -39,6 +39,8 @@ const mainEntry = read('src/main.tsx')
 const home = read('src/pages/Home.tsx')
 const publicNews = read('src/pages/News.tsx')
 const greenNode = read('src/pages/GreenNode.tsx')
+const newsPolicyHardening = read('supabase/migrations/20260715101500_news_policy_hardening.sql')
+const newsAuditPolicyHardening = read('supabase/migrations/20260715103000_news_audit_policy_hardening.sql')
 const redesignCss = read('src/xethkioz-redesign.css')
 
 check('RC-Live version stamped', pkg.version.includes('rc-live'))
@@ -89,7 +91,17 @@ check(
     && publicNews.includes('filteredArticles')
     && publicNews.includes('activeTopics')
     && publicNews.includes('setVisibleCount')
-    && publicNews.includes("next.set('category', category)"),
+    && publicNews.includes("next.set('category', category)")
+    && publicNews.includes("next.set('q', cleanValue)")
+    && publicNews.includes('snap-mandatory'),
+)
+check(
+  'News RLS is role-scoped and avoids repeated auth evaluation',
+  newsPolicyHardening.includes('to anon')
+    && newsPolicyHardening.includes('to authenticated')
+    && newsPolicyHardening.includes('(select auth.uid())')
+    && newsPolicyHardening.includes('revoke execute')
+    && newsAuditPolicyHardening.includes('(select public.xethkioz_is_moderator_or_admin())'),
 )
 check(
   'Green Node opens real learning paths and published technical news',
