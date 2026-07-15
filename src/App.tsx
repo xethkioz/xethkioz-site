@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { Navigate, Routes, Route, useLocation } from 'react-router-dom'
 import { Analytics as VercelAnalytics } from '@vercel/analytics/react'
 import { LangProvider } from './lib/LangContext'
@@ -61,6 +61,41 @@ function RouteFallback() {
   )
 }
 
+const routeNames: Record<string, string> = {
+  '/': 'Inicio',
+  '/gaming': 'Juegos',
+  '/science': 'Ciencia y tecnología',
+  '/fun': 'Memes',
+  '/creacion-web': 'Creación web',
+  '/green-node': 'Green Node',
+  '/news': 'Noticias',
+  '/community': 'Comunidad',
+  '/profile': 'Perfil',
+  '/account': 'Cuenta',
+  '/login': 'Iniciar sesión',
+  '/cms': 'Panel editorial',
+}
+
+function RouteAccessibility({ pathname }: { pathname: string }) {
+  const [announcement, setAnnouncement] = useState('')
+
+  useEffect(() => {
+    const routeName = pathname.startsWith('/news/')
+      ? 'Artículo de noticias'
+      : pathname.startsWith('/cms/')
+        ? 'Panel editorial'
+        : routeNames[pathname] ?? 'Sección XETHKIOZ'
+
+    setAnnouncement(`Página cargada: ${routeName}`)
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById('main-content')?.focus({ preventScroll: true })
+    })
+    return () => window.cancelAnimationFrame(frame)
+  }, [pathname])
+
+  return <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</p>
+}
+
 function AppShell() {
   const location = useLocation()
   const isCmsRoute = location.pathname === '/cms' || location.pathname.startsWith('/cms/')
@@ -68,9 +103,11 @@ function AppShell() {
 
   return (
     <>
+      <a href="#main-content" className="xk-skip-link">Saltar al contenido principal</a>
       <Analytics />
       <VercelAnalytics />
       <ScrollToTop />
+      <RouteAccessibility pathname={location.pathname} />
       {!isCmsRoute && !isHomeRoute && (
         <AppErrorBoundary label="Global Controls" compact>
           <Suspense fallback={null}>
@@ -80,7 +117,7 @@ function AppShell() {
         </AppErrorBoundary>
       )}
 
-      <main id="main-content" className="min-h-screen bg-[#0A0A0F]">
+      <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#0A0A0F] outline-none">
         <AppErrorBoundary label="Routes">
           <Suspense fallback={<RouteFallback />}>
             <Routes>
