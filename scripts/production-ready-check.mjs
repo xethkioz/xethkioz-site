@@ -91,6 +91,8 @@ check(
   'Home uses the isolated infected Wisp without legacy duplication',
   home.includes('xk-home-specter')
     && home.includes('wisp-digital-specter-v1.webp')
+    && home.includes('xl:min-h-[320px]')
+    && home.includes('hidden h-[300px] w-[250px]')
     && home.includes('WISP // INFECTED')
     && !home.includes('/assets/green-wisp.png'),
 )
