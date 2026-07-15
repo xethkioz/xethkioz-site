@@ -30,6 +30,8 @@ export class AuthNexusService {
   private readonly errorListeners = new Set<AuthErrorListener>()
   private currentSession: XethkiozAuthorizedSession | null = null
   private authSubscription: { unsubscribe: () => void } | null = null
+  private authListenerConsumers = 0
+  private hydrationPromise: Promise<XethkiozAuthorizedSession | null> | null = null
 
   constructor(options: AuthNexusServiceOptions = {}) {
     this.client = options.client ?? cmsSupabaseClient
@@ -47,19 +49,20 @@ export class AuthNexusService {
       return () => undefined
     }
 
-    if (this.authSubscription) {
-      return () => this.stopAuthStateListener()
-    }
+    this.authListenerConsumers += 1
+    if (this.authSubscription) return () => this.releaseAuthStateListener()
 
     const { data } = this.client.auth.onAuthStateChange((event: AuthChangeEvent, session: Session | null) => {
       void this.handleAuthStateChange(event, session)
     })
 
     this.authSubscription = data.subscription
-    return () => this.stopAuthStateListener()
+    return () => this.releaseAuthStateListener()
   }
 
-  stopAuthStateListener(): void {
+  private releaseAuthStateListener(): void {
+    this.authListenerConsumers = Math.max(0, this.authListenerConsumers - 1)
+    if (this.authListenerConsumers > 0) return
     this.authSubscription?.unsubscribe()
     this.authSubscription = null
   }
@@ -76,6 +79,16 @@ export class AuthNexusService {
   }
 
   async hydrateCurrentSession(): Promise<XethkiozAuthorizedSession | null> {
+    if (this.hydrationPromise) return this.hydrationPromise
+    this.hydrationPromise = this.hydrateCurrentSessionOnce()
+    try {
+      return await this.hydrationPromise
+    } finally {
+      this.hydrationPromise = null
+    }
+  }
+
+  private async hydrateCurrentSessionOnce(): Promise<XethkiozAuthorizedSession | null> {
     if (!isCmsSupabaseConfigured) {
       this.publishSession(null)
       return null

@@ -20,8 +20,8 @@ const hook = read('src/hooks/useNewsHydration.ts')
 const factory = read('src/components/news/XethkiozNewsFactory.tsx')
 const combined = `${client}\n${service}\n${hook}`
 
-addCheck('Typed Supabase client uses CmsNewsDatabase', /createClient<CmsNewsDatabase>/.test(client) && /CmsSupabaseClient/.test(client), 'CMS client must be type-safe against databaseSchema.ts.')
-addCheck('Environment fallback is safe', /isCmsSupabaseConfigured/.test(client) && /fallback seguro|FALLBACK_SUPABASE/.test(client), 'Local builds must not crash without Supabase env vars.')
+addCheck('Typed Supabase client uses CmsNewsDatabase', /SupabaseClient<CmsNewsDatabase>/.test(client) && /CmsSupabaseClient/.test(client), 'CMS client must be type-safe against databaseSchema.ts.')
+addCheck('Environment fallback is safe', /isCmsSupabaseConfigured/.test(client) && /supabaseEnvironment/.test(client) && /from '..\/supabaseClient'/.test(client), 'Local builds must reuse the canonical client and its safe fallback.')
 addCheck('Initial article fetch exists', /fetchInitial/.test(service) && /from\('articles'\)/.test(service) && /order\('release_date'/.test(service), 'Service must fetch CMS articles outside React.')
 addCheck('Realtime INSERT/UPDATE subscription exists', /postgres_changes/.test(service) && /INSERT/.test(service) && /UPDATE/.test(service), 'Service must listen to Supabase Realtime changes.')
 addCheck('EventBus transition is dispatched before React snapshot', /dispatchPortalTransition\(nextPortal, article\.id\)[\s\S]*publishSnapshot/.test(service), 'Portal event must reach EventBus before React receives new content.')

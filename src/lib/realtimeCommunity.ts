@@ -28,6 +28,7 @@ const DISPLAY_NAME_KEY = 'xethkioz_display_name'
 const LOCAL_MESSAGES_KEY = 'xethkioz_realtime_chat_cache_v4'
 const PRESENCE_KEY = 'xethkioz_presence_clients_v4'
 const WISP_XP_KEY = 'xethkioz_wisp_xp_v2'
+const WISP_EVENTS_KEY = 'xethkioz_wisp_events_v2'
 const CHAT_BC_CHANNEL = 'xethkioz-community-chat-v4'
 const PRESENCE_BC_CHANNEL = 'xethkioz-presence-v4'
 const REALTIME_CHAT_PREFIX = 'xethkioz:chat:'
@@ -131,7 +132,7 @@ function createBroadcastChannel(name: string) {
   }
 }
 
-function getWispData() {
+export function getWispProgress() {
   const xp = Number(storageGet(WISP_XP_KEY) || '0') || 0
   const levelIndex = WISP_LEVELS.reduce((level, item, index) => xp >= item.min ? index : level, 0)
   const level = levelIndex + 1
@@ -141,11 +142,16 @@ function getWispData() {
   return { xp, level, name: WISP_LEVELS[levelIndex].name, energy }
 }
 
+export function getRecentWispEvents() {
+  return safeParse<WispEvent[]>(storageGet(WISP_EVENTS_KEY), []).slice(0, 12)
+}
+
 export function addWispXp(points: number, eventType: WispEvent['type'] = 'visit', route = typeof window !== 'undefined' ? window.location.pathname : '/') {
   const current = Number(storageGet(WISP_XP_KEY) || '0') || 0
   const next = Math.max(0, current + points)
   storageSet(WISP_XP_KEY, String(next))
   const event: WispEvent = { id: safeRandomId('wisp-event'), type: eventType, route, points, created_at: new Date().toISOString() }
+  storageSet(WISP_EVENTS_KEY, JSON.stringify([event, ...getRecentWispEvents()].slice(0, 12)))
   try { window.dispatchEvent(new CustomEvent('xethkioz:wisp-xp', { detail: { xp: next, event } })) } catch {}
   if (isSupabaseConfigured) {
     try {
@@ -158,7 +164,7 @@ export function addWispXp(points: number, eventType: WispEvent['type'] = 'visit'
       }).then(() => undefined)
     } catch {}
   }
-  return getWispData()
+  return getWispProgress()
 }
 
 function readPresenceLocal() {
@@ -177,7 +183,7 @@ function writePresenceLocal(route: string, room: string) {
 
 function snapshotFromLocal(route: string, room: string): PresenceSnapshot {
   const clients = readPresenceLocal()
-  const wisp = getWispData()
+  const wisp = getWispProgress()
   const onlineTotal = Math.max(1, Object.keys(clients).length)
   const routeOnline = Math.max(1, Object.values(clients).filter((client) => client.route === route).length)
   const roomOnline = Math.max(1, Object.values(clients).filter((client) => client.room === room).length)
@@ -344,7 +350,7 @@ export function usePresence(route: string, room = 'general'): PresenceSnapshot {
           .on('presence', { event: 'sync' }, () => {
             const state = realtime?.presenceState() ?? {}
             const entries = Object.values(state).flat() as Array<{ route?: string; room?: string }>
-            const wisp = getWispData()
+            const wisp = getWispProgress()
             setSnapshot({
               route,
               onlineTotal: Math.max(1, entries.length),
