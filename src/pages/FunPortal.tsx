@@ -1,10 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
+import SafeImage from '../components/SafeImage'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
 import { useLang } from '../lib/LangContext'
 import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import { formatPublicNewsDate } from '../services/news/publicNewsService'
+import { fetchPublishedNews, type PublicNewsArticle } from '../services/news/publicNewsService'
+import { addWispXp } from '../lib/realtimeCommunity'
 
 type SectionBlock = { id: string; title: string; text: string }
 
@@ -44,14 +47,31 @@ export default function FunPortal() {
   const t = content[lang]
   const [activeId, setActiveId] = useState(t.blocks[0].id)
   const active = t.blocks.find((item) => item.id === activeId) ?? t.blocks[0]
-  const articles = getCuratedExternalNews('community')
+  const [published, setPublished] = useState<PublicNewsArticle[]>([])
+  const curated = getCuratedExternalNews('community')
+  const seen = new Set<string>()
+  const articles = [...published, ...curated].filter((article) => !seen.has(article.slug) && Boolean(seen.add(article.slug))).slice(0, 9)
+
+  useEffect(() => {
+    let activeRequest = true
+    void fetchPublishedNews('community').then((next) => { if (activeRequest) setPublished(next) }).catch(() => undefined)
+    return () => { activeRequest = false }
+  }, [])
+
+  function selectBlock(id: string) {
+    setActiveId(id)
+    addWispXp(2, 'portal', `/fun#${id}`)
+  }
 
   return (
     <>
       <SEO title={`${t.title} · XETHKIOZ`} description={t.description} url="/fun" />
       <section className="xk-page px-4 py-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
-          <div className="xk-section-panel overflow-hidden rounded-[2rem] border border-yellow-300/45 bg-[linear-gradient(135deg,rgba(234,179,8,.16),rgba(139,92,246,.12),rgba(50,255,138,.08))] p-6 shadow-[0_0_28px_rgba(234,179,8,.16)] md:p-10">
+          <div className="xk-section-panel relative overflow-hidden rounded-[2rem] border border-yellow-300/45 bg-[linear-gradient(135deg,rgba(234,179,8,.16),rgba(139,92,246,.12),rgba(50,255,138,.08))] p-6 shadow-[0_0_42px_rgba(234,179,8,.22)] md:p-10">
+            <SafeImage src="/news/memes/gourmet-ai-meme.svg" fallback="/images/articles/community.svg" alt="" className="absolute right-0 top-0 h-full w-full object-cover opacity-25 sm:w-1/2" />
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,.94),rgba(0,0,0,.72)_58%,rgba(139,92,246,.12))]" />
+            <div className="relative z-10">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-[#32FF8A]">MEME_CORE // HUMOR CONTROLADO</p>
               <button onClick={() => setLang(lang === 'es' ? 'en' : 'es')} className="rounded-full border border-yellow-300/40 px-4 py-2 font-mono text-xs font-black uppercase tracking-[0.18em] text-yellow-200">{lang.toUpperCase()}</button>
@@ -59,11 +79,13 @@ export default function FunPortal() {
             <h1 className="mt-4 text-4xl font-black uppercase tracking-[0.16em] text-white md:text-6xl">{t.title}</h1>
             <p className="mt-4 max-w-3xl text-sm leading-relaxed text-gray-300 md:text-base">{t.description}</p>
             <div className="mt-6 inline-flex rounded-full border border-yellow-300/40 bg-black/35 px-4 py-2 font-mono text-xs uppercase tracking-[0.18em] text-yellow-200">{t.badge}</div>
+            </div>
           </div>
 
           <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
             {t.blocks.map((item) => (
-              <button key={item.id} type="button" onClick={() => setActiveId(item.id)} className={`xk-card rounded-3xl border p-5 text-left transition hover:-translate-y-1 ${active.id === item.id ? 'border-[#32FF8A]/70 bg-[#031006]/80' : 'border-yellow-300/30 bg-black/55 hover:shadow-[0_0_18px_rgba(234,179,8,.18)]'}`}>
+              <button key={item.id} type="button" onClick={() => selectBlock(item.id)} aria-pressed={active.id === item.id} className={`xk-card relative overflow-hidden rounded-3xl border p-5 text-left transition hover:-translate-y-1 ${active.id === item.id ? 'border-[#32FF8A]/70 bg-[linear-gradient(135deg,rgba(50,255,138,.12),rgba(234,179,8,.1))]' : 'border-yellow-300/30 bg-black/55 hover:shadow-[0_0_22px_rgba(234,179,8,.22)]'}`}>
+                <span className="absolute right-4 top-3 text-4xl opacity-35" aria-hidden="true">{item.id === 'memes' ? '😂' : item.id === 'clips' ? '🎬' : '👽'}</span>
                 <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#FF6B1A]">{item.title}</p>
                 <p className="mt-4 text-sm leading-relaxed text-gray-200">{item.text}</p>
                 <span className="mt-4 inline-flex font-mono text-[10px] uppercase tracking-[0.18em] text-[#32FF8A]">{t.open}</span>
@@ -75,11 +97,14 @@ export default function FunPortal() {
             <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-yellow-200">{t.articleTitle}</p>
             <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {articles.map((article) => (
-                <article key={article.slug} className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 transition hover:-translate-y-1 hover:border-yellow-300/40">
+                <article key={article.slug} className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] transition hover:-translate-y-1 hover:border-yellow-300/40">
+                  <SafeImage src={article.cover_image_url} fallback="/news/memes/argentina-duendes-cuartos.svg" alt={article.cover_image_alt || article.title} className="aspect-video w-full object-cover transition duration-700 group-hover:scale-[1.035]" />
+                  <div className="p-5">
                   <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#FF6B1A]">{formatPublicNewsDate(article.published_at ?? article.created_at, lang)}</span>
                   <h3 className="mt-3 text-lg font-black uppercase text-white">{article.title}</h3>
                   <p className="mt-3 text-xs leading-relaxed text-gray-300">{article.summary}</p>
                   <Link to={`/news/${article.slug}`} className="mt-5 inline-flex rounded-full border border-orange-400/40 px-4 py-2 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-orange-100 hover:bg-orange-500/10">{t.read}</Link>
+                  </div>
                 </article>
               ))}
             </div>

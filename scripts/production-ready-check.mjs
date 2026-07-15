@@ -29,6 +29,7 @@ const pkg = JSON.parse(read('package.json'))
 const sql = read('database/migrations/20260628_alpha36_auth_nexus_profiles_rls.sql')
 const supabaseSql = read('supabase/migrations/20260628_alpha36_auth_nexus_profiles_rls.sql')
 const authService = read('src/services/auth/authNexusService.ts')
+const cmsSupabaseClient = read('src/services/cms/supabaseClient.ts')
 const authUi = read('src/components/auth/XethkiozNexusAuth.tsx')
 const runtimeBridge = read('src/engines/world/sandbox/RuntimeBridge.ts')
 const perf = read('src/engines/world/sandbox/PerformanceMonitor.ts')
@@ -39,6 +40,10 @@ const mainEntry = read('src/main.tsx')
 const home = read('src/pages/Home.tsx')
 const publicNews = read('src/pages/News.tsx')
 const greenNode = read('src/pages/GreenNode.tsx')
+const profileHub = read('src/pages/ProfileHub.tsx')
+const gamingHub = read('src/pages/GamingHub.tsx')
+const funPortal = read('src/pages/FunPortal.tsx')
+const realtimeCommunity = read('src/lib/realtimeCommunity.ts')
 const newsPolicyHardening = read('supabase/migrations/20260715101500_news_policy_hardening.sql')
 const newsAuditPolicyHardening = read('supabase/migrations/20260715103000_news_audit_policy_hardening.sql')
 const newsMediaUploads = read('supabase/migrations/20260715120000_news_media_uploads.sql')
@@ -56,6 +61,13 @@ check('self insert restricted to BASIC/GUEST', sql.includes('profiles_self_inser
 check('safe auth event source guard', read('src/services/auth/authSchema.ts').includes("source: 'supabase-auth-nexus'") && read('src/services/auth/authSchema.ts').includes('isAuthorizedSessionPayload'))
 check('auth service fetches profiles before event emit', authService.includes("from('profiles')") && authService.includes('USER_SESSION_AUTHORIZED'))
 check('auth service has no unknown cast', !authService.includes('as unknown as'))
+check(
+  'auth session has one canonical client and reference-counted listeners',
+  cmsSupabaseClient.includes("from '../supabaseClient'")
+    && !cmsSupabaseClient.includes('createClient')
+    && authService.includes('authListenerConsumers')
+    && authService.includes('hydrationPromise'),
+)
 check('auth UI has loading and safe error mapping', /isLoading|loading/i.test(authUi) && authUi.includes('mapAuthErrorForUser'))
 check('runtime bridge validates auth payload', runtimeBridge.includes('isAuthorizedSessionPayload') && runtimeBridge.includes('Ignored malformed USER_SESSION_AUTHORIZED'))
 check('runtime bridge validates portal payload', runtimeBridge.includes('Ignored malformed PORTAL_STATE_CHANGED'))
@@ -120,6 +132,22 @@ check(
     && greenNode.includes('fetchPublishedNews')
     && greenNode.includes('xk-green-core')
     && greenNode.includes('/news?category='),
+)
+check(
+  'Profile provides persistent progression and daily activity',
+  profileHub.includes('MISIÓN DIARIA')
+    && profileHub.includes('ACTIVIDAD RECIENTE')
+    && profileHub.includes('claimDailyMission')
+    && realtimeCommunity.includes('WISP_EVENTS_KEY'),
+)
+check(
+  'Games and Memes expose visual live content',
+  gamingHub.includes("fetchPublishedNews('gaming')")
+    && gamingHub.includes('portal-games-poster.png')
+    && gamingHub.includes('<SafeImage')
+    && funPortal.includes("fetchPublishedNews('community')")
+    && funPortal.includes('gourmet-ai-meme.svg')
+    && funPortal.includes('<SafeImage'),
 )
 check(
   'Home portals use accessible reduced-motion-safe energy effects',
