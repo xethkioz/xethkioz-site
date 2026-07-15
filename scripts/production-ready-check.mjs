@@ -41,6 +41,8 @@ const publicNews = read('src/pages/News.tsx')
 const greenNode = read('src/pages/GreenNode.tsx')
 const newsPolicyHardening = read('supabase/migrations/20260715101500_news_policy_hardening.sql')
 const newsAuditPolicyHardening = read('supabase/migrations/20260715103000_news_audit_policy_hardening.sql')
+const newsMediaUploads = read('supabase/migrations/20260715120000_news_media_uploads.sql')
+const cmsNewsEditor = read('src/cms/routes/CmsNewsEditor.tsx')
 const redesignCss = read('src/xethkioz-redesign.css')
 
 check('RC-Live version stamped', pkg.version.includes('rc-live'))
@@ -102,6 +104,15 @@ check(
     && newsPolicyHardening.includes('(select auth.uid())')
     && newsPolicyHardening.includes('revoke execute')
     && newsAuditPolicyHardening.includes('(select public.xethkioz_is_moderator_or_admin())'),
+)
+check(
+  'News CMS supports validated direct cover uploads',
+  newsMediaUploads.includes("'news-media'")
+    && newsMediaUploads.includes('file_size_limit')
+    && newsMediaUploads.includes('(storage.foldername(name))[1]')
+    && cmsNewsEditor.includes("supabase.storage.from(NEWS_MEDIA_BUCKET).upload")
+    && cmsNewsEditor.includes('MAX_COVER_BYTES')
+    && cmsNewsEditor.includes('acceptedCoverTypes'),
 )
 check(
   'Green Node opens real learning paths and published technical news',
