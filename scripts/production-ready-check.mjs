@@ -175,13 +175,19 @@ check(
   gamingHub.includes("fetchPublishedNews('gaming')")
     && gamingHub.includes('gaming-anime-nexus-v1.webp')
     && gamingHub.includes('xk-mission-board')
+    && gamingHub.includes('xk-gaming-ticker')
+    && gamingHub.includes('xk-feature-rank')
     && gamingHub.includes('<SafeImage')
     && funPortal.includes("fetchPublishedNews('community')")
     && funPortal.includes('memes-anime-chaos-v1.webp')
     && funPortal.includes('xk-meme-bento')
+    && funPortal.includes('xk-chaos-console')
+    && funPortal.includes('unleashChaos')
     && funPortal.includes('<SafeImage')
     && redesignCss.includes('@keyframes xk-anime-zoom')
-    && redesignCss.includes('.xk-manga-tabs'),
+    && redesignCss.includes('.xk-manga-tabs')
+    && redesignCss.includes('.xk-gaming-ambient')
+    && redesignCss.includes('.xk-meme-ambient'),
 )
 check(
   'Home portals use clean transparent worlds with reduced-motion-safe energy',
@@ -189,10 +195,10 @@ check(
     && home.includes('xk-home-portal-clean')
     && home.includes('portal-games-clean-v1.webp')
     && home.includes('portal-science-clean-v1.webp')
-    && home.includes('portal-fun-clean-v1.webp')
+    && home.includes('portal-fun-chaos-v2.webp')
     && exists('public/assets/portal-games-clean-v1.webp')
     && exists('public/assets/portal-science-clean-v1.webp')
-    && exists('public/assets/portal-fun-clean-v1.webp')
+    && exists('public/assets/portal-fun-chaos-v2.webp')
     && home.includes('aspect-square')
     && home.includes('md:grid-cols-3')
     && !home.includes('absolute inset-x-8 bottom-9')
