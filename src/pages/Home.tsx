@@ -442,11 +442,11 @@ function PortalCard({ portal }: { portal: Portal }) {
   const tone = portal.route === '/gaming' ? 'violet' : portal.route === '/science' ? 'cyan' : 'orange'
 
   return (
-    <Link to={portal.route} className="group block rounded-[2rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 focus-visible:ring-offset-4 focus-visible:ring-offset-black" aria-label={`${portal.button.replace(' →', '')}: ${portal.title}`}>
+    <Link to={portal.route} className={`xk-home-portal-shell xk-home-portal-shell-${tone} group block rounded-[2rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 focus-visible:ring-offset-4 focus-visible:ring-offset-black`} aria-label={`${portal.button.replace(' →', '')}: ${portal.title}`}>
       <article
         className={[
           `xk-home-portal xk-home-portal-${tone}`,
-          'relative mx-auto aspect-[0.875] w-full max-w-none overflow-hidden rounded-t-[42%] rounded-b-[1.6rem] ring-2 md:rounded-b-[1.35rem] xl:rounded-b-[2rem]',
+          'relative z-[1] mx-auto aspect-[0.875] w-full max-w-none overflow-hidden rounded-t-[42%] rounded-b-[1.6rem] ring-2 md:rounded-b-[1.35rem] xl:rounded-b-[2rem]',
           portal.ring,
           portal.shadow,
           'bg-black/25 transition-all duration-500 ease-out group-hover:scale-[1.035]',

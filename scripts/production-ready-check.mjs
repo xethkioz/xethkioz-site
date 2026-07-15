@@ -186,11 +186,14 @@ check(
 check(
   'Home portals use accessible reduced-motion-safe energy effects',
   home.includes('xk-home-portal')
+    && home.includes('xk-home-portal-shell')
     && home.includes('xk-portal-orbit')
     && home.includes('aspect-[0.875]')
     && home.includes('md:grid-cols-3')
     && !home.includes('absolute inset-x-8 bottom-9')
     && redesignCss.includes('@keyframes portal-breathe')
+    && redesignCss.includes('@keyframes portal-mist-pulse')
+    && redesignCss.includes('.xk-home-portal-shell::before')
     && redesignCss.includes('.xk-portal-particle')
     && redesignCss.includes('@media (hover: none) and (pointer: coarse)')
     && redesignCss.includes('@media (prefers-reduced-motion: reduce)'),
