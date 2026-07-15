@@ -143,11 +143,15 @@ check(
 check(
   'Games and Memes expose visual live content',
   gamingHub.includes("fetchPublishedNews('gaming')")
-    && gamingHub.includes('portal-games-poster.png')
+    && gamingHub.includes('gaming-anime-nexus-v1.webp')
+    && gamingHub.includes('xk-mission-board')
     && gamingHub.includes('<SafeImage')
     && funPortal.includes("fetchPublishedNews('community')")
-    && funPortal.includes('gourmet-ai-meme.svg')
-    && funPortal.includes('<SafeImage'),
+    && funPortal.includes('memes-anime-chaos-v1.webp')
+    && funPortal.includes('xk-meme-bento')
+    && funPortal.includes('<SafeImage')
+    && redesignCss.includes('@keyframes xk-anime-zoom')
+    && redesignCss.includes('.xk-manga-tabs'),
 )
 check(
   'Home portals use accessible reduced-motion-safe energy effects',
