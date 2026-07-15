@@ -53,12 +53,14 @@ export default function GamingHub() {
     <SEO title={`${t.title} · XETHKIOZ`} description={t.description} url="/gaming" />
     <main className="xk-page xk-anime-page xk-anime-gaming px-4 py-8 sm:px-6 lg:px-8">
       <div className="xk-anime-speedlines" aria-hidden="true" />
+      <div className="xk-gaming-ambient" aria-hidden="true"><i /><i /><i /><b /><b /></div>
       <div className="mx-auto max-w-7xl">
         <section className="xk-anime-hero xk-gaming-hero">
           <SafeImage src="/assets/identity/gaming-anime-nexus-v1.webp" fallback="/images/articles/gaming.svg" alt="Guerrero anime frente a un portal gamer de neón" className="xk-anime-hero-media" />
           <div className="xk-anime-hero-shade" />
           <div className="xk-anime-scanlines" aria-hidden="true" />
           <span className="xk-energy-slash" aria-hidden="true" />
+          <div className="xk-gaming-runes" aria-hidden="true"><i>01</i><i>界</i><i>XP</i><i>∞</i></div>
           <div className="xk-anime-hero-content">
             <div className="flex items-center justify-between gap-4">
               <p className="xk-anime-kicker"><span className="xk-live-dot" />{t.kicker}</p>
@@ -72,6 +74,8 @@ export default function GamingHub() {
           <div className="xk-hero-status" aria-hidden="true"><span>NEXUS LINK</span><b>98.7%</b><i /></div>
         </section>
 
+        <div className="xk-gaming-ticker" aria-hidden="true"><div>NEXUS ONLINE ◆ NEW WORLDS DETECTED ◆ ASIA SIGNAL ACQUIRED ◆ RAID PARTY REQUIRED ◆ NEXUS ONLINE ◆ NEW WORLDS DETECTED ◆ ASIA SIGNAL ACQUIRED ◆ RAID PARTY REQUIRED ◆</div></div>
+
         <section className="xk-mission-board" aria-label={t.active}>
           <div className="xk-mission-tabs" role="tablist" aria-label={t.active}>
             {t.blocks.map((block) => <button key={block.id} type="button" role="tab" aria-selected={active.id === block.id} onClick={() => selectBlock(block.id)} className="xk-mission-tab">
@@ -79,6 +83,7 @@ export default function GamingHub() {
             </button>)}
           </div>
           <div className="xk-active-mission" role="tabpanel">
+            <b className="xk-mission-emblem" aria-hidden="true">{active.icon}</b>
             <p>{t.active} // {active.code}</p><h2>{active.title}</h2><span>{active.text}</span>
             <div className="xk-mission-progress"><i /><i /><i /></div>
           </div>
@@ -89,10 +94,10 @@ export default function GamingHub() {
           {articles.length > 0 && <div className="xk-gaming-feed">
             <article className="xk-gaming-feature group">
               <SafeImage src={articles[0].cover_image_url} fallback="/images/articles/gaming.svg" alt={articles[0].cover_image_alt || articles[0].title} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
-              <div className="xk-feed-shade" /><div className="xk-feature-copy"><span>FEATURED RAID // {formatPublicNewsDate(articles[0].published_at ?? articles[0].created_at, lang)}</span><h3>{articles[0].title}</h3><p>{articles[0].summary}</p><Link to={`/news/${articles[0].slug}`}>{t.read} →</Link></div>
+              <div className="xk-feed-shade" /><span className="xk-feature-rank">S</span><div className="xk-feature-copy"><span>FEATURED RAID // {formatPublicNewsDate(articles[0].published_at ?? articles[0].created_at, lang)}</span><h3>{articles[0].title}</h3><p>{articles[0].summary}</p><Link to={`/news/${articles[0].slug}`}>{t.read} →</Link></div>
             </article>
             <div className="xk-gaming-rail">{articles.slice(1).map((article, index) => <article key={article.slug} className="xk-gaming-brief">
-              <span className="xk-brief-number">{String(index + 2).padStart(2, '0')}</span><SafeImage src={article.cover_image_url} fallback="/images/articles/gaming.svg" alt={article.cover_image_alt || article.title} className="xk-brief-image" /><div><small>{formatPublicNewsDate(article.published_at ?? article.created_at, lang)}</small><h3>{article.title}</h3><Link to={`/news/${article.slug}`}>{t.read} →</Link></div>
+              <span className="xk-brief-number">{String(index + 2).padStart(2, '0')}<i>{['A', 'A', 'B', 'B', 'C', 'C'][index]}</i></span><SafeImage src={article.cover_image_url} fallback="/images/articles/gaming.svg" alt={article.cover_image_alt || article.title} className="xk-brief-image" /><div><small>{formatPublicNewsDate(article.published_at ?? article.created_at, lang)}</small><h3>{article.title}</h3><Link to={`/news/${article.slug}`}>{t.read} →</Link></div>
             </article>)}</div>
           </div>}
         </section>
