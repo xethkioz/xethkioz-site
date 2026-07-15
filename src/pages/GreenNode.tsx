@@ -28,42 +28,42 @@ type GreenCopy = {
 const content: Record<'es' | 'en', GreenCopy> = {
   es: {
     title: 'Green Node',
-    description: 'Nodo para Linux, programación, buenas prácticas digitales y documentación.',
+    description: 'Archivo clandestino donde código, ocultismo digital y teorías imposibles se examinan sin confundir evidencia con ficción.',
     close: 'Cerrar portal',
-    status: 'Estado: sección conectada a lectura técnica ampliada con fuentes visibles.',
+    status: 'PROTOCOLO DE VERDAD: toda conspiración se etiqueta como ficción, hipótesis o evidencia. Green Node investiga el misterio; no fabrica certezas.',
     open: 'Abrir nodo',
     active: 'Nodo activo',
-    articleTitle: 'Green Node // técnica y documentación',
+    articleTitle: 'ARCHIVOS INTERCEPTADOS // evidencia y anomalías',
     read: 'Leer completa',
     explore: 'Explorar archivo completo',
-    liveSignal: 'Señal Wisp estable',
-    sync: 'Sincronizado con el radar editorial',
-    loading: 'Sincronizando publicaciones técnicas…',
+    liveSignal: 'Entidad Wisp infectando el nodo',
+    sync: 'Frecuencia clandestina interceptada',
+    loading: 'Descifrando archivos restringidos…',
     blocks: [
-      { id: 'linux', title: 'Linux / Open Source', text: 'Bases limpias para usuarios nuevos, herramientas libres y cultura open source.', signal: 'LINUX_CORE', category: 'green', steps: ['Elegir una distribución amigable', 'Dominar archivos, permisos y terminal', 'Crear un entorno de trabajo recuperable'] },
-      { id: 'programming', title: 'Programación', text: 'Rutas de aprendizaje, web, scripts, automatización y buenas prácticas.', signal: 'CODE_PATH', category: 'programming', steps: ['Entender lógica y control de versiones', 'Construir proyectos pequeños y verificables', 'Documentar decisiones antes de escalar'] },
-      { id: 'privacy', title: 'Higiene digital educativa', text: 'Cuentas, contraseñas, 2FA y orden básico para creadores.', signal: 'SAFE_MODE', category: 'tech', steps: ['Activar 2FA y claves únicas', 'Separar cuentas personales y de proyecto', 'Mantener backups probados y actualizados'] },
-      { id: 'research', title: 'Documentación', text: 'Archivo, fuentes, notas, seguimiento y límites editoriales claros.', signal: 'EVIDENCE_LOG', category: 'science', steps: ['Guardar fuente y fecha', 'Separar evidencia, inferencia y opinión', 'Actualizar conclusiones cuando cambien los datos'] },
+      { id: 'linux', title: 'Grimorios de código', text: 'Linux, terminales y software libre tratados como el lenguaje secreto de la máquina.', signal: 'GRIMOIRE_0X', category: 'green', steps: ['Descifrar el sistema sin romperlo', 'Dominar permisos, procesos y terminal', 'Crear un entorno recuperable antes del ritual'] },
+      { id: 'programming', title: 'Ocultismo digital', text: 'Patrones, automatizaciones y símbolos algorítmicos escondidos bajo la interfaz.', signal: 'SIGIL.EXE', category: 'programming', steps: ['Separar patrón real de coincidencia', 'Construir experimentos pequeños y verificables', 'Registrar cada mutación del código'] },
+      { id: 'privacy', title: 'Conspiraciones de red', text: 'Vigilancia, rastros digitales y relatos clandestinos examinados con criterio técnico.', signal: 'BLACK_SIGNAL', category: 'tech', steps: ['Identificar qué datos son observables', 'Distinguir capacidad técnica de especulación', 'Proteger cuentas con 2FA, claves únicas y backups'] },
+      { id: 'research', title: 'Archivo de anomalías', text: 'Expedientes, rarezas y teorías marcadas según su nivel real de evidencia.', signal: 'EVIDENCE_13', category: 'science', steps: ['Guardar fuente, autor y fecha', 'Etiquetar evidencia, inferencia, ficción u opinión', 'Cambiar la conclusión cuando cambien los datos'] },
     ],
   },
   en: {
     title: 'Green Node',
-    description: 'Node for Linux, programming, digital good practices and documentation.',
+    description: 'A clandestine archive where code, digital occultism and impossible theories are examined without confusing evidence with fiction.',
     close: 'Close portal',
-    status: 'Status: section connected to expanded technical reading with visible sources.',
+    status: 'TRUTH PROTOCOL: every conspiracy is labeled as fiction, hypothesis or evidence. Green Node investigates mystery; it does not manufacture certainty.',
     open: 'Open node',
     active: 'Active node',
-    articleTitle: 'Green Node // tech and documentation',
+    articleTitle: 'INTERCEPTED FILES // evidence and anomalies',
     read: 'Read full article',
     explore: 'Explore full archive',
-    liveSignal: 'Stable Wisp signal',
-    sync: 'Synced with the editorial radar',
-    loading: 'Syncing technical publications…',
+    liveSignal: 'Wisp entity infecting the node',
+    sync: 'Clandestine frequency intercepted',
+    loading: 'Decrypting restricted files…',
     blocks: [
-      { id: 'linux', title: 'Linux / Open Source', text: 'Clean basics for new users, free tools and open-source culture.', signal: 'LINUX_CORE', category: 'green', steps: ['Choose a beginner-friendly distribution', 'Master files, permissions and terminal', 'Build a recoverable workspace'] },
-      { id: 'programming', title: 'Programming', text: 'Learning paths, web, scripts, automation and good practices.', signal: 'CODE_PATH', category: 'programming', steps: ['Learn logic and version control', 'Build small verifiable projects', 'Document decisions before scaling'] },
-      { id: 'privacy', title: 'Digital hygiene', text: 'Accounts, passwords, 2FA and basic order for creators.', signal: 'SAFE_MODE', category: 'tech', steps: ['Enable 2FA and unique passwords', 'Separate personal and project accounts', 'Keep tested and current backups'] },
-      { id: 'research', title: 'Documentation', text: 'Archives, sources, notes, tracking and clear editorial limits.', signal: 'EVIDENCE_LOG', category: 'science', steps: ['Save source and date', 'Separate evidence, inference and opinion', 'Update conclusions when data changes'] },
+      { id: 'linux', title: 'Code grimoires', text: 'Linux, terminals and open source treated as the machine’s secret language.', signal: 'GRIMOIRE_0X', category: 'green', steps: ['Decode the system without breaking it', 'Master permissions, processes and terminal', 'Create a recoverable environment before the ritual'] },
+      { id: 'programming', title: 'Digital occultism', text: 'Patterns, automations and algorithmic symbols hidden beneath the interface.', signal: 'SIGIL.EXE', category: 'programming', steps: ['Separate real patterns from coincidence', 'Build small verifiable experiments', 'Record every mutation in the code'] },
+      { id: 'privacy', title: 'Network conspiracies', text: 'Surveillance, digital traces and clandestine stories examined with technical judgment.', signal: 'BLACK_SIGNAL', category: 'tech', steps: ['Identify which data is observable', 'Separate technical capability from speculation', 'Protect accounts with 2FA, unique keys and backups'] },
+      { id: 'research', title: 'Anomaly archive', text: 'Files, oddities and theories marked by their actual level of evidence.', signal: 'EVIDENCE_13', category: 'science', steps: ['Save source, author and date', 'Label evidence, inference, fiction or opinion', 'Change conclusions when the data changes'] },
     ],
   },
 }
@@ -119,32 +119,37 @@ export default function GreenNode() {
       <section className="xk-green-shell px-4 py-12 sm:px-6 lg:px-8">
         <div className="xk-green-matrix" aria-hidden="true" />
         <div className="mx-auto max-w-7xl">
-          <div className="xk-green-frame rounded-[2rem] bg-black/78 p-6 md:p-10">
+          <div className="xk-green-frame xk-occult-frame rounded-[2rem] bg-black/78 p-6 md:p-10">
+            <SafeImage src="/assets/identity/green-node-occult-malware-v1.webp" fallback="/images/articles/tech.svg" alt="Entidad Wisp de malware ocultista dentro de un archivo de servidores" className="xk-occult-hero-image" />
+            <div className="xk-occult-veil" aria-hidden="true" />
+            <div className="xk-occult-sigil" aria-hidden="true"><i /><i /><i /><span>13</span></div>
+            <div className="xk-classified-stamp" aria-hidden="true">CLASSIFIED // LEVEL ∆</div>
             <div className="xk-green-content">
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <p className="font-mono text-[11px] uppercase tracking-[0.34em] text-[#32FF8A]/70">REALITY_OVERRIDE // WISP_ACCESS_GRANTED</p>
+                <p className="font-mono text-[11px] uppercase tracking-[0.34em] text-[#32FF8A]/70">BLACK_ARCHIVE // WISP_INFECTION_ACCEPTED</p>
                 <button onClick={() => setLang(lang === 'es' ? 'en' : 'es')} className="rounded-full border border-[#32FF8A]/50 px-4 py-2 font-mono text-xs font-black uppercase tracking-[0.18em] text-[#D8FFE8] transition hover:bg-[#32FF8A]/10">{lang.toUpperCase()}</button>
               </div>
               <div className="mt-6 grid items-center gap-8 lg:grid-cols-[1fr_auto]">
                 <div>
-                  <h1 className="font-mono text-4xl font-black uppercase tracking-[0.18em] text-[#D8FFE8] md:text-6xl">{t.title}</h1>
+                  <p className="xk-occult-eyebrow">DOSSIER 13 / REALITY BREACH</p>
+                  <h1 className="xk-occult-title">{t.title}</h1>
                   <p className="mt-5 max-w-3xl font-mono text-sm leading-relaxed text-[#B9FFD1] md:text-base">{t.description}</p>
                   <div className="mt-5 flex flex-wrap gap-2 font-mono text-[9px] font-black uppercase tracking-[0.18em]">
                     <span className="rounded-full border border-[#32FF8A]/35 bg-[#32FF8A]/[0.07] px-3 py-2 text-[#32FF8A]">● {t.liveSignal}</span>
                     <span className="rounded-full border border-white/10 px-3 py-2 text-[#B9FFD1]/65">{t.sync}</span>
                   </div>
                 </div>
-                <div className="xk-green-core" aria-hidden="true">
+                <div className="xk-green-core xk-infected-core" aria-hidden="true">
                   <span className="xk-green-core-ring" />
                   <span className="xk-green-core-ring xk-green-core-ring-delayed" />
-                  <img src="/assets/green-wisp.png" alt="" className="relative z-10 h-28 w-28 object-contain drop-shadow-[0_0_28px_rgba(50,255,138,.9)]" />
+                  <span className="xk-core-demon"><i /><i /><b /></span>
                 </div>
               </div>
 
               <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
                 {t.blocks.map((node) => (
                   <button key={node.id} type="button" onClick={() => setActiveId(node.id)} aria-pressed={active.id === node.id} className={`group rounded-2xl border p-5 text-left font-mono shadow-[0_0_18px_rgba(50,255,138,.12)] transition hover:-translate-y-1 ${active.id === node.id ? 'border-[#D8FFE8]/70 bg-[#0A2612]' : 'border-[#32FF8A]/35 bg-[#031006]/80 hover:border-[#32FF8A]/80'}`}>
-                    <p className="text-[10px] uppercase tracking-[0.28em] text-[#32FF8A]/55">{node.signal}</p>
+                    <p className="text-[10px] uppercase tracking-[0.28em] text-[#32FF8A]/55">◬ {node.signal}</p>
                     <h2 className="mt-3 text-lg font-black uppercase tracking-[0.12em] text-[#D8FFE8]">{node.title}</h2>
                     <p className="mt-3 text-xs leading-relaxed text-[#B9FFD1]/80">{node.text}</p>
                     <span className="mt-4 inline-flex text-[10px] uppercase tracking-[0.18em] text-[#32FF8A]">{t.open}</span>

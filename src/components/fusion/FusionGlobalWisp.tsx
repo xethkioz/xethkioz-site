@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties, type MouseEvent } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useHud } from '../../lib/HudContext'
 import { useWisp } from '../../providers/WispProvider'
@@ -17,6 +17,7 @@ export default function FusionGlobalWisp() {
   const { setMood, setFocusRoute, registerEvent, triggerGreenPortal } = useWisp()
   const [portalOpen, setPortalOpen] = useState(false)
   const [portalPoint, setPortalPoint] = useState({ x: '50%', y: '50%' })
+  const navigationTimer = useRef<number | null>(null)
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -28,17 +29,23 @@ export default function FusionGlobalWisp() {
         : routeMood[location.pathname] || 'idle'
 
     setMood(nextMood)
+    setPortalOpen(false)
     setFocusRoute(location.pathname)
     registerEvent('route-watch', `route:${location.pathname}`, location.pathname)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname, account.status])
+
+  useEffect(() => () => {
+    if (navigationTimer.current !== null) window.clearTimeout(navigationTimer.current)
+  }, [])
 
   const openPortal = (event: MouseEvent<HTMLButtonElement>) => {
     const rect = event.currentTarget.getBoundingClientRect()
     setPortalPoint({ x: `${rect.left + rect.width / 2}px`, y: `${rect.top + rect.height / 2}px` })
     setPortalOpen(true)
     triggerGreenPortal()
-    window.setTimeout(() => navigate('/green-node'), 720)
+    if (navigationTimer.current !== null) window.clearTimeout(navigationTimer.current)
+    navigationTimer.current = window.setTimeout(() => navigate('/green-node'), 720)
   }
 
   return (
@@ -57,6 +64,16 @@ export default function FusionGlobalWisp() {
         title="Wisp"
       >
         <span className="sr-only">Wisp</span>
+        <span className="xk-wisp-aura" aria-hidden="true" />
+        <span className="xk-wisp-horn xk-wisp-horn-left" aria-hidden="true" />
+        <span className="xk-wisp-horn xk-wisp-horn-right" aria-hidden="true" />
+        <span className="xk-wisp-face" aria-hidden="true">
+          <i className="xk-wisp-eye xk-wisp-eye-left" />
+          <i className="xk-wisp-eye xk-wisp-eye-right" />
+          <i className="xk-wisp-mouth" />
+        </span>
+        <span className="xk-wisp-code" aria-hidden="true">0110<br />W1SP<br />0x66</span>
+        <span className="xk-wisp-tail" aria-hidden="true" />
       </button>
     </>
   )
