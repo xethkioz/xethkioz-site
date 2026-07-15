@@ -88,9 +88,9 @@ check(
     && home.includes('videoEnabled &&'),
 )
 check(
-  'Home uses the current infected Wisp identity without legacy duplication',
-  home.includes('xk-home-infected-card')
-    && home.includes('green-node-occult-malware-v1.webp')
+  'Home uses the isolated infected Wisp without legacy duplication',
+  home.includes('xk-home-specter')
+    && home.includes('wisp-digital-specter-v1.webp')
     && home.includes('WISP // INFECTED')
     && !home.includes('/assets/green-wisp.png'),
 )
