@@ -44,6 +44,7 @@ const greenNode = read('src/pages/GreenNode.tsx')
 const profileHub = read('src/pages/ProfileHub.tsx')
 const gamingHub = read('src/pages/GamingHub.tsx')
 const funPortal = read('src/pages/FunPortal.tsx')
+const fusionShell = read('src/components/fusion/FusionShell.tsx')
 const realtimeCommunity = read('src/lib/realtimeCommunity.ts')
 const newsPolicyHardening = read('supabase/migrations/20260715101500_news_policy_hardening.sql')
 const newsAuditPolicyHardening = read('supabase/migrations/20260715103000_news_audit_policy_hardening.sql')
@@ -127,6 +128,13 @@ check(
     && header.includes('xk-mobile-dock')
     && header.includes('<NavLink')
     && redesignCss.includes('.xk-mobile-dock a:focus-visible'),
+)
+check(
+  'Public pages use one compact non-overlapping header',
+  header.includes('pointer-events-none sticky top-0')
+    && header.includes('grid-cols-[minmax(0,1fr)_auto]')
+    && !fusionShell.includes('<header')
+    && !fusionShell.includes("from 'react-router-dom'"),
 )
 check(
   'News RLS is role-scoped and avoids repeated auth evaluation',

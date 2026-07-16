@@ -47,9 +47,9 @@ export default function Header() {
         </button>
       </aside>
 
-      <header className="xk-aaa-header pointer-events-none fixed inset-x-0 top-0 z-[65] px-4 py-4 md:px-8" aria-label="XETHKIOZ navegación principal">
-        <div className="pointer-events-auto mx-auto grid max-w-[1600px] grid-cols-1 items-center gap-4 rounded-[2rem] border border-white/10 bg-black/28 px-4 py-3 shadow-[0_0_28px_rgba(0,0,0,.35)] backdrop-blur-xl lg:grid-cols-[auto_1fr_auto] lg:px-6">
-          <Link to="/" className="xk-broken-logo justify-self-start font-black uppercase leading-none tracking-[0.08em] text-3xl md:text-4xl" aria-label="XETHKIOZ Home">
+      <header className="xk-aaa-header pointer-events-none sticky top-0 z-[65] px-3 py-3 md:px-8 md:py-4" aria-label="XETHKIOZ navegación principal">
+        <div className="pointer-events-auto mx-auto grid max-w-[1600px] grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-[2rem] border border-white/10 bg-black/70 px-4 py-3 shadow-[0_0_28px_rgba(0,0,0,.35)] backdrop-blur-xl sm:gap-3 lg:grid-cols-[auto_1fr_auto] lg:gap-4 lg:bg-black/28 lg:px-6">
+          <Link to="/" className="xk-broken-logo min-w-0 justify-self-start truncate font-black uppercase leading-none tracking-[0.08em] text-xl min-[360px]:text-2xl sm:text-3xl md:text-4xl" aria-label="XETHKIOZ Home">
             XETHKIOZ
           </Link>
 
@@ -64,11 +64,11 @@ export default function Header() {
             </button>
           </nav>
 
-          <div className="flex justify-self-end gap-2 font-mono text-[11px] font-black uppercase tracking-[0.16em]">
-            <button type="button" onClick={switchLang} className="rounded-full border border-white/10 bg-white/[0.035] px-3 py-2 text-white transition hover:border-[#8B5CF6] hover:text-[#8B5CF6]">
+          <div className="flex justify-self-end gap-1.5 font-mono text-[10px] font-black uppercase tracking-[0.14em] sm:gap-2 sm:text-[11px] sm:tracking-[0.16em]">
+            <button type="button" onClick={switchLang} className="rounded-full border border-white/10 bg-white/[0.035] px-2 py-2 text-white transition hover:border-[#8B5CF6] hover:text-[#8B5CF6] sm:px-3">
               {lang.toUpperCase()}
             </button>
-            <button type="button" onClick={openAccount} className="rounded-full border border-[#FF6B1A]/40 bg-[#FF6B1A]/10 px-3 py-2 text-[#FFB47A] transition hover:border-[#FF6B1A] hover:text-white">
+            <button type="button" onClick={openAccount} className="rounded-full border border-[#FF6B1A]/40 bg-[#FF6B1A]/10 px-2 py-2 text-[#FFB47A] transition hover:border-[#FF6B1A] hover:text-white sm:px-3">
               {account.status === 'connected' ? account.name : 'LOGIN'}
             </button>
           </div>

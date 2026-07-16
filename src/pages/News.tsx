@@ -219,7 +219,7 @@ export default function News() {
   }
 
   return (
-    <FusionShell tone="science" backLabel={t.v7.backCore} label={t.v7.functionality.newsEngine}>
+    <FusionShell tone="science">
       <SEO title={ui.seoTitle} description={ui.seoDescription} url="/news" />
       <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 md:py-12">
         <FusionHero tone="science" eyebrow={ui.eyebrow} heading={ui.heading} description={ui.description} />
