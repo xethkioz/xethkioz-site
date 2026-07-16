@@ -230,7 +230,8 @@ check(
     && newsletter.includes('normalizedEmail')
     && newsletter.includes('xk-newsletter-consent')
     && newsletterPrivacy.includes('newsletter_admin_only_select')
-    && newsletterPrivacy.includes('public.xethkioz_is_admin()')
+    && newsletterPrivacy.includes('profiles.id = (select auth.uid())')
+    && newsletterPrivacy.includes("lower(profiles.role::text) = 'admin'")
     && !newsletterPrivacy.includes('USING (true)'),
 )
 check(

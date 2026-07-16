@@ -1,6 +1,15 @@
 -- Newsletter privacy hardening.
 -- Public visitors may subscribe, but only an ADMIN may read subscriber emails.
 
+create table if not exists public.newsletter_subscribers (
+  id uuid primary key default gen_random_uuid(),
+  email text not null unique,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists newsletter_subscribers_created_at_idx
+on public.newsletter_subscribers (created_at desc);
+
 alter table public.newsletter_subscribers enable row level security;
 alter table public.newsletter_subscribers force row level security;
 
@@ -24,6 +33,16 @@ create policy "newsletter_admin_only_select"
 on public.newsletter_subscribers
 for select
 to authenticated
-using (public.xethkioz_is_admin());
+using (
+  exists (
+    select 1
+    from public.profiles
+    where profiles.id = (select auth.uid())
+      and lower(profiles.role::text) = 'admin'
+  )
+);
 
+grant insert on table public.newsletter_subscribers to anon, authenticated;
+grant select on table public.newsletter_subscribers to authenticated;
+revoke select on table public.newsletter_subscribers from anon;
 revoke update, delete on table public.newsletter_subscribers from anon, authenticated;
