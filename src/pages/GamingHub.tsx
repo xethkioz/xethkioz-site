@@ -49,6 +49,13 @@ export default function GamingHub() {
     addWispXp(2, 'portal', `/gaming#${id}`)
   }
 
+  function moveMissionFocus(currentIndex: number, direction: 1 | -1) {
+    const nextIndex = (currentIndex + direction + t.blocks.length) % t.blocks.length
+    const next = t.blocks[nextIndex]
+    selectBlock(next.id)
+    document.getElementById(`gaming-tab-${next.id}`)?.focus()
+  }
+
   return <>
     <SEO title={`${t.title} · XETHKIOZ`} description={t.description} url="/gaming" />
     <main className="xk-page xk-anime-page xk-anime-gaming px-4 py-8 sm:px-6 lg:px-8">
@@ -56,7 +63,7 @@ export default function GamingHub() {
       <div className="xk-gaming-ambient" aria-hidden="true"><i /><i /><i /><b /><b /></div>
       <div className="mx-auto max-w-7xl">
         <section className="xk-anime-hero xk-gaming-hero">
-          <SafeImage src="/assets/identity/gaming-anime-nexus-v1.webp" fallback="/images/articles/gaming.svg" alt="Guerrero anime frente a un portal gamer de neón" className="xk-anime-hero-media" />
+          <SafeImage src="/assets/identity/gaming-anime-nexus-v1.webp" fallback="/images/articles/gaming.svg" alt="Guerrero anime frente a un portal gamer de neón" className="xk-anime-hero-media" loading="eager" fetchPriority="high" />
           <div className="xk-anime-hero-shade" />
           <div className="xk-anime-scanlines" aria-hidden="true" />
           <span className="xk-energy-slash" aria-hidden="true" />
@@ -64,7 +71,7 @@ export default function GamingHub() {
           <div className="xk-anime-hero-content">
             <div className="flex items-center justify-between gap-4">
               <p className="xk-anime-kicker"><span className="xk-live-dot" />{t.kicker}</p>
-              <button onClick={() => setLang(lang === 'es' ? 'en' : 'es')} className="xk-hud-button">{lang.toUpperCase()}</button>
+              <button type="button" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} className="xk-hud-button">{lang.toUpperCase()}</button>
             </div>
             <p className="xk-anime-kanji" aria-hidden="true">異界</p>
             <h1 className="xk-anime-title" data-text={t.title}>{t.title}</h1>
@@ -78,11 +85,14 @@ export default function GamingHub() {
 
         <section className="xk-mission-board" aria-label={t.active}>
           <div className="xk-mission-tabs" role="tablist" aria-label={t.active}>
-            {t.blocks.map((block) => <button key={block.id} type="button" role="tab" aria-selected={active.id === block.id} onClick={() => selectBlock(block.id)} className="xk-mission-tab">
+            {t.blocks.map((block, index) => <button key={block.id} id={`gaming-tab-${block.id}`} type="button" role="tab" aria-selected={active.id === block.id} aria-controls="gaming-active-mission" tabIndex={active.id === block.id ? 0 : -1} onClick={() => selectBlock(block.id)} onKeyDown={(event) => {
+              if (event.key === 'ArrowRight' || event.key === 'ArrowDown') { event.preventDefault(); moveMissionFocus(index, 1) }
+              if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') { event.preventDefault(); moveMissionFocus(index, -1) }
+            }} className="xk-mission-tab">
               <span>{block.code}</span><b>{block.icon}</b><em>{block.title}</em>
             </button>)}
           </div>
-          <div className="xk-active-mission" role="tabpanel">
+          <div id="gaming-active-mission" className="xk-active-mission" role="tabpanel" aria-labelledby={`gaming-tab-${active.id}`} aria-live="polite">
             <b className="xk-mission-emblem" aria-hidden="true">{active.icon}</b>
             <p>{t.active} // {active.code}</p><h2>{active.title}</h2><span>{active.text}</span>
             <div className="xk-mission-progress"><i /><i /><i /></div>
@@ -100,6 +110,7 @@ export default function GamingHub() {
               <span className="xk-brief-number">{String(index + 2).padStart(2, '0')}<i>{['A', 'A', 'B', 'B', 'C', 'C'][index]}</i></span><SafeImage src={article.cover_image_url} fallback="/images/articles/gaming.svg" alt={article.cover_image_alt || article.title} className="xk-brief-image" /><div><small>{formatPublicNewsDate(article.published_at ?? article.created_at, lang)}</small><h3>{article.title}</h3><Link to={`/news/${article.slug}`}>{t.read} →</Link></div>
             </article>)}</div>
           </div>}
+          {articles.length === 0 && <p className="xk-empty-signal" role="status">NEXUS OFFLINE // Las transmisiones volverán en breve.</p>}
         </section>
 
         <div className="mt-10"><PublicAdSlot slotId="section-sidebar" fallbackLabel="XETHKIOZ GAMING SPONSOR" /></div>
