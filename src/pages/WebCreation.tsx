@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import SafeImage from '../components/SafeImage'
 import SEO from '../components/SEO'
+import { PortalPulseRail } from '../components/PortalPulseRail'
 import { useLang } from '../lib/LangContext'
 import { loadPublishedWebServices } from '../services/webServices'
 import type { WebServiceOffer } from '../types/webServices'
@@ -431,6 +432,20 @@ export default function WebCreation() {
         </div>
       </section>
 
+      <div className="relative z-10 mx-auto max-w-7xl px-5 pt-16 md:px-10 lg:px-14">
+        <PortalPulseRail
+          tone="gold"
+          eyebrow={lang === 'es' ? 'CREATION_LOOP // DE IDEA A PRESENCIA' : 'CREATION_LOOP // FROM IDEA TO PRESENCE'}
+          title={lang === 'es' ? 'No vendemos una plantilla: construimos una dirección' : 'We do not sell a template: we build a direction'}
+          description={lang === 'es' ? 'Podés mirar propuestas, entender el proceso o contar tu proyecto. Siempre sabés cuál es el siguiente paso.' : 'Explore solutions, understand the process or tell us about your project. You always know the next step.'}
+          items={[
+            { code: 'LOOK', title: lang === 'es' ? 'Ver propuestas' : 'View solutions', detail: lang === 'es' ? 'Referencias visuales con objetivos distintos' : 'Visual references for different goals', to: '/creacion-web#propuestas', action: lang === 'es' ? 'Explorar' : 'Explore' },
+            { code: 'FLOW', title: lang === 'es' ? 'Conocer el proceso' : 'Understand the process', detail: lang === 'es' ? 'Descubrimiento, diseño, desarrollo y salida' : 'Discovery, design, development and launch', to: '/creacion-web#proceso', action: lang === 'es' ? 'Entender' : 'Learn' },
+            { code: 'START', title: lang === 'es' ? 'Contar mi idea' : 'Share my idea', detail: lang === 'es' ? 'Presupuesto privado y respuesta humana' : 'Private quote and human response', to: '/creacion-web#presupuesto', action: lang === 'es' ? 'Empezar' : 'Start' },
+          ]}
+        />
+      </div>
+
       <section id="propuestas" className="scroll-mt-28 px-5 py-24 md:px-10 lg:px-14">
         <div className="mx-auto max-w-[1500px]">
           <div className="max-w-3xl">
@@ -482,7 +497,7 @@ export default function WebCreation() {
         </div>
       </section>
 
-      <section className="border-y border-white/10 bg-white/[0.025] px-5 py-24 md:px-10 lg:px-14">
+      <section id="proceso" className="scroll-mt-28 border-y border-white/10 bg-white/[0.025] px-5 py-24 md:px-10 lg:px-14">
         <div className="mx-auto max-w-[1500px]">
           <p className="font-mono text-xs font-black uppercase tracking-[0.3em] text-orange-300">{t.processEyebrow}</p>
           <h2 className="mt-4 max-w-3xl text-4xl font-black tracking-[-0.035em] md:text-6xl">{t.processTitle}</h2>

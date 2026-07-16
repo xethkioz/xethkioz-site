@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { isSupabaseConfigured, supabase } from '../services/supabaseClient'
 
 export type HudAudioMode = 'muted' | 'enabled'
@@ -8,9 +8,11 @@ export type HudAccountSource = 'supabase' | 'stored'
 export interface HudAccountState {
   status: HudAccountStatus
   name: string
+  userId?: string
   email?: string
   source?: HudAccountSource
   checked?: boolean
+  issue?: 'network'
 }
 
 interface HudContextType {
@@ -32,6 +34,7 @@ const STORAGE_VOLUME = 'xethkioz.hud.volume'
 const STORAGE_ACCOUNT_STATUS = 'xethkioz.hud.account.status'
 const STORAGE_ACCOUNT_NAME = 'xethkioz.hud.account.name'
 const STORAGE_ACCOUNT_EMAIL = 'xethkioz.hud.account.email'
+const STORAGE_ACCOUNT_USER_ID = 'xethkioz.hud.account.user-id'
 
 const guestAccount: HudAccountState = { status: 'guest', name: 'XETHKIOZ', checked: true }
 
@@ -52,16 +55,17 @@ const readStoredAccount = (): HudAccountState => {
   const status = window.localStorage.getItem(STORAGE_ACCOUNT_STATUS) === 'connected' ? 'connected' : 'guest'
   const name = window.localStorage.getItem(STORAGE_ACCOUNT_NAME)?.trim() || 'XETHKIOZ'
   const email = window.localStorage.getItem(STORAGE_ACCOUNT_EMAIL)?.trim() || undefined
+  const userId = window.localStorage.getItem(STORAGE_ACCOUNT_USER_ID)?.trim() || undefined
   return status === 'connected'
-    ? { status: 'loading', name, email, source: 'stored', checked: false }
+    ? { status: 'connected', name, email, userId, source: 'stored', checked: false }
     : { ...guestAccount, checked: false }
 }
 
-function accountFromSupabaseUser(user: { email?: string; user_metadata?: Record<string, unknown> } | null): HudAccountState {
+function accountFromSupabaseUser(user: { id?: string; email?: string; user_metadata?: Record<string, unknown> } | null): HudAccountState {
   if (!user) return guestAccount
   const rawName = user.user_metadata?.display_name || user.user_metadata?.username
   const name = typeof rawName === 'string' && rawName.trim() ? rawName.trim() : user.email?.split('@')[0] || 'XETHKIOZ'
-  return { status: 'connected', name, email: user.email, source: 'supabase', checked: true }
+  return { status: 'connected', name, userId: user.id, email: user.email, source: 'supabase', checked: true }
 }
 
 function writeStoredAccount(account: HudAccountState) {
@@ -70,6 +74,8 @@ function writeStoredAccount(account: HudAccountState) {
   window.localStorage.setItem(STORAGE_ACCOUNT_NAME, account.name)
   if (account.email) window.localStorage.setItem(STORAGE_ACCOUNT_EMAIL, account.email)
   if (!account.email || account.status !== 'connected') window.localStorage.removeItem(STORAGE_ACCOUNT_EMAIL)
+  if (account.userId) window.localStorage.setItem(STORAGE_ACCOUNT_USER_ID, account.userId)
+  if (!account.userId || account.status !== 'connected') window.localStorage.removeItem(STORAGE_ACCOUNT_USER_ID)
 }
 
 export function HudProvider({ children }: { children: ReactNode }) {
@@ -77,20 +83,26 @@ export function HudProvider({ children }: { children: ReactNode }) {
   const [volume, setVolumeState] = useState<number>(readStoredVolume)
   const [account, setAccount] = useState<HudAccountState>(readStoredAccount)
 
-  async function refreshAccount() {
+  const refreshAccount = useCallback(async () => {
     if (!isSupabaseConfigured) {
       setAccount({ ...guestAccount, checked: true })
       return
     }
 
-    setAccount((current) => ({ ...current, status: current.status === 'connected' ? 'connected' : 'loading', checked: false }))
+    setAccount((current) => ({ ...current, status: current.status === 'connected' ? 'connected' : 'loading', checked: false, issue: undefined }))
     const { data, error } = await supabase.auth.getSession()
-    if (error || !data.session?.user) {
+    if (error) {
+      setAccount((current) => current.status === 'connected'
+        ? { ...current, checked: true, issue: 'network' }
+        : { ...guestAccount, checked: true, issue: 'network' })
+      return
+    }
+    if (!data.session?.user) {
       setAccount({ ...guestAccount, checked: true })
       return
     }
     setAccount(accountFromSupabaseUser(data.session.user))
-  }
+  }, [])
 
   useEffect(() => {
     window.localStorage.setItem(STORAGE_SOUND, soundOn ? 'enabled' : 'muted')
@@ -117,7 +129,13 @@ export function HudProvider({ children }: { children: ReactNode }) {
 
     supabase.auth.getSession().then(({ data, error }) => {
       if (!active) return
-      if (error || !data.session?.user) {
+      if (error) {
+        setAccount((current) => current.status === 'connected'
+          ? { ...current, checked: true, issue: 'network' }
+          : { ...guestAccount, checked: true, issue: 'network' })
+        return
+      }
+      if (!data.session?.user) {
         setAccount({ ...guestAccount, checked: true })
         return
       }
@@ -146,6 +164,21 @@ export function HudProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
+  useEffect(() => {
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === 'visible') void refreshAccount()
+    }
+    const refreshWhenOnline = () => void refreshAccount()
+    window.addEventListener('online', refreshWhenOnline)
+    window.addEventListener('pageshow', refreshWhenOnline)
+    document.addEventListener('visibilitychange', refreshWhenVisible)
+    return () => {
+      window.removeEventListener('online', refreshWhenOnline)
+      window.removeEventListener('pageshow', refreshWhenOnline)
+      document.removeEventListener('visibilitychange', refreshWhenVisible)
+    }
+  }, [refreshAccount])
+
   const value = useMemo<HudContextType>(() => ({
     soundOn,
     audioMode: soundOn ? 'enabled' : 'muted',
@@ -166,7 +199,7 @@ export function HudProvider({ children }: { children: ReactNode }) {
     },
     setAccountName: (next) => setAccount((current) => ({ ...current, name: next.trim() || current.name })),
     refreshAccount,
-  }), [soundOn, volume, account])
+  }), [soundOn, volume, account, refreshAccount])
 
   return <HudContext.Provider value={value}>{children}</HudContext.Provider>
 }

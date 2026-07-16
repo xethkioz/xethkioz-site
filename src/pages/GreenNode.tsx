@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import SafeImage from '../components/SafeImage'
 import SEO from '../components/SEO'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
+import { PortalPulseRail } from '../components/PortalPulseRail'
 import { useLang } from '../lib/LangContext'
 import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import { fetchPublishedNews, formatPublicNewsDate, type PublicNewsArticle, type PublicNewsCategory } from '../services/news/publicNewsService'
@@ -176,7 +177,19 @@ export default function GreenNode() {
                 ))}
               </div>
 
-              <section className="xk-green-terminal" aria-labelledby="green-terminal-title">
+              <PortalPulseRail
+                tone="green"
+                eyebrow="BLACK_LOOP // LA SEÑAL TE ESTÁ MIRANDO"
+                title="No leas el archivo: intervenilo"
+                description="Green Node cobra vida cuando decidís qué descifrar, qué evidencia contrastar y hasta dónde activar el modo profundo."
+                items={[
+                  { code: '>_', title: 'Usar la terminal', detail: 'Comandos simulados, sin tocar tu dispositivo', to: '/green-node#terminal', action: 'Decodificar' },
+                  { code: '13', title: 'Abrir expedientes', detail: 'Ocultismo, red y anomalías documentadas', to: '/green-node#archive', action: 'Investigar' },
+                  { code: 'EYE', title: 'Cruzar evidencia', detail: 'Distinguir fuente, hipótesis y ficción', to: '/green-node#evidence', action: 'Contrastar' },
+                ]}
+              />
+
+              <section id="terminal" className="xk-green-terminal scroll-mt-28" aria-labelledby="green-terminal-title">
                 <header><div><i /><i /><i /></div><p id="green-terminal-title">root@xethkioz:~/black_archive</p><button type="button" aria-pressed={deepMode} onClick={() => setDeepMode((current) => !current)}>{deepMode ? 'SALIR DEEP MODE' : 'ACTIVAR DEEP MODE'}</button></header>
                 <div className="xk-terminal-screen" role="log" aria-live="polite" aria-relevant="additions">{terminalLines.map((line, index) => <p key={`${line}-${index}`}><span>{index === terminalLines.length - 1 ? '›' : '·'}</span>{line}</p>)}</div>
                 <form onSubmit={runTerminalCommand}><label htmlFor="green-command" className="sr-only">Comando de la terminal simulada</label><span aria-hidden="true">visitor@green-node:~$</span><input id="green-command" value={terminalInput} onChange={(event) => setTerminalInput(event.target.value)} autoComplete="off" spellCheck={false} maxLength={40} placeholder="help" /><button type="submit">EJECUTAR ↵</button></form>
@@ -185,7 +198,7 @@ export default function GreenNode() {
 
               {deepMode && <aside className="xk-deep-reveal" role="status"><p>ARCHIVO ∆ REVELADO</p><b>La teoría más seductora también necesita evidencia.</b><span>Seguí la señal escondida: fecha → autor → fuente → contradicción.</span></aside>}
 
-              <section className="mt-6 overflow-hidden rounded-2xl border border-[#32FF8A]/35 bg-[radial-gradient(circle_at_90%_10%,rgba(50,255,138,.13),transparent_32%),rgba(3,16,6,.88)] p-5 font-mono md:p-7" aria-live="polite">
+              <section id="archive" className="mt-6 scroll-mt-28 overflow-hidden rounded-2xl border border-[#32FF8A]/35 bg-[radial-gradient(circle_at_90%_10%,rgba(50,255,138,.13),transparent_32%),rgba(3,16,6,.88)] p-5 font-mono md:p-7" aria-live="polite">
                 <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
                   <div>
                     <p className="text-[9px] font-black uppercase tracking-[0.28em] text-[#32FF8A]/60">{t.active} // {active.signal}</p>
@@ -199,7 +212,7 @@ export default function GreenNode() {
                 </ol>
               </section>
 
-              <section className="mt-8 rounded-2xl border border-[#32FF8A]/25 bg-black/70 p-5 font-mono">
+              <section id="evidence" className="mt-8 scroll-mt-28 rounded-2xl border border-[#32FF8A]/25 bg-black/70 p-5 font-mono">
                 <p className="text-[10px] uppercase tracking-[0.28em] text-[#32FF8A]/70">{t.articleTitle}</p>
                 {loadingNews ? <p className="mt-4 text-xs text-[#B9FFD1]/60">{t.loading}</p> : null}
                 <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">

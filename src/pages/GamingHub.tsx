@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
 import SafeImage from '../components/SafeImage'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
+import { PortalPulseRail } from '../components/PortalPulseRail'
 import { useLang } from '../lib/LangContext'
 import { addWispXp } from '../lib/realtimeCommunity'
 import { STREAM_LINKS } from '../lib/siteConfig'
@@ -114,6 +115,18 @@ export default function GamingHub() {
           </div>
           <div className="xk-stream-orbit" aria-hidden="true"><i /><i /><span>{liveStream ? 'LIVE' : 'STANDBY'}</span></div>
         </section>
+
+        <PortalPulseRail
+          tone="violet"
+          eyebrow="PLAYER_LOOP // ELEGÍ TU PRÓXIMA MISIÓN"
+          title="Que entrar a Gaming siempre tenga algo para hacer"
+          description="Seguí la señal, buscá escuadrón o llevate una guía. Cada acción alimenta el recorrido de tu perfil."
+          items={[
+            { code: 'LIVE', title: 'Perseguir la señal', detail: 'Directos y últimos videos', to: STREAM_LINKS.kick, action: 'Abrir canal' },
+            { code: 'PARTY', title: 'Armar escuadrón', detail: 'Comunidad, servidores y compañeros', to: '/community', action: 'Entrar' },
+            { code: 'BUILD', title: 'Preparar personaje', detail: 'Noticias, builds y archivo gamer', to: '/news?category=gaming', action: 'Explorar' },
+          ]}
+        />
 
         <section className="xk-mission-board" aria-label={t.active}>
           <div className="xk-mission-tabs" role="tablist" aria-label={t.active}>

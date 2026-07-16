@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
+import { PortalPulseRail } from '../components/PortalPulseRail'
 import Newsletter from '../components/Newsletter'
 import { useLang } from '../lib/LangContext'
 import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
@@ -87,12 +88,24 @@ export default function ScienceLab() {
             ))}
           </div>
 
-          <section className="xk-tech-stack" aria-labelledby="tech-stack-title">
+          <PortalPulseRail
+            tone="cyan"
+            eyebrow="LAB_LOOP // APRENDER HACIENDO"
+            title="La tecnología sirve cuando podés usarla"
+            description="Abrí la caja de herramientas, probá una respuesta guiada o llevate una señal semanal con contexto."
+            items={[
+              { code: 'STACK', title: 'Abrir herramientas', detail: 'El stack real detrás del proyecto', to: '/science#tech-stack', action: 'Inspeccionar' },
+              { code: 'ASK', title: 'Consultar al laboratorio', detail: 'Respuestas locales sobre IA y web', to: '/science#lab-assistant', action: 'Probar' },
+              { code: 'SIGNAL', title: 'Recibir tendencias', detail: 'Tres noticias útiles por semana', to: '/science#science-newsletter', action: 'Suscribirme' },
+            ]}
+          />
+
+          <section id="tech-stack" className="xk-tech-stack scroll-mt-28" aria-labelledby="tech-stack-title">
             <div><p>TECH_STACK // HERRAMIENTAS REALES</p><h2 id="tech-stack-title">Cómo está construido XETHKIOZ</h2><span>Herramientas que hoy sostienen la web y el flujo creativo. Sin recomendaciones pagas ni productos inventados.</span></div>
             <div>{stack.map((tool) => <article key={tool.name}><span aria-hidden="true">{tool.icon}</span><div><h3>{tool.name}</h3><p>{tool.detail}</p></div></article>)}</div>
           </section>
 
-          <section className="xk-lab-assistant" aria-labelledby="lab-assistant-title">
+          <section id="lab-assistant" className="xk-lab-assistant scroll-mt-28" aria-labelledby="lab-assistant-title">
             <div className="xk-assistant-console"><p>MINI_BOT // MODO LOCAL</p><h2 id="lab-assistant-title">Preguntale al laboratorio</h2><span>Elegí una ruta. Las respuestas están curadas en la página: no se envían datos a una API externa.</span><div role="tablist" aria-label="Temas del asistente">{Object.entries(assistantAnswers).map(([id, item]) => <button key={id} type="button" role="tab" aria-selected={assistantTopic === id} onClick={() => setAssistantTopic(id)}>{item.label}</button>)}</div></div>
             <div className="xk-assistant-answer" role="tabpanel" aria-live="polite"><small>RESPUESTA // {assistant.label}</small><p>{assistant.answer}</p><Link to={assistant.link}>ABRIR RUTA RELACIONADA →</Link></div>
           </section>
@@ -115,7 +128,7 @@ export default function ScienceLab() {
             <PublicAdSlot slotId="section-sidebar" fallbackLabel="XETHKIOZ TECH SPONSOR" />
           </div>
 
-          <section className="xk-science-newsletter" aria-label="Newsletter de tendencias"><div><p>WEEKLY_SIGNAL // 3 NOTICIAS QUE IMPORTAN</p><h2>Una señal útil por semana</h2><span>IA, ciencia y tecnología con contexto, fuentes y sin saturarte.</span></div><Newsletter /></section>
+          <section id="science-newsletter" className="xk-science-newsletter scroll-mt-28" aria-label="Newsletter de tendencias"><div><p>WEEKLY_SIGNAL // 3 NOTICIAS QUE IMPORTAN</p><h2>Una señal útil por semana</h2><span>IA, ciencia y tecnología con contexto, fuentes y sin saturarte.</span></div><Newsletter /></section>
 
           <div className="mt-8 rounded-3xl border border-[#32FF8A]/25 bg-black/45 p-5 font-mono text-xs leading-relaxed text-gray-300">{t.status}</div>
           <Link to="/" className="mt-8 inline-flex rounded-full border border-blue-300/40 px-4 py-3 font-mono text-xs uppercase tracking-[0.18em] text-blue-100 transition hover:border-[#32FF8A] hover:text-[#32FF8A]">{t.back}</Link>

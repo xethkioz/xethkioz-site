@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
 import SafeImage from '../components/SafeImage'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
+import { PortalPulseRail } from '../components/PortalPulseRail'
 import { useLang } from '../lib/LangContext'
 import { addWispXp } from '../lib/realtimeCommunity'
 import { SOCIAL_LINKS } from '../lib/siteConfig'
@@ -96,9 +97,21 @@ export default function FunPortal() {
           <div className="xk-chaos-gauge"><div><span>{t.chaos}</span><b>{[87, 96, 73][activeIndex]}%</b></div><i><em style={{ width: `${[87, 96, 73][activeIndex]}%` }} /></i><small>MEME_CORE // {activeId.toUpperCase()} // UNSTABLE</small></div>
           <div className="xk-chaos-output"><span aria-hidden="true">☄</span><p role="status" aria-live="polite" aria-atomic="true">{t.chaosLines[chaosIndex]}</p><button type="button" onClick={unleashChaos}>{t.unleash} →</button></div>
         </section>
+
+        <PortalPulseRail
+          tone="orange"
+          eyebrow="CHAOS_LOOP // NO MIRES SIN PARTICIPAR"
+          title="Acá el humor se toca, se vota y se comparte"
+          description="Elegí una dosis rápida: el clip destacado, un meme para robar o la sala donde nace el próximo desastre."
+          items={[
+            { code: 'WEEK', title: 'Clip de la semana', detail: 'El momento que no sobrevivió al stream', to: '/fun#weekly-clip', action: 'Reproducir' },
+            { code: 'STEAL', title: 'Robar un meme', detail: 'Compartilo con marca XETHKIOZ', to: '/fun#meme-wall', action: 'Elegir' },
+            { code: 'LOL', title: 'Entrar al caos', detail: 'Comentá y proponé el próximo meme', to: '/community', action: 'Participar' },
+          ]}
+        />
         <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">{reactionAnnouncement}</p>
 
-        {articles[0] && <section className="xk-weekly-clip" aria-labelledby="weekly-clip-title">
+        {articles[0] && <section id="weekly-clip" className="xk-weekly-clip scroll-mt-28" aria-labelledby="weekly-clip-title">
           <div className="xk-weekly-clip-media"><SafeImage src={articles[0].cover_image_url} fallback="/news/memes/argentina-duendes-cuartos.svg" alt={articles[0].cover_image_alt || articles[0].title} className="h-full w-full object-cover" /><span>XETHKIOZ</span><b>CLIP<br />DE LA<br />SEMANA</b></div>
           <div><p>EDITOR'S CHAOS PICK // EP.01</p><h2 id="weekly-clip-title">{articles[0].title}</h2><span>{articles[0].summary}</span><div><Link to={`/news/${articles[0].slug}`}>{t.read} →</Link><button type="button" onClick={() => void shareArticle(articles[0])}>ROBAR MEME / COMPARTIR ↗</button></div></div>
         </section>}
@@ -108,7 +121,7 @@ export default function FunPortal() {
           <div>{SOCIAL_LINKS.filter((social) => ['TikTok Principal', 'Threads', 'Instagram', 'YouTube'].includes(social.name)).map((social) => <a key={social.name} href={social.url} target="_blank" rel="noreferrer"><span>{social.icon}</span><b>{social.name}</b><small>{social.handle} ↗</small></a>)}</div>
         </section>
 
-        <section className="mt-12">
+        <section id="meme-wall" className="mt-12 scroll-mt-28">
           <div className="xk-anime-section-title xk-meme-section-title"><span>LIVE!</span><h2>{t.stream}</h2><i /></div>
           <div className="xk-meme-bento">{articles.map((article, index) => <article key={article.slug} className={`xk-meme-card xk-meme-card-${index + 1}${reacted.has(article.slug) ? ' is-reacted' : ''}`}>
             <div className="xk-meme-image-wrap"><SafeImage src={article.cover_image_url} fallback="/news/memes/argentina-duendes-cuartos.svg" alt={article.cover_image_alt || article.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" /><span>{['LOL!', 'WTF?!', 'JAJA', 'NOOO', 'GG!', 'BRUH', 'XD'][index % 7]}</span><small>XETHKIOZ</small></div>
