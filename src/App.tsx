@@ -100,15 +100,16 @@ function AppShell() {
   const location = useLocation()
   const isCmsRoute = location.pathname === '/cms' || location.pathname.startsWith('/cms/')
   const isHomeRoute = location.pathname === '/'
+  const hasPublicNavigation = !isCmsRoute && !isHomeRoute
 
   return (
-    <>
+    <div className={hasPublicNavigation ? 'xk-app-shell xk-has-mobile-dock' : 'xk-app-shell'}>
       <a href="#main-content" className="xk-skip-link">Saltar al contenido principal</a>
       <Analytics />
       <VercelAnalytics />
       <ScrollToTop />
       <RouteAccessibility pathname={location.pathname} />
-      {!isCmsRoute && !isHomeRoute && (
+      {hasPublicNavigation && (
         <AppErrorBoundary label="Global Controls" compact>
           <Suspense fallback={null}>
             <Header />
@@ -117,7 +118,7 @@ function AppShell() {
         </AppErrorBoundary>
       )}
 
-      <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#0A0A0F] outline-none">
+      <div id="main-content" tabIndex={-1} className="min-h-screen bg-[#0A0A0F] outline-none">
         <AppErrorBoundary label="Routes">
           <Suspense fallback={<RouteFallback />}>
             <Routes>
@@ -161,19 +162,19 @@ function AppShell() {
             </Routes>
           </Suspense>
         </AppErrorBoundary>
-      </main>
+      </div>
 
-      {!isCmsRoute && !isHomeRoute && (
+      {hasPublicNavigation && (
         <Suspense fallback={null}>
           <Footer />
         </Suspense>
       )}
       {!isCmsRoute && (
         <Suspense fallback={null}>
-          <NexusChatWidget />
+          <NexusChatWidget clearMobileDock={hasPublicNavigation} />
         </Suspense>
       )}
-    </>
+    </div>
   )
 }
 

@@ -163,7 +163,7 @@ function addUniqueMessage(current: NexusMessage[], next: NexusMessage) {
   return [...current.slice(-79), next]
 }
 
-export default function NexusChatWidget() {
+export default function NexusChatWidget({ clearMobileDock = false }: { clearMobileDock?: boolean }) {
   const { lang } = useLang()
   const t = copy[lang]
   const [open, setOpen] = useState(false)
@@ -294,7 +294,7 @@ export default function NexusChatWidget() {
   const visibleMessages = messages.filter((message) => message.room === room || message.type === 'system').slice(-80)
 
   return (
-    <div className="fixed bottom-[max(.75rem,env(safe-area-inset-bottom))] right-3 z-[75] font-mono text-[#F0F0F5] sm:bottom-5 sm:right-5">
+    <div className={`fixed right-3 z-[75] font-mono text-[#F0F0F5] sm:right-5 ${clearMobileDock ? 'bottom-[calc(5.45rem+env(safe-area-inset-bottom))] md:bottom-5' : 'bottom-[max(.75rem,env(safe-area-inset-bottom))] sm:bottom-5'}`}>
       {open && (
         <section id="nexus-chat-panel" className="mb-4 w-[calc(100vw-2.5rem)] max-w-[390px] overflow-hidden rounded-3xl border border-[#8B5CF6]/60 bg-[#0A0A0F]/95 shadow-[0_0_10px_#8B5CF6,0_18px_80px_rgba(0,0,0,0.65)] backdrop-blur-xl" aria-label="XETHKIOZ Nexus Chat">
           <header className="border-b border-[#8B5CF6]/30 bg-gradient-to-r from-[#8B5CF6]/20 via-black/40 to-[#FF6B1A]/15 p-4">

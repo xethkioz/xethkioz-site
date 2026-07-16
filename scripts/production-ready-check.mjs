@@ -190,6 +190,17 @@ check(
     && redesignCss.includes('.xk-meme-ambient'),
 )
 check(
+  'Mobile portals preserve active state without covering navigation',
+  appShell.includes('xk-has-mobile-dock')
+    && appShell.includes('clearMobileDock={hasPublicNavigation}')
+    && gamingHub.includes('aria-controls="gaming-active-mission"')
+    && gamingHub.includes('aria-live="polite"')
+    && funPortal.includes('role="tablist"')
+    && funPortal.includes('aria-controls="fun-chaos-panel"')
+    && redesignCss.includes('.xk-active-mission{display:block')
+    && redesignCss.includes('scrollbar-width:none'),
+)
+check(
   'Home portals use clean transparent worlds with reduced-motion-safe energy',
   home.includes('xk-home-portal-shell')
     && home.includes('xk-home-portal-clean')
