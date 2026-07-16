@@ -5,6 +5,7 @@ import SafeImage from '../components/SafeImage'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
 import { useLang } from '../lib/LangContext'
 import { addWispXp } from '../lib/realtimeCommunity'
+import { SOCIAL_LINKS } from '../lib/siteConfig'
 import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import { fetchPublishedNews, formatPublicNewsDate, type PublicNewsArticle } from '../services/news/publicNewsService'
 
@@ -43,6 +44,18 @@ export default function FunPortal() {
   function unleashChaos() {
     setChaosIndex((current) => (current + 1) % t.chaosLines.length)
     addWispXp(1, 'mission', '/fun#chaos-meter')
+  }
+  async function shareArticle(article: PublicNewsArticle) {
+    const url = `${window.location.origin}/news/${article.slug}`
+    const shareData = { title: article.title, text: `${article.title} · XETHKIOZ`, url }
+    try {
+      if (navigator.share) await navigator.share(shareData)
+      else window.open(`https://wa.me/?text=${encodeURIComponent(`${shareData.text} ${url}`)}`, '_blank', 'noopener,noreferrer')
+      setReactionAnnouncement(`Listo para compartir: ${article.title}`)
+      addWispXp(2, 'mission', `/fun#share-${article.slug}`)
+    } catch {
+      setReactionAnnouncement('Compartir cancelado')
+    }
   }
   function moveChannelFocus(currentIndex: number, direction: 1 | -1) {
     const nextIndex = (currentIndex + direction + t.blocks.length) % t.blocks.length
@@ -85,11 +98,21 @@ export default function FunPortal() {
         </section>
         <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">{reactionAnnouncement}</p>
 
+        {articles[0] && <section className="xk-weekly-clip" aria-labelledby="weekly-clip-title">
+          <div className="xk-weekly-clip-media"><SafeImage src={articles[0].cover_image_url} fallback="/news/memes/argentina-duendes-cuartos.svg" alt={articles[0].cover_image_alt || articles[0].title} className="h-full w-full object-cover" /><span>XETHKIOZ</span><b>CLIP<br />DE LA<br />SEMANA</b></div>
+          <div><p>EDITOR'S CHAOS PICK // EP.01</p><h2 id="weekly-clip-title">{articles[0].title}</h2><span>{articles[0].summary}</span><div><Link to={`/news/${articles[0].slug}`}>{t.read} →</Link><button type="button" onClick={() => void shareArticle(articles[0])}>ROBAR MEME / COMPARTIR ↗</button></div></div>
+        </section>}
+
+        <section className="xk-social-wall" aria-labelledby="social-wall-title">
+          <div><p>SOCIAL_WALL // SEÑALES CURADAS</p><h2 id="social-wall-title">El caos sigue en todas las pantallas</h2><span>Accesos directos a los canales oficiales. El contenido automático llegará cuando cada plataforma tenga una integración estable.</span></div>
+          <div>{SOCIAL_LINKS.filter((social) => ['TikTok Principal', 'Threads', 'Instagram', 'YouTube'].includes(social.name)).map((social) => <a key={social.name} href={social.url} target="_blank" rel="noreferrer"><span>{social.icon}</span><b>{social.name}</b><small>{social.handle} ↗</small></a>)}</div>
+        </section>
+
         <section className="mt-12">
           <div className="xk-anime-section-title xk-meme-section-title"><span>LIVE!</span><h2>{t.stream}</h2><i /></div>
           <div className="xk-meme-bento">{articles.map((article, index) => <article key={article.slug} className={`xk-meme-card xk-meme-card-${index + 1}${reacted.has(article.slug) ? ' is-reacted' : ''}`}>
-            <div className="xk-meme-image-wrap"><SafeImage src={article.cover_image_url} fallback="/news/memes/argentina-duendes-cuartos.svg" alt={article.cover_image_alt || article.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" /><span>{['LOL!', 'WTF?!', 'JAJA', 'NOOO', 'GG!', 'BRUH', 'XD'][index % 7]}</span></div>
-            <div className="xk-meme-copy"><small>EP.{String(index + 1).padStart(2, '0')} // {formatPublicNewsDate(article.published_at ?? article.created_at, lang)}</small><h3>{article.title}</h3>{index === 0 && <p>{article.summary}</p>}<div><Link to={`/news/${article.slug}`}>{t.read} →</Link><button type="button" onClick={() => react(article.slug)} disabled={reacted.has(article.slug)}>{reacted.has(article.slug) ? t.reacted : t.react}</button></div></div>
+            <div className="xk-meme-image-wrap"><SafeImage src={article.cover_image_url} fallback="/news/memes/argentina-duendes-cuartos.svg" alt={article.cover_image_alt || article.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" /><span>{['LOL!', 'WTF?!', 'JAJA', 'NOOO', 'GG!', 'BRUH', 'XD'][index % 7]}</span><small>XETHKIOZ</small></div>
+            <div className="xk-meme-copy"><small>EP.{String(index + 1).padStart(2, '0')} // {formatPublicNewsDate(article.published_at ?? article.created_at, lang)}</small><h3>{article.title}</h3>{index === 0 && <p>{article.summary}</p>}<div><Link to={`/news/${article.slug}`}>{t.read} →</Link><button type="button" onClick={() => react(article.slug)} disabled={reacted.has(article.slug)}>{reacted.has(article.slug) ? t.reacted : t.react}</button><button type="button" onClick={() => void shareArticle(article)}>COMPARTIR ↗</button></div></div>
           </article>)}</div>
           {articles.length === 0 && <p className="xk-empty-signal xk-empty-signal-meme" role="status">MEME_CORE OFFLINE // El caos está recargando.</p>}
         </section>

@@ -5,6 +5,9 @@ import SafeImage from '../components/SafeImage'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
 import { useLang } from '../lib/LangContext'
 import { addWispXp } from '../lib/realtimeCommunity'
+import { STREAM_LINKS } from '../lib/siteConfig'
+import { supabase } from '../lib/supabase'
+import type { Stream } from '../lib/types'
 import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import { fetchPublishedNews, formatPublicNewsDate, type PublicNewsArticle } from '../services/news/publicNewsService'
 
@@ -34,6 +37,9 @@ export default function GamingHub() {
   const t = content[lang]
   const [activeId, setActiveId] = useState(t.blocks[0].id)
   const [published, setPublished] = useState<PublicNewsArticle[]>([])
+  const [liveStream, setLiveStream] = useState<Stream | null>(null)
+  const [latestVod, setLatestVod] = useState<Stream | null>(null)
+  const [streamRadarReady, setStreamRadarReady] = useState(false)
   const active = t.blocks.find((block) => block.id === activeId) ?? t.blocks[0]
   const seen = new Set<string>()
   const articles = [...published, ...getCuratedExternalNews('gaming')].filter((article) => !seen.has(article.slug) && Boolean(seen.add(article.slug))).slice(0, 7)
@@ -41,6 +47,19 @@ export default function GamingHub() {
   useEffect(() => {
     let alive = true
     void fetchPublishedNews('gaming').then((next) => { if (alive) setPublished(next) }).catch(() => undefined)
+    void (async () => {
+      try {
+        const { data } = await supabase.from('streams').select('*').order('published_at', { ascending: false }).limit(12)
+        if (!alive) return
+        const streams = (data ?? []) as Stream[]
+        setLiveStream(streams.find((stream) => stream.is_live) ?? null)
+        setLatestVod(streams.find((stream) => !stream.is_live) ?? null)
+      } catch {
+        // Keep the public channel links available when the CMS radar is unreachable.
+      } finally {
+        if (alive) setStreamRadarReady(true)
+      }
+    })()
     return () => { alive = false }
   }, [])
 
@@ -83,6 +102,19 @@ export default function GamingHub() {
 
         <div className="xk-gaming-ticker" aria-hidden="true"><div>NEXUS ONLINE ◆ NEW WORLDS DETECTED ◆ ASIA SIGNAL ACQUIRED ◆ RAID PARTY REQUIRED ◆ NEXUS ONLINE ◆ NEW WORLDS DETECTED ◆ ASIA SIGNAL ACQUIRED ◆ RAID PARTY REQUIRED ◆</div></div>
 
+        <section className="xk-creator-signal" aria-labelledby="creator-signal-title">
+          <div className="xk-creator-signal-copy">
+            <p><span className={liveStream ? 'is-live' : ''} /> STREAM_RADAR // {streamRadarReady ? (liveStream ? 'SEÑAL MARCADA EN VIVO EN EL CMS' : 'CANAL EN ESPERA') : 'SINCRONIZANDO'}</p>
+            <h2 id="creator-signal-title">Directos, VOD y comunidad en un solo punto</h2>
+            <span>{liveStream ? liveStream.title : 'Abrí Kick para comprobar el directo. Si el canal está offline, podés seguir con los últimos videos y noticias sin salir del Nexus.'}</span>
+            <div>
+              <a href={liveStream?.channel_url || STREAM_LINKS.kick} target="_blank" rel="noreferrer">{liveStream ? 'ENTRAR AL DIRECTO' : 'ABRIR KICK'} ↗</a>
+              <a href={latestVod?.channel_url || STREAM_LINKS.youtube} target="_blank" rel="noreferrer">{latestVod ? 'VER ÚLTIMO VOD' : 'VER YOUTUBE'} ↗</a>
+            </div>
+          </div>
+          <div className="xk-stream-orbit" aria-hidden="true"><i /><i /><span>{liveStream ? 'LIVE' : 'STANDBY'}</span></div>
+        </section>
+
         <section className="xk-mission-board" aria-label={t.active}>
           <div className="xk-mission-tabs" role="tablist" aria-label={t.active}>
             {t.blocks.map((block, index) => <button key={block.id} id={`gaming-tab-${block.id}`} type="button" role="tab" aria-selected={active.id === block.id} aria-controls="gaming-active-mission" tabIndex={active.id === block.id ? 0 : -1} onClick={() => selectBlock(block.id)} onKeyDown={(event) => {
@@ -97,6 +129,26 @@ export default function GamingHub() {
             <p>{t.active} // {active.code}</p><h2>{active.title}</h2><span>{active.text}</span>
             <div className="xk-mission-progress"><i /><i /><i /></div>
           </div>
+        </section>
+
+        <section className="xk-gaming-utility-grid" aria-label="Armería y tablero de juego">
+          <article className="xk-armory-panel">
+            <p>ARMORY // MI SETUP</p>
+            <h2>Hardware sin humo</h2>
+            <span>La ficha queda preparada para sumar componentes y enlaces afiliados, pero los modelos se publicarán recién cuando estén confirmados.</span>
+            <div>
+              {[['PC PRINCIPAL', 'Especificaciones en verificación'], ['PERIFÉRICOS', 'Mouse, teclado y audio por confirmar'], ['PRODUCCIÓN', 'OBS + flujo audiovisual del ecosistema']].map(([label, value], index) => <div key={label}><b>0{index + 1}</b><small>{label}</small><strong>{value}</strong></div>)}
+            </div>
+          </article>
+          <article className="xk-build-board">
+            <p>PARTY_BOARD // BUILDS & SERVIDORES</p>
+            <h2>Entrá a jugar con la comunidad</h2>
+            <div>
+              <Link to="/news?category=gaming"><span>POE 2</span><b>Builds y guías documentadas</b><small>Explorar archivo →</small></Link>
+              <Link to="/community"><span>MU ONLINE</span><b>Punto de encuentro del servidor</b><small>Buscar escuadrón →</small></Link>
+              <Link to="/community"><span>MMORPG</span><b>Compartí tu build y armá party</b><small>Entrar al Nexus →</small></Link>
+            </div>
+          </article>
         </section>
 
         <section className="mt-10">

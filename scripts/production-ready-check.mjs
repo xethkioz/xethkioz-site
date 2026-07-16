@@ -41,14 +41,17 @@ const mainEntry = read('src/main.tsx')
 const home = read('src/pages/Home.tsx')
 const publicNews = read('src/pages/News.tsx')
 const greenNode = read('src/pages/GreenNode.tsx')
+const scienceLab = read('src/pages/ScienceLab.tsx')
 const profileHub = read('src/pages/ProfileHub.tsx')
 const gamingHub = read('src/pages/GamingHub.tsx')
 const funPortal = read('src/pages/FunPortal.tsx')
+const newsletter = read('src/components/Newsletter.tsx')
 const fusionShell = read('src/components/fusion/FusionShell.tsx')
 const realtimeCommunity = read('src/lib/realtimeCommunity.ts')
 const newsPolicyHardening = read('supabase/migrations/20260715101500_news_policy_hardening.sql')
 const newsAuditPolicyHardening = read('supabase/migrations/20260715103000_news_audit_policy_hardening.sql')
 const newsMediaUploads = read('supabase/migrations/20260715120000_news_media_uploads.sql')
+const newsletterPrivacy = read('supabase/migrations/20260716110000_newsletter_privacy_hardening.sql')
 const cmsNewsEditor = read('src/cms/routes/CmsNewsEditor.tsx')
 const redesignCss = read('src/xethkioz-redesign.css')
 
@@ -172,6 +175,15 @@ check(
     && greenNode.includes('/news?category='),
 )
 check(
+  'Green Node terminal and Deep Mode stay simulated, explicit and evidence-safe',
+  greenNode.includes('runTerminalCommand')
+    && greenNode.includes('SIMULACIÓN SEGURA')
+    && greenNode.includes('protocolo_verdad')
+    && greenNode.includes('aria-pressed={deepMode}')
+    && !greenNode.includes('eval(')
+    && !greenNode.includes('<audio'),
+)
+check(
   'Profile provides persistent progression and daily activity',
   profileHub.includes('MISIÓN DIARIA')
     && profileHub.includes('ACTIVIDAD RECIENTE')
@@ -196,6 +208,31 @@ check(
     && redesignCss.includes('.xk-manga-tabs')
     && redesignCss.includes('.xk-gaming-ambient')
     && redesignCss.includes('.xk-meme-ambient'),
+)
+check(
+  'Creator hubs expose honest live, setup, build and sharing utilities',
+  gamingHub.includes("from('streams')")
+    && gamingHub.includes('SEÑAL MARCADA EN VIVO EN EL CMS')
+    && gamingHub.includes('Especificaciones en verificación')
+    && gamingHub.includes('PARTY_BOARD')
+    && !gamingHub.includes('fallbackStreams')
+    && funPortal.includes('navigator.share')
+    && funPortal.includes('wa.me')
+    && funPortal.includes('xk-weekly-clip')
+    && funPortal.includes('SOCIAL_WALL'),
+)
+check(
+  'Science exposes the real stack, a local assistant and a private newsletter',
+  scienceLab.includes('React + TypeScript')
+    && scienceLab.includes('MODO LOCAL')
+    && scienceLab.includes('no se envían datos a una API externa')
+    && scienceLab.includes('<Newsletter')
+    && newsletter.includes('normalizedEmail')
+    && newsletter.includes('xk-newsletter-consent')
+    && newsletterPrivacy.includes('newsletter_admin_only_select')
+    && newsletterPrivacy.includes('profiles.id = (select auth.uid())')
+    && newsletterPrivacy.includes("lower(profiles.role::text) = 'admin'")
+    && !newsletterPrivacy.includes('USING (true)'),
 )
 check(
   'Mobile portals preserve active state without covering navigation',
