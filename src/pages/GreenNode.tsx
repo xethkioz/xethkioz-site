@@ -75,6 +75,9 @@ export default function GreenNode() {
   const active = t.blocks.find((item) => item.id === activeId) ?? t.blocks[0]
   const [publishedArticles, setPublishedArticles] = useState<PublicNewsArticle[]>([])
   const [loadingNews, setLoadingNews] = useState(true)
+  const [deepMode, setDeepMode] = useState(false)
+  const [terminalInput, setTerminalInput] = useState('')
+  const [terminalLines, setTerminalLines] = useState<string[]>(['GREEN_NODE v13.6 // terminal simulada', 'Escribí “help” para listar comandos seguros.'])
 
   useEffect(() => {
     let mounted = true
@@ -113,10 +116,31 @@ export default function GreenNode() {
     return (matching.length ? matching : merged).slice(0, 6)
   }, [active.category, publishedArticles])
 
+  function runTerminalCommand(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const command = terminalInput.trim().toLowerCase()
+    if (!command) return
+    const responses: Record<string, string> = {
+      help: 'COMANDOS: listar_archivos · decodificar_archivo · protocolo_verdad · deep_mode · limpiar',
+      listar_archivos: 'GRIMOIRE_0X  SIGIL.EXE  BLACK_SIGNAL  EVIDENCE_13',
+      decodificar_archivo: 'EVIDENCE_13 desbloqueado. La anomalía se abre como hipótesis, nunca como certeza.',
+      protocolo_verdad: 'ACTIVO: evidencia ≠ inferencia ≠ ficción. Verificá fuente, autor, fecha y contexto.',
+      deep_mode: `DEEP_MODE ${deepMode ? 'ya estaba activo' : 'activado'}. La interfaz cambia; la evidencia no.`,
+    }
+    if (command === 'limpiar') {
+      setTerminalLines(['Terminal limpia. El archivo conserva sus fuentes.'])
+    } else {
+      setTerminalLines((current) => [...current.slice(-5), `> ${command}`, responses[command] ?? 'COMANDO NO RECONOCIDO. Usá “help”.'])
+    }
+    if (command === 'decodificar_archivo') setActiveId('research')
+    if (command === 'deep_mode') setDeepMode(true)
+    setTerminalInput('')
+  }
+
   return (
     <>
       <SEO title={`${t.title} · XETHKIOZ`} description={t.description} url="/green-node" />
-      <section className="xk-green-shell px-4 py-12 sm:px-6 lg:px-8">
+      <section className={`xk-green-shell px-4 py-12 sm:px-6 lg:px-8${deepMode ? ' xk-deep-mode' : ''}`}>
         <div className="xk-green-matrix" aria-hidden="true" />
         <div className="mx-auto max-w-7xl">
           <div className="xk-green-frame xk-occult-frame rounded-[2rem] bg-black/78 p-6 md:p-10">
@@ -151,6 +175,15 @@ export default function GreenNode() {
                   </button>
                 ))}
               </div>
+
+              <section className="xk-green-terminal" aria-labelledby="green-terminal-title">
+                <header><div><i /><i /><i /></div><p id="green-terminal-title">root@xethkioz:~/black_archive</p><button type="button" aria-pressed={deepMode} onClick={() => setDeepMode((current) => !current)}>{deepMode ? 'SALIR DEEP MODE' : 'ACTIVAR DEEP MODE'}</button></header>
+                <div className="xk-terminal-screen" role="log" aria-live="polite" aria-relevant="additions">{terminalLines.map((line, index) => <p key={`${line}-${index}`}><span>{index === terminalLines.length - 1 ? '›' : '·'}</span>{line}</p>)}</div>
+                <form onSubmit={runTerminalCommand}><label htmlFor="green-command" className="sr-only">Comando de la terminal simulada</label><span aria-hidden="true">visitor@green-node:~$</span><input id="green-command" value={terminalInput} onChange={(event) => setTerminalInput(event.target.value)} autoComplete="off" spellCheck={false} maxLength={40} placeholder="help" /><button type="submit">EJECUTAR ↵</button></form>
+                <small>SIMULACIÓN SEGURA: esta consola no ejecuta código ni accede a tu dispositivo.</small>
+              </section>
+
+              {deepMode && <aside className="xk-deep-reveal" role="status"><p>ARCHIVO ∆ REVELADO</p><b>La teoría más seductora también necesita evidencia.</b><span>Seguí la señal escondida: fecha → autor → fuente → contradicción.</span></aside>}
 
               <section className="mt-6 overflow-hidden rounded-2xl border border-[#32FF8A]/35 bg-[radial-gradient(circle_at_90%_10%,rgba(50,255,138,.13),transparent_32%),rgba(3,16,6,.88)] p-5 font-mono md:p-7" aria-live="polite">
                 <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">

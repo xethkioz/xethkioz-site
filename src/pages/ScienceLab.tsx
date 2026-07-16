@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
+import Newsletter from '../components/Newsletter'
 import { useLang } from '../lib/LangContext'
 import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import { formatPublicNewsDate } from '../services/news/publicNewsService'
@@ -43,8 +44,24 @@ export default function ScienceLab() {
   const { lang, setLang } = useLang()
   const t = content[lang]
   const [activeId, setActiveId] = useState(t.blocks[0].id)
+  const [assistantTopic, setAssistantTopic] = useState('ia')
   const active = t.blocks.find((item) => item.id === activeId) ?? t.blocks[0]
   const articles = [...getCuratedExternalNews('ai'), ...getCuratedExternalNews('tech'), ...getCuratedExternalNews('science')]
+  const stack = [
+    { icon: '⚛', name: 'React + TypeScript', detail: 'Interfaz tipada y componentes reutilizables.' },
+    { icon: '⚡', name: 'Vite', detail: 'Build rápido y entrega optimizada del frontend.' },
+    { icon: '◫', name: 'Supabase', detail: 'Autenticación, base de datos y contenido dinámico.' },
+    { icon: '▲', name: 'Vercel', detail: 'Deploy, previews y observabilidad del sitio.' },
+    { icon: '◉', name: 'GitHub + Codex', detail: 'Versionado, revisión y automatización asistida.' },
+    { icon: '▶', name: 'OBS + FFmpeg', detail: 'Producción y procesamiento audiovisual.' },
+  ]
+  const assistantAnswers: Record<string, { label: string; answer: string; link: string }> = {
+    ia: { label: 'IA útil', answer: 'Empezá por una tarea concreta, definí qué dato puede equivocarse y verificá la salida antes de publicarla. Un buen prompt no reemplaza una buena fuente.', link: '/news?category=ai' },
+    web: { label: 'Crear una web', answer: 'Priorizá objetivo, velocidad móvil, accesibilidad y una llamada a la acción medible. El efecto visual sirve cuando acompaña el recorrido.', link: '/creacion-web' },
+    performance: { label: 'Rendimiento', answer: 'Medí primero: peso de imágenes, JavaScript inicial y estabilidad visual. Optimizá el cuello de botella real, no el que parece más técnico.', link: '/news?category=tech' },
+    security: { label: 'Seguridad', answer: 'Usá 2FA, claves únicas, permisos mínimos y backups probados. Nunca pegues secretos o tokens en un chatbot o repositorio público.', link: '/green-node' },
+  }
+  const assistant = assistantAnswers[assistantTopic]
 
   return (
     <>
@@ -70,6 +87,16 @@ export default function ScienceLab() {
             ))}
           </div>
 
+          <section className="xk-tech-stack" aria-labelledby="tech-stack-title">
+            <div><p>TECH_STACK // HERRAMIENTAS REALES</p><h2 id="tech-stack-title">Cómo está construido XETHKIOZ</h2><span>Herramientas que hoy sostienen la web y el flujo creativo. Sin recomendaciones pagas ni productos inventados.</span></div>
+            <div>{stack.map((tool) => <article key={tool.name}><span aria-hidden="true">{tool.icon}</span><div><h3>{tool.name}</h3><p>{tool.detail}</p></div></article>)}</div>
+          </section>
+
+          <section className="xk-lab-assistant" aria-labelledby="lab-assistant-title">
+            <div className="xk-assistant-console"><p>MINI_BOT // MODO LOCAL</p><h2 id="lab-assistant-title">Preguntale al laboratorio</h2><span>Elegí una ruta. Las respuestas están curadas en la página: no se envían datos a una API externa.</span><div role="tablist" aria-label="Temas del asistente">{Object.entries(assistantAnswers).map(([id, item]) => <button key={id} type="button" role="tab" aria-selected={assistantTopic === id} onClick={() => setAssistantTopic(id)}>{item.label}</button>)}</div></div>
+            <div className="xk-assistant-answer" role="tabpanel" aria-live="polite"><small>RESPUESTA // {assistant.label}</small><p>{assistant.answer}</p><Link to={assistant.link}>ABRIR RUTA RELACIONADA →</Link></div>
+          </section>
+
           <section className="mt-8 rounded-3xl border border-blue-300/25 bg-black/55 p-5 md:p-7">
             <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-blue-200">{t.articleTitle}</p>
             <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -87,6 +114,8 @@ export default function ScienceLab() {
           <div className="mt-8">
             <PublicAdSlot slotId="section-sidebar" fallbackLabel="XETHKIOZ TECH SPONSOR" />
           </div>
+
+          <section className="xk-science-newsletter" aria-label="Newsletter de tendencias"><div><p>WEEKLY_SIGNAL // 3 NOTICIAS QUE IMPORTAN</p><h2>Una señal útil por semana</h2><span>IA, ciencia y tecnología con contexto, fuentes y sin saturarte.</span></div><Newsletter /></section>
 
           <div className="mt-8 rounded-3xl border border-[#32FF8A]/25 bg-black/45 p-5 font-mono text-xs leading-relaxed text-gray-300">{t.status}</div>
           <Link to="/" className="mt-8 inline-flex rounded-full border border-blue-300/40 px-4 py-3 font-mono text-xs uppercase tracking-[0.18em] text-blue-100 transition hover:border-[#32FF8A] hover:text-[#32FF8A]">{t.back}</Link>
