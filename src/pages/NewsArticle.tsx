@@ -107,7 +107,7 @@ export default function NewsArticle() {
   }, [slug, ui.notFound])
 
   return (
-    <FusionShell tone="science" backLabel={ui.back} label="XETHKIOZ NEWS">
+    <FusionShell tone="science">
       <SEO title={article ? `${article.title} · XETHKIOZ` : 'Noticia · XETHKIOZ'} description={article?.summary ?? ui.notFound} image={article?.cover_image_url ?? undefined} url={slug ? `/news/${slug}` : '/news'} />
       <main className="mx-auto max-w-5xl px-4 py-10 text-white sm:px-6 md:py-12">
         <Link to="/news" className="font-mono text-xs font-black uppercase tracking-[0.18em] text-orange-300 transition hover:text-orange-100">← {ui.back}</Link>
