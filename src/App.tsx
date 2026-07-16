@@ -14,6 +14,7 @@ import { WorldOrchestratorProvider } from './engines/world/orchestrator'
 import { WorldThemeProvider } from './engines/world/theme'
 import { LightingEngineProvider } from './engines/world/lighting'
 import { AdminGuard } from './cms/guards'
+import { addWispXp } from './lib/realtimeCommunity'
 
 const Header = lazy(() => import('./components/Header'))
 const Footer = lazy(() => import('./components/Footer'))
@@ -76,6 +77,8 @@ const routeNames: Record<string, string> = {
   '/cms': 'Panel editorial',
 }
 
+const activityTrackedPortals = new Set(['/gaming', '/science', '/fun', '/creacion-web', '/green-node'])
+
 function RouteAccessibility({ pathname }: { pathname: string }) {
   const [announcement, setAnnouncement] = useState('')
 
@@ -101,6 +104,19 @@ function AppShell() {
   const isCmsRoute = location.pathname === '/cms' || location.pathname.startsWith('/cms/')
   const isHomeRoute = location.pathname === '/'
   const hasPublicNavigation = !isCmsRoute && !isHomeRoute
+
+  useEffect(() => {
+    if (!activityTrackedPortals.has(location.pathname)) return
+    const day = new Date().toISOString().slice(0, 10)
+    const storageKey = `xethkioz.portal-visit.${day}.${location.pathname}`
+    try {
+      if (window.localStorage.getItem(storageKey)) return
+      window.localStorage.setItem(storageKey, 'recorded')
+      addWispXp(5, 'portal', location.pathname)
+    } catch {
+      // Activity tracking is optional when browser storage is unavailable.
+    }
+  }, [location.pathname])
 
   return (
     <div className={hasPublicNavigation ? 'xk-app-shell xk-has-mobile-dock' : 'xk-app-shell'}>

@@ -132,14 +132,18 @@ function createBroadcastChannel(name: string) {
   }
 }
 
-export function getWispProgress() {
-  const xp = Number(storageGet(WISP_XP_KEY) || '0') || 0
+export function getWispProgressForXp(rawXp: number) {
+  const xp = Math.max(0, Number.isFinite(rawXp) ? rawXp : 0)
   const levelIndex = WISP_LEVELS.reduce((level, item, index) => xp >= item.min ? index : level, 0)
   const level = levelIndex + 1
   const next = WISP_LEVELS[levelIndex + 1]?.min ?? WISP_LEVELS[levelIndex].min + 1000
   const currentMin = WISP_LEVELS[levelIndex].min
   const energy = Math.min(100, Math.round(((xp - currentMin) / Math.max(1, next - currentMin)) * 100))
   return { xp, level, name: WISP_LEVELS[levelIndex].name, energy }
+}
+
+export function getWispProgress() {
+  return getWispProgressForXp(Number(storageGet(WISP_XP_KEY) || '0') || 0)
 }
 
 export function getRecentWispEvents() {
@@ -155,13 +159,24 @@ export function addWispXp(points: number, eventType: WispEvent['type'] = 'visit'
   try { window.dispatchEvent(new CustomEvent('xethkioz:wisp-xp', { detail: { xp: next, event } })) } catch {}
   if (isSupabaseConfigured) {
     try {
-      supabase.from('xeth_wisp_events').insert({
-        id: event.id,
-        client_id: getClientId(),
-        event_type: event.type,
-        route: event.route,
-        points: event.points,
-      }).then(() => undefined)
+      supabase.auth.getSession().then(({ data }) => {
+        if (data.session?.user) {
+          void supabase.from('user_activity_events').insert({
+            id: event.id,
+            event_type: event.type,
+            route: event.route,
+            points: event.points,
+          })
+          return
+        }
+        void supabase.from('xeth_wisp_events').insert({
+          id: event.id,
+          client_id: getClientId(),
+          event_type: event.type,
+          route: event.route,
+          points: event.points,
+        })
+      })
     } catch {}
   }
   return getWispProgress()

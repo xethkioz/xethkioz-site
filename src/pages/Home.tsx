@@ -55,6 +55,17 @@ const copy = {
     webNote: 'Propuestas visuales · Presupuesto privado · Diseño responsive',
     webImageAlt: 'Ejemplo visual de una landing page premium creada por XETHKIOZ',
     webFeaturedLabel: 'Propuesta destacada',
+    storyEyebrow: 'ESTO TAMBIÉN SOY YO',
+    storyTitle: 'No es una colección de páginas. Es todo lo que me mueve.',
+    storyText: 'XETHKIOZ nació para reunir las cosas que me obsesionan: jugar hasta entender un mundo, aprender algo que parecía imposible, reírme del caos, construir ideas y mirar donde casi nadie mira.',
+    storyCta: 'Elegí qué parte querés conocer',
+    chapters: [
+      { code: '01', title: 'JUGAR', text: 'Competir, perder, mejorar y volver a entrar.', route: '/gaming', tone: 'violet' },
+      { code: '02', title: 'ENTENDER', text: 'Ciencia y tecnología explicadas con curiosidad real.', route: '/science', tone: 'cyan' },
+      { code: '03', title: 'REÍR', text: 'Memes, fails y ese caos que merece compartirse.', route: '/fun', tone: 'orange' },
+      { code: '04', title: 'CREAR', text: 'Transformar una idea en una presencia digital propia.', route: '/creacion-web', tone: 'gold' },
+      { code: '05', title: 'DESCIFRAR', text: 'El archivo oscuro donde la señal deja de ser normal.', route: '/green-node', tone: 'green' },
+    ],
     statsUsers: '+25K XETHKIOZERS',
     statsNews: '1,248 NOTICIAS',
     statsContent: '+3.6K CONTENIDO',
@@ -125,6 +136,17 @@ const copy = {
     webNote: 'Visual proposals · Private quote · Responsive design',
     webImageAlt: 'Visual example of a premium landing page created by XETHKIOZ',
     webFeaturedLabel: 'Featured solution',
+    storyEyebrow: 'THIS IS ALSO ME',
+    storyTitle: 'This is not a collection of pages. It is everything that drives me.',
+    storyText: 'XETHKIOZ was created to bring together the things I obsess over: playing until I understand a world, learning what looked impossible, laughing at chaos, building ideas and looking where almost nobody looks.',
+    storyCta: 'Choose which side you want to meet',
+    chapters: [
+      { code: '01', title: 'PLAY', text: 'Compete, lose, improve and enter again.', route: '/gaming', tone: 'violet' },
+      { code: '02', title: 'UNDERSTAND', text: 'Science and technology with genuine curiosity.', route: '/science', tone: 'cyan' },
+      { code: '03', title: 'LAUGH', text: 'Memes, fails and chaos worth sharing.', route: '/fun', tone: 'orange' },
+      { code: '04', title: 'CREATE', text: 'Turn an idea into a digital presence of its own.', route: '/creacion-web', tone: 'gold' },
+      { code: '05', title: 'DECODE', text: 'The dark archive where the signal stops being normal.', route: '/green-node', tone: 'green' },
+    ],
     statsUsers: '+25K XETHKIOZERS',
     statsNews: '1,248 NEWS',
     statsContent: '+3.6K CONTENT',
@@ -359,6 +381,15 @@ export default function Home() {
               ))}
             </section>
 
+            <HomeStoryPulse
+              eyebrow={t.storyEyebrow}
+              title={t.storyTitle}
+              text={t.storyText}
+              cta={t.storyCta}
+              chapters={t.chapters}
+              onOpenWisp={openWisp}
+            />
+
             <WebCreationFeature
               eyebrow={t.webEyebrow}
               title={t.webTitle}
@@ -375,6 +406,44 @@ export default function Home() {
         <StatsBar stats={[t.statsUsers, t.statsNews, t.statsContent, t.statsSecure]} copyright={t.copyright} />
       </section>
     </>
+  )
+}
+
+function HomeStoryPulse({
+  eyebrow,
+  title,
+  text,
+  cta,
+  chapters,
+  onOpenWisp,
+}: {
+  eyebrow: string
+  title: string
+  text: string
+  cta: string
+  chapters: readonly { code: string; title: string; text: string; route: string; tone: string }[]
+  onOpenWisp: () => void
+}) {
+  return (
+    <section className="xk-home-story" aria-labelledby="home-story-title">
+      <div className="xk-home-story-copy">
+        <p>{eyebrow}</p>
+        <h2 id="home-story-title">{title}</h2>
+        <span>{text}</span>
+        <small>{cta} ↓</small>
+      </div>
+      <div className="xk-home-story-chapters">
+        {chapters.map((chapter) => chapter.route === '/green-node' ? (
+          <button key={chapter.code} type="button" onClick={onOpenWisp} className={`xk-home-chapter is-${chapter.tone}`}>
+            <i>{chapter.code}</i><strong>{chapter.title}</strong><span>{chapter.text}</span><b>↗</b>
+          </button>
+        ) : (
+          <Link key={chapter.code} to={chapter.route} className={`xk-home-chapter is-${chapter.tone}`}>
+            <i>{chapter.code}</i><strong>{chapter.title}</strong><span>{chapter.text}</span><b>↗</b>
+          </Link>
+        ))}
+      </div>
+    </section>
   )
 }
 

@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState, type FormEvent } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type UIEvent } from 'react'
 import { useLang } from '../../lib/LangContext'
+import { addWispXp } from '../../lib/realtimeCommunity'
 import { authNexusService } from '../../services/auth/authNexusService'
 import type { XethkiozAuthorizedSession } from '../../services/auth/authSchema'
 import { isSupabaseConfigured, supabase } from '../../services/supabaseClient'
@@ -173,6 +174,10 @@ export default function NexusChatWidget({ clearMobileDock = false }: { clearMobi
   const [status, setStatus] = useState<ChatStatus>(isSupabaseConfigured ? 'syncing' : 'local')
   const [session, setSession] = useState<XethkiozAuthorizedSession | null>(() => authNexusService.getSnapshot())
   const [reservedWarning, setReservedWarning] = useState<string | null>(null)
+  const [unreadMessages, setUnreadMessages] = useState(false)
+  const messageViewportRef = useRef<HTMLDivElement>(null)
+  const followsLatestRef = useRef(true)
+  const lastScrollTopRef = useRef(0)
   const [messages, setMessages] = useState<NexusMessage[]>(() => {
     const local = readLocalMessages()
     return local.length ? local : [systemMessage(isSupabaseConfigured ? copy.es.empty : copy.es.localReady, 'general')]
@@ -189,6 +194,33 @@ export default function NexusChatWidget({ clearMobileDock = false }: { clearMobi
   }, [])
 
   const nicknameResolution = useMemo(() => resolveSafeNickname(nickname, session), [nickname, session])
+  const visibleMessages = useMemo(
+    () => messages.filter((message) => message.room === room || message.type === 'system').slice(-80),
+    [messages, room],
+  )
+  const latestMessageId = visibleMessages.at(-1)?.id
+
+  const scrollToLatest = useCallback((behavior: ScrollBehavior = 'smooth') => {
+    const viewport = messageViewportRef.current
+    if (!viewport) return
+    followsLatestRef.current = true
+    setUnreadMessages(false)
+    viewport.scrollTo({ top: viewport.scrollHeight, behavior })
+  }, [])
+
+  const handleMessageScroll = (event: UIEvent<HTMLDivElement>) => {
+    const viewport = event.currentTarget
+    const distanceFromBottom = viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight
+    const isAtLatest = distanceFromBottom < 48
+    const movedUp = viewport.scrollTop < lastScrollTopRef.current - 3
+    lastScrollTopRef.current = viewport.scrollTop
+    if (isAtLatest) {
+      followsLatestRef.current = true
+      setUnreadMessages(false)
+    } else if (movedUp) {
+      followsLatestRef.current = false
+    }
+  }
 
   useEffect(() => {
     if (typeof window !== 'undefined') window.localStorage.setItem('xethkioz.nexus.nickname', nicknameResolution.nickname)
@@ -197,6 +229,22 @@ export default function NexusChatWidget({ clearMobileDock = false }: { clearMobi
   useEffect(() => {
     persistLocalMessages(messages)
   }, [messages])
+
+  useEffect(() => {
+    if (!open) return undefined
+    const frame = window.requestAnimationFrame(() => {
+      if (followsLatestRef.current) scrollToLatest('auto')
+      else setUnreadMessages(true)
+    })
+    return () => window.cancelAnimationFrame(frame)
+  }, [latestMessageId, open, room, scrollToLatest, visibleMessages.length])
+
+  useEffect(() => {
+    if (!open) return
+    followsLatestRef.current = true
+    const frame = window.requestAnimationFrame(() => scrollToLatest('auto'))
+    return () => window.cancelAnimationFrame(frame)
+  }, [open, room, scrollToLatest])
 
   useEffect(() => {
     if (!open) return undefined
@@ -267,16 +315,19 @@ export default function NexusChatWidget({ clearMobileDock = false }: { clearMobi
 
     setReservedWarning(null)
     setDraft('')
+    followsLatestRef.current = true
+    setUnreadMessages(false)
 
     if (!isSupabaseConfigured) {
       setMessages((current) => addUniqueMessage(current, localUserMessage(room, safeNickname, text)))
       setStatus('local')
+      addWispXp(8, 'chat', `/chat/${room}`)
       return
     }
 
     const { data, error } = await supabase
       .from('chat_messages')
-      .insert({ room_id: room, user_id: session?.userId ?? null, display_name: safeNickname, role: session?.role === 'ADMIN' ? 'member' : 'guest', body: text })
+      .insert({ room_id: room, user_id: session?.userId ?? null, display_name: safeNickname, role: session ? 'member' : 'guest', body: text })
       .select('id, room_id, display_name, role, body, created_at')
       .single()
 
@@ -289,9 +340,8 @@ export default function NexusChatWidget({ clearMobileDock = false }: { clearMobi
 
     setMessages((current) => addUniqueMessage(current, rowToMessage(data as ChatMessageRow)))
     setStatus('online')
+    addWispXp(8, 'chat', `/chat/${room}`)
   }
-
-  const visibleMessages = messages.filter((message) => message.room === room || message.type === 'system').slice(-80)
 
   return (
     <div className={`fixed right-3 z-[75] font-mono text-[#F0F0F5] sm:right-5 ${clearMobileDock ? 'bottom-[calc(5.45rem+env(safe-area-inset-bottom))] md:bottom-5' : 'bottom-[max(.75rem,env(safe-area-inset-bottom))] sm:bottom-5'}`}>
@@ -314,7 +364,8 @@ export default function NexusChatWidget({ clearMobileDock = false }: { clearMobi
             {reservedWarning ? <p className="mt-2 rounded-xl border border-red-400/25 bg-red-500/10 px-3 py-2 text-[10px] leading-relaxed text-red-100">{reservedWarning}</p> : null}
           </header>
           <div className="grid gap-3 p-3">
-            <div className="max-h-[340px] space-y-3 overflow-y-auto rounded-2xl border border-white/10 bg-black/35 p-3">
+            <div className="relative">
+              <div ref={messageViewportRef} onScroll={handleMessageScroll} className="max-h-[340px] min-h-40 space-y-3 overflow-y-auto overscroll-contain scroll-smooth rounded-2xl border border-white/10 bg-black/35 p-3" aria-live="polite" aria-relevant="additions text">
               {visibleMessages.map((message) => (
                 <article key={message.id} className="rounded-2xl border border-white/10 bg-white/[0.03] p-3">
                   <div className="flex justify-between text-[10px] uppercase tracking-[0.16em] text-gray-500"><span className="text-[#F0F0F5]">{message.nickname}</span><span>{new Date(message.createdAt).toLocaleTimeString(lang === 'es' ? 'es-AR' : 'en-US', { hour: '2-digit', minute: '2-digit' })}</span></div>
@@ -322,6 +373,12 @@ export default function NexusChatWidget({ clearMobileDock = false }: { clearMobi
                   {message.translatedText && <p className="mt-2 rounded-xl border border-[#8B5CF6]/20 bg-black/30 px-3 py-2 text-[11px] text-violet-100">TR: {message.translatedText}</p>}
                 </article>
               ))}
+              </div>
+              {unreadMessages ? (
+                <button type="button" onClick={() => scrollToLatest()} className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full border border-[#32FF8A]/45 bg-[#06120B]/95 px-3 py-2 text-[10px] font-black uppercase tracking-[0.14em] text-[#32FF8A] shadow-[0_0_20px_rgba(50,255,138,.28)]">
+                  ↓ Nuevos mensajes
+                </button>
+              ) : null}
             </div>
             <form onSubmit={sendMessage} className="grid grid-cols-[1fr_auto] gap-2">
               <input value={draft} onChange={(event) => setDraft(event.target.value)} maxLength={500} className="rounded-2xl border border-white/10 bg-black/55 px-4 py-3 text-xs text-white outline-none placeholder:text-gray-600 focus:border-[#8B5CF6]" placeholder={t.input} />
