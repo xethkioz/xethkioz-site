@@ -37,11 +37,20 @@ export async function fetchFeedArticles(limit = 1000): Promise<FeedArticle[]> {
     headers: { apikey: key, Accept: 'application/json' },
   })
   let response = await requestArticles(supabaseUrl, anonKey)
+  let usedFallback = false
   if (!response.ok && (supabaseUrl !== PUBLIC_SUPABASE_URL || anonKey !== PUBLIC_SUPABASE_KEY)) {
+    usedFallback = true
     response = await requestArticles(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_KEY)
   }
   if (!response.ok) {
-    console.error('[public-news-feed] Supabase request failed', response.status)
+    const detail = (await response.text()).slice(0, 240)
+    console.error(JSON.stringify({
+      level: 'error',
+      message: 'public-news-feed Supabase request failed',
+      status: response.status,
+      usedFallback,
+      detail,
+    }))
     return []
   }
   return await response.json() as FeedArticle[]
