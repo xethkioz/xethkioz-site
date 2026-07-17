@@ -21,6 +21,7 @@ set
     ),
     jsonb_build_object(
       'type', 'heading',
+      'text',
       'Qué está confirmado y qué todavía no'
     ),
     jsonb_build_object(
@@ -35,6 +36,7 @@ set
     ),
     jsonb_build_object(
       'type', 'heading',
+      'text',
       'Por qué importa para la comunidad'
     ),
     jsonb_build_object(
@@ -49,6 +51,7 @@ set
     ),
     jsonb_build_object(
       'type', 'heading',
+      'text',
       'Lectura XETHKIOZ'
     ),
     jsonb_build_object(
