@@ -16,6 +16,24 @@ const content = {
   en: { description: 'The most chaotic side of the internet: memes, clips and oddities served like an out-of-control anime episode.', badge: 'CHAOS AUTHORIZED', back: 'Escape the chaos', stream: 'ILLEGAL HUMOR BROADCAST', read: 'Watch episode', react: 'LOL +1', reacted: 'REACTION SENT', chaos: 'CHAOS METER', unleash: 'Unleash chaos', chaosLines: ['The algorithm found a forbidden meme.', 'A digital gremlin stole the server Wi-Fi.', 'Dignity left the chat. Everything works.', 'The Wisp laughed. This is concerning.'], blocks: [{ id: 'memes', code: '01', title: 'Quick memes', icon: '爆' }, { id: 'clips', code: '02', title: 'Clips & videos', icon: '映' }, { id: 'legends', code: '03', title: 'Oddities', icon: '怪' }] },
 } as const
 
+const humorDeck = {
+  gaming: [
+    'Yo no tengo backlog: tengo un museo de decisiones económicas cuestionables.',
+    'La build decía “barata”. Tres horas después estoy pidiendo un préstamo en Wraeclast.',
+    'Entré a hacer una misión rápida y salí con otra profesión, dos mascotas y sueño atrasado.',
+  ],
+  adulto: [
+    'De chico quería ser adulto. Claramente faltaban páginas en el tutorial.',
+    'Mi cuerpo no envejece: desbloquea sonidos ambientales nuevos.',
+    'El verdadero modo difícil empieza cuando te acostás y recordás una cuenta sin pagar.',
+  ],
+  trabajo: [
+    'El café no resuelve problemas, pero permite mirarlos con más definición.',
+    'Reunión que pudo ser mensaje: el jefe final de toda oficina.',
+    'Hoy di el 100%: 12% a cada una de las ocho cosas que estaba haciendo.',
+  ],
+} as const
+
 export default function FunPortal() {
   const { lang, setLang } = useLang()
   const t = content[lang]
@@ -23,6 +41,10 @@ export default function FunPortal() {
   const [reacted, setReacted] = useState<Set<string>>(() => new Set())
   const [chaosIndex, setChaosIndex] = useState(0)
   const [reactionAnnouncement, setReactionAnnouncement] = useState('')
+  const [humorMode, setHumorMode] = useState<keyof typeof humorDeck>('gaming')
+  const [jokeIndex, setJokeIndex] = useState(0)
+  const [laughStreak, setLaughStreak] = useState(0)
+  const [battleVote, setBattleVote] = useState<string | null>(null)
   const [published, setPublished] = useState<PublicNewsArticle[]>([])
   const seen = new Set<string>()
   const articles = [...published, ...getCuratedExternalNews('community')].filter((article) => !seen.has(article.slug) && Boolean(seen.add(article.slug))).slice(0, 7)
@@ -46,6 +68,17 @@ export default function FunPortal() {
   function unleashChaos() {
     setChaosIndex((current) => (current + 1) % t.chaosLines.length)
     addWispXp(1, 'mission', '/fun#chaos-meter')
+  }
+  function generateJoke() {
+    setJokeIndex((current) => (current + 1) % humorDeck[humorMode].length)
+    setLaughStreak((current) => current + 1)
+    addWispXp(1, 'mission', `/fun#humor-${humorMode}`)
+  }
+  function voteBattle(slug: string) {
+    if (battleVote) return
+    setBattleVote(slug)
+    setReactionAnnouncement('Voto registrado en el duelo de memes')
+    addWispXp(2, 'mission', `/fun#battle-${slug}`)
   }
   async function shareArticle(article: PublicNewsArticle) {
     const url = `${window.location.origin}/news/${article.slug}`
@@ -98,6 +131,16 @@ export default function FunPortal() {
         <section id="fun-chaos-panel" className="xk-chaos-console" role="tabpanel" aria-labelledby={`fun-tab-${active.id}`}>
           <div className="xk-chaos-gauge"><div><span>{t.chaos}</span><b>{[87, 96, 73][activeIndex]}%</b></div><i><em style={{ width: `${[87, 96, 73][activeIndex]}%` }} /></i><small>MEME_CORE // {activeId.toUpperCase()} // UNSTABLE</small></div>
           <div className="xk-chaos-output"><span aria-hidden="true">☄</span><p role="status" aria-live="polite" aria-atomic="true">{t.chaosLines[chaosIndex]}</p><button type="button" onClick={unleashChaos}>{t.unleash} →</button></div>
+        </section>
+
+        <section className="xk-fun-arcade" aria-labelledby="fun-arcade-title">
+          <div className="xk-fun-arcade-head"><div><p>ARCADE_DEL_CAOS // PARTIDA RÁPIDA</p><h2 id="fun-arcade-title">No vengas sólo a mirar</h2><span>Elegí tu tipo de humor, generá una dosis y mantené viva la racha. No necesita cuenta ni comparte datos.</span></div><b><small>RACHA</small>{laughStreak}</b></div>
+          <div className="xk-humor-machine">
+            <div role="tablist" aria-label="Tipo de humor">{(Object.keys(humorDeck) as Array<keyof typeof humorDeck>).map((mode) => <button key={mode} type="button" role="tab" aria-selected={humorMode === mode} onClick={() => { setHumorMode(mode); setJokeIndex(0) }}>{mode}</button>)}</div>
+            <blockquote aria-live="polite">“{humorDeck[humorMode][jokeIndex]}”</blockquote>
+            <button type="button" onClick={generateJoke}>OTRA DOSIS DE CAOS →</button>
+          </div>
+          {articles.length >= 2 ? <div className="xk-meme-battle"><p>MEME_BATTLE // ELEGÍ AL CAMPEÓN</p><div>{articles.slice(0, 2).map((article, index) => <article key={article.slug} className={battleVote === article.slug ? 'is-winner' : ''}><SafeImage src={article.cover_image_url} fallback="/images/articles/community-chat.svg" alt={article.cover_image_alt || article.title} className="h-full w-full object-cover" /><span>PLAYER {index + 1}</span><h3>{article.title}</h3><button type="button" disabled={Boolean(battleVote)} onClick={() => voteBattle(article.slug)}>{battleVote === article.slug ? 'ELEGIDO ✓' : 'ESTE GANA'}</button></article>)}</div>{battleVote ? <button type="button" onClick={() => setBattleVote(null)}>NUEVO DUELO ↻</button> : null}</div> : null}
         </section>
 
         <PortalPulseRail
