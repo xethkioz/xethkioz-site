@@ -80,6 +80,14 @@ export default function GreenNode() {
   const [deepMode, setDeepMode] = useState(false)
   const [terminalInput, setTerminalInput] = useState('')
   const [terminalLines, setTerminalLines] = useState<string[]>(['GREEN_NODE v13.6 // terminal simulada', 'Escribí “help” para listar comandos seguros.'])
+  const [accessSequence, setAccessSequence] = useState(0)
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const intervals = reducedMotion ? [80, 140, 200, 260] : [520, 1080, 1680, 2450]
+    const timers = intervals.map((delay, index) => window.setTimeout(() => setAccessSequence(index + 1), delay))
+    return () => timers.forEach((timer) => window.clearTimeout(timer))
+  }, [])
 
   useEffect(() => {
     let mounted = true
@@ -142,6 +150,14 @@ export default function GreenNode() {
   return (
     <>
       <SEO title={`${t.title} · XETHKIOZ`} description={t.description} url="/green-node" />
+      {accessSequence < 4 ? <div className="xk-green-access-sequence" role="status" aria-live="polite" aria-label="Simulación visual de acceso a Green Node">
+        <div className="xk-access-noise" aria-hidden="true" />
+        <p>SIMULACIÓN VISUAL // NO SE ACCEDE A TU DISPOSITIVO</p>
+        <h2>{['INTERCEPTANDO SEÑAL', 'RASTRO FANTASMA DETECTADO', 'INTEGRIDAD COMPROMETIDA', 'ABRIENDO GREEN NODE'][Math.min(accessSequence, 3)]}</h2>
+        <div><i style={{ width: `${[12, 39, 71, 100][Math.min(accessSequence, 3)]}%` }} /></div>
+        <span>{['Buscando una frecuencia que no debería existir…', 'La entidad respondió desde el otro lado.', 'Inyectando sombras en la interfaz…', 'Acceso visitante concedido.'][Math.min(accessSequence, 3)]}</span>
+        <code>0x66 :: W1SP :: SAFE_SIMULATION</code>
+      </div> : null}
       <section className={`xk-green-shell px-4 py-12 sm:px-6 lg:px-8${deepMode ? ' xk-deep-mode' : ''}`}>
         <div className="xk-green-matrix" aria-hidden="true" />
         <div className="mx-auto max-w-7xl">
