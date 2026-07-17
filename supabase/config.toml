@@ -1,2 +1,5 @@
 [functions.submit-web-quote]
 verify_jwt = false
+
+[functions.visit-log]
+verify_jwt = false
