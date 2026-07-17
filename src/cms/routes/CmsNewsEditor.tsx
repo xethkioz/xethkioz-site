@@ -29,6 +29,13 @@ type EditableNewsArticle = {
   cover_image_url: string | null
   cover_image_alt: string | null
   cover_image_path: string | null
+  content: Array<{ type?: string; text?: string }>
+  source_urls: string[]
+  tags: string[]
+}
+
+function countEditorialWords(content: EditableNewsArticle['content']) {
+  return content.reduce((total, block) => total + String(block.text ?? '').trim().split(/\s+/).filter(Boolean).length, 0)
 }
 
 export default function CmsNewsEditor() {
@@ -54,12 +61,19 @@ export default function CmsNewsEditor() {
   const cleanTitleLength = title.trim().length
   const cleanSummaryLength = summary.trim().length
   const publicUrl = article ? `https://www.xethkioz.com.ar/news/${article.slug}` : 'https://www.xethkioz.com.ar/news/...'
+  const contentWordCount = article ? countEditorialWords(article.content) : 0
+  const headingCount = article?.content.filter((block) => block.type === 'heading').length ?? 0
+  const hasSource = Boolean(article?.source_urls.length)
+  const depthReady = contentWordCount >= 220 && headingCount >= 3 && hasSource
   const editorialChecks = [
     { label: 'Título claro (35–70 caracteres)', pass: cleanTitleLength >= 35 && cleanTitleLength <= 70 },
     { label: 'Resumen SEO (120–165 caracteres)', pass: cleanSummaryLength >= 120 && cleanSummaryLength <= 165 },
     { label: 'Portada configurada', pass: Boolean(coverImageUrl.trim()) },
     { label: 'Portada accesible', pass: Boolean(coverImageAlt.trim()) },
     { label: 'Revisión editorial aprobada', pass: reviewStatus === 'approved' },
+    { label: 'Desarrollo editorial (mínimo 220 palabras)', pass: contentWordCount >= 220 },
+    { label: 'Ruta narrativa (mínimo 3 capítulos)', pass: headingCount >= 3 },
+    { label: 'Al menos una fuente verificable', pass: hasSource },
   ]
   const passedChecks = editorialChecks.filter((check) => check.pass).length
 
@@ -83,7 +97,7 @@ export default function CmsNewsEditor() {
 
       const { data, error: queryError } = await supabase
         .from('news_articles')
-        .select('id, slug, title, summary, status, review_status, editor_notes, published_at, cover_image_url, cover_image_alt, cover_image_path')
+        .select('id, slug, title, summary, status, review_status, editor_notes, published_at, cover_image_url, cover_image_alt, cover_image_path, content, source_urls, tags')
         .eq('id', id)
         .maybeSingle()
 
@@ -184,6 +198,10 @@ export default function CmsNewsEditor() {
     }
 
     const requestedStatus = publishNow || nextStatus === 'published'
+    if (requestedStatus && !depthReady) {
+      setError(`La publicación no supera el control de profundidad: ${contentWordCount}/220 palabras, ${headingCount}/3 capítulos y ${hasSource ? 'fuente presente' : 'sin fuente'}. Ampliá el dossier desde el generador antes de publicarlo.`)
+      return
+    }
     const safeStatus: NewsStatus = requestedStatus && !isAdmin ? 'review' : nextStatus
     const safeReviewStatus: ReviewStatus = requestedStatus && !isAdmin ? 'pending' : nextReviewStatus
 

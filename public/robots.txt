@@ -10,3 +10,4 @@ Disallow: /green-node
 Disallow: /api/
 
 Sitemap: https://www.xethkioz.com.ar/sitemap.xml
+Sitemap: https://www.xethkioz.com.ar/news-sitemap.xml

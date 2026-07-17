@@ -4,6 +4,7 @@ import SEO from '../components/SEO'
 import SafeImage from '../components/SafeImage'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
 import { PortalPulseRail } from '../components/PortalPulseRail'
+import { NexusDistrict } from '../components/NexusDistrict'
 import { useLang } from '../lib/LangContext'
 import { addWispXp } from '../lib/realtimeCommunity'
 import { SOCIAL_LINKS } from '../lib/siteConfig'
@@ -84,6 +85,7 @@ export default function FunPortal() {
           </div>
         </section>
 
+        <NexusDistrict tone="fun" />
         <div className="xk-meme-marquee" aria-hidden="true"><div>MEME SIGNAL ◆ REACTION OVERLOAD ◆ INTERNET CULTURE ◆ MEME SIGNAL ◆ REACTION OVERLOAD ◆ INTERNET CULTURE ◆</div></div>
 
         <section className="xk-manga-tabs" role="tablist" aria-label="Meme channels">

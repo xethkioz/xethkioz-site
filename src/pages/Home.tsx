@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import SafeImage from '../components/SafeImage'
 import SEO from '../components/SEO'
+import { NexusDistrict } from '../components/NexusDistrict'
 import { fallbackWebServiceOffers } from '../data/webServiceFallbacks'
 import { useWisp } from '../providers/WispProvider'
 import { useLang } from '../lib/LangContext'
@@ -375,6 +376,7 @@ export default function Home() {
               onClick={openWisp}
             />
 
+            <NexusDistrict tone="home" compact />
             <section id="portals" aria-label={t.portalsLabel} className="xk-home-portal-deck mt-8 grid grid-cols-1 items-stretch gap-4 p-2.5 md:grid-cols-3 md:gap-3 md:p-4 xl:mt-7 xl:gap-5">
               {t.portals.map((portal) => (
                 <PortalCard key={portal.title} portal={portal} />

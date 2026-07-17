@@ -4,6 +4,7 @@ import SEO from '../components/SEO'
 import SafeImage from '../components/SafeImage'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
 import { PortalPulseRail } from '../components/PortalPulseRail'
+import { NexusDistrict } from '../components/NexusDistrict'
 import { useLang } from '../lib/LangContext'
 import { addWispXp } from '../lib/realtimeCommunity'
 import { STREAM_LINKS } from '../lib/siteConfig'
@@ -101,6 +102,7 @@ export default function GamingHub() {
           <div className="xk-hero-status" aria-hidden="true"><span>NEXUS LINK</span><b>98.7%</b><i /></div>
         </section>
 
+        <NexusDistrict tone="gaming" />
         <div className="xk-gaming-ticker" aria-hidden="true"><div>NEXUS ONLINE ◆ NEW WORLDS DETECTED ◆ ASIA SIGNAL ACQUIRED ◆ RAID PARTY REQUIRED ◆ NEXUS ONLINE ◆ NEW WORLDS DETECTED ◆ ASIA SIGNAL ACQUIRED ◆ RAID PARTY REQUIRED ◆</div></div>
 
         <section className="xk-creator-signal" aria-labelledby="creator-signal-title">

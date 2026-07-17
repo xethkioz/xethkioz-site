@@ -4,6 +4,7 @@ import SEO from '../components/SEO'
 import SafeImage from '../components/SafeImage'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
 import { PortalPulseRail } from '../components/PortalPulseRail'
+import { NexusDistrict } from '../components/NexusDistrict'
 import Newsletter from '../components/Newsletter'
 import { useLang } from '../lib/LangContext'
 import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
@@ -106,6 +107,7 @@ export default function ScienceLab() {
             <p className="mt-4 max-w-3xl font-mono text-sm leading-relaxed text-blue-100/80">{t.description}</p>
           </div>
 
+          <NexusDistrict tone="science" />
           <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
             {t.blocks.map((item) => (
               <button key={item.id} type="button" onClick={() => setActiveId(item.id)} className={`xk-card rounded-3xl border p-5 text-left shadow-[0_0_16px_rgba(139,92,246,.12)] transition ${active.id === item.id ? 'border-[#32FF8A]/70 bg-[#031006]/80' : 'border-blue-300/30 bg-black/50 hover:border-blue-200/70'}`}>
