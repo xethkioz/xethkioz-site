@@ -12,6 +12,22 @@ import { fetchPublishedNews, formatPublicNewsDate, type PublicNewsArticle, type 
 
 type SectionBlock = { id: string; title: string; text: string }
 
+const learningRoutes = [
+  { code: 'KIDS', icon: '🧪', title: 'Explorar con chicos', level: '8–13 años', description: 'Experimentos seguros, espacio, programación visual y preguntas para aprender jugando.', action: 'Ver ideas familiares' },
+  { code: 'START', icon: '🛠️', title: 'Primer proyecto', level: 'Desde cero', description: 'Proyectos pequeños con materiales claros, dificultad, costo aproximado y resultado esperado.', action: 'Elegir un proyecto' },
+  { code: 'ADULT', icon: '🧠', title: 'Tecnología para adultos', level: 'Uso cotidiano', description: 'IA útil, privacidad, compras inteligentes, automatización y herramientas para trabajo o estudio.', action: 'Resolver algo real' },
+  { code: 'GADGET', icon: '⌚', title: 'Radar de gadgets', level: 'Mercado mundial', description: 'Qué salió, para quién sirve, cuánto aporta y qué es solamente marketing.', action: 'Abrir el radar' },
+]
+
+const referenceSites = [
+  { name: 'NASA Learning', scope: 'Ciencia y proyectos por edad', url: 'https://www.nasa.gov/learning-resources/', mark: 'NASA' },
+  { name: 'Arduino Project Hub', scope: 'Electrónica y proyectos prácticos', url: 'https://projecthub.arduino.cc/', mark: 'ARD' },
+  { name: 'Raspberry Pi Projects', scope: 'Programación, hardware y educación', url: 'https://projects.raspberrypi.org/', mark: 'RPI' },
+  { name: 'CERN Science Gateway', scope: 'Física, universo y recursos educativos', url: 'https://visit.cern/science-gateway', mark: 'CERN' },
+  { name: 'MIT Technology Review', scope: 'Tendencias y análisis tecnológico', url: 'https://www.technologyreview.com/', mark: 'MIT' },
+  { name: 'IEEE Spectrum', scope: 'Ingeniería y tecnología mundial', url: 'https://spectrum.ieee.org/', mark: 'IEEE' },
+]
+
 const content: Record<'es' | 'en', { title: string; description: string; back: string; open: string; status: string; articleTitle: string; read: string; blocks: SectionBlock[] }> = {
   es: {
     title: 'Tecnología / Ciencia',
@@ -108,6 +124,10 @@ export default function ScienceLab() {
           </div>
 
           <NexusDistrict tone="science" />
+          <section className="xk-learning-routes" aria-labelledby="learning-routes-title">
+            <div className="xk-learning-routes-head"><p>OASIS_LAB // ELEGÍ PARA QUIÉN</p><h2 id="learning-routes-title">Tecnología que termina en algo útil</h2><span>No hace falta saber programar. Cada ruta tendrá edad sugerida, dificultad, materiales, tiempo, costo y advertencias claras.</span></div>
+            <div>{learningRoutes.map((route) => <a key={route.code} href="#lab-assistant"><span aria-hidden="true">{route.icon}</span><small>{route.code} // {route.level}</small><h3>{route.title}</h3><p>{route.description}</p><b>{route.action} →</b></a>)}</div>
+          </section>
           <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
             {t.blocks.map((item) => (
               <button key={item.id} type="button" onClick={() => setActiveId(item.id)} className={`xk-card rounded-3xl border p-5 text-left shadow-[0_0_16px_rgba(139,92,246,.12)] transition ${active.id === item.id ? 'border-[#32FF8A]/70 bg-[#031006]/80' : 'border-blue-300/30 bg-black/50 hover:border-blue-200/70'}`}>
@@ -133,6 +153,11 @@ export default function ScienceLab() {
           <section id="tech-stack" className="xk-tech-stack scroll-mt-28" aria-labelledby="tech-stack-title">
             <div><p>TECH_STACK // HERRAMIENTAS REALES</p><h2 id="tech-stack-title">Cómo está construido XETHKIOZ</h2><span>Herramientas que hoy sostienen la web y el flujo creativo. Sin recomendaciones pagas ni productos inventados.</span></div>
             <div>{stack.map((tool) => <article key={tool.name}><span aria-hidden="true">{tool.icon}</span><div><h3>{tool.name}</h3><p>{tool.detail}</p></div></article>)}</div>
+          </section>
+
+          <section className="xk-science-references" aria-labelledby="science-references-title">
+            <div><p>WORLD_LINKS // FUENTES PARA SEGUIR APRENDIENDO</p><h2 id="science-references-title">Referentes conectados al laboratorio</h2><span>XETHKIOZ explica y ordena; estas instituciones permiten profundizar en la fuente. Los enlaces externos se identifican siempre.</span></div>
+            <div>{referenceSites.map((site) => <a key={site.name} href={site.url} target="_blank" rel="noreferrer"><i>{site.mark}</i><span><b>{site.name}</b><small>{site.scope}</small></span><em>↗</em></a>)}</div>
           </section>
 
           <section id="lab-assistant" className="xk-lab-assistant scroll-mt-28" aria-labelledby="lab-assistant-title">
