@@ -22,6 +22,24 @@ export default function Analytics() {
     const pagePath = location.pathname + location.search
     if (GA4_ID && window.gtag) window.gtag('config', GA4_ID, { page_path: pagePath })
     if (PIXEL_ID && window.fbq) window.fbq('track', 'PageView')
+
+    const telemetryKey = `xethkioz.telemetry.${pagePath}`
+    if (window.sessionStorage.getItem(telemetryKey)) return
+    window.sessionStorage.setItem(telemetryKey, 'queued')
+    const width = window.innerWidth
+    const deviceType = width < 640 ? 'mobile' : width < 1024 ? 'tablet' : 'desktop'
+    const payload = {
+      route: pagePath.slice(0, 240),
+      deviceType,
+      viewportWidth: width,
+      viewportHeight: window.innerHeight,
+      language: navigator.language.slice(0, 24),
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone.slice(0, 80),
+      referrerHost: (() => { try { return document.referrer ? new URL(document.referrer).hostname.slice(0, 180) : null } catch { return null } })(),
+    }
+    void fetch('/api/visit-log', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), keepalive: true }).catch(() => {
+      window.sessionStorage.removeItem(telemetryKey)
+    })
   }, [location])
 
   return (
