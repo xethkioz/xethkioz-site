@@ -1,4 +1,6 @@
 const SITE_URL = 'https://www.xethkioz.com.ar'
+const PUBLIC_SUPABASE_URL = 'https://pascicauudfyydzknoop.supabase.co'
+const PUBLIC_SUPABASE_KEY = 'sb_publishable_baha-MZOxBr-2pQGaXlcwA_edqFjj-_'
 
 export type FeedArticle = {
   slug: string
@@ -20,9 +22,8 @@ export function absoluteUrl(value: string) {
 }
 
 export async function fetchFeedArticles(limit = 1000): Promise<FeedArticle[]> {
-  const supabaseUrl = (process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL)?.replace(/\/+$/, '')
-  const anonKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY
-  if (!supabaseUrl || !anonKey) return []
+  const supabaseUrl = (process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || PUBLIC_SUPABASE_URL).replace(/\/+$/, '')
+  const anonKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || PUBLIC_SUPABASE_KEY
 
   const query = new URLSearchParams({
     select: 'slug,title,summary,category,published_at,updated_at,cover_image_url',
@@ -30,11 +31,15 @@ export async function fetchFeedArticles(limit = 1000): Promise<FeedArticle[]> {
     order: 'published_at.desc',
     limit: String(Math.min(1000, Math.max(1, limit))),
   })
-  const response = await fetch(`${supabaseUrl}/rest/v1/news_articles?${query}`, {
+  const requestArticles = (url: string, key: string) => fetch(`${url}/rest/v1/news_articles?${query}`, {
     // Modern Supabase publishable keys are API keys, not JWT access tokens.
     // Sending them as Bearer tokens makes PostgREST reject an otherwise public request.
-    headers: { apikey: anonKey, Accept: 'application/json' },
+    headers: { apikey: key, Accept: 'application/json' },
   })
+  let response = await requestArticles(supabaseUrl, anonKey)
+  if (!response.ok && (supabaseUrl !== PUBLIC_SUPABASE_URL || anonKey !== PUBLIC_SUPABASE_KEY)) {
+    response = await requestArticles(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_KEY)
+  }
   if (!response.ok) {
     console.error('[public-news-feed] Supabase request failed', response.status)
     return []
