@@ -159,9 +159,9 @@ export default function GamingHub() {
             <p>PARTY_BOARD // BUILDS & SERVIDORES</p>
             <h2>Entrá a jugar con la comunidad</h2>
             <div>
-              <Link to="/news?category=gaming"><span>POE 2</span><b>Builds y guías documentadas</b><small>Explorar archivo →</small></Link>
-              <Link to="/community"><span>MU ONLINE</span><b>Punto de encuentro del servidor</b><small>Buscar escuadrón →</small></Link>
-              <Link to="/community"><span>MMORPG</span><b>Compartí tu build y armá party</b><small>Entrar al Nexus →</small></Link>
+              <Link to="/gaming/guides"><span>5 MUNDOS</span><b>Archivo principal de guías</b><small>Elegir universo →</small></Link>
+              <Link to="/news?category=gaming"><span>RADAR</span><b>Estrenos y juegos que vienen</b><small>Ver tendencias →</small></Link>
+              <Link to="/community"><span>PARTY</span><b>Compartí tu build y armá grupo</b><small>Entrar al Nexus →</small></Link>
             </div>
           </article>
         </section>
@@ -181,7 +181,7 @@ export default function GamingHub() {
         </section>
 
         <div className="mt-10"><PublicAdSlot slotId="section-sidebar" fallbackLabel="XETHKIOZ GAMING SPONSOR" /></div>
-        <nav className="mt-8 flex flex-wrap gap-3 font-mono text-xs uppercase tracking-[0.18em]"><Link to="/" className="xk-hud-button">{t.back}</Link><Link to="/news" className="xk-hud-button">{t.news}</Link><Link to="/community" className="xk-hud-button">{t.community}</Link></nav>
+        <nav className="mt-8 flex flex-wrap gap-3 font-mono text-xs uppercase tracking-[0.18em]"><Link to="/" className="xk-hud-button">{t.back}</Link><Link to="/gaming/guides" className="xk-hud-button">Guías</Link><Link to="/news?category=gaming" className="xk-hud-button">Radar gamer</Link><Link to="/community" className="xk-hud-button">{t.community}</Link></nav>
       </div>
     </main>
   </>
