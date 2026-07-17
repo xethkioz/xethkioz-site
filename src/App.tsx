@@ -23,6 +23,7 @@ const NexusChatWidget = lazy(() => import('./components/nexus/NexusChatWidget'))
 
 const Home = lazy(() => import('./pages/Home'))
 const GamingHub = lazy(() => import('./pages/GamingHub'))
+const GamingGuides = lazy(() => import('./pages/GamingGuides'))
 const ScienceLab = lazy(() => import('./pages/ScienceLab'))
 const FunPortal = lazy(() => import('./pages/FunPortal'))
 const WebCreation = lazy(() => import('./pages/WebCreation'))
@@ -70,6 +71,7 @@ function RouteFallback() {
 const routeNames: Record<string, string> = {
   '/': 'Inicio',
   '/gaming': 'Juegos',
+  '/gaming/guides': 'Guías de juegos',
   '/science': 'Ciencia y tecnología',
   '/fun': 'Memes',
   '/creacion-web': 'Creación web',
@@ -145,6 +147,7 @@ function AppShell() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/gaming" element={<GamingHub />} />
+              <Route path="/gaming/guides" element={<GamingGuides />} />
               <Route path="/science" element={<ScienceLab />} />
               <Route path="/fun" element={<FunPortal />} />
               <Route path="/creacion-web" element={<WebCreation />} />
