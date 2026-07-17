@@ -14,6 +14,8 @@ declare global {
 const GA4_ID = import.meta.env.VITE_GA4_ID as string | undefined
 const CLARITY_ID = import.meta.env.VITE_CLARITY_ID as string | undefined
 const PIXEL_ID = import.meta.env.VITE_FACEBOOK_PIXEL_ID as string | undefined
+const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL as string | undefined)?.replace(/\/+$/, '')
+const SUPABASE_PUBLIC_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined
 
 export default function Analytics() {
   const location = useLocation()
@@ -24,8 +26,12 @@ export default function Analytics() {
     if (PIXEL_ID && window.fbq) window.fbq('track', 'PageView')
 
     const telemetryKey = `xethkioz.telemetry.${pagePath}`
-    if (window.sessionStorage.getItem(telemetryKey)) return
-    window.sessionStorage.setItem(telemetryKey, 'queued')
+    try {
+      if (window.sessionStorage.getItem(telemetryKey)) return
+      window.sessionStorage.setItem(telemetryKey, 'queued')
+    } catch {
+      // The collector still works when private browsing disables sessionStorage.
+    }
     const width = window.innerWidth
     const deviceType = width < 640 ? 'mobile' : width < 1024 ? 'tablet' : 'desktop'
     const payload = {
@@ -37,9 +43,13 @@ export default function Analytics() {
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone.slice(0, 80),
       referrerHost: (() => { try { return document.referrer ? new URL(document.referrer).hostname.slice(0, 180) : null } catch { return null } })(),
     }
-    void fetch('/api/visit-log', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), keepalive: true }).catch(() => {
-      window.sessionStorage.removeItem(telemetryKey)
-    })
+    const endpoint = SUPABASE_URL ? `${SUPABASE_URL}/functions/v1/visit-log` : '/api/visit-log'
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+    if (SUPABASE_PUBLIC_KEY) headers.apikey = SUPABASE_PUBLIC_KEY
+    const retryLater = () => { try { window.sessionStorage.removeItem(telemetryKey) } catch { /* Optional storage. */ } }
+    void fetch(endpoint, { method: 'POST', headers, body: JSON.stringify(payload), keepalive: true })
+      .then((response) => { if (!response.ok) retryLater() })
+      .catch(retryLater)
   }, [location])
 
   return (

@@ -13,7 +13,8 @@ export default function handler(_request: any, response: any) {
   response.status(200).json({
     ok: true,
     supabasePublicConfigReady: publicConfigReady,
-    visitLoggingConfigured: supabaseUrlReady && serviceRoleReady,
+    visitLoggingConfigured: supabaseUrlReady,
+    visitLoggingBackend: serviceRoleReady ? 'vercel' : 'supabase-edge',
     serverRecoveryAvailable:
       serviceRoleReady &&
       hasValue(process.env.XETHKIOZ_ADMIN_RECOVERY_TOKEN),
