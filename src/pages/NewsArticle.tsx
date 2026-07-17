@@ -161,20 +161,8 @@ export default function NewsArticle() {
             </div>
             <h1 className="mt-6 text-3xl font-black uppercase leading-[1] tracking-[-0.04em] sm:text-4xl md:text-6xl">{article.title}</h1>
             {article.summary ? <p className="mt-5 border-l-2 border-orange-300 pl-5 text-base leading-8 text-slate-200 md:text-lg">{article.summary}</p> : null}
-            <div className="xk-news-briefing">
-              <div><small>TIEMPO DE LECTURA</small><strong>{readingMinutes} MIN</strong></div>
-              <div><small>ORIGEN DE SEÑAL</small><strong>{getSourceHost(article)}</strong></div>
-              <div><small>PROTOCOLO</small><strong>FUENTE + CONTEXTO</strong></div>
-              <div><small>ESTADO</small><strong>VERIFICADO</strong></div>
-            </div>
-            <div className="xk-news-reading-grid">
-              <aside className="xk-news-route" aria-label="Ruta de lectura">
-                <p>RUTA DE LECTURA</p>
-                {readingBlocks.filter((block) => block.type === 'heading').map((block, index) => <span key={`${block.text}-${index}`}><i>{String(index + 1).padStart(2, '0')}</i>{block.text}</span>)}
-                <small>La fuente establece el dato. La lectura XETHKIOZ aporta contexto sin reemplazarla.</small>
-              </aside>
-              <section className="xk-news-prose">{readingBlocks.length ? readingBlocks.map(renderContentBlock) : <p className="text-slate-300">{article.summary}</p>}</section>
-            </div>
+            <div className="xk-news-simple-meta"><span>{readingMinutes} min de lectura</span><span>Fuente: {getSourceHost(article)}</span><span>Revisado por XETHKIOZ</span></div>
+            <section className="xk-news-prose xk-news-prose-simple">{readingBlocks.length ? readingBlocks.map(renderContentBlock) : <p className="text-slate-300">{article.summary}</p>}</section>
             <div className="xk-news-trustline" aria-label="Protocolo editorial"><span>FUENTE PRIMARIA</span><i /><span>CONTEXTO HUMANO</span><i /><span>LÍMITES VISIBLES</span></div>
             {article.tags.length ? <div className="mt-8 flex flex-wrap gap-2 border-t border-white/10 pt-5">{article.tags.map((tag) => <span key={tag} className="rounded-full border border-violet-400/25 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-violet-100">#{tag}</span>)}</div> : null}
             {article.source_urls.length ? (
