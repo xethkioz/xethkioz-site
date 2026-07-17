@@ -1,12 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
+import SafeImage from '../components/SafeImage'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
 import { PortalPulseRail } from '../components/PortalPulseRail'
 import Newsletter from '../components/Newsletter'
 import { useLang } from '../lib/LangContext'
 import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
-import { formatPublicNewsDate } from '../services/news/publicNewsService'
+import { fetchPublishedNews, formatPublicNewsDate, type PublicNewsArticle, type PublicNewsCategory } from '../services/news/publicNewsService'
 
 type SectionBlock = { id: string; title: string; text: string }
 
@@ -46,8 +47,35 @@ export default function ScienceLab() {
   const t = content[lang]
   const [activeId, setActiveId] = useState(t.blocks[0].id)
   const [assistantTopic, setAssistantTopic] = useState('ia')
+  const [published, setPublished] = useState<PublicNewsArticle[]>([])
+  const [loadingNews, setLoadingNews] = useState(true)
   const active = t.blocks.find((item) => item.id === activeId) ?? t.blocks[0]
-  const articles = [...getCuratedExternalNews('ai'), ...getCuratedExternalNews('tech'), ...getCuratedExternalNews('science')]
+  const categoryByBlock: Record<string, PublicNewsCategory[]> = {
+    ai: ['ai'],
+    science: ['science'],
+    tech: ['tech', 'programming'],
+  }
+  const articles = useMemo(() => {
+    const selected = categoryByBlock[activeId] ?? ['science', 'tech', 'ai']
+    const fallback = selected.flatMap((category) => getCuratedExternalNews(category))
+    const seen = new Set<string>()
+    return [...published.filter((article) => selected.includes(article.category)), ...fallback]
+      .filter((article) => !seen.has(article.slug) && Boolean(seen.add(article.slug)))
+      .slice(0, 12)
+  }, [activeId, published])
+
+  useEffect(() => {
+    let alive = true
+    Promise.all(['science', 'tech', 'ai', 'programming'].map((category) => fetchPublishedNews(category as PublicNewsCategory)))
+      .then((groups) => {
+        if (!alive) return
+        const seen = new Set<string>()
+        setPublished(groups.flat().filter((article) => !seen.has(article.slug) && Boolean(seen.add(article.slug))))
+      })
+      .catch(() => { if (alive) setPublished([]) })
+      .finally(() => { if (alive) setLoadingNews(false) })
+    return () => { alive = false }
+  }, [])
   const stack = [
     { icon: '⚛', name: 'React + TypeScript', detail: 'Interfaz tipada y componentes reutilizables.' },
     { icon: '⚡', name: 'Vite', detail: 'Build rápido y entrega optimizada del frontend.' },
@@ -111,14 +139,20 @@ export default function ScienceLab() {
           </section>
 
           <section className="mt-8 rounded-3xl border border-blue-300/25 bg-black/55 p-5 md:p-7">
-            <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-blue-200">{t.articleTitle}</p>
+            <div className="flex flex-wrap items-end justify-between gap-3">
+              <div><p className="font-mono text-[10px] uppercase tracking-[0.28em] text-blue-200">{t.articleTitle}</p><h2 className="mt-2 text-2xl font-black uppercase text-white">{active.title}</h2></div>
+              <span className="rounded-full border border-[#32FF8A]/30 px-4 py-2 font-mono text-[9px] uppercase tracking-[0.18em] text-[#32FF8A]">{loadingNews ? 'SINCRONIZANDO DATOS' : `${articles.length} SEÑALES VERIFICADAS`}</span>
+            </div>
             <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {articles.map((article) => (
-                <article key={article.slug} className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 transition hover:-translate-y-1 hover:border-blue-300/40">
+                <article key={article.slug} className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] transition hover:-translate-y-1 hover:border-blue-300/40">
+                  <SafeImage src={article.cover_image_url} fallback="/images/articles/science.svg" alt={article.cover_image_alt || article.title} className="aspect-[16/8] w-full object-cover transition duration-700 group-hover:scale-[1.025]" />
+                  <div className="p-5">
                   <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#32FF8A]">{article.category} · {formatPublicNewsDate(article.published_at ?? article.created_at, lang)}</span>
                   <h3 className="mt-3 text-lg font-black uppercase text-white">{article.title}</h3>
                   <p className="mt-3 text-xs leading-relaxed text-gray-300">{article.summary}</p>
-                  <Link to={`/news/${article.slug}`} className="mt-5 inline-flex rounded-full border border-orange-400/40 px-4 py-2 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-orange-100 hover:bg-orange-500/10">{t.read}</Link>
+                  <div className="mt-5 flex flex-wrap items-center gap-2"><Link to={`/news/${article.slug}`} className="inline-flex rounded-full border border-orange-400/40 px-4 py-2 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-orange-100 hover:bg-orange-500/10">{t.read}</Link>{article.source_urls.length > 0 ? <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-blue-200/70">● fuente oficial</span> : null}</div>
+                  </div>
                 </article>
               ))}
             </div>
