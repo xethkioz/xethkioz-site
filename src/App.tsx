@@ -40,6 +40,7 @@ const CmsNewsEditor = lazy(() => import('./cms/routes/CmsNewsEditor'))
 const CmsNewsList = lazy(() => import('./cms/routes/CmsNewsList'))
 const CmsReviewQueue = lazy(() => import('./cms/routes/CmsReviewQueue'))
 const CmsUsersPanel = lazy(() => import('./cms/routes/CmsUsersPanel'))
+const CmsTrafficLogs = lazy(() => import('./cms/routes/CmsTrafficLogs'))
 const CmsAdsManager = lazy(() => import('./cms/routes/CmsAdsManager'))
 const CmsWebServicesManager = lazy(() => import('./cms/routes/CmsWebServicesManager'))
 const CmsWebQuotes = lazy(() => import('./cms/routes/CmsWebQuotes'))
@@ -181,6 +182,7 @@ function AppShell() {
                 <Route path="news/:id" element={<CmsNewsEditor />} />
                 <Route path="review" element={<CmsReviewQueue />} />
                 <Route path="users" element={<CmsUsersPanel />} />
+                <Route path="traffic" element={<CmsTrafficLogs />} />
                 <Route path="ads" element={<CmsAdsManager />} />
                 <Route path="web-services" element={<CmsWebServicesManager />} />
                 <Route path="web-quotes" element={<CmsWebQuotes />} />
