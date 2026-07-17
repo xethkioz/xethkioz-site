@@ -14,6 +14,14 @@ interface SEOProps {
 const SITE = 'XETHKIOZ'
 const SITE_URL = 'https://www.xethkioz.com.ar'
 const DESC = 'Portal gamer y tecnológico con noticias, comunidad, streaming, IA, ciencia y cultura digital.'
+const SAME_AS = [
+  'https://www.instagram.com/xethkioz',
+  'https://www.threads.com/@xethkioz',
+  'https://www.tiktok.com/@xethkioz0',
+  'https://www.youtube.com/@XETHKIOZ',
+  'https://www.twitch.tv/xethkioz',
+  'https://kick.com/xethkioz',
+]
 
 function absoluteUrl(value: string) {
   if (!value) return SITE_URL
@@ -57,6 +65,17 @@ export default function SEO({
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={imageUrl} />
+      <link rel="alternate" type="application/rss+xml" title="XETHKIOZ // Nexus News" href={`${SITE_URL}/feed.xml`} />
+
+      <script type="application/ld+json">
+        {JSON.stringify({
+          '@context': 'https://schema.org',
+          '@graph': [
+            { '@type': 'Organization', '@id': `${SITE_URL}/#organization`, name: SITE, url: SITE_URL, logo: absoluteUrl('/favicon.svg'), sameAs: SAME_AS },
+            { '@type': 'WebSite', '@id': `${SITE_URL}/#website`, name: SITE, url: SITE_URL, inLanguage: 'es-AR', publisher: { '@id': `${SITE_URL}/#organization` } },
+          ],
+        })}
+      </script>
 
       {type === 'article' && (
         <script type="application/ld+json">
@@ -69,9 +88,7 @@ export default function SEO({
             datePublished: publishedTime,
             author: { '@type': 'Person', name: author || 'XETHKIOZ' },
             publisher: {
-              '@type': 'Organization',
-              name: SITE,
-              logo: { '@type': 'ImageObject', url: absoluteUrl('/favicon.svg') },
+              '@id': `${SITE_URL}/#organization`,
             },
             mainEntityOfPage: canonical,
           })}

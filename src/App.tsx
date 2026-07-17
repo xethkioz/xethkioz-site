@@ -45,6 +45,11 @@ const CmsWebQuotes = lazy(() => import('./cms/routes/CmsWebQuotes'))
 const AccountAccess = lazy(() => import('./pages/AccountAccessStable'))
 const ConfirmEmail = lazy(() => import('./pages/ConfirmEmail'))
 const NotFound = lazy(() => import('./pages/NotFound'))
+const About = lazy(() => import('./pages/About'))
+const Contact = lazy(() => import('./pages/Contact'))
+const Support = lazy(() => import('./pages/Support'))
+const Privacy = lazy(() => import('./pages/Privacy'))
+const EditorialPolicy = lazy(() => import('./pages/EditorialPolicy'))
 
 function GreenNodeGate() {
   const unlocked = typeof window !== 'undefined' && Boolean(window.sessionStorage.getItem(GREEN_NODE_UNLOCK_KEY))
@@ -148,6 +153,11 @@ function AppShell() {
               <Route path="/news" element={<News />} />
               <Route path="/news/:slug" element={<NewsArticle />} />
               <Route path="/community" element={<Community />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/support" element={<Support />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/editorial-policy" element={<EditorialPolicy />} />
               <Route path="/profile" element={<ProfileHub />} />
               <Route path="/login" element={<AccountAccess />} />
               <Route path="/account" element={<AccountAccess />} />

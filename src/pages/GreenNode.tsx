@@ -4,6 +4,7 @@ import SafeImage from '../components/SafeImage'
 import SEO from '../components/SEO'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
 import { PortalPulseRail } from '../components/PortalPulseRail'
+import { NexusDistrict } from '../components/NexusDistrict'
 import { useLang } from '../lib/LangContext'
 import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import { fetchPublishedNews, formatPublicNewsDate, type PublicNewsArticle, type PublicNewsCategory } from '../services/news/publicNewsService'
@@ -166,6 +167,7 @@ export default function GreenNode() {
                 </div>
               </div>
 
+              <NexusDistrict tone="green" />
               <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
                 {t.blocks.map((node) => (
                   <button key={node.id} type="button" onClick={() => setActiveId(node.id)} aria-pressed={active.id === node.id} className={`group rounded-2xl border p-5 text-left font-mono shadow-[0_0_18px_rgba(50,255,138,.12)] transition hover:-translate-y-1 ${active.id === node.id ? 'border-[#D8FFE8]/70 bg-[#0A2612]' : 'border-[#32FF8A]/35 bg-[#031006]/80 hover:border-[#32FF8A]/80'}`}>
