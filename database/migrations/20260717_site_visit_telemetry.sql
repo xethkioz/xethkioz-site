@@ -24,7 +24,14 @@ alter table public.site_visit_logs force row level security;
 
 drop policy if exists "site_visit_logs_admin_read" on public.site_visit_logs;
 create policy "site_visit_logs_admin_read" on public.site_visit_logs for select to authenticated
-using (public.xethkioz_is_admin());
+using (
+  exists (
+    select 1
+    from public.profiles profile
+    where profile.id = (select auth.uid())
+      and upper(profile.role::text) = 'ADMIN'
+  )
+);
 
 revoke all on table public.site_visit_logs from public, anon, authenticated;
 grant select on table public.site_visit_logs to authenticated;
