@@ -201,6 +201,7 @@ body {
 
 .xk-wisp.is-inside-node{display:none}
 @media(max-width:767px){.xk-wisp{right:1rem;bottom:calc(5.7rem + env(safe-area-inset-bottom));width:64px;height:70px;z-index:80}.xk-wisp-horn{top:-17px;height:28px;width:13px}.xk-wisp-horn-left{left:9px}.xk-wisp-horn-right{right:9px}.xk-wisp-face{inset:6px}.xk-wisp-eye{top:19px;width:17px;height:10px}.xk-wisp-mouth{top:42px;width:23px}.xk-wisp-code{display:none}.xk-wisp-tail{left:25px;bottom:-20px;height:28px}.xk-wisp-aura{inset:-15px}.xk-wisp-taunt{position:absolute;right:calc(100% + .75rem);bottom:5px;display:block;width:152px;border:1px solid rgba(50,255,138,.5);border-radius:1rem 1rem .2rem 1rem;background:rgba(1,6,4,.94);padding:.7rem .8rem;box-shadow:0 0 25px rgba(50,255,138,.18);font:900 .62rem/1.35 ui-monospace,monospace;letter-spacing:.04em;text-align:center;color:#d8ffe8;animation:occult-flicker 3.2s steps(1) infinite}}
+@media(min-width:1280px){.xk-wisp.is-home-entry{display:none}}
 
 .xk-wisp-portal {
   pointer-events: none;

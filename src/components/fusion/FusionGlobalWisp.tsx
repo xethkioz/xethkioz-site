@@ -57,7 +57,7 @@ export default function FusionGlobalWisp() {
       />
       <button
         type="button"
-        className={`xk-wisp${location.pathname === '/green-node' ? ' is-inside-node' : ''}`}
+        className={`xk-wisp${location.pathname === '/' ? ' is-home-entry' : ''}${location.pathname === '/green-node' ? ' is-inside-node' : ''}`}
         onClick={openPortal}
         onMouseEnter={() => registerEvent('portal-hover', 'wisp-organic-hover', location.pathname)}
         aria-label="Abrir portal Wisp hacia Green Node"

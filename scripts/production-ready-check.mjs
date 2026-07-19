@@ -47,6 +47,7 @@ const gamingHub = read('src/pages/GamingHub.tsx')
 const funPortal = read('src/pages/FunPortal.tsx')
 const newsletter = read('src/components/Newsletter.tsx')
 const fusionShell = read('src/components/fusion/FusionShell.tsx')
+const globalWisp = read('src/components/fusion/FusionGlobalWisp.tsx')
 const realtimeCommunity = read('src/lib/realtimeCommunity.ts')
 const newsPolicyHardening = read('supabase/migrations/20260715101500_news_policy_hardening.sql')
 const newsAuditPolicyHardening = read('supabase/migrations/20260715103000_news_audit_policy_hardening.sql')
@@ -266,12 +267,16 @@ check(
     && redesignCss.includes('@media (prefers-reduced-motion: reduce)'),
 )
 check(
-  'Wisp exposes a desktop-only malware demon identity',
+  'Wisp exposes a responsive malware demon identity and mobile Green Node entry',
   appShell.includes('FusionGlobalWisp')
-    && read('src/components/fusion/FusionGlobalWisp.tsx').includes('xk-wisp-horn')
-    && read('src/components/fusion/FusionGlobalWisp.tsx').includes('xk-wisp-code')
+    && appShell.includes('!isCmsRoute')
+    && globalWisp.includes('xk-wisp-horn')
+    && globalWisp.includes('xk-wisp-code')
+    && globalWisp.includes('No vayas a tocarme…')
+    && globalWisp.includes("location.pathname === '/' ? ' is-home-entry'")
     && redesignCss.includes('@keyframes wisp-virus-glitch')
-    && redesignCss.includes('@media (min-width: 768px)')
+    && redesignCss.includes('@media(max-width:767px)')
+    && redesignCss.includes('@media(min-width:1280px){.xk-wisp.is-home-entry{display:none}}')
     && redesignCss.includes('@media (prefers-reduced-motion: reduce)'),
 )
 const strictPackageAudit = process.env.XETHKIOZ_STRICT_PACKAGE_AUDIT === '1'
