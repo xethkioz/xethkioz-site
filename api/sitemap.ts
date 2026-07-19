@@ -1,6 +1,6 @@
 import { SITE_URL, escapeXml, fetchFeedArticles } from './_public-news-feed.js'
 
-const staticRoutes = ['/', '/gaming', '/gaming/guides', '/science', '/fun', '/news', '/community', '/creacion-web', '/about', '/support', '/contact', '/privacy', '/editorial-policy']
+const staticRoutes = ['/', '/nexus-city', '/gaming', '/gaming/guides', '/science', '/fun', '/news', '/community', '/creacion-web', '/about', '/support', '/contact', '/privacy', '/editorial-policy']
 
 export default async function handler(_request: any, response: any) {
   const articles = await fetchFeedArticles(1000)
