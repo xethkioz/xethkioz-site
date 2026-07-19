@@ -193,6 +193,18 @@ export default function NexusChatWidget({ clearMobileDock = false }: { clearMobi
     }
   }, [])
 
+  useEffect(() => {
+    const openFromWorld = (event: Event) => {
+      const detail = (event as CustomEvent<{ room?: string }>).detail
+      const requestedRoom = detail?.room
+      if (requestedRoom && rooms.some((item) => item.id === requestedRoom)) setRoom(requestedRoom)
+      setOpen(true)
+      followsLatestRef.current = true
+    }
+    window.addEventListener('xethkioz:nexus-chat-open', openFromWorld)
+    return () => window.removeEventListener('xethkioz:nexus-chat-open', openFromWorld)
+  }, [])
+
   const nicknameResolution = useMemo(() => resolveSafeNickname(nickname, session), [nickname, session])
   const visibleMessages = useMemo(
     () => messages.filter((message) => message.room === room || message.type === 'system').slice(-80),
