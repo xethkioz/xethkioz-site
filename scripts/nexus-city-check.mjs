@@ -41,6 +41,8 @@ check('public safety controls', passport.includes('nexus_safety_reports') && pas
 check('safe public projection', passport.includes("from('nexus_public_directory')") && social.includes("from('nexus_public_directory')") && !passport.includes("select('user_id,handle,display_name,bio,status_text,locale,visibility,avatar_state,room_state"))
 check('independent room sync', social.includes("from('nexus_rooms').upsert") && social.includes('room_state: { theme: room.theme, furniture: room.furniture }'))
 check('living room movement and presence', room.includes('usePresence') && room.includes("window.addEventListener('keydown'") && room.includes('moveToPointer') && room.includes('navigator.share'))
+check('ephemeral room co-presence', room.includes("xethkioz:capsule-live:") && room.includes(".on('presence', { event: 'sync' }") && room.includes('channel.track(viewerSignal)') && room.includes('livePeers.map'))
+check('viewer uses own avatar', room.includes("from('nexus_avatar_profiles')") && room.includes('String(viewerAvatar.outfit)') && !room.includes('String(profile?.avatar_state?.outfit)'))
 check('capsule chat invitation', room.includes("xethkioz:nexus-chat-open") && room.includes('INVITAR DESDE EL CHAT'))
 check('moderation inbox', app.includes("import('./cms/routes/CmsNexusSafety')") && safety.includes("from('nexus_safety_reports')") && safety.includes('canModerate') && safety.includes('resolved_at'))
 check('earned-only economy', page.includes('Nexus Shards') && page.includes('pagos con dinero real permanecerán desactivados') && !page.includes('stripe'))
