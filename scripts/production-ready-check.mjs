@@ -39,6 +39,8 @@ const appShell = read('src/App.tsx')
 const header = read('src/components/Header.tsx')
 const mainEntry = read('src/main.tsx')
 const home = read('src/pages/Home.tsx')
+const indexHtml = read('index.html')
+const webManifest = read('public/manifest.webmanifest')
 const publicNews = read('src/pages/News.tsx')
 const greenNode = read('src/pages/GreenNode.tsx')
 const scienceLab = read('src/pages/ScienceLab.tsx')
@@ -57,6 +59,12 @@ const cmsNewsEditor = read('src/cms/routes/CmsNewsEditor.tsx')
 const redesignCss = read('src/xethkioz-redesign.css')
 
 check('10.0 production version stamped', pkg.version === '10.0.0')
+check(
+  'installable web manifest is linked and versioned',
+  indexHtml.includes('rel="manifest" href="/manifest.webmanifest"')
+    && webManifest.includes('XETHKIOZ Web 10.0')
+    && webManifest.includes('"display": "standalone"'),
+)
 check('production audit script registered', pkg.scripts['audit:production-ready'] === 'node scripts/production-ready-check.mjs')
 check('database and supabase auth migrations match', sql === supabaseSql)
 check('profiles RLS enabled', sql.includes('alter table public.profiles enable row level security'))

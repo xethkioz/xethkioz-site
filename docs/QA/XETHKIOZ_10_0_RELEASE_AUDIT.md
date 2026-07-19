@@ -4,9 +4,9 @@ Fecha: 2026-07-19
 Rama: `agent/editorial-depth-03`  
 Release: `10.0.0 · Nexus City Multiverse Production Release`
 
-## Resultado del candidato
+## Resultado final
 
-**PASS para preview y promoción controlada.** El lanzamiento queda condicionado a que el commit publicado conserve los checks verdes y a una verificación final del dominio productivo luego del merge.
+**PASS en producción.** El PR fue integrado, Vercel publicó la release en los dominios canónicos y la verificación posterior al despliegue no detectó errores de runtime, imágenes rotas ni desbordes horizontales en las rutas principales.
 
 ## Alcance revisado
 
@@ -33,6 +33,10 @@ Release: `10.0.0 · Nexus City Multiverse Production Release`
 | Rutas públicas del preview | PASS |
 | Imágenes del preview | 0 rotas |
 | Overflow horizontal desktop/móvil | 0 detectado |
+| Dominio productivo y alias `www` | READY |
+| API/RSS/sitemaps/robots | HTTP 200 |
+| Errores Vercel posteriores al deploy | 0 |
+| Errores Supabase 4xx/5xx posteriores al deploy | 0 |
 
 ## Verificación visual y funcional del preview
 
@@ -47,6 +51,7 @@ Release: `10.0.0 · Nexus City Multiverse Production Release`
 - Versión unificada en paquete, UI, health check, configuración y base de datos.
 - Dependencias compatibles actualizadas sin introducir saltos mayores de React, Router, Tailwind o TypeScript.
 - Sitemap ampliado con `/gaming/guides`.
+- Manifiesto web instalable, identidad móvil y color de sistema declarados explícitamente.
 - Fundación de monetización activada con slots y campañas protegidos por RLS.
 - Índices agregados para relaciones de artículos, comentarios y campañas.
 - Políticas RLS optimizadas para evitar evaluaciones repetidas y lecturas administrativas solapadas.
@@ -67,10 +72,12 @@ Release: `10.0.0 · Nexus City Multiverse Production Release`
 - Los índices nuevos aparecen inicialmente como “sin uso”; se conservarán hasta contar con tráfico suficiente para medirlos.
 - Las actualizaciones mayores de framework se posponen a una rama separada para no mezclar una migración de React/Router/Tailwind con este lanzamiento.
 
-## Gate de promoción
+## Gate de promoción completado
 
-1. Publicar el commit 10.0 en el PR.
-2. Esperar preview y checks de Vercel en verde.
-3. Repetir smoke test público.
-4. Marcar el PR listo, mergear y verificar el dominio productivo.
-5. Revisar logs posteriores al despliegue antes de declarar la release estable.
+1. Commit 10.0 publicado y PR integrado: completado.
+2. Preview y checks de Vercel: completado.
+3. Smoke test público de rutas, imágenes, SEO y Wisp: completado.
+4. Dominio productivo y alias `www`: completado.
+5. Logs posteriores al despliegue: completado, sin errores de runtime.
+
+**Declaración:** XETHKIOZ Web 10.0 queda confirmada como release estable de producción al 19 de julio de 2026.
