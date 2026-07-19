@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, '..');
-const reportPath = join(rootDir, 'docs', 'QA', 'FUSION_ALPHA_2_5_CONSOLIDATED_AUDIT.md');
+const reportPath = join(rootDir, 'docs', 'QA', 'XETHKIOZ_10_0_CONSOLIDATED_AUDIT.md');
 
 const startedAt = new Date();
 const results = [];
@@ -49,7 +49,7 @@ const runStep = ({ name, command, args, requiredFiles = [] }) => {
   return false;
 };
 
-banner('🛡️  XETHKIOZ FUSION — AUDITORÍA CONSOLIDADA ALPHA 2.5');
+banner('🛡️  XETHKIOZ 10.0 — AUDITORÍA CONSOLIDADA');
 
 const steps = [
   {
@@ -83,6 +83,30 @@ const steps = [
     requiredFiles: ['scripts/functionality-core-check.mjs']
   },
   {
+    name: 'Auth Nexus',
+    command: 'node',
+    args: ['scripts/auth-nexus-check.mjs'],
+    requiredFiles: ['scripts/auth-nexus-check.mjs']
+  },
+  {
+    name: 'Security Hardening',
+    command: 'node',
+    args: ['scripts/security-hardening-check.mjs'],
+    requiredFiles: ['scripts/security-hardening-check.mjs']
+  },
+  {
+    name: 'Web Services',
+    command: 'node',
+    args: ['scripts/web-services-check.mjs'],
+    requiredFiles: ['scripts/web-services-check.mjs']
+  },
+  {
+    name: 'News Factory',
+    command: 'node',
+    args: ['scripts/news-factory-check.mjs'],
+    requiredFiles: ['scripts/news-factory-check.mjs']
+  },
+  {
     name: 'Wisp Engine',
     command: 'node',
     args: ['scripts/wisp-engine-check.mjs'],
@@ -107,6 +131,18 @@ const steps = [
     requiredFiles: ['scripts/sql-inventory.mjs']
   },
   {
+    name: 'Production Readiness',
+    command: 'node',
+    args: ['scripts/production-ready-check.mjs'],
+    requiredFiles: ['scripts/production-ready-check.mjs']
+  },
+  {
+    name: 'Dependency Security',
+    command: 'npm',
+    args: ['audit', '--omit=dev'],
+    requiredFiles: ['package.json', 'package-lock.json']
+  },
+  {
     name: 'Production Build',
     command: 'npm',
     args: ['run', 'build'],
@@ -125,7 +161,7 @@ for (const step of steps) {
 
 const finishedAt = new Date();
 const summary = [
-  '# XETHKIOZ Fusion Alpha 2.5 — Consolidated Audit',
+  '# XETHKIOZ 10.0 — Consolidated Audit',
   '',
   `- Started: ${startedAt.toISOString()}`,
   `- Finished: ${finishedAt.toISOString()}`,

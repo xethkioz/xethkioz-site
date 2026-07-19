@@ -69,7 +69,7 @@ const copy = {
     statsNews: '1,248 NOTICIAS',
     statsContent: '+3.6K CONTENIDO',
     statsSecure: '24/7 SISTEMA SEGURO',
-    copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia. XETHKIOZ Web v1.0. Todos los derechos reservados.',
+    copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia. XETHKIOZ Web v10.0. Todos los derechos reservados.',
     portals: [
       {
         title: 'JUEGOS',
@@ -144,7 +144,7 @@ const copy = {
     statsNews: '1,248 NEWS',
     statsContent: '+3.6K CONTENT',
     statsSecure: '24/7 SECURE SYSTEM',
-    copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia. XETHKIOZ Web v1.0. All rights reserved.',
+    copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia. XETHKIOZ Web v10.0. All rights reserved.',
     portals: [
       {
         title: 'GAMES',
@@ -253,7 +253,7 @@ export default function Home() {
   return (
     <>
       <SEO
-        title="XETHKIOZ Web v1.0 · Ecosistema"
+        title="XETHKIOZ Web v10.0 · Nexus City"
         description="Ecosistema inmersivo XETHKIOZ con gaming, ciencia, diversión, Green Wisp y creación de páginas web a medida."
         url="/"
         image="/assets/xethkioz-cover.png"

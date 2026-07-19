@@ -2,6 +2,9 @@ function cleanText(value: unknown, max: number) {
   return typeof value === 'string' ? value.trim().slice(0, max) : null
 }
 
+const CLEANUP_INTERVAL_MS = 6 * 60 * 60_000
+let lastCleanupAt = 0
+
 function detectClient(userAgent: string) {
   const ua = userAgent.toLowerCase()
   const os = /android/.test(ua) ? 'Android' : /iphone|ipad|ios/.test(ua) ? 'iOS' : /windows/.test(ua) ? 'Windows' : /mac os|macintosh/.test(ua) ? 'macOS' : /linux/.test(ua) ? 'Linux' : 'Otro'
@@ -62,10 +65,14 @@ export default async function handler(request: any, response: any) {
   const headers = { apikey: serviceKey, Authorization: `Bearer ${serviceKey}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' }
   const stored = await fetch(`${supabaseUrl}/rest/v1/site_visit_logs`, { method: 'POST', headers, body: JSON.stringify(row) })
   if (!stored.ok) {
-    console.error('visit-log insert failed', stored.status)
+    console.error(JSON.stringify({ level: 'error', message: 'visit-log insert failed', status: stored.status }))
     return response.status(202).json({ ok: false })
   }
-  const cutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
-  await fetch(`${supabaseUrl}/rest/v1/site_visit_logs?visited_at=lt.${encodeURIComponent(cutoff)}`, { method: 'DELETE', headers }).catch(() => undefined)
+  const now = Date.now()
+  if (now - lastCleanupAt >= CLEANUP_INTERVAL_MS) {
+    lastCleanupAt = now
+    const cutoff = new Date(now - 30 * 24 * 60 * 60 * 1000).toISOString()
+    await fetch(`${supabaseUrl}/rest/v1/site_visit_logs?visited_at=lt.${encodeURIComponent(cutoff)}`, { method: 'DELETE', headers }).catch(() => undefined)
+  }
   return response.status(202).json({ ok: true })
 }

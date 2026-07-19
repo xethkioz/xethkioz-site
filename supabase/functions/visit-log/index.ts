@@ -1,4 +1,4 @@
-import { createClient } from 'npm:@supabase/supabase-js@2.108.2'
+import { createClient } from 'npm:@supabase/supabase-js@2.110.7'
 
 type RateEntry = { count: number; resetAt: number }
 
@@ -6,6 +6,8 @@ const rateBucket = new Map<string, RateEntry>()
 const WINDOW_MS = 15 * 60_000
 const IP_LIMIT = 120
 const MAX_BODY_BYTES = 4_096
+const CLEANUP_INTERVAL_MS = 6 * 60 * 60_000
+let lastCleanupAt = 0
 
 function isAllowedOrigin(origin: string) {
   if (origin === 'https://www.xethkioz.com.ar' || origin === 'https://xethkioz.com.ar') return true
@@ -157,8 +159,12 @@ Deno.serve(async (request: Request) => {
     return json(request, 503, { ok: false, error: 'SERVICE_UNAVAILABLE' })
   }
 
-  const retentionCutoff = new Date(Date.now() - 30 * 24 * 60 * 60_000).toISOString()
-  const { error: cleanupError } = await admin.from('site_visit_logs').delete().lt('visited_at', retentionCutoff)
-  if (cleanupError) console.error('[visit-log] Retention cleanup failed', { code: cleanupError.code })
+  const now = Date.now()
+  if (now - lastCleanupAt >= CLEANUP_INTERVAL_MS) {
+    lastCleanupAt = now
+    const retentionCutoff = new Date(now - 30 * 24 * 60 * 60_000).toISOString()
+    const { error: cleanupError } = await admin.from('site_visit_logs').delete().lt('visited_at', retentionCutoff)
+    if (cleanupError) console.error(JSON.stringify({ level: 'error', message: 'visit-log retention cleanup failed', code: cleanupError.code }))
+  }
   return json(request, 202, { ok: true })
 })

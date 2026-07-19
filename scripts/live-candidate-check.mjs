@@ -3,14 +3,13 @@ import { join } from 'node:path'
 
 const root = process.cwd()
 const checks = [
-  ['src/pages/Home.tsx', ['WorldGateV5']],
+  ['src/pages/Home.tsx', ['xk-home-portal-deck', 'portal-games-world-v3.webp', 'portal-science-world-v3.webp', 'portal-fun-world-v3.webp']],
   ['src/components/fusion/FusionWorldStageV5.tsx', ['getPortalRegistry', 'panel-cyber']],
   ['src/engines/portal/portalRegistry.ts', ['portalRegistry', 'wispWatching']],
   ['src/design/designTokens.ts', ['designTokens', 'fusionAccent']],
   ['src/components/fusion/FusionWispEntity.tsx', ['fusion-wisp-entity']],
-  ['src/components/fusion/FusionGlobalWisp.tsx', ['FusionGlobalWisp', 'FusionWispEntity']],
-  ['src/components/fusion/FusionGlobalStatus.tsx', ['FusionGlobalStatus', 'FUSION_STAGE']],
-  ['src/components/Header.tsx', ['useHud', 'fusion-hud-panel']],
+  ['src/components/fusion/FusionGlobalWisp.tsx', ['FusionGlobalWisp', 'triggerGreenPortal', "navigate('/green-node')"]],
+  ['src/components/Header.tsx', ['useHud', 'xk-mobile-dock', 'openGreen']],
   ['src/lib/HudContext.tsx', ['localStorage', 'xethkioz.hud.sound', 'xethkioz.hud.account.status']],
 ]
 
@@ -34,7 +33,7 @@ if (home.includes('alpha6-portal-world') || home.includes('<img')) {
 
 mkdirSync(join(root, 'docs/QA'), { recursive: true })
 const report = [
-  '# Fusion Alpha 1.0 Live Candidate Check',
+  '# XETHKIOZ 10.0 Live Candidate Check',
   '',
   `Generated: ${new Date().toISOString()}`,
   '',
@@ -43,7 +42,7 @@ const report = [
   ...((failures.length ? failures : ['All live-candidate guardrails passed.']).map((line) => `- ${line}`)),
   '',
 ].join('\n')
-writeFileSync(join(root, 'docs/QA/FUSION_ALPHA_1_0_LIVE_CHECK.md'), report)
+writeFileSync(join(root, 'docs/QA/XETHKIOZ_10_0_LIVE_CHECK.md'), report)
 
 if (failures.length) {
   console.error(report)

@@ -1,3 +1,12 @@
+# 10.0.0 — Nexus City Multiverse Production Release
+
+- Profundización editorial de noticias con lectura extensa, fuentes oficiales y jerarquía visual más clara.
+- Portales de Inicio reconstruidos como mundos orgánicos con energía ambiental y capas transparentes.
+- Auditoría integral de rutas, imágenes, responsive, autenticación, chat, seguridad, dependencias y producción.
+- Fundación operativa de anuncios y sponsors con RLS, agenda y administración privada.
+- Telemetría técnica optimizada con retención de 30 días y limpieza periódica de menor latencia.
+- Sitemap ampliado para guías; versión de UI, configuración, health check y base de datos unificadas en 10.0.0.
+
 # Fusion Alpha 2.2 — World Hero Stage
 
 - Updated Section 0 World Hero Stage with RPG avatar actions.

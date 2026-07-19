@@ -56,7 +56,7 @@ const newsletterPrivacy = read('supabase/migrations/20260716110000_newsletter_pr
 const cmsNewsEditor = read('src/cms/routes/CmsNewsEditor.tsx')
 const redesignCss = read('src/xethkioz-redesign.css')
 
-check('RC-Live version stamped', pkg.version.includes('rc-live'))
+check('10.0 production version stamped', pkg.version === '10.0.0')
 check('production audit script registered', pkg.scripts['audit:production-ready'] === 'node scripts/production-ready-check.mjs')
 check('database and supabase auth migrations match', sql === supabaseSql)
 check('profiles RLS enabled', sql.includes('alter table public.profiles enable row level security'))
@@ -250,6 +250,12 @@ check(
   'Home portals use clean transparent worlds with reduced-motion-safe energy',
   home.includes('xk-home-portal-shell')
     && home.includes('xk-home-portal-clean')
+    && home.includes('portal-games-world-v3.webp')
+    && home.includes('portal-science-world-v3.webp')
+    && home.includes('portal-fun-world-v3.webp')
+    && exists('public/assets/portal-games-world-v3.webp')
+    && exists('public/assets/portal-science-world-v3.webp')
+    && exists('public/assets/portal-fun-world-v3.webp')
     && home.includes('portal-games-clean-v1.webp')
     && home.includes('portal-science-clean-v1.webp')
     && home.includes('portal-fun-chaos-v2.webp')
@@ -317,4 +323,4 @@ if (failed) {
   process.exit(1)
 }
 
-console.log('XETHKIOZ RC-Live production-ready audit PASS')
+console.log('XETHKIOZ 10.0 production-ready audit PASS')
