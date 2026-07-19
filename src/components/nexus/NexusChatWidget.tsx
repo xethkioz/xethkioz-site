@@ -195,9 +195,10 @@ export default function NexusChatWidget({ clearMobileDock = false }: { clearMobi
 
   useEffect(() => {
     const openFromWorld = (event: Event) => {
-      const detail = (event as CustomEvent<{ room?: string }>).detail
+      const detail = (event as CustomEvent<{ room?: string; draft?: string }>).detail
       const requestedRoom = detail?.room
       if (requestedRoom && rooms.some((item) => item.id === requestedRoom)) setRoom(requestedRoom)
+      if (detail?.draft) setDraft(cleanText(detail.draft))
       setOpen(true)
       followsLatestRef.current = true
     }
