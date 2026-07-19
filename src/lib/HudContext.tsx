@@ -38,24 +38,37 @@ const STORAGE_ACCOUNT_USER_ID = 'xethkioz.hud.account.user-id'
 
 const guestAccount: HudAccountState = { status: 'guest', name: 'XETHKIOZ', checked: true }
 
+const safeStorage = {
+  get(key: string) {
+    if (typeof window === 'undefined') return null
+    try { return window.localStorage.getItem(key) } catch { return null }
+  },
+  set(key: string, value: string) {
+    if (typeof window === 'undefined') return
+    try { window.localStorage.setItem(key, value) } catch { /* Supabase remains the session source. */ }
+  },
+  remove(key: string) {
+    if (typeof window === 'undefined') return
+    try { window.localStorage.removeItem(key) } catch { /* Optional HUD cache. */ }
+  },
+}
+
 const readStoredSound = (): boolean => {
-  if (typeof window === 'undefined') return false
-  return window.localStorage.getItem(STORAGE_SOUND) === 'enabled'
+  return safeStorage.get(STORAGE_SOUND) === 'enabled'
 }
 
 const readStoredVolume = (): number => {
-  if (typeof window === 'undefined') return 0.45
-  const stored = Number(window.localStorage.getItem(STORAGE_VOLUME))
+  const stored = Number(safeStorage.get(STORAGE_VOLUME))
   if (!Number.isFinite(stored)) return 0.45
   return Math.min(1, Math.max(0, stored))
 }
 
 const readStoredAccount = (): HudAccountState => {
   if (typeof window === 'undefined') return guestAccount
-  const status = window.localStorage.getItem(STORAGE_ACCOUNT_STATUS) === 'connected' ? 'connected' : 'guest'
-  const name = window.localStorage.getItem(STORAGE_ACCOUNT_NAME)?.trim() || 'XETHKIOZ'
-  const email = window.localStorage.getItem(STORAGE_ACCOUNT_EMAIL)?.trim() || undefined
-  const userId = window.localStorage.getItem(STORAGE_ACCOUNT_USER_ID)?.trim() || undefined
+  const status = safeStorage.get(STORAGE_ACCOUNT_STATUS) === 'connected' ? 'connected' : 'guest'
+  const name = safeStorage.get(STORAGE_ACCOUNT_NAME)?.trim() || 'XETHKIOZ'
+  const email = safeStorage.get(STORAGE_ACCOUNT_EMAIL)?.trim() || undefined
+  const userId = safeStorage.get(STORAGE_ACCOUNT_USER_ID)?.trim() || undefined
   return status === 'connected'
     ? { status: 'connected', name, email, userId, source: 'stored', checked: false }
     : { ...guestAccount, checked: false }
@@ -69,13 +82,12 @@ function accountFromSupabaseUser(user: { id?: string; email?: string; user_metad
 }
 
 function writeStoredAccount(account: HudAccountState) {
-  if (typeof window === 'undefined') return
-  window.localStorage.setItem(STORAGE_ACCOUNT_STATUS, account.status === 'connected' ? 'connected' : 'guest')
-  window.localStorage.setItem(STORAGE_ACCOUNT_NAME, account.name)
-  if (account.email) window.localStorage.setItem(STORAGE_ACCOUNT_EMAIL, account.email)
-  if (!account.email || account.status !== 'connected') window.localStorage.removeItem(STORAGE_ACCOUNT_EMAIL)
-  if (account.userId) window.localStorage.setItem(STORAGE_ACCOUNT_USER_ID, account.userId)
-  if (!account.userId || account.status !== 'connected') window.localStorage.removeItem(STORAGE_ACCOUNT_USER_ID)
+  safeStorage.set(STORAGE_ACCOUNT_STATUS, account.status === 'connected' ? 'connected' : 'guest')
+  safeStorage.set(STORAGE_ACCOUNT_NAME, account.name)
+  if (account.email) safeStorage.set(STORAGE_ACCOUNT_EMAIL, account.email)
+  if (!account.email || account.status !== 'connected') safeStorage.remove(STORAGE_ACCOUNT_EMAIL)
+  if (account.userId) safeStorage.set(STORAGE_ACCOUNT_USER_ID, account.userId)
+  if (!account.userId || account.status !== 'connected') safeStorage.remove(STORAGE_ACCOUNT_USER_ID)
 }
 
 export function HudProvider({ children }: { children: ReactNode }) {
@@ -105,12 +117,12 @@ export function HudProvider({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => {
-    window.localStorage.setItem(STORAGE_SOUND, soundOn ? 'enabled' : 'muted')
+    safeStorage.set(STORAGE_SOUND, soundOn ? 'enabled' : 'muted')
     document.documentElement.dataset.xethSound = soundOn ? 'enabled' : 'muted'
   }, [soundOn])
 
   useEffect(() => {
-    window.localStorage.setItem(STORAGE_VOLUME, String(volume))
+    safeStorage.set(STORAGE_VOLUME, String(volume))
     document.documentElement.style.setProperty('--xeth-audio-volume', String(volume))
   }, [volume])
 
