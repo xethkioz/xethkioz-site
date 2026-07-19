@@ -384,15 +384,9 @@ export function usePresence(route: string, room = 'general'): PresenceSnapshot {
           })
       } catch {}
 
-      try {
-        supabase.from('xeth_presence_routes').upsert({
-          client_id: clientId,
-          display_name: name,
-          route,
-          room,
-          last_seen: new Date().toISOString(),
-        }).then(() => undefined)
-      } catch {}
+      // Realtime Presence is intentionally ephemeral. Persisting anonymous
+      // presence created noisy REST writes and retained more visitor data than
+      // the live counter needs.
     }
 
     return () => {

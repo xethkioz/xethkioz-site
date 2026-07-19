@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type CSSProperties } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import SEO from '../components/SEO'
+import NexusSocialLoop from '../components/nexus/NexusSocialLoop'
 import { useHud } from '../lib/HudContext'
 import { useLang } from '../lib/LangContext'
 import { addWispXp, getWispProgress, usePresence } from '../lib/realtimeCommunity'
@@ -164,10 +165,10 @@ export default function NexusCity() {
         <section className="xk-city-hero">
           <div className="xk-city-grid" aria-hidden="true" />
           <div className="xk-city-hero-copy">
-            <p>NEXUS CITY // WORLD ALPHA 01</p>
+            <p>NEXUS CITY // LIVING WORLD 02</p>
             <h1>{lang === 'es' ? 'Tu identidad entra al mundo.' : 'Your identity enters the world.'}</h1>
             <span>{lang === 'es' ? 'Un lobby social propio de XETHKIOZ: avatar, distritos, chat, progresión e inventario. No es otra red social; es la entrada humana al multiverso.' : 'A XETHKIOZ social lobby with avatars, districts, chat, progression and inventory. Not another social network: the human entrance to the multiverse.'}</span>
-            <div><a href="#avatar-lab">{lang === 'es' ? 'CREAR AVATAR' : 'CREATE AVATAR'} ↓</a><button type="button" onClick={() => openRoom('general')}>{lang === 'es' ? 'ABRIR CHAT GLOBAL' : 'OPEN GLOBAL CHAT'} ↗</button></div>
+            <div><a href="#avatar-lab">{lang === 'es' ? 'CREAR AVATAR' : 'CREATE AVATAR'} ↓</a><a href="#social-loop">{lang === 'es' ? 'ABRIR MI CÁPSULA' : 'OPEN MY CAPSULE'} ↓</a><button type="button" onClick={() => openRoom('general')}>{lang === 'es' ? 'ABRIR CHAT GLOBAL' : 'OPEN GLOBAL CHAT'} ↗</button></div>
           </div>
           <div className="xk-city-signal"><i /><span>{presence.onlineTotal} ONLINE</span><b>WORLD STATUS // ALPHA</b></div>
         </section>
@@ -210,9 +211,11 @@ export default function NexusCity() {
           <div>{districts.map((district) => <article key={district.id} style={{ '--district': district.tone } as CSSProperties}><i>{district.glyph}</i><small>ROOM // {district.id.toUpperCase()}</small><h3>{lang === 'es' ? district.es : district.en}</h3><p>{lang === 'es' ? district.detailEs : district.detailEn}</p><button type="button" onClick={() => openRoom(district.room)}>{lang === 'es' ? 'ENTRAR A LA SALA' : 'ENTER ROOM'} ↗</button></article>)}</div>
         </section>
 
+        <div id="social-loop"><NexusSocialLoop lang={lang} account={account} avatar={avatar} onNotice={setNotice} /></div>
+
         <section className="xk-city-roadmap">
           <div><p>SAFE ECONOMY // PHASED RELEASE</p><h2>{lang === 'es' ? 'Primero comunidad. Después comercio.' : 'Community first. Commerce later.'}</h2><span>{lang === 'es' ? 'Esta Alpha usa Nexus Shards obtenidos por actividad. Los pagos con dinero real permanecerán desactivados hasta incorporar moderación 24/7, controles de edad, términos, reembolsos y protección antifraude.' : 'This Alpha uses Nexus Shards earned through activity. Real-money payments stay disabled until moderation, age controls, terms, refunds and anti-fraud protections are ready.'}</span></div>
-          <ol><li><b>01</b><span>{lang === 'es' ? 'Avatar e inventario' : 'Avatar and inventory'}</span><strong>ACTIVE</strong></li><li><b>02</b><span>{lang === 'es' ? 'Salas y presencia' : 'Rooms and presence'}</span><strong>ALPHA</strong></li><li><b>03</b><span>{lang === 'es' ? 'Moderación y reportes' : 'Moderation and reports'}</span><strong>NEXT</strong></li><li><b>04</b><span>{lang === 'es' ? 'Tienda segura' : 'Safe store'}</span><strong>LOCKED</strong></li></ol>
+          <ol><li><b>01</b><span>{lang === 'es' ? 'Avatar e inventario' : 'Avatar and inventory'}</span><strong>ACTIVE</strong></li><li><b>02</b><span>{lang === 'es' ? 'Pasaporte y cápsula' : 'Passport and capsule'}</span><strong>ACTIVE</strong></li><li><b>03</b><span>{lang === 'es' ? 'Contactos y seguridad' : 'Contacts and safety'}</span><strong>BETA</strong></li><li><b>04</b><span>{lang === 'es' ? 'Tienda segura' : 'Safe store'}</span><strong>LOCKED</strong></li></ol>
         </section>
       </main>
     </>

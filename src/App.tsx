@@ -30,6 +30,7 @@ const WebCreation = lazy(() => import('./pages/WebCreation'))
 const GreenNode = lazy(() => import('./pages/GreenNode'))
 const ProfileHub = lazy(() => import('./pages/ProfileHub'))
 const NexusCity = lazy(() => import('./pages/NexusCity'))
+const NexusPassport = lazy(() => import('./pages/NexusPassport'))
 const News = lazy(() => import('./pages/News'))
 const NewsArticle = lazy(() => import('./pages/NewsArticle'))
 const Community = lazy(() => import('./pages/Community'))
@@ -95,6 +96,8 @@ function RouteAccessibility({ pathname }: { pathname: string }) {
   useEffect(() => {
     const routeName = pathname.startsWith('/news/')
       ? 'Artículo de noticias'
+      : pathname.startsWith('/nexus-city/u/')
+        ? 'Pasaporte Nexus'
       : pathname.startsWith('/cms/')
         ? 'Panel editorial'
         : routeNames[pathname] ?? 'Sección XETHKIOZ'
@@ -166,6 +169,7 @@ function AppShell() {
               <Route path="/news/:slug" element={<NewsArticle />} />
               <Route path="/community" element={<Community />} />
               <Route path="/nexus-city" element={<NexusCity />} />
+              <Route path="/nexus-city/u/:handle" element={<NexusPassport />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/support" element={<Support />} />
