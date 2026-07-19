@@ -1,0 +1,21 @@
+{
+  "name": "XETHKIOZ Web 10.0 · Nexus City",
+  "short_name": "XETHKIOZ",
+  "description": "Universo digital de gaming, ciencia, tecnología, humor, creación web y Green Node.",
+  "lang": "es-AR",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#050509",
+  "theme_color": "#0A0A0F",
+  "categories": ["games", "entertainment", "news", "technology"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
