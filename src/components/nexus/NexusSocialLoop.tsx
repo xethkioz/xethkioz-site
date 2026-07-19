@@ -15,7 +15,6 @@ type PublicProfile = {
   status_text: string
   locale: string
   avatar_state: Record<string, unknown>
-  room_state: RoomState
   updated_at: string
 }
 
@@ -92,9 +91,9 @@ export default function NexusSocialLoop({ lang, account, avatar, onNotice }: { l
   useEffect(() => {
     if (!isSupabaseConfigured) return
     let active = true
-    supabase.from('nexus_public_profiles')
-      .select('user_id,handle,display_name,bio,status_text,locale,avatar_state,room_state,updated_at')
-      .eq('visibility', 'public').order('updated_at', { ascending: false }).limit(8)
+    supabase.from('nexus_public_directory')
+      .select('user_id,handle,display_name,bio,status_text,locale,avatar_state,updated_at')
+      .order('updated_at', { ascending: false }).limit(8)
       .then(({ data }) => { if (active && data) setDirectory(data as PublicProfile[]) })
     return () => { active = false }
   }, [savedToday])
@@ -102,10 +101,18 @@ export default function NexusSocialLoop({ lang, account, avatar, onNotice }: { l
   useEffect(() => {
     if (!connected || !account.userId || !isSupabaseConfigured) return
     let active = true
-    supabase.from('nexus_public_profiles').select('handle,display_name,bio,status_text,visibility,room_state').eq('user_id', account.userId).maybeSingle().then(({ data }) => {
-      if (!active || !data) return
-      setProfile({ handle: data.handle, displayName: data.display_name, bio: data.bio || '', statusText: data.status_text || '', visibility: data.visibility })
-      if (data.room_state && typeof data.room_state === 'object') setRoom((current) => ({ ...current, ...(data.room_state as Partial<RoomState>) }))
+    Promise.all([
+      supabase.from('nexus_public_profiles').select('handle,display_name,bio,status_text,visibility').eq('user_id', account.userId).maybeSingle(),
+      supabase.from('nexus_rooms').select('room_state,access').eq('owner_id', account.userId).maybeSingle(),
+    ]).then(([passportResult, roomResult]) => {
+      if (!active) return
+      if (passportResult.data) {
+        const data = passportResult.data
+        setProfile({ handle: data.handle, displayName: data.display_name, bio: data.bio || '', statusText: data.status_text || '', visibility: data.visibility })
+      }
+      if (roomResult.data?.room_state && typeof roomResult.data.room_state === 'object') {
+        setRoom((current) => ({ ...current, ...(roomResult.data?.room_state as Partial<RoomState>), access: roomResult.data?.access as RoomState['access'] }))
+      }
     })
     return () => { active = false }
   }, [account.userId, connected])
@@ -120,7 +127,7 @@ export default function NexusSocialLoop({ lang, account, avatar, onNotice }: { l
       const { data } = await supabase.from('nexus_relationships').select('id,requester_id,addressee_id,status').or(`requester_id.eq.${account.userId},addressee_id.eq.${account.userId}`).neq('status', 'blocked').order('updated_at', { ascending: false }).limit(24)
       if (!active || !data) return
       const peerIds = [...new Set(data.map((row) => row.requester_id === account.userId ? row.addressee_id : row.requester_id))]
-      const profiles = peerIds.length ? await supabase.from('nexus_public_profiles').select('user_id,handle,display_name,status_text').in('user_id', peerIds) : { data: [] }
+      const profiles = peerIds.length ? await supabase.from('nexus_public_directory').select('user_id,handle,display_name,status_text').in('user_id', peerIds) : { data: [] }
       const byId = new Map((profiles.data || []).map((item) => [item.user_id, item]))
       setSignals(data.map((row) => ({ ...row, peer: byId.get(row.requester_id === account.userId ? row.addressee_id : row.requester_id) })) as RelationshipSignal[])
     }
@@ -141,6 +148,7 @@ export default function NexusSocialLoop({ lang, account, avatar, onNotice }: { l
       return
     }
     setSaving(true)
+    const now = new Date().toISOString()
     const { error } = await supabase.from('nexus_public_profiles').upsert({
       user_id: account.userId,
       handle,
@@ -151,11 +159,22 @@ export default function NexusSocialLoop({ lang, account, avatar, onNotice }: { l
       visibility: profile.visibility,
       avatar_state: avatar,
       room_state: room,
-      updated_at: new Date().toISOString(),
+      updated_at: now,
     }, { onConflict: 'user_id' })
-    setSaving(false)
     if (error) {
+      setSaving(false)
       onNotice(error.code === '23505' ? (lang === 'es' ? 'Ese identificador ya está ocupado.' : 'That handle is already taken.') : (lang === 'es' ? 'No se pudo sincronizar el pasaporte.' : 'Could not sync the passport.'))
+      return
+    }
+    const { error: roomError } = await supabase.from('nexus_rooms').upsert({
+      owner_id: account.userId,
+      room_state: { theme: room.theme, furniture: room.furniture },
+      access: room.access,
+      updated_at: now,
+    }, { onConflict: 'owner_id' })
+    setSaving(false)
+    if (roomError) {
+      onNotice(lang === 'es' ? 'El pasaporte se guardó, pero la cápsula no pudo sincronizarse.' : 'The passport was saved, but the capsule could not sync.')
       return
     }
     setProfile((current) => ({ ...current, handle }))
@@ -203,7 +222,7 @@ export default function NexusSocialLoop({ lang, account, avatar, onNotice }: { l
         <label>{lang === 'es' ? 'Señal actual' : 'Current signal'}<input value={profile.statusText} onChange={(event) => setProfile((current) => ({ ...current, statusText: event.target.value.slice(0, 80) }))} maxLength={80} /></label>
         <label>{lang === 'es' ? 'Bio breve' : 'Short bio'}<textarea value={profile.bio} onChange={(event) => setProfile((current) => ({ ...current, bio: event.target.value.slice(0, 280) }))} maxLength={280} /></label>
         <label>{lang === 'es' ? 'Visibilidad' : 'Visibility'}<select value={profile.visibility} onChange={(event) => setProfile((current) => ({ ...current, visibility: event.target.value as DraftProfile['visibility'] }))}><option value="public">PUBLIC</option><option value="contacts">CONTACTS</option><option value="private">PRIVATE</option></select></label>
-        <div><button type="button" onClick={savePassport} disabled={saving}>{saving ? 'SYNC…' : (lang === 'es' ? 'PUBLICAR PASAPORTE' : 'PUBLISH PASSPORT')}</button>{connected && profile.handle ? <Link to={`/nexus-city/u/${profile.handle}`}>{lang === 'es' ? 'VER PERFIL ↗' : 'VIEW PROFILE ↗'}</Link> : null}</div>
+        <div><button type="button" onClick={savePassport} disabled={saving}>{saving ? 'SYNC…' : (lang === 'es' ? 'PUBLICAR PASAPORTE' : 'PUBLISH PASSPORT')}</button>{connected && profile.handle ? <><Link to={`/nexus-city/u/${profile.handle}`}>{lang === 'es' ? 'VER PERFIL ↗' : 'VIEW PROFILE ↗'}</Link><Link to={`/nexus-city/room/${profile.handle}`}>{lang === 'es' ? 'VISITAR CÁPSULA ↗' : 'VISIT CAPSULE ↗'}</Link></> : null}</div>
       </article>
 
       <article className={`xk-capsule xk-capsule-${room.theme}`}>
