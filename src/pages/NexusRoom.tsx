@@ -193,6 +193,10 @@ export default function NexusRoom() {
     window.dispatchEvent(new CustomEvent('xethkioz:nexus-chat-open', { detail: { room: 'general', draft: `📍 ${lang === 'es' ? 'Estoy en la cápsula de' : 'I am inside'} @${roomHandle}: /nexus-city/room/${roomHandle}` } }))
   }
 
+  const openCapsuleChat = () => {
+    window.dispatchEvent(new CustomEvent('xethkioz:nexus-chat-open', { detail: { room: `capsule-${roomHandle}` } }))
+  }
+
   if (pageState === 'loading') return <main className="xk-room-page"><p className="xk-room-loader">NEXUS // NEGOTIATING ACCESS…</p></main>
   if (pageState === 'missing' || !profile) return <main className="xk-room-page"><SEO title="Cápsula no encontrada" description="Esta cápsula de Nexus City no está disponible." url={`/nexus-city/room/${roomHandle}`} /><section className="xk-room-denied"><small>ROOM // SIGNAL_NOT_FOUND</small><h1>{lang === 'es' ? 'La cápsula no existe.' : 'The capsule does not exist.'}</h1><p>{lang === 'es' ? 'El identificador puede haber cambiado o su pasaporte no es público.' : 'The handle may have changed or its passport is not public.'}</p><Link to="/nexus-city">← NEXUS CITY</Link></section></main>
   if (pageState === 'locked' || !room) return <main className="xk-room-page"><SEO title={`Cápsula de ${profile.display_name}`} description="Acceso protegido por el propietario." url={`/nexus-city/room/${roomHandle}`} /><section className="xk-room-denied is-locked"><small>ROOM // ACCESS_DENIED</small><h1>{lang === 'es' ? 'La puerta está cerrada.' : 'The door is locked.'}</h1><p>{lang === 'es' ? 'Esta cápsula es privada, requiere ser contacto o todavía no fue publicada.' : 'This capsule is private, requires an accepted contact, or has not been published.'}</p><div><Link to={`/nexus-city/u/${roomHandle}`}>{lang === 'es' ? 'VOLVER AL PASAPORTE' : 'BACK TO PASSPORT'}</Link><Link to="/nexus-city">NEXUS CITY</Link></div></section></main>
@@ -209,7 +213,7 @@ export default function NexusRoom() {
         <div className="xk-room-player" style={{ left: `${position.x}%`, top: `${position.y}%` }}><i /><span /><b /><em /><small>YOU</small></div>
         <p>{lang === 'es' ? 'TOCÁ EL ESCENARIO · FLECHAS / WASD' : 'TAP THE STAGE · ARROWS / WASD'}</p>
       </div>
-      <div className="xk-room-command"><div><button type="button" onClick={() => nudge(0,-5)}>▲</button><span><button type="button" onClick={() => nudge(-5,0)}>◀</button><button type="button" onClick={() => nudge(0,5)}>▼</button><button type="button" onClick={() => nudge(5,0)}>▶</button></span></div><div><button type="button" onClick={inviteToChat}>{lang === 'es' ? 'INVITAR DESDE EL CHAT' : 'INVITE FROM CHAT'}</button>{account.userId === profile.user_id ? <Link to="/nexus-city#social-loop">{lang === 'es' ? 'EDITAR MI CÁPSULA' : 'EDIT MY CAPSULE'}</Link> : null}</div>{notice ? <p role="status">{notice}</p> : null}</div>
+      <div className="xk-room-command"><div><button type="button" onClick={() => nudge(0,-5)}>▲</button><span><button type="button" onClick={() => nudge(-5,0)}>◀</button><button type="button" onClick={() => nudge(0,5)}>▼</button><button type="button" onClick={() => nudge(5,0)}>▶</button></span></div><div><button type="button" onClick={openCapsuleChat}>{lang === 'es' ? 'CHAT DE LA CÁPSULA' : 'CAPSULE CHAT'}</button><button type="button" onClick={inviteToChat}>{lang === 'es' ? 'INVITAR DESDE EL CHAT' : 'INVITE FROM CHAT'}</button>{account.userId === profile.user_id ? <Link to="/nexus-city#social-loop">{lang === 'es' ? 'EDITAR MI CÁPSULA' : 'EDIT MY CAPSULE'}</Link> : null}</div>{notice ? <p role="status">{notice}</p> : null}</div>
     </section>
   </main>
 }
