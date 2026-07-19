@@ -137,6 +137,12 @@ function AppShell() {
         <AppErrorBoundary label="Global Controls" compact>
           <Suspense fallback={null}>
             <Header />
+          </Suspense>
+        </AppErrorBoundary>
+      )}
+      {!isCmsRoute && (
+        <AppErrorBoundary label="Global Wisp" compact>
+          <Suspense fallback={null}>
             <FusionGlobalWisp />
           </Suspense>
         </AppErrorBoundary>
