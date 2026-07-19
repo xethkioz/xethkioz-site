@@ -8,6 +8,7 @@ const nav = [
   { to: '/gaming', label: 'GAMES' },
   { to: '/science', label: 'SCIENCE & TECH' },
   { to: '/fun', label: 'FUN' },
+  { to: '/nexus-city', label: 'NEXUS CITY' },
   { to: '/creacion-web', label: 'CREACIÓN WEB' },
 ]
 
@@ -16,6 +17,7 @@ const rail = [
   { to: '/gaming', label: 'Juegos', icon: '🎮' },
   { to: '/science', label: 'Ciencia', icon: '◈' },
   { to: '/fun', label: 'Memes', icon: '☻' },
+  { to: '/nexus-city', label: 'Nexus', icon: '◎' },
   { to: '/creacion-web', label: 'Creación web', icon: '▣' },
 ]
 

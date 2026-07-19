@@ -29,6 +29,7 @@ const FunPortal = lazy(() => import('./pages/FunPortal'))
 const WebCreation = lazy(() => import('./pages/WebCreation'))
 const GreenNode = lazy(() => import('./pages/GreenNode'))
 const ProfileHub = lazy(() => import('./pages/ProfileHub'))
+const NexusCity = lazy(() => import('./pages/NexusCity'))
 const News = lazy(() => import('./pages/News'))
 const NewsArticle = lazy(() => import('./pages/NewsArticle'))
 const Community = lazy(() => import('./pages/Community'))
@@ -79,13 +80,14 @@ const routeNames: Record<string, string> = {
   '/green-node': 'Green Node',
   '/news': 'Noticias',
   '/community': 'Comunidad',
+  '/nexus-city': 'Nexus City',
   '/profile': 'Perfil',
   '/account': 'Cuenta',
   '/login': 'Iniciar sesión',
   '/cms': 'Panel editorial',
 }
 
-const activityTrackedPortals = new Set(['/gaming', '/science', '/fun', '/creacion-web', '/green-node'])
+const activityTrackedPortals = new Set(['/gaming', '/science', '/fun', '/creacion-web', '/green-node', '/nexus-city'])
 
 function RouteAccessibility({ pathname }: { pathname: string }) {
   const [announcement, setAnnouncement] = useState('')
@@ -163,6 +165,7 @@ function AppShell() {
               <Route path="/news" element={<News />} />
               <Route path="/news/:slug" element={<NewsArticle />} />
               <Route path="/community" element={<Community />} />
+              <Route path="/nexus-city" element={<NexusCity />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/support" element={<Support />} />

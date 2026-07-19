@@ -11,6 +11,7 @@ export const PUBLIC_ROUTES = [
   { path: '/green-node', name: 'Green Node', status: 'hidden-portal', owner: 'wisp' },
   { path: '/news', name: 'News Engine', status: 'preview-module', owner: 'content' },
   { path: '/community', name: 'Community Engine', status: 'preview-module', owner: 'community' },
+  { path: '/nexus-city', name: 'Nexus City', status: 'public-social-alpha', owner: 'community' },
   { path: '/profile', name: 'Profile Hub', status: 'preview-module', owner: 'community' },
   { path: '/cms', name: 'CMS Studio', status: 'preview-module', owner: 'editorial' },
 ] as const
@@ -43,4 +44,6 @@ export const FUSION_GUARDRAILS = [
   'Home V5 must keep modular hierarchy: hero, portals, updates, Wisp panel, community status and content signals.',
   'Portal metadata must come from Portal Registry instead of hardcoded Home arrays.',
   'New visual constants must be introduced through Design Tokens before being used by components.',
+  'Social cosmetics must use earned, server-verifiable currency until moderation, age, refund and anti-fraud controls are operational.',
+  'Nexus City must preserve report, block and safe-chat paths before enabling direct user-to-user commerce.',
 ] as const
