@@ -93,6 +93,7 @@ export default function NexusSocialLoop({ lang, account, avatar, onNotice }: { l
     let active = true
     supabase.from('nexus_public_directory')
       .select('user_id,handle,display_name,bio,status_text,locale,avatar_state,updated_at')
+      .eq('visibility', 'public')
       .order('updated_at', { ascending: false }).limit(8)
       .then(({ data }) => { if (active && data) setDirectory(data as PublicProfile[]) })
     return () => { active = false }

@@ -43,6 +43,10 @@ const rooms = [
   { id: 'fun', es: 'Memes', en: 'Memes' },
 ] satisfies ChatRoom[]
 
+function isCapsuleRoom(value: string) {
+  return /^capsule-[a-z0-9_]{3,24}$/.test(value)
+}
+
 const LOCAL_STORAGE_MESSAGES = 'xethkioz.nexus.local.messages.v3'
 
 const copy = {
@@ -197,7 +201,7 @@ export default function NexusChatWidget({ clearMobileDock = false }: { clearMobi
     const openFromWorld = (event: Event) => {
       const detail = (event as CustomEvent<{ room?: string; draft?: string }>).detail
       const requestedRoom = detail?.room
-      if (requestedRoom && rooms.some((item) => item.id === requestedRoom)) setRoom(requestedRoom)
+      if (requestedRoom && (rooms.some((item) => item.id === requestedRoom) || isCapsuleRoom(requestedRoom))) setRoom(requestedRoom)
       if (detail?.draft) setDraft(cleanText(detail.draft))
       setOpen(true)
       followsLatestRef.current = true
@@ -207,6 +211,11 @@ export default function NexusChatWidget({ clearMobileDock = false }: { clearMobi
   }, [])
 
   const nicknameResolution = useMemo(() => resolveSafeNickname(nickname, session), [nickname, session])
+  const roomOptions = useMemo<ChatRoom[]>(() => {
+    if (!isCapsuleRoom(room)) return [...rooms]
+    const handle = room.slice('capsule-'.length)
+    return [...rooms, { id: room, es: `Cápsula @${handle}`, en: `Capsule @${handle}` }]
+  }, [room])
   const visibleMessages = useMemo(
     () => messages.filter((message) => message.room === room || message.type === 'system').slice(-80),
     [messages, room],
@@ -371,7 +380,7 @@ export default function NexusChatWidget({ clearMobileDock = false }: { clearMobi
             <div className="mt-4 grid grid-cols-[1fr_auto] gap-2">
               <input value={nickname} onChange={(event) => { setNickname(event.target.value); setReservedWarning(null) }} className="rounded-xl border border-white/10 bg-black/45 px-3 py-2 text-xs text-white outline-none focus:border-[#8B5CF6]" placeholder={t.nickname} />
               <select value={room} onChange={(event) => setRoom(event.target.value)} className="rounded-xl border border-white/10 bg-black/45 px-3 py-2 text-xs text-white outline-none focus:border-[#FF6B1A]">
-                {rooms.map((item) => <option key={item.id} value={item.id}>{item[lang].toUpperCase()}</option>)}
+                {roomOptions.map((item) => <option key={item.id} value={item.id}>{item[lang].toUpperCase()}</option>)}
               </select>
             </div>
             {reservedWarning ? <p className="mt-2 rounded-xl border border-red-400/25 bg-red-500/10 px-3 py-2 text-[10px] leading-relaxed text-red-100">{reservedWarning}</p> : null}
