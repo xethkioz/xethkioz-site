@@ -50,6 +50,8 @@ check('interactive capsule objects', room.includes('activateObject') && room.inc
 check('viewer uses own avatar', room.includes("from('nexus_avatar_profiles')") && room.includes('String(viewerAvatar.outfit)') && !room.includes('String(profile?.avatar_state?.outfit)'))
 check('capsule chat invitation', room.includes("xethkioz:nexus-chat-open") && room.includes('INVITAR DESDE EL CHAT'))
 check('capsule contextual chat', room.includes('CHAT DE LA CÁPSULA') && room.includes('capsule-${roomHandle}') && chat.includes('isCapsuleRoom(requestedRoom)') && chat.includes('roomOptions.map'))
+check('chat follows latest without trapping reader', chat.includes('followsLatestRef') && chat.includes('movedUp') && chat.includes('↓ Nuevos mensajes') && chat.includes('scrollToLatest'))
+check('chat isolates rooms and optional storage', chat.includes('messages.filter((message) => message.room === room).slice(-80)') && chat.includes('persistLocalNickname') && chat.includes('Shared chat remains available'))
 check('official Atrium entrance', page.includes('ENTRAR AL ATRIO VIVO') && page.includes('/nexus-city/room/xethkioz') && room.includes('officialRoom') && css.includes('.xk-city-atrium'))
 check('auth profile recovery contract', authRecoveryMigration.includes('create or replace function public.handle_new_user()') && authRecoveryMigration.includes('after insert on auth.users') && authRecoveryMigration.includes("'BASIC','GUEST'") && authRecoveryMigration.includes('revoke all on function public.handle_new_user()'))
 check('system Atrium has no human owner', authRecoveryMigration.includes("'capsule-xethkioz'") && authRecoveryMigration.includes('owner_id=null') && authRecoveryMigration.includes("room_kind='public'"))

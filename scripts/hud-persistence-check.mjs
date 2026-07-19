@@ -19,6 +19,7 @@ add('App wraps routes with HudProvider', app.includes('<HudProvider>') && app.in
 add('Header consumes HUD context', header.includes('useHud()') && header.includes('account') && !header.includes('useState(false)'), 'Header must consume the canonical global account state.')
 add('HUD persists sound and volume', hud.includes('localStorage') && hud.includes('xethkioz.hud.sound') && hud.includes('xethkioz.hud.volume'), 'Sound and volume must persist between routes and reloads.')
 add('HUD persists account state', hud.includes('xethkioz.hud.account.status') && hud.includes('refreshAccount') && header.includes('openAccount'), 'Account identity must persist and revalidate through the global HUD context.')
+add('HUD tolerates blocked local storage', hud.includes('const safeStorage') && hud.includes('try { return window.localStorage.getItem(key) } catch') && hud.includes('Supabase remains the session source'), 'Privacy modes or storage quotas must not crash account hydration or navigation.')
 add('HUD keeps an audio foundation', hud.includes('setVolume') && hud.includes('xethkioz.hud.volume') && hud.includes('xeth-audio-volume'), 'Audio preferences must remain available without forcing a visible control when no track is active.')
 add('Guardrail updated', fusionConfig.includes('HUD state must be global and persistent'), 'HUD rule must be documented in code guardrails.')
 add('CSS has HUD polish', css.includes('.fusion-hud-panel') && css.includes('.fusion-volume-control'), 'HUD-specific CSS must be present and isolated.')

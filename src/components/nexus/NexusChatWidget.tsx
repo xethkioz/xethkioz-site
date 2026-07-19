@@ -160,7 +160,17 @@ function readLocalMessages(): NexusMessage[] {
 
 function persistLocalMessages(messages: NexusMessage[]) {
   if (typeof window === 'undefined') return
-  window.localStorage.setItem(LOCAL_STORAGE_MESSAGES, JSON.stringify(messages.slice(-80)))
+  try { window.localStorage.setItem(LOCAL_STORAGE_MESSAGES, JSON.stringify(messages.slice(-80))) } catch { /* Shared chat remains available. */ }
+}
+
+function readLocalNickname() {
+  if (typeof window === 'undefined') return 'Visitante'
+  try { return window.localStorage.getItem('xethkioz.nexus.nickname') || 'Visitante' } catch { return 'Visitante' }
+}
+
+function persistLocalNickname(nickname: string) {
+  if (typeof window === 'undefined') return
+  try { window.localStorage.setItem('xethkioz.nexus.nickname', nickname) } catch { /* Optional local preference. */ }
 }
 
 function addUniqueMessage(current: NexusMessage[], next: NexusMessage) {
@@ -173,7 +183,7 @@ export default function NexusChatWidget({ clearMobileDock = false }: { clearMobi
   const t = copy[lang]
   const [open, setOpen] = useState(false)
   const [room, setRoom] = useState('general')
-  const [nickname, setNickname] = useState(() => (typeof window === 'undefined' ? 'Visitante' : window.localStorage.getItem('xethkioz.nexus.nickname') || 'Visitante'))
+  const [nickname, setNickname] = useState(readLocalNickname)
   const [draft, setDraft] = useState('')
   const [status, setStatus] = useState<ChatStatus>(isSupabaseConfigured ? 'syncing' : 'local')
   const [session, setSession] = useState<XethkiozAuthorizedSession | null>(() => authNexusService.getSnapshot())
@@ -217,7 +227,7 @@ export default function NexusChatWidget({ clearMobileDock = false }: { clearMobi
     return [...rooms, { id: room, es: `Cápsula @${handle}`, en: `Capsule @${handle}` }]
   }, [room])
   const visibleMessages = useMemo(
-    () => messages.filter((message) => message.room === room || message.type === 'system').slice(-80),
+    () => messages.filter((message) => message.room === room).slice(-80),
     [messages, room],
   )
   const latestMessageId = visibleMessages.at(-1)?.id
@@ -245,7 +255,7 @@ export default function NexusChatWidget({ clearMobileDock = false }: { clearMobi
   }
 
   useEffect(() => {
-    if (typeof window !== 'undefined') window.localStorage.setItem('xethkioz.nexus.nickname', nicknameResolution.nickname)
+    persistLocalNickname(nicknameResolution.nickname)
   }, [nicknameResolution.nickname])
 
   useEffect(() => {
