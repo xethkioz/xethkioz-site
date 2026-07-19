@@ -73,6 +73,7 @@ check('no payment ledger', !/create table[^;]+(?:payment|credit_card|checkout_se
 check('no social payment ledger', !/create table[^;]+(?:payment|credit_card|checkout_session)/i.test(socialMigration))
 check('responsive world UI', css.includes('.xk-city-page') && css.includes('@media(max-width:640px)') && css.includes('.xk-avatar-stage'))
 check('responsive social UI', css.includes('.xk-social-loop') && css.includes('.xk-public-passport') && css.includes('@media(max-width:720px)'))
+check('living room clears desktop launcher', css.includes('calc(100% - 7.5rem)') && css.includes('margin-left:max(6.5rem') && css.includes('margin-inline:auto'))
 check('discoverable route', sitemap.includes("'/nexus-city'") && seo.includes('SearchAction'))
 check('OpenSearch discovery', index.includes('rel="search"') && search.includes('/news?q={searchTerms}'))
 
