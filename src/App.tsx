@@ -31,6 +31,7 @@ const GreenNode = lazy(() => import('./pages/GreenNode'))
 const ProfileHub = lazy(() => import('./pages/ProfileHub'))
 const NexusCity = lazy(() => import('./pages/NexusCity'))
 const NexusPassport = lazy(() => import('./pages/NexusPassport'))
+const NexusRoom = lazy(() => import('./pages/NexusRoom'))
 const News = lazy(() => import('./pages/News'))
 const NewsArticle = lazy(() => import('./pages/NewsArticle'))
 const Community = lazy(() => import('./pages/Community'))
@@ -43,6 +44,7 @@ const CmsNewsList = lazy(() => import('./cms/routes/CmsNewsList'))
 const CmsReviewQueue = lazy(() => import('./cms/routes/CmsReviewQueue'))
 const CmsUsersPanel = lazy(() => import('./cms/routes/CmsUsersPanel'))
 const CmsTrafficLogs = lazy(() => import('./cms/routes/CmsTrafficLogs'))
+const CmsNexusSafety = lazy(() => import('./cms/routes/CmsNexusSafety'))
 const CmsAdsManager = lazy(() => import('./cms/routes/CmsAdsManager'))
 const CmsWebServicesManager = lazy(() => import('./cms/routes/CmsWebServicesManager'))
 const CmsWebQuotes = lazy(() => import('./cms/routes/CmsWebQuotes'))
@@ -98,6 +100,8 @@ function RouteAccessibility({ pathname }: { pathname: string }) {
       ? 'Artículo de noticias'
       : pathname.startsWith('/nexus-city/u/')
         ? 'Pasaporte Nexus'
+      : pathname.startsWith('/nexus-city/room/')
+        ? 'Cápsula Nexus'
       : pathname.startsWith('/cms/')
         ? 'Panel editorial'
         : routeNames[pathname] ?? 'Sección XETHKIOZ'
@@ -170,6 +174,7 @@ function AppShell() {
               <Route path="/community" element={<Community />} />
               <Route path="/nexus-city" element={<NexusCity />} />
               <Route path="/nexus-city/u/:handle" element={<NexusPassport />} />
+              <Route path="/nexus-city/room/:handle" element={<NexusRoom />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/support" element={<Support />} />
@@ -196,6 +201,7 @@ function AppShell() {
                 <Route path="review" element={<CmsReviewQueue />} />
                 <Route path="users" element={<CmsUsersPanel />} />
                 <Route path="traffic" element={<CmsTrafficLogs />} />
+                <Route path="nexus-safety" element={<CmsNexusSafety />} />
                 <Route path="ads" element={<CmsAdsManager />} />
                 <Route path="web-services" element={<CmsWebServicesManager />} />
                 <Route path="web-quotes" element={<CmsWebQuotes />} />

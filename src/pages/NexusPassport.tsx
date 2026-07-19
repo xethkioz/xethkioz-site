@@ -12,9 +12,7 @@ type PassportRow = {
   bio: string
   status_text: string
   locale: string
-  visibility: 'public' | 'contacts' | 'private'
   avatar_state: Record<string, unknown>
-  room_state: { theme?: string; furniture?: string[]; access?: string }
   updated_at: string
 }
 
@@ -26,8 +24,6 @@ const outfitColors: Record<string, string> = {
   'outfit-void-cultist': '#32ff8a',
 }
 const auraColors: Record<string, string> = { 'aura-neon-pulse': '#f97316', 'aura-green-malware': '#32ff8a' }
-const themeColors: Record<string, string> = { violet: '#8b5cf6', cyan: '#22d3ee', orange: '#f97316', green: '#32ff8a' }
-const furnitureGlyph: Record<string, string> = { arcade: '▣', console: '⌁', plant: '♧', portal: '◉' }
 
 function safeHandle(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9_]/g, '').slice(0, 24)
@@ -54,8 +50,8 @@ export default function NexusPassport() {
     }
     let active = true
     setPageState('loading')
-    supabase.from('nexus_public_profiles')
-      .select('user_id,handle,display_name,bio,status_text,locale,visibility,avatar_state,room_state,updated_at')
+    supabase.from('nexus_public_directory')
+      .select('user_id,handle,display_name,bio,status_text,locale,avatar_state,updated_at')
       .eq('handle', publicHandle).maybeSingle()
       .then(({ data, error }) => {
         if (!active) return
@@ -76,7 +72,6 @@ export default function NexusPassport() {
       '--passport-skin': String(state.skin || '#c98f68'),
       '--passport-outfit': outfitColors[String(state.outfit)] || '#8b5cf6',
       '--passport-aura': auraColors[String(state.aura)] || '#f97316',
-      '--passport-room': themeColors[String(profile?.room_state?.theme)] || '#8b5cf6',
     } as CSSProperties
   }, [profile])
 
@@ -121,8 +116,6 @@ export default function NexusPassport() {
 
   if (pageState === 'missing' || !profile) return <main className="xk-passport-page"><SEO title="Pasaporte no disponible" description="Este Pasaporte Nexus no existe o no es público." url={`/nexus-city/u/${publicHandle}`} /><section className="xk-passport-missing"><small>ERROR // SIGNAL_NOT_FOUND</small><h1>{lang === 'es' ? 'Esta señal no está disponible.' : 'This signal is unavailable.'}</h1><p>{lang === 'es' ? 'Puede ser privada, haber cambiado de identificador o todavía no existir.' : 'It may be private, renamed or not created yet.'}</p><Link to="/nexus-city">← NEXUS CITY</Link></section></main>
 
-  const roomObjects = Array.isArray(profile.room_state?.furniture) ? profile.room_state.furniture : []
-
   return <main className="xk-passport-page" style={avatarStyle}>
     <SEO title={`${profile.display_name} · Pasaporte Nexus`} description={profile.status_text || profile.bio || `Pasaporte público de @${profile.handle} en Nexus City.`} url={`/nexus-city/u/${profile.handle}`} tags={['Nexus City', 'XETHKIOZ', 'avatar', profile.handle]} />
     <section className="xk-public-passport">
@@ -133,14 +126,12 @@ export default function NexusPassport() {
           <p><small>PLAYER SIGNAL</small><strong>@{profile.handle}</strong><span>{profile.status_text || 'NEXUS ONLINE'}</span></p>
         </div>
         <div className="xk-public-passport-copy">
-          <small>IDENTITY // {profile.visibility.toUpperCase()}</small><h1>{profile.display_name}</h1><blockquote>{profile.bio || (lang === 'es' ? 'Este explorador todavía no escribió su historia.' : 'This explorer has not written their story yet.')}</blockquote>
-          <dl><div><dt>{lang === 'es' ? 'Idioma' : 'Language'}</dt><dd>{profile.locale.toUpperCase()}</dd></div><div><dt>{lang === 'es' ? 'Última señal' : 'Last signal'}</dt><dd>{new Intl.DateTimeFormat(lang === 'es' ? 'es-AR' : 'en-US', { dateStyle: 'medium' }).format(new Date(profile.updated_at))}</dd></div><div><dt>{lang === 'es' ? 'Cápsula' : 'Capsule'}</dt><dd>{String(profile.room_state?.access || 'open').toUpperCase()}</dd></div></dl>
-          <div className="xk-passport-actions"><button type="button" onClick={openChat}>{lang === 'es' ? 'ABRIR CHAT' : 'OPEN CHAT'}</button>{isOwn ? <Link to="/nexus-city#social-loop">{lang === 'es' ? 'EDITAR PASAPORTE' : 'EDIT PASSPORT'}</Link> : <><button type="button" onClick={requestContact}>+ {lang === 'es' ? 'CONECTAR' : 'CONNECT'}</button><button type="button" className="is-safety" onClick={() => setReportOpen((current) => !current)}>{lang === 'es' ? 'SEGURIDAD' : 'SAFETY'}</button></>}</div>
+          <small>IDENTITY // PUBLIC SIGNAL</small><h1>{profile.display_name}</h1><blockquote>{profile.bio || (lang === 'es' ? 'Este explorador todavía no escribió su historia.' : 'This explorer has not written their story yet.')}</blockquote>
+          <dl><div><dt>{lang === 'es' ? 'Idioma' : 'Language'}</dt><dd>{profile.locale.toUpperCase()}</dd></div><div><dt>{lang === 'es' ? 'Última señal' : 'Last signal'}</dt><dd>{new Intl.DateTimeFormat(lang === 'es' ? 'es-AR' : 'en-US', { dateStyle: 'medium' }).format(new Date(profile.updated_at))}</dd></div><div><dt>{lang === 'es' ? 'Destino' : 'Destination'}</dt><dd>NEXUS CITY</dd></div></dl>
+          <div className="xk-passport-actions"><Link to={`/nexus-city/room/${profile.handle}`}>{lang === 'es' ? 'VISITAR CÁPSULA' : 'VISIT CAPSULE'}</Link><button type="button" onClick={openChat}>{lang === 'es' ? 'ABRIR CHAT' : 'OPEN CHAT'}</button>{isOwn ? <Link to="/nexus-city#social-loop">{lang === 'es' ? 'EDITAR PASAPORTE' : 'EDIT PASSPORT'}</Link> : <><button type="button" onClick={requestContact}>+ {lang === 'es' ? 'CONECTAR' : 'CONNECT'}</button><button type="button" className="is-safety" onClick={() => setReportOpen((current) => !current)}>{lang === 'es' ? 'SEGURIDAD' : 'SAFETY'}</button></>}</div>
           {notice ? <p className="xk-passport-notice" role="status">{notice}</p> : null}
         </div>
       </div>
-
-      <div className="xk-public-room"><div><small>CAPSULE PREVIEW // {String(profile.room_state?.theme || 'violet').toUpperCase()}</small><h2>{lang === 'es' ? 'Su rincón del multiverso' : 'Their corner of the multiverse'}</h2></div><div className="xk-public-room-scene">{roomObjects.map((item) => <i key={item} className={`is-${item}`}>{furnitureGlyph[item] || '◇'}</i>)}<b>NX</b></div></div>
 
       {reportOpen && !isOwn ? <section className="xk-passport-safety" aria-labelledby="safety-title"><div><small>TRUST & SAFETY // PRIVATE CHANNEL</small><h2 id="safety-title">{lang === 'es' ? 'Protegé tu experiencia' : 'Protect your experience'}</h2><p>{lang === 'es' ? 'El reporte es privado. Incluí contexto concreto; no publiques datos personales.' : 'Reports are private. Add specific context; do not include personal information.'}</p></div><label>{lang === 'es' ? 'Motivo' : 'Reason'}<select value={reportCategory} onChange={(event) => setReportCategory(event.target.value)}><option value="harassment">HARASSMENT</option><option value="spam">SPAM</option><option value="unsafe-content">UNSAFE CONTENT</option><option value="impersonation">IMPERSONATION</option><option value="other">OTHER</option></select></label><label>{lang === 'es' ? 'Qué ocurrió' : 'What happened'}<textarea value={reportDetail} onChange={(event) => setReportDetail(event.target.value.slice(0, 1200))} maxLength={1200} /></label><div><button type="button" onClick={sendReport}>{lang === 'es' ? 'ENVIAR REPORTE PRIVADO' : 'SEND PRIVATE REPORT'}</button><button type="button" onClick={blockExplorer}>{lang === 'es' ? 'BLOQUEAR EXPLORADOR' : 'BLOCK EXPLORER'}</button></div></section> : null}
     </section>
