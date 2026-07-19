@@ -42,6 +42,7 @@ type RelationshipSignal = {
 
 const PROFILE_STORAGE = 'xethkioz.nexus-city.passport.v1'
 const ROOM_STORAGE = 'xethkioz.nexus-city.room.v1'
+const SYSTEM_HANDLES = new Set(['xethkioz','nexus','admin','moderator','system'])
 const themeColors: Record<RoomTheme, string> = { violet: '#8b5cf6', cyan: '#22d3ee', orange: '#f97316', green: '#32ff8a' }
 const auraColors: Record<string, string> = { 'aura-neon-pulse': '#f97316', 'aura-green-malware': '#32ff8a' }
 const furniture = [
@@ -146,6 +147,10 @@ export default function NexusSocialLoop({ lang, account, avatar, onNotice }: { l
     const handle = safeHandle(profile.handle)
     if (handle.length < 3) {
       onNotice(lang === 'es' ? 'El identificador necesita al menos 3 caracteres.' : 'The handle needs at least 3 characters.')
+      return
+    }
+    if (SYSTEM_HANDLES.has(handle)) {
+      onNotice(lang === 'es' ? 'Ese identificador pertenece al sistema. Elegí uno personal.' : 'That handle belongs to the system. Choose a personal one.')
       return
     }
     setSaving(true)
