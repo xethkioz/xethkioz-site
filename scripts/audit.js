@@ -89,6 +89,12 @@ const steps = [
     requiredFiles: ['scripts/auth-nexus-check.mjs']
   },
   {
+    name: 'Nexus City Social Foundation',
+    command: 'node',
+    args: ['scripts/nexus-city-check.mjs'],
+    requiredFiles: ['scripts/nexus-city-check.mjs']
+  },
+  {
     name: 'Security Hardening',
     command: 'node',
     args: ['scripts/security-hardening-check.mjs'],
