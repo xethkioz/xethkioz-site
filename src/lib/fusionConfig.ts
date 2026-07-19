@@ -1,6 +1,6 @@
-export const FUSION_VERSION = '7.0.0-fusion-alpha.1.9-core-registry'
-export const FUSION_LABEL = 'Fusion Alpha 1.9'
-export const FUSION_STAGE = 'Core Registry · design tokens and portal registry'
+export const FUSION_VERSION = '10.0.0'
+export const FUSION_LABEL = 'XETHKIOZ 10.0'
+export const FUSION_STAGE = 'Nexus City · production multiverse'
 
 export const PUBLIC_ROUTES = [
   { path: '/', name: 'Home', status: 'public-core', owner: 'core' },
@@ -16,16 +16,15 @@ export const PUBLIC_ROUTES = [
 ] as const
 
 export const LEGACY_ROUTE_REDIRECTS = [
-  { from: '/news', to: '/gaming', reason: 'News content is temporarily collapsed into Gaming Hub.' },
-  { from: '/community', to: '/fun', reason: 'Community/fun content is temporarily collapsed into Fun Portal.' },
-  { from: '/admin', to: '/', reason: 'Admin is locked until CMS/Auth are rebuilt.' },
-  { from: '/cms', to: '/', reason: 'CMS is locked until data contracts are approved.' },
+  { from: '/web-creation', to: '/creacion-web', reason: 'Canonical Spanish service route.' },
+  { from: '/register', to: '/account', reason: 'Account creation is centralized in the stable account gateway.' },
+  { from: '/admin', to: '/cms', reason: 'Editorial administration is centralized in the protected CMS.' },
 ] as const
 
 export const FUSION_GUARDRAILS = [
   'main must remain deployable',
   'no visual rewrite without approved layered design',
-  'no SQL execution during alpha cleanup',
+  'database changes must be additive, migrated, reviewed and protected by RLS',
   'Green Wisp remains an Easter Egg/entity, not a menu item',
   'global controls must render outside portal pages',
   'Wisp must be a reusable entity component with states, not a hardcoded Home-only button',
@@ -33,13 +32,13 @@ export const FUSION_GUARDRAILS = [
   'Home must be composed from React/CSS layers, never from a flattened full-page image',
   'Live candidates must keep all public routes accessible and readable on mobile',
   'Wisp must remain visible globally through AppShell, not only inside Home',
-  'Login state must be persistent and clearly marked as preview until Auth is connected',
+  'Login state must be persistent, network-failure tolerant and backed by one canonical Supabase client',
   'Portal Engine must expose visual identity, panel hints, transition behavior, and accessible navigation per portal',
   'Green Node access remains a Wisp/Goblin Easter Egg and must not become a normal menu shortcut',
   'Wisp Engine must expose persistent state, events, energy and future AI integration hooks',
   'Visual and audio assets must be inventoried before being promoted to Live',
-  'SQL remains audit-only until migrations are consolidated and approved',
-  'CMS, news, community, profile and progress features stay mock/local until backend contracts are approved',
+  'SQL migrations must remain idempotent and production-safe',
+  'CMS, news, community, profile and progress features must preserve their Supabase and local-fallback contracts',
   'Dynamic content must be data-driven and i18n-aware before connecting Supabase',
   'Home V5 must keep modular hierarchy: hero, portals, updates, Wisp panel, community status and content signals.',
   'Portal metadata must come from Portal Registry instead of hardcoded Home arrays.',

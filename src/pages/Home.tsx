@@ -13,10 +13,8 @@ type Portal = {
   subtitle: string
   route: string
   poster: string
-  icon: string
-  ring: string
-  shadow: string
-  text: string
+  world: string
+  signal: string
   button: string
 }
 
@@ -71,17 +69,15 @@ const copy = {
     statsNews: '1,248 NOTICIAS',
     statsContent: '+3.6K CONTENIDO',
     statsSecure: '24/7 SISTEMA SEGURO',
-    copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia. XETHKIOZ Web v1.0. Todos los derechos reservados.',
+    copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia. XETHKIOZ Web v10.0. Todos los derechos reservados.',
     portals: [
       {
         title: 'JUEGOS',
         subtitle: 'Noticias · Guías · Videos · Imágenes',
         route: '/gaming',
         poster: '/assets/portal-games-clean-v1.webp',
-        icon: '🎮',
-        ring: 'ring-purple-500/90',
-        shadow: 'shadow-[0_0_70px_rgba(139,92,246,0.75)] hover:shadow-[0_0_105px_rgba(139,92,246,0.95)]',
-        text: 'text-purple-300',
+        world: '/assets/portal-games-world-v3.webp',
+        signal: 'XK-01 // REINO DE AVENTURA',
         button: 'Entrar al portal →',
       },
       {
@@ -89,10 +85,8 @@ const copy = {
         subtitle: 'Física · Tecnología · IA · Proyectos',
         route: '/science',
         poster: '/assets/portal-science-clean-v1.webp',
-        icon: '⚛',
-        ring: 'ring-cyan-400/90',
-        shadow: 'shadow-[0_0_70px_rgba(34,211,238,0.78)] hover:shadow-[0_0_110px_rgba(34,211,238,0.98)]',
-        text: 'text-cyan-300',
+        world: '/assets/portal-science-world-v3.webp',
+        signal: 'XK-02 // OBSERVATORIO VIVO',
         button: 'Entrar al portal →',
       },
       {
@@ -100,10 +94,8 @@ const copy = {
         subtitle: 'Memes · Videos · Arte · Humor',
         route: '/fun',
         poster: '/assets/portal-fun-chaos-v2.webp',
-        icon: '☻',
-        ring: 'ring-orange-400/90',
-        shadow: 'shadow-[0_0_70px_rgba(251,146,60,0.78)] hover:shadow-[0_0_110px_rgba(251,146,60,0.98)]',
-        text: 'text-orange-300',
+        world: '/assets/portal-fun-world-v3.webp',
+        signal: 'XK-03 // CALLE DEL CAOS',
         button: 'Entrar al portal →',
       },
     ] as Portal[],
@@ -152,17 +144,15 @@ const copy = {
     statsNews: '1,248 NEWS',
     statsContent: '+3.6K CONTENT',
     statsSecure: '24/7 SECURE SYSTEM',
-    copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia. XETHKIOZ Web v1.0. All rights reserved.',
+    copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia. XETHKIOZ Web v10.0. All rights reserved.',
     portals: [
       {
         title: 'GAMES',
         subtitle: 'News · Guides · Videos · Images',
         route: '/gaming',
         poster: '/assets/portal-games-clean-v1.webp',
-        icon: '🎮',
-        ring: 'ring-purple-500/90',
-        shadow: 'shadow-[0_0_70px_rgba(139,92,246,0.75)] hover:shadow-[0_0_105px_rgba(139,92,246,0.95)]',
-        text: 'text-purple-300',
+        world: '/assets/portal-games-world-v3.webp',
+        signal: 'XK-01 // ADVENTURE REALM',
         button: 'Enter portal →',
       },
       {
@@ -170,10 +160,8 @@ const copy = {
         subtitle: 'Physics · Technology · AI · Projects',
         route: '/science',
         poster: '/assets/portal-science-clean-v1.webp',
-        icon: '⚛',
-        ring: 'ring-cyan-400/90',
-        shadow: 'shadow-[0_0_70px_rgba(34,211,238,0.78)] hover:shadow-[0_0_110px_rgba(34,211,238,0.98)]',
-        text: 'text-cyan-300',
+        world: '/assets/portal-science-world-v3.webp',
+        signal: 'XK-02 // LIVING OBSERVATORY',
         button: 'Enter portal →',
       },
       {
@@ -181,10 +169,8 @@ const copy = {
         subtitle: 'Memes · Videos · Art · Humor',
         route: '/fun',
         poster: '/assets/portal-fun-chaos-v2.webp',
-        icon: '☻',
-        ring: 'ring-orange-400/90',
-        shadow: 'shadow-[0_0_70px_rgba(251,146,60,0.78)] hover:shadow-[0_0_110px_rgba(251,146,60,0.98)]',
-        text: 'text-orange-300',
+        world: '/assets/portal-fun-world-v3.webp',
+        signal: 'XK-03 // CHAOS ALLEY',
         button: 'Enter portal →',
       },
     ] as Portal[],
@@ -267,7 +253,7 @@ export default function Home() {
   return (
     <>
       <SEO
-        title="XETHKIOZ Web v1.0 · Ecosistema"
+        title="XETHKIOZ Web v10.0 · Nexus City"
         description="Ecosistema inmersivo XETHKIOZ con gaming, ciencia, diversión, Green Wisp y creación de páginas web a medida."
         url="/"
         image="/assets/xethkioz-cover.png"
@@ -376,12 +362,13 @@ export default function Home() {
               onClick={openWisp}
             />
 
-            <NexusDistrict tone="home" compact />
-            <section id="portals" aria-label={t.portalsLabel} className="xk-home-portal-deck mt-8 grid grid-cols-1 items-stretch gap-4 p-2.5 md:grid-cols-3 md:gap-3 md:p-4 xl:mt-7 xl:gap-5">
+            <section id="portals" aria-label={t.portalsLabel} className="xk-home-portal-deck mt-8 grid grid-cols-1 items-stretch md:grid-cols-3 xl:mt-7">
               {t.portals.map((portal) => (
                 <PortalCard key={portal.title} portal={portal} />
               ))}
             </section>
+
+            <NexusDistrict tone="home" compact />
 
             <HomeStoryPulse
               eyebrow={t.storyEyebrow}
@@ -513,16 +500,33 @@ function PortalCard({ portal }: { portal: Portal }) {
   const tone = portal.route === '/gaming' ? 'violet' : portal.route === '/science' ? 'cyan' : 'orange'
 
   return (
-    <Link to={portal.route} className={`xk-home-portal-shell xk-home-portal-shell-${tone} group block rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 focus-visible:ring-offset-4 focus-visible:ring-offset-black`} aria-label={`${portal.button.replace(' →', '')}: ${portal.title}`}>
+    <Link to={portal.route} className={`xk-home-portal-shell xk-home-portal-shell-${tone} group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 focus-visible:ring-offset-4 focus-visible:ring-offset-black`} aria-label={`${portal.button.replace(' →', '')}: ${portal.title}`}>
       <article className="xk-home-portal-clean relative z-[1] mx-auto aspect-square w-full max-w-none transition duration-500 ease-out group-hover:scale-[1.035]">
+        <div className="xk-home-portal-window">
+          <SafeImage
+            className="xk-home-portal-world"
+            src={portal.world}
+            alt={`${portal.title}: ${portal.subtitle}`}
+            loading="lazy"
+            fallback="/images/articles/fallback.svg"
+          />
+          <span className="xk-home-portal-depth" aria-hidden="true" />
+        </div>
         <SafeImage
-          className="xk-home-portal-image absolute inset-0 h-full w-full object-contain transition duration-1000 group-hover:scale-[1.045] group-hover:saturate-125"
+          className="xk-home-portal-image absolute inset-0 h-full w-full object-contain"
           src={portal.poster}
-          alt={portal.title}
+          alt=""
           loading="lazy"
           fallback="/images/articles/fallback.svg"
         />
+        <span className="xk-home-portal-particles" aria-hidden="true"><i /><i /><i /><i /></span>
       </article>
+      <div className="xk-home-portal-caption">
+        <span>{portal.signal}</span>
+        <strong>{portal.title}</strong>
+        <small>{portal.subtitle}</small>
+        <b>{portal.button}</b>
+      </div>
     </Link>
   )
 }

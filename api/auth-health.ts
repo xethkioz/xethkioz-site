@@ -12,6 +12,7 @@ export default function handler(_request: any, response: any) {
   response.setHeader('Cache-Control', 'no-store')
   response.status(200).json({
     ok: true,
+    release: '10.0.0',
     supabasePublicConfigReady: publicConfigReady,
     visitLoggingConfigured: supabaseUrlReady,
     visitLoggingBackend: serviceRoleReady ? 'vercel' : 'supabase-edge',

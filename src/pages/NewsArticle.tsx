@@ -8,7 +8,10 @@ import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import {
   fetchPublishedNewsBySlug,
   formatPublicNewsDate,
+  getPublicNewsReadingMetrics,
+  isPublicNewsEditorialChecklist,
   publicNewsCategoryLabels,
+  publicNewsReadingDepthLabels,
   type PublicNewsArticle,
   type PublicNewsContentBlock,
 } from '../services/news/publicNewsService'
@@ -24,6 +27,13 @@ const copy = {
     ai: 'Contenido asistido por IA',
     external: 'Radar externo curado',
     sourceLabel: 'Fuente',
+    words: 'palabras',
+    reviewed: 'Revisado por XETHKIOZ',
+    verification: 'Verificación directa',
+    consultOriginal: 'Consultar la fuente original',
+    primarySource: 'Fuente primaria',
+    humanContext: 'Contexto humano',
+    visibleLimits: 'Límites visibles',
   },
   en: {
     back: 'Back to news',
@@ -35,6 +45,13 @@ const copy = {
     ai: 'AI-assisted content',
     external: 'Curated external radar',
     sourceLabel: 'Source',
+    words: 'words',
+    reviewed: 'Reviewed by XETHKIOZ',
+    verification: 'Direct verification',
+    consultOriginal: 'Read the original source',
+    primarySource: 'Primary source',
+    humanContext: 'Human context',
+    visibleLimits: 'Visible limits',
   },
 } as const
 
@@ -65,12 +82,6 @@ function getArticleWorld(article: PublicNewsArticle) {
   return { className: 'is-science', district: '未来区 // FUTURE LAB', mode: 'INFORME DE CAMPO' }
 }
 
-function isEditorialChecklist(block: PublicNewsContentBlock) {
-  if (block.type !== 'list') return false
-  const normalized = block.text.toLocaleLowerCase('es')
-  return normalized.includes('fuente primaria') && normalized.includes('límite')
-}
-
 function renderContentBlock(block: PublicNewsContentBlock, index: number) {
   if (block.type === 'heading') return <h2 key={`${block.type}-${index}`} className="mt-8 text-2xl font-black uppercase tracking-[0.08em] text-white">{block.text}</h2>
   if (block.type === 'quote') return <blockquote key={`${block.type}-${index}`} className="mt-6 border-l-2 border-orange-300 bg-orange-500/10 px-5 py-4 text-orange-50">{block.text}</blockquote>
@@ -91,9 +102,9 @@ export default function NewsArticle() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const world = article ? getArticleWorld(article) : null
-  const readingBlocks = article?.content.filter((block) => !isEditorialChecklist(block)) ?? []
-  const readingWords = [article?.summary ?? '', ...readingBlocks.map((block) => block.text)].join(' ').trim().split(/\s+/).filter(Boolean).length
-  const readingMinutes = Math.max(2, Math.ceil(readingWords / 180))
+  const readingBlocks = article?.content.filter((block) => !isPublicNewsEditorialChecklist(block)) ?? []
+  const reading = article ? getPublicNewsReadingMetrics(article) : null
+  const readingDepthLabels = publicNewsReadingDepthLabels[lang]
 
   useEffect(() => {
     let active = true
@@ -135,8 +146,8 @@ export default function NewsArticle() {
           <article className="xk-news-archive mt-8 overflow-hidden rounded-[2rem] border border-violet-500/25 bg-[#0B0A0F] p-4 shadow-[0_0_70px_rgba(124,58,237,.18)] sm:p-6 md:p-9">
             <header className="xk-news-worldbar"><p>{world?.district}</p><span><i />{world?.mode}</span><b>FILE // {article.slug.slice(-12).toUpperCase()}</b></header>
             {article.cover_image_url ? (
-              <div className="mb-7 overflow-hidden rounded-[1.5rem] border border-orange-400/25 bg-black/40">
-                <SafeImage src={article.cover_image_url} fallback="/images/articles/fallback.svg" alt={article.cover_image_alt || article.title} className="w-full object-cover" loading="eager" />
+              <div className="xk-news-cover mb-7 overflow-hidden rounded-[1.5rem] border border-orange-400/25 bg-black/40">
+                <SafeImage src={article.cover_image_url} fallback="/images/articles/fallback.svg" alt={article.cover_image_alt || article.title} className="h-full w-full object-cover" loading="eager" />
               </div>
             ) : (
               <div className="mb-7 overflow-hidden rounded-[1.5rem] border border-orange-400/25 bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,.28),transparent_34%),linear-gradient(135deg,rgba(124,58,237,.2),rgba(0,0,0,.9))] p-5 md:p-8">
@@ -161,9 +172,20 @@ export default function NewsArticle() {
             </div>
             <h1 className="mt-6 text-3xl font-black uppercase leading-[1] tracking-[-0.04em] sm:text-4xl md:text-6xl">{article.title}</h1>
             {article.summary ? <p className="mt-5 border-l-2 border-orange-300 pl-5 text-base leading-8 text-slate-200 md:text-lg">{article.summary}</p> : null}
-            <div className="xk-news-simple-meta"><span>{readingMinutes} min de lectura</span><span>Fuente: {getSourceHost(article)}</span><span>Revisado por XETHKIOZ</span></div>
+            <div className="xk-news-simple-meta">
+              {reading ? <span>{readingDepthLabels[reading.depth]} · {reading.minutes} min</span> : null}
+              <span>{reading?.words ?? 0} {ui.words}</span>
+              <span>{ui.sourceLabel}: {getSourceHost(article)}</span>
+              <span>{ui.reviewed}</span>
+            </div>
+            {article.source_urls[0] ? (
+              <a href={article.source_urls[0]} target="_blank" rel="noreferrer" className="xk-news-source-cta">
+                <span><small>{ui.verification}</small>{ui.consultOriginal}</span>
+                <b>{getSourceHost(article)} ↗</b>
+              </a>
+            ) : null}
             <section className="xk-news-prose xk-news-prose-simple">{readingBlocks.length ? readingBlocks.map(renderContentBlock) : <p className="text-slate-300">{article.summary}</p>}</section>
-            <div className="xk-news-trustline" aria-label="Protocolo editorial"><span>FUENTE PRIMARIA</span><i /><span>CONTEXTO HUMANO</span><i /><span>LÍMITES VISIBLES</span></div>
+            <div className="xk-news-trustline" aria-label="Protocolo editorial"><span>{ui.primarySource}</span><i /><span>{ui.humanContext}</span><i /><span>{ui.visibleLimits}</span></div>
             {article.tags.length ? <div className="mt-8 flex flex-wrap gap-2 border-t border-white/10 pt-5">{article.tags.map((tag) => <span key={tag} className="rounded-full border border-violet-400/25 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-violet-100">#{tag}</span>)}</div> : null}
             {article.source_urls.length ? (
               <section className="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-5">

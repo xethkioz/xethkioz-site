@@ -1,6 +1,6 @@
-export const SITE_VERSION = 'v7.0.0-fusion-rc-live.1'
-export const SITE_RELEASE = 'Web Ops Cleanup + Stable Auth Build'
-export const SITE_BUILD_DATE = '2026-07-06'
+export const SITE_VERSION = 'v10.0.0'
+export const SITE_RELEASE = 'Nexus City · Multiverse Production Release'
+export const SITE_BUILD_DATE = '2026-07-19'
 export const SITE_DOMAIN = 'https://xethkioz.com.ar'
 
 export const DONATION_LINKS = {

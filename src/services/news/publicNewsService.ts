@@ -25,6 +25,14 @@ export type PublicNewsArticle = {
   cover_image_alt?: string | null
 }
 
+export type PublicNewsReadingDepth = 'brief' | 'analysis' | 'dossier'
+
+export type PublicNewsReadingMetrics = {
+  words: number
+  minutes: number
+  depth: PublicNewsReadingDepth
+}
+
 type RawNewsArticle = {
   id: string
   slug: string
@@ -66,6 +74,43 @@ export const publicNewsCategoryLabels = {
     programming: 'Programming',
   },
 } as const
+
+export const publicNewsReadingDepthLabels = {
+  es: {
+    brief: 'Lectura breve',
+    analysis: 'Análisis',
+    dossier: 'Dossier profundo',
+  },
+  en: {
+    brief: 'Quick brief',
+    analysis: 'Analysis',
+    dossier: 'Deep dossier',
+  },
+} as const
+
+export function isPublicNewsEditorialChecklist(block: PublicNewsContentBlock) {
+  if (block.type !== 'list') return false
+  const normalized = block.text.toLocaleLowerCase('es')
+  return normalized.includes('fuente primaria') && normalized.includes('límite')
+}
+
+export function getPublicNewsReadingMetrics(article: Pick<PublicNewsArticle, 'summary' | 'content'>): PublicNewsReadingMetrics {
+  const body = article.content
+    .filter((block) => !isPublicNewsEditorialChecklist(block))
+    .map((block) => block.text)
+  const words = [article.summary ?? '', ...body]
+    .join(' ')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .length
+
+  return {
+    words,
+    minutes: Math.max(1, Math.ceil(words / 180)),
+    depth: words < 180 ? 'brief' : words < 400 ? 'analysis' : 'dossier',
+  }
+}
 
 const TEST_24H_UNTIL = '2026-07-02T00:00:00.000Z'
 const TEST_24H_PUBLISHED_AT = '2026-06-30T21:00:00.000Z'

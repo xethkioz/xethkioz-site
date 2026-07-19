@@ -1,9 +1,9 @@
 # XETHKIOZ Network
 
-**Versión actual:** `v7.0.0-fusion-rc-live.1`  
-**Estado:** producción activa con flujo de revisión controlado.  
-**Última revisión operativa:** `2026-07-06`  
-**Dominio principal:** `https://xethkioz.com.ar`  
+**Versión actual:** `v10.0.0`
+**Estado:** producción activa con flujo de revisión controlado.
+**Última revisión operativa:** `2026-07-19`
+**Dominio principal:** `https://xethkioz.com.ar`
 **Dominio público:** `https://www.xethkioz.com.ar`
 
 XETHKIOZ Network es el ecosistema web modular de la marca XETHKIOZ. Reúne portal gamer/tech, noticias, comunidad, perfiles, CMS, streaming, Science Lab, Green Node, Wisp, módulos editoriales y futuras automatizaciones con Supabase.
@@ -27,6 +27,7 @@ La web debe tratarse como proyecto vivo. Los cambios de infraestructura, auth, C
 | `/` | Home principal | Activo |
 | `/news` | Noticias / Content OS | Activo |
 | `/gaming` | Gaming & Technology | Activo |
+| `/gaming/guides` | Guías de los juegos principales | Activo |
 | `/science` | Science Lab | Activo |
 | `/fun` | Creator / Fun Portal | Activo |
 | `/community` | Comunidad | Activo |
