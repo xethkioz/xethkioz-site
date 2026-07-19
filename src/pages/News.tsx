@@ -10,9 +10,11 @@ import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import {
   fetchPublishedNews,
   formatPublicNewsDate,
+  getPublicNewsReadingMetrics,
   isPublicNewsSupabaseConfigured,
   publicNewsCategories,
   publicNewsCategoryLabels,
+  publicNewsReadingDepthLabels,
   type PublicNewsArticle,
   type PublicNewsCategory,
 } from '../services/news/publicNewsService'
@@ -108,6 +110,11 @@ function getArticleMark(article: PublicNewsArticle) {
   if (article.category === 'community') return '😂'
   if (article.category === 'green') return '🟢'
   return '⌨️'
+}
+
+function formatReadingBadge(article: PublicNewsArticle, lang: 'es' | 'en') {
+  const reading = getPublicNewsReadingMetrics(article)
+  return `${publicNewsReadingDepthLabels[lang][reading.depth]} · ${reading.minutes} min`
 }
 
 function ArticleThumb({ article, large = false }: { article: PublicNewsArticle; large?: boolean }) {
@@ -287,6 +294,7 @@ export default function News() {
               <span>{ui.published}: {formatPublicNewsDate(featured.published_at ?? featured.created_at, lang)}</span>
               <span>{ui.source}: {getSourceHost(featured)}</span>
               {featured.ai_generated ? <span className="rounded-full border border-violet-400/35 px-3 py-1 text-violet-100">{ui.ai}</span> : null}
+              <span className="rounded-full border border-white/10 px-3 py-1 text-slate-200">{formatReadingBadge(featured, lang)}</span>
             </div>
             <h2 className="mt-5 max-w-5xl text-3xl font-black uppercase leading-[1] tracking-[-0.04em] sm:text-4xl md:text-6xl">{featured.title}</h2>
             {featured.summary ? <p className="mt-4 max-w-4xl text-base leading-7 text-slate-200 md:text-lg">{featured.summary}</p> : null}
@@ -310,6 +318,7 @@ export default function News() {
                   <span className="text-orange-300">{labels[article.category]}</span>
                   <span>{formatPublicNewsDate(article.published_at ?? article.created_at, lang)}</span>
                   <span>{getSourceHost(article)}</span>
+                  <span className="rounded-full border border-white/10 px-2 py-1 text-slate-300">{formatReadingBadge(article, lang)}</span>
                 </div>
                 <h3 className="mt-3 text-xl font-black leading-tight md:text-2xl">{article.title}</h3>
                 {article.summary ? <p className="mt-3 line-clamp-4 text-sm leading-6 text-slate-300">{article.summary}</p> : null}
