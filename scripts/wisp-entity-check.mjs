@@ -10,21 +10,31 @@ const add = (name, passed, details) => checks.push({ name, passed, details })
 
 const wisp = read('src/components/fusion/FusionWispEntity.tsx')
 const home = read('src/pages/Home.tsx')
+const app = read('src/App.tsx')
 const legacyWorldStage = read('src/components/fusion/FusionWorldStage.tsx')
 const worldGateV5 = read('src/engines/world/WorldGateV5.tsx')
 const worldHeroStage = read('src/engines/world/WorldHeroStage.tsx')
 const globalWisp = read('src/components/fusion/FusionGlobalWisp.tsx')
 const css = read('src/index.css')
+const redesignCss = read('src/xethkioz-redesign.css')
 const fusionConfig = read('src/lib/fusionConfig.ts')
 
 add('FusionWispEntity exists', exists('src/components/fusion/FusionWispEntity.tsx') && wisp.includes('FusionWispEntity'), 'Wisp must be a reusable component.')
 add('Wisp supports states', ['idle', 'watching', 'connected', 'guiding', 'alert', 'sleeping'].every((token) => wisp.includes(token)), 'Wisp must expose stable visual states for future interaction and AI/event hooks.')
 add(
-  'Home uses reusable Wisp through the active World Gate layer',
+  'Home uses reusable Wisp through the active global or World Gate layer',
   (legacyWorldStage.includes('<FusionWispEntity') || globalWisp.includes('<FusionWispEntity') || worldGateV5.includes('<WispHUD') || worldHeroStage.includes('<WorldWispMotion'))
-    && (home.includes('<FusionWorldStage') || home.includes('<WorldGateV5'))
+    && (home.includes('<FusionWorldStage') || home.includes('<WorldGateV5') || (app.includes('<FusionGlobalWisp') && app.includes('!isCmsRoute')))
     && !home.includes('className="green-wisp-secret"'),
-  'Home must use reusable Wisp/World Wisp components through the current World Gate layer, not hardcode old Wisp markup.',
+  'Home must use reusable Wisp/World Wisp components through the current global or World Gate layer, not hardcode old Wisp markup.',
+)
+add(
+  'Home preserves the mobile Wisp entry and taunt',
+  app.includes('<FusionGlobalWisp')
+    && globalWisp.includes("location.pathname === '/' ? ' is-home-entry'")
+    && redesignCss.includes('.xk-wisp-taunt')
+    && redesignCss.includes('.xk-wisp.is-home-entry'),
+  'The homepage must expose the demon Wisp on mobile while avoiding a duplicate next to the desktop specter.',
 )
 add(
   'Wisp routes to Green Node',
