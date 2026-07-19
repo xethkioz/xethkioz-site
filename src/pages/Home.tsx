@@ -45,6 +45,7 @@ const copy = {
     navGames: 'JUEGOS',
     navScience: 'CIENCIA & TECH',
     navFun: 'DIVERSIÓN',
+    navNexus: 'NEXUS CITY',
     navWeb: 'CREACIÓN WEB',
     navWisp: 'WISP NEXUS',
     webEyebrow: 'NUEVA LÍNEA · CREACIÓN WEB',
@@ -62,8 +63,9 @@ const copy = {
       { code: '01', title: 'JUGAR', text: 'Competir, perder, mejorar y volver a entrar.', route: '/gaming', tone: 'violet' },
       { code: '02', title: 'ENTENDER', text: 'Ciencia y tecnología explicadas con curiosidad real.', route: '/science', tone: 'cyan' },
       { code: '03', title: 'REÍR', text: 'Memes, fails y ese caos que merece compartirse.', route: '/fun', tone: 'orange' },
-      { code: '04', title: 'CREAR', text: 'Transformar una idea en una presencia digital propia.', route: '/creacion-web', tone: 'gold' },
-      { code: '05', title: 'DESCIFRAR', text: 'El archivo oscuro donde la señal deja de ser normal.', route: '/green-node', tone: 'green' },
+      { code: '04', title: 'HABITAR', text: 'Crear un avatar, conocer gente y dejar una marca en Nexus City.', route: '/nexus-city', tone: 'violet' },
+      { code: '05', title: 'CREAR', text: 'Transformar una idea en una presencia digital propia.', route: '/creacion-web', tone: 'gold' },
+      { code: '06', title: 'DESCIFRAR', text: 'El archivo oscuro donde la señal deja de ser normal.', route: '/green-node', tone: 'green' },
     ],
     statsUsers: '+25K XETHKIOZERS',
     statsNews: '1,248 NOTICIAS',
@@ -120,6 +122,7 @@ const copy = {
     navGames: 'GAMES',
     navScience: 'SCIENCE & TECH',
     navFun: 'FUN',
+    navNexus: 'NEXUS CITY',
     navWeb: 'WEB CREATION',
     navWisp: 'WISP NEXUS',
     webEyebrow: 'NEW LINE · WEB CREATION',
@@ -137,8 +140,9 @@ const copy = {
       { code: '01', title: 'PLAY', text: 'Compete, lose, improve and enter again.', route: '/gaming', tone: 'violet' },
       { code: '02', title: 'UNDERSTAND', text: 'Science and technology with genuine curiosity.', route: '/science', tone: 'cyan' },
       { code: '03', title: 'LAUGH', text: 'Memes, fails and chaos worth sharing.', route: '/fun', tone: 'orange' },
-      { code: '04', title: 'CREATE', text: 'Turn an idea into a digital presence of its own.', route: '/creacion-web', tone: 'gold' },
-      { code: '05', title: 'DECODE', text: 'The dark archive where the signal stops being normal.', route: '/green-node', tone: 'green' },
+      { code: '04', title: 'INHABIT', text: 'Create an avatar, meet people and leave a mark in Nexus City.', route: '/nexus-city', tone: 'violet' },
+      { code: '05', title: 'CREATE', text: 'Turn an idea into a digital presence of its own.', route: '/creacion-web', tone: 'gold' },
+      { code: '06', title: 'DECODE', text: 'The dark archive where the signal stops being normal.', route: '/green-node', tone: 'green' },
     ],
     statsUsers: '+25K XETHKIOZERS',
     statsNews: '1,248 NEWS',
@@ -182,6 +186,7 @@ const sideItems = [
   { to: '/gaming', icon: '🎮' },
   { to: '/science', icon: '⚛' },
   { to: '/fun', icon: '☻' },
+  { to: '/nexus-city', icon: '◎' },
   { to: '/creacion-web', icon: '▣' },
 ]
 
@@ -310,6 +315,7 @@ export default function Home() {
             <Link to="/gaming" className="rounded-full px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-white/80 transition hover:bg-white/10 hover:text-orange-300">{t.navGames}</Link>
             <Link to="/science" className="rounded-full px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-white/80 transition hover:bg-white/10 hover:text-orange-300">{t.navScience}</Link>
             <Link to="/fun" className="rounded-full px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-white/80 transition hover:bg-white/10 hover:text-orange-300">{t.navFun}</Link>
+            <Link to="/nexus-city" className="rounded-full px-5 py-3 font-mono text-xs font-black uppercase tracking-[0.18em] text-cyan-200 transition hover:bg-cyan-400/10 hover:text-white">{t.navNexus}</Link>
             <Link to="/creacion-web" className="rounded-full px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-orange-200 transition hover:bg-orange-400/10 hover:text-orange-100">{t.navWeb}</Link>
             <button
               type="button"
