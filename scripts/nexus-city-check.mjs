@@ -21,6 +21,7 @@ const socialMigration = read('supabase/migrations/20260719223000_nexus_city_soci
 const policyMigration = read('supabase/migrations/20260719224500_nexus_relationships_policy_optimization.sql')
 const roomsMigration = read('supabase/migrations/20260719233000_nexus_city_rooms_privacy.sql')
 const capsuleChatMigration = read('supabase/migrations/20260719240000_nexus_capsule_chat.sql')
+const authRecoveryMigration = read('supabase/migrations/20260719250000_auth_profile_recovery_atrium.sql')
 const directoryDefinition = roomsMigration.split('create table if not exists public.nexus_public_directory')[1]?.split('create table if not exists public.nexus_rooms')[0] || ''
 const sitemap = read('api/sitemap.ts')
 const seo = read('src/components/SEO.tsx')
@@ -49,6 +50,10 @@ check('interactive capsule objects', room.includes('activateObject') && room.inc
 check('viewer uses own avatar', room.includes("from('nexus_avatar_profiles')") && room.includes('String(viewerAvatar.outfit)') && !room.includes('String(profile?.avatar_state?.outfit)'))
 check('capsule chat invitation', room.includes("xethkioz:nexus-chat-open") && room.includes('INVITAR DESDE EL CHAT'))
 check('capsule contextual chat', room.includes('CHAT DE LA CÁPSULA') && room.includes('capsule-${roomHandle}') && chat.includes('isCapsuleRoom(requestedRoom)') && chat.includes('roomOptions.map'))
+check('official Atrium entrance', page.includes('ENTRAR AL ATRIO VIVO') && page.includes('/nexus-city/room/xethkioz') && room.includes('officialRoom') && css.includes('.xk-city-atrium'))
+check('auth profile recovery contract', authRecoveryMigration.includes('create or replace function public.handle_new_user()') && authRecoveryMigration.includes('after insert on auth.users') && authRecoveryMigration.includes("'BASIC','GUEST'") && authRecoveryMigration.includes('revoke all on function public.handle_new_user()'))
+check('system Atrium has no human owner', authRecoveryMigration.includes("'capsule-xethkioz'") && authRecoveryMigration.includes('owner_id=null') && authRecoveryMigration.includes("room_kind='public'"))
+check('reserved system handles', social.includes('SYSTEM_HANDLES') && social.includes('Ese identificador pertenece al sistema') && authRecoveryMigration.includes('nexus_public_profiles_system_handle'))
 check('moderation inbox', app.includes("import('./cms/routes/CmsNexusSafety')") && safety.includes("from('nexus_safety_reports')") && safety.includes('canModerate') && safety.includes('resolved_at'))
 check('earned-only economy', page.includes('Nexus Shards') && page.includes('pagos con dinero real permanecerán desactivados') && !page.includes('stripe'))
 check('safety roadmap', page.includes('moderación') && page.includes('antifraude') && page.includes('reembolsos'))

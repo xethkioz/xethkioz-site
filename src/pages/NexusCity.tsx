@@ -165,12 +165,17 @@ export default function NexusCity() {
         <section className="xk-city-hero">
           <div className="xk-city-grid" aria-hidden="true" />
           <div className="xk-city-hero-copy">
-            <p>NEXUS CITY // LIVING WORLD 02</p>
+            <p>NEXUS CITY // LIVING WORLD 03</p>
             <h1>{lang === 'es' ? 'Tu identidad entra al mundo.' : 'Your identity enters the world.'}</h1>
             <span>{lang === 'es' ? 'Un lobby social propio de XETHKIOZ: avatar, distritos, chat, progresión e inventario. No es otra red social; es la entrada humana al multiverso.' : 'A XETHKIOZ social lobby with avatars, districts, chat, progression and inventory. Not another social network: the human entrance to the multiverse.'}</span>
-            <div><a href="#avatar-lab">{lang === 'es' ? 'CREAR AVATAR' : 'CREATE AVATAR'} ↓</a><a href="#social-loop">{lang === 'es' ? 'ABRIR MI CÁPSULA' : 'OPEN MY CAPSULE'} ↓</a><button type="button" onClick={() => openRoom('general')}>{lang === 'es' ? 'ABRIR CHAT GLOBAL' : 'OPEN GLOBAL CHAT'} ↗</button></div>
+            <div><Link to="/nexus-city/room/xethkioz">{lang === 'es' ? 'ENTRAR AL ATRIO VIVO' : 'ENTER THE LIVE ATRIUM'} ↗</Link><a href="#avatar-lab">{lang === 'es' ? 'CREAR AVATAR' : 'CREATE AVATAR'} ↓</a><a href="#social-loop">{lang === 'es' ? 'ABRIR MI CÁPSULA' : 'OPEN MY CAPSULE'} ↓</a></div>
           </div>
           <div className="xk-city-signal"><i /><span>{presence.onlineTotal} ONLINE</span><b>WORLD STATUS // ALPHA</b></div>
+        </section>
+
+        <section className="xk-city-atrium" aria-labelledby="atrium-title">
+          <div><p>OFFICIAL WORLD // ALWAYS OPEN</p><h2 id="atrium-title">{lang === 'es' ? 'El Atrio ya está encendido.' : 'The Atrium is already online.'}</h2><span>{lang === 'es' ? 'Entrá sin crear una cápsula. Mové tu avatar, activá objetos, hacé gestos y conversá con quienes estén conectados.' : 'Enter without creating a capsule. Move your avatar, activate objects, use gestures and chat with whoever is online.'}</span><Link to="/nexus-city/room/xethkioz">{lang === 'es' ? 'CRUZAR EL UMBRAL →' : 'CROSS THE THRESHOLD →'}</Link></div>
+          <div className="xk-atrium-preview" aria-hidden="true"><i className="is-arcade">▣</i><i className="is-console">⌁</i><i className="is-plant">♧</i><i className="is-portal">◉</i><b>中央</b><span>LIVE SIGNAL</span></div>
         </section>
 
         <section id="avatar-lab" className="xk-avatar-lab" aria-labelledby="avatar-lab-title">

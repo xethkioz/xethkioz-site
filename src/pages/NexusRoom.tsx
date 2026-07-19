@@ -28,6 +28,8 @@ const objectCopy = {
   es: { arcade: 'Arcade activada: una nueva partida busca jugadores.', console: 'Consola enlazada al chat de la cápsula.', plant: 'El bio-neón está reaccionando a tu presencia.', portal: 'El mini portal está cargando una ruta desconocida.' },
   en: { arcade: 'Arcade active: a new game is looking for players.', console: 'Console linked to the capsule chat.', plant: 'The bio-neon is reacting to your presence.', portal: 'The mini portal is charging an unknown route.' },
 } as const
+const officialProfile: ProfileRow = { user_id: 'system-xethkioz', handle: 'xethkioz', display_name: 'XETHKIOZ ATRIUM', status_text: 'La plaza central está encendida. Exploradores, señales y mundos convergen acá.', avatar_state: {} }
+const officialRoom: RoomRow = { owner_id: 'system-xethkioz', room_state: { theme: 'green', furniture: ['arcade','console','plant','portal'] }, access: 'open', updated_at: '2026-07-19T00:00:00.000Z' }
 
 function safeHandle(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9_]/g, '').slice(0, 24)
@@ -83,6 +85,7 @@ export default function NexusRoom() {
   const { lang } = useLang()
   const { account } = useHud()
   const roomHandle = safeHandle(handle)
+  const isOfficialAtrium = roomHandle === 'xethkioz'
   const presence = usePresence(`/nexus-city/room/${roomHandle}`, `capsule-${roomHandle}`)
   const stageRef = useRef<HTMLDivElement>(null)
   const liveChannelRef = useRef<ReturnType<typeof supabase.channel> | null>(null)
@@ -115,6 +118,13 @@ export default function NexusRoom() {
   }, [account.userId])
 
   useEffect(() => {
+    if (isOfficialAtrium) {
+      setProfile(officialProfile)
+      setRoom(officialRoom)
+      setPageState('ready')
+      addWispXp(5, 'visit', '/nexus-city/room/xethkioz')
+      return
+    }
     if (!roomHandle || !isSupabaseConfigured) {
       setPageState('missing')
       return
@@ -147,7 +157,7 @@ export default function NexusRoom() {
     }
     void load()
     return () => { active = false }
-  }, [account.userId, roomHandle])
+  }, [account.userId, isOfficialAtrium, roomHandle])
 
   useEffect(() => {
     if (pageState !== 'ready') return
@@ -286,10 +296,10 @@ export default function NexusRoom() {
   if (pageState === 'locked' || !room) return <main className="xk-room-page"><SEO title={`Cápsula de ${profile.display_name}`} description="Acceso protegido por el propietario." url={`/nexus-city/room/${roomHandle}`} /><section className="xk-room-denied is-locked"><small>ROOM // ACCESS_DENIED</small><h1>{lang === 'es' ? 'La puerta está cerrada.' : 'The door is locked.'}</h1><p>{lang === 'es' ? 'Esta cápsula es privada, requiere ser contacto o todavía no fue publicada.' : 'This capsule is private, requires an accepted contact, or has not been published.'}</p><div><Link to={`/nexus-city/u/${roomHandle}`}>{lang === 'es' ? 'VOLVER AL PASAPORTE' : 'BACK TO PASSPORT'}</Link><Link to="/nexus-city">NEXUS CITY</Link></div></section></main>
 
   return <main className="xk-room-page" style={visualStyle}>
-    <SEO title={`${profile.display_name} · Cápsula Nexus`} description={`Visitá la cápsula de @${profile.handle} en Nexus City.`} url={`/nexus-city/room/${profile.handle}`} tags={['Nexus City','XETHKIOZ','virtual room',profile.handle]} />
+    <SEO title={isOfficialAtrium ? `${profile.display_name} · Nexus City` : `${profile.display_name} · Cápsula Nexus`} description={isOfficialAtrium ? (lang === 'es' ? 'Entrá al Atrio oficial de Nexus City: una plaza social viva dentro del universo XETHKIOZ.' : 'Enter the official Nexus City Atrium: a living social plaza inside the XETHKIOZ universe.') : (lang === 'es' ? `Visitá la cápsula de @${profile.handle} en Nexus City.` : `Visit @${profile.handle}'s capsule in Nexus City.`)} url={`/nexus-city/room/${profile.handle}`} tags={['Nexus City','XETHKIOZ','virtual room',profile.handle]} />
     <section className="xk-living-room">
-      <header><div><Link to={`/nexus-city/u/${profile.handle}`}>← @{profile.handle}</Link><small>CAPSULE // {room.access.toUpperCase()}</small></div><div><span className={presence.realtime ? 'is-live' : ''}>● {Math.max(presence.roomOnline, livePeers.length + 1)} {lang === 'es' ? 'EN LA CÁPSULA' : 'IN CAPSULE'}</span><button type="button" onClick={shareRoom}>{lang === 'es' ? 'INVITAR ↗' : 'INVITE ↗'}</button></div></header>
-      <div className="xk-living-room-copy"><small>PERSONAL UNIVERSE // {roomTheme.toUpperCase()}</small><h1>{profile.display_name}</h1><p>{profile.status_text || (lang === 'es' ? 'Una señal flota dentro del Nexus.' : 'A signal floats inside the Nexus.')}</p></div>
+      <header><div><Link to={isOfficialAtrium ? '/nexus-city' : `/nexus-city/u/${profile.handle}`}>← {isOfficialAtrium ? 'NEXUS CITY' : `@${profile.handle}`}</Link><small>{isOfficialAtrium ? 'SYSTEM // OFFICIAL ATRIUM' : `CAPSULE // ${room.access.toUpperCase()}`}</small></div><div><span className={presence.realtime ? 'is-live' : ''}>● {Math.max(presence.roomOnline, livePeers.length + 1)} {isOfficialAtrium ? (lang === 'es' ? 'EN EL ATRIO' : 'IN THE ATRIUM') : (lang === 'es' ? 'EN LA CÁPSULA' : 'IN CAPSULE')}</span><button type="button" onClick={shareRoom}>{lang === 'es' ? 'INVITAR ↗' : 'INVITE ↗'}</button></div></header>
+      <div className="xk-living-room-copy"><small>{isOfficialAtrium ? 'SHARED UNIVERSE' : 'PERSONAL UNIVERSE'} // {roomTheme.toUpperCase()}</small><h1>{profile.display_name}</h1><p>{isOfficialAtrium ? (lang === 'es' ? 'La plaza central está encendida. Exploradores, señales y mundos convergen acá.' : 'The central plaza is online. Explorers, signals, and worlds converge here.') : (profile.status_text || (lang === 'es' ? 'Una señal flota dentro del Nexus.' : 'A signal floats inside the Nexus.'))}</p></div>
       <div ref={stageRef} className={`xk-living-room-stage${activeObject ? ` is-object-${activeObject}` : ''}`} onClick={moveToPointer} role="application" aria-label={lang === 'es' ? 'Cápsula interactiva. Usá flechas o tocá el escenario para mover el avatar.' : 'Interactive capsule. Use arrows or tap the stage to move the avatar.'} tabIndex={0}>
         <div className="xk-room-skyline" aria-hidden="true"><i /><i /><i /><i /><i /><span /></div>
         {roomObjects.map((item) => <button type="button" key={item} onClick={(event) => activateObject(item, event)} className={`xk-room-object is-${item}${activeObject === item ? ' is-active' : ''}`} aria-label={`${lang === 'es' ? 'Activar' : 'Activate'} ${item}`}>{furnitureGlyph[item] || '◇'}</button>)}
@@ -298,7 +308,7 @@ export default function NexusRoom() {
         <div className={`xk-room-player${activeEmote ? ` is-emote-${activeEmote}` : ''}`} style={{ left: `${position.x}%`, top: `${position.y}%` }}><i /><span /><b /><em /><small>YOU</small>{activeEmote ? <strong aria-hidden="true">{emoteGlyph[activeEmote]}</strong> : null}</div>
         <p>{lang === 'es' ? 'TOCÁ EL ESCENARIO · FLECHAS / WASD' : 'TAP THE STAGE · ARROWS / WASD'}</p>
       </div>
-      <div className="xk-room-command"><div><button type="button" onClick={() => nudge(0,-5)}>▲</button><span><button type="button" onClick={() => nudge(-5,0)}>◀</button><button type="button" onClick={() => nudge(0,5)}>▼</button><button type="button" onClick={() => nudge(5,0)}>▶</button></span></div><div><button type="button" onClick={openCapsuleChat}>{lang === 'es' ? 'CHAT DE LA CÁPSULA' : 'CAPSULE CHAT'}</button><button type="button" onClick={inviteToChat}>{lang === 'es' ? 'INVITAR DESDE EL CHAT' : 'INVITE FROM CHAT'}</button>{account.userId === profile.user_id ? <Link to="/nexus-city#social-loop">{lang === 'es' ? 'EDITAR MI CÁPSULA' : 'EDIT MY CAPSULE'}</Link> : null}</div><div className="xk-room-emotes">{(['wave','dance','glitch'] as RoomEmote[]).map((emote) => <button type="button" key={emote} onClick={() => performEmote(emote)} aria-pressed={activeEmote === emote}>{emoteGlyph[emote]} {emoteLabel[lang][emote]}</button>)}</div>{notice ? <p role="status">{notice}</p> : null}</div>
+      <div className="xk-room-command"><div><button type="button" onClick={() => nudge(0,-5)}>▲</button><span><button type="button" onClick={() => nudge(-5,0)}>◀</button><button type="button" onClick={() => nudge(0,5)}>▼</button><button type="button" onClick={() => nudge(5,0)}>▶</button></span></div><div><button type="button" onClick={openCapsuleChat}>{isOfficialAtrium ? (lang === 'es' ? 'CHAT DEL ATRIO' : 'ATRIUM CHAT') : (lang === 'es' ? 'CHAT DE LA CÁPSULA' : 'CAPSULE CHAT')}</button><button type="button" onClick={inviteToChat}>{lang === 'es' ? 'INVITAR DESDE EL CHAT' : 'INVITE FROM CHAT'}</button>{!isOfficialAtrium && account.userId === profile.user_id ? <Link to="/nexus-city#social-loop">{lang === 'es' ? 'EDITAR MI CÁPSULA' : 'EDIT MY CAPSULE'}</Link> : null}</div><div className="xk-room-emotes">{(['wave','dance','glitch'] as RoomEmote[]).map((emote) => <button type="button" key={emote} onClick={() => performEmote(emote)} aria-pressed={activeEmote === emote}>{emoteGlyph[emote]} {emoteLabel[lang][emote]}</button>)}</div>{notice ? <p role="status">{notice}</p> : null}</div>
     </section>
   </main>
 }

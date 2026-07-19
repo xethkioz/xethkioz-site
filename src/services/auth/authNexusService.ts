@@ -161,7 +161,7 @@ export class AuthNexusService {
   }
 
   private async authorizeSupabaseSession(session: Session): Promise<XethkiozAuthorizedSession> {
-    const profile = await this.ensureProfile(session.user.id)
+    const profile = await this.ensureProfile(session.user.id, session.user.email ?? null)
     return createAuthorizedSession({
       userId: session.user.id,
       email: session.user.email ?? null,
@@ -171,7 +171,7 @@ export class AuthNexusService {
     })
   }
 
-  private async ensureProfile(userId: string): Promise<ProfileRow> {
+  private async ensureProfile(userId: string, email: string | null): Promise<ProfileRow> {
     const { data, error } = await this.client.from('profiles').select('*').eq('id', userId).maybeSingle()
 
     if (data) return data
@@ -197,6 +197,7 @@ export class AuthNexusService {
       .from('profiles')
       .insert({
         id: userId,
+        email,
         subscription_tier: DEFAULT_GUEST_PROFILE.subscription_tier,
         role: DEFAULT_GUEST_PROFILE.role,
       })
