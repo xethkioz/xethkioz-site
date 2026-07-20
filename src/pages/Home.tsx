@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import SafeImage from '../components/SafeImage'
 import SEO from '../components/SEO'
 import { NexusDistrict } from '../components/NexusDistrict'
-import { UniversePortalOrbit } from '../components/universe/UniversePortalOrbit'
 import { fallbackWebServiceOffers } from '../data/webServiceFallbacks'
-import { useWisp } from '../providers/WispProvider'
 import { useLang } from '../lib/LangContext'
+import { useWisp } from '../providers/WispProvider'
 import type { WebServiceOffer } from '../types/webServices'
+import './HomeReborn.css'
 
 type DataSavingConnection = {
   saveData?: boolean
@@ -15,111 +15,227 @@ type DataSavingConnection = {
   removeEventListener?: (type: 'change', listener: () => void) => void
 }
 
+type PortalCard = {
+  id: string
+  code: string
+  title: string
+  subtitle: string
+  action: string
+  route: string
+  world: string
+  frame: string
+  tone: string
+  position: string
+}
+
+type DestinationCard = {
+  id: 'nexus' | 'web' | 'green'
+  code: string
+  title: string
+  text: string
+  action: string
+  route: string
+  image: string
+  tone: string
+  position: string
+}
+
 const copy = {
   es: {
-    eyebrow: 'Bienvenido al ecosistema',
-    titleTop: 'EL GAMING',
-    titleBottom: 'ES MI PASIÓN',
-    subtitle: 'Tres portales, un estudio creativo y miles de historias por descubrir.',
-    cta: 'Explorar ecosistema →',
-    wispTitle: 'WISP // INFECTED',
-    wispText: 'Una entidad malware abrió el Archivo Negro. Entrá si querés investigar la señal.',
-    wispBtn: 'Interceptar señal',
-    wispNote: 'Acceso clandestino · Nivel 13',
-    login: 'Login',
-    news: 'Abrir radar de noticias',
+    kicker: 'XETHKIOZ // WORLD GATE',
+    titleTop: 'EL GAMING ES',
+    titleBottom: 'MI PASIÓN',
+    intro: 'Una entrada viva hacia tres mundos principales. Gaming, ciencia y caos vuelven a sentirse como portales reales, con identidad propia y sin convertir el Home en una grilla técnica.',
+    primaryCta: 'ELEGIR UN PORTAL',
+    newsCta: 'ABRIR RADAR DE NOTICIAS',
+    portalLabel: 'PORTALES PRINCIPALES // SEÑAL ESTABLE',
+    liveSignal: '3 PORTALES PRINCIPALES ACTIVOS',
+    nexusSignal: 'NEXUS CITY EN LÍNEA',
+    safeSignal: 'SISTEMA SEGURO 24/7',
+    secondaryEyebrow: 'OTRAS PUERTAS DEL NEXUS',
+    secondaryTitle: 'El universo continúa después del portal.',
+    secondaryText: 'Destinos especiales para habitar, crear y descifrar XETHKIOZ sin competir con la escena principal.',
+    webEyebrow: 'XETHKIOZ // CREACIÓN WEB',
+    webTitle: 'Tu idea también puede convertirse en un mundo.',
+    webText: 'Diseño y desarrollo de páginas con identidad propia, rendimiento real y una presentación que no parece una plantilla genérica.',
+    webCta: 'EXPLORAR CREACIÓN WEB',
+    featured: 'PROPUESTA DESTACADA',
+    login: 'LOGIN',
     switchLanguage: 'Cambiar a inglés',
-    primaryNav: 'Navegación principal',
-    launcher: 'Accesos rápidos XETHKIOZ',
-    navHome: 'HOME',
-    navGames: 'JUEGOS',
-    navScience: 'CIENCIA & TECH',
-    navFun: 'DIVERSIÓN',
-    navNexus: 'NEXUS CITY',
-    navWeb: 'CREACIÓN WEB',
-    navWisp: 'WISP NEXUS',
-    webEyebrow: 'NUEVA LÍNEA · CREACIÓN WEB',
-    webTitle: 'Tu idea también puede tener su propio universo.',
-    webText: 'Diseño y desarrollo de landing pages, tiendas online y sitios profesionales con identidad, velocidad y presupuesto personalizado.',
-    webCta: 'Explorar creación web →',
-    webNote: 'Propuestas visuales · Presupuesto privado · Diseño responsive',
-    webImageAlt: 'Ejemplo visual de una landing page premium creada por XETHKIOZ',
-    webFeaturedLabel: 'Propuesta destacada',
-    storyEyebrow: 'ESTO TAMBIÉN SOY YO',
-    storyTitle: 'No es una colección de páginas. Es todo lo que me mueve.',
-    storyText: 'XETHKIOZ nació para reunir las cosas que me obsesionan: jugar hasta entender un mundo, aprender algo que parecía imposible, reírme del caos, construir ideas y mirar donde casi nadie mira.',
-    storyCta: 'Elegí qué parte querés conocer',
-    chapters: [
-      { code: '01', title: 'JUGAR', text: 'Competir, perder, mejorar y volver a entrar.', route: '/gaming', tone: 'violet' },
-      { code: '02', title: 'ENTENDER', text: 'Ciencia y tecnología explicadas con curiosidad real.', route: '/science', tone: 'cyan' },
-      { code: '03', title: 'REÍR', text: 'Memes, fails y ese caos que merece compartirse.', route: '/fun', tone: 'orange' },
-      { code: '04', title: 'HABITAR', text: 'Crear un avatar, conocer gente y dejar una marca en Nexus City.', route: '/nexus-city', tone: 'violet' },
-      { code: '05', title: 'CREAR', text: 'Transformar una idea en una presencia digital propia.', route: '/creacion-web', tone: 'gold' },
-      { code: '06', title: 'DESCIFRAR', text: 'El archivo oscuro donde la señal deja de ser normal.', route: '/green-node', tone: 'green' },
-    ],
-    statsUsers: '+25K XETHKIOZERS',
-    statsNews: '1,248 NOTICIAS',
-    statsContent: '+3.6K CONTENIDO',
-    statsSecure: '24/7 SISTEMA SEGURO',
-    copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia. XETHKIOZ Web v10.0. Todos los derechos reservados.',
+    wispLabel: 'Abrir Green Node mediante Wisp',
+    primary: [
+      {
+        id: 'science',
+        code: 'XK-02',
+        title: 'CIENCIA & TECH',
+        subtitle: 'IA · Física · Hardware · Futuro',
+        action: 'ATRAVESAR PORTAL',
+        route: '/science',
+        world: '/assets/portal-science-world-v3.webp',
+        frame: '/assets/portal-science-clean-v1.webp',
+        tone: '#22d3ee',
+        position: '50% 47%',
+      },
+      {
+        id: 'gaming',
+        code: 'XK-01',
+        title: 'GAMING',
+        subtitle: 'Noticias · Guías · Comunidad · Mundos',
+        action: 'ATRAVESAR PORTAL',
+        route: '/gaming',
+        world: '/assets/portal-games-world-v3.webp',
+        frame: '/assets/portal-games-clean-v1.webp',
+        tone: '#8b5cf6',
+        position: '50% 52%',
+      },
+      {
+        id: 'fun',
+        code: 'XK-03',
+        title: 'DIVERSIÓN',
+        subtitle: 'Memes · Arte · Videos · Caos',
+        action: 'ATRAVESAR PORTAL',
+        route: '/fun',
+        world: '/assets/portal-fun-world-v3.webp',
+        frame: '/assets/portal-fun-chaos-v2.webp',
+        tone: '#ff6b1a',
+        position: '50% 53%',
+      },
+    ] as PortalCard[],
+    destinations: [
+      {
+        id: 'nexus',
+        code: 'XK-04 // CIUDAD VIVA',
+        title: 'NEXUS CITY',
+        text: 'Creá tu identidad, recorré salas y conectate con la comunidad.',
+        action: 'ENTRAR A LA CIUDAD',
+        route: '/nexus-city',
+        image: '/assets/xethkioz-cover.png',
+        tone: '#a855f7',
+        position: '50% 38%',
+      },
+      {
+        id: 'web',
+        code: 'XK-05 // ESTUDIO CREATIVO',
+        title: 'CREACIÓN WEB',
+        text: 'Proyectos digitales personalizados con estética, velocidad y estrategia.',
+        action: 'VER EL ESTUDIO',
+        route: '/creacion-web',
+        image: '/web-services/creacion-web-og.png',
+        tone: '#f59e0b',
+        position: '50% 50%',
+      },
+      {
+        id: 'green',
+        code: 'XK-06 // SEÑAL INFECTADA',
+        title: 'GREEN NODE',
+        text: 'El Archivo Negro permanece oculto hasta que Wisp abra el acceso.',
+        action: 'INTERCEPTAR SEÑAL',
+        route: '/green-node',
+        image: '/assets/identity/green-node-occult-malware-v1.webp',
+        tone: '#32ff8a',
+        position: '50% 40%',
+      },
+    ] as DestinationCard[],
+    copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia · XETHKIOZ Web v10.0',
   },
   en: {
-    eyebrow: 'Welcome to the ecosystem',
+    kicker: 'XETHKIOZ // WORLD GATE',
     titleTop: 'GAMING IS',
     titleBottom: 'MY PASSION',
-    subtitle: 'Three portals, one creative studio and thousands of stories waiting to be discovered.',
-    cta: 'Explore ecosystem →',
-    wispTitle: 'WISP // INFECTED',
-    wispText: 'A malware entity opened the Black Archive. Enter if you want to investigate the signal.',
-    wispBtn: 'Intercept signal',
-    wispNote: 'Clandestine access · Level 13',
-    login: 'Login',
-    news: 'Open news radar',
+    intro: 'A living entrance into three main worlds. Gaming, science and chaos feel like real portals again, each with its own identity and without turning the Home into a technical grid.',
+    primaryCta: 'CHOOSE A PORTAL',
+    newsCta: 'OPEN NEWS RADAR',
+    portalLabel: 'MAIN PORTALS // STABLE SIGNAL',
+    liveSignal: '3 MAIN PORTALS ACTIVE',
+    nexusSignal: 'NEXUS CITY ONLINE',
+    safeSignal: 'SECURE SYSTEM 24/7',
+    secondaryEyebrow: 'OTHER NEXUS GATES',
+    secondaryTitle: 'The universe continues beyond the portal.',
+    secondaryText: 'Special destinations to inhabit, create and decode XETHKIOZ without competing with the main scene.',
+    webEyebrow: 'XETHKIOZ // WEB CREATION',
+    webTitle: 'Your idea can become a world of its own.',
+    webText: 'Web design and development with original identity, real performance and a presentation that never feels like a generic template.',
+    webCta: 'EXPLORE WEB CREATION',
+    featured: 'FEATURED PROPOSAL',
+    login: 'LOGIN',
     switchLanguage: 'Switch to Spanish',
-    primaryNav: 'Primary navigation',
-    launcher: 'XETHKIOZ quick links',
-    navHome: 'HOME',
-    navGames: 'GAMES',
-    navScience: 'SCIENCE & TECH',
-    navFun: 'FUN',
-    navNexus: 'NEXUS CITY',
-    navWeb: 'WEB CREATION',
-    navWisp: 'WISP NEXUS',
-    webEyebrow: 'NEW LINE · WEB CREATION',
-    webTitle: 'Your idea can have a universe of its own.',
-    webText: 'Design and development of landing pages, online stores and professional sites with identity, speed and a custom quote.',
-    webCta: 'Explore web creation →',
-    webNote: 'Visual proposals · Private quote · Responsive design',
-    webImageAlt: 'Visual example of a premium landing page created by XETHKIOZ',
-    webFeaturedLabel: 'Featured solution',
-    storyEyebrow: 'THIS IS ALSO ME',
-    storyTitle: 'This is not a collection of pages. It is everything that drives me.',
-    storyText: 'XETHKIOZ was created to bring together the things I obsess over: playing until I understand a world, learning what looked impossible, laughing at chaos, building ideas and looking where almost nobody looks.',
-    storyCta: 'Choose which side you want to meet',
-    chapters: [
-      { code: '01', title: 'PLAY', text: 'Compete, lose, improve and enter again.', route: '/gaming', tone: 'violet' },
-      { code: '02', title: 'UNDERSTAND', text: 'Science and technology with genuine curiosity.', route: '/science', tone: 'cyan' },
-      { code: '03', title: 'LAUGH', text: 'Memes, fails and chaos worth sharing.', route: '/fun', tone: 'orange' },
-      { code: '04', title: 'INHABIT', text: 'Create an avatar, meet people and leave a mark in Nexus City.', route: '/nexus-city', tone: 'violet' },
-      { code: '05', title: 'CREATE', text: 'Turn an idea into a digital presence of its own.', route: '/creacion-web', tone: 'gold' },
-      { code: '06', title: 'DECODE', text: 'The dark archive where the signal stops being normal.', route: '/green-node', tone: 'green' },
-    ],
-    statsUsers: '+25K XETHKIOZERS',
-    statsNews: '1,248 NEWS',
-    statsContent: '+3.6K CONTENT',
-    statsSecure: '24/7 SECURE SYSTEM',
-    copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia. XETHKIOZ Web v10.0. All rights reserved.',
+    wispLabel: 'Open Green Node through Wisp',
+    primary: [
+      {
+        id: 'science',
+        code: 'XK-02',
+        title: 'SCIENCE & TECH',
+        subtitle: 'AI · Physics · Hardware · Future',
+        action: 'CROSS PORTAL',
+        route: '/science',
+        world: '/assets/portal-science-world-v3.webp',
+        frame: '/assets/portal-science-clean-v1.webp',
+        tone: '#22d3ee',
+        position: '50% 47%',
+      },
+      {
+        id: 'gaming',
+        code: 'XK-01',
+        title: 'GAMING',
+        subtitle: 'News · Guides · Community · Worlds',
+        action: 'CROSS PORTAL',
+        route: '/gaming',
+        world: '/assets/portal-games-world-v3.webp',
+        frame: '/assets/portal-games-clean-v1.webp',
+        tone: '#8b5cf6',
+        position: '50% 52%',
+      },
+      {
+        id: 'fun',
+        code: 'XK-03',
+        title: 'FUN',
+        subtitle: 'Memes · Art · Videos · Chaos',
+        action: 'CROSS PORTAL',
+        route: '/fun',
+        world: '/assets/portal-fun-world-v3.webp',
+        frame: '/assets/portal-fun-chaos-v2.webp',
+        tone: '#ff6b1a',
+        position: '50% 53%',
+      },
+    ] as PortalCard[],
+    destinations: [
+      {
+        id: 'nexus',
+        code: 'XK-04 // LIVING CITY',
+        title: 'NEXUS CITY',
+        text: 'Create your identity, explore rooms and connect with the community.',
+        action: 'ENTER THE CITY',
+        route: '/nexus-city',
+        image: '/assets/xethkioz-cover.png',
+        tone: '#a855f7',
+        position: '50% 38%',
+      },
+      {
+        id: 'web',
+        code: 'XK-05 // CREATIVE STUDIO',
+        title: 'WEB CREATION',
+        text: 'Custom digital projects built around aesthetics, speed and strategy.',
+        action: 'OPEN THE STUDIO',
+        route: '/creacion-web',
+        image: '/web-services/creacion-web-og.png',
+        tone: '#f59e0b',
+        position: '50% 50%',
+      },
+      {
+        id: 'green',
+        code: 'XK-06 // INFECTED SIGNAL',
+        title: 'GREEN NODE',
+        text: 'The Black Archive stays hidden until Wisp opens the access point.',
+        action: 'INTERCEPT SIGNAL',
+        route: '/green-node',
+        image: '/assets/identity/green-node-occult-malware-v1.webp',
+        tone: '#32ff8a',
+        position: '50% 40%',
+      },
+    ] as DestinationCard[],
+    copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia · XETHKIOZ Web v10.0',
   },
 } as const
-
-const sideItems = [
-  { to: '/', icon: '⌂' },
-  { to: '/gaming', icon: '🎮' },
-  { to: '/science', icon: '⚛' },
-  { to: '/fun', icon: '☻' },
-  { to: '/nexus-city', icon: '◎' },
-  { to: '/creacion-web', icon: '▣' },
-]
 
 function useAmbientVideoEnabled() {
   const [enabled, setEnabled] = useState(false)
@@ -154,7 +270,7 @@ function useFeaturedWebService() {
         if (active) setOffer(nextOffer)
       })
       .catch(() => {
-        // The static featured offer remains available if the CMS cannot be reached.
+        // The static featured offer remains visible when the CMS is unavailable.
       })
 
     return () => {
@@ -169,9 +285,9 @@ export default function Home() {
   const navigate = useNavigate()
   const { triggerGreenPortal } = useWisp()
   const { lang, setLang } = useLang()
-  const t = copy[lang]
   const videoEnabled = useAmbientVideoEnabled()
   const featuredWebOffer = useFeaturedWebService()
+  const t = copy[lang]
 
   const openWisp = () => {
     triggerGreenPortal()
@@ -182,28 +298,24 @@ export default function Home() {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     document.getElementById('portals')?.scrollIntoView({
       behavior: reduceMotion ? 'auto' : 'smooth',
-      block: 'start',
+      block: 'center',
     })
   }
 
   return (
     <>
       <SEO
-        title="XETHKIOZ Web v10.0 · Nexus City"
-        description="Ecosistema inmersivo XETHKIOZ con gaming, ciencia, diversión, Green Wisp y creación de páginas web a medida."
+        title="XETHKIOZ · Gaming Is My Passion"
+        description="Entrada inmersiva al universo XETHKIOZ: gaming, ciencia, diversión, Nexus City, Green Node y creación web."
         url="/"
         image="/assets/xethkioz-cover.png"
       />
 
-      <section className="relative min-h-[100svh] overflow-hidden bg-[#0A0A0F] text-white">
-        <div
-          className="fixed inset-0 -z-50 h-full w-full bg-cover bg-center"
-          style={{ backgroundImage: "url('/assets/bg-dragon-poster.webp')" }}
-          aria-hidden="true"
-        />
+      <main className="xk-rb-home">
+        <div className="xk-rb-bg" aria-hidden="true" />
         {videoEnabled && (
           <video
-            className="fixed inset-0 -z-50 h-full w-full object-cover"
+            className="xk-rb-bg-video"
             src="/assets/bg-dragon-animated.mp4"
             autoPlay
             loop
@@ -214,158 +326,189 @@ export default function Home() {
             aria-hidden="true"
           />
         )}
+        <div className="xk-rb-shade" aria-hidden="true" />
+        <div className="xk-rb-grid" aria-hidden="true" />
 
-        <div className="fixed inset-0 -z-40 bg-black/65" />
-        <div className="fixed inset-0 -z-30 bg-[radial-gradient(circle_at_30%_30%,rgba(139,92,246,0.16),transparent_30%),radial-gradient(circle_at_75%_35%,rgba(34,197,94,0.10),transparent_24%),radial-gradient(circle_at_center,transparent_35%,#0A0A0F_92%)]" />
-        <div className="xk-noise fixed inset-0 -z-20 opacity-[0.17]" />
-
-        <LeftLauncher
-          onWisp={openWisp}
-          label={t.launcher}
-          itemLabels={[t.navHome, t.navGames, t.navScience, t.navFun, t.navWeb]}
-          wispLabel={t.navWisp}
-        />
-
-        <header className="relative z-30 flex items-center justify-between px-5 py-5 md:px-10 lg:px-14">
-          <Link to="/" className="group" aria-label="XETHKIOZ Home">
-            <div className="text-4xl font-black italic tracking-tight md:text-5xl">
-              <span className="bg-gradient-to-br from-orange-500 via-orange-300 to-purple-500 bg-clip-text text-transparent drop-shadow-[0_0_22px_rgba(255,107,26,0.65)]">
-                X
-              </span>
-              <span className="bg-gradient-to-r from-purple-300 via-purple-500 to-violet-700 bg-clip-text text-transparent drop-shadow-[0_0_18px_rgba(139,92,246,0.7)]">
-                ETHKIOZ
-              </span>
-            </div>
-            <p className="mt-1 text-[8px] font-bold uppercase tracking-[0.18em] text-white/70">
-              Gaming Is My Passion · Beyond The Game
-            </p>
-          </Link>
-
-          <nav className="hidden rounded-full border border-white/10 bg-black/30 px-3 py-2 backdrop-blur-xl lg:flex" aria-label={t.primaryNav}>
-            <Link to="/" aria-current="page" className="rounded-full px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-white/80 transition hover:bg-white/10 hover:text-orange-300">{t.navHome}</Link>
-            <Link to="/gaming" className="rounded-full px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-white/80 transition hover:bg-white/10 hover:text-orange-300">{t.navGames}</Link>
-            <Link to="/science" className="rounded-full px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-white/80 transition hover:bg-white/10 hover:text-orange-300">{t.navScience}</Link>
-            <Link to="/fun" className="rounded-full px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-white/80 transition hover:bg-white/10 hover:text-orange-300">{t.navFun}</Link>
-            <Link to="/nexus-city" className="rounded-full px-5 py-3 font-mono text-xs font-black uppercase tracking-[0.18em] text-cyan-200 transition hover:bg-cyan-400/10 hover:text-white">{t.navNexus}</Link>
-            <Link to="/creacion-web" className="rounded-full px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-orange-200 transition hover:bg-orange-400/10 hover:text-orange-100">{t.navWeb}</Link>
-            <button
-              type="button"
-              onClick={openWisp}
-              className="rounded-full px-5 py-3 font-mono text-xs font-black uppercase tracking-[0.18em] text-green-300 transition hover:bg-green-400/10 hover:shadow-[0_0_20px_rgba(34,197,94,0.6)]"
-            >
-              {t.navWisp}
-            </button>
-          </nav>
-
-          <div className="flex items-center gap-2">
-            <Link to="/news" aria-label={t.news} className="hidden h-11 w-11 place-items-center rounded-xl border border-white/10 bg-black/30 backdrop-blur-xl transition hover:border-orange-400/60 hover:shadow-[0_0_20px_rgba(251,146,60,0.4)] md:grid">⌕</Link>
-            <button
-              type="button"
-              onClick={() => setLang(lang === 'es' ? 'en' : 'es')}
-              aria-label={t.switchLanguage}
-              className="rounded-xl border border-white/10 bg-black/30 px-4 py-3 font-mono text-xs font-bold uppercase tracking-[0.16em] backdrop-blur-xl transition hover:border-purple-400"
-            >
-              {lang.toUpperCase()}
-            </button>
-            <Link
-              to="/login"
-              className="rounded-xl border border-purple-500/40 bg-purple-500/10 px-4 py-3 font-mono text-xs font-black uppercase tracking-[0.16em] text-purple-200 backdrop-blur-xl transition hover:bg-purple-500/20 hover:shadow-[0_0_22px_rgba(139,92,246,0.55)]"
-            >
-              {t.login}
+        <div className="xk-rb-shell">
+          <header className="xk-rb-header">
+            <Link to="/" className="xk-rb-brand" aria-label="XETHKIOZ Home">
+              <span className="xk-rb-logo">XETHKIOZ</span>
+              <small>Gaming Is My Passion · Beyond The Game</small>
             </Link>
-          </div>
-        </header>
 
-        <div className="relative z-20 mx-auto max-w-[1720px] px-5 pb-40 pt-2 md:px-10 lg:px-14">
-          <div className="relative min-h-[calc(100svh-190px)]">
-            <section className="xk-home-manifesto pt-4 xl:min-h-[320px] xl:pr-[300px]">
-              <p className="font-mono text-xs font-black uppercase tracking-[0.38em] text-orange-300 drop-shadow-[0_0_14px_rgba(251,146,60,0.72)]">
-                {t.eyebrow}
-              </p>
+            <nav className="xk-rb-nav" aria-label={lang === 'es' ? 'Navegación principal' : 'Primary navigation'}>
+              <Link to="/gaming">{lang === 'es' ? 'Juegos' : 'Gaming'}</Link>
+              <Link to="/science">{lang === 'es' ? 'Ciencia' : 'Science'}</Link>
+              <Link to="/fun">{lang === 'es' ? 'Diversión' : 'Fun'}</Link>
+              <Link to="/nexus-city">Nexus City</Link>
+              <Link to="/creacion-web">{lang === 'es' ? 'Creación Web' : 'Web Creation'}</Link>
+            </nav>
 
-              <h1 className="xk-home-horizontal-title">
-                <span className="text-white drop-shadow-[0_0_24px_rgba(255,255,255,0.35)]">{t.titleTop}</span>{' '}
-                <span className="bg-gradient-to-r from-orange-400 via-purple-400 to-violet-700 bg-clip-text text-transparent drop-shadow-[0_0_34px_rgba(139,92,246,0.65)]">{t.titleBottom}</span>
+            <div className="xk-rb-tools">
+              <Link to="/news">NEWS</Link>
+              <button type="button" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} aria-label={t.switchLanguage}>
+                {lang.toUpperCase()}
+              </button>
+              <Link to="/login">{t.login}</Link>
+            </div>
+          </header>
+
+          <section className="xk-rb-hero" aria-labelledby="home-title">
+            <div className="xk-rb-copy">
+              <p className="xk-rb-kicker">{t.kicker}</p>
+              <h1 id="home-title">
+                {t.titleTop}
+                <span>{t.titleBottom}</span>
               </h1>
+              <p>{t.intro}</p>
 
-              <div className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-center xl:max-w-[920px]">
-                <p className="max-w-xl text-base leading-relaxed text-white/75 md:text-lg">{t.subtitle}</p>
-                <button type="button" onClick={scrollToPortals} className="shrink-0 rounded-xl border border-orange-400/60 bg-orange-500/10 px-6 py-3 font-mono text-xs font-black uppercase tracking-[0.18em] text-orange-300 shadow-[0_0_28px_rgba(251,146,60,0.28)] transition hover:scale-[1.03] hover:bg-orange-500/20 hover:shadow-[0_0_45px_rgba(251,146,60,0.55)]">{t.cta}</button>
+              <div className="xk-rb-copy-actions">
+                <button type="button" onClick={scrollToPortals}>{t.primaryCta} <span>↓</span></button>
+                <Link to="/news">{t.newsCta} <span>↗</span></Link>
               </div>
-            </section>
 
-            <FloatingWisp
-              ariaLabel={t.navWisp}
-              onClick={openWisp}
-            />
+              <div className="xk-rb-signal" aria-label={lang === 'es' ? 'Estado del sistema' : 'System status'}>
+                <span>{t.liveSignal}</span>
+                <span>{t.nexusSignal}</span>
+                <span>{t.safeSignal}</span>
+              </div>
+            </div>
 
-            <UniversePortalOrbit />
+            <div id="portals" className="xk-rb-theatre" aria-label={lang === 'es' ? 'Portales principales' : 'Main portals'}>
+              <p className="xk-rb-theatre-label">{t.portalLabel}</p>
+              <div className="xk-rb-portals">
+                {t.primary.map((portal) => <PrimaryPortal key={portal.id} portal={portal} />)}
+              </div>
+            </div>
 
-            <NexusDistrict tone="home" compact />
+            <FloatingWisp ariaLabel={t.wispLabel} onClick={openWisp} />
+          </section>
 
-            <HomeStoryPulse
-              eyebrow={t.storyEyebrow}
-              title={t.storyTitle}
-              text={t.storyText}
-              cta={t.storyCta}
-              chapters={t.chapters}
-              onOpenWisp={openWisp}
-            />
+          <section className="xk-rb-secondary" aria-labelledby="secondary-gates-title">
+            <div className="xk-rb-section-head">
+              <div>
+                <p>{t.secondaryEyebrow}</p>
+                <h2 id="secondary-gates-title">{t.secondaryTitle}</h2>
+              </div>
+              <span>{t.secondaryText}</span>
+            </div>
 
-            <WebCreationFeature
-              eyebrow={t.webEyebrow}
-              title={t.webTitle}
-              text={t.webText}
-              cta={t.webCta}
-              note={t.webNote}
-              imageAlt={t.webImageAlt}
-              featuredLabel={t.webFeaturedLabel}
-              offer={featuredWebOffer}
-            />
-          </div>
+            <div className="xk-rb-destinations">
+              {t.destinations.map((destination) => (
+                <Destination key={destination.id} destination={destination} onOpenWisp={openWisp} />
+              ))}
+            </div>
+          </section>
+
+          <NexusDistrict tone="home" compact />
+
+          <WebCreationFeature
+            eyebrow={t.webEyebrow}
+            title={t.webTitle}
+            text={t.webText}
+            cta={t.webCta}
+            featuredLabel={t.featured}
+            offer={featuredWebOffer}
+          />
+
+          <footer className="xk-rb-footer">
+            <div>
+              <span>{t.copyright}</span>
+              <nav aria-label={lang === 'es' ? 'Enlaces legales' : 'Legal links'}>
+                <Link to="/privacy">{lang === 'es' ? 'Privacidad' : 'Privacy'}</Link>
+                <Link to="/editorial-policy">{lang === 'es' ? 'Política editorial' : 'Editorial policy'}</Link>
+                <Link to="/contact">{lang === 'es' ? 'Contacto' : 'Contact'}</Link>
+              </nav>
+            </div>
+          </footer>
         </div>
-
-        <StatsBar stats={[t.statsUsers, t.statsNews, t.statsContent, t.statsSecure]} copyright={t.copyright} />
-      </section>
+      </main>
     </>
   )
 }
 
-function HomeStoryPulse({
-  eyebrow,
-  title,
-  text,
-  cta,
-  chapters,
-  onOpenWisp,
-}: {
-  eyebrow: string
-  title: string
-  text: string
-  cta: string
-  chapters: readonly { code: string; title: string; text: string; route: string; tone: string }[]
-  onOpenWisp: () => void
-}) {
+function PrimaryPortal({ portal }: { portal: PortalCard }) {
   return (
-    <section className="xk-home-story" aria-labelledby="home-story-title">
-      <div className="xk-home-story-copy">
-        <p>{eyebrow}</p>
-        <h2 id="home-story-title">{title}</h2>
-        <span>{text}</span>
-        <small>{cta} ↓</small>
-      </div>
-      <div className="xk-home-story-chapters">
-        {chapters.map((chapter) => chapter.route === '/green-node' ? (
-          <button key={chapter.code} type="button" onClick={onOpenWisp} className={`xk-home-chapter is-${chapter.tone}`}>
-            <i>{chapter.code}</i><strong>{chapter.title}</strong><span>{chapter.text}</span><b>↗</b>
-          </button>
-        ) : (
-          <Link key={chapter.code} to={chapter.route} className={`xk-home-chapter is-${chapter.tone}`}>
-            <i>{chapter.code}</i><strong>{chapter.title}</strong><span>{chapter.text}</span><b>↗</b>
-          </Link>
-        ))}
-      </div>
-    </section>
+    <Link
+      to={portal.route}
+      className="xk-rb-portal"
+      style={{ '--tone': portal.tone } as CSSProperties}
+      aria-label={`${portal.action}: ${portal.title}`}
+    >
+      <span className="xk-rb-gate">
+        <span className="xk-rb-aura" aria-hidden="true" />
+        <span className="xk-rb-window">
+          <SafeImage
+            src={portal.world}
+            fallback="/images/articles/fallback.svg"
+            alt=""
+            loading="eager"
+            style={{ objectPosition: portal.position }}
+          />
+        </span>
+        <SafeImage
+          src={portal.frame}
+          fallback="/images/articles/fallback.svg"
+          alt=""
+          className="xk-rb-frame"
+          loading="eager"
+        />
+        <span className="xk-rb-sparks" aria-hidden="true"><i /><i /><i /></span>
+      </span>
+
+      <span className="xk-rb-portal-copy">
+        <small>{portal.code} // WORLD GATE</small>
+        <strong>{portal.title}</strong>
+        <span>{portal.subtitle}</span>
+        <b>{portal.action} ↗</b>
+      </span>
+    </Link>
+  )
+}
+
+function Destination({ destination, onOpenWisp }: { destination: DestinationCard; onOpenWisp: () => void }) {
+  const content = (
+    <>
+      <SafeImage
+        src={destination.image}
+        fallback="/images/articles/fallback.svg"
+        alt=""
+        style={{ objectPosition: destination.position }}
+      />
+      <span className="xk-rb-destination-copy">
+        <small>{destination.code}</small>
+        <strong>{destination.title}</strong>
+        <span>{destination.text}</span>
+        <b>{destination.action} ↗</b>
+      </span>
+    </>
+  )
+
+  const style = { '--tone': destination.tone } as CSSProperties
+
+  if (destination.id === 'green') {
+    return (
+      <button type="button" className="xk-rb-destination" style={style} onClick={onOpenWisp}>
+        {content}
+      </button>
+    )
+  }
+
+  return <Link to={destination.route} className="xk-rb-destination" style={style}>{content}</Link>
+}
+
+function FloatingWisp({ ariaLabel, onClick }: { ariaLabel: string; onClick: () => void }) {
+  return (
+    <div className="xk-rb-wisp">
+      <button type="button" onClick={onClick} aria-label={ariaLabel}>
+        <SafeImage
+          src="/assets/identity/wisp-digital-specter-v1.webp"
+          fallback="/images/articles/tech.svg"
+          alt=""
+          loading="eager"
+        />
+      </button>
+    </div>
   )
 }
 
@@ -374,8 +517,6 @@ function WebCreationFeature({
   title,
   text,
   cta,
-  note,
-  imageAlt,
   featuredLabel,
   offer,
 }: {
@@ -383,117 +524,32 @@ function WebCreationFeature({
   title: string
   text: string
   cta: string
-  note: string
-  imageAlt: string
   featuredLabel: string
   offer: WebServiceOffer
 }) {
   return (
-    <section className="relative mt-14 overflow-hidden rounded-[1.75rem] border border-orange-400/25 bg-gradient-to-br from-orange-500/[0.09] via-purple-500/[0.09] to-black/55 p-5 shadow-[0_32px_100px_rgba(0,0,0,.48)] sm:p-6 md:mt-20 md:rounded-[2.4rem] md:p-9 lg:p-12" aria-labelledby="web-creation-home-title">
-      <div className="absolute -left-20 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-orange-500/10 blur-3xl" aria-hidden="true" />
-      <div className="absolute -right-20 top-1/3 h-80 w-80 rounded-full bg-purple-500/15 blur-3xl" aria-hidden="true" />
-      <div className="relative grid items-center gap-10 xl:grid-cols-[0.8fr_1.2fr]">
+    <section className="xk-rb-web" aria-labelledby="web-creation-home-title">
+      <div className="xk-rb-web-copy">
+        <small>{eyebrow}</small>
+        <h2 id="web-creation-home-title">{title}</h2>
+        <p>{text}</p>
+        <Link to="/creacion-web">{cta} ↗</Link>
+      </div>
+
+      <Link to="/creacion-web" className="xk-rb-web-preview" aria-label={`${cta}: ${offer.title}`}>
+        <SafeImage
+          src={offer.image_url}
+          fallback="/web-services/landing-premium.svg"
+          alt={offer.image_alt || offer.title}
+        />
         <div>
-          <p className="font-mono text-[10px] font-black uppercase tracking-[0.3em] text-orange-300">{eyebrow}</p>
-          <h2 id="web-creation-home-title" className="mt-4 max-w-2xl text-[2rem] font-black leading-[1.02] tracking-[-0.04em] sm:text-4xl md:text-6xl">{title}</h2>
-          <p className="mt-5 max-w-xl text-sm leading-6 text-white/70 md:text-base md:leading-7">{text}</p>
-          <Link to="/creacion-web" className="mt-6 inline-flex rounded-full bg-gradient-to-r from-orange-500 to-orange-300 px-5 py-3.5 font-mono text-[10px] font-black uppercase tracking-[0.14em] text-black shadow-[0_0_28px_rgba(255,106,0,.28)] transition hover:scale-[1.02] hover:shadow-[0_0_45px_rgba(255,106,0,.48)] sm:px-6 sm:py-4 sm:text-xs sm:tracking-[0.16em]">
-            {cta}
-          </Link>
-          <p className="mt-5 font-mono text-[8px] font-bold uppercase leading-5 tracking-[0.14em] text-purple-200/65 sm:text-[9px] sm:tracking-[0.18em]">{note}</p>
+          <span>
+            <small>{featuredLabel}</small>
+            <strong>{offer.title}</strong>
+          </span>
+          <b>{offer.price_label}</b>
         </div>
-
-        <Link to="/creacion-web" className="group relative block overflow-hidden rounded-[1.75rem] border border-white/15 bg-black/60 p-2 shadow-[0_25px_70px_rgba(0,0,0,.5)]" aria-label={`${cta}: ${offer.title}`}>
-          <div className="flex h-8 items-center gap-2 border-b border-white/10 px-3" aria-hidden="true">
-            <span className="h-2 w-2 rounded-full bg-orange-400" />
-            <span className="h-2 w-2 rounded-full bg-purple-400" />
-            <span className="h-2 w-2 rounded-full bg-cyan-400" />
-            <span className="ml-2 h-2 flex-1 rounded-full bg-white/[0.06]" />
-          </div>
-          <div className="overflow-hidden rounded-[1.2rem]">
-            <SafeImage src={offer.image_url} fallback="/web-services/landing-premium.svg" alt={offer.image_alt || imageAlt} className="aspect-[12/7.6] w-full object-cover transition duration-700 group-hover:scale-[1.025]" />
-          </div>
-          <div className="grid gap-3 px-3 py-4 sm:grid-cols-[1fr_auto] sm:items-end sm:px-4">
-            <div className="min-w-0">
-              <p className="font-mono text-[9px] font-black uppercase tracking-[0.18em] text-orange-300">{featuredLabel}</p>
-              <p className="mt-1 truncate text-base font-black text-white">{offer.title}</p>
-            </div>
-            <div className="sm:text-right">
-              <p className="text-sm font-black text-purple-100">{offer.price_label}</p>
-              {offer.delivery_label ? <p className="mt-1 text-[10px] text-white/45">{offer.delivery_label}</p> : null}
-            </div>
-          </div>
-        </Link>
-      </div>
+      </Link>
     </section>
-  )
-}
-
-function FloatingWisp({
-  ariaLabel,
-  onClick,
-}: {
-  ariaLabel: string
-  onClick: () => void
-}) {
-  return (
-    <div className="pointer-events-none absolute right-[1%] top-0 z-20 hidden h-[300px] w-[250px] xl:block 2xl:right-[2%]">
-      <span className="xk-home-specter-energy" aria-hidden="true" />
-      <button type="button" onClick={onClick} aria-label={ariaLabel} className="xk-home-specter pointer-events-auto absolute inset-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#32FF8A]">
-        <SafeImage src="/assets/identity/wisp-digital-specter-v1.webp" fallback="/images/articles/tech.svg" alt="" className="h-full w-full object-contain drop-shadow-[0_0_22px_rgba(50,255,138,.52)]" />
-      </button>
-    </div>
-  )
-}
-
-function LeftLauncher({
-  onWisp,
-  label,
-  itemLabels,
-  wispLabel,
-}: {
-  onWisp: () => void
-  label: string
-  itemLabels: readonly string[]
-  wispLabel: string
-}) {
-  return (
-    <nav className="xk-home-launcher fixed left-4 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-3 rounded-[1.6rem] border border-white/10 bg-black/35 p-2 shadow-[0_0_30px_rgba(139,92,246,0.25)] backdrop-blur-xl md:flex" aria-label={label}>
-      {sideItems.map((item, index) => (
-        <Link
-          key={item.to}
-          to={item.to}
-          aria-label={itemLabels[index]}
-          aria-current={item.to === '/' ? 'page' : undefined}
-          className="grid h-12 w-12 place-items-center rounded-2xl border border-white/10 bg-black/40 text-xl text-white/75 transition hover:border-purple-400 hover:text-purple-200 hover:shadow-[0_0_22px_rgba(139,92,246,0.65)]"
-        >
-          {item.icon}
-        </Link>
-      ))}
-
-      <button
-        type="button"
-        onClick={onWisp}
-        aria-label={wispLabel}
-        className="grid h-12 w-12 place-items-center rounded-2xl border border-green-500/40 bg-green-500/10 text-xl text-green-300 transition hover:border-green-300 hover:shadow-[0_0_25px_rgba(34,197,94,0.8)]"
-      >
-        ✦
-      </button>
-    </nav>
-  )
-}
-
-function StatsBar({ stats, copyright }: { stats: string[]; copyright: string }) {
-  return (
-    <footer className="absolute inset-x-0 bottom-0 z-30 border-t border-white/10 bg-black/72 px-5 py-4 font-mono text-white/75 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-[1720px] flex-col items-center justify-between gap-3 text-center md:flex-row">
-        <div className="flex flex-wrap justify-center gap-x-7 gap-y-2 text-xs uppercase tracking-[0.18em]">
-          {stats.map((item) => (
-            <span key={item}>{item}</span>
-          ))}
-        </div>
-        <p className="text-[10px] uppercase tracking-[0.12em] text-white/45">{copyright}</p>
-      </div>
-    </footer>
   )
 }
