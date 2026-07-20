@@ -1,6 +1,16 @@
+import fs from 'node:fs'
+import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { resolve } from 'node:path'
+
+const seoShellDirectory = resolve(process.cwd(), 'seo-shells')
+const seoShellInputs = fs.existsSync(seoShellDirectory)
+  ? Object.fromEntries(
+      fs.readdirSync(seoShellDirectory)
+        .filter((file) => file.endsWith('.html'))
+        .map((file) => [`seo-${file.replace(/\.html$/, '')}`, resolve(seoShellDirectory, file)]),
+    )
+  : {}
 
 export default defineConfig({
   plugins: [react()],
@@ -13,6 +23,7 @@ export default defineConfig({
       input: {
         main: resolve(process.cwd(), 'index.html'),
         webCreation: resolve(process.cwd(), 'creacion-web.html'),
+        ...seoShellInputs,
       },
       output: {
         manualChunks(id) {
