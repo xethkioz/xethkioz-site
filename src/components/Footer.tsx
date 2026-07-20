@@ -4,7 +4,7 @@ import { SOCIAL_LINKS } from '../lib/siteConfig'
 
 const copy = {
   es: {
-    description: 'Gaming, tecnología, ciencia, humor y archivos extraños dentro de un universo independiente creado en Argentina.',
+    description: 'Gaming, tecnología, ciencia, humor y archivos extraños conectados por una Red de Portales independiente creada en Argentina.',
     support: 'Apoyar el proyecto',
     informationLabel: 'Información',
     trust: 'Confianza',
@@ -18,7 +18,7 @@ const copy = {
     rights: 'Todos los derechos reservados.',
   },
   en: {
-    description: 'Gaming, technology, science, humor and unusual archives inside an independent universe created in Argentina.',
+    description: 'Gaming, technology, science, humor and unusual archives connected through an independent Portal Network created in Argentina.',
     support: 'Support the project',
     informationLabel: 'Information',
     trust: 'Trust',
@@ -43,9 +43,7 @@ export default function Footer() {
         <div>
           <p className="font-black tracking-[.14em] text-white">XETHKIOZ</p>
           <span className="mt-3 block max-w-md text-sm leading-6">{t.description}</span>
-          <Link to="/support" className="mt-4 inline-flex font-mono text-[10px] font-black uppercase tracking-[.16em] text-orange-300">
-            {t.support} →
-          </Link>
+          <Link to="/support" className="mt-4 inline-flex font-mono text-[10px] font-black uppercase tracking-[.16em] text-orange-300">{t.support} →</Link>
         </div>
 
         <nav aria-label={t.informationLabel}>
@@ -61,17 +59,13 @@ export default function Footer() {
         <nav aria-label={t.socialLabel}>
           <p className="font-mono text-[10px] font-black uppercase tracking-[.18em] text-cyan-300">{t.external}</p>
           <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
-            {SOCIAL_LINKS.filter((item) => item.name !== 'Web').slice(0, 6).map((item) => (
-              <a key={item.name} href={item.url} target="_blank" rel="noreferrer noopener">{item.name}</a>
-            ))}
+            {SOCIAL_LINKS.filter((item) => item.name !== 'Web').slice(0, 6).map((item) => <a key={item.name} href={item.url} target="_blank" rel="noreferrer noopener">{item.name}</a>)}
           </div>
           <a href="/feed.xml" className="mt-3 inline-flex text-sm text-orange-200">{t.rss}</a>
         </nav>
       </div>
 
-      <p className="mx-auto mt-8 max-w-7xl border-t border-white/10 pt-5 text-center font-mono text-[9px] uppercase tracking-[0.12em]">
-        © 2026 Alexis Ivan Diaz Sellanes Santajulia · XETHKIOZ · {t.rights}
-      </p>
+      <p className="mx-auto mt-8 max-w-7xl border-t border-white/10 pt-5 text-center font-mono text-[9px] uppercase tracking-[0.12em]">© 2026 Alexis Ivan Diaz Sellanes Santajulia · XETHKIOZ · {t.rights}</p>
     </footer>
   )
 }
