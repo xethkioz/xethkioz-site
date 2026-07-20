@@ -34,11 +34,11 @@ const authUi = read('src/components/auth/XethkiozNexusAuth.tsx')
 const runtimeBridge = read('src/engines/world/sandbox/RuntimeBridge.ts')
 const perf = read('src/engines/world/sandbox/PerformanceMonitor.ts')
 const shaderManager = read('src/engines/world/sandbox/ShaderManager.ts')
-const contracts = read('src/engines/world/sandbox/portalEventContracts.ts')
 const appShell = read('src/App.tsx')
 const header = read('src/components/Header.tsx')
 const mainEntry = read('src/main.tsx')
 const home = read('src/pages/Home.tsx')
+const homeCss = read('src/pages/HomeReborn.css')
 const indexHtml = read('index.html')
 const webManifest = read('public/manifest.webmanifest')
 const publicNews = read('src/pages/News.tsx')
@@ -57,9 +57,7 @@ const newsMediaUploads = read('supabase/migrations/20260715120000_news_media_upl
 const newsletterPrivacy = read('supabase/migrations/20260716110000_newsletter_privacy_hardening.sql')
 const cmsNewsEditor = read('src/cms/routes/CmsNewsEditor.tsx')
 const redesignCss = read('src/xethkioz-redesign.css')
-const universeOrbit = read('src/components/universe/UniversePortalOrbit.tsx')
 const universeTransit = read('src/components/universe/UniverseTransitRail.tsx')
-const universeRegistry = read('src/lib/universePortals.ts')
 const nexusDistrict = read('src/components/NexusDistrict.tsx')
 const nexusCity = read('src/pages/NexusCity.tsx')
 const webCreation = read('src/pages/WebCreation.tsx')
@@ -76,7 +74,7 @@ check('database and supabase auth migrations match', sql === supabaseSql)
 check('profiles RLS enabled', sql.includes('alter table public.profiles enable row level security'))
 check('public profile projection exists', sql.includes('create or replace view public.public_profiles'))
 check('privilege update guard exists', sql.includes('xethkioz_guard_profile_privilege_update'))
-check('no unrestricted public profiles read policy', !/create\s+policy\s+\"profiles_public_read\"/i.test(sql))
+check('no unrestricted public profiles read policy', !/create\s+policy\s+"profiles_public_read"/i.test(sql))
 check('self insert restricted to BASIC/GUEST', sql.includes('profiles_self_insert_basic_only') && sql.includes("subscription_tier = 'BASIC'") && sql.includes("role = 'GUEST'"))
 check('safe auth event source guard', read('src/services/auth/authSchema.ts').includes("source: 'supabase-auth-nexus'") && read('src/services/auth/authSchema.ts').includes('isAuthorizedSessionPayload'))
 check('auth service fetches profiles before event emit', authService.includes("from('profiles')") && authService.includes('USER_SESSION_AUTHORIZED'))
@@ -107,12 +105,13 @@ check(
     && home.includes('videoEnabled &&'),
 )
 check(
-  'Home uses the isolated infected Wisp without legacy duplication',
-  home.includes('xk-home-specter')
+  'Home uses the isolated infected Wisp without mobile duplication',
+  home.includes('className="xk-rb-wisp"')
     && home.includes('wisp-digital-specter-v1.webp')
-    && home.includes('xl:min-h-[320px]')
-    && home.includes('hidden h-[300px] w-[250px]')
-    && home.includes('WISP // INFECTED')
+    && home.includes('triggerGreenPortal()')
+    && homeCss.includes('.xk-rb-wisp{')
+    && homeCss.includes('display:none')
+    && homeCss.includes('@media (min-width:1280px){.xk-rb-wisp{display:block}}')
     && !home.includes('/assets/green-wisp.png'),
 )
 check(
@@ -121,15 +120,32 @@ check(
     && home.includes('/assets/bg-dragon-poster.webp'),
 )
 check(
-  'Home exposes accessible navigation semantics',
-  !home.includes('<main className="relative z-20')
-    && home.includes('aria-label={itemLabels[index]}')
-    && universeOrbit.includes('role="tablist"')
-    && universeOrbit.includes('role="tabpanel"')
-    && universeOrbit.includes('aria-controls="universe-active-portal"')
-    && universeOrbit.includes('handleKeyDown')
+  'Home exposes accessible navigation and reduced-motion scrolling',
+  home.includes('<main className="xk-rb-home">')
+    && home.includes('aria-label={lang ===')
     && home.includes('to="/news"')
-    && home.includes("behavior: reduceMotion ? 'auto' : 'smooth'"),
+    && home.includes("behavior: reduceMotion ? 'auto' : 'smooth'")
+    && home.includes('aria-labelledby="home-title"'),
+)
+check(
+  'Home restores three primary magical portals with real interior depth',
+  home.includes("frame: '/assets/portal-games-clean-v1.webp'")
+    && home.includes("frame: '/assets/portal-science-clean-v1.webp'")
+    && home.includes("frame: '/assets/portal-fun-chaos-v2.webp'")
+    && home.includes('className="xk-rb-window"')
+    && home.includes('className="xk-rb-frame"')
+    && homeCss.includes('.xk-rb-portals{')
+    && homeCss.includes('grid-template-columns:.88fr 1.16fr .88fr')
+    && homeCss.includes('scroll-snap-type:x mandatory'),
+)
+check(
+  'Home keeps Nexus, Web Creation and Green Node secondary to the main portal scene',
+  home.includes('className="xk-rb-destinations"')
+    && home.includes("id: 'nexus'")
+    && home.includes("id: 'web'")
+    && home.includes("id: 'green'")
+    && home.includes('<NexusDistrict tone="home" compact />')
+    && home.includes('offer={featuredWebOffer}'),
 )
 check(
   'News supports searchable, shareable and progressive discovery',
@@ -170,7 +186,7 @@ check(
   newsMediaUploads.includes("'news-media'")
     && newsMediaUploads.includes('file_size_limit')
     && newsMediaUploads.includes('(storage.foldername(name))[1]')
-    && cmsNewsEditor.includes("supabase.storage.from(NEWS_MEDIA_BUCKET).upload")
+    && cmsNewsEditor.includes('supabase.storage.from(NEWS_MEDIA_BUCKET).upload')
     && cmsNewsEditor.includes('MAX_COVER_BYTES')
     && cmsNewsEditor.includes('acceptedCoverTypes'),
 )
@@ -264,32 +280,15 @@ check(
     && redesignCss.includes('scrollbar-width:none'),
 )
 check(
-  'Home uses an accessible six-world orbit with shared responsive transit',
-  home.includes('<UniversePortalOrbit />')
-    && universeOrbit.includes('role="tablist"')
-    && universeOrbit.includes('aria-selected')
-    && universeOrbit.includes('prefers-reduced-motion: reduce')
-    && universeOrbit.includes('setInterval')
-    && universeTransit.includes('aria-current')
-    && (universeRegistry.match(/id: '/g) || []).length === 6
-    && ['portal-games-world-v3.webp', 'portal-science-world-v3.webp', 'portal-fun-world-v3.webp', 'green-node-occult-malware-v1.webp', 'creacion-web-og.png'].every((asset) => universeRegistry.includes(asset))
-    && exists('public/assets/portal-games-world-v3.webp')
-    && exists('public/assets/portal-science-world-v3.webp')
-    && exists('public/assets/portal-fun-world-v3.webp')
-    && redesignCss.includes('.xk-universe-core')
-    && redesignCss.includes('.xk-universe-transit-rail')
-    && redesignCss.includes('@media(max-width:720px)')
-    && redesignCss.includes('@media(prefers-reduced-motion:reduce)'),
-)
-check(
-  'All six public worlds expose the shared multiverse transit language',
+  'All public worlds retain shared responsive transit outside the Home theatre',
   nexusDistrict.includes('<UniverseTransitRail compact />')
     && gamingHub.includes('<NexusDistrict tone="gaming"')
     && funPortal.includes('<NexusDistrict tone="fun"')
     && scienceLab.includes('<NexusDistrict tone="science"')
     && greenNode.includes('<NexusDistrict tone="green"')
     && nexusCity.includes('<UniverseTransitRail />')
-    && webCreation.includes('<UniverseTransitRail />'),
+    && webCreation.includes('<UniverseTransitRail />')
+    && universeTransit.includes('aria-current'),
 )
 check(
   'Wisp exposes a responsive malware demon identity and mobile Green Node entry',
@@ -304,6 +303,7 @@ check(
     && redesignCss.includes('@media(min-width:1280px){.xk-wisp.is-home-entry{display:none}}')
     && redesignCss.includes('@media (prefers-reduced-motion: reduce)'),
 )
+
 const strictPackageAudit = process.env.XETHKIOZ_STRICT_PACKAGE_AUDIT === '1'
 if (strictPackageAudit) {
   check('no env files packaged', !exists('.env') && !exists('.env.local') && !exists('.env.production'))
