@@ -42,6 +42,7 @@ const CmsGenerate = lazy(() => import('./cms/routes/CmsGenerate'))
 const CmsNewsEditor = lazy(() => import('./cms/routes/CmsNewsEditor'))
 const CmsNewsList = lazy(() => import('./cms/routes/CmsNewsList'))
 const CmsReviewQueue = lazy(() => import('./cms/routes/CmsReviewQueue'))
+const CmsSchedule = lazy(() => import('./cms/routes/CmsSchedule'))
 const CmsUsersPanel = lazy(() => import('./cms/routes/CmsUsersPanel'))
 const CmsTrafficLogs = lazy(() => import('./cms/routes/CmsTrafficLogs'))
 const CmsNexusSafety = lazy(() => import('./cms/routes/CmsNexusSafety'))
@@ -230,6 +231,7 @@ function AppShell() {
                 <Route path="news/new" element={<CmsNewsEditor />} />
                 <Route path="news/:id" element={<CmsNewsEditor />} />
                 <Route path="review" element={<CmsReviewQueue />} />
+                <Route path="schedule" element={<CmsSchedule />} />
                 <Route path="users" element={<CmsUsersPanel />} />
                 <Route path="traffic" element={<CmsTrafficLogs />} />
                 <Route path="nexus-safety" element={<CmsNexusSafety />} />
