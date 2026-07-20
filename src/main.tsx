@@ -6,6 +6,7 @@ import App from './App'
 import './index.css'
 import './visibility-fixes.css'
 import './xethkioz-redesign.css'
+import './home-portal-rings.css'
 
 const rootElement = document.getElementById('root')
 
