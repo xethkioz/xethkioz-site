@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run typecheck && vite build",
+    "build": "npm run typecheck && npm run audit:routes && vite build",
     "preview": "vite preview",
     "audit": "node scripts/audit.js",
     "audit:tree": "node scripts/print-tree.mjs",
@@ -32,6 +32,7 @@
     "audit:latency-glitch-bridge": "node scripts/latency-glitch-bridge-check.mjs",
     "audit:security-hardening": "node scripts/security-hardening-check.mjs",
     "audit:web-services": "node scripts/web-services-check.mjs",
+    "audit:routes": "node scripts/route-integrity-check.mjs",
     "audit:production-ready": "node scripts/production-ready-check.mjs",
     "audit:env": "node scripts/env-ready-check.mjs",
     "deploy:check": "npm run verify && npm audit --omit=dev",
