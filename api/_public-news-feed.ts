@@ -24,10 +24,12 @@ export function absoluteUrl(value: string) {
 export async function fetchFeedArticles(limit = 1000): Promise<FeedArticle[]> {
   const supabaseUrl = (process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || PUBLIC_SUPABASE_URL).replace(/\/+$/, '')
   const anonKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || PUBLIC_SUPABASE_KEY
+  const now = new Date().toISOString()
 
   const query = new URLSearchParams({
     select: 'slug,title,summary,category,published_at,updated_at,cover_image_url',
     status: 'eq.published',
+    published_at: `lte.${now}`,
     order: 'published_at.desc',
     limit: String(Math.min(1000, Math.max(1, limit))),
   })
