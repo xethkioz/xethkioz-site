@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { UniverseTransitRail } from './universe/UniverseTransitRail'
 
 export type NexusDistrictTone = 'home' | 'gaming' | 'fun' | 'science' | 'green'
 
@@ -58,6 +59,7 @@ export function NexusDistrict({ tone, compact = false }: { tone: NexusDistrictTo
         ))}
       </nav>
       <div className="xk-nexus-transit" aria-hidden="true"><span>NEXUS LINE 7</span><i /><b>次の駅 · NEXT DISTRICT · SEÑAL ACTIVA · 次の駅 · NEXT DISTRICT · SEÑAL ACTIVA</b></div>
+      {tone !== 'home' ? <UniverseTransitRail compact /> : null}
     </section>
   )
 }

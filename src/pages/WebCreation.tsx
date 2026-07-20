@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import SafeImage from '../components/SafeImage'
 import SEO from '../components/SEO'
+import { UniverseTransitRail } from '../components/universe/UniverseTransitRail'
 import { PortalPulseRail } from '../components/PortalPulseRail'
 import { useLang } from '../lib/LangContext'
 import { loadPublishedWebServices } from '../services/webServices'
@@ -416,7 +417,11 @@ export default function WebCreation() {
         </div>
       </section>
 
-      <section className="relative z-10 -mt-10 px-5 md:px-10 lg:px-14" aria-label={lang === 'es' ? 'Compromisos del servicio' : 'Service commitments'}>
+      <div className="relative z-10 mx-auto max-w-[1500px] px-5 md:px-10 lg:px-14">
+        <UniverseTransitRail />
+      </div>
+
+      <section className="relative z-10 mt-4 px-5 md:px-10 lg:px-14" aria-label={lang === 'es' ? 'Compromisos del servicio' : 'Service commitments'}>
         <div className="mx-auto grid max-w-[1500px] gap-3 rounded-[2rem] border border-white/10 bg-[#0c0914]/90 p-3 shadow-[0_28px_90px_rgba(0,0,0,.45)] backdrop-blur-xl md:grid-cols-3">
           {t.trust.map(([title, description], index) => (
             <article key={title} className="rounded-[1.4rem] border border-white/[0.07] bg-white/[0.035] p-5">

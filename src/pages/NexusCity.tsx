@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type CSSProperties } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import SEO from '../components/SEO'
+import { UniverseTransitRail } from '../components/universe/UniverseTransitRail'
 import NexusSocialLoop from '../components/nexus/NexusSocialLoop'
 import { useHud } from '../lib/HudContext'
 import { useLang } from '../lib/LangContext'
@@ -172,6 +173,8 @@ export default function NexusCity() {
           </div>
           <div className="xk-city-signal"><i /><span>{presence.onlineTotal} ONLINE</span><b>WORLD STATUS // ALPHA</b></div>
         </section>
+
+        <UniverseTransitRail />
 
         <section className="xk-city-atrium" aria-labelledby="atrium-title">
           <div><p>OFFICIAL WORLD // ALWAYS OPEN</p><h2 id="atrium-title">{lang === 'es' ? 'El Atrio ya está encendido.' : 'The Atrium is already online.'}</h2><span>{lang === 'es' ? 'Entrá sin crear una cápsula. Mové tu avatar, activá objetos, hacé gestos y conversá con quienes estén conectados.' : 'Enter without creating a capsule. Move your avatar, activate objects, use gestures and chat with whoever is online.'}</span><Link to="/nexus-city/room/xethkioz">{lang === 'es' ? 'CRUZAR EL UMBRAL →' : 'CROSS THE THRESHOLD →'}</Link></div>

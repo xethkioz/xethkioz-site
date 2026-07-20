@@ -57,6 +57,12 @@ const newsMediaUploads = read('supabase/migrations/20260715120000_news_media_upl
 const newsletterPrivacy = read('supabase/migrations/20260716110000_newsletter_privacy_hardening.sql')
 const cmsNewsEditor = read('src/cms/routes/CmsNewsEditor.tsx')
 const redesignCss = read('src/xethkioz-redesign.css')
+const universeOrbit = read('src/components/universe/UniversePortalOrbit.tsx')
+const universeTransit = read('src/components/universe/UniverseTransitRail.tsx')
+const universeRegistry = read('src/lib/universePortals.ts')
+const nexusDistrict = read('src/components/NexusDistrict.tsx')
+const nexusCity = read('src/pages/NexusCity.tsx')
+const webCreation = read('src/pages/WebCreation.tsx')
 
 check('10.0 production version stamped', pkg.version === '10.0.0')
 check(
@@ -118,7 +124,10 @@ check(
   'Home exposes accessible navigation semantics',
   !home.includes('<main className="relative z-20')
     && home.includes('aria-label={itemLabels[index]}')
-    && home.includes("portal.button.replace(' →', '')")
+    && universeOrbit.includes('role="tablist"')
+    && universeOrbit.includes('role="tabpanel"')
+    && universeOrbit.includes('aria-controls="universe-active-portal"')
+    && universeOrbit.includes('handleKeyDown')
     && home.includes('to="/news"')
     && home.includes("behavior: reduceMotion ? 'auto' : 'smooth'"),
 )
@@ -255,30 +264,32 @@ check(
     && redesignCss.includes('scrollbar-width:none'),
 )
 check(
-  'Home portals use clean transparent worlds with reduced-motion-safe energy',
-  home.includes('xk-home-portal-shell')
-    && home.includes('xk-home-portal-clean')
-    && home.includes('portal-games-world-v3.webp')
-    && home.includes('portal-science-world-v3.webp')
-    && home.includes('portal-fun-world-v3.webp')
+  'Home uses an accessible six-world orbit with shared responsive transit',
+  home.includes('<UniversePortalOrbit />')
+    && universeOrbit.includes('role="tablist"')
+    && universeOrbit.includes('aria-selected')
+    && universeOrbit.includes('prefers-reduced-motion: reduce')
+    && universeOrbit.includes('setInterval')
+    && universeTransit.includes('aria-current')
+    && (universeRegistry.match(/id: '/g) || []).length === 6
+    && ['portal-games-world-v3.webp', 'portal-science-world-v3.webp', 'portal-fun-world-v3.webp', 'green-node-occult-malware-v1.webp', 'creacion-web-og.png'].every((asset) => universeRegistry.includes(asset))
     && exists('public/assets/portal-games-world-v3.webp')
     && exists('public/assets/portal-science-world-v3.webp')
     && exists('public/assets/portal-fun-world-v3.webp')
-    && home.includes('portal-games-clean-v1.webp')
-    && home.includes('portal-science-clean-v1.webp')
-    && home.includes('portal-fun-chaos-v2.webp')
-    && exists('public/assets/portal-games-clean-v1.webp')
-    && exists('public/assets/portal-science-clean-v1.webp')
-    && exists('public/assets/portal-fun-chaos-v2.webp')
-    && home.includes('aspect-square')
-    && home.includes('md:grid-cols-3')
-    && !home.includes('absolute inset-x-8 bottom-9')
-    && redesignCss.includes('@keyframes portal-mist-pulse')
-    && redesignCss.includes('.xk-home-portal-shell::before')
-    && redesignCss.includes('.xk-home-portal-image')
-    && redesignCss.includes('mask-image:radial-gradient')
-    && redesignCss.includes('@media (hover: none) and (pointer: coarse)')
-    && redesignCss.includes('@media (prefers-reduced-motion: reduce)'),
+    && redesignCss.includes('.xk-universe-core')
+    && redesignCss.includes('.xk-universe-transit-rail')
+    && redesignCss.includes('@media(max-width:720px)')
+    && redesignCss.includes('@media(prefers-reduced-motion:reduce)'),
+)
+check(
+  'All six public worlds expose the shared multiverse transit language',
+  nexusDistrict.includes('<UniverseTransitRail compact />')
+    && gamingHub.includes('<NexusDistrict tone="gaming"')
+    && funPortal.includes('<NexusDistrict tone="fun"')
+    && scienceLab.includes('<NexusDistrict tone="science"')
+    && greenNode.includes('<NexusDistrict tone="green"')
+    && nexusCity.includes('<UniverseTransitRail />')
+    && webCreation.includes('<UniverseTransitRail />'),
 )
 check(
   'Wisp exposes a responsive malware demon identity and mobile Green Node entry',
