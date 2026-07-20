@@ -1,4 +1,4 @@
-import { SyntheticEvent } from 'react'
+import { SyntheticEvent, type CSSProperties } from 'react'
 
 type SafeImageProps = {
   src?: string | null
@@ -7,6 +7,7 @@ type SafeImageProps = {
   fallback?: string
   loading?: 'lazy' | 'eager'
   fetchPriority?: 'high' | 'low' | 'auto'
+  style?: CSSProperties
 }
 
 export const IMAGE_FALLBACK = '/images/articles/fallback.svg'
@@ -40,6 +41,7 @@ export default function SafeImage({
   fallback = IMAGE_FALLBACK,
   loading = 'lazy',
   fetchPriority = 'auto',
+  style,
 }: SafeImageProps) {
   const safeSrc = cleanImageUrl(src, fallback)
 
@@ -57,6 +59,7 @@ export default function SafeImage({
       loading={loading}
       decoding="async"
       fetchPriority={fetchPriority}
+      style={style}
       onError={handleError}
     />
   )
