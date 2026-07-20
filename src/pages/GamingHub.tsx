@@ -178,9 +178,7 @@ export default function GamingHub() {
   const streamStatus = streamRadarReady
     ? (liveStream ? t.stream.liveCms : t.stream.standby)
     : t.stream.syncing
-  const streamDescription = liveStream
-    ? (liveStream.description || t.stream.liveDescription)
-    : t.stream.standbyDescription
+  const streamDescription = liveStream ? t.stream.liveDescription : t.stream.standbyDescription
 
   useEffect(() => {
     let alive = true
