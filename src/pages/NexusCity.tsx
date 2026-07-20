@@ -9,6 +9,7 @@ import { addWispXp, getWispProgress, usePresence } from '../lib/realtimeCommunit
 import { isSupabaseConfigured, supabase } from '../services/supabaseClient'
 
 type CosmeticSlot = 'outfit' | 'aura' | 'accessory'
+type CosmeticRarity = 'starter' | 'rare' | 'epic'
 
 type Cosmetic = {
   id: string
@@ -17,7 +18,7 @@ type Cosmetic = {
   detail: { es: string; en: string }
   price: number
   color: string
-  rarity: 'starter' | 'rare' | 'epic'
+  rarity: CosmeticRarity
 }
 
 type AvatarState = {
@@ -59,6 +60,93 @@ const districts = [
   { id: 'fun', glyph: '笑街', tone: '#fb923c', es: 'Chaos Alley', en: 'Chaos Alley', room: 'fun', detailEs: 'Memes, eventos y duelos absurdos.', detailEn: 'Memes, events and absurd battles.' },
 ]
 
+const cityCopy = {
+  es: {
+    seoTitle: 'Nexus City · Mundo social',
+    seoDescription: 'Creá tu avatar XETHKIOZ, explorá distritos, reunite con la comunidad y desbloqueá cosméticos con tu actividad.',
+    heroKicker: 'NEXUS CITY // MUNDO VIVO 03',
+    heroTitle: 'Tu identidad entra al mundo.',
+    heroText: 'Un lobby social propio de XETHKIOZ: avatar, distritos, chat, progresión e inventario. No es otra red social; es el punto humano de la Red de Portales.',
+    enterAtrium: 'ENTRAR AL ATRIO VIVO',
+    createAvatar: 'CREAR AVATAR',
+    openCapsule: 'ABRIR MI CÁPSULA',
+    online: 'EN LÍNEA',
+    worldStatus: 'ESTADO DEL MUNDO // ALPHA',
+    atriumEyebrow: 'MUNDO OFICIAL // SIEMPRE ABIERTO',
+    atriumTitle: 'El Atrio ya está encendido.',
+    atriumText: 'Entrá sin crear una cápsula. Mové tu avatar, activá objetos, hacé gestos y conversá con quienes estén conectados.',
+    crossThreshold: 'CRUZAR EL UMBRAL',
+    liveSignal: 'SEÑAL ACTIVA',
+    avatarPreview: 'Vista previa del avatar XETHKIOZ',
+    playerId: 'ID_JUGADOR',
+    guest: 'EXPLORADOR_INVITADO',
+    shards: 'FRAGMENTOS NEXUS',
+    avatarEyebrow: 'LAB_AVATAR // FORJA DE IDENTIDAD',
+    avatarTitle: 'Construí tu versión del Nexus',
+    skin: 'Piel',
+    hair: 'Cabello',
+    skinOption: 'Tono de piel',
+    hairNames: { spikes: 'Puntas', wave: 'Ondulado', cyber: 'Cyber' } as Record<string, string>,
+    rarity: { starter: 'inicial', rare: 'raro', epic: 'épico' } as Record<CosmeticRarity, string>,
+    slots: { outfit: 'atuendo', aura: 'aura', accessory: 'accesorio' } as Record<CosmeticSlot, string>,
+    equipped: 'EQUIPADO',
+    equip: 'EQUIPAR',
+    connect: 'CONECTAR CUENTA PARA GUARDAR',
+    mapEyebrow: 'MAPA_MUNDO // RED NEÓN TOKIO',
+    mapTitle: 'Elegí dónde aparecer',
+    mapText: 'Cada distrito conserva su identidad, pero comparte avatar, actividad, chat y reputación.',
+    room: 'SALA',
+    enterRoom: 'ENTRAR A LA SALA',
+    roadmapEyebrow: 'ECONOMÍA SEGURA // DESPLIEGUE POR FASES',
+    roadmapTitle: 'Primero comunidad. Después comercio.',
+    roadmapText: 'Esta Alpha usa Nexus Shards obtenidos por actividad. Los pagos con dinero real permanecerán desactivados hasta incorporar moderación 24/7, controles de edad, términos, reembolsos y protección antifraude.',
+    roadmap: ['Avatar e inventario', 'Pasaporte y cápsula', 'Contactos y seguridad', 'Tienda segura'],
+    states: ['ACTIVO', 'ACTIVO', 'BETA', 'BLOQUEADO'],
+  },
+  en: {
+    seoTitle: 'Nexus City · Social world',
+    seoDescription: 'Create your XETHKIOZ avatar, explore districts, meet the community and unlock cosmetics through activity.',
+    heroKicker: 'NEXUS CITY // LIVING WORLD 03',
+    heroTitle: 'Your identity enters the world.',
+    heroText: 'A XETHKIOZ social lobby with avatars, districts, chat, progression and inventory. Not another social network: the human hub of the Portal Network.',
+    enterAtrium: 'ENTER THE LIVE ATRIUM',
+    createAvatar: 'CREATE AVATAR',
+    openCapsule: 'OPEN MY CAPSULE',
+    online: 'ONLINE',
+    worldStatus: 'WORLD STATUS // ALPHA',
+    atriumEyebrow: 'OFFICIAL WORLD // ALWAYS OPEN',
+    atriumTitle: 'The Atrium is already online.',
+    atriumText: 'Enter without creating a capsule. Move your avatar, activate objects, use gestures and chat with whoever is online.',
+    crossThreshold: 'CROSS THE THRESHOLD',
+    liveSignal: 'LIVE SIGNAL',
+    avatarPreview: 'XETHKIOZ avatar preview',
+    playerId: 'PLAYER_ID',
+    guest: 'GUEST_EXPLORER',
+    shards: 'NEXUS SHARDS',
+    avatarEyebrow: 'AVATAR_LAB // IDENTITY FORGE',
+    avatarTitle: 'Build your Nexus self',
+    skin: 'Skin',
+    hair: 'Hair',
+    skinOption: 'Skin tone',
+    hairNames: { spikes: 'Spikes', wave: 'Wave', cyber: 'Cyber' } as Record<string, string>,
+    rarity: { starter: 'starter', rare: 'rare', epic: 'epic' } as Record<CosmeticRarity, string>,
+    slots: { outfit: 'outfit', aura: 'aura', accessory: 'accessory' } as Record<CosmeticSlot, string>,
+    equipped: 'EQUIPPED',
+    equip: 'EQUIP',
+    connect: 'CONNECT ACCOUNT TO SAVE',
+    mapEyebrow: 'WORLD MAP // TOKYO NEON NETWORK',
+    mapTitle: 'Choose where to spawn',
+    mapText: 'Every district keeps its identity while sharing avatars, activity, chat and reputation.',
+    room: 'ROOM',
+    enterRoom: 'ENTER ROOM',
+    roadmapEyebrow: 'SAFE ECONOMY // PHASED RELEASE',
+    roadmapTitle: 'Community first. Commerce later.',
+    roadmapText: 'This Alpha uses Nexus Shards earned through activity. Real-money payments stay disabled until 24/7 moderation, age controls, terms, refunds and anti-fraud protections are ready.',
+    roadmap: ['Avatar and inventory', 'Passport and capsule', 'Contacts and safety', 'Safe store'],
+    states: ['ACTIVE', 'ACTIVE', 'BETA', 'LOCKED'],
+  },
+} as const
+
 function readAvatar(): AvatarState {
   if (typeof window === 'undefined') return defaultAvatar
   try {
@@ -71,6 +159,7 @@ function readAvatar(): AvatarState {
 
 export default function NexusCity() {
   const { lang } = useLang()
+  const t = cityCopy[lang]
   const { account } = useHud()
   const location = useLocation()
   const presence = usePresence(location.pathname, 'nexus-city')
@@ -156,74 +245,69 @@ export default function NexusCity() {
 
   return (
     <>
-      <SEO
-        title={lang === 'es' ? 'Nexus City · Universo social' : 'Nexus City · Social universe'}
-        description={lang === 'es' ? 'Creá tu avatar XETHKIOZ, explorá distritos, reunite con la comunidad y desbloqueá cosméticos con tu actividad.' : 'Create your XETHKIOZ avatar, explore districts, meet the community and unlock cosmetics through activity.'}
-        url="/nexus-city"
-        tags={['virtual world', 'gaming community', 'avatars', 'Nexus City', 'XETHKIOZ']}
-      />
+      <SEO title={t.seoTitle} description={t.seoDescription} url="/nexus-city" tags={['virtual world', 'gaming community', 'avatars', 'Nexus City', 'XETHKIOZ']} />
       <main className="xk-city-page">
-        <section className="xk-city-hero">
+        <section className="xk-city-hero" aria-labelledby="nexus-city-title">
           <div className="xk-city-grid" aria-hidden="true" />
           <div className="xk-city-hero-copy">
-            <p>NEXUS CITY // LIVING WORLD 03</p>
-            <h1>{lang === 'es' ? 'Tu identidad entra al mundo.' : 'Your identity enters the world.'}</h1>
-            <span>{lang === 'es' ? 'Un lobby social propio de XETHKIOZ: avatar, distritos, chat, progresión e inventario. No es otra red social; es la entrada humana al multiverso.' : 'A XETHKIOZ social lobby with avatars, districts, chat, progression and inventory. Not another social network: the human entrance to the multiverse.'}</span>
-            <div><Link to="/nexus-city/room/xethkioz">{lang === 'es' ? 'ENTRAR AL ATRIO VIVO' : 'ENTER THE LIVE ATRIUM'} ↗</Link><a href="#avatar-lab">{lang === 'es' ? 'CREAR AVATAR' : 'CREATE AVATAR'} ↓</a><a href="#social-loop">{lang === 'es' ? 'ABRIR MI CÁPSULA' : 'OPEN MY CAPSULE'} ↓</a></div>
+            <p>{t.heroKicker}</p>
+            <h1 id="nexus-city-title">{t.heroTitle}</h1>
+            <span>{t.heroText}</span>
+            <div><Link to="/nexus-city/room/xethkioz">{t.enterAtrium} ↗</Link><a href="#avatar-lab">{t.createAvatar} ↓</a><a href="#social-loop">{t.openCapsule} ↓</a></div>
           </div>
-          <div className="xk-city-signal"><i /><span>{presence.onlineTotal} ONLINE</span><b>WORLD STATUS // ALPHA</b></div>
+          <div className="xk-city-signal" aria-label={`${presence.onlineTotal} ${t.online}`}><i aria-hidden="true" /><span>{presence.onlineTotal} {t.online}</span><b>{t.worldStatus}</b></div>
         </section>
 
         <UniverseTransitRail />
 
         <section className="xk-city-atrium" aria-labelledby="atrium-title">
-          <div><p>OFFICIAL WORLD // ALWAYS OPEN</p><h2 id="atrium-title">{lang === 'es' ? 'El Atrio ya está encendido.' : 'The Atrium is already online.'}</h2><span>{lang === 'es' ? 'Entrá sin crear una cápsula. Mové tu avatar, activá objetos, hacé gestos y conversá con quienes estén conectados.' : 'Enter without creating a capsule. Move your avatar, activate objects, use gestures and chat with whoever is online.'}</span><Link to="/nexus-city/room/xethkioz">{lang === 'es' ? 'CRUZAR EL UMBRAL →' : 'CROSS THE THRESHOLD →'}</Link></div>
-          <div className="xk-atrium-preview" aria-hidden="true"><i className="is-arcade">▣</i><i className="is-console">⌁</i><i className="is-plant">♧</i><i className="is-portal">◉</i><b>中央</b><span>LIVE SIGNAL</span></div>
+          <div><p>{t.atriumEyebrow}</p><h2 id="atrium-title">{t.atriumTitle}</h2><span>{t.atriumText}</span><Link to="/nexus-city/room/xethkioz">{t.crossThreshold} →</Link></div>
+          <div className="xk-atrium-preview" aria-hidden="true"><i className="is-arcade">▣</i><i className="is-console">⌁</i><i className="is-plant">♧</i><i className="is-portal">◉</i><b>中央</b><span>{t.liveSignal}</span></div>
         </section>
 
         <section id="avatar-lab" className="xk-avatar-lab" aria-labelledby="avatar-lab-title">
           <div className="xk-avatar-stage" style={avatarStyle}>
-            <div className={`xk-avatar xk-hair-${avatar.hair}`} aria-label="Vista previa de avatar XETHKIOZ">
-              <i className="xk-avatar-aura" /><i className="xk-avatar-shadow" />
-              <span className="xk-avatar-hair" /><span className="xk-avatar-head"><b /><b /><em /></span>
-              <span className="xk-avatar-body"><i /></span><span className="xk-avatar-legs"><i /><i /></span>
-              {avatar.accessory !== 'none' ? <span className={`xk-avatar-accessory ${avatar.accessory}`} /> : null}
+            <div className={`xk-avatar xk-hair-${avatar.hair}`} role="img" aria-label={t.avatarPreview}>
+              <i className="xk-avatar-aura" aria-hidden="true" /><i className="xk-avatar-shadow" aria-hidden="true" />
+              <span className="xk-avatar-hair" aria-hidden="true" /><span className="xk-avatar-head" aria-hidden="true"><b /><b /><em /></span>
+              <span className="xk-avatar-body" aria-hidden="true"><i /></span><span className="xk-avatar-legs" aria-hidden="true"><i /><i /></span>
+              {avatar.accessory !== 'none' ? <span className={`xk-avatar-accessory ${avatar.accessory}`} aria-hidden="true" /> : null}
             </div>
-            <div className="xk-avatar-id"><small>PLAYER_ID</small><strong>{isConnected ? account.name : 'GUEST_EXPLORER'}</strong><span>{balance} ◈ NEXUS SHARDS</span></div>
+            <div className="xk-avatar-id"><small>{t.playerId}</small><strong>{isConnected ? account.name : t.guest}</strong><span>{balance} ◈ {t.shards}</span></div>
           </div>
 
           <div className="xk-avatar-console">
-            <p>AVATAR_LAB // IDENTITY FORGE</p>
-            <h2 id="avatar-lab-title">{lang === 'es' ? 'Construí tu versión del Nexus' : 'Build your Nexus self'}</h2>
+            <p>{t.avatarEyebrow}</p>
+            <h2 id="avatar-lab-title">{t.avatarTitle}</h2>
             <div className="xk-avatar-basics">
-              <fieldset><legend>{lang === 'es' ? 'Piel' : 'Skin'}</legend>{['#f0c7a5', '#c98f68', '#8d5a3b', '#593622', '#8be9d4'].map((skin) => <button key={skin} type="button" aria-label={`Skin ${skin}`} aria-pressed={avatar.skin === skin} onClick={() => setAvatar((current) => ({ ...current, skin }))} style={{ background: skin }} />)}</fieldset>
-              <fieldset><legend>{lang === 'es' ? 'Cabello' : 'Hair'}</legend>{['spikes', 'wave', 'cyber'].map((hair) => <button key={hair} type="button" aria-pressed={avatar.hair === hair} onClick={() => setAvatar((current) => ({ ...current, hair }))}>{hair}</button>)}</fieldset>
+              <fieldset><legend>{t.skin}</legend>{['#f0c7a5', '#c98f68', '#8d5a3b', '#593622', '#8be9d4'].map((skin, index) => <button key={skin} type="button" aria-label={`${t.skinOption} ${index + 1}`} aria-pressed={avatar.skin === skin} onClick={() => setAvatar((current) => ({ ...current, skin }))} style={{ background: skin }} />)}</fieldset>
+              <fieldset><legend>{t.hair}</legend>{['spikes', 'wave', 'cyber'].map((hair) => <button key={hair} type="button" aria-label={t.hairNames[hair]} aria-pressed={avatar.hair === hair} onClick={() => setAvatar((current) => ({ ...current, hair }))}>{t.hairNames[hair]}</button>)}</fieldset>
             </div>
             <div className="xk-cosmetic-grid">
               {cosmetics.map((item) => {
                 const owned = avatar.owned.includes(item.id)
                 const equipped = avatar[item.slot] === item.id
                 return <article key={item.id} style={{ '--item-color': item.color } as CSSProperties}>
-                  <small>{item.rarity} // {item.slot}</small><h3>{item.name[lang]}</h3><p>{item.detail[lang]}</p>
-                  <button type="button" onClick={() => owned ? equip(item) : acquire(item)} disabled={equipped}>{equipped ? (lang === 'es' ? 'EQUIPADO' : 'EQUIPPED') : owned ? (lang === 'es' ? 'EQUIPAR' : 'EQUIP') : `${item.price} ◈`}</button>
+                  <small>{t.rarity[item.rarity]} // {t.slots[item.slot]}</small><h3>{item.name[lang]}</h3><p>{item.detail[lang]}</p>
+                  <button type="button" onClick={() => owned ? equip(item) : acquire(item)} disabled={equipped}>{equipped ? t.equipped : owned ? t.equip : `${item.price} ◈`}</button>
                 </article>
               })}
             </div>
-            {notice ? <p className="xk-city-notice" role="status">{notice}</p> : null}
-            {!isConnected ? <Link className="xk-city-login" to="/account?mode=signin">{lang === 'es' ? 'CONECTAR CUENTA PARA GUARDAR →' : 'CONNECT ACCOUNT TO SAVE →'}</Link> : null}
+            {notice ? <p className="xk-city-notice" role="status" aria-live="polite" aria-atomic="true">{notice}</p> : null}
+            {!isConnected ? <Link className="xk-city-login" to="/account?mode=signin">{t.connect} →</Link> : null}
           </div>
         </section>
 
         <section className="xk-city-districts" aria-labelledby="districts-title">
-          <div><p>WORLD MAP // TOKYO NEON NETWORK</p><h2 id="districts-title">{lang === 'es' ? 'Elegí dónde aparecer' : 'Choose where to spawn'}</h2><span>{lang === 'es' ? 'Cada distrito conserva su identidad, pero comparte avatar, actividad, chat y reputación.' : 'Every district keeps its identity while sharing avatars, activity, chat and reputation.'}</span></div>
-          <div>{districts.map((district) => <article key={district.id} style={{ '--district': district.tone } as CSSProperties}><i>{district.glyph}</i><small>ROOM // {district.id.toUpperCase()}</small><h3>{lang === 'es' ? district.es : district.en}</h3><p>{lang === 'es' ? district.detailEs : district.detailEn}</p><button type="button" onClick={() => openRoom(district.room)}>{lang === 'es' ? 'ENTRAR A LA SALA' : 'ENTER ROOM'} ↗</button></article>)}</div>
+          <div><p>{t.mapEyebrow}</p><h2 id="districts-title">{t.mapTitle}</h2><span>{t.mapText}</span></div>
+          <div>{districts.map((district) => <article key={district.id} style={{ '--district': district.tone } as CSSProperties}><i aria-hidden="true">{district.glyph}</i><small>{t.room} // {district.id.toUpperCase()}</small><h3>{lang === 'es' ? district.es : district.en}</h3><p>{lang === 'es' ? district.detailEs : district.detailEn}</p><button type="button" onClick={() => openRoom(district.room)}>{t.enterRoom} ↗</button></article>)}</div>
         </section>
 
         <div id="social-loop"><NexusSocialLoop lang={lang} account={account} avatar={avatar} onNotice={setNotice} /></div>
 
-        <section className="xk-city-roadmap">
-          <div><p>SAFE ECONOMY // PHASED RELEASE</p><h2>{lang === 'es' ? 'Primero comunidad. Después comercio.' : 'Community first. Commerce later.'}</h2><span>{lang === 'es' ? 'Esta Alpha usa Nexus Shards obtenidos por actividad. Los pagos con dinero real permanecerán desactivados hasta incorporar moderación 24/7, controles de edad, términos, reembolsos y protección antifraude.' : 'This Alpha uses Nexus Shards earned through activity. Real-money payments stay disabled until moderation, age controls, terms, refunds and anti-fraud protections are ready.'}</span></div>
-          <ol><li><b>01</b><span>{lang === 'es' ? 'Avatar e inventario' : 'Avatar and inventory'}</span><strong>ACTIVE</strong></li><li><b>02</b><span>{lang === 'es' ? 'Pasaporte y cápsula' : 'Passport and capsule'}</span><strong>ACTIVE</strong></li><li><b>03</b><span>{lang === 'es' ? 'Contactos y seguridad' : 'Contacts and safety'}</span><strong>BETA</strong></li><li><b>04</b><span>{lang === 'es' ? 'Tienda segura' : 'Safe store'}</span><strong>LOCKED</strong></li></ol>
+        <section className="xk-city-roadmap" aria-labelledby="city-roadmap-title">
+          <div><p>{t.roadmapEyebrow}</p><h2 id="city-roadmap-title">{t.roadmapTitle}</h2><span>{t.roadmapText}</span></div>
+          <ol>{t.roadmap.map((step, index) => <li key={step}><b>0{index + 1}</b><span>{step}</span><strong>{t.states[index]}</strong></li>)}</ol>
         </section>
       </main>
     </>
