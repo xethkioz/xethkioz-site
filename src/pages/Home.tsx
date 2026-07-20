@@ -15,6 +15,11 @@ type DataSavingConnection = {
   removeEventListener?: (type: 'change', listener: () => void) => void
 }
 
+type IdleCapableWindow = Window & {
+  requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number
+  cancelIdleCallback?: (handle: number) => void
+}
+
 type PortalCard = {
   id: string
   code: string
@@ -46,8 +51,10 @@ const copy = {
     titleTop: 'EL GAMING ES',
     titleBottom: 'MI PASIÓN',
     intro: 'Una entrada viva hacia tres mundos principales. Gaming, ciencia y caos vuelven a sentirse como portales reales, con identidad propia y sin convertir el Home en una grilla técnica.',
+    seoDescription: 'Entrada inmersiva al universo XETHKIOZ: gaming, ciencia, diversión, Nexus City, Green Node y creación web.',
     primaryCta: 'ELEGIR UN PORTAL',
     newsCta: 'ABRIR RADAR DE NOTICIAS',
+    news: 'NOTICIAS',
     portalLabel: 'PORTALES PRINCIPALES // SEÑAL ESTABLE',
     liveSignal: '3 PORTALES PRINCIPALES ACTIVOS',
     nexusSignal: 'NEXUS CITY EN LÍNEA',
@@ -60,8 +67,10 @@ const copy = {
     webText: 'Diseño y desarrollo de páginas con identidad propia, rendimiento real y una presentación que no parece una plantilla genérica.',
     webCta: 'EXPLORAR CREACIÓN WEB',
     featured: 'PROPUESTA DESTACADA',
-    login: 'LOGIN',
+    login: 'INICIAR SESIÓN',
+    brandLabel: 'Ir al inicio de XETHKIOZ',
     switchLanguage: 'Cambiar a inglés',
+    switchCode: 'EN',
     wispLabel: 'Abrir Green Node mediante Wisp',
     primary: [
       {
@@ -143,8 +152,10 @@ const copy = {
     titleTop: 'GAMING IS',
     titleBottom: 'MY PASSION',
     intro: 'A living entrance into three main worlds. Gaming, science and chaos feel like real portals again, each with its own identity and without turning the Home into a technical grid.',
+    seoDescription: 'An immersive entrance to the XETHKIOZ universe: gaming, science, fun, Nexus City, Green Node and web creation.',
     primaryCta: 'CHOOSE A PORTAL',
     newsCta: 'OPEN NEWS RADAR',
+    news: 'NEWS',
     portalLabel: 'MAIN PORTALS // STABLE SIGNAL',
     liveSignal: '3 MAIN PORTALS ACTIVE',
     nexusSignal: 'NEXUS CITY ONLINE',
@@ -157,8 +168,10 @@ const copy = {
     webText: 'Web design and development with original identity, real performance and a presentation that never feels like a generic template.',
     webCta: 'EXPLORE WEB CREATION',
     featured: 'FEATURED PROPOSAL',
-    login: 'LOGIN',
+    login: 'SIGN IN',
+    brandLabel: 'Go to XETHKIOZ home',
     switchLanguage: 'Switch to Spanish',
+    switchCode: 'ES',
     wispLabel: 'Open Green Node through Wisp',
     primary: [
       {
@@ -237,19 +250,43 @@ const copy = {
   },
 } as const
 
+function scheduleIdleTask(task: () => void, timeout = 1200) {
+  const idleWindow = window as IdleCapableWindow
+  if (idleWindow.requestIdleCallback) {
+    const handle = idleWindow.requestIdleCallback(task, { timeout })
+    return () => idleWindow.cancelIdleCallback?.(handle)
+  }
+
+  const handle = window.setTimeout(task, timeout)
+  return () => window.clearTimeout(handle)
+}
+
 function useAmbientVideoEnabled() {
   const [enabled, setEnabled] = useState(false)
 
   useEffect(() => {
     const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)')
     const connection = (navigator as Navigator & { connection?: DataSavingConnection }).connection
-    const syncPreference = () => setEnabled(!motionPreference.matches && !connection?.saveData)
+    let cancelScheduled: (() => void) | undefined
+
+    const syncPreference = () => {
+      cancelScheduled?.()
+      cancelScheduled = undefined
+
+      if (motionPreference.matches || connection?.saveData) {
+        setEnabled(false)
+        return
+      }
+
+      cancelScheduled = scheduleIdleTask(() => setEnabled(true))
+    }
 
     syncPreference()
     motionPreference.addEventListener('change', syncPreference)
     connection?.addEventListener?.('change', syncPreference)
 
     return () => {
+      cancelScheduled?.()
       motionPreference.removeEventListener('change', syncPreference)
       connection?.removeEventListener?.('change', syncPreference)
     }
@@ -263,18 +300,20 @@ function useFeaturedWebService() {
 
   useEffect(() => {
     let active = true
-
-    import('../services/webServices')
-      .then(({ loadFeaturedWebService }) => loadFeaturedWebService())
-      .then((nextOffer) => {
-        if (active) setOffer(nextOffer)
-      })
-      .catch(() => {
-        // The static featured offer remains visible when the CMS is unavailable.
-      })
+    const cancelScheduled = scheduleIdleTask(() => {
+      import('../services/webServices')
+        .then(({ loadFeaturedWebService }) => loadFeaturedWebService())
+        .then((nextOffer) => {
+          if (active) setOffer(nextOffer)
+        })
+        .catch(() => {
+          // The static featured offer remains visible when the CMS is unavailable.
+        })
+    }, 1800)
 
     return () => {
       active = false
+      cancelScheduled()
     }
   }, [])
 
@@ -305,8 +344,8 @@ export default function Home() {
   return (
     <>
       <SEO
-        title="XETHKIOZ · Gaming Is My Passion"
-        description="Entrada inmersiva al universo XETHKIOZ: gaming, ciencia, diversión, Nexus City, Green Node y creación web."
+        title="Gaming Is My Passion · World Gate"
+        description={t.seoDescription}
         url="/"
         image="/assets/xethkioz-cover.png"
       />
@@ -321,7 +360,7 @@ export default function Home() {
             loop
             muted
             playsInline
-            preload="metadata"
+            preload="none"
             poster="/assets/bg-dragon-poster.webp"
             aria-hidden="true"
           />
@@ -331,7 +370,7 @@ export default function Home() {
 
         <div className="xk-rb-shell">
           <header className="xk-rb-header">
-            <Link to="/" className="xk-rb-brand" aria-label="XETHKIOZ Home">
+            <Link to="/" className="xk-rb-brand" aria-label={t.brandLabel}>
               <span className="xk-rb-logo">XETHKIOZ</span>
               <small>Gaming Is My Passion · Beyond The Game</small>
             </Link>
@@ -345,9 +384,9 @@ export default function Home() {
             </nav>
 
             <div className="xk-rb-tools">
-              <Link to="/news">NEWS</Link>
+              <Link to="/news">{t.news}</Link>
               <button type="button" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} aria-label={t.switchLanguage}>
-                {lang.toUpperCase()}
+                {t.switchCode}
               </button>
               <Link to="/login">{t.login}</Link>
             </div>
@@ -363,8 +402,8 @@ export default function Home() {
               <p>{t.intro}</p>
 
               <div className="xk-rb-copy-actions">
-                <button type="button" onClick={scrollToPortals}>{t.primaryCta} <span>↓</span></button>
-                <Link to="/news">{t.newsCta} <span>↗</span></Link>
+                <button type="button" onClick={scrollToPortals}>{t.primaryCta} <span aria-hidden="true">↓</span></button>
+                <Link to="/news">{t.newsCta} <span aria-hidden="true">↗</span></Link>
               </div>
 
               <div className="xk-rb-signal" aria-label={lang === 'es' ? 'Estado del sistema' : 'System status'}>
@@ -428,6 +467,8 @@ export default function Home() {
 }
 
 function PrimaryPortal({ portal }: { portal: PortalCard }) {
+  const isFeatured = portal.id === 'gaming'
+
   return (
     <Link
       to={portal.route}
@@ -443,16 +484,11 @@ function PrimaryPortal({ portal }: { portal: PortalCard }) {
             fallback="/images/articles/fallback.svg"
             alt=""
             loading="eager"
+            fetchPriority={isFeatured ? 'high' : 'low'}
             style={{ objectPosition: portal.position }}
           />
         </span>
-        <SafeImage
-          src={portal.frame}
-          fallback="/images/articles/fallback.svg"
-          alt=""
-          className="xk-rb-frame"
-          loading="eager"
-        />
+        <span className="xk-rb-frame" aria-hidden="true" />
         <span className="xk-rb-sparks" aria-hidden="true"><i /><i /><i /></span>
       </span>
 
@@ -473,6 +509,7 @@ function Destination({ destination, onOpenWisp }: { destination: DestinationCard
         src={destination.image}
         fallback="/images/articles/fallback.svg"
         alt=""
+        fetchPriority="low"
         style={{ objectPosition: destination.position }}
       />
       <span className="xk-rb-destination-copy">
@@ -505,7 +542,8 @@ function FloatingWisp({ ariaLabel, onClick }: { ariaLabel: string; onClick: () =
           src="/assets/identity/wisp-digital-specter-v1.webp"
           fallback="/images/articles/tech.svg"
           alt=""
-          loading="eager"
+          loading="lazy"
+          fetchPriority="low"
         />
       </button>
     </div>
@@ -541,6 +579,7 @@ function WebCreationFeature({
           src={offer.image_url}
           fallback="/web-services/landing-premium.svg"
           alt={offer.image_alt || offer.title}
+          fetchPriority="low"
         />
         <div>
           <span>
