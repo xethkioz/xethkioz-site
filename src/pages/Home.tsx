@@ -3,20 +3,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import SafeImage from '../components/SafeImage'
 import SEO from '../components/SEO'
 import { NexusDistrict } from '../components/NexusDistrict'
+import { UniversePortalOrbit } from '../components/universe/UniversePortalOrbit'
 import { fallbackWebServiceOffers } from '../data/webServiceFallbacks'
 import { useWisp } from '../providers/WispProvider'
 import { useLang } from '../lib/LangContext'
 import type { WebServiceOffer } from '../types/webServices'
-
-type Portal = {
-  title: string
-  subtitle: string
-  route: string
-  poster: string
-  world: string
-  signal: string
-  button: string
-}
 
 type DataSavingConnection = {
   saveData?: boolean
@@ -40,7 +31,6 @@ const copy = {
     switchLanguage: 'Cambiar a inglés',
     primaryNav: 'Navegación principal',
     launcher: 'Accesos rápidos XETHKIOZ',
-    portalsLabel: 'Portales XETHKIOZ',
     navHome: 'HOME',
     navGames: 'JUEGOS',
     navScience: 'CIENCIA & TECH',
@@ -72,35 +62,6 @@ const copy = {
     statsContent: '+3.6K CONTENIDO',
     statsSecure: '24/7 SISTEMA SEGURO',
     copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia. XETHKIOZ Web v10.0. Todos los derechos reservados.',
-    portals: [
-      {
-        title: 'JUEGOS',
-        subtitle: 'Noticias · Guías · Videos · Imágenes',
-        route: '/gaming',
-        poster: '/assets/portal-games-clean-v1.webp',
-        world: '/assets/portal-games-world-v3.webp',
-        signal: 'XK-01 // REINO DE AVENTURA',
-        button: 'Entrar al portal →',
-      },
-      {
-        title: 'CIENCIA Y TECNOLOGÍA',
-        subtitle: 'Física · Tecnología · IA · Proyectos',
-        route: '/science',
-        poster: '/assets/portal-science-clean-v1.webp',
-        world: '/assets/portal-science-world-v3.webp',
-        signal: 'XK-02 // OBSERVATORIO VIVO',
-        button: 'Entrar al portal →',
-      },
-      {
-        title: 'DIVERSIÓN',
-        subtitle: 'Memes · Videos · Arte · Humor',
-        route: '/fun',
-        poster: '/assets/portal-fun-chaos-v2.webp',
-        world: '/assets/portal-fun-world-v3.webp',
-        signal: 'XK-03 // CALLE DEL CAOS',
-        button: 'Entrar al portal →',
-      },
-    ] as Portal[],
   },
   en: {
     eyebrow: 'Welcome to the ecosystem',
@@ -117,7 +78,6 @@ const copy = {
     switchLanguage: 'Switch to Spanish',
     primaryNav: 'Primary navigation',
     launcher: 'XETHKIOZ quick links',
-    portalsLabel: 'XETHKIOZ portals',
     navHome: 'HOME',
     navGames: 'GAMES',
     navScience: 'SCIENCE & TECH',
@@ -149,35 +109,6 @@ const copy = {
     statsContent: '+3.6K CONTENT',
     statsSecure: '24/7 SECURE SYSTEM',
     copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia. XETHKIOZ Web v10.0. All rights reserved.',
-    portals: [
-      {
-        title: 'GAMES',
-        subtitle: 'News · Guides · Videos · Images',
-        route: '/gaming',
-        poster: '/assets/portal-games-clean-v1.webp',
-        world: '/assets/portal-games-world-v3.webp',
-        signal: 'XK-01 // ADVENTURE REALM',
-        button: 'Enter portal →',
-      },
-      {
-        title: 'SCIENCE & TECHNOLOGY',
-        subtitle: 'Physics · Technology · AI · Projects',
-        route: '/science',
-        poster: '/assets/portal-science-clean-v1.webp',
-        world: '/assets/portal-science-world-v3.webp',
-        signal: 'XK-02 // LIVING OBSERVATORY',
-        button: 'Enter portal →',
-      },
-      {
-        title: 'FUN',
-        subtitle: 'Memes · Videos · Art · Humor',
-        route: '/fun',
-        poster: '/assets/portal-fun-chaos-v2.webp',
-        world: '/assets/portal-fun-world-v3.webp',
-        signal: 'XK-03 // CHAOS ALLEY',
-        button: 'Enter portal →',
-      },
-    ] as Portal[],
   },
 } as const
 
@@ -368,11 +299,7 @@ export default function Home() {
               onClick={openWisp}
             />
 
-            <section id="portals" aria-label={t.portalsLabel} className="xk-home-portal-deck mt-8 grid grid-cols-1 items-stretch md:grid-cols-3 xl:mt-7">
-              {t.portals.map((portal) => (
-                <PortalCard key={portal.title} portal={portal} />
-              ))}
-            </section>
+            <UniversePortalOrbit />
 
             <NexusDistrict tone="home" compact />
 
@@ -499,41 +426,6 @@ function WebCreationFeature({
         </Link>
       </div>
     </section>
-  )
-}
-
-function PortalCard({ portal }: { portal: Portal }) {
-  const tone = portal.route === '/gaming' ? 'violet' : portal.route === '/science' ? 'cyan' : 'orange'
-
-  return (
-    <Link to={portal.route} className={`xk-home-portal-shell xk-home-portal-shell-${tone} group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 focus-visible:ring-offset-4 focus-visible:ring-offset-black`} aria-label={`${portal.button.replace(' →', '')}: ${portal.title}`}>
-      <article className="xk-home-portal-clean relative z-[1] mx-auto aspect-square w-full max-w-none transition duration-500 ease-out group-hover:scale-[1.035]">
-        <div className="xk-home-portal-window">
-          <SafeImage
-            className="xk-home-portal-world"
-            src={portal.world}
-            alt={`${portal.title}: ${portal.subtitle}`}
-            loading="lazy"
-            fallback="/images/articles/fallback.svg"
-          />
-          <span className="xk-home-portal-depth" aria-hidden="true" />
-        </div>
-        <SafeImage
-          className="xk-home-portal-image absolute inset-0 h-full w-full object-contain"
-          src={portal.poster}
-          alt=""
-          loading="lazy"
-          fallback="/images/articles/fallback.svg"
-        />
-        <span className="xk-home-portal-particles" aria-hidden="true"><i /><i /><i /><i /></span>
-      </article>
-      <div className="xk-home-portal-caption">
-        <span>{portal.signal}</span>
-        <strong>{portal.title}</strong>
-        <small>{portal.subtitle}</small>
-        <b>{portal.button}</b>
-      </div>
-    </Link>
   )
 }
 
