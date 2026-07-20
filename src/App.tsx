@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { Navigate, Routes, Route, useLocation } from 'react-router-dom'
 import { Analytics as VercelAnalytics } from '@vercel/analytics/react'
-import { LangProvider } from './lib/LangContext'
+import { LangProvider, useLang } from './lib/LangContext'
 import { HudProvider } from './lib/HudContext'
 import { GREEN_NODE_UNLOCK_KEY, WispProvider } from './providers/WispProvider'
 import { ProfileProgressProvider } from './lib/ProfileProgressContext'
@@ -63,61 +63,86 @@ function GreenNodeGate() {
 }
 
 function RouteFallback() {
+  const { lang } = useLang()
+
   return (
-    <section className="mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center px-6 text-center">
+    <section className="mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center px-6 text-center" aria-live="polite" aria-busy="true">
       <div className="rounded-3xl border border-purple-500/40 bg-[#0A0A0F] px-8 py-6 shadow-[0_0_20px_rgba(139,92,246,.22)]">
         <p className="font-mono text-xs uppercase tracking-widest text-[#FF6B1A]">XETHKIOZ</p>
-        <h1 className="mt-3 text-2xl font-black text-white md:text-3xl">Cargando sección</h1>
+        <h1 className="mt-3 text-2xl font-black text-white md:text-3xl">
+          {lang === 'es' ? 'Cargando sección' : 'Loading section'}
+        </h1>
       </div>
     </section>
   )
 }
 
-const routeNames: Record<string, string> = {
-  '/': 'Inicio',
-  '/gaming': 'Juegos',
-  '/gaming/guides': 'Guías de juegos',
-  '/science': 'Ciencia y tecnología',
-  '/fun': 'Memes',
-  '/creacion-web': 'Creación web',
-  '/green-node': 'Green Node',
-  '/news': 'Noticias',
-  '/community': 'Comunidad',
-  '/nexus-city': 'Nexus City',
-  '/profile': 'Perfil',
-  '/account': 'Cuenta',
-  '/login': 'Iniciar sesión',
-  '/cms': 'Panel editorial',
-}
+const routeNames = {
+  es: {
+    '/': 'Inicio',
+    '/gaming': 'Juegos',
+    '/gaming/guides': 'Guías de juegos',
+    '/science': 'Ciencia y tecnología',
+    '/fun': 'Diversión',
+    '/creacion-web': 'Creación web',
+    '/green-node': 'Green Node',
+    '/news': 'Noticias',
+    '/community': 'Comunidad',
+    '/nexus-city': 'Nexus City',
+    '/profile': 'Perfil',
+    '/account': 'Cuenta',
+    '/login': 'Iniciar sesión',
+    '/cms': 'Panel editorial',
+  },
+  en: {
+    '/': 'Home',
+    '/gaming': 'Gaming',
+    '/gaming/guides': 'Gaming guides',
+    '/science': 'Science and technology',
+    '/fun': 'Fun',
+    '/creacion-web': 'Web creation',
+    '/green-node': 'Green Node',
+    '/news': 'News',
+    '/community': 'Community',
+    '/nexus-city': 'Nexus City',
+    '/profile': 'Profile',
+    '/account': 'Account',
+    '/login': 'Sign in',
+    '/cms': 'Editorial dashboard',
+  },
+} as const
 
 const activityTrackedPortals = new Set(['/gaming', '/science', '/fun', '/creacion-web', '/green-node', '/nexus-city'])
 
 function RouteAccessibility({ pathname }: { pathname: string }) {
+  const { lang } = useLang()
   const [announcement, setAnnouncement] = useState('')
 
   useEffect(() => {
     const routeName = pathname.startsWith('/news/')
-      ? 'Artículo de noticias'
+      ? (lang === 'es' ? 'Artículo de noticias' : 'News article')
       : pathname.startsWith('/nexus-city/u/')
-        ? 'Pasaporte Nexus'
-      : pathname.startsWith('/nexus-city/room/')
-        ? 'Cápsula Nexus'
-      : pathname.startsWith('/cms/')
-        ? 'Panel editorial'
-        : routeNames[pathname] ?? 'Sección XETHKIOZ'
+        ? (lang === 'es' ? 'Pasaporte Nexus' : 'Nexus passport')
+        : pathname.startsWith('/nexus-city/room/')
+          ? (lang === 'es' ? 'Cápsula Nexus' : 'Nexus capsule')
+          : pathname.startsWith('/cms/')
+            ? (lang === 'es' ? 'Panel editorial' : 'Editorial dashboard')
+            : routeNames[lang][pathname as keyof typeof routeNames.es]
+              ?? (lang === 'es' ? 'Sección XETHKIOZ' : 'XETHKIOZ section')
 
-    setAnnouncement(`Página cargada: ${routeName}`)
+    setAnnouncement(lang === 'es' ? `Página cargada: ${routeName}` : `Page loaded: ${routeName}`)
     const frame = window.requestAnimationFrame(() => {
       document.getElementById('main-content')?.focus({ preventScroll: true })
     })
     return () => window.cancelAnimationFrame(frame)
-  }, [pathname])
+  }, [lang, pathname])
 
   return <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</p>
 }
 
 function AppShell() {
   const location = useLocation()
+  const { lang } = useLang()
   const isCmsRoute = location.pathname === '/cms' || location.pathname.startsWith('/cms/')
   const isHomeRoute = location.pathname === '/'
   const hasPublicNavigation = !isCmsRoute && !isHomeRoute
@@ -135,22 +160,28 @@ function AppShell() {
     }
   }, [location.pathname])
 
+  const errorLabels = lang === 'es'
+    ? { controls: 'Controles globales', wisp: 'Wisp global', routes: 'Rutas' }
+    : { controls: 'Global controls', wisp: 'Global Wisp', routes: 'Routes' }
+
   return (
     <div className={hasPublicNavigation ? 'xk-app-shell xk-has-mobile-dock' : 'xk-app-shell'}>
-      <a href="#main-content" className="xk-skip-link">Saltar al contenido principal</a>
+      <a href="#main-content" className="xk-skip-link">
+        {lang === 'es' ? 'Saltar al contenido principal' : 'Skip to main content'}
+      </a>
       <Analytics />
       <VercelAnalytics />
       <ScrollToTop />
       <RouteAccessibility pathname={location.pathname} />
       {hasPublicNavigation && (
-        <AppErrorBoundary label="Global Controls" compact>
+        <AppErrorBoundary label={errorLabels.controls} compact>
           <Suspense fallback={null}>
             <Header />
           </Suspense>
         </AppErrorBoundary>
       )}
       {!isCmsRoute && (
-        <AppErrorBoundary label="Global Wisp" compact>
+        <AppErrorBoundary label={errorLabels.wisp} compact>
           <Suspense fallback={null}>
             <FusionGlobalWisp />
           </Suspense>
@@ -158,7 +189,7 @@ function AppShell() {
       )}
 
       <div id="main-content" tabIndex={-1} className="min-h-screen bg-[#0A0A0F] outline-none">
-        <AppErrorBoundary label="Routes">
+        <AppErrorBoundary label={errorLabels.routes}>
           <Suspense fallback={<RouteFallback />}>
             <Routes>
               <Route path="/" element={<Home />} />
