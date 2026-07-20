@@ -6,6 +6,8 @@ import { isSupabaseConfigured, supabase } from '../../services/supabaseClient'
 
 type Lang = 'es' | 'en'
 type RoomTheme = 'violet' | 'cyan' | 'orange' | 'green'
+type ProfileVisibility = 'public' | 'contacts' | 'private'
+type RelationshipStatus = 'pending' | 'accepted' | 'blocked'
 
 type PublicProfile = {
   user_id: string
@@ -29,20 +31,20 @@ type DraftProfile = {
   displayName: string
   bio: string
   statusText: string
-  visibility: 'public' | 'contacts' | 'private'
+  visibility: ProfileVisibility
 }
 
 type RelationshipSignal = {
   id: string
   requester_id: string
   addressee_id: string
-  status: 'pending' | 'accepted' | 'blocked'
+  status: RelationshipStatus
   peer?: Pick<PublicProfile, 'user_id' | 'handle' | 'display_name' | 'status_text'>
 }
 
 const PROFILE_STORAGE = 'xethkioz.nexus-city.passport.v1'
 const ROOM_STORAGE = 'xethkioz.nexus-city.room.v1'
-const SYSTEM_HANDLES = new Set(['xethkioz','nexus','admin','moderator','system'])
+const SYSTEM_HANDLES = new Set(['xethkioz', 'nexus', 'admin', 'moderator', 'system'])
 const themeColors: Record<RoomTheme, string> = { violet: '#8b5cf6', cyan: '#22d3ee', orange: '#f97316', green: '#32ff8a' }
 const auraColors: Record<string, string> = { 'aura-neon-pulse': '#f97316', 'aura-green-malware': '#32ff8a' }
 const furniture = [
@@ -51,6 +53,115 @@ const furniture = [
   { id: 'plant', glyph: '♧', es: 'Bio-neón', en: 'Bio-neon' },
   { id: 'portal', glyph: '◉', es: 'Mini portal', en: 'Mini portal' },
 ] as const
+
+const socialCopy = {
+  es: {
+    fallbackHandle: 'explorador',
+    fallbackName: 'Explorador',
+    fallbackStatus: 'Recién llegado al Nexus.',
+    headingEyebrow: 'BUCLE SOCIAL NEXUS // FASE 02',
+    headingTitle: 'Tu lugar. Tu gente. Tu señal.',
+    headingText: 'Personalizá una cápsula, publicá tu identidad y conectá con otros exploradores sin exponer correo ni datos privados.',
+    passportEyebrow: 'PASAPORTE // IDENTIDAD PÚBLICA',
+    passportTitle: 'Pasaporte Nexus',
+    handle: 'Identificador público',
+    displayName: 'Nombre visible',
+    currentSignal: 'Señal actual',
+    shortBio: 'Bio breve',
+    visibility: 'Visibilidad',
+    visibilityOptions: { public: 'Público', contacts: 'Contactos', private: 'Privado' } as Record<ProfileVisibility, string>,
+    syncing: 'SINCRONIZANDO…',
+    publish: 'PUBLICAR PASAPORTE',
+    viewProfile: 'VER PERFIL',
+    visitCapsule: 'VISITAR CÁPSULA',
+    capsuleEyebrow: 'MI CÁPSULA // CONSTRUCTOR DE SALA',
+    capsuleTitle: 'Cápsula personal',
+    energy: 'Energía',
+    objects: 'Objetos',
+    access: 'Acceso',
+    themes: { violet: 'Violeta', cyan: 'Cian', orange: 'Naranja', green: 'Verde' } as Record<RoomTheme, string>,
+    accessOptions: { open: 'Abierto', contacts: 'Contactos', private: 'Privado' } as Record<RoomState['access'], string>,
+    missionsEyebrow: 'BUCLE DIARIO // SEÑAL DE REGRESO',
+    missionsTitle: 'Misiones de hoy',
+    missions: ['Entrar a Nexus City', 'Sincronizar pasaporte o cápsula', 'Usar un emote en el chat'],
+    emoteEyebrow: 'MAZO DE EMOTES // ACCIONES DE CHAT',
+    emoteTitle: 'Entrá diciendo algo',
+    emotes: ['👋 ¡Llegué al Nexus!', '⚔️ Busco party', '🧪 Tengo una idea', '😂 Modo caos activado', '👁️ Vi algo en Green Node', '🔥 GG'],
+    directoryEyebrow: 'SEÑALES PÚBLICAS // DESCUBRIMIENTO',
+    directoryTitle: 'Exploradores recientes',
+    passport: 'PASAPORTE',
+    capsule: 'CÁPSULA',
+    connect: 'CONECTAR',
+    directoryEmpty: 'La ciudad todavía está esperando sus primeros pasaportes públicos.',
+    contactsEyebrow: 'CONSOLA DE CONTACTOS // CONSENTIMIENTO PRIMERO',
+    contactsTitle: 'Señales y contactos',
+    contactsText: 'Vos decidís quién entra a tu red. Podés aceptar, ignorar o bloquear sin exponer datos privados.',
+    incoming: 'ENTRANTE',
+    outgoing: 'SALIENTE',
+    relationshipStatus: { pending: 'PENDIENTE', accepted: 'ACEPTADA', blocked: 'BLOQUEADA' } as Record<RelationshipStatus, string>,
+    privateExplorer: 'Explorador privado',
+    nonPublicPassport: 'Pasaporte no público',
+    accept: 'ACEPTAR',
+    disconnect: 'DESCONECTAR',
+    ignore: 'IGNORAR',
+    block: 'BLOQUEAR',
+    signalsEmpty: 'Sin señales pendientes. Explorá pasaportes públicos para conectar.',
+    contactNetworkUpdated: 'Red de contactos actualizada.',
+  },
+  en: {
+    fallbackHandle: 'explorer',
+    fallbackName: 'Explorer',
+    fallbackStatus: 'New to the Nexus.',
+    headingEyebrow: 'NEXUS SOCIAL LOOP // PHASE 02',
+    headingTitle: 'Your place. Your people. Your signal.',
+    headingText: 'Customize a capsule, publish your identity and connect with explorers without exposing email or private data.',
+    passportEyebrow: 'PASSPORT // PUBLIC IDENTITY',
+    passportTitle: 'Nexus Passport',
+    handle: 'Public handle',
+    displayName: 'Display name',
+    currentSignal: 'Current signal',
+    shortBio: 'Short bio',
+    visibility: 'Visibility',
+    visibilityOptions: { public: 'Public', contacts: 'Contacts', private: 'Private' } as Record<ProfileVisibility, string>,
+    syncing: 'SYNCING…',
+    publish: 'PUBLISH PASSPORT',
+    viewProfile: 'VIEW PROFILE',
+    visitCapsule: 'VISIT CAPSULE',
+    capsuleEyebrow: 'MY CAPSULE // ROOM BUILDER',
+    capsuleTitle: 'Personal capsule',
+    energy: 'Energy',
+    objects: 'Objects',
+    access: 'Access',
+    themes: { violet: 'Violet', cyan: 'Cyan', orange: 'Orange', green: 'Green' } as Record<RoomTheme, string>,
+    accessOptions: { open: 'Open', contacts: 'Contacts', private: 'Private' } as Record<RoomState['access'], string>,
+    missionsEyebrow: 'DAILY LOOP // RETURN SIGNAL',
+    missionsTitle: 'Today’s missions',
+    missions: ['Enter Nexus City', 'Sync passport or capsule', 'Use an emote in chat'],
+    emoteEyebrow: 'EMOTE DECK // CHAT ACTIONS',
+    emoteTitle: 'Enter with a signal',
+    emotes: ['👋 I reached the Nexus!', '⚔️ Looking for a party', '🧪 I have an idea', '😂 Chaos mode enabled', '👁️ I saw something in Green Node', '🔥 GG'],
+    directoryEyebrow: 'PUBLIC SIGNALS // DISCOVERY',
+    directoryTitle: 'Recent explorers',
+    passport: 'PASSPORT',
+    capsule: 'CAPSULE',
+    connect: 'CONNECT',
+    directoryEmpty: 'The city is waiting for its first public passports.',
+    contactsEyebrow: 'CONTACT CONSOLE // CONSENT FIRST',
+    contactsTitle: 'Signals and contacts',
+    contactsText: 'You decide who enters your network. Accept, ignore or block without exposing private data.',
+    incoming: 'INCOMING',
+    outgoing: 'OUTGOING',
+    relationshipStatus: { pending: 'PENDING', accepted: 'ACCEPTED', blocked: 'BLOCKED' } as Record<RelationshipStatus, string>,
+    privateExplorer: 'Private explorer',
+    nonPublicPassport: 'Non-public passport',
+    accept: 'ACCEPT',
+    disconnect: 'DISCONNECT',
+    ignore: 'IGNORE',
+    block: 'BLOCK',
+    signalsEmpty: 'No pending signals. Explore public passports to connect.',
+    contactNetworkUpdated: 'Contact network updated.',
+  },
+} as const
 
 function safeHandle(value: string) {
   return value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9_]/g, '').slice(0, 24)
@@ -63,9 +174,10 @@ function readJson<T>(key: string, fallback: T): T {
 }
 
 export default function NexusSocialLoop({ lang, account, avatar, onNotice }: { lang: Lang; account: HudAccountState; avatar: Record<string, unknown>; onNotice: (message: string) => void }) {
+  const t = socialCopy[lang]
   const connected = account.status === 'connected' && Boolean(account.userId)
-  const initialHandle = safeHandle(account.name || '') || 'explorador'
-  const [profile, setProfile] = useState<DraftProfile>(() => readJson(PROFILE_STORAGE, { handle: initialHandle, displayName: account.name || 'Explorador', bio: '', statusText: lang === 'es' ? 'Recién llegado al Nexus.' : 'New to the Nexus.', visibility: 'public' as const }))
+  const initialHandle = safeHandle(account.name || '') || t.fallbackHandle
+  const [profile, setProfile] = useState<DraftProfile>(() => readJson(PROFILE_STORAGE, { handle: initialHandle, displayName: account.name || t.fallbackName, bio: '', statusText: t.fallbackStatus, visibility: 'public' as const }))
   const [room, setRoom] = useState<RoomState>(() => readJson(ROOM_STORAGE, { theme: 'violet' as const, furniture: ['console'], access: 'open' as const }))
   const [directory, setDirectory] = useState<PublicProfile[]>([])
   const [saving, setSaving] = useState(false)
@@ -84,10 +196,14 @@ export default function NexusSocialLoop({ lang, account, avatar, onNotice }: { l
 
   useEffect(() => {
     if (!connected || !account.name) return
-    setProfile((current) => current.handle !== 'explorador' || current.displayName !== 'Explorador'
-      ? current
-      : { ...current, handle: safeHandle(account.name) || 'explorador', displayName: account.name })
-  }, [account.name, connected])
+    setProfile((current) => {
+      const defaultHandle = ['explorador', 'explorer'].includes(current.handle)
+      const defaultName = ['Explorador', 'Explorer'].includes(current.displayName)
+      return defaultHandle && defaultName
+        ? { ...current, handle: safeHandle(account.name) || t.fallbackHandle, displayName: account.name }
+        : current
+    })
+  }, [account.name, connected, t.fallbackHandle])
 
   useEffect(() => {
     if (!isSupabaseConfigured) return
@@ -206,7 +322,7 @@ export default function NexusSocialLoop({ lang, account, avatar, onNotice }: { l
       : supabase.from('nexus_relationships').update({ status: action, updated_at: new Date().toISOString() }).eq('id', signal.id)
     const { error } = await request
     if (!error) setRelationshipRevision((current) => current + 1)
-    onNotice(error ? (lang === 'es' ? 'No se pudo actualizar la señal.' : 'Could not update the signal.') : (lang === 'es' ? 'Red social actualizada.' : 'Social network updated.'))
+    onNotice(error ? (lang === 'es' ? 'No se pudo actualizar la señal.' : 'Could not update the signal.') : t.contactNetworkUpdated)
   }
 
   const useEmote = (emote: string) => {
@@ -218,37 +334,41 @@ export default function NexusSocialLoop({ lang, account, avatar, onNotice }: { l
   const toggleFurniture = (id: string) => setRoom((current) => ({ ...current, furniture: current.furniture.includes(id) ? current.furniture.filter((item) => item !== id) : [...current.furniture, id].slice(-4) }))
 
   return <section className="xk-social-loop" aria-labelledby="social-loop-title">
-    <div className="xk-social-heading"><p>NEXUS SOCIAL LOOP // PHASE 02</p><h2 id="social-loop-title">{lang === 'es' ? 'Tu lugar. Tu gente. Tu señal.' : 'Your place. Your people. Your signal.'}</h2><span>{lang === 'es' ? 'Personalizá una cápsula, publicá tu identidad y conectá con otros exploradores sin exponer correo ni datos privados.' : 'Customize a capsule, publish your identity and connect with explorers without exposing email or private data.'}</span></div>
+    <div className="xk-social-heading"><p>{t.headingEyebrow}</p><h2 id="social-loop-title">{t.headingTitle}</h2><span>{t.headingText}</span></div>
 
     <div className="xk-social-grid">
-      <article className="xk-passport-editor">
-        <small>PASSPORT // PUBLIC IDENTITY</small><h3>{lang === 'es' ? 'Pasaporte Nexus' : 'Nexus Passport'}</h3>
-        <label>{lang === 'es' ? 'Identificador público' : 'Public handle'}<span>@</span><input value={profile.handle} onChange={(event) => setProfile((current) => ({ ...current, handle: safeHandle(event.target.value) }))} maxLength={24} /></label>
-        <label>{lang === 'es' ? 'Nombre visible' : 'Display name'}<input value={profile.displayName} onChange={(event) => setProfile((current) => ({ ...current, displayName: event.target.value.slice(0, 40) }))} maxLength={40} /></label>
-        <label>{lang === 'es' ? 'Señal actual' : 'Current signal'}<input value={profile.statusText} onChange={(event) => setProfile((current) => ({ ...current, statusText: event.target.value.slice(0, 80) }))} maxLength={80} /></label>
-        <label>{lang === 'es' ? 'Bio breve' : 'Short bio'}<textarea value={profile.bio} onChange={(event) => setProfile((current) => ({ ...current, bio: event.target.value.slice(0, 280) }))} maxLength={280} /></label>
-        <label>{lang === 'es' ? 'Visibilidad' : 'Visibility'}<select value={profile.visibility} onChange={(event) => setProfile((current) => ({ ...current, visibility: event.target.value as DraftProfile['visibility'] }))}><option value="public">PUBLIC</option><option value="contacts">CONTACTS</option><option value="private">PRIVATE</option></select></label>
-        <div><button type="button" onClick={savePassport} disabled={saving}>{saving ? 'SYNC…' : (lang === 'es' ? 'PUBLICAR PASAPORTE' : 'PUBLISH PASSPORT')}</button>{connected && profile.handle ? <><Link to={`/nexus-city/u/${profile.handle}`}>{lang === 'es' ? 'VER PERFIL ↗' : 'VIEW PROFILE ↗'}</Link><Link to={`/nexus-city/room/${profile.handle}`}>{lang === 'es' ? 'VISITAR CÁPSULA ↗' : 'VISIT CAPSULE ↗'}</Link></> : null}</div>
+      <article className="xk-passport-editor" aria-busy={saving}>
+        <small>{t.passportEyebrow}</small><h3>{t.passportTitle}</h3>
+        <label>{t.handle}<span aria-hidden="true">@</span><input value={profile.handle} onChange={(event) => setProfile((current) => ({ ...current, handle: safeHandle(event.target.value) }))} maxLength={24} autoComplete="username" /></label>
+        <label>{t.displayName}<input value={profile.displayName} onChange={(event) => setProfile((current) => ({ ...current, displayName: event.target.value.slice(0, 40) }))} maxLength={40} /></label>
+        <label>{t.currentSignal}<input value={profile.statusText} onChange={(event) => setProfile((current) => ({ ...current, statusText: event.target.value.slice(0, 80) }))} maxLength={80} /></label>
+        <label>{t.shortBio}<textarea value={profile.bio} onChange={(event) => setProfile((current) => ({ ...current, bio: event.target.value.slice(0, 280) }))} maxLength={280} /></label>
+        <label>{t.visibility}<select value={profile.visibility} onChange={(event) => setProfile((current) => ({ ...current, visibility: event.target.value as DraftProfile['visibility'] }))}>{(Object.keys(t.visibilityOptions) as ProfileVisibility[]).map((value) => <option key={value} value={value}>{t.visibilityOptions[value]}</option>)}</select></label>
+        <div><button type="button" onClick={savePassport} disabled={saving}>{saving ? t.syncing : t.publish}</button>{connected && profile.handle ? <><Link to={`/nexus-city/u/${profile.handle}`}>{t.viewProfile} ↗</Link><Link to={`/nexus-city/room/${profile.handle}`}>{t.visitCapsule} ↗</Link></> : null}</div>
       </article>
 
       <article className={`xk-capsule xk-capsule-${room.theme}`}>
-        <small>MY CAPSULE // ROOM BUILDER</small><h3>{lang === 'es' ? 'Cápsula personal' : 'Personal capsule'}</h3>
-        <div className="xk-capsule-room">{room.furniture.map((id) => { const item = furniture.find((entry) => entry.id === id); return item ? <i key={id} className={`is-${id}`} title={item[lang]}>{item.glyph}</i> : null })}<b>NX</b></div>
-        <div className="xk-room-controls"><fieldset><legend>{lang === 'es' ? 'Energía' : 'Energy'}</legend>{(['violet','cyan','orange','green'] as RoomTheme[]).map((theme) => <button key={theme} type="button" aria-label={theme} aria-pressed={room.theme === theme} onClick={() => setRoom((current) => ({ ...current, theme }))} style={{ '--swatch': themeColors[theme] } as CSSProperties} />)}</fieldset><fieldset><legend>{lang === 'es' ? 'Objetos' : 'Objects'}</legend>{furniture.map((item) => <button key={item.id} type="button" aria-pressed={room.furniture.includes(item.id)} onClick={() => toggleFurniture(item.id)}>{item.glyph} {item[lang]}</button>)}</fieldset><label>{lang === 'es' ? 'Acceso' : 'Access'}<select value={room.access} onChange={(event) => setRoom((current) => ({ ...current, access: event.target.value as RoomState['access'] }))}><option value="open">OPEN</option><option value="contacts">CONTACTS</option><option value="private">PRIVATE</option></select></label></div>
+        <small>{t.capsuleEyebrow}</small><h3>{t.capsuleTitle}</h3>
+        <div className="xk-capsule-room">{room.furniture.map((id) => { const item = furniture.find((entry) => entry.id === id); return item ? <i key={id} className={`is-${id}`} aria-hidden="true">{item.glyph}</i> : null })}<b aria-hidden="true">NX</b></div>
+        <div className="xk-room-controls">
+          <fieldset><legend>{t.energy}</legend>{(['violet', 'cyan', 'orange', 'green'] as RoomTheme[]).map((theme) => <button key={theme} type="button" aria-label={t.themes[theme]} aria-pressed={room.theme === theme} onClick={() => setRoom((current) => ({ ...current, theme }))} style={{ '--swatch': themeColors[theme] } as CSSProperties} />)}</fieldset>
+          <fieldset><legend>{t.objects}</legend>{furniture.map((item) => <button key={item.id} type="button" aria-pressed={room.furniture.includes(item.id)} onClick={() => toggleFurniture(item.id)}><span aria-hidden="true">{item.glyph}</span> {item[lang]}</button>)}</fieldset>
+          <label>{t.access}<select value={room.access} onChange={(event) => setRoom((current) => ({ ...current, access: event.target.value as RoomState['access'] }))}>{(Object.keys(t.accessOptions) as RoomState['access'][]).map((value) => <option key={value} value={value}>{t.accessOptions[value]}</option>)}</select></label>
+        </div>
       </article>
     </div>
 
     <div className="xk-social-secondary">
-      <article className="xk-city-missions"><small>DAILY LOOP // RETURN SIGNAL</small><h3>{lang === 'es' ? 'Misiones de hoy' : 'Today’s missions'}</h3>{[
-        lang === 'es' ? 'Entrar a Nexus City' : 'Enter Nexus City',
-        lang === 'es' ? 'Sincronizar pasaporte o cápsula' : 'Sync passport or capsule',
-        lang === 'es' ? 'Usar un emote en el chat' : 'Use an emote in chat',
-      ].map((mission, index) => <p key={mission} className={completedMissions[index] ? 'is-done' : ''}><b>{completedMissions[index] ? '✓' : '○'}</b><span>{mission}</span><em>+{[15,20,3][index]} XP</em></p>)}</article>
-      <article className="xk-emote-deck"><small>EMOTE DECK // CHAT ACTIONS</small><h3>{lang === 'es' ? 'Entrá diciendo algo' : 'Enter with a signal'}</h3><div>{['👋 ¡Llegué al Nexus!','⚔️ Busco party','🧪 Tengo una idea','😂 Modo caos activado','👁️ Vi algo en Green Node','🔥 GG'].map((emote) => <button type="button" key={emote} onClick={() => useEmote(emote)}>{emote}</button>)}</div></article>
+      <article className="xk-city-missions"><small>{t.missionsEyebrow}</small><h3>{t.missionsTitle}</h3>{t.missions.map((mission, index) => <p key={mission} className={completedMissions[index] ? 'is-done' : ''}><b aria-hidden="true">{completedMissions[index] ? '✓' : '○'}</b><span>{mission}</span><em>+{[15, 20, 3][index]} XP</em></p>)}</article>
+      <article className="xk-emote-deck"><small>{t.emoteEyebrow}</small><h3>{t.emoteTitle}</h3><div>{t.emotes.map((emote) => <button type="button" key={emote} onClick={() => useEmote(emote)}>{emote}</button>)}</div></article>
     </div>
 
-    <div className="xk-explorer-directory"><div><small>PUBLIC SIGNALS // DISCOVERY</small><h3>{lang === 'es' ? 'Exploradores recientes' : 'Recent explorers'}</h3></div>{directory.length ? <div>{directory.map((item) => <article key={item.user_id}><i style={{ '--profile-aura': auraColors[String(item.avatar_state?.aura)] || '#8b5cf6' } as CSSProperties}>◎</i><small>@{item.handle}</small><h4>{item.display_name}</h4><p>{item.status_text || item.bio || 'NEXUS ONLINE'}</p><div><Link to={`/nexus-city/u/${item.handle}`}>{lang === 'es' ? 'PASAPORTE' : 'PASSPORT'}</Link><Link to={`/nexus-city/room/${item.handle}`}>{lang === 'es' ? 'CÁPSULA' : 'CAPSULE'}</Link>{item.user_id !== account.userId ? <button type="button" onClick={() => requestContact(item)}>+ {lang === 'es' ? 'CONECTAR' : 'CONNECT'}</button> : null}</div></article>)}</div> : <p>{lang === 'es' ? 'La ciudad todavía está esperando sus primeros pasaportes públicos.' : 'The city is waiting for its first public passports.'}</p>}</div>
+    <div className="xk-explorer-directory"><div><small>{t.directoryEyebrow}</small><h3>{t.directoryTitle}</h3></div>{directory.length ? <div>{directory.map((item) => <article key={item.user_id}><i aria-hidden="true" style={{ '--profile-aura': auraColors[String(item.avatar_state?.aura)] || '#8b5cf6' } as CSSProperties}>◎</i><small>@{item.handle}</small><h4>{item.display_name}</h4><p>{item.status_text || item.bio || 'NEXUS ONLINE'}</p><div><Link to={`/nexus-city/u/${item.handle}`}>{t.passport}</Link><Link to={`/nexus-city/room/${item.handle}`}>{t.capsule}</Link>{item.user_id !== account.userId ? <button type="button" onClick={() => requestContact(item)}>+ {t.connect}</button> : null}</div></article>)}</div> : <p>{t.directoryEmpty}</p>}</div>
 
-    {connected ? <div className="xk-signal-inbox"><div><small>CONTACT CONSOLE // CONSENT FIRST</small><h3>{lang === 'es' ? 'Señales y contactos' : 'Signals and contacts'}</h3><p>{lang === 'es' ? 'Vos decidís quién entra a tu red. Podés aceptar, ignorar o bloquear sin exponer datos privados.' : 'You decide who enters your network. Accept, ignore or block without exposing private data.'}</p></div>{signals.length ? <div>{signals.map((signal) => { const incoming = signal.addressee_id === account.userId; const peerName = signal.peer?.display_name || (lang === 'es' ? 'Explorador privado' : 'Private explorer'); return <article key={signal.id}><span>{signal.status === 'accepted' ? '◆' : '◇'}</span><div><small>{incoming ? 'INCOMING' : 'OUTGOING'} // {signal.status.toUpperCase()}</small><h4>{peerName}</h4>{signal.peer ? <Link to={`/nexus-city/u/${signal.peer.handle}`}>@{signal.peer.handle}</Link> : <p>{lang === 'es' ? 'Pasaporte no público' : 'Non-public passport'}</p>}</div><div>{incoming && signal.status === 'pending' ? <button type="button" onClick={() => updateSignal(signal, 'accepted')}>{lang === 'es' ? 'ACEPTAR' : 'ACCEPT'}</button> : null}<button type="button" onClick={() => updateSignal(signal, 'delete')}>{signal.status === 'accepted' ? (lang === 'es' ? 'DESCONECTAR' : 'DISCONNECT') : (lang === 'es' ? 'IGNORAR' : 'IGNORE')}</button><button type="button" className="is-danger" onClick={() => updateSignal(signal, 'blocked')}>{lang === 'es' ? 'BLOQUEAR' : 'BLOCK'}</button></div></article>})}</div> : <p className="xk-signal-empty">{lang === 'es' ? 'Sin señales pendientes. Explorá pasaportes públicos para conectar.' : 'No pending signals. Explore public passports to connect.'}</p>}</div> : null}
+    {connected ? <div className="xk-signal-inbox"><div><small>{t.contactsEyebrow}</small><h3>{t.contactsTitle}</h3><p>{t.contactsText}</p></div>{signals.length ? <div>{signals.map((signal) => {
+      const incoming = signal.addressee_id === account.userId
+      const peerName = signal.peer?.display_name || t.privateExplorer
+      return <article key={signal.id}><span aria-hidden="true">{signal.status === 'accepted' ? '◆' : '◇'}</span><div><small>{incoming ? t.incoming : t.outgoing} // {t.relationshipStatus[signal.status]}</small><h4>{peerName}</h4>{signal.peer ? <Link to={`/nexus-city/u/${signal.peer.handle}`}>@{signal.peer.handle}</Link> : <p>{t.nonPublicPassport}</p>}</div><div>{incoming && signal.status === 'pending' ? <button type="button" onClick={() => updateSignal(signal, 'accepted')}>{t.accept}</button> : null}<button type="button" onClick={() => updateSignal(signal, 'delete')}>{signal.status === 'accepted' ? t.disconnect : t.ignore}</button><button type="button" className="is-danger" onClick={() => updateSignal(signal, 'blocked')}>{t.block}</button></div></article>
+    })}</div> : <p className="xk-signal-empty">{t.signalsEmpty}</p>}</div> : null}
   </section>
 }
