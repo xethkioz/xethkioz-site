@@ -1,0 +1,89 @@
+name: Apply Nexus immersive HUD
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - agent/nexus-immersive-hud-120
+    paths:
+      - .github/workflows/apply-nexus-immersive-hud.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/nexus-immersive-hud-120
+          fetch-depth: 0
+
+      - name: Apply verified route patch
+        shell: python
+        run: |
+          from pathlib import Path
+
+          app = Path('src/App.tsx')
+          text = app.read_text(encoding='utf-8')
+
+          replacements = [
+              (
+                  "  const hasPublicNavigation = !isCmsRoute && !isHomeRoute\n",
+                  "  const hasPublicNavigation = !isCmsRoute && !isHomeRoute\n  const isPixelGameRoute = location.pathname === '/nexus-city/room/xethkioz'\n",
+                  1,
+              ),
+              (
+                  "    <div className={hasPublicNavigation ? 'xk-app-shell xk-has-mobile-dock' : 'xk-app-shell'}>",
+                  "    <div className={`${hasPublicNavigation ? 'xk-app-shell xk-has-mobile-dock' : 'xk-app-shell'}${isPixelGameRoute ? ' xk-is-pixel-game' : ''}`}>",
+                  1,
+              ),
+              (
+                  "      {!isCmsRoute && (\n        <AppErrorBoundary label={errorLabels.wisp} compact>",
+                  "      {!isCmsRoute && !isPixelGameRoute && (\n        <AppErrorBoundary label={errorLabels.wisp} compact>",
+                  1,
+              ),
+              (
+                  "      {!isCmsRoute && (\n        <Suspense fallback={null}>\n          <NexusChatWidget clearMobileDock={hasPublicNavigation} />",
+                  "      {!isCmsRoute && !isPixelGameRoute && (\n        <Suspense fallback={null}>\n          <NexusChatWidget clearMobileDock={hasPublicNavigation} />",
+                  1,
+              ),
+          ]
+
+          for old, new, expected in replacements:
+              found = text.count(old)
+              if found != expected:
+                  raise SystemExit(f'App.tsx mismatch: expected {expected}, found {found}: {old[:80]!r}')
+              text = text.replace(old, new, expected)
+
+          app.write_text(text, encoding='utf-8')
+
+          world = Path('src/pages/NexusPixelWorld.tsx')
+          world_text = world.read_text(encoding='utf-8')
+          old_import = "import './NexusPixelRpg.css'\n"
+          new_import = "import './NexusPixelRpg.css'\nimport './NexusPixelImmersive.css'\n"
+          if world_text.count(old_import) != 1:
+              raise SystemExit('NexusPixelWorld import anchor mismatch')
+          world.write_text(world_text.replace(old_import, new_import, 1), encoding='utf-8')
+
+      - name: Remove temporary workflow
+        run: rm .github/workflows/apply-nexus-immersive-hud.yml
+
+      - name: Verify diff scope
+        run: |
+          files="$(git diff --name-only)"
+          printf '%s\n' "$files"
+          test "$files" = "src/App.tsx
+          src/pages/NexusPixelWorld.tsx" || {
+            echo "Unexpected patch scope"
+            exit 1
+          }
+
+      - name: Commit integration
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/App.tsx src/pages/NexusPixelWorld.tsx .github/workflows/apply-nexus-immersive-hud.yml
+          git commit -m "fix(game): isolate Plaza Nexus floating HUD"
+          git push origin HEAD:agent/nexus-immersive-hud-120
