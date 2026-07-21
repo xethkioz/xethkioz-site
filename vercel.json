@@ -6,6 +6,18 @@
     { "source": "/sitemap.xml", "destination": "/api/sitemap" },
     { "source": "/news-sitemap.xml", "destination": "/api/news-sitemap" },
     { "source": "/feed.xml", "destination": "/api/feed" },
+    { "source": "/gaming/guides", "destination": "/seo-shells/gaming-guides.html" },
+    { "source": "/gaming", "destination": "/seo-shells/gaming.html" },
+    { "source": "/science", "destination": "/seo-shells/science.html" },
+    { "source": "/fun", "destination": "/seo-shells/fun.html" },
+    { "source": "/news", "destination": "/seo-shells/news.html" },
+    { "source": "/community", "destination": "/seo-shells/community.html" },
+    { "source": "/nexus-city", "destination": "/seo-shells/nexus-city.html" },
+    { "source": "/about", "destination": "/seo-shells/about.html" },
+    { "source": "/contact", "destination": "/seo-shells/contact.html" },
+    { "source": "/support", "destination": "/seo-shells/support.html" },
+    { "source": "/privacy", "destination": "/seo-shells/privacy.html" },
+    { "source": "/editorial-policy", "destination": "/seo-shells/editorial-policy.html" },
     { "source": "/creacion-web", "destination": "/creacion-web.html" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ],
@@ -33,6 +45,60 @@
       "source": "/creacion-web.html",
       "headers": [
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/cms",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+      ]
+    },
+    {
+      "source": "/cms/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+      ]
+    },
+    {
+      "source": "/admin",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+      ]
+    },
+    {
+      "source": "/account",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+      ]
+    },
+    {
+      "source": "/login",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+      ]
+    },
+    {
+      "source": "/register",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+      ]
+    },
+    {
+      "source": "/confirm-email",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+      ]
+    },
+    {
+      "source": "/profile",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+      ]
+    },
+    {
+      "source": "/green-node",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
       ]
     },
     {

@@ -11,6 +11,7 @@ node_modules/
 dist/
 dist-ssr/
 .netlify/
+seo-shells/
 
 # TypeScript / tooling caches
 *.tsbuildinfo
