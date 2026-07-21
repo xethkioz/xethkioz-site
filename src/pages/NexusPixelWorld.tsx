@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import SEO from '../components/SEO'
+import NexusBabyDemonWisp from './NexusBabyDemonWisp'
 import NexusPixelInventoryLayer from './NexusPixelInventoryLayer'
 import {
   areas,
@@ -21,6 +22,7 @@ import {
   type QuestState,
   type WorldObject,
 } from '../game/nexusPixelRpg'
+import { describeAutotile, readNexusVisualTheme } from '../game/nexusVisualTheme'
 import { useHud } from '../lib/HudContext'
 import { useLang } from '../lib/LangContext'
 import { addWispXp, getDisplayName } from '../lib/realtimeCommunity'
@@ -228,6 +230,7 @@ export default function NexusPixelWorld() {
   const bubbleTimerRef = useRef<number | null>(null)
   const [clientKey] = useState(getClientKey)
   const [avatar] = useState(readAvatar)
+  const [visualTheme] = useState(readNexusVisualTheme)
   const [area, setArea] = useState<AreaId>('plaza')
   const [position, setPosition] = useState(areas.plaza.spawn)
   const [direction, setDirection] = useState<Direction>('down')
@@ -250,7 +253,8 @@ export default function NexusPixelWorld() {
   const tiles = useMemo(() => Array.from({ length: areaDefinition.width * areaDefinition.height }, (_, index) => {
     const x = index % areaDefinition.width
     const y = Math.floor(index / areaDefinition.width)
-    return { x, y, kind: tileKindAt(area, x, y) }
+    const kind = tileKindAt(area, x, y)
+    return { x, y, kind, visual: describeAutotile(area, x, y, kind) }
   }), [area, areaDefinition.height, areaDefinition.width])
 
   const signal = useMemo(() => ({
@@ -483,6 +487,7 @@ export default function NexusPixelWorld() {
         : t.quest.active
 
   const questProgress = quest.completed ? 100 : quest.started ? Math.round((quest.activated.length / 3) * 80) + 10 : 0
+  const wispStage = !quest.started ? 'idle' : quest.completed ? 'complete' : quest.activated.length === 3 ? 'ready' : 'quest'
   const cameraX = position.x * TILE_SIZE + TILE_SIZE / 2
   const cameraY = position.y * TILE_SIZE + TILE_SIZE / 2
   const worldStyle = {
@@ -496,7 +501,7 @@ export default function NexusPixelWorld() {
   const nearbyAction = nearbyNpc ? t.talk : nearbyObject?.beaconId ? t.activate : t.enter
 
   return (
-    <main className="xk-pixel-page">
+    <main className={`xk-pixel-page is-${visualTheme}`}>
       <SEO title={t.title} description={t.description} url="/nexus-city/room/xethkioz" />
       <header className="xk-pixel-header">
         <div>
@@ -512,7 +517,7 @@ export default function NexusPixelWorld() {
         <div className="xk-pixel-viewport">
           <div className="xk-pixel-area-badge"><small>{t.area}</small><strong>{areaDefinition.label[lang]}</strong><span>{areaDefinition.subtitle[lang]}</span></div>
           <div className={`xk-pixel-world ${areaDefinition.className}`} style={worldStyle}>
-            {tiles.map((tile) => <span key={`${area}-${tile.x}-${tile.y}`} className={`xk-pixel-tile is-${tile.kind}`} style={{ left: tile.x * TILE_SIZE, top: tile.y * TILE_SIZE }} aria-hidden="true" />)}
+            {tiles.map((tile) => <span key={`${area}-${tile.x}-${tile.y}`} className={`xk-pixel-tile is-${tile.kind} ${visualTheme === 'emeraldcraft-v2' ? tile.visual.classes : ''}`} data-mask={visualTheme === 'emeraldcraft-v2' ? tile.visual.mask : undefined} data-variant={visualTheme === 'emeraldcraft-v2' ? tile.visual.variant : undefined} style={{ left: tile.x * TILE_SIZE, top: tile.y * TILE_SIZE }} aria-hidden="true" />)}
             <NexusPixelInventoryLayer area={area} position={position} lang={lang} questCompleted={quest.completed} onNotice={setNotice} />
 
             {areaObjects.map((item) => {
@@ -540,7 +545,7 @@ export default function NexusPixelWorld() {
                 onClick={() => focusEntity(npc, () => openNpcDialogue(npc))}
                 aria-label={`${npc.name[lang]}: ${npc.role[lang]}`}
               >
-                <i aria-hidden="true" /><b aria-hidden="true">{npc.glyph}</b><em aria-hidden="true" /><small>{npc.name[lang]}</small>
+                {npc.id === 'wisp-guide' && visualTheme === 'emeraldcraft-v2' ? <NexusBabyDemonWisp nearby={nearbyNpc?.id === npc.id} stage={wispStage} /> : <><i aria-hidden="true" /><b aria-hidden="true">{npc.glyph}</b><em aria-hidden="true" /></>}<small>{npc.name[lang]}</small>
               </button>
             ))}
 
