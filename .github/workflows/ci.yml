@@ -44,23 +44,7 @@ jobs:
         run: npm run audit:production-ready
 
       - name: Build
-        id: build
-        continue-on-error: true
-        run: npm run build > xethkioz-build.log 2>&1
-
-      - name: Upload build diagnostic
-        if: steps.build.outcome == 'failure'
-        uses: actions/upload-artifact@v4
-        with:
-          name: xethkioz-build-diagnostic-108
-          path: xethkioz-build.log
-          retention-days: 1
-
-      - name: Enforce build result
-        if: steps.build.outcome == 'failure'
-        run: |
-          tail -n 80 xethkioz-build.log
-          exit 1
+        run: npm run build
 
       - name: Dependency vulnerability audit
         run: npm audit --omit=dev
