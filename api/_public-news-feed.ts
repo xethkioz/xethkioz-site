@@ -20,6 +20,8 @@ export type PublicArticleMetadata = FeedArticle & {
   tags: string[] | null
 }
 
+type CuratedArticle = ReturnType<typeof getCuratedExternalNews>[number]
+
 export function escapeXml(value: string) {
   return value.replace(/[<>&'\"]/g, (character) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&apos;', '"': '&quot;' })[character] ?? character)
 }
@@ -69,19 +71,19 @@ async function resolvePublicRows<T>(query: URLSearchParams, label: string): Prom
   return await response.json() as T[]
 }
 
-function findCuratedArticleMetadata(slug: string): PublicArticleMetadata | null {
-  const article = getCuratedExternalNews().find((item) => item.slug === slug) ?? null
-  if (!article || article.status !== 'published') return null
+function toCuratedArticleMetadata(article: CuratedArticle): PublicArticleMetadata | null {
+  if (article.status !== 'published') return null
 
   const publishedAt = article.published_at || article.created_at
-  if (!publishedAt || Number.isNaN(Date.parse(publishedAt)) || Date.parse(publishedAt) > Date.now()) return null
+  const timestamp = Date.parse(publishedAt)
+  if (!publishedAt || Number.isNaN(timestamp) || timestamp > Date.now()) return null
 
   return {
     slug: article.slug,
     title: article.title,
     summary: article.summary ?? null,
     category: article.category,
-    published_at: article.published_at ?? null,
+    published_at: publishedAt,
     updated_at: null,
     created_at: article.created_at,
     cover_image_url: article.cover_image_url ?? null,
@@ -90,17 +92,46 @@ function findCuratedArticleMetadata(slug: string): PublicArticleMetadata | null 
   }
 }
 
+function getPublishedCuratedArticleMetadata() {
+  return getCuratedExternalNews()
+    .map(toCuratedArticleMetadata)
+    .filter((article): article is PublicArticleMetadata => article !== null)
+}
+
+function findCuratedArticleMetadata(slug: string): PublicArticleMetadata | null {
+  return getPublishedCuratedArticleMetadata().find((article) => article.slug === slug) ?? null
+}
+
+function feedTimestamp(article: FeedArticle) {
+  const value = article.published_at || article.updated_at
+  const timestamp = value ? Date.parse(value) : 0
+  return Number.isNaN(timestamp) ? 0 : timestamp
+}
+
+function mergeFeedArticles(supabaseRows: FeedArticle[], limit: number) {
+  const merged = new Map<string, FeedArticle>()
+
+  for (const article of getPublishedCuratedArticleMetadata()) merged.set(article.slug, article)
+  for (const article of supabaseRows) merged.set(article.slug, article)
+
+  return [...merged.values()]
+    .sort((left, right) => feedTimestamp(right) - feedTimestamp(left))
+    .slice(0, limit)
+}
+
 export async function fetchFeedArticles(limit = 1000): Promise<FeedArticle[]> {
+  const safeLimit = Math.min(1000, Math.max(1, limit))
   const now = new Date().toISOString()
   const query = new URLSearchParams({
     select: 'slug,title,summary,category,published_at,updated_at,cover_image_url',
     status: 'eq.published',
     published_at: `lte.${now}`,
     order: 'published_at.desc',
-    limit: String(Math.min(1000, Math.max(1, limit))),
+    limit: String(safeLimit),
   })
 
-  return resolvePublicRows<FeedArticle>(query, 'public-news-feed')
+  const rows = await resolvePublicRows<FeedArticle>(query, 'public-news-feed')
+  return mergeFeedArticles(rows, safeLimit)
 }
 
 export async function fetchPublishedArticleMetadata(slug: string): Promise<PublicArticleMetadata | null> {
