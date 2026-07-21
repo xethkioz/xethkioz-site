@@ -82,7 +82,7 @@ function findCuratedArticleMetadata(slug: string): PublicArticleMetadata | null 
     summary: article.summary ?? null,
     category: article.category,
     published_at: article.published_at ?? null,
-    updated_at: article.updated_at ?? null,
+    updated_at: null,
     created_at: article.created_at,
     cover_image_url: article.cover_image_url ?? null,
     cover_image_alt: article.cover_image_alt ?? null,
