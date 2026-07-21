@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import SEO from '../components/SEO'
+import NexusPixelInventoryLayer from './NexusPixelInventoryLayer'
 import {
   areas,
   AVATAR_STORAGE_KEY,
@@ -512,6 +513,7 @@ export default function NexusPixelWorld() {
           <div className="xk-pixel-area-badge"><small>{t.area}</small><strong>{areaDefinition.label[lang]}</strong><span>{areaDefinition.subtitle[lang]}</span></div>
           <div className={`xk-pixel-world ${areaDefinition.className}`} style={worldStyle}>
             {tiles.map((tile) => <span key={`${area}-${tile.x}-${tile.y}`} className={`xk-pixel-tile is-${tile.kind}`} style={{ left: tile.x * TILE_SIZE, top: tile.y * TILE_SIZE }} aria-hidden="true" />)}
+            <NexusPixelInventoryLayer area={area} position={position} lang={lang} questCompleted={quest.completed} onNotice={setNotice} />
 
             {areaObjects.map((item) => {
               const activeBeacon = item.beaconId && quest.activated.includes(item.beaconId)
