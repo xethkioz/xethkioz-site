@@ -22,6 +22,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(process.cwd(), 'index.html'),
+        cms: resolve(process.cwd(), 'cms.html'),
         webCreation: resolve(process.cwd(), 'creacion-web.html'),
         ...seoShellInputs,
       },
