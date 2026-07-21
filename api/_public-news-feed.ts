@@ -1,3 +1,5 @@
+import { getCuratedExternalNews } from '../src/services/news/curatedExternalNews.js'
+
 const SITE_URL = 'https://www.xethkioz.com.ar'
 const PUBLIC_SUPABASE_URL = 'https://pascicauudfyydzknoop.supabase.co'
 const PUBLIC_SUPABASE_KEY = 'sb_publishable_baha-MZOxBr-2pQGaXlcwA_edqFjj-_'
@@ -67,6 +69,27 @@ async function resolvePublicRows<T>(query: URLSearchParams, label: string): Prom
   return await response.json() as T[]
 }
 
+function findCuratedArticleMetadata(slug: string): PublicArticleMetadata | null {
+  const article = getCuratedExternalNews().find((item) => item.slug === slug) ?? null
+  if (!article || article.status !== 'published') return null
+
+  const publishedAt = article.published_at || article.created_at
+  if (!publishedAt || Number.isNaN(Date.parse(publishedAt)) || Date.parse(publishedAt) > Date.now()) return null
+
+  return {
+    slug: article.slug,
+    title: article.title,
+    summary: article.summary ?? null,
+    category: article.category,
+    published_at: article.published_at ?? null,
+    updated_at: article.updated_at ?? null,
+    created_at: article.created_at,
+    cover_image_url: article.cover_image_url ?? null,
+    cover_image_alt: article.cover_image_alt ?? null,
+    tags: article.tags ?? [],
+  }
+}
+
 export async function fetchFeedArticles(limit = 1000): Promise<FeedArticle[]> {
   const now = new Date().toISOString()
   const query = new URLSearchParams({
@@ -94,7 +117,7 @@ export async function fetchPublishedArticleMetadata(slug: string): Promise<Publi
   })
 
   const rows = await resolvePublicRows<PublicArticleMetadata>(query, 'public-news-article')
-  return rows[0] ?? null
+  return rows[0] ?? findCuratedArticleMetadata(normalizedSlug)
 }
 
 export { SITE_URL }
