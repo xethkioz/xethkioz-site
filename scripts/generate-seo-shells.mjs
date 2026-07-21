@@ -140,24 +140,19 @@ function renderShell(template, route) {
   const image = absoluteUrl(route.image)
   let html = template
 
-  html = replaceTag(html, /<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${escapeHtml(route.description)}" />`, 'description')
+  html = replaceTag(html, /<meta data-rh="true" name="description" content="[^"]*" \/>/, `<meta data-rh="true" name="description" content="${escapeHtml(route.description)}" />`, 'description')
   html = replaceTag(html, /<meta name="keywords" content="[^"]*" \/>/, `<meta name="keywords" content="${escapeHtml(route.keywords)}" />`, 'keywords')
-  html = replaceTag(html, /<meta property="og:title" content="[^"]*" \/>/, `<meta property="og:title" content="${escapeHtml(route.title)}" />`, 'Open Graph title')
-  html = replaceTag(html, /<meta property="og:description" content="[^"]*" \/>/, `<meta property="og:description" content="${escapeHtml(route.description)}" />`, 'Open Graph description')
-  html = replaceTag(html, /<meta property="og:image" content="[^"]*" \/>/, `<meta property="og:image" content="${escapeHtml(image)}" />`, 'Open Graph image')
-  html = replaceTag(html, /<meta name="twitter:title" content="[^"]*" \/>/, `<meta name="twitter:title" content="${escapeHtml(route.title)}" />`, 'Twitter title')
-  html = replaceTag(html, /<meta name="twitter:description" content="[^"]*" \/>/, `<meta name="twitter:description" content="${escapeHtml(route.description)}" />`, 'Twitter description')
-  html = replaceTag(html, /<meta name="twitter:image" content="[^"]*" \/>/, `<meta name="twitter:image" content="${escapeHtml(image)}" />`, 'Twitter image')
+  html = replaceTag(html, /<link data-rh="true" rel="canonical" href="[^"]*" \/>/, `<link data-rh="true" rel="canonical" href="${escapeHtml(canonical)}" />`, 'canonical URL')
+  html = replaceTag(html, /<meta data-rh="true" property="og:title" content="[^"]*" \/>/, `<meta data-rh="true" property="og:title" content="${escapeHtml(route.title)}" />`, 'Open Graph title')
+  html = replaceTag(html, /<meta data-rh="true" property="og:description" content="[^"]*" \/>/, `<meta data-rh="true" property="og:description" content="${escapeHtml(route.description)}" />`, 'Open Graph description')
+  html = replaceTag(html, /<meta data-rh="true" property="og:url" content="[^"]*" \/>/, `<meta data-rh="true" property="og:url" content="${escapeHtml(canonical)}" />`, 'Open Graph URL')
+  html = replaceTag(html, /<meta data-rh="true" property="og:image" content="[^"]*" \/>/, `<meta data-rh="true" property="og:image" content="${escapeHtml(image)}" />`, 'Open Graph image')
+  html = replaceTag(html, /<meta property="og:image:alt" content="[^"]*" \/>/, `<meta property="og:image:alt" content="${escapeHtml(route.imageAlt)}" />`, 'Open Graph image alt')
+  html = replaceTag(html, /<meta data-rh="true" name="twitter:title" content="[^"]*" \/>/, `<meta data-rh="true" name="twitter:title" content="${escapeHtml(route.title)}" />`, 'Twitter title')
+  html = replaceTag(html, /<meta data-rh="true" name="twitter:description" content="[^"]*" \/>/, `<meta data-rh="true" name="twitter:description" content="${escapeHtml(route.description)}" />`, 'Twitter description')
+  html = replaceTag(html, /<meta data-rh="true" name="twitter:image" content="[^"]*" \/>/, `<meta data-rh="true" name="twitter:image" content="${escapeHtml(image)}" />`, 'Twitter image')
+  html = replaceTag(html, /<meta name="twitter:image:alt" content="[^"]*" \/>/, `<meta name="twitter:image:alt" content="${escapeHtml(route.imageAlt)}" />`, 'Twitter image alt')
   html = replaceTag(html, /<title>[^<]*<\/title>/, `<title>${escapeHtml(route.title)}</title>`, 'document title')
-
-  const routeMetadata = [
-    `    <link rel="canonical" href="${escapeHtml(canonical)}" />`,
-    `    <meta property="og:url" content="${escapeHtml(canonical)}" />`,
-    `    <meta property="og:image:alt" content="${escapeHtml(route.imageAlt)}" />`,
-    `    <meta name="twitter:image:alt" content="${escapeHtml(route.imageAlt)}" />`,
-  ].join('\n')
-
-  html = html.replace('    <meta property="og:site_name" content="XETHKIOZ" />', `${routeMetadata}\n    <meta property="og:site_name" content="XETHKIOZ" />`)
   return html
 }
 
