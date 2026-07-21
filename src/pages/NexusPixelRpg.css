@@ -1,0 +1,401 @@
+.xk-pixel-area-badge {
+  position: absolute;
+  z-index: 24;
+  top: .75rem;
+  left: .75rem;
+  display: grid;
+  min-width: 190px;
+  padding: .65rem .8rem;
+  border: 3px solid #1b1228;
+  background: rgba(8, 7, 14, .9);
+  color: #fff;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, .32);
+  pointer-events: none;
+}
+
+.xk-pixel-area-badge small {
+  color: #ff9a56;
+  font-size: 7px;
+  font-weight: 900;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.xk-pixel-area-badge strong {
+  margin-top: 2px;
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.xk-pixel-area-badge span {
+  margin-top: 3px;
+  color: #aca5b8;
+  font-size: 8px;
+}
+
+.xk-pixel-world.is-guild-area { background: #271d35; }
+.xk-pixel-world.is-lab-area { background: #112f38; }
+.xk-pixel-world.is-arcade-area { background: #382016; }
+
+.xk-pixel-tile.is-indoor {
+  background:
+    linear-gradient(45deg, rgba(255, 255, 255, .045) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, .08) 75%),
+    #403649;
+  background-size: 20px 20px;
+  border: 1px solid rgba(10, 7, 14, .17);
+}
+
+.xk-pixel-world.is-lab-area .xk-pixel-tile.is-indoor {
+  background:
+    linear-gradient(90deg, transparent 0 17px, rgba(67, 222, 239, .1) 17px 20px, transparent 20px),
+    #24464d;
+}
+
+.xk-pixel-world.is-arcade-area .xk-pixel-tile.is-indoor {
+  background:
+    radial-gradient(circle at 8px 8px, rgba(255, 151, 74, .14) 0 2px, transparent 3px),
+    #4c342c;
+}
+
+.xk-pixel-tile.is-carpet {
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, .06) 0 4px, transparent 4px 12px),
+    #6e3677;
+  border-left: 3px solid #9b55a4;
+  border-right: 3px solid #3d1945;
+}
+
+.xk-pixel-world.is-arcade-area .xk-pixel-tile.is-carpet {
+  background: repeating-linear-gradient(90deg, #a94c22 0 8px, #71301c 8px 16px);
+  border-left-color: #e47b38;
+  border-right-color: #4d1b10;
+}
+
+.xk-pixel-tile.is-metal {
+  background:
+    linear-gradient(135deg, transparent 0 44%, rgba(101, 236, 255, .14) 45% 54%, transparent 55%),
+    #294d55;
+  border: 1px solid #17363d;
+}
+
+.xk-pixel-tile.is-void { background: #030306; }
+
+.xk-pixel-object.is-door > span {
+  width: 30px;
+  height: 36px;
+  border-bottom-width: 5px;
+  background: #4d345d;
+  color: #fff;
+}
+
+.xk-pixel-object.is-door.is-exit > span {
+  height: 24px;
+  background: #2d2434;
+  color: #bdb4c8;
+}
+
+.xk-pixel-object.is-console > span {
+  background: #202638;
+  color: #89efff;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, .35), inset 0 0 0 3px #11141d;
+}
+
+.xk-pixel-object.is-beacon > span {
+  width: 25px;
+  height: 34px;
+  border-radius: 50% 50% 20% 20%;
+  opacity: .48;
+  filter: grayscale(.8);
+  transform: scale(.86);
+}
+
+.xk-pixel-object.is-beacon.is-violet > span { background: #7340b5; color: #d9c0ff; }
+.xk-pixel-object.is-beacon.is-cyan > span { background: #14718a; color: #a7f4ff; }
+.xk-pixel-object.is-beacon.is-orange > span { background: #9b481f; color: #ffd0a3; }
+
+.xk-pixel-object.is-beacon.is-activated > span {
+  opacity: 1;
+  filter: none;
+  transform: scale(1);
+  animation: xk-rpg-beacon 750ms steps(2, end) infinite;
+}
+
+.xk-pixel-object.is-beacon.is-activated::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  opacity: .5;
+  animation: xk-rpg-signal 1.4s steps(4, end) infinite;
+}
+
+.xk-pixel-npc {
+  position: absolute;
+  z-index: 13;
+  width: 40px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  transform: translateY(-8px);
+  image-rendering: pixelated;
+}
+
+.xk-pixel-npc > i,
+.xk-pixel-npc > b,
+.xk-pixel-npc > em {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  font-style: normal;
+}
+
+.xk-pixel-npc > i {
+  left: 10px;
+  top: 3px;
+  width: 20px;
+  height: 18px;
+  border: 3px solid #130d1b;
+  background: #d2a27e;
+}
+
+.xk-pixel-npc > b {
+  left: 7px;
+  top: 20px;
+  width: 26px;
+  height: 19px;
+  border: 3px solid #130d1b;
+  background: #5a337d;
+  font-family: ui-monospace, monospace;
+  font-size: 8px;
+}
+
+.xk-pixel-npc > em {
+  left: 9px;
+  top: 39px;
+  width: 8px;
+  height: 7px;
+  background: #1d1724;
+  box-shadow: 14px 0 #1d1724;
+}
+
+.xk-pixel-npc > small {
+  position: absolute;
+  left: 50%;
+  top: 47px;
+  transform: translateX(-50%);
+  max-width: 95px;
+  padding: 2px 5px;
+  overflow: hidden;
+  border: 2px solid #15101e;
+  background: #f5ecff;
+  color: #23162e;
+  font-family: ui-monospace, monospace;
+  font-size: 7px;
+  font-weight: 900;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.xk-pixel-npc.is-guide > i {
+  border-radius: 50%;
+  background: #76d5c3;
+  box-shadow: 0 0 14px rgba(50, 255, 138, .7);
+}
+
+.xk-pixel-npc.is-guide > b { background: #274b49; color: #baffd4; }
+.xk-pixel-npc.is-gaming-npc > b { background: #563378; color: #ffb572; }
+.xk-pixel-npc.is-science-npc > b { background: #175a6e; color: #aff6ff; }
+.xk-pixel-npc.is-fun-npc > b { background: #8b421e; color: #ffdb9d; }
+
+.xk-pixel-npc.is-nearby {
+  filter: brightness(1.22) drop-shadow(0 0 8px rgba(255, 255, 255, .35));
+  animation: xk-rpg-npc-ready 700ms steps(2, end) infinite;
+}
+
+.xk-pixel-dialogue {
+  position: absolute;
+  z-index: 40;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  gap: .9rem;
+  align-items: center;
+  padding: .85rem;
+  border: 4px solid #181020;
+  outline: 2px solid rgba(255, 255, 255, .65);
+  background: rgba(248, 244, 255, .97);
+  color: #1b1322;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, .38);
+}
+
+.xk-pixel-dialogue > div {
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  border: 3px solid #23172d;
+  background: linear-gradient(135deg, #593c72, #1a342e);
+  color: #c9ffe0;
+  font-size: 1.65rem;
+  text-shadow: 2px 2px #000;
+}
+
+.xk-pixel-dialogue article small {
+  color: #765f82;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+
+.xk-pixel-dialogue h2 {
+  margin: 2px 0 4px;
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+.xk-pixel-dialogue p {
+  margin: 0;
+  font-size: .75rem;
+  line-height: 1.55;
+}
+
+.xk-pixel-dialogue > button {
+  min-width: 135px;
+  padding: .75rem;
+  border: 3px solid #281534;
+  background: #7842a1;
+  color: #fff;
+  font-family: inherit;
+  font-size: .58rem;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  box-shadow: 3px 3px 0 #1a0d22;
+}
+
+.xk-pixel-quest {
+  padding: 1rem;
+  border: 1px solid rgba(255, 107, 26, .28);
+  border-radius: 1rem;
+  background: rgba(36, 17, 8, .86);
+  box-shadow: inset 0 0 24px rgba(255, 107, 26, .05);
+}
+
+.xk-pixel-quest > small {
+  color: #ff9d5c;
+  font-family: ui-monospace, monospace;
+  font-size: .57rem;
+  font-weight: 900;
+  letter-spacing: .16em;
+}
+
+.xk-pixel-quest h2 {
+  margin: .35rem 0;
+  font-size: .95rem;
+  text-transform: uppercase;
+}
+
+.xk-pixel-quest p {
+  min-height: 2.4rem;
+  margin: 0 0 .65rem;
+  color: #d9c8be;
+  font-size: .74rem;
+  line-height: 1.45;
+}
+
+.xk-pixel-quest > div {
+  height: 8px;
+  overflow: hidden;
+  border: 2px solid #1a0d08;
+  background: #120b08;
+}
+
+.xk-pixel-quest > div i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #8b5cf6, #22d3ee, #ff6b1a);
+  transition: width .35s steps(5, end);
+}
+
+.xk-pixel-quest > span,
+.xk-pixel-quest > strong {
+  display: block;
+  margin-top: .45rem;
+  font-family: ui-monospace, monospace;
+  font-size: .61rem;
+}
+
+.xk-pixel-quest > span { color: #ffbd8d; }
+.xk-pixel-quest > strong { color: #9a8e86; font-weight: 500; }
+
+.xk-pixel-quest.is-complete {
+  border-color: rgba(50, 255, 138, .34);
+  background: rgba(6, 36, 21, .82);
+}
+
+.xk-pixel-quest.is-complete > small,
+.xk-pixel-quest.is-complete > span { color: #88ffc0; }
+
+@keyframes xk-rpg-beacon {
+  50% { transform: translateY(-3px) scale(1.05); filter: brightness(1.45); }
+}
+
+@keyframes xk-rpg-signal {
+  70%, 100% { transform: scale(1.65); opacity: 0; }
+}
+
+@keyframes xk-rpg-npc-ready {
+  50% { transform: translateY(-10px); }
+}
+
+@media (max-width: 840px) {
+  .xk-pixel-dialogue {
+    grid-template-columns: 54px 1fr;
+  }
+
+  .xk-pixel-dialogue > div {
+    width: 52px;
+    height: 52px;
+  }
+
+  .xk-pixel-dialogue > button {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .xk-pixel-area-badge {
+    top: .45rem;
+    left: .45rem;
+    min-width: 150px;
+    padding: .5rem .6rem;
+  }
+
+  .xk-pixel-dialogue {
+    left: .45rem;
+    right: .45rem;
+    bottom: .45rem;
+    gap: .55rem;
+    padding: .65rem;
+  }
+
+  .xk-pixel-dialogue p { font-size: .68rem; }
+  .xk-pixel-dialogue > div { width: 45px; height: 45px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xk-pixel-object.is-beacon.is-activated > span,
+  .xk-pixel-object.is-beacon.is-activated::after,
+  .xk-pixel-npc.is-nearby { animation: none; }
+}
