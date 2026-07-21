@@ -16,11 +16,17 @@ import {
   type PublicNewsContentBlock,
 } from '../services/news/publicNewsService'
 
+type ArticleErrorKind = 'not-found' | 'load' | null
+
 const copy = {
   es: {
     back: 'Volver a noticias',
+    home: 'Volver al inicio',
     loading: 'Cargando noticia...',
-    notFound: 'No se encontró la noticia publicada.',
+    notFoundTitle: 'Noticia no encontrada',
+    notFound: 'La publicación no existe, todavía no está disponible o fue retirada del radar público.',
+    loadFailedTitle: 'No pudimos abrir la noticia',
+    loadFailed: 'Hubo un problema temporal al consultar el radar. Podés volver al listado y reintentar desde allí.',
     source: 'Fuente original',
     sources: 'Fuentes originales',
     published: 'Publicado',
@@ -37,8 +43,12 @@ const copy = {
   },
   en: {
     back: 'Back to news',
+    home: 'Back to home',
     loading: 'Loading article...',
-    notFound: 'Published article not found.',
+    notFoundTitle: 'Article not found',
+    notFound: 'This publication does not exist, is not public yet or was removed from the public radar.',
+    loadFailedTitle: 'We could not open this article',
+    loadFailed: 'A temporary problem interrupted the radar request. Return to the news list and retry from there.',
     source: 'Original source',
     sources: 'Original sources',
     published: 'Published',
@@ -101,6 +111,7 @@ export default function NewsArticle() {
   const [isExternal, setIsExternal] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [errorKind, setErrorKind] = useState<ArticleErrorKind>(null)
   const world = article ? getArticleWorld(article) : null
   const readingBlocks = article?.content.filter((block) => !isPublicNewsEditorialChecklist(block)) ?? []
   const reading = article ? getPublicNewsReadingMetrics(article) : null
@@ -110,12 +121,15 @@ export default function NewsArticle() {
     let active = true
     async function loadArticle() {
       if (!slug) {
+        setArticle(null)
         setError(ui.notFound)
+        setErrorKind('not-found')
         setLoading(false)
         return
       }
       setLoading(true)
       setError(null)
+      setErrorKind(null)
       try {
         const externalArticle = getCuratedExternalNews().find((item) => item.slug === slug) ?? null
         const nextArticle = externalArticle ?? await fetchPublishedNewsBySlug(slug)
@@ -123,25 +137,44 @@ export default function NewsArticle() {
           setArticle(nextArticle)
           setIsExternal(Boolean(externalArticle))
           setError(nextArticle ? null : ui.notFound)
+          setErrorKind(nextArticle ? null : 'not-found')
         }
-      } catch (caughtError) {
-        if (active) setError(caughtError instanceof Error ? caughtError.message : ui.notFound)
+      } catch {
+        if (active) {
+          setArticle(null)
+          setIsExternal(false)
+          setError(ui.loadFailed)
+          setErrorKind('load')
+        }
       } finally {
         if (active) setLoading(false)
       }
     }
     void loadArticle()
     return () => { active = false }
-  }, [slug, ui.notFound])
+  }, [slug, ui.loadFailed, ui.notFound])
+
+  const fallbackTitle = errorKind === 'load' ? ui.loadFailedTitle : ui.notFoundTitle
 
   return (
     <FusionShell tone="science">
-      <SEO title={article ? `${article.title} · XETHKIOZ` : 'Noticia · XETHKIOZ'} description={article?.summary ?? ui.notFound} image={article?.cover_image_url ?? undefined} url={slug ? `/news/${slug}` : '/news'} type={article ? 'article' : 'website'} publishedTime={article?.published_at ?? article?.created_at ?? undefined} author="Alexis Díaz · XETHKIOZ" tags={article?.tags} />
+      <SEO title={article?.title ?? fallbackTitle} description={article?.summary ?? error ?? ui.notFound} image={article?.cover_image_url ?? undefined} url={slug ? `/news/${slug}` : '/news'} type={article ? 'article' : 'website'} publishedTime={article?.published_at ?? article?.created_at ?? undefined} author="Alexis Díaz · XETHKIOZ" tags={article?.tags} />
       <main className={`xk-news-dossier ${world?.className ?? ''} mx-auto max-w-7xl px-4 py-10 text-white sm:px-6 md:py-12`}>
         <div className="xk-news-city" aria-hidden="true"><i /><i /><i /><span /><span /></div>
         <Link to="/news" className="font-mono text-xs font-black uppercase tracking-[0.18em] text-orange-300 transition hover:text-orange-100">← {ui.back}</Link>
-        {loading ? <p className="mt-8 rounded-3xl border border-violet-500/20 bg-white/[0.04] p-5 text-violet-100">{ui.loading}</p> : null}
-        {error ? <p className="mt-8 rounded-3xl border border-red-500/30 bg-red-500/10 p-5 text-red-200">{error}</p> : null}
+        {loading ? <p className="mt-8 rounded-3xl border border-violet-500/20 bg-white/[0.04] p-5 text-violet-100" role="status" aria-live="polite">{ui.loading}</p> : null}
+        {!loading && error && !article ? (
+          <section className="mt-8 overflow-hidden rounded-[2rem] border border-red-400/25 bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,.16),transparent_36%),linear-gradient(135deg,rgba(124,58,237,.14),rgba(0,0,0,.92))] p-6 text-center shadow-[0_0_60px_rgba(124,58,237,.15)] md:p-10" role="alert" aria-labelledby="news-error-title">
+            <p className="font-mono text-xs font-black uppercase tracking-[0.3em] text-orange-300">NEWS_ENGINE // {errorKind === 'load' ? 'SIGNAL_INTERRUPTED' : 'FILE_NOT_FOUND'}</p>
+            <div className="mx-auto mt-6 grid h-20 w-20 place-items-center rounded-3xl border border-white/15 bg-black/45 text-3xl" aria-hidden="true">{errorKind === 'load' ? '⌁' : '404'}</div>
+            <h1 id="news-error-title" className="mt-6 text-3xl font-black uppercase tracking-[-0.03em] text-white md:text-5xl">{fallbackTitle}</h1>
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-300">{error}</p>
+            <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+              <Link to="/news" className="rounded-full border border-orange-300/50 bg-orange-500/10 px-5 py-3 font-mono text-xs font-black uppercase tracking-[0.18em] text-orange-100 transition hover:bg-orange-500/20">{ui.back}</Link>
+              <Link to="/" className="rounded-full border border-violet-300/35 px-5 py-3 font-mono text-xs font-black uppercase tracking-[0.18em] text-violet-100 transition hover:bg-violet-500/10">{ui.home}</Link>
+            </div>
+          </section>
+        ) : null}
         {article ? (
           <article className="xk-news-archive mt-8 overflow-hidden rounded-[2rem] border border-violet-500/25 bg-[#0B0A0F] p-4 shadow-[0_0_70px_rgba(124,58,237,.18)] sm:p-6 md:p-9">
             <header className="xk-news-worldbar"><p>{world?.district}</p><span><i />{world?.mode}</span><b>FILE // {article.slug.slice(-12).toUpperCase()}</b></header>
@@ -150,7 +183,7 @@ export default function NewsArticle() {
                 <SafeImage src={article.cover_image_url} fallback="/images/articles/fallback.svg" alt={article.cover_image_alt || article.title} className="h-full w-full object-cover" loading="eager" />
               </div>
             ) : (
-              <div className="mb-7 overflow-hidden rounded-[1.5rem] border border-orange-400/25 bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,.28),transparent_34%),linear-gradient(135deg,rgba(124,58,237,.2),rgba(0,0,0,.9))] p-5 md:p-8">
+              <div className="mb-7 overflow-hidden rounded-[1.5rem] border border-orange-400/25 bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,.28),transparent_34%),linear-gradient(135deg,rgba(124,58,247,.2),rgba(0,0,0,.9))] p-5 md:p-8">
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
                     <div className="grid h-14 w-14 place-items-center rounded-2xl border border-white/15 bg-black/45 text-3xl md:h-16 md:w-16">{getArticleMark(article)}</div>
