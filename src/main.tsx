@@ -11,6 +11,7 @@ import './pages/NexusPixelPolish.css'
 import './pages/NexusPixelMotion.css'
 import './pages/NexusPixelEmerald.css'
 import './pages/NexusEmeraldCraftV2.css'
+import './pages/NexusPixelImmersive.css'
 
 const rootElement = document.getElementById('root')
 

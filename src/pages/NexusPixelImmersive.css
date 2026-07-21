@@ -1,0 +1,31 @@
+/* Immersive route safety for Plaza Nexus.
+ * Keeps global floating site widgets outside the game HUD and reserves
+ * the lower-right corner for the Nexus inventory controls.
+ */
+
+.xk-app-shell.xk-is-pixel-game {
+  --xk-game-hud-safe-right: max(18px, env(safe-area-inset-right));
+  --xk-game-hud-safe-bottom: max(18px, env(safe-area-inset-bottom));
+}
+
+.xk-app-shell.xk-is-pixel-game .xk-pixel-inventory-root {
+  right: var(--xk-game-hud-safe-right);
+  bottom: var(--xk-game-hud-safe-bottom);
+  z-index: 140;
+}
+
+.xk-app-shell.xk-is-pixel-game .xk-pixel-inventory {
+  max-height: min(650px, calc(100dvh - 150px));
+}
+
+@media (max-width: 767px) {
+  .xk-app-shell.xk-is-pixel-game {
+    --xk-game-hud-safe-right: max(10px, env(safe-area-inset-right));
+    --xk-game-hud-safe-bottom: calc(5.75rem + env(safe-area-inset-bottom));
+  }
+
+  .xk-app-shell.xk-is-pixel-game .xk-pixel-inventory {
+    width: min(420px, calc(100vw - 20px));
+    max-height: calc(100dvh - 11rem);
+  }
+}

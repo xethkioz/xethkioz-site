@@ -153,6 +153,7 @@ function AppShell() {
   const isCmsRoute = location.pathname === '/cms' || location.pathname.startsWith('/cms/')
   const isHomeRoute = location.pathname === '/'
   const hasPublicNavigation = !isCmsRoute && !isHomeRoute
+  const isPixelGameRoute = location.pathname === '/nexus-city/room/xethkioz'
 
   useEffect(() => {
     if (!activityTrackedPortals.has(location.pathname)) return
@@ -172,7 +173,7 @@ function AppShell() {
     : { controls: 'Global controls', wisp: 'Global Wisp', routes: 'Routes' }
 
   return (
-    <div className={hasPublicNavigation ? 'xk-app-shell xk-has-mobile-dock' : 'xk-app-shell'}>
+    <div className={`${hasPublicNavigation ? 'xk-app-shell xk-has-mobile-dock' : 'xk-app-shell'}${isPixelGameRoute ? ' xk-is-pixel-game' : ''}`}>
       <a href="#main-content" className="xk-skip-link">
         {lang === 'es' ? 'Saltar al contenido principal' : 'Skip to main content'}
       </a>
@@ -187,7 +188,7 @@ function AppShell() {
           </Suspense>
         </AppErrorBoundary>
       )}
-      {!isCmsRoute && (
+      {!isCmsRoute && !isPixelGameRoute && (
         <AppErrorBoundary label={errorLabels.wisp} compact>
           <Suspense fallback={null}>
             <FusionGlobalWisp />
@@ -260,7 +261,7 @@ function AppShell() {
           <Footer />
         </Suspense>
       )}
-      {!isCmsRoute && (
+      {!isCmsRoute && !isPixelGameRoute && (
         <Suspense fallback={null}>
           <NexusChatWidget clearMobileDock={hasPublicNavigation} />
         </Suspense>
