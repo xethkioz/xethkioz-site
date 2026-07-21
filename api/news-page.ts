@@ -14,20 +14,23 @@ function firstHeader(value: string | string[] | undefined) {
 }
 
 function escapeHtml(value: string) {
-  return value
-    .replaceAll('&', '&amp;')
-    .replaceAll('"', '&quot;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
+  return value.replace(/[&"<>]/g, (character) => ({
+    '&': '&amp;',
+    '"': '&quot;',
+    '<': '&lt;',
+    '>': '&gt;',
+  })[character] ?? character)
 }
 
 function safeJson(value: unknown) {
   return JSON.stringify(value)
-    .replaceAll('<', '\\u003c')
-    .replaceAll('>', '\\u003e')
-    .replaceAll('&', '\\u0026')
-    .replaceAll('\u2028', '\\u2028')
-    .replaceAll('\u2029', '\\u2029')
+    .replace(/[<>&]/g, (character) => ({
+      '<': '\\u003c',
+      '>': '\\u003e',
+      '&': '\\u0026',
+    })[character] ?? character)
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029')
 }
 
 function replaceRequired(html: string, pattern: RegExp, replacement: string, label: string) {
