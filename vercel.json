@@ -20,6 +20,9 @@
     { "source": "/privacy", "destination": "/seo-shells/privacy.html" },
     { "source": "/editorial-policy", "destination": "/seo-shells/editorial-policy.html" },
     { "source": "/creacion-web", "destination": "/creacion-web.html" },
+    { "source": "/cms", "destination": "/cms.html" },
+    { "source": "/cms/(.*)", "destination": "/cms.html" },
+    { "source": "/admin", "destination": "/cms.html" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ],
   "headers": [
@@ -34,6 +37,13 @@
       "source": "/index.html",
       "headers": [
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/cms.html",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
       ]
     },
     {
