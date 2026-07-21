@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
 import SafeImage from '../components/SafeImage'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
+import FunGameGateway from '../components/fun/FunGameGateway'
 import { PortalPulseRail } from '../components/PortalPulseRail'
 import { NexusDistrict } from '../components/NexusDistrict'
 import { useLang } from '../lib/LangContext'
@@ -52,8 +53,8 @@ const humorDeck: Record<'es' | 'en', Record<HumorMode, readonly string[]>> = {
 
 const content = {
   es: {
-    title: 'Memes',
-    description: 'El lado más caótico de internet: memes, clips y rarezas servidos como un episodio anime fuera de control.',
+    title: 'Diversión y juego',
+    description: 'Entrá a Plaza Nexus y seguí bajando para encontrar memes, chistes, clips y rarezas servidos con energía de caos.',
     heroAlt: 'Espíritu anime de internet saliendo de un teléfono con energía de meme',
     switchLanguage: 'Cambiar a inglés',
     switchCode: 'EN',
@@ -125,8 +126,8 @@ const content = {
     sponsor: 'SPONSOR DE XETHKIOZ FUN',
   },
   en: {
-    title: 'Memes',
-    description: 'The most chaotic side of the internet: memes, clips and oddities served like an out-of-control anime episode.',
+    title: 'Fun & Play',
+    description: 'Enter Nexus Plaza, then keep scrolling for memes, jokes, clips and oddities powered by pure chaos.',
     heroAlt: 'Anime internet spirit bursting from a phone with meme energy',
     switchLanguage: 'Switch to Spanish',
     switchCode: 'ES',
@@ -296,7 +297,9 @@ export default function FunPortal() {
         <div className="xk-manga-burst" aria-hidden="true" />
         <div className="xk-meme-ambient" aria-hidden="true"><i /><i /><i /><b>!</b><b>?</b><b>爆</b></div>
         <div className="mx-auto max-w-7xl">
-          <section className="xk-anime-hero xk-meme-hero" aria-labelledby="fun-title">
+          <FunGameGateway lang={lang} />
+
+          <section id="humor" className="xk-anime-hero xk-meme-hero scroll-mt-24" aria-labelledby="fun-title">
             <SafeImage src="/assets/identity/memes-anime-chaos-v1.webp" fallback="/images/articles/community.svg" alt={t.heroAlt} className="xk-anime-hero-media" loading="eager" fetchPriority="high" />
             <div className="xk-anime-hero-shade" aria-hidden="true" /><div className="xk-halftone" aria-hidden="true" />
             <div className="xk-meme-hero-sprites" aria-hidden="true"><span>HA!</span><span>?!</span><span>LOL</span></div>
