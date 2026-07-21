@@ -1,0 +1,577 @@
+/*
+ * Nexus Pixel Emerald layer
+ * Original XETHKIOZ art direction inspired by classic handheld RPG readability.
+ * No third-party sprites or copyrighted game assets are used.
+ */
+
+.xk-pixel-page {
+  --emerald-grass: #62b95f;
+  --emerald-grass-light: #8bd174;
+  --emerald-grass-dark: #2e7544;
+  --emerald-path: #d4bd82;
+  --emerald-path-dark: #9c754a;
+  --emerald-water: #55b9df;
+  --emerald-water-dark: #227da9;
+  --emerald-ink: #233035;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(117, 212, 119, .18), transparent 30%),
+    radial-gradient(circle at 12% 30%, rgba(84, 188, 221, .12), transparent 29%),
+    radial-gradient(circle at 88% 22%, rgba(255, 218, 112, .1), transparent 26%),
+    linear-gradient(180deg, #152637 0%, #0b1722 54%, #070c13 100%);
+}
+
+/* Remove the hard technical-grid feeling from the playable canvas. */
+.xk-pixel-viewport {
+  background: #326e47;
+  border-color: #293642;
+  outline-color: #768997;
+  box-shadow:
+    0 10px 0 #080d12,
+    0 35px 110px rgba(0, 0, 0, .6),
+    inset 0 0 0 3px rgba(255, 255, 255, .08),
+    inset 0 0 70px rgba(3, 11, 17, .18);
+}
+
+.xk-pixel-viewport::before {
+  opacity: .34;
+  background:
+    linear-gradient(180deg, rgba(255, 251, 205, .11), transparent 24%, transparent 76%, rgba(8, 22, 30, .16)),
+    repeating-linear-gradient(0deg, rgba(8, 30, 19, .025) 0 1px, transparent 1px 5px);
+}
+
+.xk-pixel-world {
+  background: #4c9d57;
+  filter: saturate(1.14) contrast(1.025) brightness(1.025);
+}
+
+.xk-pixel-tile {
+  border: 0 !important;
+  outline: 0;
+  overflow: visible;
+}
+
+/* Organic grass variants. */
+.xk-pixel-tile.is-grass {
+  z-index: 1;
+  background:
+    radial-gradient(ellipse at 7px 31px, #347c45 0 1px, transparent 2px),
+    radial-gradient(ellipse at 11px 28px, #78c96b 0 1px, transparent 2px),
+    radial-gradient(ellipse at 29px 12px, #347c45 0 1px, transparent 2px),
+    radial-gradient(circle at 22px 25px, rgba(255, 240, 139, .2) 0 1px, transparent 2px),
+    linear-gradient(135deg, rgba(255,255,255,.04), transparent 46%),
+    var(--emerald-grass);
+  box-shadow: none;
+}
+
+.xk-pixel-tile.is-grass:nth-child(3n) {
+  background-color: #5fb45a;
+  background-position: 2px 3px, 4px 1px, -3px 2px, 0 0, 0 0, 0 0;
+}
+
+.xk-pixel-tile.is-grass:nth-child(5n) {
+  background-color: #67bd61;
+  filter: brightness(1.015);
+}
+
+/* Small wild flowers: purely decorative and deterministic. */
+.xk-pixel-tile.is-grass:nth-child(13n)::before,
+.xk-pixel-tile.is-grass:nth-child(19n)::before {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  left: 7px;
+  top: 8px;
+  width: 4px;
+  height: 4px;
+  background: #fff6d0;
+  box-shadow:
+    -3px 0 #ff8c9b,
+    3px 0 #ff8c9b,
+    0 -3px #ff8c9b,
+    0 3px #ff8c9b,
+    20px 17px #fff3ad,
+    17px 17px #8ee4ff,
+    23px 17px #8ee4ff,
+    20px 14px #8ee4ff,
+    20px 20px #8ee4ff;
+  filter: drop-shadow(1px 2px 0 rgba(27, 94, 47, .26));
+}
+
+/* Tall-grass clusters overlap neighboring tiles and soften the square grid. */
+.xk-pixel-tile.is-grass:nth-child(7n)::after,
+.xk-pixel-tile.is-grass:nth-child(17n)::after {
+  content: '';
+  position: absolute;
+  z-index: 3;
+  left: -2px;
+  bottom: 1px;
+  width: 5px;
+  height: 13px;
+  border-radius: 80% 0 60% 10%;
+  background: #2c7843;
+  box-shadow:
+    5px 2px #4e9f52,
+    10px -1px #2f8046,
+    15px 3px #60af59,
+    21px 0 #347f45,
+    27px 2px #56a854,
+    33px -1px #2f7542,
+    38px 3px #62b45d;
+  transform-origin: 50% 100%;
+  animation: xk-emerald-grass-wave 2s steps(4, end) infinite;
+}
+
+/* Paths overlap by two pixels, creating a continuous, less blocky ribbon. */
+.xk-pixel-tile.is-path {
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  transform: translate(-2px, -2px);
+  border-radius: 7px 10px 6px 9px;
+  background:
+    radial-gradient(circle at 8px 9px, rgba(119, 82, 47, .18) 0 2px, transparent 3px),
+    radial-gradient(circle at 31px 29px, rgba(255, 251, 211, .2) 0 2px, transparent 3px),
+    radial-gradient(circle at 20px 34px, rgba(120, 87, 52, .12) 0 1px, transparent 2px),
+    linear-gradient(135deg, rgba(255,255,255,.09), transparent 47%),
+    var(--emerald-path);
+  box-shadow:
+    inset 0 3px rgba(255, 247, 203, .14),
+    inset 0 -3px rgba(126, 87, 52, .12),
+    0 0 0 1px rgba(88, 127, 66, .12);
+}
+
+.xk-pixel-tile.is-path:nth-child(4n) {
+  border-radius: 10px 6px 11px 5px;
+  background-position: 2px 1px, -2px 3px, 4px -2px, 0 0, 0 0;
+}
+
+/* Plaza stone is still readable but no longer a visible checkerboard. */
+.xk-pixel-tile.is-plaza {
+  z-index: 2;
+  width: 42px;
+  height: 42px;
+  transform: translate(-1px, -1px);
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.12) 0 8%, transparent 9% 70%, rgba(58,43,71,.08) 71%),
+    radial-gradient(circle at 33px 30px, rgba(66, 48, 78, .11) 0 1px, transparent 2px),
+    #a697aa;
+  background-size: 24px 24px, auto, auto;
+  box-shadow: inset 0 2px rgba(255,255,255,.09), inset 0 -2px rgba(50,36,61,.1);
+}
+
+/* Water tiles visually merge and receive irregular shoreline highlights. */
+.xk-pixel-tile.is-water {
+  z-index: 1;
+  width: 44px;
+  height: 44px;
+  transform: translate(-2px, -2px);
+  border-radius: 9px 7px 10px 6px;
+  background:
+    linear-gradient(180deg, rgba(198, 247, 255, .62) 0 2px, transparent 3px 10px),
+    repeating-linear-gradient(0deg, #2f92bd 0 7px, var(--emerald-water) 7px 13px, #389fc9 13px 18px);
+  box-shadow:
+    inset 0 0 0 3px rgba(20, 100, 135, .22),
+    inset 0 4px rgba(205, 249, 255, .2),
+    0 0 0 2px rgba(42, 112, 85, .18);
+  animation: xk-emerald-water 1.1s steps(4, end) infinite;
+}
+
+.xk-pixel-tile.is-water:nth-child(3n) { border-radius: 6px 11px 7px 12px; }
+
+.xk-pixel-tile.is-water::before {
+  left: 5px;
+  top: 10px;
+  width: 13px;
+  height: 2px;
+  background: rgba(226, 253, 255, .88);
+  box-shadow: 18px 17px rgba(178, 239, 255, .55);
+  animation: xk-emerald-ripple 1.1s steps(4, end) infinite;
+}
+
+.xk-pixel-tile.is-water::after {
+  right: 5px;
+  top: 27px;
+  width: 9px;
+  height: 2px;
+  background: rgba(219, 250, 255, .75);
+}
+
+/* Tree trunks remain tile-aligned while the canopy overlaps adjacent cells. */
+.xk-pixel-tile.is-tree {
+  z-index: 8;
+  background:
+    linear-gradient(90deg, transparent 15px, #81502e 15px 25px, transparent 25px),
+    linear-gradient(90deg, transparent 17px, #a76b38 17px 21px, transparent 21px),
+    transparent;
+  filter: drop-shadow(4px 7px 0 rgba(19, 69, 37, .3));
+}
+
+.xk-pixel-tile.is-tree::before {
+  content: '';
+  position: absolute;
+  left: -6px;
+  top: -13px;
+  width: 52px;
+  height: 45px;
+  border-radius: 48% 52% 45% 55%;
+  background:
+    radial-gradient(circle at 12px 16px, #78c868 0 10px, transparent 11px),
+    radial-gradient(circle at 28px 10px, #69bb5c 0 13px, transparent 14px),
+    radial-gradient(circle at 42px 18px, #52a953 0 11px, transparent 12px),
+    radial-gradient(circle at 21px 27px, #47994d 0 15px, transparent 16px),
+    radial-gradient(circle at 38px 30px, #367f47 0 13px, transparent 14px);
+  box-shadow: inset 0 -5px rgba(20, 78, 42, .18);
+}
+
+.xk-pixel-tile.is-tree::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: -6px;
+  width: 11px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(223, 255, 174, .45);
+  box-shadow: 24px 8px rgba(188, 244, 144, .28), 13px 20px rgba(169, 234, 126, .22);
+}
+
+.xk-pixel-tile.is-tree:nth-child(4n)::before {
+  transform: translateY(1px) scaleX(.94);
+  filter: hue-rotate(-5deg) brightness(.98);
+}
+
+/* Buildings adopt clearer handheld-RPG silhouettes. */
+.xk-pixel-tile.is-roof {
+  z-index: 7;
+  width: 42px;
+  height: 43px;
+  transform: translate(-1px, -2px);
+  border-radius: 6px 6px 1px 1px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.28), transparent 23%),
+    repeating-linear-gradient(90deg, #9a4f63 0 8px, #bd6471 8px 16px);
+  border-top: 4px solid #ef9a93 !important;
+  border-bottom: 4px solid #663344 !important;
+  box-shadow: 0 5px 0 rgba(45, 26, 45, .28), inset 0 -5px rgba(84, 35, 52, .16);
+}
+
+.xk-pixel-world.is-guild-area .xk-pixel-tile.is-roof {
+  background: repeating-linear-gradient(90deg, #6b407f 0 8px, #8756a0 8px 16px);
+  border-top-color: #c694df !important;
+  border-bottom-color: #43234f !important;
+}
+
+.xk-pixel-tile.is-wall {
+  background:
+    linear-gradient(90deg, rgba(255,255,255,.1), transparent 25%),
+    repeating-linear-gradient(0deg, #e4d3b0 0 10px, #d3ba91 10px 20px);
+  box-shadow: inset -4px 0 rgba(91, 67, 50, .11);
+}
+
+.xk-pixel-world.is-lab-area .xk-pixel-tile.is-wall {
+  background: repeating-linear-gradient(0deg, #d9e8e5 0 10px, #a8c9ca 10px 20px);
+}
+
+.xk-pixel-tile.is-floor {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.12) 0 50%, rgba(99,67,47,.07) 50%),
+    #e2b77e;
+  box-shadow: inset 0 2px rgba(255,255,255,.1);
+}
+
+/* More playful interaction props. */
+.xk-pixel-object > span {
+  border-radius: 5px;
+}
+
+.xk-pixel-object.is-sign > span {
+  border-radius: 3px 3px 1px 1px;
+  background: #a66b34;
+  border-color: #4d2d1b;
+}
+
+.xk-pixel-object.is-fountain > span {
+  border-radius: 46% 54% 50% 50%;
+  background: radial-gradient(circle at 38% 28%, #d6fbff 0 3px, #56c4df 4px 11px, #247a9c 12px);
+  box-shadow: 0 0 0 4px #9dd5c9, 0 0 0 7px #396e61, 0 4px 0 #1a3f39;
+}
+
+/*
+ * Baby Demon Wisp — original CSS pixel character.
+ * Uses the existing guide NPC markup, so mission logic and accessibility remain intact.
+ */
+.xk-pixel-npc.is-guide {
+  z-index: 18;
+  width: 52px;
+  height: 62px;
+  margin-left: -6px;
+  margin-top: -12px;
+  transform-origin: 50% 80%;
+  filter:
+    drop-shadow(0 0 7px rgba(145, 93, 255, .68))
+    drop-shadow(0 8px 2px rgba(24, 20, 40, .28));
+  animation: xk-baby-wisp-float 1.8s steps(5, end) infinite;
+}
+
+.xk-pixel-npc.is-guide::before {
+  left: 50%;
+  bottom: 0;
+  width: 31px;
+  height: 9px;
+  transform: translateX(-50%);
+  background: rgba(49, 34, 77, .3);
+  filter: blur(1px);
+  animation: xk-baby-wisp-shadow 1.8s steps(5, end) infinite;
+}
+
+.xk-pixel-npc.is-guide::after {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 24px;
+  width: 37px;
+  height: 37px;
+  transform: translate(-50%, -50%);
+  border: 2px solid rgba(177, 131, 255, .34);
+  border-radius: 50%;
+  box-shadow: 0 0 13px rgba(139, 92, 246, .42), inset 0 0 10px rgba(255, 130, 77, .14);
+  animation: xk-baby-wisp-aura 2.4s steps(6, end) infinite;
+}
+
+/* Head */
+.xk-pixel-npc.is-guide > i {
+  z-index: 5;
+  left: 12px;
+  top: 4px;
+  width: 28px;
+  height: 25px;
+  border: 3px solid #21152f;
+  border-radius: 46% 46% 50% 50%;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,.14), transparent 34%),
+    #7046a2;
+  box-shadow:
+    inset 0 -5px #56357f,
+    inset -4px 0 rgba(38, 20, 56, .18),
+    0 3px 0 rgba(39, 23, 51, .24);
+}
+
+/* Eyes and tiny fangs. */
+.xk-pixel-npc.is-guide > i::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 9px;
+  width: 5px;
+  height: 6px;
+  border-radius: 50% 50% 35% 35%;
+  background: #fff6b0;
+  box-shadow:
+    12px 0 #fff6b0,
+    1px 1px #ff7547,
+    13px 1px #ff7547,
+    6px 8px 0 -1px #fff;
+  animation: xk-baby-wisp-blink 3.6s steps(1, end) infinite;
+}
+
+/* Horn pair. */
+.xk-pixel-npc.is-guide > i::after {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: -9px;
+  width: 10px;
+  height: 12px;
+  border: 3px solid #21152f;
+  border-right: 0;
+  border-bottom: 0;
+  border-radius: 9px 0 0 0;
+  background: #ff8d55;
+  transform: rotate(-12deg);
+  box-shadow: 25px 2px 0 -1px #ff8d55, 28px 0 0 1px #21152f;
+}
+
+/* Body */
+.xk-pixel-npc.is-guide > b {
+  z-index: 4;
+  left: 15px;
+  top: 27px;
+  width: 22px;
+  height: 20px;
+  overflow: visible;
+  border: 3px solid #21152f;
+  border-radius: 48% 48% 42% 42%;
+  background: #654095;
+  color: transparent;
+  font-size: 0;
+  box-shadow: inset 0 -5px #49306f, inset 4px 0 rgba(255,255,255,.08);
+}
+
+/* Wings */
+.xk-pixel-npc.is-guide > b::before,
+.xk-pixel-npc.is-guide > b::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 1px;
+  width: 14px;
+  height: 17px;
+  border: 3px solid #21152f;
+  background: #ff8555;
+  clip-path: polygon(100% 0, 90% 100%, 48% 68%, 0 100%, 18% 18%);
+  transform-origin: 100% 45%;
+  animation: xk-baby-wisp-wing-left .5s steps(2, end) infinite;
+}
+
+.xk-pixel-npc.is-guide > b::before { right: 15px; }
+.xk-pixel-npc.is-guide > b::after {
+  left: 15px;
+  transform: scaleX(-1);
+  transform-origin: 0 45%;
+  animation-name: xk-baby-wisp-wing-right;
+}
+
+/* Tail with bright arrow tip. */
+.xk-pixel-npc.is-guide > em {
+  z-index: 3;
+  left: 24px;
+  top: 43px;
+  width: 19px;
+  height: 5px;
+  border: 0;
+  border-radius: 0 0 10px 0;
+  background: #56347f;
+  box-shadow: none;
+  transform: rotate(28deg);
+  transform-origin: 0 50%;
+  animation: xk-baby-wisp-tail 1.1s steps(4, end) infinite;
+}
+
+.xk-pixel-npc.is-guide > em::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: -4px;
+  width: 10px;
+  height: 10px;
+  background: #ff8555;
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  filter: drop-shadow(1px 1px 0 #21152f);
+}
+
+.xk-pixel-npc.is-guide > small {
+  top: 58px;
+  color: #352342;
+  background: #fff8d9;
+  border-color: #342342;
+  box-shadow: 2px 2px 0 rgba(32, 20, 42, .28);
+}
+
+.xk-pixel-npc.is-guide.is-nearby {
+  filter:
+    brightness(1.1)
+    drop-shadow(0 0 10px rgba(255, 133, 85, .72))
+    drop-shadow(0 0 18px rgba(139, 92, 246, .58));
+  animation: xk-baby-wisp-ready .62s steps(3, end) infinite;
+}
+
+/* A slightly softer portable-RPG UI. */
+.xk-pixel-area-badge,
+.xk-pixel-dialogue,
+.xk-pixel-hud,
+.xk-pixel-quest {
+  border-color: #293044;
+  outline-color: rgba(255, 249, 210, .58);
+}
+
+.xk-pixel-area-badge {
+  background: linear-gradient(180deg, rgba(255, 250, 221, .97), rgba(239, 229, 194, .96));
+  color: #28343b;
+  box-shadow: 4px 5px 0 rgba(25, 34, 42, .28);
+}
+
+.xk-pixel-area-badge small { color: #a84f33; }
+.xk-pixel-area-badge span { color: #5f6a67; }
+
+@keyframes xk-emerald-grass-wave {
+  0%, 100% { transform: skewX(-5deg) translateY(0); }
+  50% { transform: skewX(6deg) translateY(-1px); }
+}
+
+@keyframes xk-emerald-water {
+  0% { background-position: 0 0, 0 0; }
+  50% { background-position: 8px 1px, 0 -5px; }
+  100% { background-position: 16px 0, 0 -10px; }
+}
+
+@keyframes xk-emerald-ripple {
+  0%, 100% { transform: translateX(0); opacity: .6; }
+  50% { transform: translateX(8px); opacity: 1; }
+}
+
+@keyframes xk-baby-wisp-float {
+  0%, 100% { transform: translateY(-8px) rotate(-1deg); }
+  50% { transform: translateY(-13px) rotate(1deg); }
+}
+
+@keyframes xk-baby-wisp-shadow {
+  0%, 100% { transform: translateX(-50%) scaleX(1); opacity: .34; }
+  50% { transform: translateX(-50%) scaleX(.72); opacity: .2; }
+}
+
+@keyframes xk-baby-wisp-aura {
+  0%, 100% { transform: translate(-50%, -50%) scale(.85); opacity: .25; }
+  50% { transform: translate(-50%, -50%) scale(1.14); opacity: .62; }
+}
+
+@keyframes xk-baby-wisp-blink {
+  0%, 42%, 48%, 100% { transform: scaleY(1); }
+  44%, 46% { transform: scaleY(.15); }
+}
+
+@keyframes xk-baby-wisp-wing-left {
+  0%, 100% { transform: rotate(-18deg) scaleY(.86); }
+  50% { transform: rotate(12deg) scaleY(1.06); }
+}
+
+@keyframes xk-baby-wisp-wing-right {
+  0%, 100% { transform: scaleX(-1) rotate(-18deg) scaleY(.86); }
+  50% { transform: scaleX(-1) rotate(12deg) scaleY(1.06); }
+}
+
+@keyframes xk-baby-wisp-tail {
+  0%, 100% { transform: rotate(23deg); }
+  50% { transform: rotate(42deg); }
+}
+
+@keyframes xk-baby-wisp-ready {
+  0%, 100% { transform: translateY(-9px) scale(1); }
+  50% { transform: translateY(-15px) scale(1.06); }
+}
+
+@media (max-width: 720px) {
+  .xk-pixel-tile.is-tree::before {
+    filter: saturate(.98);
+  }
+
+  .xk-pixel-npc.is-guide {
+    margin-left: -5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xk-pixel-tile.is-grass::after,
+  .xk-pixel-tile.is-water,
+  .xk-pixel-tile.is-water::before,
+  .xk-pixel-npc.is-guide,
+  .xk-pixel-npc.is-guide::before,
+  .xk-pixel-npc.is-guide::after,
+  .xk-pixel-npc.is-guide > i::before,
+  .xk-pixel-npc.is-guide > b::before,
+  .xk-pixel-npc.is-guide > b::after,
+  .xk-pixel-npc.is-guide > em,
+  .xk-pixel-npc.is-guide.is-nearby {
+    animation: none !important;
+  }
+}

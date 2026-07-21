@@ -9,6 +9,7 @@ import './xethkioz-redesign.css'
 import './home-portal-rings.css'
 import './pages/NexusPixelPolish.css'
 import './pages/NexusPixelMotion.css'
+import './pages/NexusPixelEmerald.css'
 
 const rootElement = document.getElementById('root')
 
