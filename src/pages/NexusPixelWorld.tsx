@@ -269,7 +269,11 @@ export default function NexusPixelWorld() {
   }, [])
 
   useEffect(() => {
-    window.localStorage.setItem(QUEST_STORAGE_KEY, JSON.stringify(quest))
+    try {
+      window.localStorage.setItem(QUEST_STORAGE_KEY, JSON.stringify(quest))
+    } catch {
+      // Quest progress remains active in memory when browser storage is unavailable.
+    }
   }, [quest])
 
   useEffect(() => () => {
@@ -334,7 +338,15 @@ export default function NexusPixelWorld() {
     setDirection('up')
     setDialogue(null)
     setNotice(`${destination.label[lang]} · ${destination.subtitle[lang]}`)
-    addWispXp(2, 'visit', `/nexus-city/room/xethkioz#${nextArea}`)
+    try {
+      const visitKey = `xethkioz.nexus-pixel.area.${nextArea}`
+      if (!window.sessionStorage.getItem(visitKey)) {
+        window.sessionStorage.setItem(visitKey, '1')
+        addWispXp(2, 'visit', `/nexus-city/room/xethkioz#${nextArea}`)
+      }
+    } catch {
+      // Area transitions remain functional without optional session progression.
+    }
   }
 
   function openNpcDialogue(npc: NpcDefinition) {
