@@ -71,7 +71,7 @@ const objects: WorldObject[] = [
     detail: { es: 'Entrar a Ciencia y Tecnología', en: 'Enter Science and Technology' },
   },
   {
-    id: 'fun-gate', x: 21, y: 15, glyph: '爆', target: 'fun', className: 'is-fun',
+    id: 'fun-gate', x: 21, y: 12, glyph: '爆', target: 'fun', className: 'is-fun',
     label: { es: 'Callejón del Caos', en: 'Chaos Alley' },
     detail: { es: 'Entrar al mundo de Memes', en: 'Enter the Meme world' },
   },
