@@ -11,6 +11,7 @@
     { "source": "/science", "destination": "/seo-shells/science.html" },
     { "source": "/fun", "destination": "/seo-shells/fun.html" },
     { "source": "/news", "destination": "/seo-shells/news.html" },
+    { "source": "/news/:slug", "destination": "/api/news-page?slug=:slug" },
     { "source": "/community", "destination": "/seo-shells/community.html" },
     { "source": "/nexus-city", "destination": "/seo-shells/nexus-city.html" },
     { "source": "/about", "destination": "/seo-shells/about.html" },
