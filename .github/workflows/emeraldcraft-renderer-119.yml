@@ -1,0 +1,95 @@
+name: Apply EmeraldCraft renderer integration
+
+on:
+  push:
+    branches:
+      - agent/emeraldcraft-renderer-119
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/emeraldcraft-renderer-119
+          fetch-depth: 0
+
+      - name: Apply exact integration patch
+        shell: python
+        run: |
+          from pathlib import Path
+
+          world_path = Path('src/pages/NexusPixelWorld.tsx')
+          main_path = Path('src/main.tsx')
+          world = world_path.read_text()
+          main = main_path.read_text()
+
+          replacements = [
+              (
+                  "import NexusPixelInventoryLayer from './NexusPixelInventoryLayer'\n",
+                  "import NexusBabyDemonWisp from './NexusBabyDemonWisp'\nimport NexusPixelInventoryLayer from './NexusPixelInventoryLayer'\n",
+              ),
+              (
+                  "} from '../game/nexusPixelRpg'\n",
+                  "} from '../game/nexusPixelRpg'\nimport { describeAutotile, readNexusVisualTheme } from '../game/nexusVisualTheme'\n",
+              ),
+              (
+                  "  const [avatar] = useState(readAvatar)\n",
+                  "  const [avatar] = useState(readAvatar)\n  const [visualTheme] = useState(readNexusVisualTheme)\n",
+              ),
+              (
+                  "    return { x, y, kind: tileKindAt(area, x, y) }\n",
+                  "    const kind = tileKindAt(area, x, y)\n    return { x, y, kind, visual: describeAutotile(area, x, y, kind) }\n",
+              ),
+              (
+                  "  const questProgress = quest.completed ? 100 : quest.started ? Math.round((quest.activated.length / 3) * 80) + 10 : 0\n",
+                  "  const questProgress = quest.completed ? 100 : quest.started ? Math.round((quest.activated.length / 3) * 80) + 10 : 0\n  const wispStage = !quest.started ? 'idle' : quest.completed ? 'complete' : quest.activated.length === 3 ? 'ready' : 'quest'\n",
+              ),
+              (
+                  "    <main className=\"xk-pixel-page\">\n",
+                  "    <main className={`xk-pixel-page is-${visualTheme}`}>\n",
+              ),
+              (
+                  "            {tiles.map((tile) => <span key={`${area}-${tile.x}-${tile.y}`} className={`xk-pixel-tile is-${tile.kind}`} style={{ left: tile.x * TILE_SIZE, top: tile.y * TILE_SIZE }} aria-hidden=\"true\" />)}\n",
+                  "            {tiles.map((tile) => <span key={`${area}-${tile.x}-${tile.y}`} className={`xk-pixel-tile is-${tile.kind} ${visualTheme === 'emeraldcraft-v2' ? tile.visual.classes : ''}`} data-mask={visualTheme === 'emeraldcraft-v2' ? tile.visual.mask : undefined} data-variant={visualTheme === 'emeraldcraft-v2' ? tile.visual.variant : undefined} style={{ left: tile.x * TILE_SIZE, top: tile.y * TILE_SIZE }} aria-hidden=\"true\" />)}\n",
+              ),
+              (
+                  "                <i aria-hidden=\"true\" /><b aria-hidden=\"true\">{npc.glyph}</b><em aria-hidden=\"true\" /><small>{npc.name[lang]}</small>\n",
+                  "                {npc.id === 'wisp-guide' && visualTheme === 'emeraldcraft-v2' ? <NexusBabyDemonWisp nearby={nearbyNpc?.id === npc.id} stage={wispStage} /> : <><i aria-hidden=\"true\" /><b aria-hidden=\"true\">{npc.glyph}</b><em aria-hidden=\"true\" /></>}<small>{npc.name[lang]}</small>\n",
+              ),
+          ]
+
+          for old, new in replacements:
+              count = world.count(old)
+              if count != 1:
+                  raise SystemExit(f'Expected one world match, found {count}: {old[:80]!r}')
+              world = world.replace(old, new, 1)
+
+          old_import = "import './pages/NexusPixelEmerald.css'\n"
+          new_import = "import './pages/NexusPixelEmerald.css'\nimport './pages/NexusEmeraldCraftV2.css'\n"
+          if main.count(old_import) != 1:
+              raise SystemExit('Expected exactly one Emerald CSS import')
+          main = main.replace(old_import, new_import, 1)
+
+          world_path.write_text(world)
+          main_path.write_text(main)
+
+      - name: Verify constrained diff
+        run: |
+          git diff --check
+          files="$(git diff --name-only | sort)"
+          expected=$'src/main.tsx\nsrc/pages/NexusPixelWorld.tsx'
+          test "$files" = "$expected"
+
+      - name: Remove temporary workflow and commit
+        run: |
+          rm .github/workflows/emeraldcraft-renderer-119.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/main.tsx src/pages/NexusPixelWorld.tsx .github/workflows/emeraldcraft-renderer-119.yml
+          git commit -m "feat(game): integrate versioned EmeraldCraft renderer"
+          git push origin HEAD:agent/emeraldcraft-renderer-119
