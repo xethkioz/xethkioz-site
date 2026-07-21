@@ -7,6 +7,7 @@ import './index.css'
 import './visibility-fixes.css'
 import './xethkioz-redesign.css'
 import './home-portal-rings.css'
+import './pages/NexusPixelPolish.css'
 
 const rootElement = document.getElementById('root')
 
