@@ -122,11 +122,14 @@ export default function NewsArticle() {
     async function loadArticle() {
       if (!slug) {
         setArticle(null)
+        setIsExternal(false)
         setError(ui.notFound)
         setErrorKind('not-found')
         setLoading(false)
         return
       }
+      setArticle(null)
+      setIsExternal(false)
       setLoading(true)
       setError(null)
       setErrorKind(null)
@@ -183,7 +186,7 @@ export default function NewsArticle() {
                 <SafeImage src={article.cover_image_url} fallback="/images/articles/fallback.svg" alt={article.cover_image_alt || article.title} className="h-full w-full object-cover" loading="eager" />
               </div>
             ) : (
-              <div className="mb-7 overflow-hidden rounded-[1.5rem] border border-orange-400/25 bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,.28),transparent_34%),linear-gradient(135deg,rgba(124,58,247,.2),rgba(0,0,0,.9))] p-5 md:p-8">
+              <div className="mb-7 overflow-hidden rounded-[1.5rem] border border-orange-400/25 bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,.28),transparent_34%),linear-gradient(135deg,rgba(124,58,237,.2),rgba(0,0,0,.9))] p-5 md:p-8">
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
                     <div className="grid h-14 w-14 place-items-center rounded-2xl border border-white/15 bg-black/45 text-3xl md:h-16 md:w-16">{getArticleMark(article)}</div>
