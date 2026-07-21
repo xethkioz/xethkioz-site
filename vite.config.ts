@@ -23,6 +23,7 @@ export default defineConfig({
       input: {
         main: resolve(process.cwd(), 'index.html'),
         cms: resolve(process.cwd(), 'cms.html'),
+        private: resolve(process.cwd(), 'private.html'),
         webCreation: resolve(process.cwd(), 'creacion-web.html'),
         ...seoShellInputs,
       },
