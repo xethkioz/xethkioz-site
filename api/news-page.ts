@@ -8,6 +8,8 @@ import {
 const DEFAULT_DESCRIPTION = 'Noticias, análisis y señales verificadas sobre videojuegos, tecnología, inteligencia artificial, ciencia y cultura digital.'
 const DEFAULT_IMAGE = '/assets/xethkioz-cover.png'
 const AUTHOR_NAME = 'Alexis Díaz · XETHKIOZ'
+const NOT_FOUND_TITLE = 'Noticia no encontrada | XETHKIOZ'
+const NOT_FOUND_DESCRIPTION = 'La publicación no existe, todavía no está disponible o fue retirada del radar público de XETHKIOZ.'
 
 function firstHeader(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value
@@ -140,6 +142,29 @@ function renderArticleShell(template: string, article: PublicArticleMetadata) {
   return html.replace('  </head>', `${articleMetadata}\n  </head>`)
 }
 
+function renderNotFoundShell(template: string, slug: string) {
+  const requestedUrl = `${SITE_URL}/news/${encodeURIComponent(slug)}`
+  const image = absoluteUrl(DEFAULT_IMAGE)
+  let html = template
+
+  html = replaceRequired(html, /<meta data-rh="true" name="description" content="[^"]*" \/>/, `<meta data-rh="true" name="description" content="${escapeHtml(NOT_FOUND_DESCRIPTION)}" />`, 'NOT_FOUND_DESCRIPTION')
+  html = replaceRequired(html, /<meta name="keywords" content="[^"]*" \/>/, '<meta name="keywords" content="XETHKIOZ, noticias" />', 'NOT_FOUND_KEYWORDS')
+  html = replaceRequired(html, /<meta name="robots" content="[^"]*" \/>/, '<meta name="robots" content="noindex, nofollow, noarchive" />', 'NOT_FOUND_ROBOTS')
+  html = replaceRequired(html, /<meta name="googlebot" content="[^"]*" \/>/, '<meta name="googlebot" content="noindex, nofollow, noarchive" />', 'NOT_FOUND_GOOGLEBOT')
+  html = replaceRequired(html, /<link data-rh="true" rel="canonical" href="[^"]*" \/>/, `<link data-rh="true" rel="canonical" href="${escapeHtml(requestedUrl)}" />`, 'NOT_FOUND_CANONICAL')
+  html = replaceRequired(html, /<meta data-rh="true" property="og:type" content="[^"]*" \/>/, '<meta data-rh="true" property="og:type" content="website" />', 'NOT_FOUND_OG_TYPE')
+  html = replaceRequired(html, /<meta data-rh="true" property="og:title" content="[^"]*" \/>/, `<meta data-rh="true" property="og:title" content="${escapeHtml(NOT_FOUND_TITLE)}" />`, 'NOT_FOUND_OG_TITLE')
+  html = replaceRequired(html, /<meta data-rh="true" property="og:description" content="[^"]*" \/>/, `<meta data-rh="true" property="og:description" content="${escapeHtml(NOT_FOUND_DESCRIPTION)}" />`, 'NOT_FOUND_OG_DESCRIPTION')
+  html = replaceRequired(html, /<meta data-rh="true" property="og:url" content="[^"]*" \/>/, `<meta data-rh="true" property="og:url" content="${escapeHtml(requestedUrl)}" />`, 'NOT_FOUND_OG_URL')
+  html = replaceRequired(html, /<meta data-rh="true" property="og:image" content="[^"]*" \/>/, `<meta data-rh="true" property="og:image" content="${escapeHtml(image)}" />`, 'NOT_FOUND_OG_IMAGE')
+  html = replaceRequired(html, /<meta property="og:image:alt" content="[^"]*" \/>/, '<meta property="og:image:alt" content="Noticia no encontrada en XETHKIOZ" />', 'NOT_FOUND_OG_IMAGE_ALT')
+  html = replaceRequired(html, /<meta data-rh="true" name="twitter:title" content="[^"]*" \/>/, `<meta data-rh="true" name="twitter:title" content="${escapeHtml(NOT_FOUND_TITLE)}" />`, 'NOT_FOUND_TWITTER_TITLE')
+  html = replaceRequired(html, /<meta data-rh="true" name="twitter:description" content="[^"]*" \/>/, `<meta data-rh="true" name="twitter:description" content="${escapeHtml(NOT_FOUND_DESCRIPTION)}" />`, 'NOT_FOUND_TWITTER_DESCRIPTION')
+  html = replaceRequired(html, /<meta data-rh="true" name="twitter:image" content="[^"]*" \/>/, `<meta data-rh="true" name="twitter:image" content="${escapeHtml(image)}" />`, 'NOT_FOUND_TWITTER_IMAGE')
+  html = replaceRequired(html, /<meta name="twitter:image:alt" content="[^"]*" \/>/, '<meta name="twitter:image:alt" content="Noticia no encontrada en XETHKIOZ" />', 'NOT_FOUND_TWITTER_IMAGE_ALT')
+  return replaceRequired(html, /<title>[^<]*<\/title>/, `<title>${escapeHtml(NOT_FOUND_TITLE)}</title>`, 'NOT_FOUND_TITLE')
+}
+
 export default async function handler(request: any, response: any) {
   const slug = typeof request.query?.slug === 'string' ? request.query.slug : ''
   if (!slug) {
@@ -152,10 +177,24 @@ export default async function handler(request: any, response: any) {
   try {
     const article = await fetchPublishedArticleMetadata(slug)
     if (!article) {
-      response.setHeader('Content-Type', 'text/plain; charset=utf-8')
       response.setHeader('Cache-Control', 'public, max-age=0, s-maxage=120')
       response.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive')
-      response.status(404).send('Published article not found.')
+      try {
+        const template = await fetchStaticNewsShell(request)
+        const html = renderNotFoundShell(template, slug)
+        response.setHeader('Content-Type', 'text/html; charset=utf-8')
+        response.setHeader('Content-Language', 'es-AR')
+        response.status(404).send(html)
+      } catch (shellError) {
+        console.error(JSON.stringify({
+          level: 'error',
+          message: 'news-page 404 shell failed',
+          slug,
+          detail: shellError instanceof Error ? shellError.message : String(shellError),
+        }))
+        response.setHeader('Content-Type', 'text/plain; charset=utf-8')
+        response.status(404).send('Published article not found.')
+      }
       return
     }
 
