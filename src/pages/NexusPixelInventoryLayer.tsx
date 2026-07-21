@@ -103,7 +103,7 @@ export default function NexusPixelInventoryLayer({ area, position, lang, questCo
     const item = inventoryItems[activePickup.itemId]
     setInventory((current) => collectPickup(current, activePickup))
     onNotice(`${t.pickup}: ${item.name[lang]} ×${activePickup.amount}`)
-    if (activePickup.xp > 0) addWispXp(activePickup.xp, 'collectible', `/nexus-city/room/xethkioz#pickup-${activePickup.id}`)
+    if (activePickup.xp > 0) addWispXp(activePickup.xp, 'mission', `/nexus-city/room/xethkioz#pickup-${activePickup.id}`)
   }, [activePickup, inventory.collected, lang, onNotice, t.pickup])
 
   function openChest(chest: PixelChest) {
@@ -122,7 +122,7 @@ export default function NexusPixelInventoryLayer({ area, position, lang, questCo
     }
     setInventory((current) => openPixelChest(current, chest))
     onNotice(`${t.chestOpened}: ${rewardSummary(chest, lang)}`)
-    if (chest.xp > 0) addWispXp(chest.xp, 'collectible', `/nexus-city/room/xethkioz#chest-${chest.id}`)
+    if (chest.xp > 0) addWispXp(chest.xp, 'mission', `/nexus-city/room/xethkioz#chest-${chest.id}`)
   }
 
   useEffect(() => {
