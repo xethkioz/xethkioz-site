@@ -32,6 +32,7 @@ const ProfileHub = lazy(() => import('./pages/ProfileHub'))
 const NexusCity = lazy(() => import('./pages/NexusCity'))
 const NexusPassport = lazy(() => import('./pages/NexusPassport'))
 const NexusRoom = lazy(() => import('./pages/NexusRoom'))
+const NexusPixelWorld = lazy(() => import('./pages/NexusPixelWorld'))
 const News = lazy(() => import('./pages/News'))
 const NewsArticle = lazy(() => import('./pages/NewsArticle'))
 const Community = lazy(() => import('./pages/Community'))
@@ -91,6 +92,7 @@ const routeNames = {
     '/news': 'Noticias',
     '/community': 'Comunidad',
     '/nexus-city': 'Nexus City',
+    '/nexus-city/room/xethkioz': 'Plaza Nexus',
     '/profile': 'Perfil',
     '/account': 'Cuenta',
     '/login': 'Iniciar sesión',
@@ -107,6 +109,7 @@ const routeNames = {
     '/news': 'News',
     '/community': 'Community',
     '/nexus-city': 'Nexus City',
+    '/nexus-city/room/xethkioz': 'Nexus Plaza',
     '/profile': 'Profile',
     '/account': 'Account',
     '/login': 'Sign in',
@@ -125,12 +128,14 @@ function RouteAccessibility({ pathname }: { pathname: string }) {
       ? (lang === 'es' ? 'Artículo de noticias' : 'News article')
       : pathname.startsWith('/nexus-city/u/')
         ? (lang === 'es' ? 'Pasaporte Nexus' : 'Nexus passport')
-        : pathname.startsWith('/nexus-city/room/')
-          ? (lang === 'es' ? 'Cápsula Nexus' : 'Nexus capsule')
-          : pathname.startsWith('/cms/')
-            ? (lang === 'es' ? 'Panel editorial' : 'Editorial dashboard')
-            : routeNames[lang][pathname as keyof typeof routeNames.es]
-              ?? (lang === 'es' ? 'Sección XETHKIOZ' : 'XETHKIOZ section')
+        : pathname === '/nexus-city/room/xethkioz'
+          ? (lang === 'es' ? 'Plaza Nexus' : 'Nexus Plaza')
+          : pathname.startsWith('/nexus-city/room/')
+            ? (lang === 'es' ? 'Cápsula Nexus' : 'Nexus capsule')
+            : pathname.startsWith('/cms/')
+              ? (lang === 'es' ? 'Panel editorial' : 'Editorial dashboard')
+              : routeNames[lang][pathname as keyof typeof routeNames.es]
+                ?? (lang === 'es' ? 'Sección XETHKIOZ' : 'XETHKIOZ section')
 
     setAnnouncement(lang === 'es' ? `Página cargada: ${routeName}` : `Page loaded: ${routeName}`)
     const frame = window.requestAnimationFrame(() => {
@@ -207,6 +212,7 @@ function AppShell() {
               <Route path="/community" element={<Community />} />
               <Route path="/nexus-city" element={<NexusCity />} />
               <Route path="/nexus-city/u/:handle" element={<NexusPassport />} />
+              <Route path="/nexus-city/room/xethkioz" element={<NexusPixelWorld />} />
               <Route path="/nexus-city/room/:handle" element={<NexusRoom />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
