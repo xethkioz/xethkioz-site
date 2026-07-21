@@ -213,7 +213,7 @@ export default function NexusPixelWorld() {
   const [peers, setPeers] = useState<PixelPeer[]>([])
   const [bubble, setBubble] = useState('')
   const [message, setMessage] = useState('')
-  const [notice, setNotice] = useState(t.welcome)
+  const [notice, setNotice] = useState<string>(t.welcome)
   const [realtime, setRealtime] = useState(false)
 
   const displayName = account.status === 'connected' ? account.name : getDisplayName()
