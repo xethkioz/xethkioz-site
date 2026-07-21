@@ -23,6 +23,11 @@
     { "source": "/cms", "destination": "/cms.html" },
     { "source": "/cms/(.*)", "destination": "/cms.html" },
     { "source": "/admin", "destination": "/cms.html" },
+    { "source": "/account", "destination": "/private.html" },
+    { "source": "/login", "destination": "/private.html" },
+    { "source": "/register", "destination": "/private.html" },
+    { "source": "/confirm-email", "destination": "/private.html" },
+    { "source": "/profile", "destination": "/private.html" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ],
   "headers": [
@@ -41,6 +46,13 @@
     },
     {
       "source": "/cms.html",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+      ]
+    },
+    {
+      "source": "/private.html",
       "headers": [
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
         { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
