@@ -4,6 +4,8 @@ import SEO from '../components/SEO'
 import SafeImage from '../components/SafeImage'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
 import FunGameGateway from '../components/fun/FunGameGateway'
+import NexusCity from './NexusCity'
+import './FunNexusFusion.css'
 import { PortalPulseRail } from '../components/PortalPulseRail'
 import { NexusDistrict } from '../components/NexusDistrict'
 import { useLang } from '../lib/LangContext'
@@ -298,6 +300,7 @@ export default function FunPortal() {
         <div className="xk-meme-ambient" aria-hidden="true"><i /><i /><i /><b>!</b><b>?</b><b>爆</b></div>
         <div className="mx-auto max-w-7xl">
           <FunGameGateway lang={lang} />
+          <NexusCity embedded />
 
           <section id="humor" className="xk-anime-hero xk-meme-hero scroll-mt-24" aria-labelledby="fun-title">
             <SafeImage src="/assets/identity/memes-anime-chaos-v1.webp" fallback="/images/articles/community.svg" alt={t.heroAlt} className="xk-anime-hero-media" loading="eager" fetchPriority="high" />

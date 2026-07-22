@@ -157,7 +157,7 @@ function readAvatar(): AvatarState {
   }
 }
 
-export default function NexusCity() {
+export default function NexusCity({ embedded = false }: { embedded?: boolean }) {
   const { lang } = useLang()
   const t = cityCopy[lang]
   const { account } = useHud()
@@ -245,8 +245,8 @@ export default function NexusCity() {
 
   return (
     <>
-      <SEO title={t.seoTitle} description={t.seoDescription} url="/nexus-city" tags={['virtual world', 'gaming community', 'avatars', 'Nexus City', 'XETHKIOZ']} />
-      <main className="xk-city-page">
+      {!embedded ? <SEO title={t.seoTitle} description={t.seoDescription} url="/nexus-city" tags={['virtual world', 'gaming community', 'avatars', 'Nexus City', 'XETHKIOZ']} /> : null}
+      <div id={embedded ? 'nexus-city' : undefined} className={`xk-city-page${embedded ? ' xk-city-page-embedded' : ''}`}>
         <section className="xk-city-hero" aria-labelledby="nexus-city-title">
           <div className="xk-city-grid" aria-hidden="true" />
           <div className="xk-city-hero-copy">
@@ -309,7 +309,7 @@ export default function NexusCity() {
           <div><p>{t.roadmapEyebrow}</p><h2 id="city-roadmap-title">{t.roadmapTitle}</h2><span>{t.roadmapText}</span></div>
           <ol>{t.roadmap.map((step, index) => <li key={step}><b>0{index + 1}</b><span>{step}</span><strong>{t.states[index]}</strong></li>)}</ol>
         </section>
-      </main>
+      </div>
     </>
   )
 }
