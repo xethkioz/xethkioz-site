@@ -333,7 +333,8 @@ export default function GreenNode() {
   const [searchParams, setSearchParams] = useSearchParams()
   const requestedView = searchParams.get('view')
   const activeView = requestedView === 'dossiers' || requestedView === 'terminal' || requestedView === 'signals' ? requestedView : 'overview'
-  const [activeId, setActiveId] = useState<string>(t.blocks[0].id)
+  const requestedNode = searchParams.get('node')
+  const [activeId, setActiveId] = useState<string>(() => t.blocks.some((item) => item.id === requestedNode) ? requestedNode! : t.blocks[0].id)
   const active = t.blocks.find((item) => item.id === activeId) ?? t.blocks[0]
   const activeIndex = Math.max(0, t.blocks.findIndex((item) => item.id === active.id))
   const [publishedArticles, setPublishedArticles] = useState<PublicNewsArticle[]>([])
@@ -361,6 +362,10 @@ export default function GreenNode() {
     setTerminalLines([...t.terminal.initial])
     setTerminalInput('')
   }, [lang])
+
+  useEffect(() => {
+    if (requestedNode && t.blocks.some((item) => item.id === requestedNode)) setActiveId(requestedNode)
+  }, [requestedNode, t.blocks])
 
   useEffect(() => {
     try {
@@ -397,6 +402,15 @@ export default function GreenNode() {
   function selectView(view: 'overview' | 'dossiers' | 'terminal' | 'signals') {
     const next = new URLSearchParams(searchParams)
     next.set('view', view)
+    setSearchParams(next)
+    window.requestAnimationFrame(() => document.getElementById('green-view-content')?.focus({ preventScroll: true }))
+  }
+
+  function openNode(nodeId: string) {
+    setActiveId(nodeId)
+    const next = new URLSearchParams(searchParams)
+    next.set('view', 'signals')
+    next.set('node', nodeId)
     setSearchParams(next)
     window.requestAnimationFrame(() => document.getElementById('green-view-content')?.focus({ preventScroll: true }))
   }
@@ -537,7 +551,7 @@ export default function GreenNode() {
                     aria-selected={active.id === node.id}
                     aria-controls="archive"
                     tabIndex={active.id === node.id ? 0 : -1}
-                    onClick={() => setActiveId(node.id)}
+                    onClick={() => openNode(node.id)}
                     onKeyDown={(event) => {
                       if (event.key === 'ArrowRight' || event.key === 'ArrowDown') { event.preventDefault(); moveNodeFocus(index, 1) }
                       if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') { event.preventDefault(); moveNodeFocus(index, -1) }
