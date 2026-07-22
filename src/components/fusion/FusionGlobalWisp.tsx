@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import SafeImage from '../SafeImage'
 import { useHud } from '../../lib/HudContext'
+import { useLang } from '../../lib/LangContext'
 import { useWisp } from '../../providers/WispProvider'
 import type { WispMood } from '../../lib/WispEngineContext'
+import './FusionGlobalWisp.css'
 
 const routeMood: Record<string, WispMood> = {
   '/': 'watching',
@@ -12,14 +15,34 @@ const routeMood: Record<string, WispMood> = {
   '/green-node': 'GREEN_MODE',
 }
 
+const outerRunes = ['ᚺ', 'ᚨ', 'ᚲ', 'ᚲ', 'ᛉ', 'ᛟ', 'ᚾ', 'ᛖ']
+const innerRunes = ['0x66', 'XK', '06', 'NODE', 'W1SP', 'ROOT']
+
+const labels = {
+  es: {
+    action: 'Abrir la Zona Hack y entrar a Green Node',
+    marker: 'ZONA HACK',
+    node: 'XK-06 // GREEN NODE',
+    status: 'VECTOR DE ACCESO LISTO',
+  },
+  en: {
+    action: 'Open the Hack Zone and enter Green Node',
+    marker: 'HACK ZONE',
+    node: 'XK-06 // GREEN NODE',
+    status: 'ACCESS VECTOR READY',
+  },
+} as const
+
 export default function FusionGlobalWisp() {
   const { account } = useHud()
-  const { setMood, setFocusRoute, registerEvent, triggerGreenPortal } = useWisp()
+  const { lang } = useLang()
+  const { mood, energy, setMood, setFocusRoute, registerEvent, triggerGreenPortal } = useWisp()
   const [portalOpen, setPortalOpen] = useState(false)
   const [portalPoint, setPortalPoint] = useState({ x: '50%', y: '50%' })
   const navigationTimer = useRef<number | null>(null)
   const location = useLocation()
   const navigate = useNavigate()
+  const t = labels[lang]
 
   useEffect(() => {
     const nextMood = location.pathname === '/green-node'
@@ -44,9 +67,18 @@ export default function FusionGlobalWisp() {
     setPortalPoint({ x: `${rect.left + rect.width / 2}px`, y: `${rect.top + rect.height / 2}px` })
     setPortalOpen(true)
     triggerGreenPortal()
+    registerEvent('green-unlock', 'wisp-hack-zone-open', '/green-node')
     if (navigationTimer.current !== null) window.clearTimeout(navigationTimer.current)
     navigationTimer.current = window.setTimeout(() => navigate('/green-node'), 720)
   }
+
+  const focusWisp = () => registerEvent('portal-hover', 'wisp-hack-zone-focus', location.pathname)
+  const moodClass = mood === 'GREEN_MODE' ? 'green-mode' : mood
+  const clampedEnergy = Math.max(0, Math.min(100, energy))
+  const wispStyle = {
+    '--wisp-energy': `${clampedEnergy}%`,
+    '--wisp-energy-level': clampedEnergy / 100,
+  } as CSSProperties
 
   return (
     <>
@@ -57,24 +89,62 @@ export default function FusionGlobalWisp() {
       />
       <button
         type="button"
-        className={`xk-wisp${location.pathname === '/' ? ' is-home-entry' : ''}${location.pathname === '/green-node' ? ' is-inside-node' : ''}`}
+        className={`xk-wisp xk-wisp-${moodClass}${location.pathname === '/' ? ' is-home-entry' : ''}${location.pathname === '/green-node' ? ' is-inside-node' : ''}${portalOpen ? ' is-opening' : ''}`}
+        style={wispStyle}
         onClick={openPortal}
-        onMouseEnter={() => registerEvent('portal-hover', 'wisp-organic-hover', location.pathname)}
-        aria-label="Abrir portal Wisp hacia Green Node"
-        title="Wisp"
+        onMouseEnter={focusWisp}
+        onFocus={focusWisp}
+        aria-label={t.action}
+        aria-pressed={portalOpen}
+        title={t.action}
       >
-        <span className="sr-only">Wisp</span>
-        <span className="xk-wisp-taunt" aria-hidden="true">No vayas a tocarme…</span>
-        <span className="xk-wisp-aura" aria-hidden="true" />
-        <span className="xk-wisp-horn xk-wisp-horn-left" aria-hidden="true" />
-        <span className="xk-wisp-horn xk-wisp-horn-right" aria-hidden="true" />
-        <span className="xk-wisp-face" aria-hidden="true">
-          <i className="xk-wisp-eye xk-wisp-eye-left" />
-          <i className="xk-wisp-eye xk-wisp-eye-right" />
-          <i className="xk-wisp-mouth" />
+        <span className="sr-only">{t.action}</span>
+
+        <span className="xk-wisp-home-marker" aria-hidden="true">
+          <b>{t.marker}</b>
+          <small>{t.node}</small>
         </span>
-        <span className="xk-wisp-code" aria-hidden="true">0110<br />W1SP<br />0x66</span>
-        <span className="xk-wisp-tail" aria-hidden="true" />
+
+        <span className="xk-wisp-field" aria-hidden="true">
+          <span className="xk-wisp-energy-cloud" />
+          <span className="xk-wisp-energy-arc xk-wisp-energy-arc-outer" />
+          <span className="xk-wisp-energy-arc xk-wisp-energy-arc-inner" />
+
+          <span className="xk-wisp-rune-ring xk-wisp-rune-ring-outer">
+            {outerRunes.map((rune, index) => (
+              <i key={`${rune}-${index}`} style={{ '--rune-angle': `${index * 45}deg` } as CSSProperties}>{rune}</i>
+            ))}
+          </span>
+
+          <span className="xk-wisp-rune-ring xk-wisp-rune-ring-inner">
+            {innerRunes.map((rune, index) => (
+              <i key={`${rune}-${index}`} style={{ '--rune-angle': `${index * 60}deg` } as CSSProperties}>{rune}</i>
+            ))}
+          </span>
+
+          <span className="xk-wisp-specter-wrap">
+            <SafeImage
+              src="/assets/identity/wisp-digital-specter-v1.webp"
+              fallback="/images/articles/tech.svg"
+              className="xk-wisp-specter"
+              alt=""
+              loading="eager"
+              fetchPriority={location.pathname === '/' ? 'high' : 'low'}
+            />
+            <span className="xk-wisp-scanline" />
+            <span className="xk-wisp-glitch-slice" />
+          </span>
+
+          <span className="xk-wisp-particles">
+            {Array.from({ length: 8 }, (_, index) => <i key={index} />)}
+          </span>
+        </span>
+
+        <span className="xk-wisp-terminal" aria-hidden="true">
+          <b>{t.marker}</b>
+          <span>{t.node}</span>
+          <i>{t.status}</i>
+        </span>
       </button>
     </>
   )
