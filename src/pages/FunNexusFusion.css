@@ -1,0 +1,94 @@
+/* Unified Fun + Nexus City portal. */
+
+.xk-city-page-embedded {
+  position: relative;
+  margin: 2.2rem 0 4rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 181, 71, .36);
+  border-radius: 2rem;
+  background:
+    radial-gradient(circle at 82% 8%, rgba(255, 193, 74, .14), transparent 30%),
+    radial-gradient(circle at 12% 28%, rgba(255, 107, 26, .12), transparent 34%),
+    linear-gradient(180deg, rgba(22, 13, 5, .94), rgba(7, 8, 14, .98));
+  box-shadow: 0 0 0 1px rgba(255,255,255,.04) inset, 0 28px 90px rgba(0,0,0,.5), 0 0 45px rgba(255, 144, 32, .12);
+}
+
+.xk-city-page-embedded::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: linear-gradient(to bottom, #000, transparent 82%);
+}
+
+.xk-city-page-embedded > * {
+  position: relative;
+  z-index: 1;
+}
+
+.xk-city-page-embedded .xk-city-hero {
+  min-height: auto;
+  margin: 0;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 181, 71, .24);
+  border-radius: 0;
+  background:
+    radial-gradient(circle at 76% 28%, rgba(255, 177, 53, .18), transparent 35%),
+    linear-gradient(135deg, rgba(52, 24, 4, .96), rgba(12, 9, 17, .97));
+}
+
+.xk-city-page-embedded .xk-city-hero-copy > p,
+.xk-city-page-embedded .xk-city-atrium > div > p,
+.xk-city-page-embedded .xk-avatar-console > p,
+.xk-city-page-embedded .xk-city-districts > div:first-child > p,
+.xk-city-page-embedded .xk-city-roadmap > div > p {
+  color: #ffb53e;
+}
+
+.xk-city-page-embedded .xk-city-hero-copy > div > a:first-child,
+.xk-city-page-embedded .xk-city-atrium a {
+  border-color: rgba(255, 154, 35, .72);
+  background: linear-gradient(135deg, #ffb62f, #ff7417);
+  color: #160b02;
+  box-shadow: 0 0 24px rgba(255, 132, 27, .3);
+}
+
+.xk-city-page-embedded .xk-city-hero-copy > div > a:first-child:hover,
+.xk-city-page-embedded .xk-city-atrium a:hover {
+  filter: brightness(1.12);
+  transform: translateY(-2px);
+}
+
+.xk-city-page-embedded .xk-city-atrium,
+.xk-city-page-embedded .xk-avatar-lab,
+.xk-city-page-embedded .xk-city-districts,
+.xk-city-page-embedded .xk-city-roadmap,
+.xk-city-page-embedded #social-loop {
+  margin-left: clamp(1rem, 3vw, 2.4rem);
+  margin-right: clamp(1rem, 3vw, 2.4rem);
+}
+
+.xk-city-page-embedded .xk-city-roadmap {
+  margin-bottom: 2.4rem;
+}
+
+@media (max-width: 760px) {
+  .xk-city-page-embedded {
+    margin-top: 1.3rem;
+    border-radius: 1.35rem;
+  }
+
+  .xk-city-page-embedded .xk-city-atrium,
+  .xk-city-page-embedded .xk-avatar-lab,
+  .xk-city-page-embedded .xk-city-districts,
+  .xk-city-page-embedded .xk-city-roadmap,
+  .xk-city-page-embedded #social-loop {
+    margin-left: .75rem;
+    margin-right: .75rem;
+  }
+}
