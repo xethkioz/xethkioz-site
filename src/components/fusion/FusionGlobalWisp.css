@@ -159,7 +159,16 @@
 }
 
 .xk-wisp.is-inside-node {
-  display: none !important;
+  --wisp-size: 76px;
+  display: grid !important;
+  right: 1rem;
+  bottom: 5.75rem;
+  opacity: .9;
+}
+
+.xk-wisp.is-inside-node:hover,
+.xk-wisp.is-inside-node:focus-visible {
+  opacity: 1;
 }
 
 .xk-wisp-field {
@@ -555,6 +564,12 @@
     right: .85rem;
     bottom: calc(5.8rem + env(safe-area-inset-bottom));
     z-index: 80;
+  }
+
+  .xk-wisp.is-inside-node {
+    --wisp-size: 62px;
+    right: .55rem;
+    bottom: calc(5.35rem + env(safe-area-inset-bottom));
   }
 
   .xk-wisp-terminal {

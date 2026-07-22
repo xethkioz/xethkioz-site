@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import SafeImage from '../components/SafeImage'
+import GreenNodeWispGuide, { type GreenNodeView } from '../components/GreenNodeWispGuide'
 import SEO from '../components/SEO'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
 import { PortalPulseRail } from '../components/PortalPulseRail'
@@ -399,7 +400,7 @@ export default function GreenNode() {
     return () => { mounted = false }
   }, [activeView])
 
-  function selectView(view: 'overview' | 'dossiers' | 'terminal' | 'signals') {
+  function selectView(view: GreenNodeView) {
     const next = new URLSearchParams(searchParams)
     next.set('view', view)
     setSearchParams(next)
@@ -537,6 +538,8 @@ export default function GreenNode() {
                   ['signals', t.views.signals, t.views.signalsDetail, '⌁'],
                 ] as const).map(([view, label, detail, glyph]) => <button key={view} type="button" aria-pressed={activeView === view} onClick={() => selectView(view)}><span aria-hidden="true">{glyph}</span><b>{label}</b><small>{detail}</small></button>)}
               </nav>
+
+              <GreenNodeWispGuide activeView={activeView} ready={accessSequence >= 4} onNavigate={selectView} />
 
               <div id="green-view-content" className={`xk-green-view is-${activeView}`} tabIndex={-1}>
 

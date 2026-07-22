@@ -5,6 +5,7 @@ import { useHud } from '../../lib/HudContext'
 import { useLang } from '../../lib/LangContext'
 import { useWisp } from '../../providers/WispProvider'
 import type { WispMood } from '../../lib/WispEngineContext'
+import { WISP_GREEN_GUIDE_EVENT } from '../../lib/wispGuide'
 import './FusionGlobalWisp.css'
 
 const routeMood: Record<string, WispMood> = {
@@ -24,12 +25,18 @@ const labels = {
     marker: 'ZONA HACK',
     node: 'XK-06 // GREEN NODE',
     status: 'VECTOR DE ACCESO LISTO',
+    helpAction: 'Pedir ayuda al WISP para usar Green Node',
+    helpMarker: 'GUÍA WISP',
+    helpStatus: 'TOCÁ PARA REABRIR EL RECORRIDO',
   },
   en: {
     action: 'Open the Hack Zone and enter Green Node',
     marker: 'HACK ZONE',
     node: 'XK-06 // GREEN NODE',
     status: 'ACCESS VECTOR READY',
+    helpAction: 'Ask WISP how to use Green Node',
+    helpMarker: 'WISP GUIDE',
+    helpStatus: 'TAP TO REOPEN THE TOUR',
   },
 } as const
 
@@ -43,6 +50,8 @@ export default function FusionGlobalWisp() {
   const location = useLocation()
   const navigate = useNavigate()
   const t = labels[lang]
+  const insideGreenNode = location.pathname === '/green-node'
+  const actionLabel = insideGreenNode ? t.helpAction : t.action
 
   useEffect(() => {
     const nextMood = location.pathname === '/green-node'
@@ -63,6 +72,11 @@ export default function FusionGlobalWisp() {
   }, [])
 
   const openPortal = (event: MouseEvent<HTMLButtonElement>) => {
+    if (insideGreenNode) {
+      registerEvent('portal-hover', 'wisp-green-guide-open', '/green-node')
+      window.dispatchEvent(new CustomEvent(WISP_GREEN_GUIDE_EVENT))
+      return
+    }
     const rect = event.currentTarget.getBoundingClientRect()
     setPortalPoint({ x: `${rect.left + rect.width / 2}px`, y: `${rect.top + rect.height / 2}px` })
     setPortalOpen(true)
@@ -94,14 +108,14 @@ export default function FusionGlobalWisp() {
         onClick={openPortal}
         onMouseEnter={focusWisp}
         onFocus={focusWisp}
-        aria-label={t.action}
+        aria-label={actionLabel}
         aria-pressed={portalOpen}
-        title={t.action}
+        title={actionLabel}
       >
-        <span className="sr-only">{t.action}</span>
+        <span className="sr-only">{actionLabel}</span>
 
         <span className="xk-wisp-home-marker" aria-hidden="true">
-          <b>{t.marker}</b>
+          <b>{insideGreenNode ? t.helpMarker : t.marker}</b>
           <small>{t.node}</small>
         </span>
 
@@ -141,9 +155,9 @@ export default function FusionGlobalWisp() {
         </span>
 
         <span className="xk-wisp-terminal" aria-hidden="true">
-          <b>{t.marker}</b>
+          <b>{insideGreenNode ? t.helpMarker : t.marker}</b>
           <span>{t.node}</span>
-          <i>{t.status}</i>
+          <i>{insideGreenNode ? t.helpStatus : t.status}</i>
         </span>
       </button>
     </>
