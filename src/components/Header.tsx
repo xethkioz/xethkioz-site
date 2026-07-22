@@ -9,7 +9,6 @@ const navigation = {
     { to: '/gaming', label: 'JUEGOS' },
     { to: '/science', label: 'CIENCIA & TECH' },
     { to: '/fun', label: 'DIVERSIÓN' },
-    { to: '/nexus-city', label: 'NEXUS CITY' },
     { to: '/creacion-web', label: 'CREACIÓN WEB' },
   ],
   en: [
@@ -17,7 +16,6 @@ const navigation = {
     { to: '/gaming', label: 'GAMING' },
     { to: '/science', label: 'SCIENCE & TECH' },
     { to: '/fun', label: 'FUN' },
-    { to: '/nexus-city', label: 'NEXUS CITY' },
     { to: '/creacion-web', label: 'WEB CREATION' },
   ],
 } as const
@@ -28,7 +26,6 @@ const launcher = {
     { to: '/gaming', label: 'Juegos', icon: '🎮' },
     { to: '/science', label: 'Ciencia', icon: '◈' },
     { to: '/fun', label: 'Diversión', icon: '☻' },
-    { to: '/nexus-city', label: 'Nexus City', icon: '◎' },
     { to: '/creacion-web', label: 'Creación web', icon: '▣' },
   ],
   en: [
@@ -36,7 +33,6 @@ const launcher = {
     { to: '/gaming', label: 'Gaming', icon: '🎮' },
     { to: '/science', label: 'Science', icon: '◈' },
     { to: '/fun', label: 'Fun', icon: '☻' },
-    { to: '/nexus-city', label: 'Nexus City', icon: '◎' },
     { to: '/creacion-web', label: 'Web creation', icon: '▣' },
   ],
 } as const

@@ -29,7 +29,6 @@ const FunPortal = lazy(() => import('./pages/FunPortal'))
 const WebCreation = lazy(() => import('./pages/WebCreation'))
 const GreenNode = lazy(() => import('./pages/GreenNode'))
 const ProfileHub = lazy(() => import('./pages/ProfileHub'))
-const NexusCity = lazy(() => import('./pages/NexusCity'))
 const NexusPassport = lazy(() => import('./pages/NexusPassport'))
 const NexusRoom = lazy(() => import('./pages/NexusRoom'))
 const NexusPixelWorld = lazy(() => import('./pages/NexusPixelWorld'))
@@ -211,7 +210,7 @@ function AppShell() {
               <Route path="/news" element={<News />} />
               <Route path="/news/:slug" element={<NewsArticle />} />
               <Route path="/community" element={<Community />} />
-              <Route path="/nexus-city" element={<NexusCity />} />
+              <Route path="/nexus-city" element={<Navigate to="/fun#nexus-city" replace />} />
               <Route path="/nexus-city/u/:handle" element={<NexusPassport />} />
               <Route path="/nexus-city/room/xethkioz" element={<NexusPixelWorld />} />
               <Route path="/nexus-city/room/:handle" element={<NexusRoom />} />
