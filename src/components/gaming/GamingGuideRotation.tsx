@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import SafeImage from '../SafeImage'
 import { guideGames, radarGames, type GuideLang } from '../../data/gamingGuideCatalog'
@@ -93,7 +93,7 @@ export default function GamingGuideRotation({ lang }: { lang: GuideLang }) {
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
       onBlurCapture={() => setPaused(false)}
-      style={{ '--rotation-accent': active.color } as React.CSSProperties}
+      style={{ '--rotation-accent': active.color } as CSSProperties}
     >
       <header className="xk-game-rotation-head">
         <div><p>{t.eyebrow}</p><h2 id="game-rotation-title">{t.title}</h2><span>{t.description}</span></div>
@@ -101,7 +101,7 @@ export default function GamingGuideRotation({ lang }: { lang: GuideLang }) {
       </header>
 
       <article className="xk-game-rotation-stage">
-        <SafeImage src={active.image} fallback="/images/articles/gaming.svg" alt={`Arte representativo de ${active.title}`} className="xk-game-rotation-image" />
+        <SafeImage src={active.image} fallback="/images/articles/gaming.svg" alt={`${lang === 'es' ? 'Arte representativo de' : 'Representative art for'} ${active.title}`} className="xk-game-rotation-image" />
         <div className="xk-game-rotation-shade" aria-hidden="true" />
         <div className="xk-game-rotation-copy">
           <small>{active.kind === 'guide' ? t.guide : t.radar} // {active.code}</small>
