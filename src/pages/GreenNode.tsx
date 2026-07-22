@@ -5,9 +5,11 @@ import SEO from '../components/SEO'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
 import { PortalPulseRail } from '../components/PortalPulseRail'
 import { NexusDistrict } from '../components/NexusDistrict'
+import { greenNodeDossiers, type GreenDossierCategory } from '../data/greenNodeDossiers'
 import { useLang } from '../lib/LangContext'
 import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import { fetchPublishedNews, formatPublicNewsDate, type PublicNewsArticle, type PublicNewsCategory } from '../services/news/publicNewsService'
+import './GreenNodeDossiers.css'
 
 type NodeBlock = {
   id: string
@@ -66,7 +68,28 @@ type GreenCopy = {
       truth: string
       deepActive: string
       deepAlreadyActive: string
+      anonUnlock: string
+      declassifiedUnlock: string
     }
+  }
+  dossiers: {
+    eyebrow: string
+    title: string
+    description: string
+    level: string
+    source: string
+    confirmed: string
+    unresolved: string
+    locked: string
+    unlock: string
+    all: string
+    hacktivism: string
+    police: string
+    declassified: string
+    mystery: string
+    documented: string
+    disputed: string
+    unverified: string
   }
   reveal: {
     eyebrow: string
@@ -123,13 +146,18 @@ const content: Record<'es' | 'en', GreenCopy> = {
       clear: 'Terminal limpia. El archivo conserva sus fuentes.',
       unknown: 'COMANDO NO RECONOCIDO. Usá “help”.',
       responses: {
-        help: 'COMANDOS: listar_archivos · decodificar_archivo · protocolo_verdad · deep_mode · limpiar/clear',
+        help: 'COMANDOS: listar_archivos · interceptar_anon · desclasificar · decodificar_archivo · protocolo_verdad · deep_mode · limpiar/clear',
         list: 'GRIMOIRE_0X  SIGIL.EXE  BLACK_SIGNAL  EVIDENCE_13',
         decode: 'EVIDENCE_13 desbloqueado. La anomalía se abre como hipótesis, nunca como certeza.',
         truth: 'ACTIVO: evidencia ≠ inferencia ≠ ficción. Verificá fuente, autor, fecha y contexto.',
         deepActive: 'DEEP_MODE activado. La interfaz cambia; la evidencia no.',
         deepAlreadyActive: 'DEEP_MODE ya estaba activo. La interfaz cambia; la evidencia no.',
+        anonUnlock: 'CLEARANCE 02 concedido. Expedientes policiales y red Anonymous disponibles.',
+        declassifiedUnlock: 'CLEARANCE 03 concedido. Proyectos desclasificados y archivo de anomalías disponibles.',
       },
+    },
+    dossiers: {
+      eyebrow: 'VAULT_13 // INTELIGENCIA ABIERTA', title: 'Expedientes clasificados', description: 'Casos reales, operaciones policiales, programas desclasificados y misterios. Cada archivo separa lo confirmado de lo que todavía está discutido.', level: 'Nivel de acceso', source: 'Abrir fuente primaria', confirmed: 'CONFIRMADO', unresolved: 'LÍMITE / DUDA', locked: 'ARCHIVO CIFRADO', unlock: 'Consultá “help” en la terminal para elevar el acceso.', all: 'Todos', hacktivism: 'Hacktivismo', police: 'Casos policiales', declassified: 'Desclasificados', mystery: 'Misterios', documented: 'DOCUMENTADO', disputed: 'DISPUTADO', unverified: 'NO VERIFICADO',
     },
     reveal: {
       eyebrow: 'ARCHIVO ∆ REVELADO',
@@ -189,13 +217,18 @@ const content: Record<'es' | 'en', GreenCopy> = {
       clear: 'Terminal cleared. The archive keeps its sources.',
       unknown: 'UNKNOWN COMMAND. Use “help”.',
       responses: {
-        help: 'COMMANDS: listar_archivos · decodificar_archivo · protocolo_verdad · deep_mode · limpiar/clear',
+        help: 'COMMANDS: listar_archivos · interceptar_anon · desclasificar · decodificar_archivo · protocolo_verdad · deep_mode · limpiar/clear',
         list: 'GRIMOIRE_0X  SIGIL.EXE  BLACK_SIGNAL  EVIDENCE_13',
         decode: 'EVIDENCE_13 unlocked. The anomaly opens as a hypothesis, never as certainty.',
         truth: 'ACTIVE: evidence ≠ inference ≠ fiction. Verify source, author, date and context.',
         deepActive: 'DEEP_MODE enabled. The interface changes; the evidence does not.',
         deepAlreadyActive: 'DEEP_MODE was already active. The interface changes; the evidence does not.',
+        anonUnlock: 'CLEARANCE 02 granted. Law-enforcement and Anonymous network files are available.',
+        declassifiedUnlock: 'CLEARANCE 03 granted. Declassified projects and anomaly files are available.',
       },
+    },
+    dossiers: {
+      eyebrow: 'VAULT_13 // OPEN INTELLIGENCE', title: 'Classified case files', description: 'Real cases, law-enforcement operations, declassified programs and mysteries. Every file separates confirmed facts from what remains disputed.', level: 'Clearance level', source: 'Open primary source', confirmed: 'CONFIRMED', unresolved: 'LIMIT / DOUBT', locked: 'ENCRYPTED FILE', unlock: 'Use “help” in the terminal to raise your clearance.', all: 'All', hacktivism: 'Hacktivism', police: 'Law enforcement', declassified: 'Declassified', mystery: 'Mysteries', documented: 'DOCUMENTED', disputed: 'DISPUTED', unverified: 'UNVERIFIED',
     },
     reveal: {
       eyebrow: 'FILE ∆ REVEALED',
@@ -223,6 +256,8 @@ export default function GreenNode() {
   const [terminalInput, setTerminalInput] = useState('')
   const [terminalLines, setTerminalLines] = useState<string[]>(() => [...t.terminal.initial])
   const [accessSequence, setAccessSequence] = useState(0)
+  const [clearance, setClearance] = useState<1 | 2 | 3>(1)
+  const [dossierFilter, setDossierFilter] = useState<'all' | GreenDossierCategory>('all')
   const accessIndex = Math.min(accessSequence, 3)
 
   useEffect(() => {
@@ -272,6 +307,8 @@ export default function GreenNode() {
     return (matching.length ? matching : merged).slice(0, 6)
   }, [active.category, publishedArticles])
 
+  const dossiers = useMemo(() => dossierFilter === 'all' ? greenNodeDossiers : greenNodeDossiers.filter((item) => item.category === dossierFilter), [dossierFilter])
+
   function runTerminalCommand(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const command = terminalInput.trim().toLowerCase()
@@ -282,6 +319,8 @@ export default function GreenNode() {
       decodificar_archivo: t.terminal.responses.decode,
       protocolo_verdad: t.terminal.responses.truth,
       deep_mode: deepMode ? t.terminal.responses.deepAlreadyActive : t.terminal.responses.deepActive,
+      interceptar_anon: t.terminal.responses.anonUnlock,
+      desclasificar: t.terminal.responses.declassifiedUnlock,
     }
     if (command === 'limpiar' || command === 'clear') {
       setTerminalLines([t.terminal.clear])
@@ -290,6 +329,8 @@ export default function GreenNode() {
     }
     if (command === 'decodificar_archivo') setActiveId('research')
     if (command === 'deep_mode') setDeepMode(true)
+    if (command === 'interceptar_anon') setClearance((current) => current < 2 ? 2 : current)
+    if (command === 'desclasificar') setClearance(3)
     setTerminalInput('')
   }
 
@@ -374,6 +415,28 @@ export default function GreenNode() {
               </section>
 
               {deepMode && <aside className="xk-deep-reveal" role="status"><p>{t.reveal.eyebrow}</p><b>{t.reveal.title}</b><span>{t.reveal.description}</span></aside>}
+
+              <section className="xk-dossier-vault scroll-mt-28" id="classified-files" aria-labelledby="classified-files-title">
+                <header className="xk-dossier-vault-head">
+                  <div><small>{t.dossiers.eyebrow}</small><h2 id="classified-files-title">{t.dossiers.title}</h2><p>{t.dossiers.description}</p></div>
+                  <div className="xk-clearance-meter" aria-label={`${t.dossiers.level}: ${clearance}/3`}><span>{t.dossiers.level}</span><b>0{clearance} / 03</b><i style={{ '--clearance': `${clearance * 33.333}%` } as React.CSSProperties} /></div>
+                </header>
+                <nav className="xk-dossier-filters" aria-label={t.dossiers.title}>
+                  {([
+                    ['all', t.dossiers.all], ['hacktivism', t.dossiers.hacktivism], ['law-enforcement', t.dossiers.police], ['declassified', t.dossiers.declassified], ['mystery', t.dossiers.mystery],
+                  ] as const).map(([id, label]) => <button key={id} type="button" aria-pressed={dossierFilter === id} onClick={() => setDossierFilter(id)}>{label}</button>)}
+                </nav>
+                <div className="xk-dossier-grid">
+                  {dossiers.map((dossier) => dossier.clearance <= clearance ? (
+                    <details key={dossier.id} className={`xk-dossier-card is-${dossier.evidence}`}>
+                      <summary><div><small>{dossier.code} // {dossier.period}</small><h3>{dossier.title[lang]}</h3></div><span>{t.dossiers[dossier.evidence]}</span></summary>
+                      <div className="xk-dossier-body"><p>{dossier.summary[lang]}</p><div className="xk-dossier-facts"><div><b>{t.dossiers.confirmed}</b><span>{dossier.confirmed[lang]}</span></div><div><b>{t.dossiers.unresolved}</b><span>{dossier.unresolved[lang]}</span></div></div><a className="xk-dossier-source" href={dossier.sourceHref} target="_blank" rel="noopener noreferrer">{t.dossiers.source}: {dossier.sourceLabel} ↗</a></div>
+                    </details>
+                  ) : (
+                    <article key={dossier.id} className="xk-dossier-locked"><div><b>████ // {t.dossiers.locked} // LVL 0{dossier.clearance}</b><span>{t.dossiers.unlock}</span><a href="#terminal">root@green-node:~$ help ↑</a></div></article>
+                  ))}
+                </div>
+              </section>
 
               <section id="archive" className="mt-6 scroll-mt-28 overflow-hidden rounded-2xl border border-[#32FF8A]/35 bg-[radial-gradient(circle_at_90%_10%,rgba(50,255,138,.13),transparent_32%),rgba(3,16,6,.88)] p-5 font-mono md:p-7" role="tabpanel" aria-labelledby={`green-tab-${active.id}`} aria-live="polite">
                 <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">

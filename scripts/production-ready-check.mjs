@@ -43,6 +43,8 @@ const indexHtml = read('index.html')
 const webManifest = read('public/manifest.webmanifest')
 const publicNews = read('src/pages/News.tsx')
 const greenNode = read('src/pages/GreenNode.tsx')
+const greenDossiers = read('src/data/greenNodeDossiers.ts')
+const gamingGuides = read('src/pages/GamingGuides.tsx')
 const scienceLab = read('src/pages/ScienceLab.tsx')
 const profileHub = read('src/pages/ProfileHub.tsx')
 const gamingHub = read('src/pages/GamingHub.tsx')
@@ -217,6 +219,25 @@ check(
     && greenNode.includes('aria-pressed={deepMode}')
     && !greenNode.includes('eval(')
     && !greenNode.includes('<audio'),
+)
+check(
+  'Green Node provides sourced tiered dossiers without presenting theories as facts',
+  greenNode.includes('xk-dossier-vault')
+    && greenNode.includes('interceptar_anon')
+    && greenNode.includes('desclasificar')
+    && greenDossiers.includes("evidence: 'documented'")
+    && greenDossiers.includes("evidence: 'disputed'")
+    && greenDossiers.includes('FBI / U.S. Department of Justice')
+    && greenDossiers.includes('U.S. Senate Select Committee on Intelligence')
+    && greenDossiers.includes('U.S. National Archives'),
+)
+check(
+  'Gaming guides support discovery, shareable deep links and persistent checklists',
+  gamingGuides.includes('xk-guide-search')
+    && gamingGuides.includes("next.set('module', moduleId)")
+    && gamingGuides.includes('xethkioz.guide-progress.v1')
+    && gamingGuides.includes('navigator.clipboard.writeText')
+    && gamingGuides.includes('aria-pressed={completedSteps.includes(index)}'),
 )
 check(
   'Profile provides persistent progression and daily activity',

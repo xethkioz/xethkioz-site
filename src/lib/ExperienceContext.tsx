@@ -23,7 +23,7 @@ function soundtrackMetaForPath(pathname: string): { id: SoundtrackId; label: str
   if (pathname.startsWith('/science')) return { id: 'progressive', label: 'PROG CYBER METAL' }
   if (pathname.startsWith('/green-node')) return { id: 'death', label: 'BLACK / DEATH METAL' }
   if (pathname.startsWith('/nexus-city')) return { id: 'industrial', label: 'INDUSTRIAL METAL' }
-  return { id: 'power', label: 'POWER METAL' }
+  return { id: 'arcane', label: 'FANTASÍA ARCANA' }
 }
 
 function getInitialGraphicsMode(): GraphicsMode {
