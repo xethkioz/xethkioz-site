@@ -21,7 +21,6 @@ const Header = lazy(() => import('./components/Header'))
 const Footer = lazy(() => import('./components/Footer'))
 const FusionGlobalWisp = lazy(() => import('./components/fusion/FusionGlobalWisp'))
 const NexusChatWidget = lazy(() => import('./components/nexus/NexusChatWidget'))
-const ExperienceControls = lazy(() => import('./components/ExperienceControls'))
 
 const Home = lazy(() => import('./pages/Home'))
 const GamingHub = lazy(() => import('./pages/GamingHub'))
@@ -266,11 +265,6 @@ function AppShell() {
         <Suspense fallback={null}>
           <NexusChatWidget clearMobileDock={hasPublicNavigation} />
         </Suspense>
-      )}
-      {!isCmsRoute && (
-        <AppErrorBoundary label={lang === 'es' ? 'Modo de experiencia' : 'Experience mode'} compact>
-          <Suspense fallback={null}><ExperienceControls /></Suspense>
-        </AppErrorBoundary>
       )}
     </div>
   )

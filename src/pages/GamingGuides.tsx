@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from 'react'
+import { useEffect, useMemo, useState, type CSSProperties } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import SEO from '../components/SEO'
 import SafeImage from '../components/SafeImage'
@@ -15,7 +15,6 @@ const copy = {
     title: 'Guías que explican el camino.',
     highlight: 'No solo la build final.',
     description: 'Cada módulo resume qué hacer, por qué hacerlo, qué revisar antes de copiar una configuración y qué puede cambiar con un parche. El contenido está redactado por XETHKIOZ a partir de fuentes técnicas enlazadas.',
-    switchLanguage: 'Cambiar a inglés',
     principles: ['✓ PASOS CLAROS', '✓ ESPAÑOL / ENGLISH', '✓ VERSIÓN Y ADVERTENCIAS', '✓ FUENTES TÉCNICAS'],
     gamesLabel: 'Bibliotecas disponibles',
     moduleLabel: 'Módulos de la guía',
@@ -27,6 +26,7 @@ const copy = {
     radarText: 'GTA VI, AION 2, Minecraft, Roblox y Fortnite tienen seguimiento principal de noticias, actualizaciones, mods, temporadas y cambios oficiales.',
     openRadar: 'Abrir radar',
     back: 'Volver a Gaming',
+    searchLabel: 'Buscar en todas las guías', searchPlaceholder: 'Ej: leveleo, build, raid, economía…', noResults: 'No encontramos ese objetivo. Probá otra palabra.', openGuide: 'Abrir módulo', progress: 'Tu progreso', reset: 'Reiniciar', completed: 'completado', copyLink: 'Copiar enlace', copied: 'Enlace copiado', searchEyebrow: 'RUTA RÁPIDA // ENCONTRÁ TU OBJETIVO', searchText: 'Buscá por juego, sistema o meta. El resultado abre la guía exacta y la URL se puede compartir.',
   },
   en: {
     seoTitle: 'WoW, Diablo IV, Final Fantasy XIV and Path of Exile Guides',
@@ -36,7 +36,6 @@ const copy = {
     title: 'Guides that explain the path.',
     highlight: 'Not only the final build.',
     description: 'Each module summarizes what to do, why it matters, what to check before copying a setup and what may change with a patch. Content is written by XETHKIOZ from the linked technical sources.',
-    switchLanguage: 'Switch to Spanish',
     principles: ['✓ CLEAR STEPS', '✓ ESPAÑOL / ENGLISH', '✓ VERSION AND WARNINGS', '✓ TECHNICAL SOURCES'],
     gamesLabel: 'Available libraries',
     moduleLabel: 'Guide modules',
@@ -48,25 +47,86 @@ const copy = {
     radarText: 'GTA VI, AION 2, Minecraft, Roblox and Fortnite receive primary coverage for news, updates, mods, seasons and official changes.',
     openRadar: 'Open radar',
     back: 'Back to Gaming',
+    searchLabel: 'Search all guides', searchPlaceholder: 'E.g. leveling, build, raid, economy…', noResults: 'We could not find that goal. Try another word.', openGuide: 'Open module', progress: 'Your progress', reset: 'Reset', completed: 'complete', copyLink: 'Copy link', copied: 'Link copied', searchEyebrow: 'QUICK ROUTE // FIND YOUR GOAL', searchText: 'Search by game, system or goal. Results open the exact guide and its URL can be shared.',
   },
 } as const
 
 export default function GamingGuides() {
-  const { lang, setLang } = useLang()
+  const { lang } = useLang()
   const t = copy[lang]
   const [searchParams, setSearchParams] = useSearchParams()
   const activeGame = getGuideGame(searchParams.get('game'))
-  const [activeModuleId, setActiveModuleId] = useState(activeGame.modules[0].id)
+  const requestedModule = searchParams.get('module')
+  const [activeModuleId, setActiveModuleId] = useState(activeGame.modules.some((module) => module.id === requestedModule) ? requestedModule! : activeGame.modules[0].id)
   const activeModule = activeGame.modules.find((module) => module.id === activeModuleId) ?? activeGame.modules[0]
+  const [query, setQuery] = useState('')
+  const [completedSteps, setCompletedSteps] = useState<number[]>([])
+  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
-    setActiveModuleId(activeGame.modules[0].id)
-  }, [activeGame.id])
+    const moduleFromUrl = searchParams.get('module')
+    setActiveModuleId(activeGame.modules.some((module) => module.id === moduleFromUrl) ? moduleFromUrl! : activeGame.modules[0].id)
+  }, [activeGame.id, searchParams])
+
+  useEffect(() => {
+    const key = `xethkioz.guide-progress.v1.${activeGame.id}.${activeModule.id}`
+    try {
+      const parsed = JSON.parse(window.localStorage.getItem(key) ?? '[]')
+      setCompletedSteps(Array.isArray(parsed) ? parsed.filter((value): value is number => Number.isInteger(value) && value >= 0 && value < activeModule.steps[lang].length) : [])
+    } catch {
+      setCompletedSteps([])
+    }
+  }, [activeGame.id, activeModule.id, activeModule.steps, lang])
 
   const selectGame = (game: GuideGame) => {
     const next = new URLSearchParams(searchParams)
     next.set('game', game.id)
+    next.delete('module')
     setSearchParams(next, { replace: true })
+  }
+
+  const selectModule = (moduleId: string) => {
+    const next = new URLSearchParams(searchParams)
+    next.set('game', activeGame.id)
+    next.set('module', moduleId)
+    setSearchParams(next, { replace: true })
+    setActiveModuleId(moduleId)
+  }
+
+  const openSearchResult = (game: GuideGame, moduleId: string) => {
+    setSearchParams({ game: game.id, module: moduleId })
+    setQuery('')
+    window.requestAnimationFrame(() => document.getElementById('guide-library')?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
+  }
+
+  const searchResults = useMemo(() => {
+    const normalized = query.trim().toLocaleLowerCase(lang === 'es' ? 'es' : 'en')
+    if (!normalized) return []
+    return guideGames.flatMap((game) => game.modules.map((module) => ({ game, module }))).filter(({ game, module }) => [game.title, game.code, game.subtitle[lang], module.title[lang], module.summary[lang], ...module.steps[lang]].join(' ').toLocaleLowerCase(lang === 'es' ? 'es' : 'en').includes(normalized)).slice(0, 8)
+  }, [lang, query])
+
+  const toggleStep = (index: number) => {
+    const next = completedSteps.includes(index) ? completedSteps.filter((value) => value !== index) : [...completedSteps, index]
+    setCompletedSteps(next)
+    try { window.localStorage.setItem(`xethkioz.guide-progress.v1.${activeGame.id}.${activeModule.id}`, JSON.stringify(next)) } catch { /* Progress remains available for this session. */ }
+  }
+
+  const resetProgress = () => {
+    setCompletedSteps([])
+    try { window.localStorage.removeItem(`xethkioz.guide-progress.v1.${activeGame.id}.${activeModule.id}`) } catch { /* Optional local persistence. */ }
+  }
+
+  const copyModuleLink = async () => {
+    const next = new URL(window.location.href)
+    next.searchParams.set('game', activeGame.id)
+    next.searchParams.set('module', activeModule.id)
+    try {
+      await navigator.clipboard.writeText(next.toString())
+      setCopied(true)
+      window.setTimeout(() => setCopied(false), 1800)
+    } catch {
+      window.history.replaceState(null, '', `${next.pathname}${next.search}`)
+    }
   }
 
   const gameStyle = { '--guide-color': activeGame.color } as CSSProperties
@@ -85,14 +145,18 @@ export default function GamingGuides() {
             <h1>{t.title}<br /><span>{t.highlight}</span></h1>
             <p>{t.description}</p>
           </div>
-          <button type="button" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} aria-label={t.switchLanguage}>{lang === 'es' ? 'EN' : 'ES'}</button>
         </header>
 
         <section className="xk-guides-v2-principles" aria-label={lang === 'es' ? 'Criterios editoriales' : 'Editorial criteria'}>
           {t.principles.map((principle) => <span key={principle}>{principle}</span>)}
         </section>
 
-        <section className="xk-guide-library-layout" aria-label={t.gamesLabel}>
+        <section className="xk-guide-search" aria-labelledby="guide-search-title">
+          <header><div><small>{t.searchEyebrow}</small><h2 id="guide-search-title">{t.searchLabel}</h2><p>{t.searchText}</p></div><label><span className="sr-only">{t.searchLabel}</span><b aria-hidden="true">⌕</b><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t.searchPlaceholder} /></label></header>
+          {query.trim() ? <div className="xk-guide-search-results" role="list" aria-live="polite">{searchResults.length ? searchResults.map(({ game, module }) => <button key={`${game.id}-${module.id}`} type="button" role="listitem" onClick={() => openSearchResult(game, module.id)} style={{ '--guide-color': game.color } as CSSProperties}><i /><span><small>{game.title} // {game.code}</small><b>{module.title[lang]}</b><em>{module.summary[lang]}</em></span><strong>{t.openGuide} →</strong></button>) : <p>{t.noResults}</p>}</div> : null}
+        </section>
+
+        <section id="guide-library" className="xk-guide-library-layout scroll-mt-28" aria-label={t.gamesLabel}>
           <aside className="xk-guide-library-nav">
             <p>{t.gamesLabel}</p>
             {guideGames.map((game) => (
@@ -122,17 +186,18 @@ export default function GamingGuides() {
 
             <nav className="xk-guide-module-tabs" aria-label={t.moduleLabel} style={gameStyle}>
               {activeGame.modules.map((module) => (
-                <button key={module.id} type="button" className={activeModule.id === module.id ? 'is-active' : ''} aria-pressed={activeModule.id === module.id} onClick={() => setActiveModuleId(module.id)}>
+                <button key={module.id} type="button" className={activeModule.id === module.id ? 'is-active' : ''} aria-pressed={activeModule.id === module.id} onClick={() => selectModule(module.id)}>
                   {module.title[lang]}
                 </button>
               ))}
             </nav>
 
             <section className="xk-guide-module" style={gameStyle} aria-labelledby={`guide-module-${activeGame.id}-${activeModule.id}`}>
-              <small>{activeGame.code} // {activeModule.id.toUpperCase()}</small>
+              <div className="xk-guide-module-toolbar"><small>{activeGame.code} // {activeModule.id.toUpperCase()}</small><button type="button" onClick={() => void copyModuleLink()}>{copied ? t.copied : t.copyLink} ↗</button></div>
               <h3 id={`guide-module-${activeGame.id}-${activeModule.id}`}>{activeModule.title[lang]}</h3>
               <p>{activeModule.summary[lang]}</p>
-              <ol>{activeModule.steps[lang].map((step) => <li key={step}>{step}</li>)}</ol>
+              <div className="xk-guide-progress"><div><span>{t.progress}</span><b>{Math.round((completedSteps.length / activeModule.steps[lang].length) * 100)}% {t.completed}</b></div><i><span style={{ width: `${(completedSteps.length / activeModule.steps[lang].length) * 100}%` }} /></i>{completedSteps.length ? <button type="button" onClick={resetProgress}>{t.reset}</button> : null}</div>
+              <ol>{activeModule.steps[lang].map((step, index) => <li key={step} className={completedSteps.includes(index) ? 'is-complete' : ''}><button type="button" aria-pressed={completedSteps.includes(index)} onClick={() => toggleStep(index)}><span>{step}</span><b aria-hidden="true">{completedSteps.includes(index) ? '✓' : '+'}</b></button></li>)}</ol>
               <p className="xk-guide-warning"><strong>{t.warning}:</strong> {activeModule.warning[lang]}</p>
               <a className="xk-guide-source" href={activeModule.sourceHref} target="_blank" rel="noreferrer noopener">{t.source}: {activeModule.sourceLabel} ↗</a>
             </section>

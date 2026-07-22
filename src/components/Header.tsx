@@ -2,6 +2,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useHud } from '../lib/HudContext'
 import { useLang } from '../lib/LangContext'
 import { useWisp } from '../providers/WispProvider'
+import ExperienceControls from './ExperienceControls'
 
 const navigation = {
   es: [
@@ -112,12 +113,13 @@ export default function Header() {
             </button>
           </nav>
 
-          <div className="flex justify-self-end gap-1.5 font-mono text-[10px] font-black uppercase tracking-[0.14em] sm:gap-2 sm:text-[11px] sm:tracking-[0.16em]">
+          <div className="xk-header-actions flex justify-self-end gap-1.5 font-mono text-[10px] font-black uppercase tracking-[0.14em] sm:gap-2 sm:text-[11px] sm:tracking-[0.16em]">
+            <ExperienceControls />
             <button type="button" onClick={switchLang} aria-label={t.switchLanguage} title={t.switchLanguage} className="rounded-full border border-white/10 bg-white/[0.035] px-2 py-2 text-white transition hover:border-[#8B5CF6] hover:text-[#8B5CF6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 sm:px-3">
               {lang === 'es' ? 'EN' : 'ES'}
             </button>
             <button type="button" onClick={openAccount} aria-label={t.account} className="rounded-full border border-[#FF6B1A]/40 bg-[#FF6B1A]/10 px-2 py-2 text-[#FFB47A] transition hover:border-[#FF6B1A] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 sm:px-3">
-              {account.status === 'connected' ? account.name : t.login}
+              <span className="xk-account-full">{account.status === 'connected' ? account.name : t.login}</span><span className="xk-account-compact" aria-hidden="true">{account.status === 'connected' ? '●' : '↪'}</span>
             </button>
           </div>
         </div>
