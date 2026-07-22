@@ -1,0 +1,68 @@
+name: Apply gaming guide hub
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - agent/gaming-guides-hub-122
+    paths:
+      - .github/workflows/apply-gaming-guide-hub.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/gaming-guides-hub-122
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Apply exact integration
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('src/pages/GamingHub.tsx')
+          text = path.read_text()
+
+          replacements = [
+            (
+              "import PublicAdSlot from '../components/ads/PublicAdSlot'",
+              "import PublicAdSlot from '../components/ads/PublicAdSlot'\nimport GamingGuideRotation from '../components/gaming/GamingGuideRotation'",
+            ),
+            (
+              "{ code: '5 MUNDOS', title: 'Archivo principal de guías', action: 'Elegir mundo', to: '/gaming/guides' }",
+              "{ code: '4 GUÍAS', title: 'WoW, Diablo IV, FFXIV y Path of Exile', action: 'Abrir biblioteca', to: '/gaming/guides' }",
+            ),
+            (
+              "{ code: '5 WORLDS', title: 'Main guide archive', action: 'Choose a world', to: '/gaming/guides' }",
+              "{ code: '4 GUIDES', title: 'WoW, Diablo IV, FFXIV and Path of Exile', action: 'Open library', to: '/gaming/guides' }",
+            ),
+            (
+              '          <div className="xk-gaming-ticker" aria-hidden="true"><div>{t.ticker} ◆ {t.ticker} ◆</div></div>\n\n          <section className="xk-creator-signal"',
+              '          <div className="xk-gaming-ticker" aria-hidden="true"><div>{t.ticker} ◆ {t.ticker} ◆</div></div>\n\n          <GamingGuideRotation lang={lang} />\n\n          <section className="xk-creator-signal"',
+            ),
+          ]
+
+          for old, new in replacements:
+            count = text.count(old)
+            if count != 1:
+              raise SystemExit(f'Expected one match, found {count}: {old[:100]!r}')
+            text = text.replace(old, new, 1)
+
+          path.write_text(text)
+          PY
+      - name: Commit integration
+        run: |
+          git config user.name "xethkioz-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add src/pages/GamingHub.tsx
+          git commit -m "feat(gaming): make guide and radar rotation primary"
+          git rm .github/workflows/apply-gaming-guide-hub.yml
+          git commit -m "chore: remove temporary gaming integration workflow"
+          git push origin HEAD:agent/gaming-guides-hub-122
