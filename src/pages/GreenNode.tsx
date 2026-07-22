@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import SafeImage from '../components/SafeImage'
 import GreenNodeWispGuide, { type GreenNodeView } from '../components/GreenNodeWispGuide'
 import SEO from '../components/SEO'
@@ -312,6 +312,12 @@ type GreenProgress = {
   final: boolean
 }
 
+const GREEN_HASH_VIEWS: Readonly<Record<string, GreenNodeView>> = {
+  '#archive': 'dossiers',
+  '#terminal': 'terminal',
+  '#evidence': 'signals',
+}
+
 function readGreenProgress(): GreenProgress {
   const fallback: GreenProgress = { clearance: 1, read: [], signals: [], final: false }
   try {
@@ -331,9 +337,11 @@ function readGreenProgress(): GreenProgress {
 export default function GreenNode() {
   const { lang, setLang } = useLang()
   const t = content[lang]
+  const location = useLocation()
   const [searchParams, setSearchParams] = useSearchParams()
   const requestedView = searchParams.get('view')
-  const activeView = requestedView === 'dossiers' || requestedView === 'terminal' || requestedView === 'signals' ? requestedView : 'overview'
+  const hashView = GREEN_HASH_VIEWS[location.hash.toLowerCase()]
+  const activeView = requestedView === 'dossiers' || requestedView === 'terminal' || requestedView === 'signals' ? requestedView : hashView ?? 'overview'
   const requestedNode = searchParams.get('node')
   const [activeId, setActiveId] = useState<string>(() => t.blocks.some((item) => item.id === requestedNode) ? requestedNode! : t.blocks[0].id)
   const active = t.blocks.find((item) => item.id === activeId) ?? t.blocks[0]
@@ -367,6 +375,18 @@ export default function GreenNode() {
   useEffect(() => {
     if (requestedNode && t.blocks.some((item) => item.id === requestedNode)) setActiveId(requestedNode)
   }, [requestedNode, t.blocks])
+
+  useEffect(() => {
+    if (accessSequence < 4 || !location.hash) return
+    const targetId = decodeURIComponent(location.hash.slice(1))
+    const frame = window.requestAnimationFrame(() => {
+      const target = document.getElementById(targetId)
+      if (!target) return
+      target.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' })
+      target.focus({ preventScroll: true })
+    })
+    return () => window.cancelAnimationFrame(frame)
+  }, [accessSequence, activeView, location.hash])
 
   useEffect(() => {
     try {
@@ -552,7 +572,7 @@ export default function GreenNode() {
                     type="button"
                     role="tab"
                     aria-selected={active.id === node.id}
-                    aria-controls="archive"
+                    aria-controls="signal-archive"
                     tabIndex={active.id === node.id ? 0 : -1}
                     onClick={() => openNode(node.id)}
                     onKeyDown={(event) => {
@@ -574,7 +594,7 @@ export default function GreenNode() {
               </> : null}
 
               {activeView === 'terminal' ? <>
-              <section id="terminal" className="xk-green-terminal scroll-mt-28" aria-labelledby="green-terminal-title">
+              <section id="terminal" className="xk-green-terminal scroll-mt-28" aria-labelledby="green-terminal-title" tabIndex={-1}>
                 <header><div aria-hidden="true"><i /><i /><i /></div><p id="green-terminal-title">root@xethkioz:~/black_archive</p><button type="button" aria-pressed={deepMode} onClick={() => setDeepMode((current) => !current)}>{deepMode ? t.terminal.disableDeep : t.terminal.enableDeep}</button></header>
                 <div className="xk-terminal-screen" role="log" aria-live="polite" aria-relevant="additions">{terminalLines.map((line, index) => <p key={`${line}-${index}`}><span aria-hidden="true">{index === terminalLines.length - 1 ? '›' : '·'}</span>{line}</p>)}</div>
                 <form onSubmit={runTerminalCommand}><label htmlFor="green-command" className="sr-only">{t.terminal.commandLabel}</label><span aria-hidden="true">visitor@green-node:~$</span><input id="green-command" value={terminalInput} onChange={(event) => setTerminalInput(event.target.value)} autoComplete="off" spellCheck={false} maxLength={40} placeholder="help" /><button type="submit">{t.terminal.run} ↵</button></form>
@@ -585,7 +605,7 @@ export default function GreenNode() {
               </> : null}
 
               {activeView === 'dossiers' ? <>
-              <section className="xk-green-investigation" aria-labelledby="green-investigation-title">
+              <section id="archive" className="xk-green-investigation scroll-mt-28" aria-labelledby="green-investigation-title" tabIndex={-1}>
                 <header>
                   <div><small>{t.investigation.eyebrow}</small><h2 id="green-investigation-title">{t.investigation.title}</h2><p>{t.investigation.description}</p></div>
                   <button type="button" onClick={resetInvestigation}>{t.investigation.reset}</button>
@@ -632,7 +652,7 @@ export default function GreenNode() {
               </> : null}
 
               {activeView === 'signals' ? <>
-              <section id="archive" className="mt-6 scroll-mt-28 overflow-hidden rounded-2xl border border-[#32FF8A]/35 bg-[radial-gradient(circle_at_90%_10%,rgba(50,255,138,.13),transparent_32%),rgba(3,16,6,.88)] p-5 font-mono md:p-7" role="tabpanel" aria-labelledby={`green-tab-${active.id}`} aria-live="polite">
+              <section id="signal-archive" className="mt-6 scroll-mt-28 overflow-hidden rounded-2xl border border-[#32FF8A]/35 bg-[radial-gradient(circle_at_90%_10%,rgba(50,255,138,.13),transparent_32%),rgba(3,16,6,.88)] p-5 font-mono md:p-7" role="tabpanel" aria-labelledby={`green-tab-${active.id}`} aria-live="polite">
                 <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
                   <div>
                     <p className="text-[9px] font-black uppercase tracking-[0.28em] text-[#32FF8A]/60">{t.active} // {active.signal}</p>
@@ -646,7 +666,7 @@ export default function GreenNode() {
                 </ol>
               </section>
 
-              <section id="evidence" className="mt-8 scroll-mt-28 rounded-2xl border border-[#32FF8A]/25 bg-black/70 p-5 font-mono" aria-labelledby="evidence-title">
+              <section id="evidence" className="mt-8 scroll-mt-28 rounded-2xl border border-[#32FF8A]/25 bg-black/70 p-5 font-mono" aria-labelledby="evidence-title" tabIndex={-1}>
                 <p id="evidence-title" className="text-[10px] uppercase tracking-[0.28em] text-[#32FF8A]/70">{t.articleTitle}</p>
                 {loadingNews ? <p className="mt-4 text-xs text-[#B9FFD1]/60" role="status" aria-live="polite">{t.loading}</p> : null}
                 {articles.length > 0 ? <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">

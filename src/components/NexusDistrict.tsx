@@ -30,9 +30,9 @@ const districtLinks: Record<Lang, Record<NexusDistrictTone, DistrictLink[]>> = {
       { code: '創造', glyph: 'WEB', title: 'Creation Studio', detail: 'Ideas convertidas en sistemas', to: '/creacion-web' },
     ],
     green: [
-      { code: '禁制', glyph: '13', title: 'Restricted Archive', detail: 'Expedientes clasificados', to: '/green-node#archive' },
-      { code: '異常', glyph: '>_', title: 'Signal Terminal', detail: 'Intervenir la transmisión', to: '/green-node#terminal' },
-      { code: '検証', glyph: 'EYE', title: 'Evidence Room', detail: 'Fuente, hipótesis o ficción', to: '/green-node#evidence' },
+      { code: '禁制', glyph: '13', title: 'Restricted Archive', detail: 'Expedientes clasificados', to: '/green-node?view=dossiers#archive' },
+      { code: '異常', glyph: '>_', title: 'Signal Terminal', detail: 'Intervenir la transmisión', to: '/green-node?view=terminal#terminal' },
+      { code: '検証', glyph: 'EYE', title: 'Evidence Room', detail: 'Fuente, hipótesis o ficción', to: '/green-node?view=signals#evidence' },
     ],
   },
   en: {
@@ -58,9 +58,9 @@ const districtLinks: Record<Lang, Record<NexusDistrictTone, DistrictLink[]>> = {
       { code: '創造', glyph: 'WEB', title: 'Creation Studio', detail: 'Ideas transformed into systems', to: '/creacion-web' },
     ],
     green: [
-      { code: '禁制', glyph: '13', title: 'Restricted Archive', detail: 'Classified case files', to: '/green-node#archive' },
-      { code: '異常', glyph: '>_', title: 'Signal Terminal', detail: 'Intervene in the transmission', to: '/green-node#terminal' },
-      { code: '検証', glyph: 'EYE', title: 'Evidence Room', detail: 'Source, hypothesis or fiction', to: '/green-node#evidence' },
+      { code: '禁制', glyph: '13', title: 'Restricted Archive', detail: 'Classified case files', to: '/green-node?view=dossiers#archive' },
+      { code: '異常', glyph: '>_', title: 'Signal Terminal', detail: 'Intervene in the transmission', to: '/green-node?view=terminal#terminal' },
+      { code: '検証', glyph: 'EYE', title: 'Evidence Room', detail: 'Source, hypothesis or fiction', to: '/green-node?view=signals#evidence' },
     ],
   },
 }

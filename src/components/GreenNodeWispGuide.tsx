@@ -147,23 +147,18 @@ export default function GreenNodeWispGuide({ activeView, ready, onNavigate }: Gr
   const [stepIndex, setStepIndex] = useState(0)
   const panelRef = useRef<HTMLElement>(null)
   const autoOpened = useRef(false)
-  const onNavigateRef = useRef(onNavigate)
   const step = t.steps[stepIndex]
-
-  useEffect(() => {
-    onNavigateRef.current = onNavigate
-  }, [onNavigate])
 
   useEffect(() => {
     if (!ready || autoOpened.current || guideWasCompleted()) return
     autoOpened.current = true
+    const matchingStep = t.steps.findIndex((item) => item.view === activeView)
     const timer = window.setTimeout(() => {
-      setStepIndex(0)
+      setStepIndex(matchingStep >= 0 ? matchingStep : 0)
       setOpen(true)
-      onNavigateRef.current('overview')
     }, 420)
     return () => window.clearTimeout(timer)
-  }, [ready])
+  }, [activeView, ready, t.steps])
 
   useEffect(() => {
     const reopenGuide = () => {
