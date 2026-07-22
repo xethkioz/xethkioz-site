@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
 import SafeImage from '../components/SafeImage'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
+import GamingGuideRotation from '../components/gaming/GamingGuideRotation'
 import { PortalPulseRail } from '../components/PortalPulseRail'
 import { NexusDistrict } from '../components/NexusDistrict'
 import { useLang } from '../lib/LangContext'
@@ -74,7 +75,7 @@ const content = {
       eyebrow: 'PARTY_BOARD // BUILDS & SERVIDORES',
       title: 'Entrá a jugar con la comunidad',
       items: [
-        { code: '5 MUNDOS', title: 'Archivo principal de guías', action: 'Elegir mundo', to: '/gaming/guides' },
+        { code: '4 GUÍAS', title: 'WoW, Diablo IV, FFXIV y Path of Exile', action: 'Abrir biblioteca', to: '/gaming/guides' },
         { code: 'RADAR', title: 'Estrenos y juegos que vienen', action: 'Ver tendencias', to: '/news?category=gaming' },
         { code: 'PARTY', title: 'Compartí tu build y armá grupo', action: 'Entrar al Nexus', to: '/community' },
       ],
@@ -146,7 +147,7 @@ const content = {
       eyebrow: 'PARTY_BOARD // BUILDS & SERVERS',
       title: 'Join the community and play',
       items: [
-        { code: '5 WORLDS', title: 'Main guide archive', action: 'Choose a world', to: '/gaming/guides' },
+        { code: '4 GUIDES', title: 'WoW, Diablo IV, FFXIV and Path of Exile', action: 'Open library', to: '/gaming/guides' },
         { code: 'RADAR', title: 'Releases and upcoming games', action: 'View trends', to: '/news?category=gaming' },
         { code: 'PARTY', title: 'Share your build and form a group', action: 'Enter the Nexus', to: '/community' },
       ],
@@ -242,6 +243,8 @@ export default function GamingHub() {
 
           <NexusDistrict tone="gaming" />
           <div className="xk-gaming-ticker" aria-hidden="true"><div>{t.ticker} ◆ {t.ticker} ◆</div></div>
+
+          <GamingGuideRotation lang={lang} />
 
           <section className="xk-creator-signal" aria-labelledby="creator-signal-title">
             <div className="xk-creator-signal-copy">
