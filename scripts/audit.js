@@ -95,6 +95,12 @@ const steps = [
     requiredFiles: ['scripts/nexus-city-check.mjs']
   },
   {
+    name: 'Experience Full / Lite and Audio',
+    command: 'node',
+    args: ['scripts/experience-mode-check.mjs'],
+    requiredFiles: ['scripts/experience-mode-check.mjs']
+  },
+  {
     name: 'Security Hardening',
     command: 'node',
     args: ['scripts/security-hardening-check.mjs'],

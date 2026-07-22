@@ -1,7 +1,7 @@
 # XETHKIOZ 10.0 — Consolidated Audit
 
-- Started: 2026-07-19T18:57:51.077Z
-- Finished: 2026-07-19T18:58:11.184Z
+- Started: 2026-07-22T18:23:07.866Z
+- Finished: 2026-07-22T18:23:20.410Z
 - Result: PASS
 
 ## Checks
@@ -15,6 +15,7 @@
 | Functionality Core | SUCCESS | node scripts/functionality-core-check.mjs |
 | Auth Nexus | SUCCESS | node scripts/auth-nexus-check.mjs |
 | Nexus City Social Foundation | SUCCESS | node scripts/nexus-city-check.mjs |
+| Experience Full / Lite and Audio | SUCCESS | node scripts/experience-mode-check.mjs |
 | Security Hardening | SUCCESS | node scripts/security-hardening-check.mjs |
 | Web Services | SUCCESS | node scripts/web-services-check.mjs |
 | News Factory | SUCCESS | node scripts/news-factory-check.mjs |

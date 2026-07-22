@@ -1,6 +1,6 @@
 # Fusion Alpha 1.5 Visual / Audio Objects Review
 
-Generated: 2026-07-19T18:57:52.775Z
+Generated: 2026-07-22T18:23:08.449Z
 
 ## Asset summary
 - Total media assets: 101
@@ -20,9 +20,9 @@ Generated: 2026-07-19T18:57:52.775Z
 - public/videos/xethkioz-pixel-banner.mp4
 
 ## Audio assets
-- No real audio files detected yet. HUD audio is a persistent preview state only.
+- No audio files are shipped: the optional soundtrack is generated locally with Web Audio.
 
 ## Visual object notes
 - Videos must remain atmospheric layers with overlays and fallbacks, never flattened UI.
 - Current Green media belongs to the Media Engine. Fun/duende video still needs to be re-uploaded in this conversation before integration.
-- No audio playback engine is approved yet; audio ON/OFF remains a state contract for future soundscapes.
+- Procedural audio is opt-in, original, route-aware and disabled by Lite mode.

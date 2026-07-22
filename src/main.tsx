@@ -7,11 +7,13 @@ import './index.css'
 import './visibility-fixes.css'
 import './xethkioz-redesign.css'
 import './home-portal-rings.css'
-import './pages/NexusPixelPolish.css'
-import './pages/NexusPixelMotion.css'
-import './pages/NexusPixelEmerald.css'
-import './pages/NexusEmeraldCraftV2.css'
-import './pages/NexusPixelImmersive.css'
+import './experience.css'
+
+try {
+  document.documentElement.dataset.xkGraphics = window.localStorage.getItem('xethkioz.experience.graphics.v1') === 'lite' ? 'lite' : 'full'
+} catch {
+  document.documentElement.dataset.xkGraphics = 'full'
+}
 
 const rootElement = document.getElementById('root')
 

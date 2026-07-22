@@ -28,6 +28,19 @@ const referenceSites = [
   { name: 'IEEE Spectrum', scope: { es: 'Ingeniería y tecnología mundial', en: 'Global engineering and technology' }, url: 'https://spectrum.ieee.org/', mark: 'IEEE' },
 ] as const
 
+const argenCienciaCopy = {
+  es: {
+    eyebrow: 'RED CIENTÍFICA CONECTADA', title: 'ArgenCiencia · divulgación científica',
+    text: 'Acceso directo al portal científico de la familia para ampliar noticias, investigaciones y proyectos.',
+    action: 'ABRIR ARGENCIENCIA', external: 'Sitio externo',
+  },
+  en: {
+    eyebrow: 'CONNECTED SCIENCE NETWORK', title: 'ArgenCiencia · science outreach',
+    text: 'Direct access to the family science portal for more news, research and projects.',
+    action: 'OPEN ARGENCIENCIA', external: 'External site',
+  },
+} as const
+
 const content = {
   es: {
     title: 'Tecnología / Ciencia',
@@ -196,6 +209,7 @@ const content = {
 export default function ScienceLab() {
   const { lang, setLang } = useLang()
   const t = content[lang]
+  const argenCiencia = argenCienciaCopy[lang]
   const [activeId, setActiveId] = useState<string>(t.blocks[0].id)
   const [assistantTopic, setAssistantTopic] = useState<string>('ia')
   const [published, setPublished] = useState<PublicNewsArticle[]>([])
@@ -253,6 +267,12 @@ export default function ScienceLab() {
             <h1 id="science-title" className="mt-4 text-4xl font-black uppercase tracking-[0.16em] text-white md:text-6xl">{t.title}</h1>
             <p className="mt-4 max-w-3xl font-mono text-sm leading-relaxed text-blue-100/80">{t.description}</p>
           </section>
+
+          <aside className="xk-argenciencia-link" aria-label={argenCiencia.title}>
+            <i aria-hidden="true">AR</i>
+            <div><small>{argenCiencia.eyebrow}</small><strong>{argenCiencia.title}</strong><span>{argenCiencia.text}</span></div>
+            <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer" aria-label={`${argenCiencia.action} · ${argenCiencia.external}`}>{argenCiencia.action} ↗</a>
+          </aside>
 
           <NexusDistrict tone="science" />
 

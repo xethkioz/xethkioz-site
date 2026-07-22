@@ -15,11 +15,13 @@ import { WorldThemeProvider } from './engines/world/theme'
 import { LightingEngineProvider } from './engines/world/lighting'
 import { AdminGuard } from './cms/guards'
 import { addWispXp } from './lib/realtimeCommunity'
+import { ExperienceProvider } from './lib/ExperienceContext'
 
 const Header = lazy(() => import('./components/Header'))
 const Footer = lazy(() => import('./components/Footer'))
 const FusionGlobalWisp = lazy(() => import('./components/fusion/FusionGlobalWisp'))
 const NexusChatWidget = lazy(() => import('./components/nexus/NexusChatWidget'))
+const ExperienceControls = lazy(() => import('./components/ExperienceControls'))
 
 const Home = lazy(() => import('./pages/Home'))
 const GamingHub = lazy(() => import('./pages/GamingHub'))
@@ -265,6 +267,11 @@ function AppShell() {
           <NexusChatWidget clearMobileDock={hasPublicNavigation} />
         </Suspense>
       )}
+      {!isCmsRoute && (
+        <AppErrorBoundary label={lang === 'es' ? 'Modo de experiencia' : 'Experience mode'} compact>
+          <Suspense fallback={null}><ExperienceControls /></Suspense>
+        </AppErrorBoundary>
+      )}
     </div>
   )
 }
@@ -277,13 +284,15 @@ export default function App() {
           <WorldThemeProvider>
             <LightingEngineProvider>
               <LangProvider>
-                <HudProvider>
-                  <WispProvider>
-                    <ProfileProgressProvider>
-                      <AppShell />
-                    </ProfileProgressProvider>
-                  </WispProvider>
-                </HudProvider>
+                <ExperienceProvider>
+                  <HudProvider>
+                    <WispProvider>
+                      <ProfileProgressProvider>
+                        <AppShell />
+                      </ProfileProgressProvider>
+                    </WispProvider>
+                  </HudProvider>
+                </ExperienceProvider>
               </LangProvider>
             </LightingEngineProvider>
           </WorldThemeProvider>

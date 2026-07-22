@@ -25,6 +25,7 @@ const audio = media.filter((file) => ['.mp3','.wav','.ogg'].includes(path.extnam
 const video = media.filter((file) => ['.mp4','.webm'].includes(path.extname(file).toLowerCase()))
 const image = media.filter((file) => ['.svg','.webp','.png','.jpg','.jpeg','.gif'].includes(path.extname(file).toLowerCase()))
 const rel = (file) => path.relative(root, file).replaceAll('\\\\','/')
+const proceduralAudio = fs.existsSync(path.join(root, 'src/lib/proceduralMetal.ts'))
 
 const report = [
   '# Fusion Alpha 1.5 Visual / Audio Objects Review',
@@ -42,12 +43,12 @@ const report = [
   ...(video.length ? video.map((file) => `- ${rel(file)}`) : ['- No video assets detected.']),
   '',
   '## Audio assets',
-  ...(audio.length ? audio.map((file) => `- ${rel(file)}`) : ['- No real audio files detected yet. HUD audio is a persistent preview state only.']),
+  ...(audio.length ? audio.map((file) => `- ${rel(file)}`) : [proceduralAudio ? '- No audio files are shipped: the optional soundtrack is generated locally with Web Audio.' : '- No audio files detected.']),
   '',
   '## Visual object notes',
   '- Videos must remain atmospheric layers with overlays and fallbacks, never flattened UI.',
   '- Current Green media belongs to the Media Engine. Fun/duende video still needs to be re-uploaded in this conversation before integration.',
-  '- No audio playback engine is approved yet; audio ON/OFF remains a state contract for future soundscapes.',
+  proceduralAudio ? '- Procedural audio is opt-in, original, route-aware and disabled by Lite mode.' : '- Audio ON/OFF remains a state contract for future soundscapes.',
   '',
 ].join('\n')
 fs.mkdirSync(path.join(root, 'docs/ARCHITECTURE'), { recursive: true })

@@ -1,13 +1,13 @@
 # Fusion Alpha 1.5 Code / Routes / Structure Review
 
-Generated: 2026-07-19T18:57:52.939Z
+Generated: 2026-07-22T18:23:08.502Z
 
 ## Summary
-- Source TS/TSX files: 233
-- Page route files: 44
-- Component files: 55
+- Source TS/TSX files: 256
+- Page route files: 49
+- Component files: 62
 - Fusion engine components: 13
-- Lib/config/context files: 20
+- Lib/config/context files: 23
 
 ## Public route contract detected in App.tsx
 - /: present
