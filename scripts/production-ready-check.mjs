@@ -49,6 +49,7 @@ const scienceLab = read('src/pages/ScienceLab.tsx')
 const profileHub = read('src/pages/ProfileHub.tsx')
 const gamingHub = read('src/pages/GamingHub.tsx')
 const funPortal = read('src/pages/FunPortal.tsx')
+const funCss = read('src/pages/FunNexusFusion.css')
 const newsletter = read('src/components/Newsletter.tsx')
 const fusionShell = read('src/components/fusion/FusionShell.tsx')
 const globalWisp = read('src/components/fusion/FusionGlobalWisp.tsx')
@@ -250,7 +251,8 @@ check(
   'Games and Memes expose visual live content',
   gamingHub.includes("fetchPublishedNews('gaming')")
     && gamingHub.includes('gaming-anime-nexus-v1.webp')
-    && gamingHub.includes('xk-mission-board')
+    && gamingHub.includes('xk-gaming-start')
+    && gamingHub.includes("activeSection === 'news'")
     && gamingHub.includes('xk-gaming-ticker')
     && gamingHub.includes('xk-feature-rank')
     && gamingHub.includes('<SafeImage')
@@ -258,10 +260,12 @@ check(
     && funPortal.includes('memes-anime-chaos-v1.webp')
     && funPortal.includes('xk-meme-bento')
     && funPortal.includes('xk-chaos-console')
+    && funPortal.includes("activeMemeSection === 'arcade'")
+    && funPortal.includes("activeMemeSection === 'wall'")
     && funPortal.includes('unleashChaos')
     && funPortal.includes('<SafeImage')
     && redesignCss.includes('@keyframes xk-anime-zoom')
-    && redesignCss.includes('.xk-manga-tabs')
+    && funCss.includes('.xk-meme-section-nav')
     && redesignCss.includes('.xk-gaming-ambient')
     && redesignCss.includes('.xk-meme-ambient'),
 )
@@ -294,11 +298,11 @@ check(
   'Mobile portals preserve active state without covering navigation',
   appShell.includes('xk-has-mobile-dock')
     && appShell.includes('clearMobileDock={hasPublicNavigation}')
-    && gamingHub.includes('aria-controls="gaming-active-mission"')
+    && gamingHub.includes('xk-gaming-section-nav')
     && gamingHub.includes('aria-live="polite"')
     && funPortal.includes('role="tablist"')
-    && funPortal.includes('aria-controls="fun-chaos-panel"')
-    && redesignCss.includes('.xk-active-mission{display:block')
+    && funPortal.includes('xk-meme-section-nav')
+    && funCss.includes('grid-template-columns:1fr 1fr')
     && redesignCss.includes('scrollbar-width:none'),
 )
 check(
@@ -350,6 +354,7 @@ runNodeAudit('shader pipeline audit', 'scripts/shader-pipeline-sandbox-check.mjs
 runNodeAudit('visual runtime audit', 'scripts/visual-runtime-sandbox-check.mjs')
 runNodeAudit('news factory audit', 'scripts/news-factory-check.mjs')
 runNodeAudit('web services audit', 'scripts/web-services-check.mjs')
+runNodeAudit('Green, Games and Guides depth audit', 'scripts/green-games-guides-check.mjs')
 
 let failed = 0
 for (const item of checks) {

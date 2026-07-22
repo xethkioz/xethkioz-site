@@ -269,9 +269,9 @@ export const guideGames: readonly GuideGame[] = [
   {
     id: 'poe',
     code: 'WRAECLAST',
-    title: 'Path of Exile',
-    subtitle: { es: 'PoE 1 · PoE 2 · builds · Atlas · economía', en: 'PoE 1 · PoE 2 · builds · Atlas · economy' },
-    status: { es: 'PoE 1 Mirage 3.28 · PoE 2 patch 0.5', en: 'PoE 1 Mirage 3.28 · PoE 2 patch 0.5' },
+    title: 'Path of Exile 2',
+    subtitle: { es: 'PoE 2 · Runes of Aldur · builds · Atlas · economía', en: 'PoE 2 · Runes of Aldur · builds · Atlas · economy' },
+    status: { es: 'PoE 2 · Runes of Aldur 0.5.4b', en: 'PoE 2 · Runes of Aldur 0.5.4b' },
     image: '/images/articles/pc-gaming.svg',
     color: '#f97316',
     modules: [

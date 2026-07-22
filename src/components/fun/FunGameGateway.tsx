@@ -58,7 +58,7 @@ export default function FunGameGateway({ lang }: FunGameGatewayProps) {
           >
             {t.primary} <span aria-hidden="true">▶</span>
           </Link>
-          <a href="#humor">{t.secondary} <span aria-hidden="true">↓</span></a>
+          <Link to="/fun?mode=memes#humor">{t.secondary} <span aria-hidden="true">↓</span></Link>
         </div>
       </div>
 

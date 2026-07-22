@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { lazy, Suspense, useEffect, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import SEO from '../components/SEO'
 import SafeImage from '../components/SafeImage'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
 import FunGameGateway from '../components/fun/FunGameGateway'
-import NexusCity from './NexusCity'
 import './FunNexusFusion.css'
 import { PortalPulseRail } from '../components/PortalPulseRail'
 import { NexusDistrict } from '../components/NexusDistrict'
@@ -15,6 +14,10 @@ import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import { fetchPublishedNews, formatPublicNewsDate, type PublicNewsArticle } from '../services/news/publicNewsService'
 
 type HumorMode = 'gaming' | 'adulto' | 'trabajo'
+type FunPortalMode = 'play' | 'memes'
+type MemeSection = 'home' | 'arcade' | 'clips' | 'wall'
+
+const NexusCity = lazy(() => import('./NexusCity'))
 
 const humorDeck: Record<'es' | 'en', Record<HumorMode, readonly string[]>> = {
   es: {
@@ -108,8 +111,8 @@ const content = {
       title: 'Acá el humor se toca, se vota y se comparte',
       description: 'Elegí una dosis rápida: el clip destacado, un meme para robar o la sala donde nace el próximo desastre.',
       items: [
-        { code: 'WEEK', title: 'Clip de la semana', detail: 'El momento que no sobrevivió al stream', to: '/fun#weekly-clip', action: 'Reproducir' },
-        { code: 'STEAL', title: 'Robar un meme', detail: 'Compartilo con marca XETHKIOZ', to: '/fun#meme-wall', action: 'Elegir' },
+        { code: 'WEEK', title: 'Clip de la semana', detail: 'El momento que no sobrevivió al stream', to: '/fun?mode=memes&section=clips#weekly-clip', action: 'Reproducir' },
+        { code: 'STEAL', title: 'Robar un meme', detail: 'Compartilo con marca XETHKIOZ', to: '/fun?mode=memes&section=wall#meme-wall', action: 'Elegir' },
         { code: 'LOL', title: 'Entrar al caos', detail: 'Comentá y proponé el próximo meme', to: '/community', action: 'Participar' },
       ],
     },
@@ -126,6 +129,8 @@ const content = {
     },
     empty: 'MEME_CORE OFFLINE // El caos está recargando.',
     sponsor: 'SPONSOR DE XETHKIOZ FUN',
+    modes: { aria: 'Elegir modo de Diversión', eyebrow: 'FUN_OS // DOS EXPERIENCIAS, UN PORTAL', title: '¿Qué querés hacer hoy?', play: 'MODO JUEGOS', playDetail: 'Plaza Nexus, misiones, avatar y mundo social', memes: 'MODO MEMES', memesDetail: 'Humor, duelos, clips y contenido para compartir', loading: 'Cargando Plaza Nexus…', expand: 'EXPLORAR NEXUS CITY', collapse: 'CERRAR NEXUS CITY' },
+    sections: { aria: 'Elegir sección de Memes', home: 'PORTADA', homeDetail: 'Qué hay en Meme Core', arcade: 'ARCADE', arcadeDetail: 'Chistes y duelo', clips: 'CLIPS', clipsDetail: 'Selección y redes', wall: 'MURO', wallDetail: 'Todos los memes' },
   },
   en: {
     title: 'Fun & Play',
@@ -181,8 +186,8 @@ const content = {
       title: 'Here humor is touched, voted on and shared',
       description: 'Choose a quick dose: the featured clip, a meme to steal or the room where the next disaster begins.',
       items: [
-        { code: 'WEEK', title: 'Clip of the week', detail: 'The moment that did not survive the stream', to: '/fun#weekly-clip', action: 'Play' },
-        { code: 'STEAL', title: 'Steal a meme', detail: 'Share it with the XETHKIOZ mark', to: '/fun#meme-wall', action: 'Choose' },
+        { code: 'WEEK', title: 'Clip of the week', detail: 'The moment that did not survive the stream', to: '/fun?mode=memes&section=clips#weekly-clip', action: 'Play' },
+        { code: 'STEAL', title: 'Steal a meme', detail: 'Share it with the XETHKIOZ mark', to: '/fun?mode=memes&section=wall#meme-wall', action: 'Choose' },
         { code: 'LOL', title: 'Enter the chaos', detail: 'Comment and propose the next meme', to: '/community', action: 'Join' },
       ],
     },
@@ -199,14 +204,22 @@ const content = {
     },
     empty: 'MEME_CORE OFFLINE // Chaos is reloading.',
     sponsor: 'XETHKIOZ FUN SPONSOR',
+    modes: { aria: 'Choose Fun mode', eyebrow: 'FUN_OS // TWO EXPERIENCES, ONE PORTAL', title: 'What do you want to do today?', play: 'GAME MODE', playDetail: 'Nexus Plaza, missions, avatar and social world', memes: 'MEME MODE', memesDetail: 'Humor, battles, clips and shareable content', loading: 'Loading Nexus Plaza…', expand: 'EXPLORE NEXUS CITY', collapse: 'CLOSE NEXUS CITY' },
+    sections: { aria: 'Choose a Memes section', home: 'HOME', homeDetail: 'What is inside Meme Core', arcade: 'ARCADE', arcadeDetail: 'Jokes and battle', clips: 'CLIPS', clipsDetail: 'Weekly pick and socials', wall: 'WALL', wallDetail: 'Every meme' },
   },
 } as const
 
 export default function FunPortal() {
   const { lang, setLang } = useLang()
   const t = content[lang]
+  const [searchParams, setSearchParams] = useSearchParams()
+  const requestedMode = searchParams.get('mode')
+  const activeMode: FunPortalMode = requestedMode === 'memes' || (!requestedMode && typeof window !== 'undefined' && ['#humor', '#weekly-clip', '#meme-wall'].includes(window.location.hash)) ? 'memes' : 'play'
+  const requestedSection = searchParams.get('section')
+  const hashSection: MemeSection = typeof window !== 'undefined' && window.location.hash === '#weekly-clip' ? 'clips' : typeof window !== 'undefined' && window.location.hash === '#meme-wall' ? 'wall' : 'home'
+  const activeMemeSection: MemeSection = requestedSection === 'arcade' || requestedSection === 'clips' || requestedSection === 'wall' ? requestedSection : requestedSection === 'home' ? 'home' : hashSection
   const jokes = humorDeck[lang]
-  const [activeId, setActiveId] = useState<string>('memes')
+  const [showNexusHub, setShowNexusHub] = useState(false)
   const [reacted, setReacted] = useState<Set<string>>(() => new Set())
   const [chaosIndex, setChaosIndex] = useState(0)
   const [reactionAnnouncement, setReactionAnnouncement] = useState('')
@@ -219,20 +232,38 @@ export default function FunPortal() {
   const articles = [...published, ...getCuratedExternalNews('community')]
     .filter((article) => !seen.has(article.slug) && Boolean(seen.add(article.slug)))
     .slice(0, 7)
-  const activeIndex = Math.max(0, t.blocks.findIndex((block) => block.id === activeId))
-  const active = t.blocks[activeIndex]
   const humorModes = Object.keys(jokes) as HumorMode[]
+  const memeSections: ReadonlyArray<{ id: MemeSection; label: string; detail: string }> = [
+    { id: 'home', label: t.sections.home, detail: t.sections.homeDetail },
+    { id: 'arcade', label: t.sections.arcade, detail: t.sections.arcadeDetail },
+    { id: 'clips', label: t.sections.clips, detail: t.sections.clipsDetail },
+    { id: 'wall', label: t.sections.wall, detail: t.sections.wallDetail },
+  ]
+
+  function selectPortalMode(mode: FunPortalMode) {
+    const next = new URLSearchParams(searchParams)
+    next.set('mode', mode)
+    if (mode === 'play') next.delete('section')
+    else if (!next.has('section')) next.set('section', 'home')
+    setSearchParams(next)
+    addWispXp(1, 'portal', `/fun?mode=${mode}`)
+    window.requestAnimationFrame(() => document.getElementById('fun-mode-content')?.focus({ preventScroll: true }))
+  }
+
+  function selectMemeSection(section: MemeSection) {
+    const next = new URLSearchParams(searchParams)
+    next.set('mode', 'memes')
+    next.set('section', section)
+    setSearchParams(next)
+    addWispXp(1, 'portal', `/fun?mode=memes&section=${section}`)
+    window.requestAnimationFrame(() => document.getElementById('meme-section-content')?.focus({ preventScroll: true }))
+  }
 
   useEffect(() => {
     let alive = true
     void fetchPublishedNews('community').then((next) => { if (alive) setPublished(next) }).catch(() => undefined)
     return () => { alive = false }
   }, [])
-
-  function selectBlock(id: string) {
-    setActiveId(id)
-    addWispXp(2, 'portal', `/fun#${id}`)
-  }
 
   function react(slug: string) {
     if (reacted.has(slug)) return
@@ -278,13 +309,6 @@ export default function FunPortal() {
     }
   }
 
-  function moveChannelFocus(currentIndex: number, direction: 1 | -1) {
-    const nextIndex = (currentIndex + direction + t.blocks.length) % t.blocks.length
-    const next = t.blocks[nextIndex]
-    selectBlock(next.id)
-    document.getElementById(`fun-tab-${next.id}`)?.focus()
-  }
-
   function moveHumorFocus(currentIndex: number, direction: 1 | -1) {
     const nextIndex = (currentIndex + direction + humorModes.length) % humorModes.length
     const next = humorModes[nextIndex]
@@ -299,8 +323,22 @@ export default function FunPortal() {
         <div className="xk-manga-burst" aria-hidden="true" />
         <div className="xk-meme-ambient" aria-hidden="true"><i /><i /><i /><b>!</b><b>?</b><b>爆</b></div>
         <div className="mx-auto max-w-7xl">
-          <FunGameGateway lang={lang} />
-          <NexusCity embedded />
+          <section className="xk-fun-mode-switcher" aria-labelledby="fun-mode-title">
+            <div><small>{t.modes.eyebrow}</small><h2 id="fun-mode-title">{t.modes.title}</h2></div>
+            <div role="tablist" aria-label={t.modes.aria}>
+              <button type="button" role="tab" aria-selected={activeMode === 'play'} aria-controls="fun-mode-content" onClick={() => selectPortalMode('play')}><span aria-hidden="true">▶</span><b>{t.modes.play}</b><small>{t.modes.playDetail}</small></button>
+              <button type="button" role="tab" aria-selected={activeMode === 'memes'} aria-controls="fun-mode-content" onClick={() => selectPortalMode('memes')}><span aria-hidden="true">爆</span><b>{t.modes.memes}</b><small>{t.modes.memesDetail}</small></button>
+            </div>
+          </section>
+
+          <div id="fun-mode-content" tabIndex={-1} className={`xk-fun-mode-content is-${activeMode}`}>
+            {activeMode === 'play' ? <>
+              <FunGameGateway lang={lang} />
+              <button type="button" className="xk-nexus-expand" aria-expanded={showNexusHub} onClick={() => setShowNexusHub((current) => !current)}>{showNexusHub ? t.modes.collapse : t.modes.expand} <span aria-hidden="true">{showNexusHub ? '−' : '+'}</span></button>
+              {showNexusHub ? <Suspense fallback={<div className="xk-fun-mode-loading" role="status"><i aria-hidden="true" />{t.modes.loading}</div>}><NexusCity embedded /></Suspense> : null}
+            </> : null}
+
+            {activeMode === 'memes' ? <>
 
           <section id="humor" className="xk-anime-hero xk-meme-hero scroll-mt-24" aria-labelledby="fun-title">
             <SafeImage src="/assets/identity/memes-anime-chaos-v1.webp" fallback="/images/articles/community.svg" alt={t.heroAlt} className="xk-anime-hero-media" loading="eager" fetchPriority="high" />
@@ -318,33 +356,21 @@ export default function FunPortal() {
             </div>
           </section>
 
-          <NexusDistrict tone="fun" />
-          <div className="xk-meme-marquee" aria-hidden="true"><div>{t.marquee} ◆ {t.marquee} ◆</div></div>
+          <nav className="xk-meme-section-nav" aria-label={t.sections.aria}>
+            {memeSections.map((section) => <button key={section.id} type="button" aria-current={activeMemeSection === section.id ? 'page' : undefined} onClick={() => selectMemeSection(section.id)}><b>{section.label}</b><small>{section.detail}</small></button>)}
+          </nav>
 
-          <section className="xk-manga-tabs" role="tablist" aria-label={t.channelsLabel}>
-            {t.blocks.map((block, index) => (
-              <button
-                key={block.id}
-                id={`fun-tab-${block.id}`}
-                type="button"
-                role="tab"
-                aria-selected={activeId === block.id}
-                aria-controls="fun-chaos-panel"
-                tabIndex={activeId === block.id ? 0 : -1}
-                onClick={() => selectBlock(block.id)}
-                onKeyDown={(event) => {
-                  if (event.key === 'ArrowRight' || event.key === 'ArrowDown') { event.preventDefault(); moveChannelFocus(index, 1) }
-                  if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') { event.preventDefault(); moveChannelFocus(index, -1) }
-                }}
-                className="xk-manga-tab"
-              >
-                <span aria-hidden="true">{block.icon}</span><small>CH.{block.code}</small><b>{block.title}</b>
-              </button>
-            ))}
-          </section>
+          <div id="meme-section-content" tabIndex={-1}>
+          {activeMemeSection === 'home' ? <>
+            <NexusDistrict tone="fun" />
+            <div className="xk-meme-marquee" aria-hidden="true"><div>{t.marquee} ◆ {t.marquee} ◆</div></div>
+            <PortalPulseRail tone="orange" eyebrow={t.loop.eyebrow} title={t.loop.title} description={t.loop.description} items={t.loop.items} />
+          </> : null}
 
-          <section id="fun-chaos-panel" className="xk-chaos-console" role="tabpanel" aria-labelledby={`fun-tab-${active.id}`}>
-            <div className="xk-chaos-gauge"><div><span>{t.chaos}</span><b>{[87, 96, 73][activeIndex]}%</b></div><i aria-hidden="true"><em style={{ width: `${[87, 96, 73][activeIndex]}%` }} /></i><small>MEME_CORE // {activeId.toUpperCase()} // {t.unstable}</small></div>
+          {activeMemeSection === 'arcade' ? <>
+          <section id="fun-chaos-panel" className="xk-chaos-console" aria-labelledby="fun-chaos-title">
+            <h2 id="fun-chaos-title" className="sr-only">MEME CORE ARCADE</h2>
+            <div className="xk-chaos-gauge"><div><span>{t.chaos}</span><b>96%</b></div><i aria-hidden="true"><em style={{ width: '96%' }} /></i><small>MEME_CORE // ARCADE // {t.unstable}</small></div>
             <div className="xk-chaos-output"><span aria-hidden="true">☄</span><p role="status" aria-live="polite" aria-atomic="true">{t.chaosLines[chaosIndex]}</p><button type="button" onClick={unleashChaos}>{t.unleash} →</button></div>
           </section>
 
@@ -360,10 +386,11 @@ export default function FunPortal() {
             </div>
             {articles.length >= 2 ? <div className="xk-meme-battle"><p>{t.battle.eyebrow}</p><div>{articles.slice(0, 2).map((article, index) => <article key={article.slug} className={battleVote === article.slug ? 'is-winner' : ''}><SafeImage src={article.cover_image_url} fallback="/images/articles/community-chat.svg" alt={article.cover_image_alt || article.title} className="h-full w-full object-cover" /><span>{t.battle.player} {index + 1}</span><h3>{article.title}</h3><button type="button" disabled={Boolean(battleVote)} onClick={() => voteBattle(article.slug)}>{battleVote === article.slug ? `${t.battle.chosen} ✓` : t.battle.choose}</button></article>)}</div>{battleVote ? <button type="button" onClick={() => setBattleVote(null)}>{t.battle.reset} ↻</button> : null}</div> : null}
           </section>
+          </> : null}
 
-          <PortalPulseRail tone="orange" eyebrow={t.loop.eyebrow} title={t.loop.title} description={t.loop.description} items={t.loop.items} />
           <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">{reactionAnnouncement}</p>
 
+          {activeMemeSection === 'clips' ? <>
           {articles[0] && <section id="weekly-clip" className="xk-weekly-clip scroll-mt-28" aria-labelledby="weekly-clip-title">
             <div className="xk-weekly-clip-media"><SafeImage src={articles[0].cover_image_url} fallback="/news/memes/argentina-duendes-cuartos.svg" alt={articles[0].cover_image_alt || articles[0].title} className="h-full w-full object-cover" /><span>XETHKIOZ</span><b>{t.weekly.label.split(' ').map((word) => <span key={word}>{word}<br /></span>)}</b></div>
             <div><p>{t.weekly.eyebrow}</p><h2 id="weekly-clip-title">{articles[0].title}</h2><span>{articles[0].summary}</span><div><Link to={`/news/${articles[0].slug}`}>{t.read} →</Link><button type="button" onClick={() => void shareArticle(articles[0])}>{t.weekly.steal} ↗</button></div></div>
@@ -373,7 +400,9 @@ export default function FunPortal() {
             <div><p>{t.social.eyebrow}</p><h2 id="social-wall-title">{t.social.title}</h2><span>{t.social.description}</span></div>
             <div>{SOCIAL_LINKS.filter((social) => ['TikTok Principal', 'Threads', 'Instagram', 'YouTube'].includes(social.name)).map((social) => <a key={social.name} href={social.url} target="_blank" rel="noreferrer noopener" aria-label={`${t.social.external}: ${social.name}`}><span aria-hidden="true">{social.icon}</span><b>{social.name}</b><small>{social.handle} <span aria-hidden="true">↗</span></small></a>)}</div>
           </section>
+          </> : null}
 
+          {activeMemeSection === 'wall' ? <>
           <section id="meme-wall" className="mt-12 scroll-mt-28" aria-labelledby="meme-wall-title">
             <div className="xk-anime-section-title xk-meme-section-title"><span>LIVE!</span><h2 id="meme-wall-title">{t.stream}</h2><i aria-hidden="true" /></div>
             <div className="xk-meme-bento">{articles.map((article, index) => <article key={article.slug} className={`xk-meme-card xk-meme-card-${index + 1}${reacted.has(article.slug) ? ' is-reacted' : ''}`}>
@@ -384,6 +413,10 @@ export default function FunPortal() {
           </section>
 
           <div className="mt-10"><PublicAdSlot slotId="section-sidebar" fallbackLabel={t.sponsor} /></div>
+          </> : null}
+          </div>
+            </> : null}
+          </div>
           <Link to="/" className="xk-sticker-button mt-8 inline-flex">{t.back}</Link>
         </div>
       </main>

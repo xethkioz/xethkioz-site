@@ -29,7 +29,7 @@ const index = read('index.html')
 const search = read('public/opensearch.xml')
 const fun = read('src/pages/FunPortal.tsx')
 
-check('public Nexus entry integrated into Fun', app.includes('path="/nexus-city"') && app.includes('<Navigate to="/fun#nexus-city"') && fun.includes("import NexusCity from './NexusCity'") && fun.includes('<NexusCity embedded'))
+check('public Nexus entry integrated into Fun', app.includes('path="/nexus-city"') && app.includes('<Navigate to="/fun#nexus-city"') && fun.includes("const NexusCity = lazy(() => import('./NexusCity'))") && fun.includes('<NexusCity embedded'))
 check('public passport route', app.includes("import('./pages/NexusPassport')") && app.includes('path="/nexus-city/u/:handle"'))
 check('visitable capsule route', app.includes("import('./pages/NexusRoom')") && app.includes('path="/nexus-city/room/:handle"'))
 check('global and Home navigation', header.includes("to: '/fun'") && home.includes("route: '/nexus-city'") && page.includes("id={embedded ? 'nexus-city' : undefined}"))

@@ -30,6 +30,7 @@
     "audit:auth-nexus": "node scripts/auth-nexus-check.mjs",
     "audit:nexus-city": "node scripts/nexus-city-check.mjs",
     "audit:experience": "node scripts/experience-mode-check.mjs",
+    "audit:portal-depth": "node scripts/green-games-guides-check.mjs",
     "audit:latency-glitch-bridge": "node scripts/latency-glitch-bridge-check.mjs",
     "audit:security-hardening": "node scripts/security-hardening-check.mjs",
     "audit:web-services": "node scripts/web-services-check.mjs",

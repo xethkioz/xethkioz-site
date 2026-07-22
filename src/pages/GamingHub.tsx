@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import SEO from '../components/SEO'
 import SafeImage from '../components/SafeImage'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
 import GamingGuideRotation from '../components/gaming/GamingGuideRotation'
-import { PortalPulseRail } from '../components/PortalPulseRail'
 import { NexusDistrict } from '../components/NexusDistrict'
 import { useLang } from '../lib/LangContext'
 import { addWispXp } from '../lib/realtimeCommunity'
@@ -83,6 +82,14 @@ const content = {
     featured: 'RAID DESTACADA',
     offline: 'NEXUS OFFLINE // Las transmisiones volverán en breve.',
     sponsor: 'SPONSOR DE XETHKIOZ GAMING',
+    sectionLabel: 'Secciones de Gaming',
+    sections: { overview: 'Inicio', guides: 'Guías', live: 'Directos', news: 'Radar', community: 'Comunidad' },
+    start: { eyebrow: 'NEXUS GAMING // ELEGÍ UNA RUTA', title: 'Todo Gaming, sin perderte', description: 'Entrá directamente a lo que buscás. Las secciones pesadas cargan sólo cuando las abrís.', cards: [
+      { id: 'guides', code: 'BUILD', title: 'Guías y builds completas', detail: 'WoW, Diablo IV, FFXIV y PoE 2 por clase, equipo y rotación.', action: 'ABRIR GUÍAS', to: '/gaming/guides' },
+      { id: 'news', code: 'RADAR', title: 'Noticias y lanzamientos', detail: 'Señales gaming verificadas y ordenadas por fecha.', action: 'VER RADAR', to: '?section=news' },
+      { id: 'live', code: 'LIVE', title: 'Directos y videos', detail: 'Kick, YouTube y estado de transmisión.', action: 'ABRIR SEÑAL', to: '?section=live' },
+      { id: 'community', code: 'PARTY', title: 'Comunidad y escuadrones', detail: 'Buscá grupo, compartí builds y entrá al Nexus.', action: 'BUSCAR PARTY', to: '?section=community' },
+    ] },
     blocks: [
       { id: 'radar', code: '01', title: 'Radar gamer', text: 'Lanzamientos, industria y mundos que están por abrir sus puertas.', icon: '◈' },
       { id: 'guides', code: '02', title: 'Guías y builds', text: 'Estrategias, comparativas y configuraciones elegidas por la comunidad.', icon: '⚔' },
@@ -155,6 +162,14 @@ const content = {
     featured: 'FEATURED RAID',
     offline: 'NEXUS OFFLINE // Transmissions will return shortly.',
     sponsor: 'XETHKIOZ GAMING SPONSOR',
+    sectionLabel: 'Gaming sections',
+    sections: { overview: 'Start', guides: 'Guides', live: 'Live', news: 'Radar', community: 'Community' },
+    start: { eyebrow: 'GAMING NEXUS // CHOOSE A ROUTE', title: 'All of Gaming, without getting lost', description: 'Go straight to what you need. Heavy sections load only when opened.', cards: [
+      { id: 'guides', code: 'BUILD', title: 'Complete guides and builds', detail: 'WoW, Diablo IV, FFXIV and PoE 2 by class, gear and rotation.', action: 'OPEN GUIDES', to: '/gaming/guides' },
+      { id: 'news', code: 'RADAR', title: 'News and releases', detail: 'Verified gaming signals ordered by date.', action: 'OPEN RADAR', to: '?section=news' },
+      { id: 'live', code: 'LIVE', title: 'Streams and videos', detail: 'Kick, YouTube and live status.', action: 'OPEN SIGNAL', to: '?section=live' },
+      { id: 'community', code: 'PARTY', title: 'Community and squads', detail: 'Find a group, share builds and enter the Nexus.', action: 'FIND PARTY', to: '?section=community' },
+    ] },
     blocks: [
       { id: 'radar', code: '01', title: 'Gaming radar', text: 'Releases, industry moves and worlds about to open their gates.', icon: '◈' },
       { id: 'guides', code: '02', title: 'Guides and builds', text: 'Strategies, comparisons and community-picked configurations.', icon: '⚔' },
@@ -171,6 +186,9 @@ export default function GamingHub() {
   const [liveStream, setLiveStream] = useState<Stream | null>(null)
   const [latestVod, setLatestVod] = useState<Stream | null>(null)
   const [streamRadarReady, setStreamRadarReady] = useState(false)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const requestedSection = searchParams.get('section')
+  const activeSection = requestedSection === 'guides' || requestedSection === 'live' || requestedSection === 'news' || requestedSection === 'community' ? requestedSection : 'overview'
   const active = t.blocks.find((block) => block.id === activeId) ?? t.blocks[0]
   const seen = new Set<string>()
   const articles = [...published, ...getCuratedExternalNews('gaming')]
@@ -203,6 +221,13 @@ export default function GamingHub() {
   function selectBlock(id: string) {
     setActiveId(id)
     addWispXp(2, 'portal', `/gaming#${id}`)
+  }
+
+  function selectSection(section: typeof activeSection) {
+    const next = new URLSearchParams(searchParams)
+    if (section === 'overview') next.delete('section')
+    else next.set('section', section)
+    setSearchParams(next, { replace: true })
   }
 
   function moveMissionFocus(currentIndex: number, direction: 1 | -1) {
@@ -242,11 +267,15 @@ export default function GamingHub() {
           </section>
 
           <NexusDistrict tone="gaming" />
+          <nav className="xk-gaming-section-nav" aria-label={t.sectionLabel}>
+            {(Object.keys(t.sections) as Array<keyof typeof t.sections>).map((section) => <button key={section} type="button" onClick={() => selectSection(section)} aria-pressed={activeSection === section}><span>{section === 'overview' ? '◈' : section === 'guides' ? '⚔' : section === 'live' ? '●' : section === 'news' ? '⌁' : '◆'}</span><b>{t.sections[section]}</b></button>)}
+          </nav>
           <div className="xk-gaming-ticker" aria-hidden="true"><div>{t.ticker} ◆ {t.ticker} ◆</div></div>
 
-          <GamingGuideRotation lang={lang} />
+          {activeSection === 'overview' ? <section className="xk-gaming-start" aria-labelledby="gaming-start-title"><header><small>{t.start.eyebrow}</small><h2 id="gaming-start-title">{t.start.title}</h2><p>{t.start.description}</p></header><div>{t.start.cards.map((card) => card.id === 'guides' ? <Link key={card.id} to={card.to}><span>{card.code}</span><b>{card.title}</b><small>{card.detail}</small><strong>{card.action} →</strong></Link> : <button key={card.id} type="button" onClick={() => selectSection(card.id as typeof activeSection)}><span>{card.code}</span><b>{card.title}</b><small>{card.detail}</small><strong>{card.action} →</strong></button>)}</div></section> : null}
+          {activeSection === 'guides' ? <GamingGuideRotation lang={lang} /> : null}
 
-          <section className="xk-creator-signal" aria-labelledby="creator-signal-title">
+          {activeSection === 'live' ? <section className="xk-creator-signal" aria-labelledby="creator-signal-title">
             <div className="xk-creator-signal-copy">
               <p aria-live="polite"><span className={liveStream ? 'is-live' : ''} aria-hidden="true" /> {t.stream.label} // {streamStatus}</p>
               <h2 id="creator-signal-title">{t.stream.heading}</h2>
@@ -257,46 +286,9 @@ export default function GamingHub() {
               </div>
             </div>
             <div className="xk-stream-orbit" aria-hidden="true"><i /><i /><span>{liveStream ? t.stream.live : t.stream.offline}</span></div>
-          </section>
+          </section> : null}
 
-          <PortalPulseRail
-            tone="violet"
-            eyebrow={t.loop.eyebrow}
-            title={t.loop.title}
-            description={t.loop.description}
-            items={t.loop.items}
-          />
-
-          <section className="xk-mission-board" aria-label={t.active}>
-            <div className="xk-mission-tabs" role="tablist" aria-label={t.active}>
-              {t.blocks.map((block, index) => (
-                <button
-                  key={block.id}
-                  id={`gaming-tab-${block.id}`}
-                  type="button"
-                  role="tab"
-                  aria-selected={active.id === block.id}
-                  aria-controls="gaming-active-mission"
-                  tabIndex={active.id === block.id ? 0 : -1}
-                  onClick={() => selectBlock(block.id)}
-                  onKeyDown={(event) => {
-                    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') { event.preventDefault(); moveMissionFocus(index, 1) }
-                    if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') { event.preventDefault(); moveMissionFocus(index, -1) }
-                  }}
-                  className="xk-mission-tab"
-                >
-                  <span>{block.code}</span><b aria-hidden="true">{block.icon}</b><em>{block.title}</em>
-                </button>
-              ))}
-            </div>
-            <div id="gaming-active-mission" className="xk-active-mission" role="tabpanel" aria-labelledby={`gaming-tab-${active.id}`} aria-live="polite">
-              <b className="xk-mission-emblem" aria-hidden="true">{active.icon}</b>
-              <p>{t.active} // {active.code}</p><h2>{active.title}</h2><span>{active.text}</span>
-              <div className="xk-mission-progress" aria-hidden="true"><i /><i /><i /></div>
-            </div>
-          </section>
-
-          <section className="xk-gaming-utility-grid" aria-label={t.utilityLabel}>
+          {activeSection === 'community' ? <section className="xk-gaming-utility-grid" aria-label={t.utilityLabel}>
             <article className="xk-armory-panel">
               <p>{t.armory.eyebrow}</p>
               <h2>{t.armory.title}</h2>
@@ -312,9 +304,9 @@ export default function GamingHub() {
                 {t.party.items.map((item) => <Link key={item.code} to={item.to}><span>{item.code}</span><b>{item.title}</b><small>{item.action} →</small></Link>)}
               </div>
             </article>
-          </section>
+          </section> : null}
 
-          <section className="mt-10">
+          {activeSection === 'news' ? <section className="mt-10">
             <div className="xk-anime-section-title"><span>ON AIR</span><h2>{t.dispatch}</h2><i aria-hidden="true" /></div>
             {articles.length > 0 && <div className="xk-gaming-feed">
               <article className="xk-gaming-feature group">
@@ -330,9 +322,9 @@ export default function GamingHub() {
               </article>)}</div>
             </div>}
             {articles.length === 0 && <p className="xk-empty-signal" role="status">{t.offline}</p>}
-          </section>
+          </section> : null}
 
-          <div className="mt-10"><PublicAdSlot slotId="section-sidebar" fallbackLabel={t.sponsor} /></div>
+          {activeSection === 'news' ? <div className="mt-10"><PublicAdSlot slotId="section-sidebar" fallbackLabel={t.sponsor} /></div> : null}
           <nav className="mt-8 flex flex-wrap gap-3 font-mono text-xs uppercase tracking-[0.18em]" aria-label={lang === 'es' ? 'Navegación de Gaming' : 'Gaming navigation'}>
             <Link to="/" className="xk-hud-button">{t.back}</Link>
             <Link to="/gaming/guides" className="xk-hud-button">{t.guides}</Link>
