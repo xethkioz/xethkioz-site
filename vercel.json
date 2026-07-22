@@ -1,7 +1,11 @@
 {
-  "buildCommand": "npm --prefix renacer-demo install && npm --prefix renacer-demo run build",
-  "outputDirectory": "renacer-demo/dist",
-  "framework": "vite",
+  "version": 2,
+  "builds": [
+    { "src": "api/site.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/api/site.js" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
