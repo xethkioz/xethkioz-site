@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useState, type CSSProperties } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import SafeImage from '../components/SafeImage'
 import SEO from '../components/SEO'
@@ -6,8 +6,11 @@ import { NexusDistrict } from '../components/NexusDistrict'
 import { fallbackWebServiceOffers } from '../data/webServiceFallbacks'
 import { useLang } from '../lib/LangContext'
 import { useWisp } from '../providers/WispProvider'
+import { useExperience } from '../lib/ExperienceContext'
 import type { WebServiceOffer } from '../types/webServices'
 import './HomeReborn.css'
+
+const SciencePortalGateway = lazy(() => import('../components/SciencePortalGateway'))
 
 type DataSavingConnection = {
   saveData?: boolean
@@ -261,7 +264,7 @@ function scheduleIdleTask(task: () => void, timeout = 1200) {
   return () => window.clearTimeout(handle)
 }
 
-function useAmbientVideoEnabled() {
+function useAmbientVideoEnabled(graphicsMode: 'full' | 'lite') {
   const [enabled, setEnabled] = useState(false)
 
   useEffect(() => {
@@ -273,7 +276,7 @@ function useAmbientVideoEnabled() {
       cancelScheduled?.()
       cancelScheduled = undefined
 
-      if (motionPreference.matches || connection?.saveData) {
+      if (graphicsMode === 'lite' || motionPreference.matches || connection?.saveData) {
         setEnabled(false)
         return
       }
@@ -290,7 +293,7 @@ function useAmbientVideoEnabled() {
       motionPreference.removeEventListener('change', syncPreference)
       connection?.removeEventListener?.('change', syncPreference)
     }
-  }, [])
+  }, [graphicsMode])
 
   return enabled
 }
@@ -324,9 +327,12 @@ export default function Home() {
   const navigate = useNavigate()
   const { triggerGreenPortal } = useWisp()
   const { lang, setLang } = useLang()
-  const videoEnabled = useAmbientVideoEnabled()
+  const { graphicsMode } = useExperience()
+  const [scienceGatewayOpen, setScienceGatewayOpen] = useState(false)
+  const videoEnabled = useAmbientVideoEnabled(graphicsMode)
   const featuredWebOffer = useFeaturedWebService()
   const t = copy[lang]
+  const closeScienceGateway = useCallback(() => setScienceGatewayOpen(false), [])
 
   const openWisp = () => {
     triggerGreenPortal()
@@ -416,7 +422,7 @@ export default function Home() {
             <div id="portals" className="xk-rb-theatre" aria-label={lang === 'es' ? 'Portales principales' : 'Main portals'}>
               <p className="xk-rb-theatre-label">{t.portalLabel}</p>
               <div className="xk-rb-portals">
-                {t.primary.map((portal) => <PrimaryPortal key={portal.id} portal={portal} />)}
+                {t.primary.map((portal) => <PrimaryPortal key={portal.id} portal={portal} onOpenScience={() => setScienceGatewayOpen(true)} />)}
               </div>
             </div>
 
@@ -462,11 +468,12 @@ export default function Home() {
           </footer>
         </div>
       </main>
+      {scienceGatewayOpen ? <Suspense fallback={null}><SciencePortalGateway onClose={closeScienceGateway} /></Suspense> : null}
     </>
   )
 }
 
-function PrimaryPortal({ portal }: { portal: PortalCard }) {
+function PrimaryPortal({ portal, onOpenScience }: { portal: PortalCard; onOpenScience: () => void }) {
   const isFeatured = portal.id === 'gaming'
 
   return (
@@ -475,6 +482,11 @@ function PrimaryPortal({ portal }: { portal: PortalCard }) {
       className="xk-rb-portal"
       style={{ '--tone': portal.tone } as CSSProperties}
       aria-label={`${portal.action}: ${portal.title}`}
+      onClick={(event) => {
+        if (portal.id !== 'science') return
+        event.preventDefault()
+        onOpenScience()
+      }}
     >
       <span className="xk-rb-gate">
         <span className="xk-rb-aura" aria-hidden="true" />

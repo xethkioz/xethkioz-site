@@ -29,6 +29,11 @@ import { addWispXp, getDisplayName } from '../lib/realtimeCommunity'
 import { isSupabaseConfigured, supabase } from '../services/supabaseClient'
 import './NexusPixelWorld.css'
 import './NexusPixelRpg.css'
+import './NexusPixelPolish.css'
+import './NexusPixelMotion.css'
+import './NexusPixelEmerald.css'
+import './NexusEmeraldCraftV2.css'
+import './NexusPixelImmersive.css'
 
 type PixelPeer = {
   key: string

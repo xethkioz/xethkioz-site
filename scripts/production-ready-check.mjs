@@ -50,6 +50,7 @@ const funPortal = read('src/pages/FunPortal.tsx')
 const newsletter = read('src/components/Newsletter.tsx')
 const fusionShell = read('src/components/fusion/FusionShell.tsx')
 const globalWisp = read('src/components/fusion/FusionGlobalWisp.tsx')
+const globalWispCss = read('src/components/fusion/FusionGlobalWisp.css')
 const realtimeCommunity = read('src/lib/realtimeCommunity.ts')
 const newsPolicyHardening = read('supabase/migrations/20260715101500_news_policy_hardening.sql')
 const newsAuditPolicyHardening = read('supabase/migrations/20260715103000_news_audit_policy_hardening.sql')
@@ -291,17 +292,18 @@ check(
     && universeTransit.includes('aria-current'),
 )
 check(
-  'Wisp exposes a responsive malware demon identity and mobile Green Node entry',
+  'Wisp exposes a responsive Hack Zone identity and mobile Green Node entry',
   appShell.includes('FusionGlobalWisp')
     && appShell.includes('!isCmsRoute')
-    && globalWisp.includes('xk-wisp-horn')
-    && globalWisp.includes('xk-wisp-code')
-    && globalWisp.includes('No vayas a tocarme…')
+    && globalWisp.includes('xk-wisp-rune-ring')
+    && globalWisp.includes('ZONA HACK')
+    && globalWisp.includes("registerEvent('green-unlock', 'wisp-hack-zone-open'")
+    && globalWisp.includes("navigate('/green-node')")
     && globalWisp.includes("location.pathname === '/' ? ' is-home-entry'")
-    && redesignCss.includes('@keyframes wisp-virus-glitch')
-    && redesignCss.includes('@media(max-width:767px)')
-    && redesignCss.includes('@media(min-width:1280px){.xk-wisp.is-home-entry{display:none}}')
-    && redesignCss.includes('@media (prefers-reduced-motion: reduce)'),
+    && globalWispCss.includes('@keyframes xk-wisp-glitch')
+    && globalWispCss.includes('@media (max-width: 767px)')
+    && globalWispCss.includes('@media (min-width: 1280px)')
+    && globalWispCss.includes('@media (prefers-reduced-motion: reduce)'),
 )
 
 const strictPackageAudit = process.env.XETHKIOZ_STRICT_PACKAGE_AUDIT === '1'
