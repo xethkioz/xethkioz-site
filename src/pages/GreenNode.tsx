@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import SafeImage from '../components/SafeImage'
 import SEO from '../components/SEO'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
@@ -40,6 +40,17 @@ type GreenCopy = {
   empty: string
   dossier: string
   sponsor: string
+  views: {
+    aria: string
+    overview: string
+    overviewDetail: string
+    dossiers: string
+    dossiersDetail: string
+    terminal: string
+    terminalDetail: string
+    signals: string
+    signalsDetail: string
+  }
   access: {
     aria: string
     disclaimer: string
@@ -70,6 +81,8 @@ type GreenCopy = {
       deepAlreadyActive: string
       anonUnlock: string
       declassifiedUnlock: string
+      correlationLocked: string
+      correlationOpen: string
     }
   }
   dossiers: {
@@ -90,6 +103,27 @@ type GreenCopy = {
     documented: string
     disputed: string
     unverified: string
+    search: string
+    searchPlaceholder: string
+    showing: string
+    noResults: string
+  }
+  investigation: {
+    eyebrow: string
+    title: string
+    description: string
+    read: string
+    files: string
+    signals: string
+    recovered: string
+    clearance: string
+    fragments: readonly { id: string; code: string; hint: string }[]
+    finalLocked: string
+    finalReady: string
+    finalCommand: string
+    finalTitle: string
+    finalText: string
+    reset: string
   }
   reveal: {
     eyebrow: string
@@ -120,6 +154,7 @@ const content: Record<'es' | 'en', GreenCopy> = {
     empty: 'ARCHIVO VACÍO // No hay señales verificadas disponibles para este nodo.',
     dossier: 'DOSSIER 13 / BRECHA DE REALIDAD',
     sponsor: 'SPONSOR DE XETHKIOZ GREEN NODE',
+    views: { aria: 'Elegir sección de Green Node', overview: 'PUERTA DE ENTRADA', overviewDetail: 'Mapa del archivo y protocolo de verdad', dossiers: 'EXPEDIENTES', dossiersDetail: 'Casos reales, operaciones y conspiraciones', terminal: 'TERMINAL', terminalDetail: 'Comandos, niveles y señales ocultas', signals: 'INTERCEPCIONES', signalsDetail: 'Noticias y análisis del nodo' },
     access: {
       aria: 'Simulación visual de acceso a Green Node',
       disclaimer: 'SIMULACIÓN VISUAL // NO SE ACCEDE A TU DISPOSITIVO',
@@ -131,9 +166,9 @@ const content: Record<'es' | 'en', GreenCopy> = {
       title: 'No leas el archivo: intervenilo',
       description: 'Green Node cobra vida cuando decidís qué descifrar, qué evidencia contrastar y hasta dónde activar el modo profundo.',
       items: [
-        { code: '>_', title: 'Usar la terminal', detail: 'Comandos simulados, sin tocar tu dispositivo', to: '/green-node#terminal', action: 'Decodificar' },
-        { code: '13', title: 'Abrir expedientes', detail: 'Ocultismo, red y anomalías documentadas', to: '/green-node#archive', action: 'Investigar' },
-        { code: 'EYE', title: 'Cruzar evidencia', detail: 'Distinguir fuente, hipótesis y ficción', to: '/green-node#evidence', action: 'Contrastar' },
+        { code: '>_', title: 'Usar la terminal', detail: 'Comandos simulados, sin tocar tu dispositivo', to: '/green-node?view=terminal#terminal', action: 'Decodificar' },
+        { code: '13', title: 'Abrir expedientes', detail: 'Ocultismo, red y anomalías documentadas', to: '/green-node?view=dossiers#classified-files', action: 'Investigar' },
+        { code: 'EYE', title: 'Cruzar evidencia', detail: 'Distinguir fuente, hipótesis y ficción', to: '/green-node?view=signals#evidence', action: 'Contrastar' },
       ],
     },
     terminal: {
@@ -154,10 +189,21 @@ const content: Record<'es' | 'en', GreenCopy> = {
         deepAlreadyActive: 'DEEP_MODE ya estaba activo. La interfaz cambia; la evidencia no.',
         anonUnlock: 'CLEARANCE 02 concedido. Expedientes policiales y red Anonymous disponibles.',
         declassifiedUnlock: 'CLEARANCE 03 concedido. Proyectos desclasificados y archivo de anomalías disponibles.',
+        correlationLocked: 'CORRELACIÓN INCOMPLETA. Faltan señales en el archivo.',
+        correlationOpen: 'CORRELACIÓN_13 completa. Ninguna fuente aislada demuestra una teoría total: seguí actores, fechas, incentivos y contradicciones.',
       },
     },
     dossiers: {
-      eyebrow: 'VAULT_13 // INTELIGENCIA ABIERTA', title: 'Expedientes clasificados', description: 'Casos reales, operaciones policiales, programas desclasificados y misterios. Cada archivo separa lo confirmado de lo que todavía está discutido.', level: 'Nivel de acceso', source: 'Abrir fuente primaria', confirmed: 'CONFIRMADO', unresolved: 'LÍMITE / DUDA', locked: 'ARCHIVO CIFRADO', unlock: 'Consultá “help” en la terminal para elevar el acceso.', all: 'Todos', hacktivism: 'Hacktivismo', police: 'Casos policiales', declassified: 'Desclasificados', mystery: 'Misterios', documented: 'DOCUMENTADO', disputed: 'DISPUTADO', unverified: 'NO VERIFICADO',
+      eyebrow: 'VAULT_13 // INTELIGENCIA ABIERTA', title: 'Expedientes clasificados', description: 'Veinte casos reales, operaciones policiales, programas desclasificados y misterios. Cada archivo separa lo confirmado de lo que todavía está discutido.', level: 'Nivel de acceso', source: 'Abrir fuente primaria', confirmed: 'CONFIRMADO', unresolved: 'LÍMITE / DUDA', locked: 'ARCHIVO CIFRADO', unlock: 'Consultá “help” en la terminal para elevar el acceso.', all: 'Todos', hacktivism: 'Hacktivismo', police: 'Casos policiales', declassified: 'Desclasificados', mystery: 'Misterios', documented: 'DOCUMENTADO', disputed: 'DISPUTADO', unverified: 'NO VERIFICADO', search: 'Buscar por caso, código, fecha o tema', searchPlaceholder: 'Ej: Anonymous, ransomware, CIA, vigilancia…', showing: 'expedientes visibles', noResults: 'No encontramos un expediente con esa señal.',
+    },
+    investigation: {
+      eyebrow: 'INVESTIGACIÓN_13 // PROGRESO LOCAL', title: 'Seguí las señales que otros pasan por alto', description: 'Abrí expedientes, contrastá el protocolo y encontrá tres fragmentos. El progreso queda sólo en este dispositivo.', read: 'Expedientes examinados', files: 'archivos', signals: 'Señales recuperadas', recovered: 'SEÑAL RECUPERADA', clearance: 'Acceso',
+      fragments: [
+        { id: 'ghost', code: 'GHOST-14', hint: 'Rastreá el primer operativo de Anonymous.' },
+        { id: 'mirror', code: 'MIRROR-07', hint: 'Ejecutá el protocolo que separa evidencia de ficción.' },
+        { id: 'orbit', code: 'ORBIT-69', hint: 'Buscá el proyecto que catalogó 12.618 reportes.' },
+      ],
+      finalLocked: 'La correlación permanece cifrada.', finalReady: 'SEÑAL COMPLETA // ejecutá el comando oculto', finalCommand: 'correlacion_13', finalTitle: 'No existe una teoría maestra: existen patrones que deben probarse.', finalText: 'Las operaciones documentadas comparten fechas, actores, métodos e incentivos verificables. Cuando falta uno de esos enlaces, el misterio sigue siendo una hipótesis.', reset: 'Borrar progreso de investigación',
     },
     reveal: {
       eyebrow: 'ARCHIVO ∆ REVELADO',
@@ -191,6 +237,7 @@ const content: Record<'es' | 'en', GreenCopy> = {
     empty: 'EMPTY ARCHIVE // No verified signals are available for this node.',
     dossier: 'DOSSIER 13 / REALITY BREACH',
     sponsor: 'XETHKIOZ GREEN NODE SPONSOR',
+    views: { aria: 'Choose a Green Node section', overview: 'ENTRY GATE', overviewDetail: 'Archive map and truth protocol', dossiers: 'CASE FILES', dossiersDetail: 'Real cases, operations and conspiracies', terminal: 'TERMINAL', terminalDetail: 'Commands, clearance and hidden signals', signals: 'INTERCEPTS', signalsDetail: 'Node news and analysis' },
     access: {
       aria: 'Visual simulation of Green Node access',
       disclaimer: 'VISUAL SIMULATION // YOUR DEVICE IS NOT ACCESSED',
@@ -202,9 +249,9 @@ const content: Record<'es' | 'en', GreenCopy> = {
       title: 'Do not just read the archive: intervene',
       description: 'Green Node comes alive when you decide what to decode, which evidence to compare and how far to activate Deep Mode.',
       items: [
-        { code: '>_', title: 'Use the terminal', detail: 'Simulated commands that never touch your device', to: '/green-node#terminal', action: 'Decode' },
-        { code: '13', title: 'Open case files', detail: 'Documented occultism, networks and anomalies', to: '/green-node#archive', action: 'Investigate' },
-        { code: 'EYE', title: 'Cross-check evidence', detail: 'Separate sources, hypotheses and fiction', to: '/green-node#evidence', action: 'Compare' },
+        { code: '>_', title: 'Use the terminal', detail: 'Simulated commands that never touch your device', to: '/green-node?view=terminal#terminal', action: 'Decode' },
+        { code: '13', title: 'Open case files', detail: 'Documented occultism, networks and anomalies', to: '/green-node?view=dossiers#classified-files', action: 'Investigate' },
+        { code: 'EYE', title: 'Cross-check evidence', detail: 'Separate sources, hypotheses and fiction', to: '/green-node?view=signals#evidence', action: 'Compare' },
       ],
     },
     terminal: {
@@ -225,10 +272,21 @@ const content: Record<'es' | 'en', GreenCopy> = {
         deepAlreadyActive: 'DEEP_MODE was already active. The interface changes; the evidence does not.',
         anonUnlock: 'CLEARANCE 02 granted. Law-enforcement and Anonymous network files are available.',
         declassifiedUnlock: 'CLEARANCE 03 granted. Declassified projects and anomaly files are available.',
+        correlationLocked: 'INCOMPLETE CORRELATION. Signals are still missing from the archive.',
+        correlationOpen: 'CORRELATION_13 complete. No isolated source proves a total theory: follow actors, dates, incentives and contradictions.',
       },
     },
     dossiers: {
-      eyebrow: 'VAULT_13 // OPEN INTELLIGENCE', title: 'Classified case files', description: 'Real cases, law-enforcement operations, declassified programs and mysteries. Every file separates confirmed facts from what remains disputed.', level: 'Clearance level', source: 'Open primary source', confirmed: 'CONFIRMED', unresolved: 'LIMIT / DOUBT', locked: 'ENCRYPTED FILE', unlock: 'Use “help” in the terminal to raise your clearance.', all: 'All', hacktivism: 'Hacktivism', police: 'Law enforcement', declassified: 'Declassified', mystery: 'Mysteries', documented: 'DOCUMENTED', disputed: 'DISPUTED', unverified: 'UNVERIFIED',
+      eyebrow: 'VAULT_13 // OPEN INTELLIGENCE', title: 'Classified case files', description: 'Twenty real cases, law-enforcement operations, declassified programs and mysteries. Every file separates confirmed facts from what remains disputed.', level: 'Clearance level', source: 'Open primary source', confirmed: 'CONFIRMED', unresolved: 'LIMIT / DOUBT', locked: 'ENCRYPTED FILE', unlock: 'Use “help” in the terminal to raise your clearance.', all: 'All', hacktivism: 'Hacktivism', police: 'Law enforcement', declassified: 'Declassified', mystery: 'Mysteries', documented: 'DOCUMENTED', disputed: 'DISPUTED', unverified: 'UNVERIFIED', search: 'Search by case, code, date or topic', searchPlaceholder: 'E.g. Anonymous, ransomware, CIA, surveillance…', showing: 'visible files', noResults: 'No case file matches that signal.',
+    },
+    investigation: {
+      eyebrow: 'INVESTIGATION_13 // LOCAL PROGRESS', title: 'Follow the signals other people overlook', description: 'Open case files, test the truth protocol and recover three fragments. Progress remains only on this device.', read: 'Case files examined', files: 'files', signals: 'Signals recovered', recovered: 'SIGNAL RECOVERED', clearance: 'Clearance',
+      fragments: [
+        { id: 'ghost', code: 'GHOST-14', hint: 'Trace the first Anonymous operation.' },
+        { id: 'mirror', code: 'MIRROR-07', hint: 'Run the protocol that separates evidence from fiction.' },
+        { id: 'orbit', code: 'ORBIT-69', hint: 'Find the project that catalogued 12,618 reports.' },
+      ],
+      finalLocked: 'The correlation remains encrypted.', finalReady: 'SIGNAL COMPLETE // run the hidden command', finalCommand: 'correlacion_13', finalTitle: 'There is no master theory: there are patterns that must be tested.', finalText: 'Documented operations share verifiable dates, actors, methods and incentives. When one of those links is missing, the mystery remains a hypothesis.', reset: 'Erase investigation progress',
     },
     reveal: {
       eyebrow: 'FILE ∆ REVEALED',
@@ -244,9 +302,37 @@ const content: Record<'es' | 'en', GreenCopy> = {
   },
 }
 
+const GREEN_PROGRESS_KEY = 'xethkioz.green-investigation.v1'
+
+type GreenProgress = {
+  clearance: 1 | 2 | 3
+  read: string[]
+  signals: string[]
+  final: boolean
+}
+
+function readGreenProgress(): GreenProgress {
+  const fallback: GreenProgress = { clearance: 1, read: [], signals: [], final: false }
+  try {
+    const value = JSON.parse(window.localStorage.getItem(GREEN_PROGRESS_KEY) ?? 'null') as Partial<GreenProgress> | null
+    if (!value) return fallback
+    return {
+      clearance: value.clearance === 2 || value.clearance === 3 ? value.clearance : 1,
+      read: Array.isArray(value.read) ? value.read.filter((item): item is string => typeof item === 'string') : [],
+      signals: Array.isArray(value.signals) ? value.signals.filter((item): item is string => typeof item === 'string') : [],
+      final: value.final === true,
+    }
+  } catch {
+    return fallback
+  }
+}
+
 export default function GreenNode() {
   const { lang, setLang } = useLang()
   const t = content[lang]
+  const [searchParams, setSearchParams] = useSearchParams()
+  const requestedView = searchParams.get('view')
+  const activeView = requestedView === 'dossiers' || requestedView === 'terminal' || requestedView === 'signals' ? requestedView : 'overview'
   const [activeId, setActiveId] = useState<string>(t.blocks[0].id)
   const active = t.blocks.find((item) => item.id === activeId) ?? t.blocks[0]
   const activeIndex = Math.max(0, t.blocks.findIndex((item) => item.id === active.id))
@@ -256,8 +342,12 @@ export default function GreenNode() {
   const [terminalInput, setTerminalInput] = useState('')
   const [terminalLines, setTerminalLines] = useState<string[]>(() => [...t.terminal.initial])
   const [accessSequence, setAccessSequence] = useState(0)
-  const [clearance, setClearance] = useState<1 | 2 | 3>(1)
+  const [clearance, setClearance] = useState<1 | 2 | 3>(() => readGreenProgress().clearance)
+  const [readDossiers, setReadDossiers] = useState<Set<string>>(() => new Set(readGreenProgress().read))
+  const [signalFragments, setSignalFragments] = useState<Set<string>>(() => new Set(readGreenProgress().signals))
+  const [finalReveal, setFinalReveal] = useState(() => readGreenProgress().final)
   const [dossierFilter, setDossierFilter] = useState<'all' | GreenDossierCategory>('all')
+  const [dossierQuery, setDossierQuery] = useState('')
   const accessIndex = Math.min(accessSequence, 3)
 
   useEffect(() => {
@@ -273,6 +363,15 @@ export default function GreenNode() {
   }, [lang])
 
   useEffect(() => {
+    try {
+      window.localStorage.setItem(GREEN_PROGRESS_KEY, JSON.stringify({ clearance, read: [...readDossiers], signals: [...signalFragments], final: finalReveal }))
+    } catch {
+      // The investigation remains usable for this session when storage is restricted.
+    }
+  }, [clearance, finalReveal, readDossiers, signalFragments])
+
+  useEffect(() => {
+    if (activeView !== 'signals') return
     let mounted = true
     Promise.all([
       fetchPublishedNews('green'),
@@ -293,7 +392,14 @@ export default function GreenNode() {
       if (mounted) setLoadingNews(false)
     })
     return () => { mounted = false }
-  }, [])
+  }, [activeView])
+
+  function selectView(view: 'overview' | 'dossiers' | 'terminal' | 'signals') {
+    const next = new URLSearchParams(searchParams)
+    next.set('view', view)
+    setSearchParams(next)
+    window.requestAnimationFrame(() => document.getElementById('green-view-content')?.focus({ preventScroll: true }))
+  }
 
   const articles = useMemo(() => {
     const curated = [...getCuratedExternalNews('tech'), ...getCuratedExternalNews('science')]
@@ -307,7 +413,33 @@ export default function GreenNode() {
     return (matching.length ? matching : merged).slice(0, 6)
   }, [active.category, publishedArticles])
 
-  const dossiers = useMemo(() => dossierFilter === 'all' ? greenNodeDossiers : greenNodeDossiers.filter((item) => item.category === dossierFilter), [dossierFilter])
+  const dossiers = useMemo(() => {
+    const query = dossierQuery.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+    return greenNodeDossiers.filter((item) => {
+      if (dossierFilter !== 'all' && item.category !== dossierFilter) return false
+      if (!query) return true
+      return `${item.code} ${item.period} ${item.title[lang]} ${item.summary[lang]} ${item.confirmed[lang]} ${item.unresolved[lang]}`.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().includes(query)
+    })
+  }, [dossierFilter, dossierQuery, lang])
+  const investigationComplete = signalFragments.size === t.investigation.fragments.length
+
+  function recoverSignal(id: string) {
+    setSignalFragments((current) => current.has(id) ? current : new Set(current).add(id))
+  }
+
+  function markDossierRead(id: string) {
+    setReadDossiers((current) => current.has(id) ? current : new Set(current).add(id))
+    if (id === 'anonymous-payback') recoverSignal('ghost')
+    if (id === 'project-blue-book') recoverSignal('orbit')
+  }
+
+  function resetInvestigation() {
+    setClearance(1)
+    setReadDossiers(new Set())
+    setSignalFragments(new Set())
+    setFinalReveal(false)
+    try { window.localStorage.removeItem(GREEN_PROGRESS_KEY) } catch { /* Optional local persistence. */ }
+  }
 
   function runTerminalCommand(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -321,6 +453,7 @@ export default function GreenNode() {
       deep_mode: deepMode ? t.terminal.responses.deepAlreadyActive : t.terminal.responses.deepActive,
       interceptar_anon: t.terminal.responses.anonUnlock,
       desclasificar: t.terminal.responses.declassifiedUnlock,
+      correlacion_13: investigationComplete ? t.terminal.responses.correlationOpen : t.terminal.responses.correlationLocked,
     }
     if (command === 'limpiar' || command === 'clear') {
       setTerminalLines([t.terminal.clear])
@@ -331,6 +464,8 @@ export default function GreenNode() {
     if (command === 'deep_mode') setDeepMode(true)
     if (command === 'interceptar_anon') setClearance((current) => current < 2 ? 2 : current)
     if (command === 'desclasificar') setClearance(3)
+    if (command === 'protocolo_verdad') recoverSignal('mirror')
+    if (command === 'correlacion_13' && investigationComplete) setFinalReveal(true)
     setTerminalInput('')
   }
 
@@ -380,6 +515,18 @@ export default function GreenNode() {
 
               <NexusDistrict tone="green" />
 
+              <nav className="xk-green-view-nav" aria-label={t.views.aria}>
+                {([
+                  ['overview', t.views.overview, t.views.overviewDetail, '◬'],
+                  ['dossiers', t.views.dossiers, t.views.dossiersDetail, '13'],
+                  ['terminal', t.views.terminal, t.views.terminalDetail, '>_'],
+                  ['signals', t.views.signals, t.views.signalsDetail, '⌁'],
+                ] as const).map(([view, label, detail, glyph]) => <button key={view} type="button" aria-pressed={activeView === view} onClick={() => selectView(view)}><span aria-hidden="true">{glyph}</span><b>{label}</b><small>{detail}</small></button>)}
+              </nav>
+
+              <div id="green-view-content" className={`xk-green-view is-${activeView}`} tabIndex={-1}>
+
+              {activeView === 'overview' ? <>
               <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4" role="tablist" aria-label={t.nodeSelector}>
                 {t.blocks.map((node, index) => (
                   <button
@@ -406,7 +553,10 @@ export default function GreenNode() {
               </div>
 
               <PortalPulseRail tone="green" eyebrow={t.loop.eyebrow} title={t.loop.title} description={t.loop.description} items={t.loop.items} />
+              <aside className="xk-green-overview-brief"><small>{t.status}</small><div><button type="button" onClick={() => selectView('dossiers')}>{t.views.dossiers} →</button><button type="button" onClick={() => selectView('terminal')}>{t.views.terminal} →</button></div></aside>
+              </> : null}
 
+              {activeView === 'terminal' ? <>
               <section id="terminal" className="xk-green-terminal scroll-mt-28" aria-labelledby="green-terminal-title">
                 <header><div aria-hidden="true"><i /><i /><i /></div><p id="green-terminal-title">root@xethkioz:~/black_archive</p><button type="button" aria-pressed={deepMode} onClick={() => setDeepMode((current) => !current)}>{deepMode ? t.terminal.disableDeep : t.terminal.enableDeep}</button></header>
                 <div className="xk-terminal-screen" role="log" aria-live="polite" aria-relevant="additions">{terminalLines.map((line, index) => <p key={`${line}-${index}`}><span aria-hidden="true">{index === terminalLines.length - 1 ? '›' : '·'}</span>{line}</p>)}</div>
@@ -415,6 +565,29 @@ export default function GreenNode() {
               </section>
 
               {deepMode && <aside className="xk-deep-reveal" role="status"><p>{t.reveal.eyebrow}</p><b>{t.reveal.title}</b><span>{t.reveal.description}</span></aside>}
+              </> : null}
+
+              {activeView === 'dossiers' ? <>
+              <section className="xk-green-investigation" aria-labelledby="green-investigation-title">
+                <header>
+                  <div><small>{t.investigation.eyebrow}</small><h2 id="green-investigation-title">{t.investigation.title}</h2><p>{t.investigation.description}</p></div>
+                  <button type="button" onClick={resetInvestigation}>{t.investigation.reset}</button>
+                </header>
+                <div className="xk-investigation-stats" aria-live="polite">
+                  <div><span>{t.investigation.read}</span><b>{readDossiers.size} / {greenNodeDossiers.length}</b><i><em style={{ width: `${(readDossiers.size / greenNodeDossiers.length) * 100}%` }} /></i><small>{t.investigation.files}</small></div>
+                  <div><span>{t.investigation.signals}</span><b>{signalFragments.size} / {t.investigation.fragments.length}</b><i><em style={{ width: `${(signalFragments.size / t.investigation.fragments.length) * 100}%` }} /></i><small>{t.investigation.clearance} 0{clearance}</small></div>
+                </div>
+                <ol className="xk-signal-fragments">
+                  {t.investigation.fragments.map((fragment, index) => {
+                    const recovered = signalFragments.has(fragment.id)
+                    return <li key={fragment.id} className={recovered ? 'is-recovered' : ''}><span>0{index + 1}</span><div><b>{recovered ? fragment.code : '████-██'}</b><small>{recovered ? t.investigation.recovered : fragment.hint}</small></div></li>
+                  })}
+                </ol>
+                <div className={`xk-correlation-core${investigationComplete ? ' is-ready' : ''}${finalReveal ? ' is-open' : ''}`}>
+                  <span aria-hidden="true">∆13</span>
+                  <div><small>{investigationComplete ? t.investigation.finalReady : t.investigation.finalLocked}</small>{investigationComplete && !finalReveal ? <code>{t.investigation.finalCommand}</code> : null}{finalReveal ? <><h3>{t.investigation.finalTitle}</h3><p>{t.investigation.finalText}</p></> : null}</div>
+                </div>
+              </section>
 
               <section className="xk-dossier-vault scroll-mt-28" id="classified-files" aria-labelledby="classified-files-title">
                 <header className="xk-dossier-vault-head">
@@ -426,9 +599,10 @@ export default function GreenNode() {
                     ['all', t.dossiers.all], ['hacktivism', t.dossiers.hacktivism], ['law-enforcement', t.dossiers.police], ['declassified', t.dossiers.declassified], ['mystery', t.dossiers.mystery],
                   ] as const).map(([id, label]) => <button key={id} type="button" aria-pressed={dossierFilter === id} onClick={() => setDossierFilter(id)}>{label}</button>)}
                 </nav>
+                <div className="xk-dossier-search"><label><span>{t.dossiers.search}</span><input type="search" value={dossierQuery} onChange={(event) => setDossierQuery(event.target.value)} placeholder={t.dossiers.searchPlaceholder} /></label><b>{dossiers.length} / {greenNodeDossiers.length} {t.dossiers.showing}</b></div>
                 <div className="xk-dossier-grid">
                   {dossiers.map((dossier) => dossier.clearance <= clearance ? (
-                    <details key={dossier.id} className={`xk-dossier-card is-${dossier.evidence}`}>
+                    <details key={dossier.id} className={`xk-dossier-card is-${dossier.evidence}${readDossiers.has(dossier.id) ? ' is-read' : ''}`} onToggle={(event) => { if (event.currentTarget.open) markDossierRead(dossier.id) }}>
                       <summary><div><small>{dossier.code} // {dossier.period}</small><h3>{dossier.title[lang]}</h3></div><span>{t.dossiers[dossier.evidence]}</span></summary>
                       <div className="xk-dossier-body"><p>{dossier.summary[lang]}</p><div className="xk-dossier-facts"><div><b>{t.dossiers.confirmed}</b><span>{dossier.confirmed[lang]}</span></div><div><b>{t.dossiers.unresolved}</b><span>{dossier.unresolved[lang]}</span></div></div><a className="xk-dossier-source" href={dossier.sourceHref} target="_blank" rel="noopener noreferrer">{t.dossiers.source}: {dossier.sourceLabel} ↗</a></div>
                     </details>
@@ -436,8 +610,11 @@ export default function GreenNode() {
                     <article key={dossier.id} className="xk-dossier-locked"><div><b>████ // {t.dossiers.locked} // LVL 0{dossier.clearance}</b><span>{t.dossiers.unlock}</span><a href="#terminal">root@green-node:~$ help ↑</a></div></article>
                   ))}
                 </div>
+                {!dossiers.length ? <p className="xk-dossier-no-results" role="status">{t.dossiers.noResults}</p> : null}
               </section>
+              </> : null}
 
+              {activeView === 'signals' ? <>
               <section id="archive" className="mt-6 scroll-mt-28 overflow-hidden rounded-2xl border border-[#32FF8A]/35 bg-[radial-gradient(circle_at_90%_10%,rgba(50,255,138,.13),transparent_32%),rgba(3,16,6,.88)] p-5 font-mono md:p-7" role="tabpanel" aria-labelledby={`green-tab-${active.id}`} aria-live="polite">
                 <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
                   <div>
@@ -467,6 +644,9 @@ export default function GreenNode() {
                   ))}
                 </div> : !loadingNews ? <p className="xk-empty-signal" role="status">{t.empty}</p> : null}
               </section>
+              </> : null}
+
+              </div>
 
               <div className="mt-8"><PublicAdSlot slotId="section-sidebar" fallbackLabel={t.sponsor} /></div>
               <div className="mt-8 rounded-2xl border border-[#32FF8A]/25 bg-black/70 p-5 font-mono text-xs leading-relaxed text-[#B9FFD1]">{t.status}</div>

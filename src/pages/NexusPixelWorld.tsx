@@ -57,6 +57,15 @@ type DialogueState = {
   action: DialogueAction
 }
 
+type GeneralChatRow = {
+  id: string
+  room_id: string
+  user_id: string | null
+  display_name: string
+  body: string
+  created_at: string
+}
+
 const outfitColors: Record<string, string> = {
   'outfit-nexus-runner': '#8b5cf6',
   'outfit-cyber-ronin': '#22d3ee',
@@ -88,6 +97,8 @@ const copy = {
     chatPlaceholder: 'Decí algo…',
     send: 'Enviar',
     localChat: 'La presencia online está temporalmente en modo local.',
+    generalChat: 'CHAT GENERAL · PERSISTENTE',
+    generalChatDetail: 'Lo que escribís acá también aparece en Nexus Chat.',
     collision: 'Ese camino está bloqueado.',
     welcome: 'Llegaste a Plaza Nexus.',
     mapLabel: 'Mapa cenital interactivo de Nexus City',
@@ -135,6 +146,8 @@ const copy = {
     chatPlaceholder: 'Say something…',
     send: 'Send',
     localChat: 'Online presence is temporarily running in local mode.',
+    generalChat: 'GENERAL CHAT · PERSISTENT',
+    generalChatDetail: 'Messages sent here also appear in Nexus Chat.',
     collision: 'That path is blocked.',
     welcome: 'You reached Nexus Plaza.',
     mapLabel: 'Interactive top-down map of Nexus City',
@@ -242,6 +255,7 @@ export default function NexusPixelWorld() {
   const [peers, setPeers] = useState<PixelPeer[]>([])
   const [bubble, setBubble] = useState('')
   const [message, setMessage] = useState('')
+  const [generalMessages, setGeneralMessages] = useState<GeneralChatRow[]>([])
   const [notice, setNotice] = useState<string>(t.welcome)
   const [realtime, setRealtime] = useState(false)
   const [dialogue, setDialogue] = useState<DialogueState | null>(null)
@@ -326,6 +340,24 @@ export default function NexusPixelWorld() {
     if (!channelRef.current || !realtime) return
     void channelRef.current.track(signal)
   }, [realtime, signal])
+
+  useEffect(() => {
+    if (!isSupabaseConfigured) return
+    let active = true
+    void supabase.from('chat_messages').select('id,room_id,user_id,display_name,body,created_at').eq('room_id', 'general').order('created_at', { ascending: false }).limit(20).then(({ data }) => {
+      if (active) setGeneralMessages(((data ?? []) as GeneralChatRow[]).reverse())
+    })
+    const channel = supabase.channel('nexus-pixel-general-chat')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages', filter: 'room_id=eq.general' }, ({ new: row }) => {
+        const next = row as GeneralChatRow
+        setGeneralMessages((current) => current.some((item) => item.id === next.id) ? current : [...current.slice(-19), next])
+      })
+      .subscribe()
+    return () => {
+      active = false
+      void supabase.removeChannel(channel)
+    }
+  }, [])
 
   function move(nextDirection: Direction) {
     if (dialogue) return
@@ -463,7 +495,7 @@ export default function NexusPixelWorld() {
     return () => window.removeEventListener('keydown', onKeyDown)
   })
 
-  function sendMessage(event: FormEvent<HTMLFormElement>) {
+  async function sendMessage(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const next = message.trim().slice(0, 120)
     if (!next) return
@@ -474,6 +506,10 @@ export default function NexusPixelWorld() {
     bubbleTimerRef.current = window.setTimeout(() => setBubble(''), 5000)
     if (channelRef.current && realtime) {
       void channelRef.current.send({ type: 'broadcast', event: 'world-chat', payload: { ...signal, bubble: next } })
+    }
+    if (isSupabaseConfigured) {
+      const { error } = await supabase.from('chat_messages').insert({ room_id: 'general', user_id: account.userId ?? null, display_name: displayName.slice(0, 40), role: account.status === 'connected' ? 'member' : 'guest', body: next })
+      if (error) setNotice(t.localChat)
     }
   }
 
@@ -592,7 +628,12 @@ export default function NexusPixelWorld() {
 
           <form className="xk-pixel-chat" onSubmit={sendMessage}>
             <label htmlFor="pixel-world-chat">{t.chatLabel}</label>
+            <div className="xk-pixel-chat-log" aria-label={t.generalChat} aria-live="polite">
+              <strong>{t.generalChat}</strong>
+              {generalMessages.slice(-5).map((chatMessage) => <p key={chatMessage.id}><b>{chatMessage.display_name}</b><span>{chatMessage.body}</span></p>)}
+            </div>
             <div><input id="pixel-world-chat" value={message} onChange={(event) => setMessage(event.target.value)} maxLength={120} placeholder={t.chatPlaceholder} /><button type="submit">{t.send}</button></div>
+            <small>{t.generalChatDetail}</small>
             {!realtime ? <small>{t.localChat}</small> : null}
           </form>
 

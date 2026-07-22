@@ -4,6 +4,7 @@ import { addWispXp } from '../../lib/realtimeCommunity'
 import { authNexusService } from '../../services/auth/authNexusService'
 import type { XethkiozAuthorizedSession } from '../../services/auth/authSchema'
 import { isSupabaseConfigured, supabase } from '../../services/supabaseClient'
+import NexusDirectMessages from './NexusDirectMessages'
 
 type NexusMessage = {
   id: string
@@ -52,6 +53,8 @@ const LOCAL_STORAGE_MESSAGES = 'xethkioz.nexus.local.messages.v3'
 const copy = {
   es: {
     title: 'Nexus Chat',
+    publicTab: 'General',
+    privateTab: 'Privados',
     nickname: 'Apodo',
     input: 'Mensaje para la comunidad',
     send: 'Enviar',
@@ -72,6 +75,8 @@ const copy = {
   },
   en: {
     title: 'Nexus Chat',
+    publicTab: 'General',
+    privateTab: 'Private',
     nickname: 'Nickname',
     input: 'Message for the community',
     send: 'Send',
@@ -182,6 +187,7 @@ export default function NexusChatWidget({ clearMobileDock = false }: { clearMobi
   const { lang } = useLang()
   const t = copy[lang]
   const [open, setOpen] = useState(false)
+  const [chatMode, setChatMode] = useState<'public' | 'private'>('public')
   const [room, setRoom] = useState('general')
   const [nickname, setNickname] = useState(readLocalNickname)
   const [draft, setDraft] = useState('')
@@ -387,16 +393,20 @@ export default function NexusChatWidget({ clearMobileDock = false }: { clearMobi
               </div>
               <span className={`rounded-full border px-2 py-1 text-[10px] uppercase ${status === 'online' ? 'border-[#32FF8A]/40 text-[#32FF8A]' : status === 'error' ? 'border-red-400/40 text-red-200' : 'border-yellow-300/30 text-yellow-200'}`}>{t.status[status]}</span>
             </div>
-            <div className="mt-4 grid grid-cols-[1fr_auto] gap-2">
+            <nav className="mt-4 grid grid-cols-2 gap-2" aria-label={t.title}>
+              <button type="button" onClick={() => setChatMode('public')} aria-pressed={chatMode === 'public'} className={`rounded-xl border px-3 py-2 text-[10px] font-black uppercase tracking-[.14em] ${chatMode === 'public' ? 'border-violet-300/50 bg-violet-400/15 text-white' : 'border-white/10 text-white/45'}`}>{t.publicTab}</button>
+              <button type="button" onClick={() => setChatMode('private')} aria-pressed={chatMode === 'private'} className={`rounded-xl border px-3 py-2 text-[10px] font-black uppercase tracking-[.14em] ${chatMode === 'private' ? 'border-cyan-300/50 bg-cyan-400/15 text-white' : 'border-white/10 text-white/45'}`}>{t.privateTab}</button>
+            </nav>
+            {chatMode === 'public' ? <div className="mt-3 grid grid-cols-[1fr_auto] gap-2">
               <input value={nickname} onChange={(event) => { setNickname(event.target.value); setReservedWarning(null) }} className="rounded-xl border border-white/10 bg-black/45 px-3 py-2 text-xs text-white outline-none focus:border-[#8B5CF6]" placeholder={t.nickname} />
               <select value={room} onChange={(event) => setRoom(event.target.value)} className="rounded-xl border border-white/10 bg-black/45 px-3 py-2 text-xs text-white outline-none focus:border-[#FF6B1A]">
                 {roomOptions.map((item) => <option key={item.id} value={item.id}>{item[lang].toUpperCase()}</option>)}
               </select>
-            </div>
-            {reservedWarning ? <p className="mt-2 rounded-xl border border-red-400/25 bg-red-500/10 px-3 py-2 text-[10px] leading-relaxed text-red-100">{reservedWarning}</p> : null}
+            </div> : null}
+            {chatMode === 'public' && reservedWarning ? <p className="mt-2 rounded-xl border border-red-400/25 bg-red-500/10 px-3 py-2 text-[10px] leading-relaxed text-red-100">{reservedWarning}</p> : null}
           </header>
           <div className="grid gap-3 p-3">
-            <div className="relative">
+            {chatMode === 'private' ? <NexusDirectMessages lang={lang} session={session} /> : <><div className="relative">
               <div ref={messageViewportRef} onScroll={handleMessageScroll} className="max-h-[340px] min-h-40 space-y-3 overflow-y-auto overscroll-contain scroll-smooth rounded-2xl border border-white/10 bg-black/35 p-3" aria-live="polite" aria-relevant="additions text">
               {visibleMessages.map((message) => (
                 <article key={message.id} className="rounded-2xl border border-white/10 bg-white/[0.03] p-3">
@@ -416,6 +426,7 @@ export default function NexusChatWidget({ clearMobileDock = false }: { clearMobi
               <input value={draft} onChange={(event) => setDraft(event.target.value)} maxLength={500} className="rounded-2xl border border-white/10 bg-black/55 px-4 py-3 text-xs text-white outline-none placeholder:text-gray-600 focus:border-[#8B5CF6]" placeholder={t.input} />
               <button type="submit" className="rounded-2xl border border-[#FF6B1A]/50 bg-[#FF6B1A]/15 px-4 text-xs font-black uppercase tracking-[0.16em] text-[#FF6B1A]">{t.send}</button>
             </form>
+            </>}
           </div>
         </section>
       )}

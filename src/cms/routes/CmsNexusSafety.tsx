@@ -4,7 +4,7 @@ import { supabase } from '../../services/supabaseClient'
 import { useAdminSession } from '../hooks'
 
 type ReportStatus = 'new' | 'reviewing' | 'resolved' | 'dismissed'
-type SafetyReport = { id: string; reporter_id: string; subject_user_id: string | null; room_id: string | null; category: string; detail: string; status: ReportStatus; created_at: string; resolved_at: string | null }
+type SafetyReport = { id: string; reporter_id: string; subject_user_id: string | null; room_id: string | null; direct_message_id: string | null; evidence_snapshot: string | null; category: string; detail: string; status: ReportStatus; created_at: string; resolved_at: string | null }
 type PublicIdentity = { user_id: string; handle: string; display_name: string }
 
 const copy = {
@@ -27,6 +27,7 @@ const copy = {
     subject: 'Sujeto',
     reporter: 'Reportante',
     room: 'Sala',
+    evidence: 'Evidencia aportada por el reportante',
     take: 'Tomar caso',
     resolve: 'Resolver',
     dismiss: 'Descartar',
@@ -59,6 +60,7 @@ const copy = {
     subject: 'Subject',
     reporter: 'Reporter',
     room: 'Room',
+    evidence: 'Evidence submitted by the reporter',
     take: 'Take case',
     resolve: 'Resolve',
     dismiss: 'Dismiss',
@@ -97,7 +99,7 @@ export default function CmsNexusSafety() {
     setLoading(true)
     setError('')
     const load = async () => {
-      const { data, error: reportError } = await supabase.from('nexus_safety_reports').select('id,reporter_id,subject_user_id,room_id,category,detail,status,created_at,resolved_at').order('created_at', { ascending: false }).limit(250)
+      const { data, error: reportError } = await supabase.from('nexus_safety_reports').select('id,reporter_id,subject_user_id,room_id,direct_message_id,evidence_snapshot,category,detail,status,created_at,resolved_at').order('created_at', { ascending: false }).limit(250)
       if (!active) return
       if (reportError) {
         setError(reportError.message)
@@ -164,6 +166,6 @@ export default function CmsNexusSafety() {
     {loading ? <p className="rounded-2xl border border-white/10 p-6 text-white/55" role="status" aria-live="polite">{t.loading}</p> : null}
     {!loading && visibleReports.length === 0 ? <p className="rounded-2xl border border-dashed border-white/15 p-8 text-center text-white/45" role="status">{t.empty}</p> : null}
 
-    <div className="grid gap-4" aria-label={t.queueLabel}>{visibleReports.map((report) => <article key={report.id} className="grid gap-4 rounded-2xl border border-white/10 bg-black/30 p-5 xl:grid-cols-[minmax(0,1fr)_auto] xl:items-start"><div><div className="flex flex-wrap items-center gap-2"><span className="rounded-full border border-rose-300/30 bg-rose-400/10 px-3 py-1 font-mono text-[10px] font-black uppercase text-rose-200">{categoryLabel(report.category)}</span><time dateTime={report.created_at} className="font-mono text-[10px] uppercase tracking-[.12em] text-white/35">{new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(report.created_at))}</time><b className="font-mono text-[10px] uppercase text-cyan-200">{t.statuses[report.status]}</b></div><h2 className="mt-4 text-lg font-black">{t.subject}: {identityLabel(report.subject_user_id)}</h2><p className="mt-1 text-xs text-white/40">{t.reporter}: {identityLabel(report.reporter_id)}{report.room_id ? ` · ${t.room}: ${report.room_id}` : ''}</p><blockquote className="mt-4 border-l-2 border-rose-400/50 bg-rose-500/[.04] px-4 py-3 text-sm leading-6 text-white/75">{report.detail}</blockquote><p className="mt-3 font-mono text-[10px] text-white/25">ID {report.id}</p></div><div className="flex flex-wrap gap-2 xl:max-w-64 xl:justify-end">{(['reviewing', 'resolved', 'dismissed'] as ReportStatus[]).map((status) => <button key={status} type="button" onClick={() => void updateStatus(report, status)} disabled={busyId === report.id || report.status === status} className="min-h-10 rounded-xl border border-white/15 px-3 text-[10px] font-black uppercase tracking-[.1em] text-white/70 transition hover:border-rose-300 disabled:opacity-30">{statusActionLabel(status)}</button>)}</div></article>)}</div>
+    <div className="grid gap-4" aria-label={t.queueLabel}>{visibleReports.map((report) => <article key={report.id} className="grid gap-4 rounded-2xl border border-white/10 bg-black/30 p-5 xl:grid-cols-[minmax(0,1fr)_auto] xl:items-start"><div><div className="flex flex-wrap items-center gap-2"><span className="rounded-full border border-rose-300/30 bg-rose-400/10 px-3 py-1 font-mono text-[10px] font-black uppercase text-rose-200">{categoryLabel(report.category)}</span><time dateTime={report.created_at} className="font-mono text-[10px] uppercase tracking-[.12em] text-white/35">{new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(report.created_at))}</time><b className="font-mono text-[10px] uppercase text-cyan-200">{t.statuses[report.status]}</b></div><h2 className="mt-4 text-lg font-black">{t.subject}: {identityLabel(report.subject_user_id)}</h2><p className="mt-1 text-xs text-white/40">{t.reporter}: {identityLabel(report.reporter_id)}{report.room_id ? ` · ${t.room}: ${report.room_id}` : ''}</p><blockquote className="mt-4 border-l-2 border-rose-400/50 bg-rose-500/[.04] px-4 py-3 text-sm leading-6 text-white/75">{report.detail}</blockquote>{report.evidence_snapshot ? <div className="mt-3 rounded-xl border border-amber-300/20 bg-amber-300/[.05] p-3"><small className="font-mono text-[9px] font-black uppercase tracking-[.12em] text-amber-200">{t.evidence}</small><p className="mt-2 whitespace-pre-wrap break-words text-sm text-white/80">{report.evidence_snapshot}</p></div> : null}<p className="mt-3 font-mono text-[10px] text-white/25">ID {report.id}{report.direct_message_id ? ` · DM ${report.direct_message_id}` : ''}</p></div><div className="flex flex-wrap gap-2 xl:max-w-64 xl:justify-end">{(['reviewing', 'resolved', 'dismissed'] as ReportStatus[]).map((status) => <button key={status} type="button" onClick={() => void updateStatus(report, status)} disabled={busyId === report.id || report.status === status} className="min-h-10 rounded-xl border border-white/15 px-3 text-[10px] font-black uppercase tracking-[.1em] text-white/70 transition hover:border-rose-300 disabled:opacity-30">{statusActionLabel(status)}</button>)}</div></article>)}</div>
   </section>
 }
