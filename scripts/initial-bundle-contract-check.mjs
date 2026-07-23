@@ -23,7 +23,7 @@ const publicHtmlFiles = [
 const MAX_INITIAL_CSS_BYTES = 347_000
 const MAX_INITIAL_CSS_GZIP_BYTES = 64_000
 const routeCssChunks = [
-  { label: 'Home portal rings', pattern: /^home-portal-rings-[^/]+\.css$/i },
+  { label: 'Home shell', pattern: /^home-shell-[^/]+\.css$/i },
   { label: 'Green Node shell', pattern: /^green-node-shell-[^/]+\.css$/i },
 ]
 
