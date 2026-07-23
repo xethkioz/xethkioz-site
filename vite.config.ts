@@ -12,6 +12,8 @@ const seoShellInputs = fs.existsSync(seoShellDirectory)
     )
   : {}
 
+const isSupabaseChunk = (dependency: string) => /(^|\/)(?:supabase|supabaseClient)-[^/]+\.js$/i.test(dependency)
+
 export default defineConfig({
   plugins: [react()],
   server: { host: '0.0.0.0', port: 5173 },
@@ -19,6 +21,13 @@ export default defineConfig({
     target: 'esnext',
     minify: 'esbuild',
     cssMinify: true,
+    modulePreload: {
+      polyfill: true,
+      resolveDependencies(_filename, dependencies, { hostType }) {
+        if (hostType !== 'html') return dependencies
+        return dependencies.filter((dependency) => !isSupabaseChunk(dependency))
+      },
+    },
     rollupOptions: {
       input: {
         main: resolve(process.cwd(), 'index.html'),
