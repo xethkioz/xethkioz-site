@@ -1,4 +1,5 @@
 import type { AuthChangeEvent, Session } from '@supabase/supabase-js'
+import type { PortalEventBusLike } from '../../engines/world/sandbox/portalEventContracts'
 import { cmsSupabaseClient, isCmsSupabaseConfigured, type CmsSupabaseClient } from '../cms/supabaseClient'
 import {
   DEFAULT_GUEST_PROFILE,
@@ -6,7 +7,7 @@ import {
   type ProfileRow,
   type XethkiozAuthorizedSession,
 } from './authSchema'
-import type { PortalEventBusLike } from '../../engines/world/sandbox/portalEventContracts'
+import { assertStrongPassword } from './passwordPolicy'
 
 export interface AuthNexusServiceOptions {
   readonly client?: CmsSupabaseClient
@@ -120,6 +121,8 @@ export class AuthNexusService {
   }
 
   async signUp(credentials: AuthCredentials): Promise<XethkiozAuthorizedSession | null> {
+    assertStrongPassword(credentials.password)
+
     const { data, error } = await this.client.auth.signUp(credentials)
     if (error) {
       const wrapped = new Error(`[AuthNexusService] Register failed: ${error.message}`)
@@ -141,7 +144,6 @@ export class AuthNexusService {
     }
     this.publishSession(null)
   }
-
 
   private async handleAuthStateChange(event: AuthChangeEvent, session: Session | null): Promise<void> {
     if (event === 'SIGNED_OUT' || !session) {

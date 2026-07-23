@@ -1,3 +1,5 @@
+import { PASSWORD_POLICY_SUMMARY } from './passwordPolicy'
+
 /**
  * XETHKIOZ Auth Nexus contracts.
  * Shared identity and permission model for Supabase, EventBus, CMS and UI.
@@ -158,6 +160,7 @@ export function mapAuthErrorForUser(error: unknown): string {
   const normalized = message.toLowerCase()
   if (normalized.includes('invalid login') || normalized.includes('invalid credentials')) return 'Credenciales inválidas. Revisá el email y la contraseña.'
   if (normalized.includes('email not confirmed')) return 'La cuenta todavía no fue confirmada. Revisá tu email.'
+  if (normalized.includes('weak password') || normalized.includes('password should be') || normalized.includes('xethkioz_password_policy')) return PASSWORD_POLICY_SUMMARY
   if (normalized.includes('network') || normalized.includes('fetch') || normalized.includes('timeout')) return 'No se pudo conectar con el Nexus. Probá de nuevo en unos segundos.'
   if (normalized.includes('profile')) return 'La sesión inició, pero no se pudo cargar el perfil. Reintentá en unos segundos.'
   return 'No se pudo completar la operación de autenticación.'

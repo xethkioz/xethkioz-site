@@ -2,6 +2,11 @@ import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import type { PortalEventBusLike } from '../../engines/world/sandbox/portalEventContracts'
 import { AuthNexusService, authNexusService } from '../../services/auth/authNexusService'
 import { mapAuthErrorForUser, type XethkiozAuthorizedSession } from '../../services/auth/authSchema'
+import {
+  PASSWORD_MIN_LENGTH,
+  assessPassword,
+  passwordPolicyError,
+} from '../../services/auth/passwordPolicy'
 
 export interface XethkiozNexusAuthProps {
   readonly eventBus?: PortalEventBusLike
@@ -19,6 +24,10 @@ export function XethkiozNexusAuth({ eventBus, service, onAuthorized }: XethkiozN
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [session, setSession] = useState<XethkiozAuthorizedSession | null>(() => stableService.getSnapshot())
+  const passwordAssessment = useMemo(() => assessPassword(password), [password])
+  const canSubmit = !isLoading
+    && /\S+@\S+\.\S+/.test(email)
+    && (mode === 'login' ? password.length > 0 : passwordAssessment.valid)
 
   useEffect(() => {
     const stopAuthListener = stableService.startAuthStateListener()
@@ -40,10 +49,21 @@ export function XethkiozNexusAuth({ eventBus, service, onAuthorized }: XethkiozN
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setError(null)
-    setIsLoading(true)
 
+    if (mode === 'register') {
+      const policyError = passwordPolicyError(password)
+      if (policyError) {
+        setError(policyError)
+        return
+      }
+    } else if (!password) {
+      setError('Ingresá tu contraseña.')
+      return
+    }
+
+    setIsLoading(true)
     try {
-      const credentials = { email, password }
+      const credentials = { email: email.trim(), password }
       const nextSession = mode === 'login' ? await stableService.signIn(credentials) : await stableService.signUp(credentials)
       if (nextSession) onAuthorized?.(nextSession)
     } catch (nextError) {
@@ -51,6 +71,12 @@ export function XethkiozNexusAuth({ eventBus, service, onAuthorized }: XethkiozN
     } finally {
       setIsLoading(false)
     }
+  }
+
+  function changeMode(nextMode: AuthMode) {
+    setMode(nextMode)
+    setPassword('')
+    setError(null)
   }
 
   if (session) return null
@@ -64,28 +90,41 @@ export function XethkiozNexusAuth({ eventBus, service, onAuthorized }: XethkiozN
           <h2 className="mt-2 text-2xl font-black uppercase tracking-[0.08em]">Identity Gateway</h2>
         </div>
 
-<form className="space-y-4" onSubmit={handleSubmit}>
-            <div className="flex rounded-xl border border-violet-500/20 bg-black/35 p-1 font-mono text-xs uppercase tracking-[0.16em]">
-              <button type="button" className={`flex-1 rounded-lg px-3 py-2 ${mode === 'login' ? 'bg-violet-500/25 text-white' : 'text-slate-500'}`} disabled={isLoading} onClick={() => setMode('login')}>Login</button>
-              <button type="button" className={`flex-1 rounded-lg px-3 py-2 ${mode === 'register' ? 'bg-orange-500/20 text-white' : 'text-slate-500'}`} disabled={isLoading} onClick={() => setMode('register')}>Registro</button>
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          <div className="flex rounded-xl border border-violet-500/20 bg-black/35 p-1 font-mono text-xs uppercase tracking-[0.16em]">
+            <button type="button" className={`flex-1 rounded-lg px-3 py-2 ${mode === 'login' ? 'bg-violet-500/25 text-white' : 'text-slate-500'}`} disabled={isLoading} onClick={() => changeMode('login')}>Login</button>
+            <button type="button" className={`flex-1 rounded-lg px-3 py-2 ${mode === 'register' ? 'bg-orange-500/20 text-white' : 'text-slate-500'}`} disabled={isLoading} onClick={() => changeMode('register')}>Registro</button>
+          </div>
+
+          <label className="block">
+            <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-violet-300">Email</span>
+            <input className="mt-2 w-full rounded-xl border border-violet-500/20 bg-black/45 px-4 py-3 font-mono text-sm text-white outline-none transition focus:border-violet-300" value={email} onChange={(event) => setEmail(event.target.value)} type="email" required autoComplete="email" />
+          </label>
+
+          <label className="block">
+            <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-orange-300">Password</span>
+            <input className="mt-2 w-full rounded-xl border border-orange-500/20 bg-black/45 px-4 py-3 font-mono text-sm text-white outline-none transition focus:border-orange-300" value={password} onChange={(event) => setPassword(event.target.value)} type="password" minLength={mode === 'register' ? PASSWORD_MIN_LENGTH : 1} required autoComplete={mode === 'login' ? 'current-password' : 'new-password'} aria-describedby={mode === 'register' ? 'nexus-password-policy' : undefined} aria-invalid={mode === 'register' && password.length > 0 && !passwordAssessment.valid} />
+          </label>
+
+          {mode === 'register' ? (
+            <div id="nexus-password-policy" className="rounded-xl border border-white/10 bg-black/35 p-3" aria-live="polite">
+              <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-slate-400">Password security protocol</p>
+              <ul className="mt-2 grid grid-cols-2 gap-2 text-[10px]">
+                {passwordAssessment.rules.map((rule) => (
+                  <li key={rule.key} className={rule.passed ? 'text-green-300' : 'text-slate-500'}>
+                    <span aria-hidden="true">{rule.passed ? '✓' : '○'}</span> {rule.label}
+                  </li>
+                ))}
+              </ul>
             </div>
+          ) : null}
 
-            <label className="block">
-              <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-violet-300">Email</span>
-              <input className="mt-2 w-full rounded-xl border border-violet-500/20 bg-black/45 px-4 py-3 font-mono text-sm text-white outline-none transition focus:border-violet-300" value={email} onChange={(event) => setEmail(event.target.value)} type="email" required autoComplete="email" />
-            </label>
+          {error ? <p className="rounded-xl border border-red-400/20 bg-red-500/10 p-3 text-xs text-red-200">{error}</p> : null}
 
-            <label className="block">
-              <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-orange-300">Password</span>
-              <input className="mt-2 w-full rounded-xl border border-orange-500/20 bg-black/45 px-4 py-3 font-mono text-sm text-white outline-none transition focus:border-orange-300" value={password} onChange={(event) => setPassword(event.target.value)} type="password" minLength={6} required autoComplete={mode === 'login' ? 'current-password' : 'new-password'} />
-            </label>
-
-            {error ? <p className="rounded-xl border border-red-400/20 bg-red-500/10 p-3 text-xs text-red-200">{error}</p> : null}
-
-            <button type="submit" disabled={isLoading} className="w-full rounded-xl border border-green-300/30 bg-green-400/10 px-4 py-3 font-mono text-xs font-black uppercase tracking-[0.2em] text-green-200 transition hover:bg-green-400/20 disabled:cursor-not-allowed disabled:opacity-50">
-              {isLoading ? 'Handshake...' : mode === 'login' ? 'Authorize Session' : 'Create Nexus ID'}
-            </button>
-          </form>
+          <button type="submit" disabled={!canSubmit} className="w-full rounded-xl border border-green-300/30 bg-green-400/10 px-4 py-3 font-mono text-xs font-black uppercase tracking-[0.2em] text-green-200 transition hover:bg-green-400/20 disabled:cursor-not-allowed disabled:opacity-50">
+            {isLoading ? 'Handshake...' : mode === 'login' ? 'Authorize Session' : 'Create Nexus ID'}
+          </button>
+        </form>
       </div>
     </section>
   )
