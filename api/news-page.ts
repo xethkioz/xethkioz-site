@@ -13,6 +13,15 @@ function firstHeader(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value
 }
 
+function requestQueryValue(request: any, key: string) {
+  const rawUrl = typeof request.url === 'string' ? request.url : '/'
+  try {
+    return new URL(rawUrl, 'http://localhost').searchParams.get(key)?.trim() ?? ''
+  } catch {
+    return ''
+  }
+}
+
 function escapeHtml(value: string) {
   return value.replace(/[&"<>]/g, (character) => ({
     '&': '&amp;',
@@ -141,7 +150,7 @@ function renderArticleShell(template: string, article: PublicArticleMetadata) {
 }
 
 export default async function handler(request: any, response: any) {
-  const slug = typeof request.query?.slug === 'string' ? request.query.slug : ''
+  const slug = requestQueryValue(request, 'slug')
   if (!slug) {
     response.setHeader('Content-Type', 'text/plain; charset=utf-8')
     response.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive')
