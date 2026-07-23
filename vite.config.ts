@@ -21,6 +21,7 @@ export default defineConfig({
     target: 'esnext',
     minify: 'esbuild',
     cssMinify: true,
+    manifest: true,
     modulePreload: {
       polyfill: true,
       resolveDependencies(_filename, dependencies, { hostType }) {
