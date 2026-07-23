@@ -1,7 +1,9 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { gzipSync } from 'node:zlib'
 
 const distDir = path.resolve(process.cwd(), 'dist')
+const assetsDir = path.join(distDir, 'assets')
 const publicHtmlFiles = [
   'index.html',
   'seo-shells/gaming.html',
@@ -18,8 +20,16 @@ const publicHtmlFiles = [
   'creacion-web.html',
 ]
 
+const MAX_INITIAL_CSS_BYTES = 347_000
+const MAX_INITIAL_CSS_GZIP_BYTES = 64_000
+const routeCssChunks = [
+  { label: 'Home portal rings', pattern: /^home-portal-rings-[^/]+\.css$/i },
+  { label: 'Green Node shell', pattern: /^green-node-shell-[^/]+\.css$/i },
+]
+
 const issues = []
 const initialScriptPattern = /<script[^>]+src="([^"]+)"/g
+const initialStylesheetPattern = /<link[^>]+rel="stylesheet"[^>]+href="([^"]+)"/g
 const forbiddenInitialChunks = [
   { label: 'Supabase', pattern: /\/(?:assets\/)?(?:supabase|supabaseClient)-[^/"']+\.js(?:\?|$)/i },
   { label: 'Framer Motion', pattern: /\/(?:assets\/)?motion-[^/"']+\.js(?:\?|$)/i },
@@ -49,6 +59,11 @@ function findStaticImportChain(manifest, startKey, targetKeys) {
   return null
 }
 
+function assetPathFromHref(href) {
+  const pathname = href.split('?')[0]
+  return path.join(distDir, pathname.replace(/^\//, ''))
+}
+
 for (const relativePath of publicHtmlFiles) {
   const absolutePath = path.join(distDir, relativePath)
   if (!fs.existsSync(absolutePath)) {
@@ -58,16 +73,50 @@ for (const relativePath of publicHtmlFiles) {
 
   const html = fs.readFileSync(absolutePath, 'utf8')
   const scripts = [...html.matchAll(initialScriptPattern)].map((match) => match[1])
+  const stylesheets = [...html.matchAll(initialStylesheetPattern)].map((match) => match[1])
 
   for (const rule of forbiddenInitialChunks) {
     const forbidden = scripts.filter((src) => rule.pattern.test(src))
     if (forbidden.length) issues.push(`${relativePath} preloads ${rule.label}: ${forbidden.join(', ')}`)
+  }
+
+  for (const routeChunk of routeCssChunks) {
+    const leaked = stylesheets.filter((href) => routeChunk.pattern.test(path.basename(href.split('?')[0])))
+    if (leaked.length) issues.push(`${relativePath} preloads route CSS ${routeChunk.label}: ${leaked.join(', ')}`)
   }
 }
 
 const mainHtml = fs.readFileSync(path.join(distDir, 'index.html'), 'utf8')
 if (!mainHtml.includes('/assets/main-')) issues.push('index.html is missing the main application bundle.')
 if (!mainHtml.includes('/assets/vendor-')) issues.push('index.html is missing the React vendor bundle.')
+
+const mainStylesheets = [...mainHtml.matchAll(initialStylesheetPattern)].map((match) => match[1])
+const mainCssHref = mainStylesheets.find((href) => /\/assets\/main-[^/]+\.css(?:\?|$)/i.test(href))
+if (!mainCssHref) {
+  issues.push('index.html is missing the initial main CSS asset.')
+} else {
+  const mainCssPath = assetPathFromHref(mainCssHref)
+  if (!fs.existsSync(mainCssPath)) {
+    issues.push(`Initial CSS asset was not generated: ${mainCssHref}`)
+  } else {
+    const mainCss = fs.readFileSync(mainCssPath)
+    const gzipBytes = gzipSync(mainCss).byteLength
+    if (mainCss.byteLength > MAX_INITIAL_CSS_BYTES) {
+      issues.push(`Initial CSS raw budget exceeded: ${mainCss.byteLength} > ${MAX_INITIAL_CSS_BYTES} bytes.`)
+    }
+    if (gzipBytes > MAX_INITIAL_CSS_GZIP_BYTES) {
+      issues.push(`Initial CSS gzip budget exceeded: ${gzipBytes} > ${MAX_INITIAL_CSS_GZIP_BYTES} bytes.`)
+    }
+    console.log(`DIAG initial CSS: ${mainCss.byteLength} raw bytes, ${gzipBytes} gzip bytes.`)
+  }
+}
+
+const assetNames = fs.existsSync(assetsDir) ? fs.readdirSync(assetsDir) : []
+for (const routeChunk of routeCssChunks) {
+  if (!assetNames.some((name) => routeChunk.pattern.test(name))) {
+    issues.push(`Expected route CSS chunk was not emitted: ${routeChunk.label}.`)
+  }
+}
 
 const manifest = readManifest()
 if (manifest) {
@@ -91,4 +140,4 @@ if (issues.length) {
   process.exit(1)
 }
 
-console.log(`PASS initial bundle: ${publicHtmlFiles.length} public HTML entries avoid Supabase and Framer Motion preload.`)
+console.log(`PASS initial bundle: ${publicHtmlFiles.length} public HTML entries avoid heavy libraries and route-only CSS; initial CSS stays within budget.`)
