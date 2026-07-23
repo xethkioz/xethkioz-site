@@ -2,12 +2,24 @@ import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
 let homeStyles: Promise<void> | null = null
+let gamingFunStyles: Promise<void> | null = null
+let scienceStyles: Promise<void> | null = null
 let greenNodeStyles: Promise<void> | null = null
 
 export function loadRouteStyles(pathname: string): Promise<void> {
   if (pathname === '/') {
     homeStyles ??= import('../generated/home-shell.css').then(() => undefined)
     return homeStyles
+  }
+
+  if (pathname === '/gaming' || pathname === '/fun') {
+    gamingFunStyles ??= import('../generated/gaming-fun-shell.css').then(() => undefined)
+    return gamingFunStyles
+  }
+
+  if (pathname === '/science') {
+    scienceStyles ??= import('../generated/science-shell.css').then(() => undefined)
+    return scienceStyles
   }
 
   if (pathname === '/green-node' || pathname.startsWith('/green-node/')) {
