@@ -15,7 +15,7 @@ import { WorldOrchestratorProvider } from './engines/world/orchestrator'
 import { WorldThemeProvider } from './engines/world/theme'
 import { LightingEngineProvider } from './engines/world/lighting'
 import { AdminGuard } from './cms/guards'
-import { addWispXp } from './lib/realtimeCommunity'
+import { addWispXp } from './lib/deferredWispXp'
 import { ExperienceProvider } from './lib/ExperienceContext'
 
 const Header = lazy(() => import('./components/Header'))

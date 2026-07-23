@@ -1,5 +1,4 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
-import { isSupabaseConfigured, supabase } from '../services/supabaseClient'
 
 export type HudAudioMode = 'muted' | 'enabled'
 export type HudAccountStatus = 'guest' | 'connected' | 'loading'
@@ -27,6 +26,12 @@ interface HudContextType {
   refreshAccount: () => Promise<void>
 }
 
+type SupabaseClientModule = typeof import('../services/supabaseClient')
+type IdleWindow = Window & {
+  requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number
+  cancelIdleCallback?: (handle: number) => void
+}
+
 const HudContext = createContext<HudContextType | undefined>(undefined)
 
 const STORAGE_SOUND = 'xethkioz.hud.sound'
@@ -35,6 +40,28 @@ const STORAGE_ACCOUNT_STATUS = 'xethkioz.hud.account.status'
 const STORAGE_ACCOUNT_NAME = 'xethkioz.hud.account.name'
 const STORAGE_ACCOUNT_EMAIL = 'xethkioz.hud.account.email'
 const STORAGE_ACCOUNT_USER_ID = 'xethkioz.hud.account.user-id'
+const HAS_SUPABASE_ENV = Boolean(
+  (import.meta.env.VITE_SUPABASE_URL as string | undefined)?.trim()
+  && (import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined)?.trim(),
+)
+
+let supabaseModulePromise: Promise<SupabaseClientModule> | null = null
+
+function loadSupabaseModule() {
+  if (!HAS_SUPABASE_ENV) return Promise.resolve<SupabaseClientModule | null>(null)
+  supabaseModulePromise ??= import('../services/supabaseClient')
+  return supabaseModulePromise
+}
+
+function scheduleDeferred(task: () => void, timeout: number) {
+  const idleWindow = window as IdleWindow
+  if (idleWindow.requestIdleCallback) {
+    const handle = idleWindow.requestIdleCallback(task, { timeout })
+    return () => idleWindow.cancelIdleCallback?.(handle)
+  }
+  const handle = window.setTimeout(task, timeout)
+  return () => window.clearTimeout(handle)
+}
 
 const guestAccount: HudAccountState = { status: 'guest', name: 'XETHKIOZ', checked: true }
 
@@ -53,9 +80,7 @@ const safeStorage = {
   },
 }
 
-const readStoredSound = (): boolean => {
-  return safeStorage.get(STORAGE_SOUND) === 'enabled'
-}
+const readStoredSound = (): boolean => safeStorage.get(STORAGE_SOUND) === 'enabled'
 
 const readStoredVolume = (): number => {
   const stored = Number(safeStorage.get(STORAGE_VOLUME))
@@ -96,13 +121,14 @@ export function HudProvider({ children }: { children: ReactNode }) {
   const [account, setAccount] = useState<HudAccountState>(readStoredAccount)
 
   const refreshAccount = useCallback(async () => {
-    if (!isSupabaseConfigured) {
+    const module = await loadSupabaseModule()
+    if (!module?.isSupabaseConfigured) {
       setAccount({ ...guestAccount, checked: true })
       return
     }
 
     setAccount((current) => ({ ...current, status: current.status === 'connected' ? 'connected' : 'loading', checked: false, issue: undefined }))
-    const { data, error } = await supabase.auth.getSession()
+    const { data, error } = await module.supabase.auth.getSession()
     if (error) {
       setAccount((current) => current.status === 'connected'
         ? { ...current, checked: true, issue: 'network' }
@@ -132,47 +158,49 @@ export function HudProvider({ children }: { children: ReactNode }) {
   }, [account])
 
   useEffect(() => {
-    if (!isSupabaseConfigured) {
+    let active = true
+    let unsubscribe: () => void = () => {}
+
+    if (!HAS_SUPABASE_ENV) {
       setAccount({ ...guestAccount, checked: true })
-      return undefined
+      return () => { active = false }
     }
 
-    let active = true
+    const hadStoredSession = readStoredAccount().status === 'connected'
+    const cancelBootstrap = scheduleDeferred(() => {
+      void loadSupabaseModule().then(async (module) => {
+        if (!active || !module?.isSupabaseConfigured) return
 
-    supabase.auth.getSession().then(({ data, error }) => {
-      if (!active) return
-      if (error) {
-        setAccount((current) => current.status === 'connected'
+        const { data: listener } = module.supabase.auth.onAuthStateChange((event, session) => {
+          if (!active) return
+          if (session?.user) {
+            setAccount(accountFromSupabaseUser(session.user))
+            return
+          }
+          if (event === 'SIGNED_OUT' || event === 'INITIAL_SESSION') setAccount({ ...guestAccount, checked: true })
+        })
+        unsubscribe = () => listener.subscription.unsubscribe()
+
+        const { data, error } = await module.supabase.auth.getSession()
+        if (!active) return
+        if (error) {
+          setAccount((current) => current.status === 'connected'
+            ? { ...current, checked: true, issue: 'network' }
+            : { ...guestAccount, checked: true, issue: 'network' })
+          return
+        }
+        setAccount(data.session?.user ? accountFromSupabaseUser(data.session.user) : { ...guestAccount, checked: true })
+      }).catch(() => {
+        if (active) setAccount((current) => current.status === 'connected'
           ? { ...current, checked: true, issue: 'network' }
           : { ...guestAccount, checked: true, issue: 'network' })
-        return
-      }
-      if (!data.session?.user) {
-        setAccount({ ...guestAccount, checked: true })
-        return
-      }
-      setAccount(accountFromSupabaseUser(data.session.user))
-    })
-
-    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session?.user) {
-        setAccount(accountFromSupabaseUser(session.user))
-        return
-      }
-
-      if (event === 'SIGNED_OUT') {
-        setAccount({ ...guestAccount, checked: true })
-        return
-      }
-
-      if (event === 'INITIAL_SESSION' && !session?.user) {
-        setAccount({ ...guestAccount, checked: true })
-      }
-    })
+      })
+    }, hadStoredSession ? 350 : 1600)
 
     return () => {
       active = false
-      listener.subscription.unsubscribe()
+      cancelBootstrap()
+      unsubscribe()
     }
   }, [])
 
@@ -199,8 +227,10 @@ export function HudProvider({ children }: { children: ReactNode }) {
     toggleSound: () => setSoundOn((current) => !current),
     setVolume: (next) => setVolumeState(Math.min(1, Math.max(0, next))),
     toggleAccount: () => {
-      if (account.status === 'connected' && isSupabaseConfigured) {
-        void supabase.auth.signOut().finally(() => setAccount({ ...guestAccount, checked: true }))
+      if (account.status === 'connected' && HAS_SUPABASE_ENV) {
+        void loadSupabaseModule()
+          .then((module) => module?.supabase.auth.signOut())
+          .finally(() => setAccount({ ...guestAccount, checked: true }))
         return
       }
       if (account.status === 'connected') {
