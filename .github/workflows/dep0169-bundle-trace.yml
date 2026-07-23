@@ -1,6 +1,8 @@
 name: DEP0169 Bundle Trace
 
 on:
+  pull_request:
+    branches: [main]
   push:
     branches: [agent/dep0169-trace-154]
   workflow_dispatch:
