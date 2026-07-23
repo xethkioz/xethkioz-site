@@ -22,6 +22,30 @@ const issues = []
 const initialScriptPattern = /<script[^>]+src="([^"]+)"/g
 const forbiddenInitialChunks = /\/(?:assets\/)?(?:supabase|supabaseClient)-[^/"']+\.js(?:\?|$)/i
 
+function readManifest() {
+  const manifestPath = path.join(distDir, '.vite', 'manifest.json')
+  if (!fs.existsSync(manifestPath)) return null
+  return JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
+}
+
+function findStaticImportChain(manifest, startKey, targetKeys) {
+  const queue = [[startKey]]
+  const visited = new Set()
+
+  while (queue.length) {
+    const chain = queue.shift()
+    const current = chain.at(-1)
+    if (!current || visited.has(current)) continue
+    visited.add(current)
+    if (targetKeys.has(current)) return chain
+
+    const imports = manifest[current]?.imports ?? []
+    for (const imported of imports) queue.push([...chain, imported])
+  }
+
+  return null
+}
+
 for (const relativePath of publicHtmlFiles) {
   const absolutePath = path.join(distDir, relativePath)
   if (!fs.existsSync(absolutePath)) {
@@ -38,6 +62,20 @@ for (const relativePath of publicHtmlFiles) {
 const mainHtml = fs.readFileSync(path.join(distDir, 'index.html'), 'utf8')
 if (!mainHtml.includes('/assets/main-')) issues.push('index.html is missing the main application bundle.')
 if (!mainHtml.includes('/assets/vendor-')) issues.push('index.html is missing the React vendor bundle.')
+
+const manifest = readManifest()
+if (manifest) {
+  const entries = Object.entries(manifest)
+  const mainEntry = entries.find(([key, value]) => value.isEntry && (value.src === 'index.html' || key === 'index.html'))?.[0]
+  const supabaseKeys = new Set(entries.filter(([, value]) => /(?:^|\/)supabase-[^/]+\.js$/i.test(value.file)).map(([key]) => key))
+  if (mainEntry && supabaseKeys.size) {
+    const chain = findStaticImportChain(manifest, mainEntry, supabaseKeys)
+    if (chain) {
+      const readable = chain.map((key) => `${key} [${manifest[key]?.file ?? 'unknown'}]`).join(' -> ')
+      issues.push(`Static Supabase import chain: ${readable}`)
+    }
+  }
+}
 
 if (issues.length) {
   issues.forEach((issue) => console.error(`FAIL ${issue}`))
