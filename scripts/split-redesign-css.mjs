@@ -70,8 +70,8 @@ if (!green.content.includes('.xk-green-shell') || !green.content.includes('.xk-g
 if (coreBlock.includes('@keyframes portal-world-drift') || coreBlock.includes('.xk-home-specter-energy')) {
   throw new Error('Home portal selectors leaked back into the global core.')
 }
-if (coreBlock.includes('/* Home manifesto:') || coreBlock.includes('.xk-home-story{')) {
-  throw new Error('Home manifesto selectors leaked back into the global core.')
+if (coreBlock.includes(HOME_STORY_START)) {
+  throw new Error('The Home manifesto base block leaked back into the global core.')
 }
 if (coreBlock.includes('.xk-green-shell') || coreBlock.includes('.xk-green-access-sequence')) {
   throw new Error('Green Node route selectors leaked back into the global core.')
