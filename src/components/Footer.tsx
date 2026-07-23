@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useLang } from '../lib/LangContext'
+import { usePrivacyConsent } from '../lib/PrivacyConsentContext'
 import { SOCIAL_LINKS } from '../lib/siteConfig'
 
 const copy = {
@@ -11,6 +12,7 @@ const copy = {
     about: 'Quiénes somos',
     editorial: 'Política editorial',
     privacy: 'Privacidad y cookies',
+    privacySettings: 'Preferencias de privacidad',
     contact: 'Contacto y sponsors',
     socialLabel: 'Redes',
     external: 'Señales externas',
@@ -25,6 +27,7 @@ const copy = {
     about: 'About us',
     editorial: 'Editorial policy',
     privacy: 'Privacy and cookies',
+    privacySettings: 'Privacy preferences',
     contact: 'Contact and sponsors',
     socialLabel: 'Social networks',
     external: 'External signals',
@@ -35,6 +38,7 @@ const copy = {
 
 export default function Footer() {
   const { lang } = useLang()
+  const { openSettings } = usePrivacyConsent()
   const t = copy[lang]
 
   return (
@@ -52,6 +56,7 @@ export default function Footer() {
             <Link to="/about">{t.about}</Link>
             <Link to="/editorial-policy">{t.editorial}</Link>
             <Link to="/privacy">{t.privacy}</Link>
+            <button type="button" onClick={openSettings} className="w-fit text-left text-inherit hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300">{t.privacySettings}</button>
             <Link to="/contact">{t.contact}</Link>
           </div>
         </nav>
