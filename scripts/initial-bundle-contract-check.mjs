@@ -20,7 +20,10 @@ const publicHtmlFiles = [
 
 const issues = []
 const initialScriptPattern = /<script[^>]+src="([^"]+)"/g
-const forbiddenInitialChunks = /\/(?:assets\/)?(?:supabase|supabaseClient)-[^/"']+\.js(?:\?|$)/i
+const forbiddenInitialChunks = [
+  { label: 'Supabase', pattern: /\/(?:assets\/)?(?:supabase|supabaseClient)-[^/"']+\.js(?:\?|$)/i },
+  { label: 'Framer Motion', pattern: /\/(?:assets\/)?motion-[^/"']+\.js(?:\?|$)/i },
+]
 
 function readManifest() {
   const manifestPath = path.join(distDir, '.vite', 'manifest.json')
@@ -55,8 +58,11 @@ for (const relativePath of publicHtmlFiles) {
 
   const html = fs.readFileSync(absolutePath, 'utf8')
   const scripts = [...html.matchAll(initialScriptPattern)].map((match) => match[1])
-  const forbidden = scripts.filter((src) => forbiddenInitialChunks.test(src))
-  if (forbidden.length) issues.push(`${relativePath} preloads Supabase: ${forbidden.join(', ')}`)
+
+  for (const rule of forbiddenInitialChunks) {
+    const forbidden = scripts.filter((src) => rule.pattern.test(src))
+    if (forbidden.length) issues.push(`${relativePath} preloads ${rule.label}: ${forbidden.join(', ')}`)
+  }
 }
 
 const mainHtml = fs.readFileSync(path.join(distDir, 'index.html'), 'utf8')
@@ -67,22 +73,14 @@ const manifest = readManifest()
 if (manifest) {
   const entries = Object.entries(manifest)
   const mainEntry = entries.find(([key, value]) => value.isEntry && (value.src === 'index.html' || key === 'index.html'))?.[0]
-  const supabaseEntries = entries.filter(([, value]) => /(?:^|\/)supabase(?:Client)?-[^/]+\.js$/i.test(value.file))
-  const supabaseKeys = new Set(supabaseEntries.map(([key]) => key))
+  const monitoredEntries = entries.filter(([, value]) => /(?:^|\/)(?:supabase(?:Client)?|motion)-[^/]+\.js$/i.test(value.file))
+  const monitoredKeys = new Set(monitoredEntries.map(([key]) => key))
 
-  if (mainEntry && supabaseKeys.size) {
-    const chain = findStaticImportChain(manifest, mainEntry, supabaseKeys)
+  if (mainEntry && monitoredKeys.size) {
+    const chain = findStaticImportChain(manifest, mainEntry, monitoredKeys)
     if (chain) {
       const readable = chain.map((key) => `${key} [${manifest[key]?.file ?? 'unknown'}]`).join(' -> ')
-      issues.push(`Static Supabase import chain: ${readable}`)
-    } else if (issues.some((issue) => issue.includes('preloads Supabase'))) {
-      const mainRecord = manifest[mainEntry]
-      const promotedBy = entries
-        .filter(([, value]) => (value.imports ?? []).some((key) => supabaseKeys.has(key)))
-        .map(([key, value]) => `${key} [${value.file}]`)
-      console.error(`DIAG main entry ${mainEntry}: ${JSON.stringify({ file: mainRecord?.file, imports: mainRecord?.imports ?? [], dynamicImports: mainRecord?.dynamicImports ?? [] })}`)
-      console.error(`DIAG Supabase entries: ${supabaseEntries.map(([key, value]) => `${key} [${value.file}]`).join(', ')}`)
-      console.error(`DIAG chunks importing Supabase: ${promotedBy.join(', ') || 'none recorded in manifest imports'}`)
+      issues.push(`Static heavy-library import chain: ${readable}`)
     }
   }
 }
@@ -93,4 +91,4 @@ if (issues.length) {
   process.exit(1)
 }
 
-console.log(`PASS initial bundle: ${publicHtmlFiles.length} public HTML entries avoid Supabase preload.`)
+console.log(`PASS initial bundle: ${publicHtmlFiles.length} public HTML entries avoid Supabase and Framer Motion preload.`)
