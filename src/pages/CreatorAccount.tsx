@@ -1,7 +1,13 @@
-import { FormEvent, useEffect, useState } from 'react'
+import { FormEvent, useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import SEO from '../components/SEO'
 import { supabase } from '../lib/supabase'
+import {
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_POLICY_SUMMARY,
+  assessPassword,
+  passwordPolicyError,
+} from '../services/auth/passwordPolicy'
 
 type Mode = 'signup' | 'signin'
 type Status = 'idle' | 'loading' | 'success' | 'error'
@@ -21,6 +27,12 @@ export default function CreatorAccount() {
     password: '',
     role: 'Creador de contenido',
   })
+  const passwordAssessment = useMemo(() => assessPassword(form.password), [form.password])
+  const emailOk = /\S+@\S+\.\S+/.test(form.email)
+  const canSubmit = status !== 'loading'
+    && !(mode === 'signup' && status === 'success')
+    && emailOk
+    && (mode === 'signup' ? passwordAssessment.valid : form.password.length > 0)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -36,6 +48,7 @@ export default function CreatorAccount() {
     setMode(nextMode)
     setStatus('idle')
     setMessage('')
+    update('password', '')
   }
 
   const cooldownKey = () => `xethkioz_signup_${form.email.trim().toLowerCase()}`
@@ -47,6 +60,25 @@ export default function CreatorAccount() {
 
     const email = form.email.trim().toLowerCase()
     const password = form.password
+
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      setStatus('error')
+      setMessage('Ingresá un email válido.')
+      return
+    }
+
+    if (mode === 'signup') {
+      const policyError = passwordPolicyError(password)
+      if (policyError) {
+        setStatus('error')
+        setMessage(policyError)
+        return
+      }
+    } else if (!password) {
+      setStatus('error')
+      setMessage('Ingresá tu contraseña.')
+      return
+    }
 
     try {
       if (mode === 'signup') {
@@ -107,8 +139,10 @@ export default function CreatorAccount() {
         setTimeout(() => navigate('/creator/panel'), 500)
       }
     } catch (error) {
+      const raw = error instanceof Error ? error.message : 'No se pudo completar la operación.'
+      const normalized = raw.toLowerCase()
       setStatus('error')
-      setMessage(error instanceof Error ? error.message : 'No se pudo completar la operación.')
+      setMessage(normalized.includes('weak password') || normalized.includes('password should be') ? PASSWORD_POLICY_SUMMARY : raw)
     }
   }
 
@@ -209,6 +243,7 @@ export default function CreatorAccount() {
                 onChange={(e) => update('email', e.target.value)}
                 className="input-field"
                 placeholder="tu@email.com"
+                autoComplete="email"
               />
             </div>
 
@@ -217,13 +252,29 @@ export default function CreatorAccount() {
               <input
                 type="password"
                 required
-                minLength={6}
+                minLength={mode === 'signup' ? PASSWORD_MIN_LENGTH : 1}
                 value={form.password}
                 onChange={(e) => update('password', e.target.value)}
                 className="input-field"
-                placeholder="Mínimo 6 caracteres"
+                placeholder={mode === 'signup' ? '12+ caracteres con mayúscula, número y símbolo' : 'Tu contraseña'}
+                autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
+                aria-describedby={mode === 'signup' ? 'creator-password-policy' : undefined}
+                aria-invalid={mode === 'signup' && form.password.length > 0 && !passwordAssessment.valid}
               />
             </div>
+
+            {mode === 'signup' ? (
+              <div id="creator-password-policy" className="rounded-lg border border-white/10 bg-black/25 p-3" aria-live="polite">
+                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-gray-400">Seguridad de contraseña</p>
+                <ul className="mt-2 grid grid-cols-2 gap-2 text-[11px]">
+                  {passwordAssessment.rules.map((rule) => (
+                    <li key={rule.key} className={rule.passed ? 'text-green-300' : 'text-gray-500'}>
+                      <span aria-hidden="true">{rule.passed ? '✓' : '○'}</span> {rule.label}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
 
             {message && (
               <div className={`rounded-lg border p-3 text-sm ${status === 'success' ? 'border-green-500/30 bg-green-500/10 text-green-300' : 'border-red-500/30 bg-red-500/10 text-red-300'}`}>
@@ -231,7 +282,7 @@ export default function CreatorAccount() {
               </div>
             )}
 
-            <button type="submit" disabled={status === 'loading' || (mode === 'signup' && status === 'success')} className="btn-primary w-full disabled:opacity-50">
+            <button type="submit" disabled={!canSubmit} className="btn-primary w-full disabled:opacity-50">
               {status === 'loading' ? 'Procesando...' : mode === 'signup' ? status === 'success' ? 'Solicitud enviada' : 'Crear mi cuenta de creador' : 'Entrar al panel'}
             </button>
           </form>
