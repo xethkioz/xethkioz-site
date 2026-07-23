@@ -14,6 +14,7 @@ export default function handler(request: any, response: any) {
     contentType: headerValue(request, 'content-type'),
   }
 
+  // This endpoint is temporary and intentionally never reads the request payload.
   console.info('[XETHKIOZ_TRIGGER_DIAGNOSTIC]', JSON.stringify(metadata))
 
   response.setHeader('Content-Type', 'application/json; charset=utf-8')
