@@ -67,12 +67,22 @@ const manifest = readManifest()
 if (manifest) {
   const entries = Object.entries(manifest)
   const mainEntry = entries.find(([key, value]) => value.isEntry && (value.src === 'index.html' || key === 'index.html'))?.[0]
-  const supabaseKeys = new Set(entries.filter(([, value]) => /(?:^|\/)supabase-[^/]+\.js$/i.test(value.file)).map(([key]) => key))
+  const supabaseEntries = entries.filter(([, value]) => /(?:^|\/)supabase(?:Client)?-[^/]+\.js$/i.test(value.file))
+  const supabaseKeys = new Set(supabaseEntries.map(([key]) => key))
+
   if (mainEntry && supabaseKeys.size) {
     const chain = findStaticImportChain(manifest, mainEntry, supabaseKeys)
     if (chain) {
       const readable = chain.map((key) => `${key} [${manifest[key]?.file ?? 'unknown'}]`).join(' -> ')
       issues.push(`Static Supabase import chain: ${readable}`)
+    } else if (issues.some((issue) => issue.includes('preloads Supabase'))) {
+      const mainRecord = manifest[mainEntry]
+      const promotedBy = entries
+        .filter(([, value]) => (value.imports ?? []).some((key) => supabaseKeys.has(key)))
+        .map(([key, value]) => `${key} [${value.file}]`)
+      console.error(`DIAG main entry ${mainEntry}: ${JSON.stringify({ file: mainRecord?.file, imports: mainRecord?.imports ?? [], dynamicImports: mainRecord?.dynamicImports ?? [] })}`)
+      console.error(`DIAG Supabase entries: ${supabaseEntries.map(([key, value]) => `${key} [${value.file}]`).join(', ')}`)
+      console.error(`DIAG chunks importing Supabase: ${promotedBy.join(', ') || 'none recorded in manifest imports'}`)
     }
   }
 }
