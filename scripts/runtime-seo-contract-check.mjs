@@ -6,6 +6,7 @@ const assert = (condition, message) => { if (!condition) issues.push(message) }
 
 const vercel = JSON.parse(read('vercel.json'))
 const sitemap = read('api/sitemap.ts')
+const newsPage = read('api/news-page.ts')
 const seoShells = read('scripts/generate-seo-shells.mjs')
 const notFound = read('api/not-found.ts')
 const streamsMigration = read('supabase/migrations/20260723153000_streams_public_radar.sql')
@@ -25,6 +26,9 @@ assert(!rewrites.some((item) => item.source === '/nexus-city'), 'Redirected Nexu
 assert(!sitemap.includes("'/nexus-city'"), 'Redirected Nexus City must not remain in the sitemap.')
 assert(!seoShells.includes("path: '/nexus-city'"), 'Redirected Nexus City must not generate a standalone SEO shell.')
 assert(rewriteMap.get('/green-node') === '/index.html', 'Green Node deep links must remain valid without exposing it in navigation.')
+assert(rewriteMap.get('/news/:slug') === '/api/news-page?slug=:slug', 'Article routes must preserve the slug query for the dynamic SEO shell.')
+assert(newsPage.includes("new URL(rawUrl, 'http://localhost').searchParams.get(key)"), 'The article SEO shell must parse its slug with the WHATWG URL API.')
+assert(!newsPage.includes('request.query'), 'The article SEO shell must not access Vercel request.query because legacy runtimes invoke url.parse().')
 assert(rewriteMap.get('/nexus-city/u/:handle') === '/index.html', 'Public Nexus passport deep links must remain valid.')
 assert(rewriteMap.get('/nexus-city/room/:handle') === '/index.html', 'Nexus room deep links must remain valid.')
 assert(rewriteMap.get('/nexus-city/vip') === '/private.html', 'VIP Nexus access must use the private noindex shell.')
@@ -68,4 +72,4 @@ if (issues.length) {
   process.exit(1)
 }
 
-console.log('PASS runtime/SEO contracts: real 404, deep links, redirects, passport privacy, enforced CSP, streams RLS/indexes and telemetry hygiene.')
+console.log('PASS runtime/SEO contracts: real 404, article WHATWG query parsing, deep links, redirects, passport privacy, enforced CSP, streams RLS/indexes and telemetry hygiene.')
