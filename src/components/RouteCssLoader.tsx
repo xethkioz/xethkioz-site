@@ -6,7 +6,7 @@ let greenNodeStyles: Promise<void> | null = null
 
 export function loadRouteStyles(pathname: string): Promise<void> {
   if (pathname === '/') {
-    homeStyles ??= import('../home-portal-rings.css').then(() => undefined)
+    homeStyles ??= import('../generated/home-shell.css').then(() => undefined)
     return homeStyles
   }
 
