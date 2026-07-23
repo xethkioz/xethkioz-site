@@ -29,6 +29,8 @@ const copy = {
     radarLabel: 'Juegos bajo seguimiento editorial',
     previous: 'Juego anterior',
     next: 'Juego siguiente',
+    pause: 'Pausar rotación automática',
+    resume: 'Reanudar rotación automática',
   },
   en: {
     eyebrow: 'GAME_SELECT // PRIMARY ARCHIVE',
@@ -42,8 +44,14 @@ const copy = {
     radarLabel: 'Games under editorial watch',
     previous: 'Previous game',
     next: 'Next game',
+    pause: 'Pause automatic rotation',
+    resume: 'Resume automatic rotation',
   },
 } as const
+
+function prefersReducedMotion() {
+  return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
 
 export default function GamingGuideRotation({ lang }: { lang: GuideLang }) {
   const t = copy[lang]
@@ -72,32 +80,54 @@ export default function GamingGuideRotation({ lang }: { lang: GuideLang }) {
     })),
   ], [lang])
   const [activeIndex, setActiveIndex] = useState(0)
-  const [paused, setPaused] = useState(false)
+  const [paused, setPaused] = useState(prefersReducedMotion)
+  const [interactionPaused, setInteractionPaused] = useState(false)
   const active = items[activeIndex] ?? items[0]
+  const rotationPaused = paused || interactionPaused
 
   useEffect(() => {
-    if (paused) return undefined
+    const preference = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const syncPreference = () => {
+      if (preference.matches) setPaused(true)
+    }
+
+    preference.addEventListener('change', syncPreference)
+    return () => preference.removeEventListener('change', syncPreference)
+  }, [])
+
+  useEffect(() => {
+    if (rotationPaused) return undefined
     const timer = window.setInterval(() => setActiveIndex((current) => (current + 1) % items.length), 6200)
     return () => window.clearInterval(timer)
-  }, [items.length, paused])
+  }, [items.length, rotationPaused])
 
   const move = (direction: 1 | -1) => {
     setActiveIndex((current) => (current + direction + items.length) % items.length)
+  }
+
+  const selectGame = (index: number) => {
+    setActiveIndex(index)
   }
 
   return (
     <section
       className="xk-game-rotation"
       aria-labelledby="game-rotation-title"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onFocusCapture={() => setPaused(true)}
-      onBlurCapture={() => setPaused(false)}
+      onMouseEnter={() => setInteractionPaused(true)}
+      onMouseLeave={() => setInteractionPaused(false)}
+      onFocusCapture={() => setInteractionPaused(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setInteractionPaused(false)
+      }}
       style={{ '--rotation-accent': active.color } as CSSProperties}
     >
       <header className="xk-game-rotation-head">
         <div><p>{t.eyebrow}</p><h2 id="game-rotation-title">{t.title}</h2><span>{t.description}</span></div>
-        <div><button type="button" onClick={() => move(-1)} aria-label={t.previous}>←</button><button type="button" onClick={() => move(1)} aria-label={t.next}>→</button></div>
+        <div>
+          <button type="button" onClick={() => move(-1)} aria-label={t.previous}>←</button>
+          <button type="button" onClick={() => setPaused((current) => !current)} aria-label={paused ? t.resume : t.pause} aria-pressed={paused}>{paused ? '▶' : 'Ⅱ'}</button>
+          <button type="button" onClick={() => move(1)} aria-label={t.next}>→</button>
+        </div>
       </header>
 
       <article className="xk-game-rotation-stage">
@@ -116,11 +146,13 @@ export default function GamingGuideRotation({ lang }: { lang: GuideLang }) {
       <div className="xk-game-rotation-groups">
         <div><p>{t.guidesLabel}</p><nav aria-label={t.guidesLabel}>{guideGames.map((game) => {
           const index = items.findIndex((item) => item.id === game.id)
-          return <button key={game.id} type="button" className={active.id === game.id ? 'is-active' : ''} onClick={() => setActiveIndex(index)}><span style={{ background: game.color }} aria-hidden="true" /><b>{game.title}</b><small>{game.code}</small></button>
+          const isActive = active.id === game.id
+          return <button key={game.id} type="button" className={isActive ? 'is-active' : ''} aria-pressed={isActive} onClick={() => selectGame(index)}><span style={{ background: game.color }} aria-hidden="true" /><b>{game.title}</b><small>{game.code}</small></button>
         })}</nav></div>
         <div><p>{t.radarLabel}</p><nav aria-label={t.radarLabel}>{radarGames.map((game) => {
           const index = items.findIndex((item) => item.id === game.id)
-          return <button key={game.id} type="button" className={active.id === game.id ? 'is-active' : ''} onClick={() => setActiveIndex(index)}><span style={{ background: game.color }} aria-hidden="true" /><b>{game.title}</b><small>{game.code}</small></button>
+          const isActive = active.id === game.id
+          return <button key={game.id} type="button" className={isActive ? 'is-active' : ''} aria-pressed={isActive} onClick={() => selectGame(index)}><span style={{ background: game.color }} aria-hidden="true" /><b>{game.title}</b><small>{game.code}</small></button>
         })}</nav></div>
       </div>
     </section>
