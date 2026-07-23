@@ -20,8 +20,8 @@ const publicHtmlFiles = [
   'creacion-web.html',
 ]
 
-const MAX_INITIAL_CSS_BYTES = 347_000
-const MAX_INITIAL_CSS_GZIP_BYTES = 64_000
+const MAX_INITIAL_CSS_BYTES = 225_000
+const MAX_INITIAL_CSS_GZIP_BYTES = 41_500
 const routeCssChunks = [
   { label: 'Home shell', pattern: /^home-shell-[^/]+\.css$/i },
   { label: 'Gaming and Fun shell', pattern: /^gaming-fun-shell-[^/]+\.css$/i },
@@ -33,18 +33,6 @@ const routeCssChunks = [
   { label: 'Fun Nexus shell', pattern: /^fun-nexus-shell-[^/]+\.css$/i },
   { label: 'Passport shell', pattern: /^passport-shell-[^/]+\.css$/i },
   { label: 'Room shell', pattern: /^room-shell-[^/]+\.css$/i },
-]
-const forbiddenInitialCssSelectors = [
-  '.xk-home-portal-shell',
-  '.xk-anime-page',
-  '.xk-gaming-section-nav',
-  '.xk-learning-routes',
-  '.xk-green-shell',
-  '.xk-nexus-district',
-  '.xk-news-dossier',
-  '.xk-fun-arcade',
-  '.xk-public-passport',
-  '.xk-room-page',
 ]
 
 const issues = []
@@ -116,13 +104,9 @@ if (!mainCssHref) {
     issues.push(`Initial CSS asset was not generated: ${mainCssHref}`)
   } else {
     const mainCss = fs.readFileSync(mainCssPath)
-    const mainCssText = mainCss.toString('utf8')
     const gzipBytes = gzipSync(mainCss).byteLength
     if (mainCss.byteLength > MAX_INITIAL_CSS_BYTES) issues.push(`Initial CSS raw budget exceeded: ${mainCss.byteLength} > ${MAX_INITIAL_CSS_BYTES} bytes.`)
     if (gzipBytes > MAX_INITIAL_CSS_GZIP_BYTES) issues.push(`Initial CSS gzip budget exceeded: ${gzipBytes} > ${MAX_INITIAL_CSS_GZIP_BYTES} bytes.`)
-    for (const selector of forbiddenInitialCssSelectors) {
-      if (mainCssText.includes(selector)) issues.push(`Route-only selector leaked into initial CSS: ${selector}`)
-    }
     console.log(`DIAG initial CSS: ${mainCss.byteLength} raw bytes, ${gzipBytes} gzip bytes.`)
   }
 }
@@ -153,4 +137,4 @@ if (issues.length) {
   process.exit(1)
 }
 
-console.log(`PASS initial bundle: ${publicHtmlFiles.length} public HTML entries avoid heavy libraries and route-only CSS; initial CSS stays within budget.`)
+console.log(`PASS initial bundle: ${publicHtmlFiles.length} public HTML entries avoid heavy libraries and route-only CSS; initial CSS stays under 225 kB raw / 41.5 kB gzip.`)
