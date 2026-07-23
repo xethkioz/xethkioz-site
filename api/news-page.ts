@@ -7,7 +7,7 @@ import {
 } from './_public-news-feed.js'
 
 type LegacyUrlModule = {
-  parse: typeof import('node:url').parse
+  parse: (...args: any[]) => any
 }
 
 type DiagnosticGlobal = typeof globalThis & {
@@ -49,13 +49,13 @@ if (!diagnosticGlobal.__xethkiozLegacyUrlParseWrapped) {
   const legacyUrl = require('node:url') as LegacyUrlModule
   const originalParse = legacyUrl.parse
 
-  legacyUrl.parse = function tracedLegacyUrlParse(...args: Parameters<LegacyUrlModule['parse']>) {
+  legacyUrl.parse = function tracedLegacyUrlParse(...args: any[]) {
     if (!diagnosticGlobal.__xethkiozLegacyUrlParseTraceEmitted) {
       diagnosticGlobal.__xethkiozLegacyUrlParseTraceEmitted = true
       logDep0169Trace('news-page url.parse invocation', new Error('legacy url.parse invocation').stack)
     }
     return originalParse(...args)
-  } as LegacyUrlModule['parse']
+  }
 }
 
 const DEFAULT_DESCRIPTION = 'Noticias, análisis y señales verificadas sobre videojuegos, tecnología, inteligencia artificial, ciencia y cultura digital.'
