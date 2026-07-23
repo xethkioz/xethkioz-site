@@ -1,12 +1,13 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { Navigate, Routes, Route, useLocation } from 'react-router-dom'
-import { Analytics as VercelAnalytics } from '@vercel/analytics/react'
 import { LangProvider, useLang } from './lib/LangContext'
 import { HudProvider } from './lib/HudContext'
 import { GREEN_NODE_UNLOCK_KEY, WispProvider } from './providers/WispProvider'
 import { ProfileProgressProvider } from './lib/ProfileProgressContext'
+import { PrivacyConsentProvider } from './lib/PrivacyConsentContext'
 import ScrollToTop from './components/ScrollToTop'
-import Analytics from './components/Analytics'
+import ConsentAwareAnalytics from './components/ConsentAwareAnalytics'
+import PrivacyConsentPanel from './components/PrivacyConsentPanel'
 import AppErrorBoundary from './components/AppErrorBoundary'
 import { WorldRuntimeIntegration, WorldRuntimeProvider } from './engines/world/runtime'
 import { WorldStateProvider } from './engines/world/state'
@@ -180,8 +181,7 @@ function AppShell() {
       <a href="#main-content" className="xk-skip-link">
         {lang === 'es' ? 'Saltar al contenido principal' : 'Skip to main content'}
       </a>
-      <Analytics />
-      <VercelAnalytics />
+      <ConsentAwareAnalytics />
       <ScrollToTop />
       <RouteAccessibility pathname={location.pathname} />
       {hasPublicNavigation && (
@@ -270,6 +270,7 @@ function AppShell() {
           <NexusChatWidget clearMobileDock={hasPublicNavigation} />
         </Suspense>
       )}
+      {!isCmsRoute ? <PrivacyConsentPanel /> : null}
     </div>
   )
 }
@@ -283,15 +284,17 @@ export default function App() {
           <WorldThemeProvider>
             <LightingEngineProvider>
               <LangProvider>
-                <ExperienceProvider>
-                  <HudProvider>
-                    <WispProvider>
-                      <ProfileProgressProvider>
-                        <AppShell />
-                      </ProfileProgressProvider>
-                    </WispProvider>
-                  </HudProvider>
-                </ExperienceProvider>
+                <PrivacyConsentProvider>
+                  <ExperienceProvider>
+                    <HudProvider>
+                      <WispProvider>
+                        <ProfileProgressProvider>
+                          <AppShell />
+                        </ProfileProgressProvider>
+                      </WispProvider>
+                    </HudProvider>
+                  </ExperienceProvider>
+                </PrivacyConsentProvider>
               </LangProvider>
             </LightingEngineProvider>
           </WorldThemeProvider>
