@@ -40,7 +40,6 @@
     { "source": "/login", "destination": "/private.html" },
     { "source": "/confirm-email", "destination": "/private.html" },
     { "source": "/profile", "destination": "/private.html" },
-    { "source": "/triggers/github", "destination": "/api/github-trigger-diagnostic" },
     { "source": "/((?!api/).*)", "destination": "/api/not-found" }
   ],
   "headers": [
