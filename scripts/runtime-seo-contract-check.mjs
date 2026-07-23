@@ -9,6 +9,7 @@ const sitemap = read('api/sitemap.ts')
 const seoShells = read('scripts/generate-seo-shells.mjs')
 const notFound = read('api/not-found.ts')
 const streamsMigration = read('supabase/migrations/20260723153000_streams_public_radar.sql')
+const streamsIndexMigration = read('supabase/migrations/20260723154500_streams_created_by_index.sql')
 const visitLog = read('supabase/functions/visit-log/index.ts')
 
 const redirectMap = new Map((vercel.redirects ?? []).map((item) => [item.source, item]))
@@ -38,6 +39,7 @@ assert(streamsMigration.includes('create table if not exists public.streams'), '
 assert(streamsMigration.includes('alter table public.streams enable row level security'), 'The streams table must enable RLS.')
 assert(streamsMigration.includes('streams_public_read'), 'The streams table requires an explicit public read policy.')
 assert(streamsMigration.includes("private.xethkioz_has_role(array['ADMIN'])"), 'Stream mutations must require the secure private ADMIN helper.')
+assert(streamsIndexMigration.includes('streams_created_by_idx') && streamsIndexMigration.includes('on public.streams (created_by)'), 'The streams editorial ownership foreign key requires a covering index.')
 
 assert(visitLog.includes('isAutomatedClient'), 'Visit telemetry must identify automated clients.')
 assert(visitLog.includes("ignored: 'automated-client'"), 'Automated clients must be excluded from stored visit analytics.')
@@ -50,4 +52,4 @@ if (issues.length) {
   process.exit(1)
 }
 
-console.log('PASS runtime/SEO contracts: real 404, deep links, redirects, CSP report-only, streams RLS and telemetry hygiene.')
+console.log('PASS runtime/SEO contracts: real 404, deep links, redirects, CSP report-only, streams RLS/indexes and telemetry hygiene.')
