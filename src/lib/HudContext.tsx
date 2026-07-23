@@ -145,7 +145,7 @@ export function HudProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let active = true
-    let unsubscribe = () => undefined
+    let unsubscribe: () => void = () => {}
 
     if (!HAS_SUPABASE_ENV) {
       setAccount({ ...guestAccount, checked: true })
