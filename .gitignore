@@ -12,6 +12,7 @@ dist/
 dist-ssr/
 .netlify/
 seo-shells/
+src/generated/*.css
 
 # TypeScript / tooling caches
 *.tsbuildinfo
