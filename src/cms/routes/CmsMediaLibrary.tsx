@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState, type ChangeEvent } from 'react'
 import SafeImage from '../../components/SafeImage'
+import { xethkiozStaticMediaCatalog } from '../../data/xethkiozStaticMediaCatalog'
 import { useLang } from '../../lib/LangContext'
 import { supabase } from '../../services/supabaseClient'
 import { useAdminSession } from '../hooks'
 
 const NEWS_MEDIA_BUCKET = 'news-media'
+const STATIC_MEDIA_OWNER = 'XETHKIOZ CORE'
 const MAX_MEDIA_BYTES = 8 * 1024 * 1024
 const MAX_LIBRARY_ITEMS = 300
 const acceptedMediaTypes = new Map([
@@ -31,15 +33,26 @@ type MediaAsset = {
   mimeType: string
   createdAt: string | null
   updatedAt: string | null
+  searchText: string
+  deletable: boolean
 }
 
 type ScopeFilter = 'all' | 'mine'
+
+const staticMediaAssets: MediaAsset[] = xethkiozStaticMediaCatalog.map((asset) => ({
+  ...asset,
+  ownerId: STATIC_MEDIA_OWNER,
+  size: 0,
+  createdAt: null,
+  updatedAt: null,
+  deletable: false,
+}))
 
 const copy = {
   es: {
     eyebrow: 'MEDIA LIBRARY',
     title: 'Imágenes reutilizables del CMS',
-    description: 'Explorá portadas ya subidas, cargá nuevos recursos y reutilizá su URL pública sin duplicar archivos.',
+    description: 'Explorá las portadas gamer y tech incluidas en XETHKIOZ, sumá nuevos recursos y reutilizá cualquier URL pública sin duplicar archivos.',
     permission: 'Acceso editorial',
     role: 'Rol',
     upload: 'Subir imágenes',
@@ -48,12 +61,12 @@ const copy = {
     uploading: 'Subiendo…',
     refresh: 'Actualizar biblioteca',
     search: 'Buscar archivos',
-    searchPlaceholder: 'Nombre, ruta o tipo de archivo',
+    searchPlaceholder: 'Juego, categoría, nombre, ruta o formato',
     scope: 'Alcance',
     all: 'Todos los recursos',
-    mine: 'Mis recursos',
-    loading: 'Leyendo el bucket news-media…',
-    loadError: 'No se pudo cargar la biblioteca multimedia.',
+    mine: 'Mis recursos subidos',
+    loading: 'Leyendo recursos XETHKIOZ y bucket news-media…',
+    loadError: 'No se pudo leer el bucket multimedia. Los recursos estáticos siguen disponibles.',
     uploadError: 'No se pudieron subir todos los archivos.',
     invalidType: 'Formato no permitido',
     tooLarge: 'supera el máximo de 8 MB',
@@ -65,24 +78,24 @@ const copy = {
     deleteSuccess: 'Archivo eliminado de la biblioteca.',
     deleteError: 'No se pudo eliminar el archivo. Solo el propietario o ADMIN pueden borrarlo.',
     emptyTitle: 'No hay imágenes disponibles',
-    emptyText: 'Subí el primer recurso o cambiá los filtros de búsqueda.',
+    emptyText: 'Cambiá los filtros de búsqueda o subí un nuevo recurso.',
     assetCount: 'recursos',
-    owner: 'Propietario',
+    owner: 'Origen',
     size: 'Tamaño',
     updated: 'Actualizado',
     path: 'Ruta interna',
     preview: 'Abrir imagen',
     copy: 'Copiar URL',
     remove: 'Eliminar',
-    noDate: 'Sin fecha',
+    noDate: 'Incluido con la web',
     libraryLabel: 'Biblioteca multimedia editorial',
     fileInput: 'Seleccionar imágenes para la biblioteca',
-    protectedNote: 'La biblioteca solo enumera archivos para usuarios editoriales autenticados. Las URLs siguen siendo públicas para que las portadas funcionen en el sitio.',
+    protectedNote: 'Los recursos XETHKIOZ CORE están versionados con la web y no se pueden borrar desde el CMS. Los archivos del bucket siguen siendo públicos para que las portadas funcionen en el sitio.',
   },
   en: {
     eyebrow: 'MEDIA LIBRARY',
     title: 'Reusable CMS images',
-    description: 'Browse uploaded covers, add new assets and reuse their public URL without duplicating files.',
+    description: 'Browse the gaming and tech covers bundled with XETHKIOZ, add new resources and reuse any public URL without duplicating files.',
     permission: 'Editorial access',
     role: 'Role',
     upload: 'Upload images',
@@ -91,12 +104,12 @@ const copy = {
     uploading: 'Uploading…',
     refresh: 'Refresh library',
     search: 'Search files',
-    searchPlaceholder: 'Name, path or file type',
+    searchPlaceholder: 'Game, category, name, path or format',
     scope: 'Scope',
-    all: 'All assets',
-    mine: 'My assets',
-    loading: 'Reading the news-media bucket…',
-    loadError: 'Could not load the media library.',
+    all: 'All resources',
+    mine: 'My uploaded resources',
+    loading: 'Reading XETHKIOZ resources and news-media bucket…',
+    loadError: 'The media bucket could not be read. Static resources remain available.',
     uploadError: 'Not all files could be uploaded.',
     invalidType: 'Unsupported format',
     tooLarge: 'exceeds the 8 MB limit',
@@ -108,19 +121,19 @@ const copy = {
     deleteSuccess: 'File removed from the library.',
     deleteError: 'Could not delete the file. Only its owner or ADMIN can remove it.',
     emptyTitle: 'No images available',
-    emptyText: 'Upload the first asset or change the search filters.',
+    emptyText: 'Change the search filters or upload a new resource.',
     assetCount: 'assets',
-    owner: 'Owner',
+    owner: 'Source',
     size: 'Size',
     updated: 'Updated',
     path: 'Internal path',
     preview: 'Open image',
     copy: 'Copy URL',
     remove: 'Delete',
-    noDate: 'No date',
+    noDate: 'Bundled with the website',
     libraryLabel: 'Editorial media library',
     fileInput: 'Select images for the media library',
-    protectedNote: 'Only authenticated editorial users can list this library. URLs remain public so covers continue working on the website.',
+    protectedNote: 'XETHKIOZ CORE resources are versioned with the website and cannot be deleted from the CMS. Bucket files remain public so covers continue working on the website.',
   },
 } as const
 
@@ -186,17 +199,28 @@ async function listMediaFolder(folder = '', depth = 0): Promise<MediaAsset[]> {
       mimeType: mimeType || 'image',
       createdAt: entry.created_at ?? null,
       updatedAt: entry.updated_at ?? entry.created_at ?? null,
+      searchText: `${entry.name} ${path} ${mimeType}`,
+      deletable: true,
     })
   }
 
   return assets.slice(0, MAX_LIBRARY_ITEMS)
 }
 
+function sortMediaAssets(assets: MediaAsset[]) {
+  return [...assets].sort((left, right) => {
+    if (left.deletable !== right.deletable) return left.deletable ? 1 : -1
+    const rightDate = new Date(right.updatedAt ?? 0).getTime()
+    const leftDate = new Date(left.updatedAt ?? 0).getTime()
+    return rightDate - leftDate || left.name.localeCompare(right.name)
+  })
+}
+
 export default function CmsMediaLibrary() {
   const { lang } = useLang()
   const t = copy[lang]
   const { user, role, canAccessCms, canDelete } = useAdminSession()
-  const [assets, setAssets] = useState<MediaAsset[]>([])
+  const [assets, setAssets] = useState<MediaAsset[]>(staticMediaAssets)
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
   const [deletingPath, setDeletingPath] = useState<string | null>(null)
@@ -209,10 +233,10 @@ export default function CmsMediaLibrary() {
     setLoading(true)
     setError(null)
     try {
-      const nextAssets = await listMediaFolder()
-      setAssets(nextAssets.sort((a, b) => new Date(b.updatedAt ?? 0).getTime() - new Date(a.updatedAt ?? 0).getTime()))
+      const uploadedAssets = await listMediaFolder()
+      setAssets(sortMediaAssets([...staticMediaAssets, ...uploadedAssets]))
     } catch (caughtError) {
-      setAssets([])
+      setAssets(sortMediaAssets(staticMediaAssets))
       setError(`${t.loadError} ${caughtError instanceof Error ? caughtError.message : ''}`.trim())
     } finally {
       setLoading(false)
@@ -221,6 +245,7 @@ export default function CmsMediaLibrary() {
 
   useEffect(() => {
     if (!canAccessCms) {
+      setAssets(sortMediaAssets(staticMediaAssets))
       setLoading(false)
       return
     }
@@ -232,7 +257,7 @@ export default function CmsMediaLibrary() {
     return assets.filter((asset) => {
       if (scope === 'mine' && asset.ownerId !== user?.id) return false
       if (!query) return true
-      return `${asset.name} ${asset.path} ${asset.mimeType}`.toLowerCase().includes(query)
+      return `${asset.name} ${asset.path} ${asset.mimeType} ${asset.searchText}`.toLowerCase().includes(query)
     })
   }, [assets, scope, search, user?.id])
 
@@ -259,22 +284,25 @@ export default function CmsMediaLibrary() {
     }
 
     setUploading(true)
-    const uploadErrors: string[] = []
-    for (const file of files) {
-      const extension = acceptedMediaTypes.get(file.type) as string
-      const path = `${user.id}/library/${Date.now()}-${safeStem(file.name)}-${crypto.randomUUID().slice(0, 8)}.${extension}`
-      const { error: uploadError } = await supabase.storage.from(NEWS_MEDIA_BUCKET).upload(path, file, {
-        cacheControl: '31536000',
-        contentType: file.type,
-        upsert: false,
-      })
-      if (uploadError) uploadErrors.push(`${file.name}: ${uploadError.message}`)
-    }
+    try {
+      const uploadErrors: string[] = []
+      for (const file of files) {
+        const extension = acceptedMediaTypes.get(file.type) as string
+        const path = `${user.id}/library/${Date.now()}-${safeStem(file.name)}-${crypto.randomUUID().slice(0, 8)}.${extension}`
+        const { error: uploadError } = await supabase.storage.from(NEWS_MEDIA_BUCKET).upload(path, file, {
+          cacheControl: '31536000',
+          contentType: file.type,
+          upsert: false,
+        })
+        if (uploadError) uploadErrors.push(`${file.name}: ${uploadError.message}`)
+      }
 
-    if (uploadErrors.length) setError(`${t.uploadError} ${uploadErrors.join(' · ')}`)
-    else setMessage(t.uploadSuccess)
-    await loadAssets()
-    setUploading(false)
+      if (uploadErrors.length) setError(`${t.uploadError} ${uploadErrors.join(' · ')}`)
+      else setMessage(t.uploadSuccess)
+      await loadAssets()
+    } finally {
+      setUploading(false)
+    }
   }
 
   async function copyUrl(asset: MediaAsset) {
@@ -288,7 +316,7 @@ export default function CmsMediaLibrary() {
   }
 
   async function removeAsset(asset: MediaAsset) {
-    if (!user?.id || (!canDelete && asset.ownerId !== user.id)) return
+    if (!asset.deletable || !user?.id || (!canDelete && asset.ownerId !== user.id)) return
     if (!window.confirm(t.deleteConfirm)) return
 
     setDeletingPath(asset.path)
@@ -341,18 +369,18 @@ export default function CmsMediaLibrary() {
       <aside className="rounded-2xl border border-green-400/20 bg-green-400/[0.05] p-4 text-xs leading-5 text-green-50/75">{t.protectedNote}</aside>
 
       {loading ? <p className="rounded-3xl border border-purple-500/20 bg-white/[0.04] p-5 text-purple-100" role="status" aria-live="polite">{t.loading}</p> : null}
-      {error ? <p className="rounded-3xl border border-red-500/30 bg-red-500/10 p-5 text-red-200" role="alert">{error}</p> : null}
+      {error ? <p className="rounded-3xl border border-yellow-500/30 bg-yellow-500/10 p-5 text-yellow-100" role="alert">{error}</p> : null}
       {message ? <p className="rounded-3xl border border-green-500/30 bg-green-500/10 p-5 text-green-100" role="status" aria-live="polite">{message}</p> : null}
 
-      {!loading && !error ? <p className="text-xs text-purple-200" role="status" aria-live="polite">{filteredAssets.length} {t.assetCount}</p> : null}
+      {!loading ? <p className="text-xs text-purple-200" role="status" aria-live="polite">{filteredAssets.length} {t.assetCount}</p> : null}
 
-      {!loading && !error && filteredAssets.length === 0 ? (
+      {!loading && filteredAssets.length === 0 ? (
         <article className="rounded-3xl border border-dashed border-purple-400/20 bg-white/[0.025] p-6" role="status"><h3 className="text-xl font-black">{t.emptyTitle}</h3><p className="mt-2 text-sm text-purple-100">{t.emptyText}</p></article>
       ) : null}
 
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3" aria-label={t.libraryLabel}>
         {filteredAssets.map((asset) => {
-          const canRemove = Boolean(user?.id && (canDelete || asset.ownerId === user.id))
+          const canRemove = asset.deletable && Boolean(user?.id && (canDelete || asset.ownerId === user.id))
           return (
             <article key={asset.path} className="overflow-hidden rounded-3xl border border-purple-500/20 bg-white/[0.04] shadow-xl shadow-black/20">
               <a href={asset.publicUrl} target="_blank" rel="noreferrer noopener" aria-label={`${t.preview}: ${asset.name}`} className="block overflow-hidden bg-black/40">
