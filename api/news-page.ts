@@ -5,6 +5,32 @@ import {
   type PublicArticleMetadata,
 } from './_public-news-feed.js'
 
+type DiagnosticGlobal = typeof globalThis & {
+  __xethkiozDep0169ProbeInstalled?: boolean
+}
+
+const diagnosticGlobal = globalThis as DiagnosticGlobal
+
+if (!diagnosticGlobal.__xethkiozDep0169ProbeInstalled) {
+  diagnosticGlobal.__xethkiozDep0169ProbeInstalled = true
+  process.on('warning', (warning) => {
+    const code = (warning as Error & { code?: string }).code
+    if (code !== 'DEP0169') return
+
+    const stack = (warning.stack ?? `${warning.name}: ${warning.message}`)
+      .split('\n')
+      .slice(0, 18)
+      .map((line) => line.replaceAll(process.cwd(), '<cwd>'))
+
+    console.warn(JSON.stringify({
+      level: 'warning',
+      message: 'news-page DEP0169 trace',
+      code,
+      stack,
+    }))
+  })
+}
+
 const DEFAULT_DESCRIPTION = 'Noticias, análisis y señales verificadas sobre videojuegos, tecnología, inteligencia artificial, ciencia y cultura digital.'
 const DEFAULT_IMAGE = '/assets/xethkioz-cover.png'
 const AUTHOR_NAME = 'Alexis Díaz · XETHKIOZ'
