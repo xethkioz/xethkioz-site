@@ -26,6 +26,8 @@ La política vive en `src/services/auth/passwordPolicy.ts` y es compartida por:
 - La pantalla legacy `CreatorAccount`, aunque actualmente no esté enlazada por el router.
 - `AuthNexusService.signUp()`, que actúa como segunda barrera dentro de la arquitectura.
 
+Esta barrera reduce el uso accidental de contraseñas débiles a través de las interfaces XETHKIOZ, pero no sustituye una regla de servidor frente a clientes que invoquen directamente Supabase Auth con la clave pública. El enforcement completo requiere configurar Auth en Supabase.
+
 ## Compatibilidad
 
 El inicio de sesión no aplica retrospectivamente la política fuerte. Una cuenta existente puede seguir ingresando con su contraseña actual aunque sea anterior a esta regla. La política se exige cuando el usuario crea o modifica su contraseña.
