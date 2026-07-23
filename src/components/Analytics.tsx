@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
+import { usePrivacyConsent } from '../lib/PrivacyConsentContext'
 
 declare global {
   interface Window {
@@ -19,11 +20,14 @@ const SUPABASE_PUBLIC_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string | u
 
 export default function Analytics() {
   const location = useLocation()
+  const { preferences } = usePrivacyConsent()
 
   useEffect(() => {
     const pagePath = location.pathname + location.search
-    if (GA4_ID && window.gtag) window.gtag('config', GA4_ID, { page_path: pagePath })
-    if (PIXEL_ID && window.fbq) window.fbq('track', 'PageView')
+
+    if (preferences.analytics && GA4_ID && window.gtag) window.gtag('config', GA4_ID, { page_path: pagePath })
+    if (preferences.marketing && PIXEL_ID && window.fbq) window.fbq('track', 'PageView')
+    if (!preferences.analytics) return
 
     const telemetryKey = `xethkioz.telemetry.${pagePath}`
     try {
@@ -32,6 +36,7 @@ export default function Analytics() {
     } catch {
       // The collector still works when private browsing disables sessionStorage.
     }
+
     const width = window.innerWidth
     const deviceType = width < 640 ? 'mobile' : width < 1024 ? 'tablet' : 'desktop'
     const payload = {
@@ -50,11 +55,11 @@ export default function Analytics() {
     void fetch(endpoint, { method: 'POST', headers, body: JSON.stringify(payload), keepalive: true })
       .then((response) => { if (!response.ok) retryLater() })
       .catch(retryLater)
-  }, [location])
+  }, [location.pathname, location.search, preferences.analytics, preferences.marketing])
 
   return (
     <Helmet>
-      {GA4_ID && (
+      {preferences.analytics && GA4_ID && (
         <>
           <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`} />
           <script>
@@ -63,13 +68,13 @@ export default function Analytics() {
         </>
       )}
 
-      {CLARITY_ID && (
+      {preferences.analytics && CLARITY_ID && (
         <script>
           {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${CLARITY_ID}");`}
         </script>
       )}
 
-      {PIXEL_ID && (
+      {preferences.marketing && PIXEL_ID && (
         <script>
           {`!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${PIXEL_ID}');fbq('track','PageView');`}
         </script>
