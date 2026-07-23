@@ -196,7 +196,7 @@ export default function AccountAccessStable() {
             </div>
           </article>
 
-          <form onSubmit={submit} className="panel-cyber flex flex-col gap-4">
+          <form onSubmit={submit} className="panel-cyber flex flex-col gap-4 p-6">
             <div className="grid grid-cols-2 gap-1 rounded-3xl border border-white/10 bg-black/30 p-1">
               <button type="button" onClick={() => changeMode('signup')} className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.18em] ${isSignup ? 'bg-orange text-black' : 'text-gray-400 hover:text-white'}`}>Crear</button>
               <button type="button" onClick={() => changeMode('signin')} className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.18em] ${isSignin ? 'bg-neon text-black' : 'text-gray-400 hover:text-white'}`}>Ingresar</button>
