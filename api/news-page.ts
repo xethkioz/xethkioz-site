@@ -1,3 +1,4 @@
+import { createRequire } from 'node:module'
 import {
   SITE_URL,
   absoluteUrl,
@@ -5,30 +6,56 @@ import {
   type PublicArticleMetadata,
 } from './_public-news-feed.js'
 
+type LegacyUrlModule = {
+  parse: typeof import('node:url').parse
+}
+
 type DiagnosticGlobal = typeof globalThis & {
   __xethkiozDep0169ProbeInstalled?: boolean
+  __xethkiozLegacyUrlParseWrapped?: boolean
+  __xethkiozLegacyUrlParseTraceEmitted?: boolean
 }
 
 const diagnosticGlobal = globalThis as DiagnosticGlobal
+
+function sanitizeDiagnosticStack(stack: string | undefined) {
+  return (stack ?? 'stack unavailable')
+    .split('\n')
+    .slice(0, 18)
+    .map((line) => line.replaceAll(process.cwd(), '<cwd>'))
+}
+
+function logDep0169Trace(message: string, stack: string | undefined) {
+  console.warn(JSON.stringify({
+    level: 'warning',
+    message,
+    code: 'DEP0169',
+    stack: sanitizeDiagnosticStack(stack),
+  }))
+}
 
 if (!diagnosticGlobal.__xethkiozDep0169ProbeInstalled) {
   diagnosticGlobal.__xethkiozDep0169ProbeInstalled = true
   process.on('warning', (warning) => {
     const code = (warning as Error & { code?: string }).code
     if (code !== 'DEP0169') return
-
-    const stack = (warning.stack ?? `${warning.name}: ${warning.message}`)
-      .split('\n')
-      .slice(0, 18)
-      .map((line) => line.replaceAll(process.cwd(), '<cwd>'))
-
-    console.warn(JSON.stringify({
-      level: 'warning',
-      message: 'news-page DEP0169 trace',
-      code,
-      stack,
-    }))
+    logDep0169Trace('news-page DEP0169 warning event', warning.stack ?? `${warning.name}: ${warning.message}`)
   })
+}
+
+if (!diagnosticGlobal.__xethkiozLegacyUrlParseWrapped) {
+  diagnosticGlobal.__xethkiozLegacyUrlParseWrapped = true
+  const require = createRequire(import.meta.url)
+  const legacyUrl = require('node:url') as LegacyUrlModule
+  const originalParse = legacyUrl.parse
+
+  legacyUrl.parse = function tracedLegacyUrlParse(...args: Parameters<LegacyUrlModule['parse']>) {
+    if (!diagnosticGlobal.__xethkiozLegacyUrlParseTraceEmitted) {
+      diagnosticGlobal.__xethkiozLegacyUrlParseTraceEmitted = true
+      logDep0169Trace('news-page url.parse invocation', new Error('legacy url.parse invocation').stack)
+    }
+    return originalParse(...args)
+  } as LegacyUrlModule['parse']
 }
 
 const DEFAULT_DESCRIPTION = 'Noticias, análisis y señales verificadas sobre videojuegos, tecnología, inteligencia artificial, ciencia y cultura digital.'
