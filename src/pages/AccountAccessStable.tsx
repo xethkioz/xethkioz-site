@@ -3,6 +3,12 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import SEO from '../components/SEO'
 import { useHud } from '../lib/HudContext'
 import { isSupabaseConfigured, supabase } from '../services/supabaseClient'
+import {
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_POLICY_SUMMARY,
+  assessPassword,
+  passwordPolicyError,
+} from '../services/auth/passwordPolicy'
 
 type Mode = 'signin' | 'signup' | 'reset' | 'update-password'
 
@@ -27,6 +33,7 @@ function friendlyError(error: unknown) {
   if (lower.includes('invalid login credentials')) return 'Credenciales inválidas. Revisá email/contraseña o usá reenviar confirmación.'
   if (lower.includes('email not confirmed')) return 'Cuenta pendiente de confirmación. Usá reenviar confirmación.'
   if (lower.includes('rate limit')) return 'Demasiados intentos. Esperá unos minutos.'
+  if (lower.includes('weak password') || lower.includes('password should be') || lower.includes('xethkioz_password_policy')) return PASSWORD_POLICY_SUMMARY
   return raw
 }
 
@@ -49,9 +56,18 @@ export default function AccountAccessStable() {
   const isReset = mode === 'reset'
   const isUpdate = mode === 'update-password'
   const emailOk = /\S+@\S+\.\S+/.test(email)
-  const passwordOk = password.length >= 8
+  const passwordAssessment = useMemo(() => assessPassword(password), [password])
+  const loginPasswordOk = password.length > 0
   const match = password === confirmPassword
-  const canSubmit = isSupabaseConfigured && !loading && (isReset ? emailOk : isUpdate ? passwordOk && match : emailOk && passwordOk && (!isSignup || match))
+  const canSubmit = isSupabaseConfigured && !loading && (
+    isReset
+      ? emailOk
+      : isUpdate
+        ? passwordAssessment.valid && match
+        : isSignup
+          ? emailOk && passwordAssessment.valid && match
+          : emailOk && loginPasswordOk
+  )
 
   useEffect(() => {
     const next = readMode(params.get('mode'))
@@ -96,9 +112,16 @@ export default function AccountAccessStable() {
       setError('Ingresá un email válido.')
       return
     }
-    if (!isReset && !passwordOk) {
-      setError('La contraseña debe tener al menos 8 caracteres.')
+    if (isSignin && !loginPasswordOk) {
+      setError('Ingresá tu contraseña.')
       return
+    }
+    if (isSignup || isUpdate) {
+      const policyError = passwordPolicyError(password)
+      if (policyError) {
+        setError(policyError)
+        return
+      }
     }
     if ((isSignup || isUpdate) && !match) {
       setError('Las contraseñas no coinciden.')
@@ -157,6 +180,8 @@ export default function AccountAccessStable() {
     }
   }
 
+  const showStrongPasswordPolicy = isSignup || isUpdate
+
   return (
     <>
       <SEO title="Cuenta XETHKIOZ" description="Acceso, registro y recuperación de cuenta XETHKIOZ." url="/account" />
@@ -171,7 +196,7 @@ export default function AccountAccessStable() {
             </div>
           </article>
 
-          <form onSubmit={submit} className="panel-cyber flex flex-col gap-4 p-6">
+          <form onSubmit={submit} className="panel-cyber flex flex-col gap-4">
             <div className="grid grid-cols-2 gap-1 rounded-3xl border border-white/10 bg-black/30 p-1">
               <button type="button" onClick={() => changeMode('signup')} className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.18em] ${isSignup ? 'bg-orange text-black' : 'text-gray-400 hover:text-white'}`}>Crear</button>
               <button type="button" onClick={() => changeMode('signin')} className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.18em] ${isSignin ? 'bg-neon text-black' : 'text-gray-400 hover:text-white'}`}>Ingresar</button>
@@ -179,8 +204,21 @@ export default function AccountAccessStable() {
 
             {isSignup ? <input value={name} onChange={(event) => setName(event.target.value)} className="rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-sm text-white outline-none focus:border-orange" placeholder="Nombre visible" autoComplete="nickname" /> : null}
             {!isUpdate ? <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} className="rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-sm text-white outline-none focus:border-orange" placeholder="tu@email.com" autoComplete="email" required /> : null}
-            {!isReset ? <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} className="rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-sm text-white outline-none focus:border-orange" placeholder={isUpdate ? 'Nueva contraseña' : 'Contraseña'} autoComplete={isSignin ? 'current-password' : 'new-password'} required /> : null}
-            {(isSignup || isUpdate) ? <input type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} className="rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-sm text-white outline-none focus:border-orange" placeholder="Repetir contraseña" autoComplete="new-password" required /> : null}
+            {!isReset ? <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} className="rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-sm text-white outline-none focus:border-orange" placeholder={isUpdate ? 'Nueva contraseña' : 'Contraseña'} autoComplete={isSignin ? 'current-password' : 'new-password'} minLength={showStrongPasswordPolicy ? PASSWORD_MIN_LENGTH : 1} aria-describedby={showStrongPasswordPolicy ? 'password-policy' : undefined} aria-invalid={showStrongPasswordPolicy && password.length > 0 && !passwordAssessment.valid} required /> : null}
+            {(isSignup || isUpdate) ? <input type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} className="rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-sm text-white outline-none focus:border-orange" placeholder="Repetir contraseña" autoComplete="new-password" minLength={PASSWORD_MIN_LENGTH} required /> : null}
+
+            {showStrongPasswordPolicy ? (
+              <div id="password-policy" className="rounded-xl border border-white/10 bg-black/30 p-3" aria-live="polite">
+                <p className="font-mono text-[10px] font-black uppercase tracking-[0.16em] text-gray-400">Seguridad de contraseña</p>
+                <ul className="mt-2 grid grid-cols-2 gap-2 text-[11px]">
+                  {passwordAssessment.rules.map((rule) => (
+                    <li key={rule.key} className={rule.passed ? 'text-green-300' : 'text-gray-500'}>
+                      <span aria-hidden="true">{rule.passed ? '✓' : '○'}</span> {rule.label}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
 
             {error ? <p className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">{error}</p> : null}
             {message ? <p className="rounded-xl border border-green-400/30 bg-green-400/10 p-3 text-sm text-green-200">{message}</p> : null}
