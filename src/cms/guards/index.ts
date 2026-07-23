@@ -1,1 +1,3 @@
-export { default as AdminGuard } from './AdminGuard'
+import { lazy } from 'react'
+
+export const AdminGuard = lazy(() => import('./AdminGuard'))
