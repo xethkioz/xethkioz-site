@@ -35,7 +35,20 @@ assert(notFound.includes("'X-Robots-Tag', 'noindex, nofollow, noarchive, nosnipp
 const headerMap = new Map((vercel.headers ?? []).map((item) => [item.source, item.headers ?? []]))
 const globalHeaders = headerMap.get('/(.*)') ?? []
 const passportHeaders = headerMap.get('/nexus-city/u/(.*)') ?? []
-assert(globalHeaders.some((item) => item.key === 'Content-Security-Policy-Report-Only'), 'A CSP report-only baseline must be present before enforcement.')
+const enforcedCsp = globalHeaders.find((item) => item.key === 'Content-Security-Policy')?.value ?? ''
+const observedCsp = globalHeaders.find((item) => item.key === 'Content-Security-Policy-Report-Only')?.value ?? ''
+assert(Boolean(enforcedCsp), 'An enforced Content-Security-Policy header is required in production.')
+assert(Boolean(observedCsp), 'A stricter report-only CSP must remain available for the next hardening stage.')
+assert(enforcedCsp.includes("default-src 'self'"), 'Enforced CSP must default to same-origin resources.')
+assert(enforcedCsp.includes("object-src 'none'"), 'Enforced CSP must block plugin/object content.')
+assert(enforcedCsp.includes("frame-ancestors 'none'"), 'Enforced CSP must prevent framing.')
+assert(enforcedCsp.includes("script-src-attr 'none'"), 'Enforced CSP must reject inline event-handler attributes.')
+assert(enforcedCsp.includes('https://*.googletagmanager.com'), 'Enforced CSP must support the documented GA4 script endpoint.')
+assert(enforcedCsp.includes('https://*.google-analytics.com') && enforcedCsp.includes('https://*.analytics.google.com'), 'Enforced CSP must support documented GA4 collection endpoints.')
+assert(enforcedCsp.includes('https://*.clarity.ms') && enforcedCsp.includes('https://c.bing.com'), 'Enforced CSP must support documented Microsoft Clarity endpoints.')
+assert(!enforcedCsp.includes('script-src https:'), 'Enforced CSP must not allow scripts from every HTTPS origin.')
+assert(!observedCsp.match(/script-src[^;]*'unsafe-inline'/), 'Report-only CSP must observe the future removal of inline scripts.')
+assert(observedCsp.includes("form-action 'self'"), 'Report-only CSP must observe same-origin-only form submissions.')
 assert(passportHeaders.some((item) => item.key === 'X-Robots-Tag' && item.value.includes('noindex') && item.value.includes('noimageindex')), 'Nexus passports must remain server-side noindex until dynamic per-profile SEO exists.')
 
 assert(streamsMigration.includes('create table if not exists public.streams'), 'The Gaming stream radar requires a real streams table migration.')
@@ -55,4 +68,4 @@ if (issues.length) {
   process.exit(1)
 }
 
-console.log('PASS runtime/SEO contracts: real 404, deep links, redirects, passport privacy, CSP report-only, streams RLS/indexes and telemetry hygiene.')
+console.log('PASS runtime/SEO contracts: real 404, deep links, redirects, passport privacy, enforced CSP, streams RLS/indexes and telemetry hygiene.')
