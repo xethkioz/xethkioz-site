@@ -3,10 +3,10 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import App from './App'
+import RouteCssLoader, { loadRouteStyles } from './components/RouteCssLoader'
 import './index.css'
 import './visibility-fixes.css'
-import './xethkioz-redesign.css'
-import './home-portal-rings.css'
+import './generated/xethkioz-core.css'
 import './experience.css'
 
 try {
@@ -53,18 +53,24 @@ window.addEventListener('unhandledrejection', (event) => {
   console.error('[XETHKIOZ] Unhandled promise rejection:', event.reason)
 })
 
-try {
+async function boot() {
   if (!rootElement) throw new Error('No existe el elemento #root en index.html')
+
+  await loadRouteStyles(window.location.pathname)
+
   createRoot(rootElement).render(
     <StrictMode>
       <HelmetProvider>
         <BrowserRouter>
+          <RouteCssLoader />
           <App />
         </BrowserRouter>
       </HelmetProvider>
     </StrictMode>,
   )
-} catch (error) {
+}
+
+void boot().catch((error) => {
   const message = error instanceof Error ? error.message : String(error)
   renderBootError(message)
-}
+})
