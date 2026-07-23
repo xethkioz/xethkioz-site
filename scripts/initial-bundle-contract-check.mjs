@@ -24,6 +24,8 @@ const MAX_INITIAL_CSS_BYTES = 347_000
 const MAX_INITIAL_CSS_GZIP_BYTES = 64_000
 const routeCssChunks = [
   { label: 'Home shell', pattern: /^home-shell-[^/]+\.css$/i },
+  { label: 'Gaming and Fun shell', pattern: /^gaming-fun-shell-[^/]+\.css$/i },
+  { label: 'Science shell', pattern: /^science-shell-[^/]+\.css$/i },
   { label: 'Green Node shell', pattern: /^green-node-shell-[^/]+\.css$/i },
 ]
 
