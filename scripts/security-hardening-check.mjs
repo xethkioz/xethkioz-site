@@ -18,6 +18,7 @@ const adminSession = read('src/cms/hooks/useAdminSession.ts')
 const adminUsers = read('supabase/functions/admin-users/index.ts')
 const supabaseConfig = read('supabase/config.toml')
 const adminConsistency = read('supabase/migrations/20260723120000_security_admin_consistency.sql')
+const articlePolicyConsolidation = read('supabase/migrations/20260723121500_articles_policy_consolidation.sql')
 const mainEntry = read('src/main.tsx')
 const appShell = read('src/App.tsx')
 
@@ -38,7 +39,8 @@ check('paid tiers do not grant administrator status', adminSession.includes("con
 check('admin account mutations require authenticated Edge function', supabaseConfig.includes('[functions.admin-users]') && supabaseConfig.includes('verify_jwt = true') && adminUsers.includes('admin.auth.getUser(token)'))
 check('admin Edge function validates secure role metadata', adminUsers.includes('caller.app_metadata?.role') && !adminUsers.includes('caller.user_metadata?.role'))
 check('privileged RLS helpers move outside the public API schema', adminConsistency.includes('set schema private') && adminConsistency.includes('revoke all on function private.xethkioz_has_role'))
-check('legacy articles policy does not expose all rows to signed-in users', adminConsistency.includes('articles_authenticated_editorial_read') && !adminConsistency.includes("or (select auth.uid()) is not null"))
+check('legacy articles policy does not expose all rows to signed-in users', articlePolicyConsolidation.includes('articles_authenticated_read') && articlePolicyConsolidation.includes("status = 'published'") && !articlePolicyConsolidation.includes("or (select auth.uid()) is not null"))
+check('legacy articles use one SELECT policy per audience', articlePolicyConsolidation.includes('articles_anon_published_read') && articlePolicyConsolidation.includes('to anon') && articlePolicyConsolidation.includes('to authenticated'))
 check('safe boot renders error details as text', mainEntry.includes('details.textContent = message') && !mainEntry.includes('document.body.innerHTML'))
 check('world runtime integration is mounted', appShell.includes('<WorldRuntimeIntegration />'))
 

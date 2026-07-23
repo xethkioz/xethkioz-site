@@ -42,6 +42,8 @@ create index if not exists nexus_vip_rooms_expiry_idx
   where status = 'active';
 create index if not exists nexus_vip_members_user_status_idx
   on public.nexus_vip_room_members (user_id, status, created_at desc);
+create index if not exists nexus_vip_members_inviter_created_idx
+  on public.nexus_vip_room_members (invited_by, created_at desc);
 create index if not exists nexus_vip_messages_room_created_idx
   on public.nexus_vip_messages (room_id, created_at desc);
 create index if not exists nexus_vip_messages_sender_created_idx
@@ -268,7 +270,10 @@ create policy nexus_vip_rooms_member_read
 on public.nexus_vip_rooms
 for select
 to authenticated
-using ((select private.xethkioz_vip_can_view(id)));
+using (
+  owner_id = (select auth.uid())
+  or (select private.xethkioz_vip_can_view(id))
+);
 
 drop policy if exists nexus_vip_rooms_owner_insert on public.nexus_vip_rooms;
 create policy nexus_vip_rooms_owner_insert
@@ -346,7 +351,7 @@ with check (
   and (select private.xethkioz_vip_can_message(room_id))
 );
 
-revoke all on public.nexus_vip_rooms, public.nexus_vip_room_members, public.nexus_vip_messages from public, anon;
+revoke all on public.nexus_vip_rooms, public.nexus_vip_room_members, public.nexus_vip_messages from public, anon, authenticated;
 grant select, insert on public.nexus_vip_rooms to authenticated;
 grant update (codename, theme, status, updated_at) on public.nexus_vip_rooms to authenticated;
 grant select, insert, delete on public.nexus_vip_room_members to authenticated;

@@ -34,7 +34,7 @@ No se copiaron contraseñas, tokens, claves privadas, mensajes ni registros de I
 - Dependencias npm: 0 vulnerabilidades conocidas.
 - Rutas internas: 42 rutas, 160 módulos alcanzables y 241 destinos internos verificados.
 - UI: 163 archivos TSX, 234 botones, 52 enlaces HTML, 3 imágenes JSX y 64 objetos bilingües verificados.
-- Nexus City: 62 controles funcionales y de seguridad.
+- Nexus City: 65 controles funcionales y de seguridad.
 - Runtime mundial: integrado y aprobado.
 - Migraciones nuevas: ejecución transaccional de prueba aprobada contra producción y revertida.
 
@@ -322,7 +322,7 @@ Los enlaces editoriales externos pueden cambiar o bloquear robots fuera del cont
 ## 10. Archivos y dependencias
 
 - 729 archivos rastreados en la base previa;
-- 73 archivos SQL reales después de corregir el doble conteo del auditor;
+- 76 archivos SQL reales después de corregir el doble conteo del auditor;
 - 13 contenidos SQL duplicados entre historiales;
 - `npm audit --omit=dev`: 0 vulnerabilidades;
 - no se detectaron secretos reales rastreados en el estado o historial revisado;
@@ -387,11 +387,19 @@ npm audit --omit=dev
 
 ## 14. Registro de despliegue
 
-Este apartado se completará con:
-
-- commit final;
-- PR;
-- migraciones aplicadas;
-- versión Edge Function;
-- deployment Vercel;
-- verificación pública posterior.
+- PR: [#132](https://github.com/xethkioz/xethkioz-site/pull/132).
+- Primera rama remota verificada: commit `232837b221c2554d870596fd508a956ef5a88748`.
+- Árbol Git remoto/local verificado: `afbe6deface093a72d10c40630ec45876afda522`.
+- Preview Vercel: `dpl_AaJG4ffASosNrzmuW1xhizSXwCd1`, estado `READY`.
+- GitHub Actions: ejecución 416, aprobada.
+- Migraciones aplicadas:
+  - `security_admin_consistency`;
+  - `articles_policy_consolidation`;
+  - `nexus_vip_rooms`;
+  - `nexus_vip_rooms_runtime_hardening`;
+  - `nexus_vip_inviter_index`.
+- Edge Function: `admin-users`, versión 1, `ACTIVE`, JWT obligatorio.
+- Prueba SQL conductual: sala/mensaje creados dentro de transacción, campos de servidor verificados y rollback confirmado con cero filas persistidas.
+- Asesor de seguridad posterior: sólo permanece `auth_leaked_password_protection`.
+- Asesor de rendimiento posterior: sin política duplicada de artículos y sin clave foránea VIP desindexada.
+- Pendiente al cerrar este documento: segunda ejecución CI/Vercel del hardening descubierto durante la prueba y verificación pública posterior al merge.
