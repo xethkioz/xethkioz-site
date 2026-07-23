@@ -1,21 +1,28 @@
-import { useEffect } from 'react'
+import { useLayoutEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
 type StylePromise = Promise<void>
 
-let homeStyles: StylePromise | null = null
-let gamingFunStyles: StylePromise | null = null
-let gamingSectionsStyles: StylePromise | null = null
-let scienceStyles: StylePromise | null = null
-let greenNodeStyles: StylePromise | null = null
-let nexusDistrictStyles: StylePromise | null = null
-let editorialStyles: StylePromise | null = null
-let funNexusStyles: StylePromise | null = null
-let passportStyles: StylePromise | null = null
-let roomStyles: StylePromise | null = null
+const styleCache = new Map<string, StylePromise>()
 
-function loadOnce(current: StylePromise | null, loader: () => Promise<unknown>): StylePromise {
-  return current ?? loader().then(() => undefined)
+function loadStyle(key: string, loader: () => Promise<unknown>): StylePromise {
+  const cached = styleCache.get(key)
+  if (cached) return cached
+
+  const request = loader()
+    .then(() => undefined)
+    .catch((error) => {
+      styleCache.delete(key)
+      throw error
+    })
+
+  styleCache.set(key, request)
+  return request
+}
+
+function normalizeRoute(pathname: string) {
+  if (pathname === '/nexus-city') return '/fun'
+  return pathname
 }
 
 function isPortalRoute(pathname: string) {
@@ -38,57 +45,48 @@ function isEditorialRoute(pathname: string) {
     || pathname === '/editorial-policy'
 }
 
-export function loadRouteStyles(pathname: string): Promise<void> {
+export function loadRouteStyles(rawPathname: string): Promise<void> {
+  const pathname = normalizeRoute(rawPathname)
   const styles: StylePromise[] = []
 
   if (pathname === '/') {
-    homeStyles = loadOnce(homeStyles, () => import('../generated/home-shell.css'))
-    styles.push(homeStyles)
+    styles.push(loadStyle('home', () => import('../generated/home-shell.css')))
   }
 
   if (pathname === '/gaming' || pathname === '/fun') {
-    gamingFunStyles = loadOnce(gamingFunStyles, () => import('../generated/gaming-fun-shell.css'))
-    styles.push(gamingFunStyles)
+    styles.push(loadStyle('gaming-fun', () => import('../generated/gaming-fun-shell.css')))
   }
 
   if (pathname === '/gaming') {
-    gamingSectionsStyles = loadOnce(gamingSectionsStyles, () => import('../generated/gaming-sections-shell.css'))
-    styles.push(gamingSectionsStyles)
+    styles.push(loadStyle('gaming-sections', () => import('../generated/gaming-sections-shell.css')))
   }
 
   if (pathname === '/science') {
-    scienceStyles = loadOnce(scienceStyles, () => import('../generated/science-shell.css'))
-    styles.push(scienceStyles)
+    styles.push(loadStyle('science', () => import('../generated/science-shell.css')))
   }
 
   if (pathname === '/green-node' || pathname.startsWith('/green-node/')) {
-    greenNodeStyles = loadOnce(greenNodeStyles, () => import('../generated/green-node-shell.css'))
-    styles.push(greenNodeStyles)
+    styles.push(loadStyle('green-node', () => import('../generated/green-node-shell.css')))
   }
 
   if (isPortalRoute(pathname)) {
-    nexusDistrictStyles = loadOnce(nexusDistrictStyles, () => import('../generated/nexus-district-shell.css'))
-    styles.push(nexusDistrictStyles)
+    styles.push(loadStyle('nexus-district', () => import('../generated/nexus-district-shell.css')))
   }
 
   if (isEditorialRoute(pathname)) {
-    editorialStyles = loadOnce(editorialStyles, () => import('../generated/editorial-shell.css'))
-    styles.push(editorialStyles)
+    styles.push(loadStyle('editorial', () => import('../generated/editorial-shell.css')))
   }
 
   if (pathname === '/fun') {
-    funNexusStyles = loadOnce(funNexusStyles, () => import('../generated/fun-nexus-shell.css'))
-    styles.push(funNexusStyles)
+    styles.push(loadStyle('fun-nexus', () => import('../generated/fun-nexus-shell.css')))
   }
 
   if (pathname.startsWith('/nexus-city/u/')) {
-    passportStyles = loadOnce(passportStyles, () => import('../generated/passport-shell.css'))
-    styles.push(passportStyles)
+    styles.push(loadStyle('passport', () => import('../generated/passport-shell.css')))
   }
 
   if (pathname.startsWith('/nexus-city/room/') && pathname !== '/nexus-city/room/xethkioz') {
-    roomStyles = loadOnce(roomStyles, () => import('../generated/room-shell.css'))
-    styles.push(roomStyles)
+    styles.push(loadStyle('room', () => import('../generated/room-shell.css')))
   }
 
   return Promise.all(styles).then(() => undefined)
@@ -97,8 +95,12 @@ export function loadRouteStyles(pathname: string): Promise<void> {
 export default function RouteCssLoader() {
   const { pathname } = useLocation()
 
-  useEffect(() => {
-    void loadRouteStyles(pathname)
+  useLayoutEffect(() => {
+    let active = true
+    void loadRouteStyles(pathname).catch((error) => {
+      if (active) console.error('[XETHKIOZ] Route CSS failed to load:', error)
+    })
+    return () => { active = false }
   }, [pathname])
 
   return null
