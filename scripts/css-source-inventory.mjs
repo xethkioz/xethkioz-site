@@ -4,6 +4,7 @@ import path from 'node:path'
 const root = process.cwd()
 const srcDir = path.join(root, 'src')
 const mainPath = path.join(srcDir, 'main.tsx')
+const redesignSourcePath = path.join(srcDir, 'xethkioz-redesign.css')
 
 function walk(directory, predicate, output = []) {
   if (!fs.existsSync(directory)) return output
@@ -97,4 +98,19 @@ for (const record of records.sort((a, b) => (b.bytes ?? 0) - (a.bytes ?? 0))) {
 console.log(`TOP GLOBAL PREFIXES: ${[...aggregatePrefixes.entries()].sort((a, b) => b[1] - a[1]).slice(0, 24).map(([prefix, count]) => `${prefix}:${count}`).join(', ')}`)
 console.log(`CANDIDATE PAGE-SCOPED CLASSES: ${pageScoped.length}. Sample: ${pageScoped.slice(0, 30).map((item) => `${item.className}→${[...new Set(item.pages)].join('|')}`).join(', ') || 'none'}`)
 console.log(`UNREFERENCED CLASS TOKENS (heuristic only): ${unreferenced.length}. Sample: ${unreferenced.slice(0, 30).map((item) => `${item.className}@${item.cssFile}`).join(', ') || 'none'}`)
+
+if (fs.existsSync(redesignSourcePath)) {
+  const redesign = fs.readFileSync(redesignSourcePath, 'utf8')
+  const markers = [...redesign.matchAll(/\/\*\s*([\s\S]*?)\s*\*\//g)].map((match, index, matches) => {
+    const start = match.index ?? 0
+    const nextStart = matches[index + 1]?.index ?? redesign.length
+    return {
+      start,
+      bytesToNext: nextStart - start,
+      label: match[1].replace(/\s+/g, ' ').trim(),
+    }
+  })
+  console.log(`CSS SECTION MARKERS (${markers.length}): ${markers.map((marker) => `${marker.start}:${marker.bytesToNext}B:${marker.label}`).join(' | ')}`)
+}
+
 console.log('NOTE: page-scoped and unreferenced results are diagnostic only; dynamic class composition requires manual confirmation before moving or deleting CSS.')
