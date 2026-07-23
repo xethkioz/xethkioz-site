@@ -152,6 +152,7 @@ function partitionResidualRouteRules(coreCss, routeCssByOwner) {
   }
 
   coreRoot.walkRules((rule) => {
+    if (rule.parent?.type !== 'root') return
     for (const selector of splitSelectorList(rule.selector)) {
       const simpleClass = selector.match(/^\.([_a-zA-Z][\w-]*)$/)?.[1]
       if (simpleClass) standaloneCoreClasses.add(simpleClass)
