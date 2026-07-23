@@ -125,6 +125,12 @@ const steps = [
     requiredFiles: ['scripts/wisp-engine-check.mjs']
   },
   {
+    name: 'Portal Wisp Guides',
+    command: 'node',
+    args: ['scripts/portal-wisp-guides-check.mjs'],
+    requiredFiles: ['scripts/portal-wisp-guides-check.mjs']
+  },
+  {
     name: 'Media Assets',
     command: 'node',
     args: ['scripts/media-assets-review.mjs'],
