@@ -1,5 +1,6 @@
 import SEO from '../components/SEO'
 import { useLang } from '../lib/LangContext'
+import { usePrivacyConsent } from '../lib/PrivacyConsentContext'
 
 const copy = {
   es: {
@@ -7,17 +8,21 @@ const copy = {
     seoDescription: 'Cómo XETHKIOZ trata datos, medición, publicidad, formularios y preferencias de navegación.',
     eyebrow: 'TRUST CENTER // PRIVACIDAD',
     title: 'Tu información no es combustible del Nexus.',
-    intro: 'Esta política explica de forma directa qué datos puede procesar XETHKIOZ y para qué. Última actualización: 20 de julio de 2026.',
+    intro: 'Esta política explica de forma directa qué datos puede procesar XETHKIOZ y para qué. Última actualización: 23 de julio de 2026.',
     sections: [
       ['Datos que podés proporcionar', 'Si creás una cuenta, comentás, pedís un presupuesto o te suscribís, podemos procesar los datos necesarios para esa acción: correo, nombre visible, mensaje, preferencias y actividad asociada a tu cuenta. No solicitamos contraseñas por mensajes ni almacenamos datos de pago en esta web.'],
-      ['Medición y almacenamiento local', 'La web puede usar medición de audiencia para conocer páginas visitadas, dispositivo aproximado, rendimiento y errores. También usa almacenamiento local para preferencias, progreso del Wisp y estado de sesión. Las herramientas externas solo se activan cuando están configuradas por el administrador.'],
-      ['Registros técnicos de funcionamiento', 'Para detectar errores, abuso y problemas de compatibilidad podemos conservar durante un máximo de 30 días la fecha, ruta visitada, dirección IP, país o región aproximados, navegador, sistema operativo, tipo de dispositivo, idioma y tamaño de pantalla. No registramos mediante este sistema contraseñas, mensajes, formularios, coordenadas GPS ni el contenido que escribís. Los registros son privados, solo pueden ser consultados por ADMIN y se usan para seguridad y funcionamiento.'],
-      ['Publicidad, afiliados y terceros', 'Los espacios patrocinados se identifican como publicidad o sponsor. Un enlace afiliado puede generar una comisión para XETHKIOZ sin aumentar el precio para el visitante y se marcará como tal. Si en el futuro se activa una red como Google AdSense, esta política se actualizará para informar proveedores, cookies y opciones de consentimiento antes de habilitar anuncios personalizados.'],
+      ['Preferencias esenciales y consentimiento', 'El idioma, la sesión, la seguridad, el progreso local y tu decisión de privacidad pueden requerir almacenamiento esencial. La analítica y el marketing están desactivados por defecto y solo se habilitan después de una elección explícita. Podés aceptar, rechazar o configurar cada categoría.'],
+      ['Analítica opcional', 'Si autorizás Analítica, XETHKIOZ puede activar Vercel Analytics, medición propia de visitas y, cuando estén configurados, Google Analytics y Microsoft Clarity. La medición propia puede procesar durante un máximo de 30 días la ruta, dirección IP, país o región aproximados, navegador, sistema operativo, dispositivo, idioma y tamaño de pantalla. Excluye bots conocidos y no registra contraseñas, mensajes, formularios, GPS ni el texto que escribís.'],
+      ['Publicidad, afiliados y marketing', 'Los espacios patrocinados se identifican como publicidad o sponsor y pueden mostrarse sin seguimiento personalizado. Un enlace afiliado puede generar una comisión sin aumentar el precio. Meta Pixel y futuras mediciones publicitarias solo se cargan cuando autorizás Marketing. Antes de habilitar anuncios personalizados se informarán proveedores y opciones adicionales.'],
+      ['Registros técnicos esenciales', 'Vercel, Supabase y otros proveedores de infraestructura pueden conservar registros operativos mínimos para entregar la web, prevenir abuso y resolver errores, aunque rechaces la analítica opcional. Estos registros se rigen también por las políticas de cada proveedor y no se utilizan desde XETHKIOZ para publicidad personalizada.'],
       ['Pagos y aportes', 'PayPal y Mercado Pago procesan las donaciones en sus propias plataformas. XETHKIOZ no recibe ni guarda números de tarjeta, credenciales bancarias o claves de esas cuentas.'],
-      ['Tus decisiones y derechos', 'Podés no crear una cuenta, rechazar comunicaciones opcionales y solicitar acceso, corrección o eliminación de los datos vinculados a vos. Para ejercer estos derechos usá la página de contacto e indicá el correo asociado.'],
+      ['Tus decisiones y derechos', 'Podés no crear una cuenta, rechazar comunicaciones opcionales, cambiar el consentimiento y solicitar acceso, corrección o eliminación de datos vinculados a vos. Para ejercer estos derechos usá Contacto e indicá el correo asociado.'],
       ['Menores de edad', 'XETHKIOZ no está dirigido a menores de 13 años y no busca recopilar deliberadamente información personal de ese grupo. Si una persona responsable detecta un registro indebido, puede solicitar su revisión o eliminación desde Contacto.'],
-      ['Seguridad, retención y cambios', 'Aplicamos permisos mínimos, controles de acceso y protección de formularios. Ningún sistema es invulnerable; los proveedores técnicos pueden conservar registros operativos según sus propias políticas. Si una modificación material afecta el uso de datos, esta página mostrará una nueva fecha de actualización.'],
+      ['Seguridad, retención y cambios', 'Aplicamos permisos mínimos, controles de acceso, protección de formularios y límites de retención. Ningún sistema es invulnerable. Si una modificación material afecta el uso de datos, esta página mostrará una nueva fecha de actualización y, cuando corresponda, se solicitará una nueva decisión.'],
     ],
+    preferencesTitle: 'Controlar categorías',
+    preferencesText: 'Abrí el panel para revisar Analítica y Marketing. Si revocás una categoría activa, la página se recarga para detener sus herramientas.',
+    preferencesAction: 'ABRIR PREFERENCIAS',
     accessTitle: 'Acceso y consultas',
     accessText: 'Para consultar, corregir o eliminar información vinculada a tu cuenta o a una solicitud comercial, escribí desde la página de Contacto usando el correo asociado. XETHKIOZ puede pedir una verificación razonable de identidad antes de modificar datos privados.',
   },
@@ -26,17 +31,21 @@ const copy = {
     seoDescription: 'How XETHKIOZ handles data, analytics, advertising, forms and browsing preferences.',
     eyebrow: 'TRUST CENTER // PRIVACY',
     title: 'Your information is not fuel for the Nexus.',
-    intro: 'This policy explains directly which data XETHKIOZ may process and why. Last updated: July 20, 2026.',
+    intro: 'This policy explains directly which data XETHKIOZ may process and why. Last updated: July 23, 2026.',
     sections: [
       ['Information you may provide', 'When you create an account, comment, request a quote or subscribe, we may process the information needed for that action: email, display name, message, preferences and activity associated with your account. We never request passwords through messages and do not store payment information on this website.'],
-      ['Analytics and local storage', 'The website may use audience measurement to understand visited pages, approximate device type, performance and errors. It also uses local storage for preferences, Wisp progress and session state. External tools are only enabled when configured by the administrator.'],
-      ['Technical operation logs', 'To detect errors, abuse and compatibility problems, we may retain for no more than 30 days the date, visited route, IP address, approximate country or region, browser, operating system, device type, language and screen size. This system does not record passwords, messages, form contents, GPS coordinates or the text you enter. Logs are private, available only to ADMIN and used for security and operation.'],
-      ['Advertising, affiliates and third parties', 'Sponsored placements are identified as advertising or sponsor content. An affiliate link may generate a commission for XETHKIOZ without increasing the visitor’s price and will be labeled accordingly. If a network such as Google AdSense is enabled in the future, this policy will be updated to identify providers, cookies and consent options before personalized advertising is activated.'],
+      ['Essential preferences and consent', 'Language, session, security, local progress and your privacy decision may require essential storage. Analytics and marketing are disabled by default and are only enabled after an explicit choice. You may accept, reject or configure each category.'],
+      ['Optional analytics', 'When you authorize Analytics, XETHKIOZ may enable Vercel Analytics, first-party visit measurement and, when configured, Google Analytics and Microsoft Clarity. First-party measurement may process for no more than 30 days the route, IP address, approximate country or region, browser, operating system, device, language and screen size. It excludes known bots and does not record passwords, messages, forms, GPS or text you enter.'],
+      ['Advertising, affiliates and marketing', 'Sponsored placements are identified as advertising or sponsor content and may appear without personalized tracking. Affiliate links may generate a commission without increasing the price. Meta Pixel and future advertising measurement load only when you authorize Marketing. Providers and additional options will be disclosed before personalized ads are enabled.'],
+      ['Essential technical logs', 'Vercel, Supabase and other infrastructure providers may retain minimum operational logs to deliver the website, prevent abuse and resolve errors even when optional analytics are rejected. Those logs are also governed by each provider’s policies and are not used by XETHKIOZ for personalized advertising.'],
       ['Payments and contributions', 'PayPal and Mercado Pago process donations on their own platforms. XETHKIOZ does not receive or store card numbers, banking credentials or passwords for those accounts.'],
-      ['Your choices and rights', 'You may choose not to create an account, decline optional communications and request access, correction or deletion of information linked to you. To exercise these rights, use the Contact page and identify the associated email address.'],
+      ['Your choices and rights', 'You may choose not to create an account, decline optional communications, change consent and request access, correction or deletion of information linked to you. Use the Contact page and identify the associated email address.'],
       ['Children', 'XETHKIOZ is not directed to children under 13 and does not knowingly seek personal information from that group. A parent or guardian who identifies an improper registration may request review or deletion through Contact.'],
-      ['Security, retention and changes', 'We apply least-privilege permissions, access controls and form protections. No system is invulnerable, and technical providers may retain operational logs under their own policies. If a material change affects data use, this page will display a new update date.'],
+      ['Security, retention and changes', 'We apply least-privilege permissions, access controls, form protection and retention limits. No system is invulnerable. If a material change affects data use, this page will display a new update date and, when appropriate, request a new decision.'],
     ],
+    preferencesTitle: 'Control categories',
+    preferencesText: 'Open the panel to review Analytics and Marketing. Disabling an active category reloads the page to stop its tools.',
+    preferencesAction: 'OPEN PREFERENCES',
     accessTitle: 'Access and inquiries',
     accessText: 'To access, correct or delete information linked to your account or a commercial request, contact us through the Contact page using the associated email address. XETHKIOZ may request reasonable identity verification before modifying private information.',
   },
@@ -44,6 +53,7 @@ const copy = {
 
 export default function Privacy() {
   const { lang } = useLang()
+  const { openSettings } = usePrivacyConsent()
   const t = copy[lang]
 
   return (
@@ -61,6 +71,12 @@ export default function Privacy() {
           <p>{description}</p>
         </section>
       ))}
+
+      <section aria-labelledby="privacy-preferences-control-title">
+        <h2 id="privacy-preferences-control-title">{t.preferencesTitle}</h2>
+        <p>{t.preferencesText}</p>
+        <button type="button" onClick={openSettings} className="mt-4 rounded-full border border-orange-400 bg-orange-400/10 px-5 py-3 font-mono text-[10px] font-black tracking-[.14em] text-orange-200 transition hover:bg-orange-400 hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300">{t.preferencesAction}</button>
+      </section>
 
       <section aria-labelledby="privacy-access-title">
         <h2 id="privacy-access-title">{t.accessTitle}</h2>
