@@ -16,8 +16,8 @@ export default function Media() {
       <SEO title={t.media.title} description={t.media.library} />
       <div className="text-center mb-10"><div className="text-5xl mb-3">🎬</div><h1 className="font-display text-3xl md:text-5xl font-bold gradient-text mb-3">{t.media.title}</h1><p className="text-gray-400">{t.media.library}</p></div>
       <div className="flex flex-wrap justify-center gap-2 mb-8">
-        <button onClick={() => setActiveType(null)} className={`px-4 py-2 text-sm font-medium rounded-full border transition-all ${!activeType ? 'text-orange border-orange bg-orange/10' : 'border-white/10 text-gray-400 hover:text-white'}`}>{t.news.all}</button>
-        {types.map((tp) => <button key={tp.key} onClick={() => setActiveType(tp.key)} className={`px-4 py-2 text-sm font-medium rounded-full border transition-all ${activeType === tp.key ? 'text-orange border-orange bg-orange/10' : 'border-white/10 text-gray-400 hover:text-white'}`}>{tp.icon} {tp.label}</button>)}
+        <button type="button" onClick={() => setActiveType(null)} className={`px-4 py-2 text-sm font-medium rounded-full border transition-all ${!activeType ? 'text-orange border-orange bg-orange/10' : 'border-white/10 text-gray-400 hover:text-white'}`}>{t.news.all}</button>
+        {types.map((tp) => <button type="button" key={tp.key} onClick={() => setActiveType(tp.key)} className={`px-4 py-2 text-sm font-medium rounded-full border transition-all ${activeType === tp.key ? 'text-orange border-orange bg-orange/10' : 'border-white/10 text-gray-400 hover:text-white'}`}>{tp.icon} {tp.label}</button>)}
       </div>
       {loading ? <MediaGridSkeleton count={6} />
       : media.length === 0 ? <div className="text-center py-20 text-gray-500">{t.common.noContent}</div>

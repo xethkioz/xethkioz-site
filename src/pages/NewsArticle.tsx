@@ -179,7 +179,7 @@ export default function NewsArticle() {
               <span>{ui.reviewed}</span>
             </div>
             {article.source_urls[0] ? (
-              <a href={article.source_urls[0]} target="_blank" rel="noreferrer" className="xk-news-source-cta">
+              <a href={article.source_urls[0]} target="_blank" rel="noopener noreferrer" className="xk-news-source-cta">
                 <span><small>{ui.verification}</small>{ui.consultOriginal}</span>
                 <b>{getSourceHost(article)} ↗</b>
               </a>
@@ -190,7 +190,7 @@ export default function NewsArticle() {
             {article.source_urls.length ? (
               <section className="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
                 <h2 className="font-mono text-xs font-black uppercase tracking-[0.22em] text-orange-300">{article.source_urls.length === 1 ? ui.source : ui.sources}</h2>
-                <ul className="mt-4 space-y-2 text-sm text-slate-300">{article.source_urls.map((sourceUrl) => <li key={sourceUrl} className="break-all"><a href={sourceUrl} target="_blank" rel="noreferrer" className="text-violet-200 transition hover:text-orange-200">{getSourceHost({ ...article, source_urls: [sourceUrl] })} · {sourceUrl}</a></li>)}</ul>
+                <ul className="mt-4 space-y-2 text-sm text-slate-300">{article.source_urls.map((sourceUrl) => <li key={sourceUrl} className="break-all"><a href={sourceUrl} target="_blank" rel="noopener noreferrer" className="text-violet-200 transition hover:text-orange-200">{getSourceHost({ ...article, source_urls: [sourceUrl] })} · {sourceUrl}</a></li>)}</ul>
               </section>
             ) : null}
           </article>

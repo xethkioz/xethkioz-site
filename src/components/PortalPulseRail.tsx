@@ -47,7 +47,7 @@ export function PortalPulseRail({ tone, eyebrow, title, description, items }: Po
             <b>{item.action} →</b>
           </>
           return item.to.startsWith('http') ? (
-            <a key={item.code} href={item.to} target="_blank" rel="noreferrer" onClick={() => recordPulseAction(item.code, item.to)}>{content}</a>
+            <a key={item.code} href={item.to} target="_blank" rel="noopener noreferrer" onClick={() => recordPulseAction(item.code, item.to)}>{content}</a>
           ) : (
             <Link key={item.code} to={item.to} onClick={() => recordPulseAction(item.code, item.to)}>{content}</Link>
           )

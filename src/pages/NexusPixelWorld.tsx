@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import SEO from '../components/SEO'
 import NexusBabyDemonWisp from './NexusBabyDemonWisp'
 import NexusPixelInventoryLayer from './NexusPixelInventoryLayer'
+import NexusPixelShop from './NexusPixelShop'
 import {
   areas,
   AVATAR_STORAGE_KEY,
@@ -104,6 +105,8 @@ const copy = {
     mapLabel: 'Mapa cenital interactivo de Nexus City',
     mobileControls: 'Controles de movimiento táctiles',
     area: 'Zona actual',
+    shop: 'Abrir tienda',
+    vip: 'Abrir salas VIP',
     quest: {
       eyebrow: 'MISIÓN PRINCIPAL // 01',
       title: 'Reactivar las señales',
@@ -153,6 +156,8 @@ const copy = {
     mapLabel: 'Interactive top-down map of Nexus City',
     mobileControls: 'Touch movement controls',
     area: 'Current area',
+    shop: 'Open shop',
+    vip: 'Open VIP rooms',
     quest: {
       eyebrow: 'MAIN QUEST // 01',
       title: 'Reactivate the signals',
@@ -213,7 +218,13 @@ function parsePeer(value: unknown): PixelPeer | null {
   const key = String(peer.key || '')
   const direction = String(peer.direction || 'down')
   const areaValue = String(peer.area || 'plaza')
-  const area: AreaId = areaValue === 'guild' || areaValue === 'lab' || areaValue === 'arcade' ? areaValue : 'plaza'
+  const area: AreaId = areaValue === 'guild'
+    || areaValue === 'lab'
+    || areaValue === 'arcade'
+    || areaValue === 'shop'
+    || areaValue === 'lounge'
+    ? areaValue
+    : 'plaza'
   const definition = areas[area]
   if (!key) return null
   return {
@@ -259,6 +270,7 @@ export default function NexusPixelWorld() {
   const [notice, setNotice] = useState<string>(t.welcome)
   const [realtime, setRealtime] = useState(false)
   const [dialogue, setDialogue] = useState<DialogueState | null>(null)
+  const [shopOpen, setShopOpen] = useState(false)
   const [quest, setQuest] = useState<QuestState>(readQuestState)
 
   const displayName = account.status === 'connected' ? account.name : getDisplayName()
@@ -360,7 +372,7 @@ export default function NexusPixelWorld() {
   }, [])
 
   function move(nextDirection: Direction) {
-    if (dialogue) return
+    if (dialogue || shopOpen) return
     setDirection(nextDirection)
     const delta = nextDirection === 'left' ? [-1, 0] : nextDirection === 'right' ? [1, 0] : nextDirection === 'up' ? [0, -1] : [0, 1]
     setPosition((current) => {
@@ -379,6 +391,7 @@ export default function NexusPixelWorld() {
     setPosition(spawn ?? destination.spawn)
     setDirection('up')
     setDialogue(null)
+    setShopOpen(false)
     setNotice(`${destination.label[lang]} · ${destination.subtitle[lang]}`)
     try {
       const visitKey = `xethkioz.nexus-pixel.area.${nextArea}`
@@ -462,6 +475,14 @@ export default function NexusPixelWorld() {
       return
     }
     if (!nearbyObject) return
+    if (nearbyObject.interaction === 'shop') {
+      setShopOpen(true)
+      return
+    }
+    if (nearbyObject.interaction === 'vip') {
+      navigate('/nexus-city/vip')
+      return
+    }
     if (nearbyObject.beaconId) {
       activateBeacon(nearbyObject)
       return
@@ -479,6 +500,10 @@ export default function NexusPixelWorld() {
       const target = event.target as HTMLElement | null
       if (target && (target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON'].includes(target.tagName))) return
       const key = event.key.toLowerCase()
+      if (key === 'escape' && shopOpen) {
+        setShopOpen(false)
+        return
+      }
       const next = key === 'arrowleft' || key === 'a' ? 'left' : key === 'arrowright' || key === 'd' ? 'right' : key === 'arrowup' || key === 'w' ? 'up' : key === 'arrowdown' || key === 's' ? 'down' : null
       if (next) {
         event.preventDefault()
@@ -539,7 +564,15 @@ export default function NexusPixelWorld() {
 
   const nearbyLabel = nearbyNpc?.name[lang] ?? nearbyObject?.label[lang]
   const nearbyDetail = nearbyNpc?.role[lang] ?? nearbyObject?.detail[lang]
-  const nearbyAction = nearbyNpc ? t.talk : nearbyObject?.beaconId ? t.activate : t.enter
+  const nearbyAction = nearbyNpc
+    ? t.talk
+    : nearbyObject?.beaconId
+      ? t.activate
+      : nearbyObject?.interaction === 'shop'
+        ? t.shop
+        : nearbyObject?.interaction === 'vip'
+          ? t.vip
+          : t.enter
 
   return (
     <main className={`xk-pixel-page is-${visualTheme}`}>
@@ -610,6 +643,7 @@ export default function NexusPixelWorld() {
               <button type="button" onClick={performDialogueAction}>{dialogue.action === 'start-quest' ? t.dialogue.accept : dialogue.action === 'complete-quest' ? t.dialogue.complete : t.dialogue.close} →</button>
             </section>
           ) : null}
+          {shopOpen ? <NexusPixelShop lang={lang} onClose={() => setShopOpen(false)} onNotice={setNotice} /> : null}
         </div>
 
         <aside className="xk-pixel-hud">

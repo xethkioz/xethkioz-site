@@ -142,7 +142,7 @@ export default function FusionGlobalWisp() {
               fallback="/images/articles/tech.svg"
               className="xk-wisp-specter"
               alt=""
-              loading="eager"
+              loading={location.pathname === '/' ? 'eager' : 'lazy'}
               fetchPriority={location.pathname === '/' ? 'high' : 'low'}
             />
             <span className="xk-wisp-scanline" />

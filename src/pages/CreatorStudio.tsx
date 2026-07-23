@@ -36,8 +36,8 @@ export default function CreatorStudio() {
             Centro operativo para streaming, OBS, overlays, clips, shorts, audio, cámaras, miniaturas y contenido multiplataforma. La meta es que todo lo que se publique en redes salga desde una base ordenada.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
-            <a href={STREAM_LINKS.kick} target="_blank" rel="noreferrer" className="btn-primary text-sm">Abrir Kick</a>
-            <a href={STREAM_LINKS.twitch} target="_blank" rel="noreferrer" className="btn-secondary text-sm">Abrir Twitch</a>
+            <a href={STREAM_LINKS.kick} target="_blank" rel="noopener noreferrer" className="btn-primary text-sm">Abrir Kick</a>
+            <a href={STREAM_LINKS.twitch} target="_blank" rel="noopener noreferrer" className="btn-secondary text-sm">Abrir Twitch</a>
             <Link to="/chat-overlay" className="btn-secondary text-sm">Overlay OBS</Link>
           </div>
         </div>

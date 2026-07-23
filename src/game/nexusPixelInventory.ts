@@ -7,6 +7,8 @@ export type InventoryItemId =
   | 'lab-crystal'
   | 'chaos-chip'
   | 'plaza-key'
+  | 'signal-tonic'
+  | 'portal-smoke'
 
 export type InventoryRarity = 'common' | 'uncommon' | 'rare' | 'epic'
 
@@ -16,6 +18,8 @@ export type InventoryItemDefinition = {
   name: Localized
   description: Localized
   rarity: InventoryRarity
+  consumable?: boolean
+  effect?: Localized
 }
 
 export type InventoryReward = {
@@ -58,6 +62,7 @@ export type PixelInventoryState = {
 }
 
 export const INVENTORY_STORAGE_KEY = 'xethkioz.nexus-pixel.inventory.v1'
+export const INVENTORY_CHANGED_EVENT = 'xethkioz:nexus-inventory-changed'
 
 export const inventoryItems: Record<InventoryItemId, InventoryItemDefinition> = {
   'wisp-shard': {
@@ -89,6 +94,18 @@ export const inventoryItems: Record<InventoryItemId, InventoryItemDefinition> = 
     id: 'plaza-key', glyph: '◆', rarity: 'epic',
     name: { es: 'Llave de la Plaza', en: 'Plaza Key' },
     description: { es: 'Recompensa por estabilizar las tres señales.', en: 'Reward for stabilizing all three signals.' },
+  },
+  'signal-tonic': {
+    id: 'signal-tonic', glyph: '▲', rarity: 'uncommon', consumable: true,
+    name: { es: 'Tónico de señal', en: 'Signal Tonic' },
+    description: { es: 'Restaura el brillo del avatar durante la sesión.', en: 'Restores the avatar glow for the current session.' },
+    effect: { es: 'La señal vuelve a brillar. Efecto cosmético activado.', en: 'Your signal shines again. Cosmetic effect activated.' },
+  },
+  'portal-smoke': {
+    id: 'portal-smoke', glyph: '≈', rarity: 'rare', consumable: true,
+    name: { es: 'Humo de portal', en: 'Portal Smoke' },
+    description: { es: 'Deja una estela misteriosa sin alterar el progreso.', en: 'Leaves a mysterious trail without changing progression.' },
+    effect: { es: 'Una estela violeta rodea al explorador.', en: 'A violet trail surrounds the explorer.' },
   },
 }
 
@@ -172,7 +189,13 @@ export function readInventoryState(): PixelInventoryState {
   if (typeof window === 'undefined') return emptyInventoryState
   try {
     const parsed = JSON.parse(window.localStorage.getItem(INVENTORY_STORAGE_KEY) || '{}') as Partial<PixelInventoryState>
-    const items = parsed.items && typeof parsed.items === 'object' ? parsed.items : {}
+    const items = parsed.items && typeof parsed.items === 'object'
+      ? Object.fromEntries(
+        Object.entries(parsed.items)
+          .filter(([itemId, amount]) => itemId in inventoryItems && Number.isFinite(Number(amount)) && Number(amount) > 0)
+          .map(([itemId, amount]) => [itemId, Math.min(999, Math.floor(Number(amount)))]),
+      ) as Partial<Record<InventoryItemId, number>>
+      : {}
     const collected = Array.isArray(parsed.collected) ? parsed.collected.filter((value): value is string => typeof value === 'string') : []
     const openedChests = Array.isArray(parsed.openedChests) ? parsed.openedChests.filter((value): value is string => typeof value === 'string') : []
     return { items, collected, openedChests }
@@ -189,11 +212,36 @@ export function persistInventoryState(state: PixelInventoryState) {
   }
 }
 
+export function announceInventoryChange() {
+  window.dispatchEvent(new CustomEvent(INVENTORY_CHANGED_EVENT))
+}
+
 export function grantRewards(state: PixelInventoryState, rewards: InventoryReward[]): PixelInventoryState {
   const items = { ...state.items }
   rewards.forEach(({ itemId, amount }) => {
     items[itemId] = Math.max(0, Math.min(999, Number(items[itemId] || 0) + amount))
   })
+  return { ...state, items }
+}
+
+export function purchaseWithShards(
+  state: PixelInventoryState,
+  reward: InventoryReward,
+  shardCost: number,
+): PixelInventoryState | null {
+  const currentShards = Number(state.items['wisp-shard'] || 0)
+  if (currentShards < shardCost || shardCost < 1) return null
+  const items: Partial<Record<InventoryItemId, number>> = { ...state.items, 'wisp-shard': currentShards - shardCost }
+  if (items['wisp-shard'] === 0) delete items['wisp-shard']
+  return grantRewards({ ...state, items }, [reward])
+}
+
+export function consumeInventoryItem(state: PixelInventoryState, itemId: InventoryItemId): PixelInventoryState | null {
+  if (!inventoryItems[itemId].consumable) return null
+  const current = Number(state.items[itemId] || 0)
+  if (current < 1) return null
+  const items = { ...state.items, [itemId]: current - 1 }
+  if (items[itemId] === 0) delete items[itemId]
   return { ...state, items }
 }
 

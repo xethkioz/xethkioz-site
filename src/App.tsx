@@ -8,7 +8,7 @@ import { ProfileProgressProvider } from './lib/ProfileProgressContext'
 import ScrollToTop from './components/ScrollToTop'
 import Analytics from './components/Analytics'
 import AppErrorBoundary from './components/AppErrorBoundary'
-import { WorldRuntimeProvider } from './engines/world/runtime'
+import { WorldRuntimeIntegration, WorldRuntimeProvider } from './engines/world/runtime'
 import { WorldStateProvider } from './engines/world/state'
 import { WorldOrchestratorProvider } from './engines/world/orchestrator'
 import { WorldThemeProvider } from './engines/world/theme'
@@ -33,6 +33,7 @@ const ProfileHub = lazy(() => import('./pages/ProfileHub'))
 const NexusPassport = lazy(() => import('./pages/NexusPassport'))
 const NexusRoom = lazy(() => import('./pages/NexusRoom'))
 const NexusPixelWorld = lazy(() => import('./pages/NexusPixelWorld'))
+const NexusVipRooms = lazy(() => import('./pages/NexusVipRooms'))
 const News = lazy(() => import('./pages/News'))
 const NewsArticle = lazy(() => import('./pages/NewsArticle'))
 const Community = lazy(() => import('./pages/Community'))
@@ -93,6 +94,7 @@ const routeNames = {
     '/community': 'Comunidad',
     '/nexus-city': 'Nexus City',
     '/nexus-city/room/xethkioz': 'Plaza Nexus',
+    '/nexus-city/vip': 'Salas VIP Nexus',
     '/profile': 'Perfil',
     '/account': 'Cuenta',
     '/login': 'Iniciar sesión',
@@ -110,6 +112,7 @@ const routeNames = {
     '/community': 'Community',
     '/nexus-city': 'Nexus City',
     '/nexus-city/room/xethkioz': 'Nexus Plaza',
+    '/nexus-city/vip': 'Nexus VIP rooms',
     '/profile': 'Profile',
     '/account': 'Account',
     '/login': 'Sign in',
@@ -214,6 +217,7 @@ function AppShell() {
               <Route path="/nexus-city" element={<Navigate to="/fun#nexus-city" replace />} />
               <Route path="/nexus-city/u/:handle" element={<NexusPassport />} />
               <Route path="/nexus-city/room/xethkioz" element={<NexusPixelWorld />} />
+              <Route path="/nexus-city/vip" element={<NexusVipRooms />} />
               <Route path="/nexus-city/room/:handle" element={<NexusRoom />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
@@ -273,6 +277,7 @@ function AppShell() {
 export default function App() {
   return (
     <WorldRuntimeProvider>
+      <WorldRuntimeIntegration />
       <WorldStateProvider>
         <WorldOrchestratorProvider>
           <WorldThemeProvider>

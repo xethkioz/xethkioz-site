@@ -13,6 +13,13 @@ const bridge = read('src/engines/world/sandbox/RuntimeBridge.ts')
 const perf = read('src/engines/world/sandbox/PerformanceMonitor.ts')
 const authUi = read('src/components/auth/XethkiozNexusAuth.tsx')
 const contracts = read('src/engines/world/sandbox/portalEventContracts.ts')
+const generateNews = read('api/generate-news/index.ts')
+const adminSession = read('src/cms/hooks/useAdminSession.ts')
+const adminUsers = read('supabase/functions/admin-users/index.ts')
+const supabaseConfig = read('supabase/config.toml')
+const adminConsistency = read('supabase/migrations/20260723120000_security_admin_consistency.sql')
+const mainEntry = read('src/main.tsx')
+const appShell = read('src/App.tsx')
 
 check('profiles public read removed', !sql.includes('create policy "profiles_public_read"'))
 check('profiles self insert locked to BASIC/GUEST', sql.includes('profiles_self_insert_basic_only') && sql.includes("subscription_tier = 'BASIC'") && sql.includes("role = 'GUEST'"))
@@ -26,6 +33,14 @@ check('latency probe has timeout', perf.includes('withTimeout') && perf.includes
 check('critical performance reports throttled', perf.includes('lastCriticalDropReportAt'))
 check('auth UI maps production-safe errors', authUi.includes('mapAuthErrorForUser'))
 check('portal event map is exhaustive', contracts.includes('PORTAL_STATE_CHANGED') && contracts.includes('CRITICAL_PERFORMANCE_DROP') && contracts.includes('USER_SESSION_AUTHORIZED') && contracts.includes('NETWORK_LATENCY_CHANGED'))
+check('news generation ignores editable user metadata roles', !generateNews.includes('user_metadata?.role') && generateNews.includes('app_metadata?.role'))
+check('paid tiers do not grant administrator status', adminSession.includes("const isAdmin = role === 'ADMIN'") && !/const\s+isAdmin[^\n]*ARCHITECT/.test(adminSession))
+check('admin account mutations require authenticated Edge function', supabaseConfig.includes('[functions.admin-users]') && supabaseConfig.includes('verify_jwt = true') && adminUsers.includes('admin.auth.getUser(token)'))
+check('admin Edge function validates secure role metadata', adminUsers.includes('caller.app_metadata?.role') && !adminUsers.includes('caller.user_metadata?.role'))
+check('privileged RLS helpers move outside the public API schema', adminConsistency.includes('set schema private') && adminConsistency.includes('revoke all on function private.xethkioz_has_role'))
+check('legacy articles policy does not expose all rows to signed-in users', adminConsistency.includes('articles_authenticated_editorial_read') && !adminConsistency.includes("or (select auth.uid()) is not null"))
+check('safe boot renders error details as text', mainEntry.includes('details.textContent = message') && !mainEntry.includes('document.body.innerHTML'))
+check('world runtime integration is mounted', appShell.includes('<WorldRuntimeIntegration />'))
 
 let failed = 0
 for (const [name, ok] of checks) {

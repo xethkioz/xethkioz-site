@@ -32,7 +32,7 @@ export const UNIVERSE_PORTALS: readonly UniversePortal[] = [
     signal: { es: 'CALLE DEL CAOS', en: 'CHAOS ALLEY' },
   },
   {
-    id: 'nexus', code: 'XK-04', glyph: '界', route: '/nexus-city', tone: '#f97316', image: '/assets/xethkioz-cover.png',
+    id: 'nexus', code: 'XK-04', glyph: '界', route: '/nexus-city', tone: '#f97316', image: '/assets/xethkioz-cover.webp',
     title: { es: 'Nexus City', en: 'Nexus City' },
     subtitle: { es: 'Avatar, Atrio vivo, chat, cápsulas y comunidad.', en: 'Avatar, live Atrium, chat, capsules and community.' },
     signal: { es: 'MUNDO SOCIAL', en: 'SOCIAL WORLD' },
@@ -50,4 +50,3 @@ export const UNIVERSE_PORTALS: readonly UniversePortal[] = [
     signal: { es: 'ARCHIVO RESTRINGIDO', en: 'RESTRICTED ARCHIVE' },
   },
 ] as const
-

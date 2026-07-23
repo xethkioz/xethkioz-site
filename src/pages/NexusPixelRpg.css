@@ -38,6 +38,8 @@
 .xk-pixel-world.is-guild-area { background: #271d35; }
 .xk-pixel-world.is-lab-area { background: #112f38; }
 .xk-pixel-world.is-arcade-area { background: #382016; }
+.xk-pixel-world.is-shop-area { background: #3b2635; }
+.xk-pixel-world.is-lounge-area { background: #171a35; }
 
 .xk-pixel-tile.is-indoor {
   background:
@@ -59,6 +61,18 @@
     #4c342c;
 }
 
+.xk-pixel-world.is-shop-area .xk-pixel-tile.is-indoor {
+  background:
+    radial-gradient(circle at 8px 8px, rgba(255, 209, 128, .13) 0 2px, transparent 3px),
+    #50384a;
+}
+
+.xk-pixel-world.is-lounge-area .xk-pixel-tile.is-indoor {
+  background:
+    linear-gradient(90deg, transparent 0 18px, rgba(120, 107, 236, .09) 18px 20px, transparent 20px),
+    #2a2c4b;
+}
+
 .xk-pixel-tile.is-carpet {
   background:
     repeating-linear-gradient(0deg, rgba(255, 255, 255, .06) 0 4px, transparent 4px 12px),
@@ -71,6 +85,18 @@
   background: repeating-linear-gradient(90deg, #a94c22 0 8px, #71301c 8px 16px);
   border-left-color: #e47b38;
   border-right-color: #4d1b10;
+}
+
+.xk-pixel-world.is-shop-area .xk-pixel-tile.is-carpet {
+  background: repeating-linear-gradient(90deg, #a95773 0 8px, #71374e 8px 16px);
+  border-left-color: #e28ba5;
+  border-right-color: #4a2133;
+}
+
+.xk-pixel-world.is-lounge-area .xk-pixel-tile.is-carpet {
+  background: repeating-linear-gradient(90deg, #5557a7 0 8px, #383a78 8px 16px);
+  border-left-color: #8689f0;
+  border-right-color: #252650;
 }
 
 .xk-pixel-tile.is-metal {
@@ -101,6 +127,10 @@
   color: #89efff;
   box-shadow: 3px 3px 0 rgba(0, 0, 0, .35), inset 0 0 0 3px #11141d;
 }
+
+.xk-pixel-object.is-shop > span { background: #7b3f5b; color: #ffe2a5; }
+.xk-pixel-object.is-lounge > span { background: #373d8a; color: #d9dcff; }
+.xk-pixel-object.is-vip > span { background: #11101e; color: #d5abff; box-shadow: 0 0 18px rgba(183, 121, 255, .7), inset 0 0 0 3px #5c3b83; }
 
 .xk-pixel-object.is-beacon > span {
   width: 25px;

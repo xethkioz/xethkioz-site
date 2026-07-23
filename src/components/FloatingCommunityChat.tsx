@@ -74,7 +74,7 @@ export default function FloatingCommunityChat() {
                   {presence.routeOnline} mirando esta página · {presence.roomOnline} en sala · {presence.onlineTotal} online · {modeLabel(status)}
                 </p>
               </div>
-              <button onClick={() => setOpen(false)} className="rounded-lg border border-white/10 px-2 py-1 text-xs text-gray-400 hover:text-white">Cerrar</button>
+              <button type="button" onClick={() => setOpen(false)} className="rounded-lg border border-white/10 px-2 py-1 text-xs text-gray-400 hover:text-white">Cerrar</button>
             </div>
             <div className="relative mt-3 rounded-2xl border border-green-400/20 bg-green-500/5 p-2 font-mono text-[10px] text-green-200">
               Wisp Lv.{presence.wispLevel} · {presence.wispName} · energía {presence.energy}% · sala sugerida: {recommendedRoom}
@@ -84,7 +84,7 @@ export default function FloatingCommunityChat() {
           <div className="grid grid-cols-[118px_1fr] min-h-[386px]">
             <aside className="border-r border-white/10 bg-black/20 p-2 space-y-1">
               {communityRooms.map((r) => (
-                <button key={r.id} onClick={() => setActiveRoom(r.id)} className={`w-full rounded-xl px-2 py-2 text-left text-xs transition-all ${activeRoom === r.id ? 'bg-orange/15 text-orange border border-orange/30' : 'text-gray-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                <button type="button" key={r.id} onClick={() => setActiveRoom(r.id)} className={`w-full rounded-xl px-2 py-2 text-left text-xs transition-all ${activeRoom === r.id ? 'bg-orange/15 text-orange border border-orange/30' : 'text-gray-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                   <span className="mr-1">{r.icon}</span>{r.name}
                 </button>
               ))}
@@ -114,7 +114,7 @@ export default function FloatingCommunityChat() {
                 </div>
                 <div className="flex gap-2">
                   <input value={text} onChange={(e) => setText(e.target.value)} maxLength={280} placeholder="Escribí en la comunidad..." className="input-field py-2 text-xs" />
-                  <button className="btn-primary px-3 py-2 text-xs">Enviar</button>
+                  <button type="submit" className="btn-primary px-3 py-2 text-xs">Enviar</button>
                 </div>
                 <p className="mt-2 text-[10px] text-gray-600">RC2.4: Realtime global activo cuando Supabase tenga aplicada la migración y Realtime habilitado.</p>
               </form>
@@ -123,7 +123,7 @@ export default function FloatingCommunityChat() {
         </section>
       )}
 
-      <button onClick={() => setOpen((value) => !value)} className="group flex items-center gap-2 rounded-full border border-orange/40 bg-ink-300/95 px-4 py-3 text-sm font-bold text-white shadow-[0_0_28px_rgba(255,106,0,0.25)] backdrop-blur-xl transition-all hover:border-orange hover:scale-105">
+      <button type="button" onClick={() => setOpen((value) => !value)} className="group flex items-center gap-2 rounded-full border border-orange/40 bg-ink-300/95 px-4 py-3 text-sm font-bold text-white shadow-[0_0_28px_rgba(255,106,0,0.25)] backdrop-blur-xl transition-all hover:border-orange hover:scale-105">
         <span className="relative flex h-3 w-3"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-60"/><span className="relative inline-flex h-3 w-3 rounded-full bg-green-400"/></span>
         💬 Chat · {presence.routeOnline} mirando
       </button>

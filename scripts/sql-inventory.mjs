@@ -3,7 +3,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 
 const root = process.cwd();
-const sqlRoots = ['database/migrations', 'supabase/migrations', 'supabase'];
+const sqlRoots = ['database/migrations', 'supabase'];
 const tableRegex = /create\s+table\s+(?:if\s+not\s+exists\s+)?([\w.]+)/gi;
 const policyRegex = /create\s+policy\s+([\s\S]*?)\s+on\s+([\w.]+)/gi;
 

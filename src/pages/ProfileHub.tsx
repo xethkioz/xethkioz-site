@@ -41,6 +41,13 @@ const copy = {
     signOut: 'Cerrar sesión',
     signIn: 'Ingresar',
     resend: 'Reenviar confirmación',
+    shortcutsEyebrow: 'ACCESOS EN VIVO',
+    shortcutsTitle: 'Volvé al multiverso',
+    shortcuts: [
+      { to: '/nexus-city/room/xethkioz', label: 'Continuar aventura', detail: 'Plaza, Casa Wisp y Gran Sala', glyph: '▶' },
+      { to: '/nexus-city/vip', label: 'Salas privadas', detail: 'Invitaciones y conversaciones VIP', glyph: '◆' },
+      { to: '/community', label: 'Canal comunitario', detail: 'Chat, contactos y señales', glyph: '⌁' },
+    ],
     progressionEyebrow: 'PROGRESIÓN WISP',
     level: 'Nivel',
     progressionText: 'Tus visitas, comentarios y misiones alimentan la energía del Wisp.',
@@ -97,6 +104,13 @@ const copy = {
     signOut: 'Sign out',
     signIn: 'Sign in',
     resend: 'Resend confirmation',
+    shortcutsEyebrow: 'LIVE SHORTCUTS',
+    shortcutsTitle: 'Return to the multiverse',
+    shortcuts: [
+      { to: '/nexus-city/room/xethkioz', label: 'Continue adventure', detail: 'Plaza, Wisp House and Grand Hall', glyph: '▶' },
+      { to: '/nexus-city/vip', label: 'Private rooms', detail: 'Invitations and VIP conversations', glyph: '◆' },
+      { to: '/community', label: 'Community channel', detail: 'Chat, contacts and signals', glyph: '⌁' },
+    ],
     progressionEyebrow: 'WISP PROGRESSION',
     level: 'Level',
     progressionText: 'Your visits, comments and missions feed the Wisp’s energy.',
@@ -252,6 +266,17 @@ export default function ProfileHub() {
             {!isConnected ? <Link to="/confirm-email" className="rounded-full border border-violet-400/40 px-4 py-3 text-violet-100 transition hover:bg-violet-500/10">{c.resend}</Link> : null}
           </div>
         </section>
+
+        {isConnected ? <section className="mt-6 rounded-[2rem] border border-orange-300/20 bg-[radial-gradient(circle_at_90%_0%,rgba(249,115,22,.14),transparent_35%),rgba(0,0,0,.48)] p-6 text-white md:p-8" aria-labelledby="profile-shortcuts-title">
+          <p className="font-mono text-[10px] font-black uppercase tracking-[0.28em] text-orange-300">{c.shortcutsEyebrow}</p>
+          <h2 id="profile-shortcuts-title" className="mt-2 text-2xl font-black uppercase">{c.shortcutsTitle}</h2>
+          <div className="mt-5 grid gap-3 md:grid-cols-3">
+            {c.shortcuts.map((shortcut) => <Link key={shortcut.to} to={shortcut.to} className="group grid grid-cols-[auto_1fr] items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-4 transition hover:-translate-y-0.5 hover:border-orange-300/40 hover:bg-orange-400/[0.07]">
+              <span className="grid h-11 w-11 place-items-center rounded-xl border border-orange-300/25 bg-orange-400/10 text-xl text-orange-200" aria-hidden="true">{shortcut.glyph}</span>
+              <span><strong className="block text-sm">{shortcut.label}</strong><small className="mt-1 block text-xs leading-5 text-slate-400">{shortcut.detail}</small></span>
+            </Link>)}
+          </div>
+        </section> : null}
 
         {isConnected ? <div className="mt-6 grid gap-6 xl:grid-cols-[1.2fr_.8fr]">
           <section className="overflow-hidden rounded-[2rem] border border-violet-400/25 bg-[radial-gradient(circle_at_85%_0%,rgba(139,92,246,.24),transparent_34%),rgba(0,0,0,.58)] p-6 text-white md:p-8" aria-labelledby="wisp-progression-title">

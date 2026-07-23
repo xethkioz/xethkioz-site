@@ -150,7 +150,7 @@ export function ErrorDisplay({ message, onRetry }: { message: string; onRetry?: 
       <div className="text-4xl mb-4">⚠️</div>
       <p className="text-gray-400 mb-4">{message}</p>
       {onRetry && (
-        <button onClick={onRetry} className="btn-primary">
+        <button type="button" onClick={onRetry} className="btn-primary">
           Retry
         </button>
       )}

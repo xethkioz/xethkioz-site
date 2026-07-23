@@ -72,7 +72,7 @@ export default function NetworkIntegrityPanel() {
           <h2 className="font-display text-2xl font-black text-white">Redes oficiales centralizadas</h2>
           <div className="mt-4 space-y-2">
             {SOCIAL_LINKS.map((link) => (
-              <a key={link.name} href={link.url} target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-black/25 px-4 py-3 text-sm transition hover:border-neon/40">
+              <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-black/25 px-4 py-3 text-sm transition hover:border-neon/40">
                 <span className="text-gray-200"><span className="mr-2">{link.icon}</span>{link.name}</span>
                 <span className="font-mono text-xs text-gray-500">{link.handle}</span>
               </a>
