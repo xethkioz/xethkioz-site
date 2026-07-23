@@ -89,10 +89,10 @@ if (coreBlock.includes(HOME_STORY_START)) {
   throw new Error('The Home manifesto base block leaked back into the global core.')
 }
 if (coreBlock.includes('.xk-green-shell') || coreBlock.includes('.xk-green-terminal{')) {
-  throw new Error('Green Node route selectors leaked back into the global core.')
+  throw new Error('Green Node route base selectors leaked back into the global core.')
 }
-if (coreBlock.includes(GAMING_FUN_START) || coreBlock.includes('.xk-meme-bento')) {
-  throw new Error('Gaming/Fun base selectors leaked back into the global core.')
+if (coreBlock.includes(GAMING_FUN_START) || coreBlock.includes('@keyframes xk-anime-zoom')) {
+  throw new Error('Gaming/Fun base block leaked back into the global core.')
 }
 if (coreBlock.includes('.xk-tech-stack,.xk-lab-assistant')) {
   throw new Error('Science base selectors leaked back into the global core.')
