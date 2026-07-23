@@ -7,6 +7,7 @@ const assert = (condition, message) => { if (!condition) issues.push(message) }
 const vercel = JSON.parse(read('vercel.json'))
 const sitemap = read('api/sitemap.ts')
 const seoShells = read('scripts/generate-seo-shells.mjs')
+const notFound = read('api/not-found.ts')
 const streamsMigration = read('supabase/migrations/20260723153000_streams_public_radar.sql')
 const visitLog = read('supabase/functions/visit-log/index.ts')
 
@@ -18,9 +19,17 @@ assert(redirectMap.get('/register')?.destination === '/account', 'Legacy registe
 assert(redirectMap.get('/admin')?.destination === '/cms', 'Legacy admin path must redirect at the HTTP layer.')
 
 const rewrites = vercel.rewrites ?? []
+const rewriteMap = new Map(rewrites.map((item) => [item.source, item.destination]))
 assert(!rewrites.some((item) => item.source === '/nexus-city'), 'Redirected Nexus City must not have an indexable SEO-shell rewrite.')
 assert(!sitemap.includes("'/nexus-city'"), 'Redirected Nexus City must not remain in the sitemap.')
 assert(!seoShells.includes("path: '/nexus-city'"), 'Redirected Nexus City must not generate a standalone SEO shell.')
+assert(rewriteMap.get('/green-node') === '/index.html', 'Green Node deep links must remain valid without exposing it in navigation.')
+assert(rewriteMap.get('/nexus-city/u/:handle') === '/index.html', 'Public Nexus passport deep links must remain valid.')
+assert(rewriteMap.get('/nexus-city/room/:handle') === '/index.html', 'Nexus room deep links must remain valid.')
+assert(rewriteMap.get('/nexus-city/vip') === '/private.html', 'VIP Nexus access must use the private noindex shell.')
+assert(rewriteMap.get('/((?!api/).*)') === '/api/not-found', 'Unknown direct requests must resolve through the real 404 function.')
+assert(notFound.includes('response.status(404).send(html)'), 'The not-found endpoint must return HTTP 404.')
+assert(notFound.includes("'X-Robots-Tag', 'noindex, nofollow, noarchive, nosnippet, noimageindex'"), 'The not-found response must prevent indexing.')
 
 const globalHeaders = (vercel.headers ?? []).find((item) => item.source === '/(.*)')?.headers ?? []
 assert(globalHeaders.some((item) => item.key === 'Content-Security-Policy-Report-Only'), 'A CSP report-only baseline must be present before enforcement.')
@@ -41,4 +50,4 @@ if (issues.length) {
   process.exit(1)
 }
 
-console.log('PASS runtime/SEO contracts: redirects, canonical sitemap, CSP report-only, streams RLS and telemetry hygiene.')
+console.log('PASS runtime/SEO contracts: real 404, deep links, redirects, CSP report-only, streams RLS and telemetry hygiene.')
