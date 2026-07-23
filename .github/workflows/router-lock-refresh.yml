@@ -5,7 +5,7 @@ on:
     branches: [agent/redeploy-clean-main-150]
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   refresh-lock:
@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: agent/redeploy-clean-main-150
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -35,6 +37,19 @@ jobs:
 
       - name: Verify application
         run: npm run build
+
+      - name: Commit verified manifests to branch
+        shell: bash
+        run: |
+          if git diff --quiet -- package.json package-lock.json; then
+            echo "Router manifests already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          git commit -m "security(deps): upgrade React Router to 7.18.1"
+          git push origin HEAD:agent/redeploy-clean-main-150
 
       - name: Upload refreshed manifests
         uses: actions/upload-artifact@v4
