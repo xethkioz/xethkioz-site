@@ -4,8 +4,8 @@
   "version": "10.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "npm run typecheck && npm run audit:routes && npm run audit:runtime-seo && npm run audit:privacy-consent && npm run audit:css-source && npm run generate:seo-shells && vite build && npm run audit:initial-bundle",
+    "dev": "npm run generate:css-split && vite",
+    "build": "npm run generate:css-split && npm run typecheck && npm run audit:routes && npm run audit:runtime-seo && npm run audit:privacy-consent && npm run audit:css-source && npm run generate:seo-shells && vite build && npm run audit:initial-bundle",
     "preview": "vite preview",
     "audit": "node scripts/audit.js",
     "audit:tree": "node scripts/print-tree.mjs",
@@ -43,6 +43,7 @@
     "audit:ui-contracts": "node scripts/ui-contract-check.mjs",
     "audit:production-ready": "node scripts/production-ready-check.mjs",
     "audit:env": "node scripts/env-ready-check.mjs",
+    "generate:css-split": "node scripts/split-redesign-css.mjs",
     "generate:seo-shells": "node scripts/generate-seo-shells.mjs",
     "deploy:check": "npm run verify && npm audit --omit=dev",
     "audit:package-clean": "XETHKIOZ_STRICT_PACKAGE_AUDIT=1 node scripts/production-ready-check.mjs",
