@@ -1,4 +1,5 @@
 import { createRequire } from 'node:module'
+import nodeProcess from 'node:process'
 import {
   SITE_URL,
   absoluteUrl,
@@ -22,7 +23,7 @@ function sanitizeDiagnosticStack(stack: string | undefined) {
   return (stack ?? 'stack unavailable')
     .split('\n')
     .slice(0, 18)
-    .map((line) => line.replaceAll(process.cwd(), '<cwd>'))
+    .map((line) => line.replaceAll(nodeProcess.cwd(), '<cwd>'))
 }
 
 function logDep0169Trace(message: string, stack: string | undefined) {
@@ -36,7 +37,7 @@ function logDep0169Trace(message: string, stack: string | undefined) {
 
 if (!diagnosticGlobal.__xethkiozDep0169ProbeInstalled) {
   diagnosticGlobal.__xethkiozDep0169ProbeInstalled = true
-  process.on('warning', (warning) => {
+  nodeProcess.on('warning', (warning) => {
     const code = (warning as Error & { code?: string }).code
     if (code !== 'DEP0169') return
     logDep0169Trace('news-page DEP0169 warning event', warning.stack ?? `${warning.name}: ${warning.message}`)
