@@ -106,15 +106,6 @@ function selectorClasses(selector) {
   return [...selector.matchAll(/\.([_a-zA-Z][\w-]*)/g)].map((match) => match[1])
 }
 
-function isConditionalRule(rule) {
-  let parent = rule.parent
-  while (parent && parent.type !== 'root') {
-    if (parent.type === 'atrule' && ['media', 'supports', 'container'].includes(parent.name)) return true
-    parent = parent.parent
-  }
-  return false
-}
-
 function appendWithAncestors(targetRoot, sourceRule, clonedRule) {
   const ancestors = []
   let parent = sourceRule.parent
@@ -145,10 +136,10 @@ function removeEmptyAtRules(rootNode) {
   }
 }
 
-function partitionConditionalRouteRules(coreCss, routeCssByOwner) {
+function partitionResidualRouteRules(coreCss, routeCssByOwner) {
   const coreRoot = postcss.parse(coreCss)
   const classOwners = new Map()
-  const topLevelCoreClasses = new Set()
+  const standaloneCoreClasses = new Set()
 
   for (const [owner, css] of Object.entries(routeCssByOwner)) {
     postcss.parse(css).walkRules((rule) => {
@@ -161,19 +152,19 @@ function partitionConditionalRouteRules(coreCss, routeCssByOwner) {
   }
 
   coreRoot.walkRules((rule) => {
-    if (rule.parent?.type !== 'root') return
-    for (const className of selectorClasses(rule.selector)) topLevelCoreClasses.add(className)
+    for (const selector of splitSelectorList(rule.selector)) {
+      const simpleClass = selector.match(/^\.([_a-zA-Z][\w-]*)$/)?.[1]
+      if (simpleClass) standaloneCoreClasses.add(simpleClass)
+    }
   })
 
   const uniqueOwner = new Map()
   for (const [className, owners] of classOwners) {
-    if (owners.size === 1 && !topLevelCoreClasses.has(className)) uniqueOwner.set(className, [...owners][0])
+    if (owners.size === 1 && !standaloneCoreClasses.has(className)) uniqueOwner.set(className, [...owners][0])
   }
 
   const extras = Object.fromEntries(Object.keys(routeCssByOwner).map((owner) => [owner, postcss.root()]))
   coreRoot.walkRules((rule) => {
-    if (!isConditionalRule(rule)) return
-
     const retainedSelectors = []
     const routeSelectors = new Map()
     for (const selector of splitSelectorList(rule.selector)) {
@@ -201,12 +192,11 @@ function partitionConditionalRouteRules(coreCss, routeCssByOwner) {
 
   const remainingLeaks = []
   coreRoot.walkRules((rule) => {
-    if (!isConditionalRule(rule)) return
     for (const className of selectorClasses(rule.selector)) {
       if (uniqueOwner.has(className)) remainingLeaks.push(`${className} in ${rule.selector}`)
     }
   })
-  if (remainingLeaks.length) throw new Error(`Conditional route selectors remain in global core: ${remainingLeaks.slice(0, 8).join(' | ')}`)
+  if (remainingLeaks.length) throw new Error(`Residual route selectors remain in global core: ${remainingLeaks.slice(0, 8).join(' | ')}`)
 
   return {
     core: coreRoot.toString().trim(),
@@ -216,7 +206,7 @@ function partitionConditionalRouteRules(coreCss, routeCssByOwner) {
 
 function appendExtra(baseCss, extraCss) {
   if (!extraCss) return baseCss
-  return `${baseCss.trim()}\n\n/* Conditional overrides moved with their route owner. */\n${extraCss.trim()}`
+  return `${baseCss.trim()}\n\n/* Residual overrides moved with their route owner. */\n${extraCss.trim()}`
 }
 
 if (!fs.existsSync(sourcePath)) throw new Error(`CSS source not found: ${path.relative(root, sourcePath)}`)
@@ -253,7 +243,7 @@ const routeBaseCss = {
   passport: blocks.passport.content,
   room: blocks.room.content,
 }
-const partitioned = partitionConditionalRouteRules(removeBlocks(source, Object.values(blocks)), routeBaseCss)
+const partitioned = partitionResidualRouteRules(removeBlocks(source, Object.values(blocks)), routeBaseCss)
 const outputs = {
   core: generated('global core CSS', partitioned.core),
   ...Object.fromEntries(Object.entries(routeBaseCss).map(([owner, css]) => [owner, generated(`${owner} route CSS`, appendExtra(css, partitioned.extras[owner]))])),
@@ -297,7 +287,7 @@ console.log(JSON.stringify({
   sourceBytes,
   globalCoreBytes,
   globalReductionBytes: sourceBytes - globalCoreBytes,
-  conditionalRouteBytes: Object.fromEntries(Object.entries(partitioned.extras).map(([key, content]) => [key, Buffer.byteLength(content)])),
+  routeOverrideBytes: Object.fromEntries(Object.entries(partitioned.extras).map(([key, content]) => [key, Buffer.byteLength(content)])),
   routeBytes: Object.fromEntries(Object.entries(outputs).filter(([key]) => key !== 'core').map(([key, content]) => [key, Buffer.byteLength(content)])),
   wrote,
 }))
