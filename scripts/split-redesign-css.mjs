@@ -49,9 +49,7 @@ function writeIfChanged(filePath, content) {
 function locateBlock(source, startMarker, endMarker, label) {
   const start = source.indexOf(startMarker)
   const end = endMarker === null ? source.length : source.indexOf(endMarker, start)
-  if (start < 0 || end < 0 || end <= start) {
-    throw new Error(`${label} CSS markers are missing or out of order.`)
-  }
+  if (start < 0 || end < 0 || end <= start) throw new Error(`${label} CSS markers are missing or out of order.`)
   return { label, start, end, content: source.slice(start, end).trim() }
 }
 
@@ -59,13 +57,11 @@ function removeBlocks(source, blocks) {
   const ordered = [...blocks].sort((left, right) => left.start - right.start)
   let cursor = 0
   const retained = []
-
   for (const block of ordered) {
     if (block.start < cursor) throw new Error(`${block.label} CSS range overlaps a previous extraction.`)
     retained.push(source.slice(cursor, block.start).trim())
     cursor = block.end
   }
-
   retained.push(source.slice(cursor).trim())
   return retained.filter(Boolean).join('\n\n').trim()
 }
@@ -79,7 +75,6 @@ if (!fs.existsSync(homeRingsPath)) throw new Error(`Home ring CSS source not fou
 
 const source = fs.readFileSync(sourcePath, 'utf8')
 const homeRings = fs.readFileSync(homeRingsPath, 'utf8').trim()
-
 const blocks = {
   homePortals: locateBlock(source, MARKERS.homePortals, MARKERS.homePortalsEnd, 'Home portals'),
   greenBase: locateBlock(source, MARKERS.greenBase, MARKERS.gamingFun, 'Green Node base'),
@@ -97,8 +92,7 @@ const blocks = {
   gamingSections: locateBlock(source, MARKERS.gamingSections, null, 'Gaming sections'),
 }
 
-const extractedBlocks = Object.values(blocks)
-const coreBlock = removeBlocks(source, extractedBlocks)
+const coreBlock = removeBlocks(source, Object.values(blocks))
 const outputs = {
   core: generated('global core CSS', coreBlock),
   home: generated('Home route CSS', `${blocks.homePortals.content}\n\n${blocks.homeStory.content}\n\n${homeRings}`),
@@ -117,15 +111,14 @@ const requiredContracts = [
   ['home', '.xk-home-portal-shell', '.xk-home-story'],
   ['greenNode', '.xk-green-shell', '.xk-green-terminal'],
   ['gamingFun', '.xk-anime-page', '.xk-meme-bento'],
-  ['gamingSections', '.xk-gaming-view-nav'],
-  ['science', '.xk-tech-stack', '.xk-science-paths'],
+  ['gamingSections', '.xk-gaming-section-nav', '.xk-gaming-start'],
+  ['science', '.xk-tech-stack', '.xk-learning-routes'],
   ['nexusDistrict', '.xk-nexus-district', '.xk-nexus-sign'],
   ['editorial', '.xk-news-dossier', '.xk-news-simple-meta'],
   ['funNexus', '.xk-fun-arcade', '.xk-city-page'],
-  ['passport', '.xk-public-passport', '.xk-passport'],
-  ['room', '.xk-room-page', '.xk-room-presence'],
+  ['passport', '.xk-public-passport', '.xk-public-avatar-stage'],
+  ['room', '.xk-room-page', '.xk-living-room'],
 ]
-
 for (const [outputKey, ...selectors] of requiredContracts) {
   for (const selector of selectors) {
     if (!outputs[outputKey].includes(selector)) throw new Error(`${outputKey} CSS is missing contract ${selector}.`)
@@ -133,19 +126,9 @@ for (const [outputKey, ...selectors] of requiredContracts) {
 }
 
 const forbiddenCoreMarkers = [
-  '@keyframes portal-world-drift',
-  MARKERS.homeStory,
-  '.xk-green-shell',
-  MARKERS.gamingFun,
-  '.xk-tech-stack,.xk-lab-assistant',
-  MARKERS.nexusDistrict,
-  MARKERS.editorial,
-  MARKERS.funArcade,
-  MARKERS.practicalScience,
-  MARKERS.nexusSocial,
-  MARKERS.publicPassport,
-  MARKERS.rooms,
-  MARKERS.gamingSections,
+  '@keyframes portal-world-drift', MARKERS.homeStory, '.xk-green-shell', MARKERS.gamingFun,
+  '.xk-tech-stack,.xk-lab-assistant', MARKERS.nexusDistrict, MARKERS.editorial, MARKERS.funArcade,
+  MARKERS.practicalScience, MARKERS.nexusSocial, MARKERS.publicPassport, MARKERS.rooms, MARKERS.gamingSections,
 ]
 for (const marker of forbiddenCoreMarkers) {
   if (outputs.core.includes(marker)) throw new Error(`Route CSS leaked into the global core: ${marker}`)
