@@ -14,6 +14,7 @@
     { "source": "/sitemap.xml", "destination": "/api/sitemap" },
     { "source": "/news-sitemap.xml", "destination": "/api/news-sitemap" },
     { "source": "/feed.xml", "destination": "/api/feed" },
+    { "source": "/", "destination": "/index.html" },
     { "source": "/gaming/guides", "destination": "/seo-shells/gaming-guides.html" },
     { "source": "/gaming", "destination": "/seo-shells/gaming.html" },
     { "source": "/science", "destination": "/seo-shells/science.html" },
@@ -27,13 +28,19 @@
     { "source": "/privacy", "destination": "/seo-shells/privacy.html" },
     { "source": "/editorial-policy", "destination": "/seo-shells/editorial-policy.html" },
     { "source": "/creacion-web", "destination": "/creacion-web.html" },
+    { "source": "/green-node", "destination": "/index.html" },
+    { "source": "/nexus-city/u/:handle", "destination": "/index.html" },
+    { "source": "/nexus-city/room/xethkioz", "destination": "/index.html" },
+    { "source": "/nexus-city/vip", "destination": "/private.html" },
+    { "source": "/nexus-city/room/:handle", "destination": "/index.html" },
     { "source": "/cms", "destination": "/cms.html" },
     { "source": "/cms/(.*)", "destination": "/cms.html" },
+    { "source": "/cms-legacy", "destination": "/cms.html" },
     { "source": "/account", "destination": "/private.html" },
     { "source": "/login", "destination": "/private.html" },
     { "source": "/confirm-email", "destination": "/private.html" },
     { "source": "/profile", "destination": "/private.html" },
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
+    { "source": "/((?!api/).*)", "destination": "/api/not-found" }
   ],
   "headers": [
     {
@@ -88,6 +95,12 @@
       ]
     },
     {
+      "source": "/cms-legacy",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+      ]
+    },
+    {
       "source": "/account",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
@@ -113,6 +126,18 @@
     },
     {
       "source": "/green-node",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+      ]
+    },
+    {
+      "source": "/nexus-city/vip",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+      ]
+    },
+    {
+      "source": "/nexus-city/room/(.*)",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
       ]
