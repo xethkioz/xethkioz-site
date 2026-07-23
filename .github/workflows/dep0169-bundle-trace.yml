@@ -30,10 +30,23 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Prepare diagnostic directory
+        shell: bash
+        run: mkdir -p dep0169-evidence
+
+      - name: Capture TypeScript diagnostics
+        shell: bash
+        run: |
+          set +e
+          npm run typecheck > dep0169-evidence/typecheck.log 2>&1
+          status=$?
+          cat dep0169-evidence/typecheck.log
+          exit "$status"
+
       - name: Prepare local Vercel project metadata
         shell: bash
         run: |
-          mkdir -p .vercel dep0169-evidence
+          mkdir -p .vercel
           printf '%s' '{"orgId":"team_pTDZMNkc6JNpwzTUqxLxGfFq","projectId":"prj_i2Tejb8Uxldw7Ru4NCp1izYU7nBB"}' > .vercel/project.json
 
       - name: Build Vercel output with deprecation traces
