@@ -62,15 +62,6 @@ const routes = [
     imageAlt: 'Comunidad XETHKIOZ',
   },
   {
-    file: 'nexus-city.html',
-    path: '/nexus-city',
-    title: 'Nexus City | La comunidad viva de XETHKIOZ',
-    description: 'La ciudad social de XETHKIOZ con avatares, pasaportes, cápsulas, actividad comunitaria y accesos a la Red de Portales.',
-    keywords: 'Nexus City, comunidad gamer, avatares, perfiles, chat, XETHKIOZ',
-    image: '/assets/xethkioz-cover.png',
-    imageAlt: 'Nexus City de XETHKIOZ',
-  },
-  {
     file: 'about.html',
     path: '/about',
     title: 'Sobre XETHKIOZ | Gaming, tecnología y Red de Portales',

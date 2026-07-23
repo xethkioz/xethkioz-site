@@ -31,7 +31,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
@@ -41,7 +41,19 @@ jobs:
         run: npm run audit:env
 
       - name: Production readiness audit
-        run: npm run audit:production-ready
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run audit:production-ready 2>&1 | tee production-ready-audit.log
+
+      - name: Upload audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xethkioz-audit-evidence
+          path: production-ready-audit.log
+          if-no-files-found: warn
+          retention-days: 7
 
       - name: Build
         run: npm run build
