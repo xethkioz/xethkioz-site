@@ -56,8 +56,7 @@ export function PrivacyConsentProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const persist = (next: PrivacyPreferences) => {
-    const previousHadTracking = preferences.analytics || preferences.marketing
-    const revokesTracking = previousHadTracking && (!next.analytics || !next.marketing)
+    const revokesTracking = (preferences.analytics && !next.analytics) || (preferences.marketing && !next.marketing)
     const stored: StoredPrivacyPreferences = {
       version: 1,
       analytics: Boolean(next.analytics),
