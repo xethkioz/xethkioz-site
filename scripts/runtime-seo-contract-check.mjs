@@ -32,8 +32,11 @@ assert(rewriteMap.get('/((?!api/).*)') === '/api/not-found', 'Unknown direct req
 assert(notFound.includes('response.status(404).send(html)'), 'The not-found endpoint must return HTTP 404.')
 assert(notFound.includes("'X-Robots-Tag', 'noindex, nofollow, noarchive, nosnippet, noimageindex'"), 'The not-found response must prevent indexing.')
 
-const globalHeaders = (vercel.headers ?? []).find((item) => item.source === '/(.*)')?.headers ?? []
+const headerMap = new Map((vercel.headers ?? []).map((item) => [item.source, item.headers ?? []]))
+const globalHeaders = headerMap.get('/(.*)') ?? []
+const passportHeaders = headerMap.get('/nexus-city/u/(.*)') ?? []
 assert(globalHeaders.some((item) => item.key === 'Content-Security-Policy-Report-Only'), 'A CSP report-only baseline must be present before enforcement.')
+assert(passportHeaders.some((item) => item.key === 'X-Robots-Tag' && item.value.includes('noindex') && item.value.includes('noimageindex')), 'Nexus passports must remain server-side noindex until dynamic per-profile SEO exists.')
 
 assert(streamsMigration.includes('create table if not exists public.streams'), 'The Gaming stream radar requires a real streams table migration.')
 assert(streamsMigration.includes('alter table public.streams enable row level security'), 'The streams table must enable RLS.')
@@ -52,4 +55,4 @@ if (issues.length) {
   process.exit(1)
 }
 
-console.log('PASS runtime/SEO contracts: real 404, deep links, redirects, CSP report-only, streams RLS/indexes and telemetry hygiene.')
+console.log('PASS runtime/SEO contracts: real 404, deep links, redirects, passport privacy, CSP report-only, streams RLS/indexes and telemetry hygiene.')

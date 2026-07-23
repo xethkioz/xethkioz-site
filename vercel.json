@@ -131,6 +131,12 @@
       ]
     },
     {
+      "source": "/nexus-city/u/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive, nosnippet, noimageindex" }
+      ]
+    },
+    {
       "source": "/nexus-city/vip",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
