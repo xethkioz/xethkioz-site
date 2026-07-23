@@ -22,11 +22,12 @@ export interface NumericMotionValue {
 }
 
 const DEFAULT_PRECISION = 0.001
+const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'
 
 function prefersReducedMotion() {
   return typeof window !== 'undefined'
     && typeof window.matchMedia === 'function'
-    && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    && window.matchMedia(REDUCED_MOTION_QUERY).matches
 }
 
 class SpringNumberValue implements NumericMotionValue {
@@ -36,10 +37,20 @@ class SpringNumberValue implements NumericMotionValue {
   private frame: number | null = null
   private previousTimestamp = 0
   private readonly listeners = new Set<NumericValueListener>()
+  private reducedMotionQuery: MediaQueryList | null = null
 
   constructor(initial: number, private readonly config: SmoothNumberConfig) {
     this.current = initial
     this.target = initial
+
+    if (
+      !config.immediate
+      && typeof window !== 'undefined'
+      && typeof window.matchMedia === 'function'
+    ) {
+      this.reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY)
+      this.reducedMotionQuery.addEventListener('change', this.handleReducedMotionChange)
+    }
   }
 
   get = () => this.current
@@ -62,6 +73,7 @@ class SpringNumberValue implements NumericMotionValue {
       this.config.immediate
       || typeof window === 'undefined'
       || typeof window.requestAnimationFrame !== 'function'
+      || this.reducedMotionQuery?.matches
       || prefersReducedMotion()
     ) {
       this.jump(next)
@@ -95,8 +107,14 @@ class SpringNumberValue implements NumericMotionValue {
   }
 
   destroy = () => {
+    this.reducedMotionQuery?.removeEventListener('change', this.handleReducedMotionChange)
+    this.reducedMotionQuery = null
     this.stop()
     this.listeners.clear()
+  }
+
+  private handleReducedMotionChange = (event: MediaQueryListEvent) => {
+    if (event.matches) this.jump(this.target)
   }
 
   private notify() {
