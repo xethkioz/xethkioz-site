@@ -16,12 +16,26 @@ Reducir el CSS cargado por todas las páginas sin eliminar estilos, alterar el a
 
 ## Resultado validado
 
-- `main.css`: 220,591 bytes raw / 40,074 bytes gzip medidos por el contrato post-build.
-- Vite: 220.59 kB raw / 40.29 kB gzip.
-- Reducción gzip: aproximadamente 38 %.
+- `main.css`: 215,179 bytes raw / 38,706 bytes gzip medidos por el contrato post-build.
+- Vite: 215.17 kB raw / 38.91 kB gzip.
+- Reducción gzip: aproximadamente 40.2 %.
 - 13 entradas HTML públicas sin precarga de Supabase, Framer Motion ni CSS de ruta.
 - TypeScript, rutas, runtime/SEO y privacidad: PASS.
+- GitHub Actions: PASS.
 - Preview Vercel: READY.
+
+## Conservación semántica y cascada
+
+Se comparó el artefacto `dist` aprobado por CI contra el artefacto de la línea base anterior al split:
+
+- 3,944 reglas CSS canónicas en la línea base.
+- 3,944 reglas CSS canónicas en el build dividido.
+- Reglas o declaraciones faltantes: 0.
+- Reglas o declaraciones agregadas por error: 0.
+- Diferencias en la declaración final efectiva: 0 para Home, Gaming, Fun, Science, Green Node, Editorial, Pasaporte y Rooms.
+- Inversiones de cascada con efecto: 0.
+
+El generador analiza reglas residuales con PostCSS, separa listas de selectores y mueve media queries, condiciones y overrides de calidad gráfica junto con su propietario de ruta. Sólo una definición simple situada directamente en la raíz puede clasificar una clase como realmente compartida.
 
 ## Arquitectura
 
@@ -56,7 +70,9 @@ La Red de Universos permanece en el núcleo global durante esta fase porque su r
 
 ## Limitación conocida
 
-En accesos directos, `main.tsx` espera el CSS correspondiente antes del primer render. En navegación interna, `RouteCssLoader` inicia la descarga al cambiar la ruta. Una fase posterior puede trasladar los imports a cada módulo lazy y validarlos con Playwright/capturas visuales para eliminar cualquier posibilidad de flash de estilos durante navegación.
+En accesos directos, `main.tsx` espera el CSS correspondiente antes del primer render. En navegación interna, `RouteCssLoader` inicia la descarga mediante `useLayoutEffect` al cambiar la ruta y permite reintentar una descarga fallida.
+
+La navegación visual automatizada del entorno fue bloqueada por una política administrativa del navegador. Por eso la aprobación no afirma capturas Playwright: usa los artefactos exactos de CI y una comparación semántica completa de reglas, declaraciones y orden de cascada.
 
 ## No incluido
 
