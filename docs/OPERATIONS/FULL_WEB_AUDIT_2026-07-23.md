@@ -1,227 +1,297 @@
-# XETHKIOZ Web 10.0 — Auditoría integral de producción
+# XETHKIOZ Web 10.0 — Auditoría integral y estado de remediación
 
-Fecha: 2026-07-23  
+Fecha de auditoría y cierre técnico: 2026-07-23  
 Repositorio: `xethkioz/xethkioz-site`  
-Baseline auditado: `main@1a09b40a11658dedae253e6a99adf0e3d78551c3`  
-Rama de remediación: `agent/full-audit-runtime-seo-133`
+Baseline original: `main@1a09b40a11658dedae253e6a99adf0e3d78551c3`  
+Main validado: `fdd00c9897f0ca1fa0760cf492c9d3e629699dd5`  
+Producción pública confirmada: `d4e199196182060f35bf15da1edc86b3b97b308c`  
+Último preview funcional confirmado: `f8b03c8551b0ab7a461254b04c7e2bf8700896cb`
 
 ## 1. Veredicto ejecutivo
 
-XETHKIOZ es una plataforma productiva y funcional, no un prototipo. La arquitectura, el CMS, la identidad visual, la seguridad de Supabase y el sistema de despliegues tienen una base sólida.
+XETHKIOZ es una plataforma productiva con arquitectura, CMS, identidad visual, SEO dinámico, controles de privacidad, RLS, CI y despliegues operativos. La baseline recibió **8.5/10** porque todavía cargaba demasiado CSS y librerías globales, carecía de CSP aplicada, mezclaba señales SEO y mantenía deudas de observabilidad.
 
-Calificación global de la baseline: **8.5/10**.
+Después de la remediación, el **main validado** alcanza una evaluación técnica aproximada de **9.3/10**. La diferencia hasta una calificación superior no está en el diseño general ni en el build: depende principalmente de pruebas reales de navegador, recuperación de backups, flujos multiusuario, controles externos de Supabase/Vercel y SEO internacional.
 
-Los riesgos principales ya no están en el diseño del Home. Se concentran en consistencia HTTP/SEO, observabilidad, consentimiento de analítica, pruebas reales de navegador y reducción del peso global.
+La producción pública confirmada todavía está algunos commits detrás del main. Este documento separa deliberadamente:
+
+- **Fusionado y validado en main:** código aprobado por GitHub CI, TypeScript, auditorías y build.
+- **Confirmado en producción:** deployment Vercel `READY` con aliases públicos.
+- **Pendiente externo:** acciones que requieren plan pago, panel administrativo o prueba humana/instrumentada.
+
+No se considera desplegado un cambio sólo porque haya sido fusionado.
 
 ## 2. Alcance auditado
 
-- GitHub: ramas, PR, CI, scripts de auditoría, rutas y módulos alcanzables.
-- Vercel: producción, previews, build, rewrites, redirects, cabeceras, funciones y registros.
-- Supabase: estado del proyecto, Auth, RLS, políticas, funciones, Edge Functions, Storage, advisors y logs.
+- GitHub: ramas, PR, CI, scripts de auditoría, dependencias, rutas y módulos alcanzables.
+- Vercel: producción, previews, rewrites, redirects, headers, functions, build y runtime logs.
+- Supabase: proyecto, organización, plan, Auth, RLS, políticas, Edge Functions, Storage y advisors.
 - Aplicación: Home, Gaming, Guías, Ciencia, Fun/Nexus, Green Node, Noticias, perfiles, chat, CMS y Creación Web.
-- SEO: canonical, shells estáticos, artículos, robots, sitemap, rutas antiguas y respuestas 404.
+- SEO: canonical, shells estáticos, artículos dinámicos, robots, sitemap, redirects y 404 reales.
 - Accesibilidad: navegación, foco, ARIA, reduced motion y contratos estáticos.
-- Rendimiento: tamaños de bundles, CSS global, carga por ruta y consultas reales.
-- Privacidad: telemetría propia, trackers externos, retención y rastreadores automatizados.
+- Rendimiento: bundles iniciales, CSS global, chunks por ruta y librerías diferidas.
+- Privacidad: consentimiento, preferencias, telemetría, retención y exclusión de bots.
+- Contenido: artículos publicados, portadas, metadata social y contratos del News Factory.
 
-## 3. Estado técnico confirmado
+## 3. Estado actual medido
 
-### Build y rutas
+### 3.1 Build y rutas — main validado
 
-- TypeScript: correcto.
-- Auditoría de rutas: **42 rutas**, **160 módulos alcanzables** y **241 destinos internos**.
-- Vite: **594–595 módulos** según el commit de auditoría.
-- Build del cliente: aproximadamente 3.3–3.7 segundos en Vercel.
-- Producción actual: `READY`.
+Último build Vercel `READY` con el árbol funcional acumulado:
 
-### Bundle de referencia
+- Rutas declaradas: **42**.
+- Módulos alcanzables: **167**.
+- Destinos internos auditados: **242**.
+- Módulos transformados por Vite: **258**.
+- Build Vite: aproximadamente **3.4 segundos**.
+- Build Vercel completo: aproximadamente **27 segundos**.
+- TypeScript cliente y API: PASS.
+- Runtime/SEO contracts: PASS.
+- Privacy consent contracts: PASS.
+- `npm audit --omit=dev`: **0 vulnerabilidades**.
 
-- CSS global principal: **350.29 kB raw / 64.40 kB gzip**.
-- JavaScript principal: **58.31 kB raw / 18.62 kB gzip**.
-- Vendor: **162.83 kB raw / 54.15 kB gzip**.
-- Supabase: **213.75 kB raw / 56.28 kB gzip**.
-- Nexus Pixel ya tiene CSS aislado por ruta: **76.23 kB raw / 16.47 kB gzip**.
+### 3.2 Bundle — main validado
+
+- CSS inicial principal: **215.21 kB raw / 38.91 kB gzip**.
+- Presupuesto automático: máximo **225 kB raw / 41.5 kB gzip**.
+- JavaScript principal: **66.52 kB raw / 20.56 kB gzip**.
+- Vendor: **186.96 kB raw / 62.59 kB gzip**.
+- Supabase diferido: **213.46 kB raw / 56.18 kB gzip**.
+- Política de contraseña: **0.80 kB raw / 0.48 kB gzip**.
+- Nexus Pixel CSS por ruta: **76.23 kB raw / 16.47 kB gzip**.
 - Gaming Guides: **82.00 kB raw / 28.44 kB gzip**.
 - Green Node: **68.25 kB raw / 23.52 kB gzip**.
 
-### Supabase
+Las **13 entradas HTML públicas** evitan precargar Supabase, Framer Motion y los chunks CSS exclusivos de rutas.
+
+### 3.3 Datos editoriales — Supabase
+
+Medición del cierre:
+
+- Registros totales en `news_articles`: **152**.
+- Artículos publicados y vigentes: **117**.
+- Artículos publicados sin portada: **0**.
+- Perfiles: **4**.
+- Salas de chat: **9**.
+- Mensajes de chat: **17**.
+- Logs de visita presentes: **365**.
+
+Las dos portadas faltantes de Meme Radar fueron asignadas con assets WebP first-party y metadata alt descriptiva. Canonical, Open Graph, Twitter Card y JSON-LD fueron verificados en el HTML público.
+
+### 3.4 Supabase y seguridad de datos
 
 - Proyecto: `ACTIVE_HEALTHY`.
 - PostgreSQL: 17.6.
-- Todas las tablas públicas auditadas tienen RLS habilitado.
-- No se detectaron tablas con RLS activo y cero políticas.
-- El Security Advisor no reportó fallos de RLS ni funciones privilegiadas expuestas.
-- Advertencia pendiente: protección contra contraseñas filtradas desactivada.
-- Las Edge Functions activas son `submit-web-quote`, `visit-log` y `admin-users`.
-- `admin-users` exige JWT.
-
-### Datos observados
-
-- Artículos publicados/editoriales: 152 registros en `news_articles`.
-- Perfiles: 4.
-- Salas de chat: 9.
-- Mensajes públicos: 17.
-- Logs de visita: 362 durante la auditoría.
-- Ofertas de creación web: 3.
-- Salas y mensajes VIP: todavía sin actividad real.
-- Buckets públicos configurados: `news-media` y `web-service-media`; sin objetos almacenados en la muestra auditada.
-
-## 4. Hallazgos críticos
-
-### C-01 — Soft 404 en rutas inexistentes
-
-**Baseline:** una URL inventada respondía HTTP 200, con canonical y metadata del Home. Esto podía provocar indexación de rutas basura y reportes de soft-404.
-
-**Remediación en esta rama:**
-
-- Se enumeran explícitamente los deep links SPA válidos.
-- Lo desconocido se envía a `api/not-found.ts`.
-- La función devuelve HTTP 404, `noindex` y una página bilingüe de error.
-- El build incorpora una auditoría que impide restaurar el catch-all a `index.html`.
-
-### C-02 — `/nexus-city` duplicaba señales SEO
-
-**Baseline:** Vercel servía un shell indexable y canonical propio para `/nexus-city`, mientras React redirigía a `/fun#nexus-city`.
-
-**Remediación en esta rama:**
-
-- Redirect HTTP permanente hacia `/fun#nexus-city`.
-- Eliminación del rewrite SEO independiente.
-- Eliminación del sitemap.
-- Eliminación del generador de shell estático.
-
-## 5. Hallazgos altos
-
-### H-01 — Consulta real a una tabla `streams` inexistente
-
-Gaming solicitaba `/rest/v1/streams` y Supabase respondía 404. La interfaz ocultaba el fallo mediante fallback, pero generaba ruido y trabajo de red innecesario.
-
-**Remediación:** migración `20260723153000_streams_public_radar.sql` con:
-
-- contrato compatible con `Stream`;
-- lectura pública;
-- mutaciones limitadas a ADMIN mediante helper privado;
-- RLS;
-- índices de publicación y señal activa.
-
-La migración fue validada dentro de una transacción con rollback.
-
-### H-02 — Analítica contaminada por bots
-
-Los logs mostraron visitas de rastreadores y herramientas automatizadas dentro de `site_visit_logs`, inflando audiencia y rutas.
-
-**Remediación:** `visit-log` identifica bots/crawlers y responde 202 sin guardar el evento.
-
-### H-03 — Limpieza de retención repetida por cold starts
-
-El marcador de seis horas vivía solo en memoria. Cada instancia nueva podía volver a ejecutar el DELETE de retención.
-
-**Remediación:** el último cleanup se persiste en `site_settings`; la comprobación se limita a la ruta raíz y sobrevive a reinicios.
-
-### H-04 — Ausencia de CSP
-
-La baseline tenía HSTS, `DENY`, `nosniff`, Referrer Policy, COOP y Permissions Policy, pero no CSP.
-
-**Remediación inicial:** `Content-Security-Policy-Report-Only` para inventariar dependencias antes de bloquearlas. No se activa enforcement hasta revisar consola y trackers reales.
-
-## 6. Fortalezas verificadas
-
-- CMS protegido por sesión y roles.
-- ADMIN no depende de `user_metadata` editable.
-- `ARCHITECT` ya no eleva automáticamente a administración.
+- Organización: plan **Free**.
+- Tablas públicas auditadas con RLS habilitado.
+- No se detectaron tablas públicas con RLS activo y cero políticas.
 - Helpers privilegiados fuera del esquema público.
-- Políticas de noticias separadas por lector, autor y moderación.
-- Storage con MIME y límites de tamaño.
-- Rutas privadas y CMS con `noindex`.
-- Artículos con HTML server-side, canonical y datos estructurados.
-- Lazy loading de páginas y chunks específicos.
-- Error boundaries, Safe Boot y fallbacks de imagen.
-- Navegación con skip link, foco restaurado y anuncios de ruta.
-- ES/EN amplio en interfaz y accesibilidad.
-- Reduced motion aplicado en componentes visuales principales.
-- Auditorías estáticas integradas al repositorio.
-- Retención declarada de 30 días ejecutándose en producción.
+- `admin-users` exige JWT.
+- Edge Functions activas auditadas: `submit-web-quote`, `visit-log` y `admin-users`.
+- Security Advisor: única advertencia actual, **Leaked Password Protection Disabled**.
 
-## 7. Riesgos todavía abiertos
+La protección nativa contra contraseñas filtradas requiere Supabase Pro o superior. Mientras el proyecto permanezca en Free, la aplicación exige para contraseñas nuevas 12 caracteres, minúscula, mayúscula, número y símbolo, sin bloquear el inicio de sesión de cuentas existentes. Esta política local no sustituye enforcement de servidor frente a clientes externos que llamen directamente Supabase Auth.
 
-### Seguridad y cuenta
+## 4. Remediaciones completadas
 
-1. Activar protección contra contraseñas filtradas en Supabase Auth.
-2. Verificar backup/PITR o realizar un dump cifrado y una prueba de restauración.
-3. Ejecutar pruebas reales con dos cuentas para invitaciones VIP, expulsión y rate limit.
-4. Reforzar el rate limit del chat público con almacenamiento durable, CAPTCHA o requisito de sesión.
-5. Revisar CSP Report-Only y convertirla en CSP aplicada sin depender permanentemente de `unsafe-inline`.
+### 4.1 HTTP y SEO
 
-### Privacidad
+- Rutas inexistentes devuelven HTTP 404 institucional con `noindex`.
+- `/nexus-city` usa redirect HTTP permanente hacia `/fun#nexus-city`.
+- Eliminados shell, sitemap y canonical duplicados de Nexus City.
+- Redirects legacy de Admin, Register y Web Creation protegidos por contratos.
+- Deep links de Green Node, pasaportes, salas y VIP preservados.
+- Artículos públicos reciben HTML server-side, canonical, OG, Twitter y `NewsArticle` JSON-LD.
+- El shell dinámico de noticias obtiene `slug` desde `request.url` mediante WHATWG `URL`.
+- `request.query` está prohibido por contrato en `api/news-page.ts` para no activar `url.parse()` en launchers Vercel antiguos.
 
-1. Implementar consentimiento explícito antes de cargar GA4, Clarity o Meta Pixel cuando estén configurados.
-2. Añadir panel de preferencias para revocar analítica/publicidad.
-3. Documentar y probar la purga de datos de cuenta y solicitudes comerciales.
+### 4.2 Rendimiento
 
-### SEO internacional
+- Supabase salió del arranque público y se carga sólo cuando una ruta/función lo necesita.
+- Framer Motion salió del arranque global.
+- El contador animado utiliza `SmoothNumberValue` local y responde en vivo a `prefers-reduced-motion`.
+- CSS global dividido de forma determinista por propietarios:
+  - Home.
+  - Gaming/Fun.
+  - Secciones Gaming.
+  - Science.
+  - Green Node.
+  - NexusDistrict.
+  - Editorial/noticias/guías.
+  - Fun/Nexus City.
+  - Pasaporte.
+  - Salas.
+- CSS inicial reducido desde aproximadamente **64.7 kB gzip** a **38.9 kB gzip**, una mejora aproximada del **40 %**.
+- Presupuesto de bundle obligatorio integrado al build.
 
-1. Crear URLs inglesas indexables o una estrategia SSR/edge por idioma.
-2. Añadir `hreflang` y canonical cruzado.
-3. Generar shells sociales ingleses; `localStorage` no alcanza para bots.
-4. Sustituir OG institucionales SVG por PNG/WebP 1200×630.
+### 4.3 Seguridad web y dependencias
 
-### Rendimiento
+- CSP aplicada en producción, manteniendo una política report-only más estricta para la siguiente fase.
+- `default-src 'self'`, `object-src 'none'`, `frame-ancestors 'none'` y `script-src-attr 'none'` protegidos por contrato.
+- React Router actualizado a **7.18.1** para cerrar tres avisos moderados.
+- CI conserva `npm-audit.json` como evidencia cuando la auditoría falla.
+- Estado actual de dependencias de producción: **0 vulnerabilidades conocidas por npm audit**.
+- `api/node-env.d.ts` dejó de estrechar artificialmente el global `process`; las funciones API usan el entorno completo de `@types/node`.
 
-1. Dividir el CSS global de 350 kB raw.
-2. Auditar la necesidad de cargar Supabase y Motion en todas las rutas públicas.
-3. Diferir chat/Wisp en sesiones de lectura rápida cuando no sean críticos.
-4. Aplicar `content-visibility` o carga progresiva a páginas extensas.
-5. Revisar consultas paralelas por categoría en Ciencia y Gaming.
+### 4.4 Auth
 
-### Calidad continua
+- Política compartida para registro y cambio/recuperación de contraseña.
+- Cobertura en `/account`, `XethkiozNexusAuth`, `CreatorAccount` legacy y `AuthNexusService.signUp()`.
+- Checklist de requisitos accesible mediante `aria-describedby` y `aria-invalid` contextual.
+- Inicio de sesión compatible con cuentas antiguas: sólo exige contraseña no vacía antes de enviar a Supabase.
+- Contratos automáticos evitan reintroducir registros débiles desde superficies conocidas.
 
-1. Añadir Playwright para rutas, auth y flujos críticos.
-2. Añadir Axe para accesibilidad real.
-3. Añadir Lighthouse CI con presupuestos de LCP, CLS, JS y CSS.
-4. Incorporar capturas visuales mobile/desktop.
+### 4.5 Privacidad y observabilidad
+
+- Trackers opcionales apagados por defecto.
+- Consentimiento granular y revocable.
+- Rutas privadas excluidas de tracking.
+- Bots y crawlers excluidos de `site_visit_logs`.
+- Retención de 30 días con marcador persistente de cleanup.
+- Endpoint diagnóstico `/triggers/github` retirado del repositorio y producción pública confirmada devuelve 404 institucional.
+- Hook Vercel Connect identificado: `647366100`, agente `Vercel-Connex/1.0`.
+
+### 4.6 Datos y contenido
+
+- Tabla `streams` creada con lectura pública, RLS e índices.
+- Mutaciones de streams limitadas a ADMIN mediante helper privado.
+- Portadas Meme Radar versionadas en una migración idempotente.
+- `audit:news-factory` protege los assets, slugs, alt y asignaciones.
+- Cero artículos publicados sin portada en la medición actual.
+
+## 5. Matriz de despliegue
+
+### Producción pública confirmada
+
+Deployment: `dpl_7KU1AznY3XgtzLGKXKEMKxSAXraw`  
+Commit: `d4e199196182060f35bf15da1edc86b3b97b308c`  
+Estado: `READY`  
+Aliases: `www.xethkioz.com.ar`, `xethkioz.com.ar`
+
+Incluye, entre otras remediaciones:
+
+- CSS por rutas y presupuesto inicial.
+- Supabase y Motion fuera del arranque público.
+- CSP enforcement.
+- React Router 7.18.1.
+- `npm audit` con cero vulnerabilidades.
+- Eliminación del endpoint diagnóstico de `/triggers/github`.
+
+### Fusionado en main y validado, pendiente de producción pública nueva
+
+Main: `fdd00c9897f0ca1fa0760cf492c9d3e629699dd5`
+
+- Política fuerte para contraseñas nuevas.
+- Cobertura de Auth legacy y guardia del servicio.
+- Migración reproducible de portadas Meme Radar.
+- Corrección del tipo global `process` en APIs.
+- Parser WHATWG de `slug` sin `request.query`.
+- Contrato contra la reintroducción de `DEP0169`.
+
+Existe preview `READY` para el cambio funcional del parser de artículos, pero no se considera sustituto de un deployment público y una prueba fría observable.
+
+## 6. Barreras automáticas actuales
+
+Cada build relevante valida:
+
+- 42 rutas y destinos internos.
+- 404 HTTP real y `noindex`.
+- Redirects y deep links.
+- Canonical y shell dinámico de artículos.
+- Parser WHATWG y ausencia de `request.query`.
+- CSP enforcement y política report-only.
+- Privacidad, consentimiento y revocación.
+- Streams con RLS e índice de ownership.
+- Telemetría sin bots y cleanup persistente.
+- CSS inicial bajo **225 kB raw / 41.5 kB gzip**.
+- Emisión de diez chunks CSS de ruta.
+- 13 entradas públicas sin Supabase, Motion ni CSS de ruta precargado.
+- Política de contraseñas y compatibilidad de login.
+- Portadas editoriales de Meme Radar.
+- `npm audit --omit=dev` con bloqueo del CI y evidencia JSON.
+
+## 7. Riesgos abiertos y bloqueos externos
+
+### Seguridad e infraestructura
+
+1. Actualizar Supabase a Pro y activar **Prevent use of leaked passwords**; luego repetir Security Advisor.
+2. Retirar desde Vercel Team → Connect el trigger destination Hook ID `647366100`, sin desconectar la integración Git normal.
+3. Confirmar 24 horas sin nuevos POST a `/triggers/github`.
+4. Verificar backup/PITR o ejecutar dump cifrado y prueba de restauración.
+5. Probar rate limit, expulsión e invitaciones VIP con dos cuentas reales.
+6. Reforzar rate limit del chat con almacenamiento durable, CAPTCHA o sesión obligatoria si aumenta el abuso.
+
+### Confirmación pendiente de runtime
+
+1. Desplegar públicamente el main posterior a `fdd00c9`.
+2. Provocar un cold start de un artículo.
+3. Confirmar en logs cero `DEP0169` para `/api/news-page`.
+4. Cerrar el issue sólo después de esa evidencia.
+
+### Calidad de navegador
+
+1. Incorporar Playwright para rutas, Auth y flujos críticos.
+2. Incorporar Axe para accesibilidad dinámica.
+3. Ejecutar Lighthouse CI con presupuestos de LCP, CLS, JS y CSS.
+4. Añadir regresión visual mobile/desktop.
 5. Probar teclado, reduced motion y zoom 200 % en navegador real.
+6. Validar que la carga de CSS por navegación interna no produzca flash visual.
+
+### SEO y contenido internacional
+
+1. Crear URLs inglesas indexables o estrategia SSR/edge por idioma.
+2. Añadir `hreflang` y canonical cruzado.
+3. Generar shells sociales ingleses.
+4. Sustituir OG institucionales SVG por PNG/WebP 1200×630.
 
 ### Mantenimiento
 
-1. Consolidar las dos historias de migraciones (`database/migrations` y `supabase/migrations`).
-2. Retirar páginas y hooks legacy no alcanzables cuando exista inventario firmado.
-3. Investigar la advertencia indirecta de Node `url.parse()` observada en una función de noticias.
-4. No eliminar índices marcados como “unused” hasta contar con tráfico representativo.
+1. Consolidar las historias de migraciones `database/migrations` y `supabase/migrations`.
+2. Retirar páginas y hooks legacy sólo después de un inventario firmado.
+3. No eliminar índices informados como “unused” hasta contar con tráfico representativo.
+4. Migrar progresivamente estilos heredados restantes de `index.css` sin usar purga heurística.
 
-## 8. Nueva barrera automática
+## 8. Fortalezas verificadas
 
-El script `scripts/runtime-seo-contract-check.mjs` se ejecuta en cada build y comprueba:
+- CMS protegido por sesión y roles.
+- ADMIN no depende de `user_metadata` editable.
+- `ARCHITECT` no eleva automáticamente a administración.
+- Políticas de noticias separadas por lector, autor y moderación.
+- Storage con MIME y límites de tamaño.
+- Rutas privadas y CMS con `noindex`.
+- Lazy loading de páginas y CSS por ruta.
+- Error boundaries, Safe Boot y fallbacks de imagen.
+- Navegación con skip link, foco restaurado y anuncios de ruta.
+- ES/EN amplio en interfaz y accesibilidad.
+- Reduced motion reactivo.
+- CI con auditorías de arquitectura, seguridad, privacidad, SEO, contenido y bundle.
+- Producción pública con CSP enforcement y cero vulnerabilidades npm conocidas.
 
-- redirects HTTP permanentes;
-- ausencia del shell y sitemap duplicado de Nexus;
-- deep links SPA válidos;
-- 404 real y noindex;
-- CSP Report-Only;
-- tabla `streams` con RLS y escritura ADMIN;
-- exclusión de bots;
-- cleanup persistente de telemetría.
+## 9. Limitaciones de la auditoría
 
-## 9. Limitaciones de esta auditoría
+No se publica una puntuación Lighthouse porque no fue posible ejecutar un navegador instrumentado confiable dentro del entorno de auditoría. Tampoco se afirma haber realizado:
 
-No se afirma un puntaje Lighthouse porque no se ejecutó un navegador instrumentado. Tampoco se realizaron todavía:
-
-- restauración de backup;
+- restauración real de backup;
 - pruebas con dos usuarios reales;
-- pruebas visuales automatizadas;
+- capturas visuales automatizadas;
 - navegación completa con lector de pantalla;
-- verificación del envío real de correo de invitación;
-- pruebas de carga sostenida.
+- envío real de invitaciones VIP;
+- pruebas de carga sostenida;
+- validación visual de todas las rutas a 200 % de zoom.
 
-Estos puntos permanecen abiertos y deben documentarse con evidencia, no asumirse.
+Estas limitaciones permanecen explícitas. Ningún check estático se presenta como sustituto de una prueba humana o de navegador.
 
-## 10. Gates antes de producción
+## 10. Gates para el próximo deployment público
 
-1. Build Vercel `READY` sin errores de compilación de Functions.
-2. Probar HTTP 404 en una ruta inventada del preview.
-3. Probar redirects de Nexus, Admin, Register y Web Creation.
-4. Probar deep links de Green Node, pasaporte, sala y VIP.
-5. Aplicar migración `streams`.
-6. Desplegar la nueva versión de `visit-log`.
-7. Repetir Security/Performance Advisors.
-8. Confirmar ausencia de nuevos 4xx/5xx inesperados.
-9. Fusionar mediante PR con squash.
+1. GitHub CI verde sobre el commit de main.
+2. Vercel Production `READY` con aliases públicos.
+3. Home y rutas principales responden HTTP 200.
+4. Ruta inventada responde HTTP 404 institucional.
+5. Redirects de Nexus, Admin, Register y Web Creation correctos.
+6. Deep links de Green Node, pasaporte, sala y VIP correctos.
+7. `/account` incluye la política de contraseña nueva sin bloquear logins existentes.
+8. Ambos artículos Meme Radar mantienen OG y alt correctos.
+9. Cold start de artículo sin `DEP0169`.
+10. Cero 4xx/5xx inesperados en funciones después del despliegue.
+11. Repetir Security Advisor y confirmar que la única advertencia siga siendo la función de Auth bloqueada por el plan Free.
+12. Fusionar y desplegar únicamente mediante PR trazable.
