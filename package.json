@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run typecheck && npm run audit:routes && npm run audit:runtime-seo && npm run audit:privacy-consent && npm run generate:seo-shells && vite build && npm run audit:initial-bundle",
+    "build": "npm run typecheck && npm run audit:routes && npm run audit:runtime-seo && npm run audit:privacy-consent && npm run audit:css-source && npm run generate:seo-shells && vite build && npm run audit:initial-bundle",
     "preview": "vite preview",
     "audit": "node scripts/audit.js",
     "audit:tree": "node scripts/print-tree.mjs",
@@ -38,6 +38,7 @@
     "audit:routes": "node scripts/route-integrity-check.mjs",
     "audit:runtime-seo": "node scripts/runtime-seo-contract-check.mjs",
     "audit:privacy-consent": "node scripts/privacy-consent-check.mjs",
+    "audit:css-source": "node scripts/css-source-inventory.mjs",
     "audit:initial-bundle": "node scripts/initial-bundle-contract-check.mjs",
     "audit:ui-contracts": "node scripts/ui-contract-check.mjs",
     "audit:production-ready": "node scripts/production-ready-check.mjs",
@@ -54,7 +55,7 @@
     "@vercel/analytics": "^2.0.1",
     "framer-motion": "^11.18.2",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react-dom": "^18.3.0",
     "react-helmet-async": "^2.0.5",
     "react-router-dom": "^6.26.2"
   },
