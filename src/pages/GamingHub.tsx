@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import SEO from '../components/SEO'
 import SafeImage from '../components/SafeImage'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
+import PortalWispGuide from '../components/PortalWispGuide'
 import GamingGuideRotation from '../components/gaming/GamingGuideRotation'
 import { NexusDistrict } from '../components/NexusDistrict'
 import { useLang } from '../lib/LangContext'
@@ -230,6 +231,10 @@ export default function GamingHub() {
     setSearchParams(next, { replace: true })
   }
 
+  function navigateWithElementalWisp(destination: string) {
+    if (destination === 'overview' || destination === 'guides' || destination === 'live' || destination === 'news' || destination === 'community') selectSection(destination)
+  }
+
   function moveMissionFocus(currentIndex: number, direction: 1 | -1) {
     const nextIndex = (currentIndex + direction + t.blocks.length) % t.blocks.length
     const next = t.blocks[nextIndex]
@@ -265,6 +270,8 @@ export default function GamingHub() {
             </div>
             <div className="xk-hero-status" aria-label={t.systemStatus}><span>{t.nexusLink}</span><b>98.7%</b><i aria-hidden="true" /></div>
           </section>
+
+          <PortalWispGuide variant="gaming" activeDestination={activeSection} onNavigate={navigateWithElementalWisp} />
 
           <NexusDistrict tone="gaming" />
           <nav className="xk-gaming-section-nav" aria-label={t.sectionLabel}>

@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import SEO from '../components/SEO'
 import SafeImage from '../components/SafeImage'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
+import PortalWispGuide from '../components/PortalWispGuide'
 import FunGameGateway from '../components/fun/FunGameGateway'
 import './FunNexusFusion.css'
 import { PortalPulseRail } from '../components/PortalPulseRail'
@@ -259,6 +260,15 @@ export default function FunPortal() {
     window.requestAnimationFrame(() => document.getElementById('meme-section-content')?.focus({ preventScroll: true }))
   }
 
+  function navigateWithLumina(destination: string) {
+    if (destination === 'play') {
+      selectPortalMode('play')
+      return
+    }
+    const section = destination.replace('memes-', '')
+    if (section === 'home' || section === 'arcade' || section === 'clips' || section === 'wall') selectMemeSection(section)
+  }
+
   useEffect(() => {
     let alive = true
     void fetchPublishedNews('community').then((next) => { if (alive) setPublished(next) }).catch(() => undefined)
@@ -330,6 +340,8 @@ export default function FunPortal() {
               <button type="button" role="tab" aria-selected={activeMode === 'memes'} aria-controls="fun-mode-content" onClick={() => selectPortalMode('memes')}><span aria-hidden="true">爆</span><b>{t.modes.memes}</b><small>{t.modes.memesDetail}</small></button>
             </div>
           </section>
+
+          <PortalWispGuide variant="fun" activeDestination={activeMode === 'play' ? 'play' : `memes-${activeMemeSection}`} onNavigate={navigateWithLumina} />
 
           <div id="fun-mode-content" tabIndex={-1} className={`xk-fun-mode-content is-${activeMode}`}>
             {activeMode === 'play' ? <>
