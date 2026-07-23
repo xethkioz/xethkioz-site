@@ -30,7 +30,7 @@ export default function GreenNodeFieldBoard() {
         <p className="mt-3 text-sm leading-relaxed text-green-100/70">
           El link de YouTube queda como referencia estética. Para LIVE usar audio propio o generado por IA sin copyright: drones graves, glitch, CRT, radio lejana, suspenso y pulsos electrónicos.
         </p>
-        <a href={GREEN_NODE_CONFIG.youtubeReference} target="_blank" rel="noreferrer" className="mt-4 inline-flex rounded-lg border border-green-400/30 bg-green-400/10 px-4 py-2 font-mono text-xs font-bold text-green-200 hover:bg-green-400/20">
+        <a href={GREEN_NODE_CONFIG.youtubeReference} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex rounded-lg border border-green-400/30 bg-green-400/10 px-4 py-2 font-mono text-xs font-bold text-green-200 hover:bg-green-400/20">
           referencia musical externa
         </a>
         <div className="mt-5 space-y-2">

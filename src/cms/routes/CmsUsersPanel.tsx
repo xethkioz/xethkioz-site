@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { useLang } from '../../lib/LangContext'
 import { supabase } from '../../services/supabaseClient'
 import { useAdminSession } from '../hooks'
@@ -21,7 +21,17 @@ const copy = {
   es: {
     eyebrow: 'USUARIOS / ROLES',
     title: 'Usuarios y permisos',
-    description: 'Panel de auditoría y gestión de perfiles. Los cambios de rol usan una RPC admin protegida en Supabase.',
+    description: 'Panel de auditoría, invitaciones y gestión de perfiles. Las acciones privilegiadas se validan en un backend privado de Supabase.',
+    inviteTitle: 'Invitar una cuenta',
+    inviteDescription: 'Supabase enviará un enlace de acceso. Por seguridad, las cuentas ADMIN sólo se asignan después de verificar al usuario.',
+    email: 'Correo',
+    emailPlaceholder: 'persona@ejemplo.com',
+    inviteRole: 'Rol inicial',
+    inviteTier: 'Tier inicial',
+    invite: 'Enviar invitación',
+    inviting: 'Enviando…',
+    inviteSuccess: 'Invitación enviada correctamente.',
+    inviteError: 'No se pudo enviar la invitación',
     currentRole: 'Rol actual',
     roleManagement: 'Gestión de roles',
     adminEnabled: 'ADMIN habilitado',
@@ -65,7 +75,17 @@ const copy = {
   en: {
     eyebrow: 'USERS / ROLES',
     title: 'Users and permissions',
-    description: 'Profile audit and access management. Role changes use a protected admin RPC in Supabase.',
+    description: 'Profile auditing, invitations and access management. Privileged actions are verified by a private Supabase backend.',
+    inviteTitle: 'Invite an account',
+    inviteDescription: 'Supabase will send an access link. For safety, ADMIN accounts are assigned only after the user is verified.',
+    email: 'Email',
+    emailPlaceholder: 'person@example.com',
+    inviteRole: 'Initial role',
+    inviteTier: 'Initial tier',
+    invite: 'Send invitation',
+    inviting: 'Sending…',
+    inviteSuccess: 'Invitation sent successfully.',
+    inviteError: 'Could not send the invitation',
     currentRole: 'Current role',
     roleManagement: 'Role management',
     adminEnabled: 'ADMIN enabled',
@@ -125,6 +145,24 @@ function formatDate(value: string | null, lang: 'es' | 'en', fallback: string) {
   return new Intl.DateTimeFormat(lang === 'es' ? 'es-AR' : 'en-US', { dateStyle: 'medium', timeStyle: 'short' }).format(date)
 }
 
+async function readFunctionError(error: unknown, fallback: string) {
+  const context = error && typeof error === 'object' && 'context' in error
+    ? (error as { context?: unknown }).context
+    : null
+
+  if (context instanceof Response) {
+    try {
+      const payload = await context.clone().json() as { error?: string }
+      if (payload.error) return `${fallback}: ${payload.error}`
+    } catch {
+      // The generic SDK error remains useful if the response is not JSON.
+    }
+  }
+
+  const message = error instanceof Error ? error.message : String(error || '')
+  return message ? `${fallback}: ${message}` : fallback
+}
+
 export default function CmsUsersPanel() {
   const { lang } = useLang()
   const t = copy[lang]
@@ -134,6 +172,10 @@ export default function CmsUsersPanel() {
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
   const [savingId, setSavingId] = useState<string | null>(null)
+  const [inviteEmail, setInviteEmail] = useState('')
+  const [inviteRole, setInviteRole] = useState<Exclude<ProfileRole, 'ADMIN'>>('USER')
+  const [inviteTier, setInviteTier] = useState<SubscriptionTier>('BASIC')
+  const [inviting, setInviting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [message, setMessage] = useState<string | null>(null)
 
@@ -196,18 +238,47 @@ export default function CmsUsersPanel() {
     setSavingId(profile.id)
     setError(null)
     setMessage(null)
-    const { error: rpcError } = await supabase.rpc('xethkioz_admin_set_profile_access', {
-      target_user_id: profile.id,
-      next_role: next.role,
-      next_subscription_tier: next.tier,
+    const { error: functionError } = await supabase.functions.invoke('admin-users', {
+      body: {
+        action: 'set_profile_access',
+        targetUserId: profile.id,
+        role: next.role,
+        tier: next.tier,
+      },
     })
 
-    if (rpcError) setError(`${t.updateError}: ${rpcError.message}`)
+    if (functionError) setError(await readFunctionError(functionError, t.updateError))
     else {
       setMessage(t.updateSuccess)
       await loadProfiles()
     }
     setSavingId(null)
+  }
+
+  async function inviteUser(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (!canDelete || !inviteEmail.trim()) return
+
+    setInviting(true)
+    setError(null)
+    setMessage(null)
+    const { error: functionError } = await supabase.functions.invoke('admin-users', {
+      body: {
+        action: 'invite_user',
+        email: inviteEmail.trim(),
+        role: inviteRole,
+        tier: inviteTier,
+      },
+    })
+
+    if (functionError) {
+      setError(await readFunctionError(functionError, t.inviteError))
+    } else {
+      setInviteEmail('')
+      setMessage(t.inviteSuccess)
+      await loadProfiles()
+    }
+    setInviting(false)
   }
 
   return (
@@ -222,6 +293,32 @@ export default function CmsUsersPanel() {
       <div className="grid gap-4 md:grid-cols-4">
         {[[t.stats.total, stats.total], [t.stats.admins, stats.admins], [t.stats.moderators, stats.moderators], [t.stats.editorial, stats.contributors]].map(([label, value]) => <article key={String(label)} className="rounded-3xl border border-purple-500/20 bg-white/[0.04] p-5"><p className="text-xs uppercase tracking-[0.2em] text-purple-200">{label}</p><strong className="mt-2 block text-3xl">{value}</strong></article>)}
       </div>
+
+      <form onSubmit={(event) => void inviteUser(event)} className="rounded-3xl border border-orange-400/25 bg-orange-400/[0.06] p-5">
+        <h3 className="text-xl font-black text-white">{t.inviteTitle}</h3>
+        <p className="mt-2 text-sm leading-6 text-purple-100">{t.inviteDescription}</p>
+        <div className="mt-4 grid gap-3 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,.8fr)_minmax(0,.8fr)_auto] lg:items-end">
+          <label className="grid gap-2 text-xs font-black uppercase tracking-[0.14em] text-purple-200">
+            {t.email}
+            <input type="email" required autoComplete="email" value={inviteEmail} onChange={(event) => setInviteEmail(event.target.value)} placeholder={t.emailPlaceholder} disabled={!canDelete || inviting} className="rounded-2xl border border-white/10 bg-slate-950 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-orange-300 disabled:opacity-60" />
+          </label>
+          <label className="grid gap-2 text-xs font-black uppercase tracking-[0.14em] text-purple-200">
+            {t.inviteRole}
+            <select value={inviteRole} onChange={(event) => setInviteRole(event.target.value as Exclude<ProfileRole, 'ADMIN'>)} disabled={!canDelete || inviting} className="rounded-2xl border border-white/10 bg-slate-950 px-4 py-3 text-sm text-white disabled:opacity-60">
+              {roleOptions.filter((option) => option !== 'ADMIN').map((option) => <option key={option} value={option}>{option}</option>)}
+            </select>
+          </label>
+          <label className="grid gap-2 text-xs font-black uppercase tracking-[0.14em] text-purple-200">
+            {t.inviteTier}
+            <select value={inviteTier} onChange={(event) => setInviteTier(event.target.value as SubscriptionTier)} disabled={!canDelete || inviting} className="rounded-2xl border border-white/10 bg-slate-950 px-4 py-3 text-sm text-white disabled:opacity-60">
+              {tierOptions.map((option) => <option key={option} value={option}>{option}</option>)}
+            </select>
+          </label>
+          <button type="submit" disabled={!canDelete || inviting || !inviteEmail.trim()} className="rounded-full border border-orange-400/50 bg-orange-500/15 px-5 py-3 text-xs font-black uppercase tracking-[0.16em] text-orange-100 transition hover:bg-orange-500/25 disabled:opacity-40">
+            {inviting ? t.inviting : t.invite}
+          </button>
+        </div>
+      </form>
 
       <label className="grid gap-2 rounded-3xl border border-purple-500/20 bg-white/[0.04] p-4 text-xs font-black uppercase tracking-[0.16em] text-purple-200">
         {t.search}

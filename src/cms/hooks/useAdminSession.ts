@@ -109,7 +109,7 @@ export function useAdminSession(): AdminSessionState {
     setTier('BASIC')
   }, [])
 
-  const isAdmin = role === 'ADMIN' || tier === 'ARCHITECT'
+  const isAdmin = role === 'ADMIN'
   const isModerator = role === 'MODERATOR' || isAdmin
   const isEditorial = role === 'CONTRIBUTOR' || role === 'EDITOR' || role === 'MODERATOR' || isAdmin
   const isCreatorTier = tier === 'CREATOR' || tier === 'ARCHITECT'

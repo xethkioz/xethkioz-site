@@ -181,9 +181,8 @@ function getClientIp(req: any) {
 }
 
 function isAdmin(user: any) {
-  const appRole = user?.app_metadata?.role
-  const userRole = user?.user_metadata?.role
-  return appRole === 'admin' || userRole === 'admin'
+  const appRole = String(user?.app_metadata?.role ?? '').toLowerCase()
+  return appRole === 'admin'
 }
 
 export default async function handler(req: any, res: any) {

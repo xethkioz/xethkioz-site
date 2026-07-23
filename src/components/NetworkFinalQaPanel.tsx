@@ -35,7 +35,7 @@ export default function NetworkFinalQaPanel() {
               key={`${link.label}-${link.url}`}
               href={link.url}
               target={link.url.startsWith('http') ? '_blank' : undefined}
-              rel={link.url.startsWith('http') ? 'noreferrer' : undefined}
+              rel={link.url.startsWith('http') ? 'noopener noreferrer' : undefined}
               className="block rounded-2xl border border-white/10 bg-black/25 p-4 transition hover:border-orange/35 hover:bg-white/[0.04]"
             >
               <span className="text-xs font-black uppercase tracking-[0.18em] text-gray-500">{link.type}</span>

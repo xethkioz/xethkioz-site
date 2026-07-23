@@ -3,11 +3,10 @@ import { Link, useSearchParams } from 'react-router-dom'
 import SEO from '../components/SEO'
 import SafeImage from '../components/SafeImage'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
+import { NexusDistrict } from '../components/NexusDistrict'
 import PortalWispGuide from '../components/PortalWispGuide'
 import FunGameGateway from '../components/fun/FunGameGateway'
 import './FunNexusFusion.css'
-import { PortalPulseRail } from '../components/PortalPulseRail'
-import { NexusDistrict } from '../components/NexusDistrict'
 import { useLang } from '../lib/LangContext'
 import { addWispXp } from '../lib/realtimeCommunity'
 import { SOCIAL_LINKS } from '../lib/siteConfig'
@@ -16,7 +15,7 @@ import { fetchPublishedNews, formatPublicNewsDate, type PublicNewsArticle } from
 
 type HumorMode = 'gaming' | 'adulto' | 'trabajo'
 type FunPortalMode = 'play' | 'memes'
-type MemeSection = 'home' | 'arcade' | 'clips' | 'wall'
+type MemeSection = 'arcade' | 'clips' | 'wall'
 
 const NexusCity = lazy(() => import('./NexusCity'))
 
@@ -217,10 +216,10 @@ export default function FunPortal() {
   const requestedMode = searchParams.get('mode')
   const activeMode: FunPortalMode = requestedMode === 'memes' || (!requestedMode && typeof window !== 'undefined' && ['#humor', '#weekly-clip', '#meme-wall'].includes(window.location.hash)) ? 'memes' : 'play'
   const requestedSection = searchParams.get('section')
-  const hashSection: MemeSection = typeof window !== 'undefined' && window.location.hash === '#weekly-clip' ? 'clips' : typeof window !== 'undefined' && window.location.hash === '#meme-wall' ? 'wall' : 'home'
-  const activeMemeSection: MemeSection = requestedSection === 'arcade' || requestedSection === 'clips' || requestedSection === 'wall' ? requestedSection : requestedSection === 'home' ? 'home' : hashSection
+  const hashSection: MemeSection = typeof window !== 'undefined' && window.location.hash === '#weekly-clip' ? 'clips' : typeof window !== 'undefined' && window.location.hash === '#meme-wall' ? 'wall' : 'arcade'
+  const activeMemeSection: MemeSection = requestedSection === 'clips' || requestedSection === 'wall' ? requestedSection : 'arcade'
   const jokes = humorDeck[lang]
-  const [showNexusHub, setShowNexusHub] = useState(false)
+  const [showNexusHub, setShowNexusHub] = useState(() => typeof window !== 'undefined' && window.location.hash === '#nexus-city')
   const [reacted, setReacted] = useState<Set<string>>(() => new Set())
   const [chaosIndex, setChaosIndex] = useState(0)
   const [reactionAnnouncement, setReactionAnnouncement] = useState('')
@@ -235,7 +234,6 @@ export default function FunPortal() {
     .slice(0, 7)
   const humorModes = Object.keys(jokes) as HumorMode[]
   const memeSections: ReadonlyArray<{ id: MemeSection; label: string; detail: string }> = [
-    { id: 'home', label: t.sections.home, detail: t.sections.homeDetail },
     { id: 'arcade', label: t.sections.arcade, detail: t.sections.arcadeDetail },
     { id: 'clips', label: t.sections.clips, detail: t.sections.clipsDetail },
     { id: 'wall', label: t.sections.wall, detail: t.sections.wallDetail },
@@ -245,7 +243,7 @@ export default function FunPortal() {
     const next = new URLSearchParams(searchParams)
     next.set('mode', mode)
     if (mode === 'play') next.delete('section')
-    else if (!next.has('section')) next.set('section', 'home')
+    else if (!next.has('section')) next.set('section', hashSection)
     setSearchParams(next)
     addWispXp(1, 'portal', `/fun?mode=${mode}`)
     window.requestAnimationFrame(() => document.getElementById('fun-mode-content')?.focus({ preventScroll: true }))
@@ -266,7 +264,7 @@ export default function FunPortal() {
       return
     }
     const section = destination.replace('memes-', '')
-    if (section === 'home' || section === 'arcade' || section === 'clips' || section === 'wall') selectMemeSection(section)
+    if (section === 'arcade' || section === 'clips' || section === 'wall') selectMemeSection(section)
   }
 
   useEffect(() => {
@@ -373,12 +371,6 @@ export default function FunPortal() {
           </nav>
 
           <div id="meme-section-content" tabIndex={-1}>
-          {activeMemeSection === 'home' ? <>
-            <NexusDistrict tone="fun" />
-            <div className="xk-meme-marquee" aria-hidden="true"><div>{t.marquee} ◆ {t.marquee} ◆</div></div>
-            <PortalPulseRail tone="orange" eyebrow={t.loop.eyebrow} title={t.loop.title} description={t.loop.description} items={t.loop.items} />
-          </> : null}
-
           {activeMemeSection === 'arcade' ? <>
           <section id="fun-chaos-panel" className="xk-chaos-console" aria-labelledby="fun-chaos-title">
             <h2 id="fun-chaos-title" className="sr-only">MEME CORE ARCADE</h2>
@@ -429,6 +421,7 @@ export default function FunPortal() {
           </div>
             </> : null}
           </div>
+          <NexusDistrict tone="fun" />
           <Link to="/" className="xk-sticker-button mt-8 inline-flex">{t.back}</Link>
         </div>
       </main>

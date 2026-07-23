@@ -36,8 +36,8 @@ export default function PortalPage({ portal, title, emoji, description, accent }
       </section>
       {catLoading ? <div className="flex justify-center gap-2 mb-10">{[...Array(4)].map((_, i) => <div key={i} className="skeleton h-10 w-24 rounded-full skeleton-shimmer" />)}</div> : categories.length > 0 && (
         <div className="flex flex-wrap justify-center gap-2 mb-10">
-          <button onClick={() => setActiveCategory(null)} className={`px-4 py-2 text-sm font-medium rounded-full border transition-all ${!activeCategory ? `${ac} ${ab}` : 'border-white/10 text-gray-400 hover:text-white'}`}>{t.news.all}</button>
-          {categories.map((c) => <button key={c.id} onClick={() => setActiveCategory(c.slug)} className={`px-4 py-2 text-sm font-medium rounded-full border transition-all ${activeCategory === c.slug ? `${ac} ${ab}` : 'border-white/10 text-gray-400 hover:text-white'}`}>{c.name}</button>)}
+          <button type="button" onClick={() => setActiveCategory(null)} className={`px-4 py-2 text-sm font-medium rounded-full border transition-all ${!activeCategory ? `${ac} ${ab}` : 'border-white/10 text-gray-400 hover:text-white'}`}>{t.news.all}</button>
+          {categories.map((c) => <button type="button" key={c.id} onClick={() => setActiveCategory(c.slug)} className={`px-4 py-2 text-sm font-medium rounded-full border transition-all ${activeCategory === c.slug ? `${ac} ${ab}` : 'border-white/10 text-gray-400 hover:text-white'}`}>{c.name}</button>)}
         </div>
       )}
       {loading ? <ArticleGridSkeleton count={6} />

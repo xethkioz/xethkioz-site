@@ -36,6 +36,7 @@
     "audit:security-hardening": "node scripts/security-hardening-check.mjs",
     "audit:web-services": "node scripts/web-services-check.mjs",
     "audit:routes": "node scripts/route-integrity-check.mjs",
+    "audit:ui-contracts": "node scripts/ui-contract-check.mjs",
     "audit:production-ready": "node scripts/production-ready-check.mjs",
     "audit:env": "node scripts/env-ready-check.mjs",
     "generate:seo-shells": "node scripts/generate-seo-shells.mjs",

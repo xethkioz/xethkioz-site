@@ -26,6 +26,11 @@
   animation: xk-motion-area-arcade .34s steps(5, end) both;
 }
 
+.xk-pixel-world.is-shop-area,
+.xk-pixel-world.is-lounge-area {
+  animation: xk-motion-area-guild .34s steps(5, end) both;
+}
+
 .xk-pixel-area-badge {
   transform-origin: left top;
   animation: xk-motion-zone-label .42s steps(5, end) both;

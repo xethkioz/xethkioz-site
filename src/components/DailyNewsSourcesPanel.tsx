@@ -33,7 +33,7 @@ export default function DailyNewsSourcesPanel() {
                   key={source.id}
                   href={source.url}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="block rounded-lg border border-white/10 bg-white/[0.03] p-3 hover:border-orange/60 transition-colors"
                 >
                   <div className="flex items-center justify-between gap-3">

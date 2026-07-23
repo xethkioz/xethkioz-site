@@ -51,7 +51,7 @@ export default function PublicAdSlot({ slotId, compact = false, fallbackLabel = 
   if (!campaign.target_url) return content
 
   return (
-    <a href={campaign.target_url} target="_blank" rel="noreferrer sponsored" className="block transition hover:-translate-y-0.5 hover:opacity-95">
+    <a href={campaign.target_url} target="_blank" rel="noopener noreferrer sponsored" className="block transition hover:-translate-y-0.5 hover:opacity-95">
       {content}
     </a>
   )

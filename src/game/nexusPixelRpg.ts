@@ -1,10 +1,11 @@
 export type PixelLang = 'es' | 'en'
 export type Direction = 'up' | 'down' | 'left' | 'right'
-export type AreaId = 'plaza' | 'guild' | 'lab' | 'arcade'
+export type AreaId = 'plaza' | 'guild' | 'lab' | 'arcade' | 'shop' | 'lounge'
 export type PortalTarget = 'gaming' | 'science' | 'fun' | 'home'
 export type TileKind = 'grass' | 'path' | 'plaza' | 'water' | 'tree' | 'roof' | 'wall' | 'floor' | 'indoor' | 'carpet' | 'metal' | 'void'
 export type BeaconId = 'violet' | 'cyan' | 'orange'
-export type NpcId = 'wisp-guide' | 'kael' | 'nova' | 'mika'
+export type NpcId = 'wisp-guide' | 'kael' | 'nova' | 'mika' | 'mara' | 'lumi'
+export type WorldInteraction = 'shop' | 'vip'
 
 export type Point = { x: number; y: number }
 export type Localized = { es: string; en: string }
@@ -33,6 +34,7 @@ export type WorldObject = {
   targetArea?: AreaId
   targetSpawn?: Point
   beaconId?: BeaconId
+  interaction?: WorldInteraction
 }
 
 export type NpcDefinition = {
@@ -80,6 +82,16 @@ export const areas: Record<AreaId, AreaDefinition> = {
     label: { es: 'Arcade del Caos', en: 'Chaos Arcade' },
     subtitle: { es: 'Memes, clips y partidas imposibles', en: 'Memes, clips and impossible games' },
   },
+  shop: {
+    id: 'shop', width: 16, height: 12, spawn: { x: 7, y: 9 }, className: 'is-shop-area',
+    label: { es: 'Casa Wisp', en: 'Wisp House' },
+    subtitle: { es: 'Consumibles y apoyo sin pay-to-win', en: 'Consumables and support without pay-to-win' },
+  },
+  lounge: {
+    id: 'lounge', width: 28, height: 18, spawn: { x: 13, y: 14 }, className: 'is-lounge-area',
+    label: { es: 'Gran Sala Nexus', en: 'Nexus Grand Hall' },
+    subtitle: { es: 'La conversación pública de todos los exploradores', en: 'The public conversation for every explorer' },
+  },
 }
 
 export const worldObjects: WorldObject[] = [
@@ -87,6 +99,16 @@ export const worldObjects: WorldObject[] = [
     id: 'portal-core', area: 'plaza', x: 13, y: 8, glyph: '◉', target: 'home', blocking: true, className: 'is-core',
     label: { es: 'Portal central', en: 'Central portal' },
     detail: { es: 'Volver a la Red de Portales', en: 'Return to the Portal Network' },
+  },
+  {
+    id: 'shop-door', area: 'plaza', x: 13, y: 5, glyph: '✦', targetArea: 'shop', targetSpawn: { x: 7, y: 9 }, className: 'is-door is-shop',
+    label: { es: 'Casa Wisp', en: 'Wisp House' },
+    detail: { es: 'Consumibles obtenidos con fragmentos del juego', en: 'Consumables traded with shards earned in game' },
+  },
+  {
+    id: 'lounge-door', area: 'plaza', x: 25, y: 10, glyph: '♟', targetArea: 'lounge', targetSpawn: { x: 13, y: 14 }, blocking: true, className: 'is-door is-lounge',
+    label: { es: 'Gran Sala Nexus', en: 'Nexus Grand Hall' },
+    detail: { es: 'Entrar a la sala pública para hablar con todos', en: 'Enter the public hall to talk with everyone' },
   },
   {
     id: 'guild-door', area: 'plaza', x: 22, y: 6, glyph: '⚔', targetArea: 'guild', targetSpawn: { x: 7, y: 9 }, className: 'is-door is-gaming',
@@ -178,6 +200,31 @@ export const worldObjects: WorldObject[] = [
     label: { es: 'Máquina Caos', en: 'Chaos machine' },
     detail: { es: 'Próximamente: minijuegos', en: 'Coming soon: minigames' },
   },
+  {
+    id: 'shop-exit', area: 'shop', x: 7, y: 10, glyph: '▼', targetArea: 'plaza', targetSpawn: { x: 13, y: 6 }, className: 'is-door is-exit',
+    label: { es: 'Salir a la Plaza', en: 'Exit to the Plaza' },
+    detail: { es: 'Volver al exterior', en: 'Return outside' },
+  },
+  {
+    id: 'shop-counter', area: 'shop', x: 7, y: 3, glyph: '▤', blocking: true, interaction: 'shop', className: 'is-console is-shop',
+    label: { es: 'Mostrador de consumibles', en: 'Consumables counter' },
+    detail: { es: 'Canjear fragmentos encontrados jugando', en: 'Trade shards earned while playing' },
+  },
+  {
+    id: 'lounge-exit', area: 'lounge', x: 13, y: 16, glyph: '▼', targetArea: 'plaza', targetSpawn: { x: 24, y: 10 }, className: 'is-door is-exit',
+    label: { es: 'Salir a la Plaza', en: 'Exit to the Plaza' },
+    detail: { es: 'Volver al centro de Nexus City', en: 'Return to central Nexus City' },
+  },
+  {
+    id: 'lounge-stage', area: 'lounge', x: 13, y: 7, glyph: '♫', blocking: true, className: 'is-console is-lounge',
+    label: { es: 'Escenario de la Gran Sala', en: 'Grand Hall stage' },
+    detail: { es: 'El chat general conecta a toda la comunidad', en: 'General chat connects the whole community' },
+  },
+  {
+    id: 'vip-gate', area: 'lounge', x: 13, y: 3, glyph: '◆', blocking: true, interaction: 'vip', className: 'is-core is-vip',
+    label: { es: 'Umbral VIP aleatorio', en: 'Random VIP threshold' },
+    detail: { es: 'Salas efímeras que sólo abren con invitación', en: 'Ephemeral rooms that only open by invitation' },
+  },
 ]
 
 export const npcs: NpcDefinition[] = [
@@ -204,6 +251,18 @@ export const npcs: NpcDefinition[] = [
     name: { es: 'Mika', en: 'Mika' },
     role: { es: 'Operadora del Caos', en: 'Chaos Operator' },
     dialogue: { es: 'No golpees las máquinas. Bueno… al menos no cuando estoy mirando.', en: 'Do not hit the machines. Well… at least not while I am watching.' },
+  },
+  {
+    id: 'mara', area: 'shop', x: 5, y: 5, glyph: 'M', className: 'is-shop-npc',
+    name: { es: 'Mara', en: 'Mara' },
+    role: { es: 'Alquimista de portales', en: 'Portal Alchemist' },
+    dialogue: { es: 'Acá los fragmentos se convierten en detalles divertidos, nunca en ventajas injustas.', en: 'Here shards become playful details, never unfair advantages.' },
+  },
+  {
+    id: 'lumi', area: 'lounge', x: 8, y: 9, glyph: 'L', className: 'is-lounge-npc',
+    name: { es: 'Lumi', en: 'Lumi' },
+    role: { es: 'Anfitriona de la Gran Sala', en: 'Grand Hall Host' },
+    dialogue: { es: 'Todo el mundo comparte este canal. Las salas privadas requieren una invitación aceptada.', en: 'Everyone shares this channel. Private rooms require an accepted invitation.' },
   },
 ]
 
@@ -235,6 +294,7 @@ export function tileKindAt(area: AreaId, x: number, y: number): TileKind {
     if (x === 0 || y === 0 || x === definition.width - 1 || y === definition.height - 1) return 'tree'
     if (x >= 2 && x <= 6 && y >= 2 && y <= 6) return 'water'
     if (x >= 18 && x <= 25 && y >= 2 && y <= 6) return y === 6 && x === 22 ? 'floor' : (y === 2 ? 'roof' : 'wall')
+    if (x >= 10 && x <= 16 && y >= 2 && y <= 5) return y === 5 && x === 13 ? 'floor' : (y === 2 ? 'roof' : 'wall')
     if (x >= 3 && x <= 9 && y >= 13 && y <= 18) return y === 13 && x === 6 ? 'floor' : (y === 18 ? 'roof' : 'wall')
     if (x >= 18 && x <= 24 && y >= 13 && y <= 18) return y === 13 && x === 21 ? 'floor' : (y === 18 ? 'roof' : 'wall')
     if (x >= 10 && x <= 17 && y >= 6 && y <= 14) return 'plaza'
@@ -262,6 +322,16 @@ export function tileKindAt(area: AreaId, x: number, y: number): TileKind {
 
   if (area === 'arcade') {
     if (x >= 6 && x <= 9) return 'carpet'
+    return 'indoor'
+  }
+
+  if (area === 'shop') {
+    if (x >= 5 && x <= 9) return 'carpet'
+    return 'indoor'
+  }
+
+  if (area === 'lounge') {
+    if (x >= 9 && x <= 18) return 'carpet'
     return 'indoor'
   }
 

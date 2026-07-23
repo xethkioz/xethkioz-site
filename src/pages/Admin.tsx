@@ -77,7 +77,7 @@ export default function Admin() {
     <div className="animate-fade-in max-w-4xl mx-auto px-4 sm:px-6 py-8">
       <SEO title={t.admin.title} />
       <div className="text-center mb-8"><div className="text-4xl mb-3">⚙️</div><h1 className="font-display text-2xl md:text-3xl font-bold gradient-text mb-2">{t.admin.title}</h1><p className="text-sm text-gray-400">{t.admin.subtitle}</p></div>
-      <div className="flex flex-wrap justify-center gap-2 mb-8">{[{ k: 'article', l: t.admin.newArticle }, { k: 'media', l: t.admin.mediaUpload }, { k: 'list', l: t.admin.articles }].map((tb) => <button key={tb.k} onClick={() => setTab(tb.k as 'article' | 'media' | 'list')} className={`px-4 py-2 text-sm font-medium rounded-full border transition-all ${tab === tb.k ? 'text-orange border-orange bg-orange/10' : 'border-white/10 text-gray-400 hover:text-white'}`}>{tb.l}</button>)}</div>
+      <div className="flex flex-wrap justify-center gap-2 mb-8">{[{ k: 'article', l: t.admin.newArticle }, { k: 'media', l: t.admin.mediaUpload }, { k: 'list', l: t.admin.articles }].map((tb) => <button type="button" key={tb.k} onClick={() => setTab(tb.k as 'article' | 'media' | 'list')} className={`px-4 py-2 text-sm font-medium rounded-full border transition-all ${tab === tb.k ? 'text-orange border-orange bg-orange/10' : 'border-white/10 text-gray-400 hover:text-white'}`}>{tb.l}</button>)}</div>
       {status === 'success' && <div className="mb-4 p-3 bg-green-500/10 border border-green-500/30 rounded-lg text-green-400 text-sm text-center animate-fade-in">{t.admin.published}</div>}
       {status === 'error' && <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm text-center animate-fade-in">{t.admin.error}</div>}
       {tab === 'article' && (

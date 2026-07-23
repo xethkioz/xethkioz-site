@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState, type CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import {
   collectPickup,
+  consumeInventoryItem,
+  INVENTORY_CHANGED_EVENT,
   inventoryItems,
   inventoryTotal,
   openPixelChest,
@@ -42,6 +44,7 @@ const copy = {
     interact: 'E · Abrir cofre',
     total: 'objetos',
     roaming: 'Personaje ambulante',
+    use: 'Usar',
   },
   en: {
     title: 'Nexus Bag',
@@ -59,6 +62,7 @@ const copy = {
     interact: 'E · Open chest',
     total: 'items',
     roaming: 'Roaming character',
+    use: 'Use',
   },
 } as const
 
@@ -94,6 +98,16 @@ export default function NexusPixelInventoryLayer({ area, position, lang, questCo
   }, [inventory])
 
   useEffect(() => {
+    const refreshInventory = () => setInventory(readInventoryState())
+    window.addEventListener(INVENTORY_CHANGED_EVENT, refreshInventory)
+    window.addEventListener('storage', refreshInventory)
+    return () => {
+      window.removeEventListener(INVENTORY_CHANGED_EVENT, refreshInventory)
+      window.removeEventListener('storage', refreshInventory)
+    }
+  }, [])
+
+  useEffect(() => {
     const timer = window.setInterval(() => setRoamerTick((current) => current + 1), 900)
     return () => window.clearInterval(timer)
   }, [])
@@ -123,6 +137,14 @@ export default function NexusPixelInventoryLayer({ area, position, lang, questCo
     setInventory((current) => openPixelChest(current, chest))
     onNotice(`${t.chestOpened}: ${rewardSummary(chest, lang)}`)
     if (chest.xp > 0) addWispXp(chest.xp, 'mission', `/nexus-city/room/xethkioz#chest-${chest.id}`)
+  }
+
+  function useItem(itemId: keyof typeof inventoryItems) {
+    const item = inventoryItems[itemId]
+    const next = consumeInventoryItem(inventory, itemId)
+    if (!next || !item.effect) return
+    setInventory(next)
+    onNotice(`${item.name[lang]} · ${item.effect[lang]}`)
   }
 
   useEffect(() => {
@@ -237,7 +259,7 @@ export default function NexusPixelInventoryLayer({ area, position, lang, questCo
                   {itemEntries.map((item) => (
                     <article key={item.id} className={`is-${item.rarity}`}>
                       <i aria-hidden="true">{item.glyph}</i>
-                      <div><strong>{item.name[lang]}</strong><p>{item.description[lang]}</p></div>
+                      <div><strong>{item.name[lang]}</strong><p>{item.description[lang]}</p>{item.consumable ? <button type="button" onClick={() => useItem(item.id)}>{t.use}</button> : null}</div>
                       <b>×{inventory.items[item.id]}</b>
                     </article>
                   ))}

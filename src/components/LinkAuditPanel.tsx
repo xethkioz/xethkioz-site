@@ -30,7 +30,7 @@ export default function LinkAuditPanel() {
               key={`${link.area}-${link.label}`}
               href={link.url}
               target={external ? '_blank' : undefined}
-              rel={external ? 'noreferrer' : undefined}
+              rel={external ? 'noopener noreferrer' : undefined}
               className="group rounded-xl border border-white/10 bg-black/25 p-4 transition-colors hover:border-orange/50"
             >
               <div className="flex items-center justify-between gap-3">
