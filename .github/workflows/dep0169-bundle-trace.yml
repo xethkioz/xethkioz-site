@@ -1,0 +1,95 @@
+name: DEP0169 Bundle Trace
+
+on:
+  push:
+    branches: [agent/dep0169-trace-154]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inspect-bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+    steps:
+      - name: Checkout diagnostic branch
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prepare local Vercel project metadata
+        shell: bash
+        run: |
+          mkdir -p .vercel dep0169-evidence
+          printf '%s' '{"orgId":"team_pTDZMNkc6JNpwzTUqxLxGfFq","projectId":"prj_i2Tejb8Uxldw7Ru4NCp1izYU7nBB"}' > .vercel/project.json
+
+      - name: Build Vercel output with deprecation traces
+        shell: bash
+        run: |
+          set -o pipefail
+          NODE_OPTIONS=--trace-deprecation npx --yes vercel@56.5.0 build --yes 2>&1 | tee /tmp/vercel-build.log
+          grep -B 2 -A 16 'DEP0169' /tmp/vercel-build.log > dep0169-evidence/build-deprecations.log || true
+
+      - name: Scan packaged functions for legacy URL APIs
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs')
+          const path = require('node:path')
+          const root = '.vercel/output/functions'
+          const output = 'dep0169-evidence/legacy-url-report.json'
+          const records = []
+          const patterns = [
+            ['url.parse', /\burl\.parse\s*\(/g],
+            ['url.resolve', /\burl\.resolve\s*\(/g],
+            ['url.format(string)', /\burl\.format\s*\(\s*['"`]/g],
+            ['parse import', /\bparse\s*\([^)]*\)/g],
+          ]
+          function walk(directory) {
+            if (!fs.existsSync(directory)) return
+            for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+              const file = path.join(directory, entry.name)
+              if (entry.isDirectory()) walk(file)
+              else if (/\.(?:cjs|mjs|js)$/.test(entry.name)) inspect(file)
+            }
+          }
+          function inspect(file) {
+            const source = fs.readFileSync(file, 'utf8')
+            for (const [token, pattern] of patterns) {
+              pattern.lastIndex = 0
+              for (const match of source.matchAll(pattern)) {
+                const line = source.slice(0, match.index).split('\n').length
+                records.push({ file: path.relative(root, file), line, token })
+              }
+            }
+          }
+          walk(root)
+          fs.writeFileSync(output, JSON.stringify({ scannedRoot: root, records }, null, 2))
+          console.log(JSON.stringify({ scannedRoot: root, legacyUrlMatches: records.length }))
+          NODE
+
+      - name: Record function inventory
+        shell: bash
+        run: |
+          find .vercel/output/functions -maxdepth 3 -type f -printf '%P\n' | sort > dep0169-evidence/function-files.txt
+          find .vercel/output/functions -path '*news-page*' -type f -printf '%P\n' | sort > dep0169-evidence/news-page-files.txt
+
+      - name: Upload sanitized diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dep0169-bundle-evidence
+          path: dep0169-evidence
+          if-no-files-found: warn
+          retention-days: 2
