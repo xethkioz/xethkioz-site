@@ -25,8 +25,26 @@ const MAX_INITIAL_CSS_GZIP_BYTES = 64_000
 const routeCssChunks = [
   { label: 'Home shell', pattern: /^home-shell-[^/]+\.css$/i },
   { label: 'Gaming and Fun shell', pattern: /^gaming-fun-shell-[^/]+\.css$/i },
+  { label: 'Gaming sections shell', pattern: /^gaming-sections-shell-[^/]+\.css$/i },
   { label: 'Science shell', pattern: /^science-shell-[^/]+\.css$/i },
   { label: 'Green Node shell', pattern: /^green-node-shell-[^/]+\.css$/i },
+  { label: 'Nexus district shell', pattern: /^nexus-district-shell-[^/]+\.css$/i },
+  { label: 'Editorial shell', pattern: /^editorial-shell-[^/]+\.css$/i },
+  { label: 'Fun Nexus shell', pattern: /^fun-nexus-shell-[^/]+\.css$/i },
+  { label: 'Passport shell', pattern: /^passport-shell-[^/]+\.css$/i },
+  { label: 'Room shell', pattern: /^room-shell-[^/]+\.css$/i },
+]
+const forbiddenInitialCssSelectors = [
+  '.xk-home-portal-shell',
+  '.xk-anime-page',
+  '.xk-gaming-section-nav',
+  '.xk-learning-routes',
+  '.xk-green-shell',
+  '.xk-nexus-district',
+  '.xk-news-dossier',
+  '.xk-fun-arcade',
+  '.xk-public-passport',
+  '.xk-room-page',
 ]
 
 const issues = []
@@ -46,18 +64,15 @@ function readManifest() {
 function findStaticImportChain(manifest, startKey, targetKeys) {
   const queue = [[startKey]]
   const visited = new Set()
-
   while (queue.length) {
     const chain = queue.shift()
     const current = chain.at(-1)
     if (!current || visited.has(current)) continue
     visited.add(current)
     if (targetKeys.has(current)) return chain
-
     const imports = manifest[current]?.imports ?? []
     for (const imported of imports) queue.push([...chain, imported])
   }
-
   return null
 }
 
@@ -81,7 +96,6 @@ for (const relativePath of publicHtmlFiles) {
     const forbidden = scripts.filter((src) => rule.pattern.test(src))
     if (forbidden.length) issues.push(`${relativePath} preloads ${rule.label}: ${forbidden.join(', ')}`)
   }
-
   for (const routeChunk of routeCssChunks) {
     const leaked = stylesheets.filter((href) => routeChunk.pattern.test(path.basename(href.split('?')[0])))
     if (leaked.length) issues.push(`${relativePath} preloads route CSS ${routeChunk.label}: ${leaked.join(', ')}`)
@@ -102,12 +116,12 @@ if (!mainCssHref) {
     issues.push(`Initial CSS asset was not generated: ${mainCssHref}`)
   } else {
     const mainCss = fs.readFileSync(mainCssPath)
+    const mainCssText = mainCss.toString('utf8')
     const gzipBytes = gzipSync(mainCss).byteLength
-    if (mainCss.byteLength > MAX_INITIAL_CSS_BYTES) {
-      issues.push(`Initial CSS raw budget exceeded: ${mainCss.byteLength} > ${MAX_INITIAL_CSS_BYTES} bytes.`)
-    }
-    if (gzipBytes > MAX_INITIAL_CSS_GZIP_BYTES) {
-      issues.push(`Initial CSS gzip budget exceeded: ${gzipBytes} > ${MAX_INITIAL_CSS_GZIP_BYTES} bytes.`)
+    if (mainCss.byteLength > MAX_INITIAL_CSS_BYTES) issues.push(`Initial CSS raw budget exceeded: ${mainCss.byteLength} > ${MAX_INITIAL_CSS_BYTES} bytes.`)
+    if (gzipBytes > MAX_INITIAL_CSS_GZIP_BYTES) issues.push(`Initial CSS gzip budget exceeded: ${gzipBytes} > ${MAX_INITIAL_CSS_GZIP_BYTES} bytes.`)
+    for (const selector of forbiddenInitialCssSelectors) {
+      if (mainCssText.includes(selector)) issues.push(`Route-only selector leaked into initial CSS: ${selector}`)
     }
     console.log(`DIAG initial CSS: ${mainCss.byteLength} raw bytes, ${gzipBytes} gzip bytes.`)
   }
@@ -115,9 +129,7 @@ if (!mainCssHref) {
 
 const assetNames = fs.existsSync(assetsDir) ? fs.readdirSync(assetsDir) : []
 for (const routeChunk of routeCssChunks) {
-  if (!assetNames.some((name) => routeChunk.pattern.test(name))) {
-    issues.push(`Expected route CSS chunk was not emitted: ${routeChunk.label}.`)
-  }
+  if (!assetNames.some((name) => routeChunk.pattern.test(name))) issues.push(`Expected route CSS chunk was not emitted: ${routeChunk.label}.`)
 }
 
 const manifest = readManifest()
@@ -126,7 +138,6 @@ if (manifest) {
   const mainEntry = entries.find(([key, value]) => value.isEntry && (value.src === 'index.html' || key === 'index.html'))?.[0]
   const monitoredEntries = entries.filter(([, value]) => /(?:^|\/)(?:supabase(?:Client)?|motion)-[^/]+\.js$/i.test(value.file))
   const monitoredKeys = new Set(monitoredEntries.map(([key]) => key))
-
   if (mainEntry && monitoredKeys.size) {
     const chain = findStaticImportChain(manifest, mainEntry, monitoredKeys)
     if (chain) {
