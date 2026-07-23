@@ -27,6 +27,10 @@ interface HudContextType {
 }
 
 type SupabaseClientModule = typeof import('../services/supabaseClient')
+type IdleWindow = Window & {
+  requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number
+  cancelIdleCallback?: (handle: number) => void
+}
 
 const HudContext = createContext<HudContextType | undefined>(undefined)
 
@@ -47,6 +51,16 @@ function loadSupabaseModule() {
   if (!HAS_SUPABASE_ENV) return Promise.resolve<SupabaseClientModule | null>(null)
   supabaseModulePromise ??= import('../services/supabaseClient')
   return supabaseModulePromise
+}
+
+function scheduleDeferred(task: () => void, timeout: number) {
+  const idleWindow = window as IdleWindow
+  if (idleWindow.requestIdleCallback) {
+    const handle = idleWindow.requestIdleCallback(task, { timeout })
+    return () => idleWindow.cancelIdleCallback?.(handle)
+  }
+  const handle = window.setTimeout(task, timeout)
+  return () => window.clearTimeout(handle)
 }
 
 const guestAccount: HudAccountState = { status: 'guest', name: 'XETHKIOZ', checked: true }
@@ -152,36 +166,40 @@ export function HudProvider({ children }: { children: ReactNode }) {
       return () => { active = false }
     }
 
-    void loadSupabaseModule().then(async (module) => {
-      if (!active || !module?.isSupabaseConfigured) return
+    const hadStoredSession = readStoredAccount().status === 'connected'
+    const cancelBootstrap = scheduleDeferred(() => {
+      void loadSupabaseModule().then(async (module) => {
+        if (!active || !module?.isSupabaseConfigured) return
 
-      const { data: listener } = module.supabase.auth.onAuthStateChange((event, session) => {
+        const { data: listener } = module.supabase.auth.onAuthStateChange((event, session) => {
+          if (!active) return
+          if (session?.user) {
+            setAccount(accountFromSupabaseUser(session.user))
+            return
+          }
+          if (event === 'SIGNED_OUT' || event === 'INITIAL_SESSION') setAccount({ ...guestAccount, checked: true })
+        })
+        unsubscribe = () => listener.subscription.unsubscribe()
+
+        const { data, error } = await module.supabase.auth.getSession()
         if (!active) return
-        if (session?.user) {
-          setAccount(accountFromSupabaseUser(session.user))
+        if (error) {
+          setAccount((current) => current.status === 'connected'
+            ? { ...current, checked: true, issue: 'network' }
+            : { ...guestAccount, checked: true, issue: 'network' })
           return
         }
-        if (event === 'SIGNED_OUT' || event === 'INITIAL_SESSION') setAccount({ ...guestAccount, checked: true })
-      })
-      unsubscribe = () => listener.subscription.unsubscribe()
-
-      const { data, error } = await module.supabase.auth.getSession()
-      if (!active) return
-      if (error) {
-        setAccount((current) => current.status === 'connected'
+        setAccount(data.session?.user ? accountFromSupabaseUser(data.session.user) : { ...guestAccount, checked: true })
+      }).catch(() => {
+        if (active) setAccount((current) => current.status === 'connected'
           ? { ...current, checked: true, issue: 'network' }
           : { ...guestAccount, checked: true, issue: 'network' })
-        return
-      }
-      setAccount(data.session?.user ? accountFromSupabaseUser(data.session.user) : { ...guestAccount, checked: true })
-    }).catch(() => {
-      if (active) setAccount((current) => current.status === 'connected'
-        ? { ...current, checked: true, issue: 'network' }
-        : { ...guestAccount, checked: true, issue: 'network' })
-    })
+      })
+    }, hadStoredSession ? 350 : 1600)
 
     return () => {
       active = false
+      cancelBootstrap()
       unsubscribe()
     }
   }, [])
