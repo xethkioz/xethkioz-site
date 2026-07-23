@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run typecheck && npm run audit:routes && npm run generate:seo-shells && vite build",
+    "build": "npm run typecheck && npm run audit:routes && npm run audit:runtime-seo && npm run generate:seo-shells && vite build",
     "preview": "vite preview",
     "audit": "node scripts/audit.js",
     "audit:tree": "node scripts/print-tree.mjs",
@@ -36,6 +36,7 @@
     "audit:security-hardening": "node scripts/security-hardening-check.mjs",
     "audit:web-services": "node scripts/web-services-check.mjs",
     "audit:routes": "node scripts/route-integrity-check.mjs",
+    "audit:runtime-seo": "node scripts/runtime-seo-contract-check.mjs",
     "audit:ui-contracts": "node scripts/ui-contract-check.mjs",
     "audit:production-ready": "node scripts/production-ready-check.mjs",
     "audit:env": "node scripts/env-ready-check.mjs",
