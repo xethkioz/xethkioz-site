@@ -1,0 +1,46 @@
+name: React Router Lock Refresh
+
+on:
+  push:
+    branches: [agent/redeploy-clean-main-150]
+
+permissions:
+  contents: read
+
+jobs:
+  refresh-lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Generate lockfile with patched router
+        run: npm install react-router-dom@7.18.1 --save-exact --package-lock-only --ignore-scripts
+
+      - name: Install generated dependency graph
+        run: npm ci
+
+      - name: Verify dependency security
+        run: npm audit --omit=dev
+
+      - name: Verify application
+        run: npm run build
+
+      - name: Upload refreshed manifests
+        uses: actions/upload-artifact@v4
+        with:
+          name: react-router-7-lockfiles
+          path: |
+            package.json
+            package-lock.json
+          retention-days: 1
