@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import postcss from 'postcss'
 
 const root = process.cwd()
 const sourcePath = path.join(root, 'src', 'xethkioz-redesign.css')
@@ -70,6 +71,154 @@ function generated(label, content) {
   return `/* AUTO-GENERATED ${label}. Edit src/xethkioz-redesign.css instead. */\n${content.trim()}\n`
 }
 
+function splitSelectorList(selector) {
+  const selectors = []
+  let start = 0
+  let roundDepth = 0
+  let squareDepth = 0
+  let quote = ''
+
+  for (let index = 0; index < selector.length; index += 1) {
+    const character = selector[index]
+    if (quote) {
+      if (character === quote && selector[index - 1] !== '\\') quote = ''
+      continue
+    }
+    if (character === '"' || character === "'") {
+      quote = character
+      continue
+    }
+    if (character === '(') roundDepth += 1
+    else if (character === ')') roundDepth = Math.max(0, roundDepth - 1)
+    else if (character === '[') squareDepth += 1
+    else if (character === ']') squareDepth = Math.max(0, squareDepth - 1)
+    else if (character === ',' && roundDepth === 0 && squareDepth === 0) {
+      selectors.push(selector.slice(start, index).trim())
+      start = index + 1
+    }
+  }
+
+  selectors.push(selector.slice(start).trim())
+  return selectors.filter(Boolean)
+}
+
+function selectorClasses(selector) {
+  return [...selector.matchAll(/\.([_a-zA-Z][\w-]*)/g)].map((match) => match[1])
+}
+
+function isConditionalRule(rule) {
+  let parent = rule.parent
+  while (parent && parent.type !== 'root') {
+    if (parent.type === 'atrule' && ['media', 'supports', 'container'].includes(parent.name)) return true
+    parent = parent.parent
+  }
+  return false
+}
+
+function appendWithAncestors(targetRoot, sourceRule, clonedRule) {
+  const ancestors = []
+  let parent = sourceRule.parent
+  while (parent && parent.type !== 'root') {
+    if (parent.type === 'atrule') ancestors.push(parent)
+    parent = parent.parent
+  }
+
+  let node = clonedRule
+  for (const ancestor of ancestors) {
+    const wrapper = ancestor.clone({ nodes: [] })
+    wrapper.append(node)
+    node = wrapper
+  }
+  targetRoot.append(node)
+}
+
+function removeEmptyAtRules(rootNode) {
+  let removed = true
+  while (removed) {
+    removed = false
+    rootNode.walkAtRules((atRule) => {
+      if (Array.isArray(atRule.nodes) && atRule.nodes.length === 0) {
+        atRule.remove()
+        removed = true
+      }
+    })
+  }
+}
+
+function partitionConditionalRouteRules(coreCss, routeCssByOwner) {
+  const coreRoot = postcss.parse(coreCss)
+  const classOwners = new Map()
+  const topLevelCoreClasses = new Set()
+
+  for (const [owner, css] of Object.entries(routeCssByOwner)) {
+    postcss.parse(css).walkRules((rule) => {
+      for (const className of selectorClasses(rule.selector)) {
+        const owners = classOwners.get(className) ?? new Set()
+        owners.add(owner)
+        classOwners.set(className, owners)
+      }
+    })
+  }
+
+  coreRoot.walkRules((rule) => {
+    if (rule.parent?.type !== 'root') return
+    for (const className of selectorClasses(rule.selector)) topLevelCoreClasses.add(className)
+  })
+
+  const uniqueOwner = new Map()
+  for (const [className, owners] of classOwners) {
+    if (owners.size === 1 && !topLevelCoreClasses.has(className)) uniqueOwner.set(className, [...owners][0])
+  }
+
+  const extras = Object.fromEntries(Object.keys(routeCssByOwner).map((owner) => [owner, postcss.root()]))
+  coreRoot.walkRules((rule) => {
+    if (!isConditionalRule(rule)) return
+
+    const retainedSelectors = []
+    const routeSelectors = new Map()
+    for (const selector of splitSelectorList(rule.selector)) {
+      const owners = new Set(selectorClasses(selector).map((className) => uniqueOwner.get(className)).filter(Boolean))
+      if (owners.size !== 1) {
+        retainedSelectors.push(selector)
+        continue
+      }
+      const owner = [...owners][0]
+      const selectors = routeSelectors.get(owner) ?? []
+      selectors.push(selector)
+      routeSelectors.set(owner, selectors)
+    }
+
+    for (const [owner, selectors] of routeSelectors) {
+      appendWithAncestors(extras[owner], rule, rule.clone({ selector: selectors.join(',') }))
+    }
+
+    if (retainedSelectors.length) rule.selector = retainedSelectors.join(',')
+    else rule.remove()
+  })
+
+  removeEmptyAtRules(coreRoot)
+  for (const extraRoot of Object.values(extras)) removeEmptyAtRules(extraRoot)
+
+  const remainingLeaks = []
+  coreRoot.walkRules((rule) => {
+    if (!isConditionalRule(rule)) return
+    for (const className of selectorClasses(rule.selector)) {
+      if (uniqueOwner.has(className)) remainingLeaks.push(`${className} in ${rule.selector}`)
+    }
+  })
+  if (remainingLeaks.length) throw new Error(`Conditional route selectors remain in global core: ${remainingLeaks.slice(0, 8).join(' | ')}`)
+
+  return {
+    core: coreRoot.toString().trim(),
+    extras: Object.fromEntries(Object.entries(extras).map(([owner, extraRoot]) => [owner, extraRoot.toString().trim()])),
+  }
+}
+
+function appendExtra(baseCss, extraCss) {
+  if (!extraCss) return baseCss
+  return `${baseCss.trim()}\n\n/* Conditional overrides moved with their route owner. */\n${extraCss.trim()}`
+}
+
 if (!fs.existsSync(sourcePath)) throw new Error(`CSS source not found: ${path.relative(root, sourcePath)}`)
 if (!fs.existsSync(homeRingsPath)) throw new Error(`Home ring CSS source not found: ${path.relative(root, homeRingsPath)}`)
 
@@ -92,19 +241,22 @@ const blocks = {
   gamingSections: locateBlock(source, MARKERS.gamingSections, null, 'Gaming sections'),
 }
 
-const coreBlock = removeBlocks(source, Object.values(blocks))
+const routeBaseCss = {
+  home: `${blocks.homePortals.content}\n\n${blocks.homeStory.content}\n\n${homeRings}`,
+  greenNode: `${blocks.greenBase.content}\n\n${blocks.greenTerminal.content}`,
+  gamingFun: blocks.gamingFun.content,
+  gamingSections: blocks.gamingSections.content,
+  science: `${blocks.science.content}\n\n${blocks.practicalScience.content}`,
+  nexusDistrict: blocks.nexusDistrict.content,
+  editorial: blocks.editorial.content,
+  funNexus: `${blocks.funArcade.content}\n\n${blocks.funNexus.content}`,
+  passport: blocks.passport.content,
+  room: blocks.room.content,
+}
+const partitioned = partitionConditionalRouteRules(removeBlocks(source, Object.values(blocks)), routeBaseCss)
 const outputs = {
-  core: generated('global core CSS', coreBlock),
-  home: generated('Home route CSS', `${blocks.homePortals.content}\n\n${blocks.homeStory.content}\n\n${homeRings}`),
-  greenNode: generated('Green Node route CSS', `${blocks.greenBase.content}\n\n${blocks.greenTerminal.content}`),
-  gamingFun: generated('Gaming and Fun shared route CSS', blocks.gamingFun.content),
-  gamingSections: generated('Gaming route sections CSS', blocks.gamingSections.content),
-  science: generated('Science route CSS', `${blocks.science.content}\n\n${blocks.practicalScience.content}`),
-  nexusDistrict: generated('NexusDistrict component CSS', blocks.nexusDistrict.content),
-  editorial: generated('Editorial routes CSS', blocks.editorial.content),
-  funNexus: generated('Fun Nexus City route CSS', `${blocks.funArcade.content}\n\n${blocks.funNexus.content}`),
-  passport: generated('Public Nexus Passport route CSS', blocks.passport.content),
-  room: generated('Nexus room route CSS', blocks.room.content),
+  core: generated('global core CSS', partitioned.core),
+  ...Object.fromEntries(Object.entries(routeBaseCss).map(([owner, css]) => [owner, generated(`${owner} route CSS`, appendExtra(css, partitioned.extras[owner]))])),
 }
 
 const requiredContracts = [
@@ -145,6 +297,7 @@ console.log(JSON.stringify({
   sourceBytes,
   globalCoreBytes,
   globalReductionBytes: sourceBytes - globalCoreBytes,
+  conditionalRouteBytes: Object.fromEntries(Object.entries(partitioned.extras).map(([key, content]) => [key, Buffer.byteLength(content)])),
   routeBytes: Object.fromEntries(Object.entries(outputs).filter(([key]) => key !== 'core').map(([key, content]) => [key, Buffer.byteLength(content)])),
   wrote,
 }))
