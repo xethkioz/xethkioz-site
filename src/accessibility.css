@@ -29,6 +29,13 @@ a[href='/confirm-email'].text-neon {
   padding-block: 8px;
 }
 
+/* Loading geometry stays stable without forcing animation on sensitive users. */
+@media (prefers-reduced-motion: reduce) {
+  [data-news-loading-skeleton] * {
+    animation: none !important;
+  }
+}
+
 /*
  * Header is lazy-loaded on public routes. Keep it fixed and reserve its final
  * height from the first frame so the route content cannot jump when it arrives.
