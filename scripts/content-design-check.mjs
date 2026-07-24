@@ -5,6 +5,7 @@ const root = process.cwd()
 const read = (relative) => fs.readFileSync(path.join(root, relative), 'utf8')
 const district = read('src/components/NexusDistrict.tsx')
 const pulse = read('src/components/PortalPulseRail.tsx')
+const browserTest = read('tests/e2e/content-design.spec.ts')
 const checks = []
 const check = (name, ok) => checks.push([name, Boolean(ok)])
 
@@ -17,6 +18,8 @@ check('Simulated live status language is removed', !/JUGADORES CONECTADOS|PLAYER
 check('Section headings describe a concrete user action', district.includes('Elegí qué hacer ahora en Gaming') && district.includes('Fuentes, herramientas y proyectos'))
 check('Portal action rails preserve localized internal routes', pulse.includes('const { localizePath } = useLang()') && pulse.includes('localizePath(item.to)'))
 check('Portal action rails keep external destinations explicit', pulse.includes('const external = /^https?:') && pulse.includes('target="_blank"'))
+check('Browser tests cover simplified Home access', browserTest.includes('tres accesos principales') && browserTest.includes("toHaveCount(3)"))
+check('Browser tests cover localized Gaming and Science routes', browserTest.includes('/en/gaming?section=live') && browserTest.includes('/en/creacion-web'))
 
 let failed = 0
 for (const [name, ok] of checks) {
