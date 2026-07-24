@@ -139,8 +139,33 @@ function ArticleThumb({ article, large = false }: { article: PublicNewsArticle; 
   )
 }
 
+function FeaturedArticleLoading({ label }: { label: string }) {
+  return (
+    <article
+      className="mt-8 min-h-[680px] overflow-hidden rounded-[2rem] border border-orange-400/20 bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,.12),transparent_34%),linear-gradient(135deg,rgba(124,58,237,.1),rgba(0,0,0,.72))] p-5 text-white md:min-h-[730px] md:p-8"
+      role="status"
+      aria-live="polite"
+      aria-busy="true"
+      data-news-loading-skeleton
+    >
+      <p className="font-mono text-[10px] font-black uppercase tracking-[0.24em] text-orange-200">{label}</p>
+      <div className="mt-5 h-72 animate-pulse rounded-2xl border border-white/[0.06] bg-white/[0.035] md:h-96" aria-hidden="true" />
+      <div className="mt-5 flex gap-2" aria-hidden="true">
+        <span className="h-7 w-24 animate-pulse rounded-full bg-white/[0.05]" />
+        <span className="h-7 w-40 animate-pulse rounded-full bg-white/[0.05]" />
+      </div>
+      <div className="mt-5 space-y-3" aria-hidden="true">
+        <span className="block h-9 w-11/12 animate-pulse rounded-xl bg-white/[0.06]" />
+        <span className="block h-9 w-3/4 animate-pulse rounded-xl bg-white/[0.06]" />
+        <span className="mt-5 block h-4 w-full animate-pulse rounded bg-white/[0.04]" />
+        <span className="block h-4 w-5/6 animate-pulse rounded bg-white/[0.04]" />
+      </div>
+    </article>
+  )
+}
+
 export default function News() {
-  const { lang, t } = useLang()
+  const { lang } = useLang()
   const ui = copy[lang]
   const labels = publicNewsCategoryLabels[lang]
   const [searchParams, setSearchParams] = useSearchParams()
@@ -256,21 +281,27 @@ export default function News() {
             ))}
           </div>
 
-          {activeTopics.length ? (
-            <div className="mt-5 border-t border-white/10 pt-5">
-              <p className="font-mono text-[9px] font-black uppercase tracking-[0.22em] text-violet-200/70">{ui.topics}</p>
+          <div className="mt-5 min-h-[76px] border-t border-white/10 pt-5" data-news-topics-reserve>
+            <p className="font-mono text-[9px] font-black uppercase tracking-[0.22em] text-violet-200/70">{ui.topics}</p>
+            {activeTopics.length ? (
               <div className="-mx-5 mt-3 flex snap-x gap-2 overflow-x-auto px-5 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
                 {activeTopics.map(([topic, count]) => <button key={topic} type="button" onClick={() => updateQuery(topic)} className="shrink-0 snap-start rounded-full border border-violet-400/20 bg-violet-500/[0.06] px-3 py-1.5 text-[10px] font-bold text-violet-100 transition hover:border-orange-300/40 hover:text-orange-100">#{topic} <span className="text-white/35">{count}</span></button>)}
               </div>
-            </div>
-          ) : null}
+            ) : (
+              <div className="mt-3 flex gap-2" aria-hidden="true">
+                <span className="h-7 w-24 animate-pulse rounded-full bg-white/[0.035]" />
+                <span className="h-7 w-32 animate-pulse rounded-full bg-white/[0.035]" />
+                <span className="hidden h-7 w-28 animate-pulse rounded-full bg-white/[0.035] sm:block" />
+              </div>
+            )}
+          </div>
         </section>
 
-        {loading ? <p className="mt-8 rounded-3xl border border-violet-500/20 bg-white/[0.04] p-5 text-violet-100">{ui.loading}</p> : null}
+        {loading ? <FeaturedArticleLoading label={ui.loading} /> : null}
         {error ? <p className="mt-8 rounded-3xl border border-yellow-500/30 bg-yellow-500/10 p-5 text-yellow-100">{error}</p> : null}
 
         {!loading && articles.length === 0 ? (
-          <article className="mt-8 rounded-[2rem] border border-orange-400/25 bg-orange-500/10 p-8 text-orange-50">
+          <article className="mt-8 min-h-[680px] rounded-[2rem] border border-orange-400/25 bg-orange-500/10 p-8 text-orange-50 md:min-h-[730px]">
             <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-orange-200">EMPTY_FEED</p>
             <h2 className="mt-3 text-3xl font-black uppercase">{ui.emptyTitle}</h2>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-orange-50/80">{ui.emptyText}</p>
@@ -278,7 +309,7 @@ export default function News() {
         ) : null}
 
         {!loading && articles.length > 0 && filteredArticles.length === 0 ? (
-          <article className="mt-8 rounded-[2rem] border border-violet-400/25 bg-violet-500/[0.07] p-8 text-violet-50">
+          <article className="mt-8 min-h-[680px] rounded-[2rem] border border-violet-400/25 bg-violet-500/[0.07] p-8 text-violet-50 md:min-h-[730px]">
             <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet-200">NO_RESULTS</p>
             <h2 className="mt-3 text-3xl font-black uppercase">{ui.noResultsTitle}</h2>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-violet-50/75">{ui.noResultsText}</p>
@@ -287,7 +318,7 @@ export default function News() {
         ) : null}
 
         {featured ? (
-          <article className="group mt-8 overflow-hidden rounded-[2rem] border border-orange-400/30 bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,.18),transparent_34%),linear-gradient(135deg,rgba(124,58,237,.16),rgba(0,0,0,.76))] p-5 text-white shadow-[0_0_50px_rgba(249,115,22,.12)] md:p-8">
+          <article className="group mt-8 min-h-[680px] overflow-hidden rounded-[2rem] border border-orange-400/30 bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,.18),transparent_34%),linear-gradient(135deg,rgba(124,58,237,.16),rgba(0,0,0,.76))] p-5 text-white shadow-[0_0_50px_rgba(249,115,22,.12)] md:min-h-[730px] md:p-8" data-news-featured-article>
             <ArticleThumb article={featured} large />
             <div className="mt-5 flex flex-wrap items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] text-orange-200">
               <span className="rounded-full border border-orange-400/40 px-3 py-1">{labels[featured.category]}</span>

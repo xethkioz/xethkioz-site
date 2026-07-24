@@ -37,7 +37,7 @@ const copy = {
 } as const
 
 export default function Footer() {
-  const { lang } = useLang()
+  const { lang, localizePath } = useLang()
   const { openSettings } = usePrivacyConsent()
   const t = copy[lang]
 
@@ -47,17 +47,17 @@ export default function Footer() {
         <div>
           <p className="font-black tracking-[.14em] text-white">XETHKIOZ</p>
           <span className="mt-3 block max-w-md text-sm leading-6">{t.description}</span>
-          <Link to="/support" className="mt-4 inline-flex font-mono text-[10px] font-black uppercase tracking-[.16em] text-orange-300">{t.support} →</Link>
+          <Link to={localizePath('/support')} className="mt-4 inline-flex font-mono text-[10px] font-black uppercase tracking-[.16em] text-orange-300">{t.support} →</Link>
         </div>
 
         <nav aria-label={t.informationLabel}>
           <p className="font-mono text-[10px] font-black uppercase tracking-[.18em] text-violet-300">{t.trust}</p>
           <div className="mt-3 grid gap-2 text-sm">
-            <Link to="/about">{t.about}</Link>
-            <Link to="/editorial-policy">{t.editorial}</Link>
-            <Link to="/privacy">{t.privacy}</Link>
+            <Link to={localizePath('/about')}>{t.about}</Link>
+            <Link to={localizePath('/editorial-policy')}>{t.editorial}</Link>
+            <Link to={localizePath('/privacy')}>{t.privacy}</Link>
             <button type="button" onClick={openSettings} className="w-fit text-left text-inherit hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300">{t.privacySettings}</button>
-            <Link to="/contact">{t.contact}</Link>
+            <Link to={localizePath('/contact')}>{t.contact}</Link>
           </div>
         </nav>
 

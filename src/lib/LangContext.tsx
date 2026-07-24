@@ -1,26 +1,76 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { translations, type Lang, type Translation } from './i18n'
+import { isEnglishPath, isLocalizedPublicPath, localizedPath as buildLocalizedPath } from './localizedRoutes'
 
-interface LangContextType { lang: Lang; setLang: (l: Lang) => void; t: Translation }
+interface LangContextType {
+  lang: Lang
+  setLang: (lang: Lang) => void
+  toggleLang: () => void
+  localizePath: (path: string) => string
+  t: Translation
+}
 
 const LangContext = createContext<LangContextType | undefined>(undefined)
+const STORAGE_KEY = 'xethkioz.lang'
 
 const getInitialLang = (): Lang => {
   if (typeof window === 'undefined') return 'es'
-  const saved = window.localStorage.getItem('xethkioz.lang')
-  return saved === 'en' ? 'en' : 'es'
+  if (isEnglishPath(window.location.pathname)) return 'en'
+  try {
+    return window.localStorage.getItem(STORAGE_KEY) === 'en' ? 'en' : 'es'
+  } catch {
+    return 'es'
+  }
 }
 
 export function LangProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<Lang>(getInitialLang)
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [preferredLang, setPreferredLang] = useState<Lang>(getInitialLang)
+  const routeLang: Lang | null = isEnglishPath(location.pathname)
+    ? 'en'
+    : isLocalizedPublicPath(location.pathname)
+      ? 'es'
+      : null
+  const lang = routeLang ?? preferredLang
   const t = translations[lang] as Translation
 
   useEffect(() => {
-    window.localStorage.setItem('xethkioz.lang', lang)
+    try {
+      window.localStorage.setItem(STORAGE_KEY, lang)
+    } catch {
+      // URL remains the canonical language source when storage is unavailable.
+    }
     document.documentElement.lang = lang === 'es' ? 'es-AR' : 'en'
   }, [lang])
 
-  return <LangContext.Provider value={{ lang, setLang, t }}>{children}</LangContext.Provider>
+  useEffect(() => {
+    if (preferredLang !== 'en' || isEnglishPath(location.pathname) || !isLocalizedPublicPath(location.pathname)) return
+    const destination = buildLocalizedPath(`${location.pathname}${location.search}${location.hash}`, 'en')
+    navigate(destination, { replace: true })
+  }, [location.hash, location.pathname, location.search, navigate, preferredLang])
+
+  const value = useMemo<LangContextType>(() => ({
+    lang,
+    t,
+    setLang: (next) => {
+      setPreferredLang(next)
+      const current = `${location.pathname}${location.search}${location.hash}`
+      const destination = buildLocalizedPath(current, next)
+      if (destination !== current) navigate(destination)
+    },
+    toggleLang: () => {
+      const next: Lang = lang === 'es' ? 'en' : 'es'
+      setPreferredLang(next)
+      const current = `${location.pathname}${location.search}${location.hash}`
+      const destination = buildLocalizedPath(current, next)
+      if (destination !== current) navigate(destination)
+    },
+    localizePath: (path) => buildLocalizedPath(path, lang),
+  }), [lang, location.hash, location.pathname, location.search, navigate, t])
+
+  return <LangContext.Provider value={value}>{children}</LangContext.Provider>
 }
 
 export function useLang() {

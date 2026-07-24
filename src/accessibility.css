@@ -14,6 +14,29 @@ a[href='/confirm-email'].text-neon {
 }
 
 /*
+ * The newsletter honeypot remains outside keyboard navigation, but its native
+ * input still needs a valid contrast pair when accessibility engines inspect it.
+ */
+.xk-newsletter-trap input {
+  background-color: #0a0a0f;
+  color: #f0f0f5;
+  border-color: #787887;
+}
+
+/* External science references must meet the WCAG 2.2 minimum target size. */
+.xk-science-references a {
+  min-height: 44px;
+  padding-block: 8px;
+}
+
+/* Loading geometry stays stable without forcing animation on sensitive users. */
+@media (prefers-reduced-motion: reduce) {
+  [data-news-loading-skeleton] * {
+    animation: none !important;
+  }
+}
+
+/*
  * Header is lazy-loaded on public routes. Keep it fixed and reserve its final
  * height from the first frame so the route content cannot jump when it arrives.
  */
