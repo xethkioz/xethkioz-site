@@ -30,6 +30,7 @@ check('internal links stay in the current tab', component.includes("target={isIn
 check('commercial external links use sponsored rel', component.includes("isCommercial ? 'noopener noreferrer sponsored'"))
 check('campaign images use SafeImage fallback', component.includes('<SafeImage') && component.includes('fallback="/images/articles/fallback.svg"'))
 check('disclosures support Spanish and English', component.includes('Promoción propia de XETHKIOZ') && component.includes('Sponsored content'))
+check('campaign slot reserves height before async hydration', component.includes("min-h-[176px]") && component.includes('data-ad-slot-loading={slotId}') && component.includes('aria-hidden="true"'))
 
 check('browser tests cover house disclosure and internal navigation', tests.includes('Promoción propia de XETHKIOZ') && tests.includes("toHaveAttribute('href', '/gaming/guides')"))
 check('browser tests neutralize javascript targets', tests.includes("target_url: 'javascript:alert(1)'") && tests.includes('no genera enlace'))
