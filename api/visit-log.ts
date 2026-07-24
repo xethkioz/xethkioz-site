@@ -15,7 +15,9 @@ const RATE_WINDOW_MS = 60_000
 const INSTANCE_LIMIT = 40
 const MAX_BODY_BYTES = 4_096
 const UPSTREAM_TIMEOUT_MS = 8_000
+const CLEANUP_INTERVAL_MS = 6 * 60 * 60_000
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+let lastCleanupAt = 0
 
 function cleanText(value: unknown, max: number) {
   if (typeof value !== 'string') return null
@@ -130,6 +132,26 @@ function applyResponseHeaders(response: any) {
   response.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive')
 }
 
+async function maybeCleanupExpiredVisits(supabaseUrl: string, serviceKey: string, route: string) {
+  const now = Date.now()
+  if (route !== '/' || now - lastCleanupAt < CLEANUP_INTERVAL_MS) return
+  lastCleanupAt = now
+
+  const cleanup = await fetch(`${supabaseUrl}/rest/v1/rpc/xethkioz_cleanup_site_visits`, {
+    method: 'POST',
+    headers: {
+      apikey: serviceKey,
+      Authorization: `Bearer ${serviceKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: '{}',
+  }).catch(() => null)
+
+  if (!cleanup?.ok) {
+    console.error(JSON.stringify({ level: 'warning', message: 'visit telemetry retention cleanup failed', status: cleanup?.status || 0 }))
+  }
+}
+
 export default async function handler(request: any, response: any) {
   applyResponseHeaders(response)
 
@@ -235,6 +257,7 @@ export default async function handler(request: any, response: any) {
       return response.status(503).json({ ok: false, error: 'SERVICE_UNAVAILABLE' })
     }
 
+    await maybeCleanupExpiredVisits(supabaseUrl, serviceKey, route)
     return response.status(202).json({ ok: true, duplicate: result.status === 'duplicate' })
   } catch (error) {
     console.error(JSON.stringify({ level: 'error', message: 'visit telemetry unavailable', reason: error instanceof Error ? error.name : 'unknown' }))
