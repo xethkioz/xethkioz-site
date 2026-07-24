@@ -1,6 +1,15 @@
 -- Editorial refresh: current, primary-source reporting for 24 July 2026.
 -- Idempotent by slug so staging and production can apply the same migration safely.
+-- Reuses the most active existing editorial author when available without hardcoding generated IDs.
 
+with editorial_author as (
+  select author_id
+  from public.news_articles
+  where author_id is not null
+  group by author_id
+  order by count(*) desc
+  limit 1
+)
 insert into public.news_articles (
   slug,
   title,
@@ -36,7 +45,7 @@ values
     {"type":"paragraph","text":"La utilidad real está en ordenar contexto y preparar mejores preguntas, no en reemplazar diagnóstico, seguimiento ni criterio profesional. La disponibilidad inicial está limitada a Estados Unidos y la información sincronizada puede estar incompleta o desactualizada. Antes de actuar sobre medicación, síntomas o decisiones clínicas, corresponde verificar el dato original y consultar a un profesional de salud. La función todavía no está disponible en Codex."}
   ]$json$::jsonb,
   'ai',
-  'abb536e3-7bfd-497e-8d24-f92487366044'::uuid,
+  (select author_id from editorial_author),
   'published',
   now() - interval '3 minutes',
   array['openai','chatgpt','health','privacy','apple-health','fuente-oficial'],
@@ -64,7 +73,7 @@ values
     {"type":"paragraph","text":"Las categorías convierten la wishlist en una herramienta de decisión y no sólo en un depósito infinito. Los enlaces compartidos pueden mostrar una categoría o filtro específico incluso cuando la lista general es privada, por lo que conviene tratarlos como enlaces revocables y compartirlos sólo con quien corresponda. Para regalar, revisar región, precio final, destinatario y plazo de aceptación evita sorpresas."}
   ]$json$::jsonb,
   'tech',
-  'abb536e3-7bfd-497e-8d24-f92487366044'::uuid,
+  (select author_id from editorial_author),
   'published',
   now() - interval '2 minutes',
   array['steam','valve','wishlist','regalos','pc-gaming','tecnologia','fuente-oficial'],
@@ -92,7 +101,7 @@ values
     {"type":"paragraph","text":"El valor de Roman no está en reemplazar a Hubble o Webb, sino en sumar una mirada complementaria: explorar mucho territorio con suficiente detalle para señalar dónde conviene enfocar instrumentos más especializados. La fecha del 30 de agosto sigue siendo una programación de lanzamiento y puede cambiar por condiciones técnicas, operativas o meteorológicas; la referencia válida será siempre la actualización oficial de NASA."}
   ]$json$::jsonb,
   'science',
-  'abb536e3-7bfd-497e-8d24-f92487366044'::uuid,
+  (select author_id from editorial_author),
   'published',
   now() - interval '1 minute',
   array['nasa','roman','telescopio-espacial','astronomia','ciencia','fuente-oficial'],
@@ -120,7 +129,7 @@ values
     {"type":"paragraph","text":"Un acceso financiado por publicidad puede ampliar el público en regiones donde hardware y suscripciones pesan más, pero sólo funciona si la alternativa sigue siendo transparente y realmente opcional. El punto crítico será evitar que una etapa presentada como pre-roll limitado se convierta después en interrupciones frecuentes o recopilación excesiva. Por ahora no es un lanzamiento general: es un Test & Learn para Xbox Insiders."}
   ]$json$::jsonb,
   'gaming',
-  'abb536e3-7bfd-497e-8d24-f92487366044'::uuid,
+  (select author_id from editorial_author),
   'published',
   now(),
   array['xbox','cloud-gaming','streaming','publicidad','xbox-insider','monetizacion','fuente-oficial'],
@@ -138,7 +147,7 @@ on conflict (slug) do update set
   summary = excluded.summary,
   content = excluded.content,
   category = excluded.category,
-  author_id = excluded.author_id,
+  author_id = coalesce(excluded.author_id, public.news_articles.author_id),
   status = excluded.status,
   published_at = coalesce(public.news_articles.published_at, excluded.published_at),
   tags = excluded.tags,
