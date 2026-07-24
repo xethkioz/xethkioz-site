@@ -50,7 +50,19 @@ export default function PublicAdSlot({ slotId, compact = false, fallbackLabel }:
     }
   }, [slotId])
 
-  if (!loaded || !campaign) return null
+  const reservedHeight = compact ? 'min-h-[148px]' : 'min-h-[176px]'
+
+  if (!loaded) {
+    return (
+      <div
+        className={`${reservedHeight} rounded-[1.5rem] border border-white/[0.04] bg-white/[0.015]`}
+        aria-hidden="true"
+        data-ad-slot-loading={slotId}
+      />
+    )
+  }
+
+  if (!campaign) return null
 
   const ui = disclosures[lang]
   const disclosure = ui[campaign.campaign_kind]
@@ -58,7 +70,7 @@ export default function PublicAdSlot({ slotId, compact = false, fallbackLabel }:
   const isCommercial = campaign.campaign_kind !== 'house'
 
   const content = (
-    <article className={`overflow-hidden rounded-[1.5rem] border border-orange-400/25 bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,.2),transparent_38%),linear-gradient(135deg,rgba(124,58,237,.16),rgba(0,0,0,.82))] text-white shadow-[0_0_35px_rgba(249,115,22,.12)] ${compact ? 'p-4' : 'p-5 md:p-6'}`}>
+    <article className={`${reservedHeight} overflow-hidden rounded-[1.5rem] border border-orange-400/25 bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,.2),transparent_38%),linear-gradient(135deg,rgba(124,58,237,.16),rgba(0,0,0,.82))] text-white shadow-[0_0_35px_rgba(249,115,22,.12)] ${compact ? 'p-4' : 'p-5 md:p-6'}`}>
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="min-w-0">
           <p className="font-mono text-[10px] font-black uppercase tracking-[0.24em] text-orange-300">{disclosure}</p>
