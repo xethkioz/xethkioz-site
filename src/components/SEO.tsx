@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async'
 import { useLang } from '../lib/LangContext'
+import { isLocalizedPublicPath, localizedAlternates, localizedPath, stripEnglishPrefix } from '../lib/localizedRoutes'
 
 interface SEOProps {
   title?: string
@@ -41,6 +42,17 @@ function absoluteUrl(value: string) {
   return `${SITE_URL}${value.startsWith('/') ? value : `/${value}`}`
 }
 
+function canonicalPath(value: string) {
+  if (!value) return '/'
+  if (!value.startsWith('http')) return stripEnglishPrefix(value)
+  try {
+    const parsed = new URL(value)
+    return stripEnglishPrefix(`${parsed.pathname}${parsed.search}`)
+  } catch {
+    return '/'
+  }
+}
+
 export default function SEO({
   title,
   description,
@@ -54,7 +66,10 @@ export default function SEO({
   const { lang } = useLang()
   const resolvedDescription = description ?? DESCRIPTIONS[lang]
   const fullTitle = title ? `${title} | ${SITE}` : DEFAULT_TITLES[lang]
-  const canonical = url ? absoluteUrl(url) : SITE_URL
+  const basePath = canonicalPath(url)
+  const hasLocalizedVersion = type === 'website' && isLocalizedPublicPath(basePath)
+  const canonical = absoluteUrl(hasLocalizedVersion ? localizedPath(basePath, lang) : basePath)
+  const alternates = hasLocalizedVersion ? localizedAlternates(basePath) : null
   const imageUrl = absoluteUrl(image)
   const locale = lang === 'es' ? 'es_AR' : 'en_US'
   const alternateLocale = lang === 'es' ? 'en_US' : 'es_AR'
@@ -69,6 +84,9 @@ export default function SEO({
       <meta name="description" content={resolvedDescription} />
       <meta httpEquiv="content-language" content={language} />
       <link rel="canonical" href={canonical} />
+      {alternates ? <link rel="alternate" hrefLang="es-AR" href={absoluteUrl(alternates.es)} /> : null}
+      {alternates ? <link rel="alternate" hrefLang="en" href={absoluteUrl(alternates.en)} /> : null}
+      {alternates ? <link rel="alternate" hrefLang="x-default" href={absoluteUrl(alternates.es)} /> : null}
       {tags && tags.length > 0 && <meta name="keywords" content={tags.join(', ')} />}
       {publishedTime && <meta property="article:published_time" content={publishedTime} />}
       {author && <meta property="article:author" content={author} />}
@@ -81,7 +99,7 @@ export default function SEO({
       <meta property="og:image" content={imageUrl} />
       <meta property="og:url" content={canonical} />
       <meta property="og:locale" content={locale} />
-      <meta property="og:locale:alternate" content={alternateLocale} />
+      {hasLocalizedVersion ? <meta property="og:locale:alternate" content={alternateLocale} /> : null}
 
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
@@ -120,6 +138,15 @@ export default function SEO({
                 target: `${SITE_URL}/news?q={search_term_string}`,
                 'query-input': 'required name=search_term_string',
               },
+            },
+            {
+              '@type': 'WebPage',
+              '@id': `${canonical}#webpage`,
+              url: canonical,
+              name: fullTitle,
+              description: resolvedDescription,
+              inLanguage: language,
+              isPartOf: { '@id': `${SITE_URL}/#website` },
             },
           ],
         })}
