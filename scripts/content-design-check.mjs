@@ -6,12 +6,13 @@ const read = (relative) => fs.readFileSync(path.join(root, relative), 'utf8')
 const district = read('src/components/NexusDistrict.tsx')
 const pulse = read('src/components/PortalPulseRail.tsx')
 const gaming = read('src/pages/GamingHub.tsx')
+const science = read('src/pages/ScienceLab.tsx')
 const browserTest = read('tests/e2e/content-design.spec.ts')
 const checks = []
 const check = (name, ok) => checks.push([name, Boolean(ok)])
 
 check('Nexus links preserve localized routes', district.includes('const { lang, localizePath } = useLang()') && district.includes('to={localizePath(item.to)}'))
-check('Science prioritizes sourced news', district.indexOf("title: 'Noticias con fuentes'") < district.indexOf("title: 'Herramientas y respuestas'"))
+check('Science district prioritizes sourced news', district.indexOf("title: 'Noticias con fuentes'") < district.indexOf("title: 'Herramientas y respuestas'"))
 check('Home exposes only the three public primary portals', !district.includes("title: 'Green Node', detail: 'Archivos"))
 check('Decorative transit rail is removed', !district.includes('UniverseTransitRail') && !district.includes('xk-nexus-transit'))
 check('Simulated live status language is removed', !/JUGADORES CONECTADOS|PLAYERS CONNECTED|INVESTIGACIÓN ACTIVA|RESEARCH ACTIVE/.test(district))
@@ -26,9 +27,14 @@ check('Gaming uses honest route count instead of fake percentage', gaming.includ
 check('Gaming replaces unverified hardware placeholders', gaming.includes('Prepará tu perfil para encontrar grupo') && !gaming.includes('Especificaciones en verificación'))
 check('Gaming localizes translated internal links', gaming.includes("localizePath('/gaming/guides')") && gaming.includes("localizePath('/community')"))
 
+check('Science primary content precedes external network and learning modules', science.indexOf('data-science-primary-content') < science.indexOf('xk-argenciencia-link') && science.indexOf('data-science-primary-content') < science.indexOf('xk-learning-routes'))
+check('Science gives each learning card a concrete destination', science.includes("title: 'Explorar con chicos'") && science.includes("to: '/news?category=science'") && science.includes("to: '#tech-stack'") && science.includes("to: '#lab-assistant'") && science.includes("to: '/news?category=tech'"))
+check('Science localizes translated assistant and home links', science.includes('localizePath(assistant.link)') && science.includes("localizePath('/')"))
+
 check('Browser tests cover simplified Home access', browserTest.includes('tres accesos principales') && browserTest.includes('toHaveCount(3)'))
 check('Browser tests cover streamlined Gaming hierarchy', browserTest.includes('una sola navegación antes del contenido') && browserTest.includes('Especificaciones en verificación'))
-check('Browser tests cover localized Science routes', browserTest.includes('/en/science#lab-assistant') && browserTest.includes('/en/creacion-web'))
+check('Browser tests cover content-first Science order', browserTest.includes('radar verificable antes de módulos secundarios') && browserTest.includes('compareDocumentPosition'))
+check('Browser tests cover distinct Science learning destinations', browserTest.includes('destino distinto y concreto') && browserTest.includes("'#tech-stack'"))
 
 let failed = 0
 for (const [name, ok] of checks) {
