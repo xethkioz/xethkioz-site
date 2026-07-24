@@ -6,7 +6,7 @@ const templatePath = path.join(root, 'index.html')
 const outputDir = path.join(root, 'seo-shells')
 const siteUrl = 'https://www.xethkioz.com.ar'
 
-const routes = [
+const spanishRoutes = [
   {
     file: 'gaming.html',
     path: '/gaming',
@@ -51,6 +51,7 @@ const routes = [
     keywords: 'noticias gaming, tecnología, inteligencia artificial, ciencia, esports, XETHKIOZ',
     image: '/assets/xethkioz-cover.png',
     imageAlt: 'Centro de noticias XETHKIOZ',
+    localized: false,
   },
   {
     file: 'community.html',
@@ -108,6 +109,132 @@ const routes = [
   },
 ]
 
+const englishRoutes = [
+  {
+    file: 'en-home.html',
+    path: '/en',
+    title: 'XETHKIOZ | Gaming, Tech, Science and Digital Culture',
+    description: 'An independent portal network for gaming, technology, science, artificial intelligence, community and digital culture.',
+    keywords: 'gaming, technology, science, artificial intelligence, streaming, digital culture, XETHKIOZ',
+    image: '/og-image.svg',
+    imageAlt: 'XETHKIOZ global portal network',
+  },
+  {
+    file: 'en-gaming.html',
+    path: '/en/gaming',
+    title: 'Nexus Gaming | News, guides and community | XETHKIOZ',
+    description: 'Releases, MMORPGs, esports, guides, builds and Asian gaming signals inside the XETHKIOZ Gaming portal.',
+    keywords: 'gaming, videogames, MMORPG, esports, guides, builds, Asian gaming, XETHKIOZ',
+    image: '/assets/portal-games-world-v3.webp',
+    imageAlt: 'XETHKIOZ Gaming portal',
+  },
+  {
+    file: 'en-gaming-guides.html',
+    path: '/en/gaming/guides',
+    title: 'Video Game Guides and Builds | XETHKIOZ',
+    description: 'Guides, settings, builds and progression routes for games selected by the XETHKIOZ community.',
+    keywords: 'video game guides, builds, MMORPG, RPG, gaming, XETHKIOZ',
+    image: '/assets/portal-games-world-v3.webp',
+    imageAlt: 'XETHKIOZ gaming guides and builds',
+  },
+  {
+    file: 'en-science.html',
+    path: '/en/science',
+    title: 'Science Lab | Science, AI and Technology | XETHKIOZ',
+    description: 'Science, artificial intelligence, hardware, software and projects explained clearly with verifiable sources.',
+    keywords: 'science, artificial intelligence, technology, hardware, software, projects, XETHKIOZ',
+    image: '/assets/portal-science-world-v3.webp',
+    imageAlt: 'XETHKIOZ Science Lab portal',
+  },
+  {
+    file: 'en-fun.html',
+    path: '/en/fun',
+    title: 'Chaos Alley | Memes, Clips and Gaming Humor | XETHKIOZ',
+    description: 'Memes, videos, clips, unusual discoveries and community creations in the XETHKIOZ entertainment portal.',
+    keywords: 'memes, gaming humor, clips, videos, community, digital culture, XETHKIOZ',
+    image: '/assets/portal-fun-world-v3.webp',
+    imageAlt: 'XETHKIOZ Chaos Alley portal',
+  },
+  {
+    file: 'en-creacion-web.html',
+    path: '/en/creacion-web',
+    title: 'Professional Web Design and Development | XETHKIOZ',
+    description: 'Modern websites, landing pages and online stores built with identity, performance, security and practical administration.',
+    keywords: 'web design, web development, landing page, online store, professional website, XETHKIOZ',
+    image: '/web-services/creacion-web-og.png',
+    imageAlt: 'A professional website created by XETHKIOZ',
+  },
+  {
+    file: 'en-community.html',
+    path: '/en/community',
+    title: 'XETHKIOZ Community | Profiles, Chat and Missions',
+    description: 'Discover profiles, activity, missions, chat and spaces connected to Nexus City in the XETHKIOZ community.',
+    keywords: 'gaming community, profiles, chat, missions, Nexus City, XETHKIOZ',
+    image: '/assets/xethkioz-cover.png',
+    imageAlt: 'XETHKIOZ community',
+  },
+  {
+    file: 'en-about.html',
+    path: '/en/about',
+    title: 'About XETHKIOZ | Gaming, Technology and Portal Network',
+    description: 'Discover the history, mission and identity of XETHKIOZ, an independent Argentine gaming and technology project.',
+    keywords: 'about XETHKIOZ, gaming, technology, Argentine project, digital culture',
+    image: '/og-image.svg',
+    imageAlt: 'XETHKIOZ identity',
+  },
+  {
+    file: 'en-contact.html',
+    path: '/en/contact',
+    title: 'Contact | XETHKIOZ',
+    description: 'Official channels to contact XETHKIOZ about stories, collaborations, proposals, support and web creation.',
+    keywords: 'contact XETHKIOZ, collaborations, support, web creation',
+    image: '/og-image.svg',
+    imageAlt: 'Official XETHKIOZ contact channels',
+  },
+  {
+    file: 'en-support.html',
+    path: '/en/support',
+    title: 'Support the Project | XETHKIOZ',
+    description: 'Official ways to support XETHKIOZ content, infrastructure and community projects.',
+    keywords: 'support XETHKIOZ, donations, community, independent project',
+    image: '/og-image.svg',
+    imageAlt: 'Support the XETHKIOZ project',
+  },
+  {
+    file: 'en-privacy.html',
+    path: '/en/privacy',
+    title: 'Privacy Policy | XETHKIOZ',
+    description: 'Information about accounts, technical logs, forms, external payments, rights and data protection at XETHKIOZ.',
+    keywords: 'privacy, data protection, accounts, XETHKIOZ',
+    image: '/og-image.svg',
+    imageAlt: 'XETHKIOZ privacy policy',
+  },
+  {
+    file: 'en-editorial-policy.html',
+    path: '/en/editorial-policy',
+    title: 'Editorial Policy | XETHKIOZ',
+    description: 'Standards for sources, human review, artificial intelligence, corrections, humor, sponsors and editorial transparency.',
+    keywords: 'editorial policy, sources, artificial intelligence, corrections, transparency, XETHKIOZ',
+    image: '/og-image.svg',
+    imageAlt: 'XETHKIOZ editorial policy',
+  },
+]
+
+const localizedPairs = new Map([
+  ['/', '/en'],
+  ['/gaming', '/en/gaming'],
+  ['/gaming/guides', '/en/gaming/guides'],
+  ['/science', '/en/science'],
+  ['/fun', '/en/fun'],
+  ['/creacion-web', '/en/creacion-web'],
+  ['/community', '/en/community'],
+  ['/about', '/en/about'],
+  ['/contact', '/en/contact'],
+  ['/support', '/en/support'],
+  ['/privacy', '/en/privacy'],
+  ['/editorial-policy', '/en/editorial-policy'],
+])
+
 function escapeHtml(value) {
   return value
     .replaceAll('&', '&amp;')
@@ -126,19 +253,35 @@ function replaceTag(html, pattern, replacement, label) {
   return html.replace(pattern, replacement)
 }
 
-function renderShell(template, route) {
+function localizedAlternates(routePath) {
+  if (localizedPairs.has(routePath)) return { es: routePath, en: localizedPairs.get(routePath) }
+  for (const [spanishPath, englishPath] of localizedPairs.entries()) {
+    if (englishPath === routePath) return { es: spanishPath, en: englishPath }
+  }
+  return null
+}
+
+function renderShell(template, route, language) {
   const canonical = `${siteUrl}${route.path}`
   const image = absoluteUrl(route.image)
+  const locale = language === 'en' ? 'en_US' : 'es_AR'
+  const alternateLocale = language === 'en' ? 'es_AR' : 'en_US'
+  const alternates = route.localized === false ? null : localizedAlternates(route.path)
+  const alternateTags = alternates
+    ? `<link data-rh="true" rel="canonical" href="${escapeHtml(canonical)}" />\n    <link rel="alternate" hreflang="es-AR" href="${siteUrl}${alternates.es}" />\n    <link rel="alternate" hreflang="en" href="${siteUrl}${alternates.en}" />\n    <link rel="alternate" hreflang="x-default" href="${siteUrl}${alternates.es}" />`
+    : `<link data-rh="true" rel="canonical" href="${escapeHtml(canonical)}" />`
   let html = template
 
+  html = replaceTag(html, /<html lang="[^"]*">/, `<html lang="${language === 'en' ? 'en' : 'es-AR'}">`, 'document language')
   html = replaceTag(html, /<meta data-rh="true" name="description" content="[^"]*" \/>/, `<meta data-rh="true" name="description" content="${escapeHtml(route.description)}" />`, 'description')
   html = replaceTag(html, /<meta name="keywords" content="[^"]*" \/>/, `<meta name="keywords" content="${escapeHtml(route.keywords)}" />`, 'keywords')
-  html = replaceTag(html, /<link data-rh="true" rel="canonical" href="[^"]*" \/>/, `<link data-rh="true" rel="canonical" href="${escapeHtml(canonical)}" />`, 'canonical URL')
+  html = replaceTag(html, /<link data-rh="true" rel="canonical" href="[^"]*" \/>/, alternateTags, 'canonical URL')
   html = replaceTag(html, /<meta data-rh="true" property="og:title" content="[^"]*" \/>/, `<meta data-rh="true" property="og:title" content="${escapeHtml(route.title)}" />`, 'Open Graph title')
   html = replaceTag(html, /<meta data-rh="true" property="og:description" content="[^"]*" \/>/, `<meta data-rh="true" property="og:description" content="${escapeHtml(route.description)}" />`, 'Open Graph description')
   html = replaceTag(html, /<meta data-rh="true" property="og:url" content="[^"]*" \/>/, `<meta data-rh="true" property="og:url" content="${escapeHtml(canonical)}" />`, 'Open Graph URL')
   html = replaceTag(html, /<meta data-rh="true" property="og:image" content="[^"]*" \/>/, `<meta data-rh="true" property="og:image" content="${escapeHtml(image)}" />`, 'Open Graph image')
   html = replaceTag(html, /<meta property="og:image:alt" content="[^"]*" \/>/, `<meta property="og:image:alt" content="${escapeHtml(route.imageAlt)}" />`, 'Open Graph image alt')
+  html = replaceTag(html, /<meta data-rh="true" property="og:locale" content="[^"]*" \/>/, `<meta data-rh="true" property="og:locale" content="${locale}" />${alternates ? `\n    <meta property="og:locale:alternate" content="${alternateLocale}" />` : ''}`, 'Open Graph locale')
   html = replaceTag(html, /<meta data-rh="true" name="twitter:title" content="[^"]*" \/>/, `<meta data-rh="true" name="twitter:title" content="${escapeHtml(route.title)}" />`, 'Twitter title')
   html = replaceTag(html, /<meta data-rh="true" name="twitter:description" content="[^"]*" \/>/, `<meta data-rh="true" name="twitter:description" content="${escapeHtml(route.description)}" />`, 'Twitter description')
   html = replaceTag(html, /<meta data-rh="true" name="twitter:image" content="[^"]*" \/>/, `<meta data-rh="true" name="twitter:image" content="${escapeHtml(image)}" />`, 'Twitter image')
@@ -153,14 +296,14 @@ const template = fs.readFileSync(templatePath, 'utf8')
 fs.rmSync(outputDir, { recursive: true, force: true })
 fs.mkdirSync(outputDir, { recursive: true })
 
-for (const route of routes) {
-  fs.writeFileSync(path.join(outputDir, route.file), renderShell(template, route), 'utf8')
-}
+for (const route of spanishRoutes) fs.writeFileSync(path.join(outputDir, route.file), renderShell(template, route, 'es'), 'utf8')
+for (const route of englishRoutes) fs.writeFileSync(path.join(outputDir, route.file), renderShell(template, route, 'en'), 'utf8')
 
+const allRoutes = [...spanishRoutes, ...englishRoutes]
 fs.writeFileSync(
   path.join(outputDir, 'routes.json'),
-  `${JSON.stringify(routes.map(({ file, path: routePath }) => ({ file, path: routePath })), null, 2)}\n`,
+  `${JSON.stringify(allRoutes.map(({ file, path: routePath }) => ({ file, path: routePath })), null, 2)}\n`,
   'utf8',
 )
 
-console.log(`Generated ${routes.length} static SEO shells in seo-shells/.`)
+console.log(`Generated ${allRoutes.length} localized static SEO shells in seo-shells/.`)
