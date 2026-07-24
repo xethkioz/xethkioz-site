@@ -4,7 +4,7 @@ import path from 'node:path'
 const root = process.cwd()
 const read = (relative) => fs.readFileSync(path.join(root, relative), 'utf8')
 const checks = []
-const check = (name, ok) => checks.push([name, Boolean(ok)])
+const check = (name, ok, detail = '') => checks.push([name, Boolean(ok), detail])
 
 const routes = read('src/lib/localizedRoutes.ts')
 const langContext = read('src/lib/LangContext.tsx')
@@ -14,7 +14,8 @@ const footer = read('src/components/Footer.tsx')
 const seo = read('src/components/SEO.tsx')
 const generator = read('scripts/generate-seo-shells.mjs')
 const sitemap = read('api/sitemap.ts')
-const vercel = read('vercel.json')
+const vercelSource = read('vercel.json')
+const vercelConfig = JSON.parse(vercelSource)
 const index = read('index.html')
 const webCreation = read('creacion-web.html')
 const browserTest = read('tests/e2e/internationalization.spec.ts')
@@ -24,6 +25,8 @@ const localizedPaths = [
   '/community', '/about', '/contact', '/support', '/privacy', '/editorial-policy',
 ]
 const englishPaths = localizedPaths.map((route) => route === '/' ? '/en' : `/en${route}`)
+const rewriteSources = new Set((vercelConfig.rewrites ?? []).map((rewrite) => rewrite?.source).filter(Boolean))
+const missingEnglishRewrites = englishPaths.filter((route) => !rewriteSources.has(route))
 
 check('localized route contract includes every core page', localizedPaths.every((route) => routes.includes(`'${route}'`)))
 check('news remains outside the localized route contract', !/LOCALIZED_PUBLIC_PATHS[\s\S]*['"]\/news['"]/.test(routes))
@@ -41,15 +44,15 @@ check('shell generator creates English documents', generator.includes("file: 'en
 check('shell generator emits language and hreflang metadata', generator.includes('<html lang=') && generator.includes('hreflang="es-AR"') && generator.includes('hreflang="x-default"'))
 check('shared root template avoids duplicate hreflang tags', !index.includes('hreflang='))
 check('Spanish web creation shell links to English counterpart', webCreation.includes('hreflang="en"') && webCreation.includes('/en/creacion-web'))
-check('Vercel maps every English path to a dedicated shell', englishPaths.every((route) => vercel.includes(`"source": "${route}"`)))
+check('Vercel maps every English path to a dedicated shell', missingEnglishRewrites.length === 0, missingEnglishRewrites.join(', '))
 check('sitemap declares XHTML alternate namespace', sitemap.includes('xmlns:xhtml="http://www.w3.org/1999/xhtml"'))
 check('sitemap contains reciprocal English and Spanish URLs', sitemap.includes("{ es: '/gaming', en: '/en/gaming'") && sitemap.includes('hreflang="x-default"'))
 check('sitemap keeps articles Spanish-only', sitemap.includes('${SITE_URL}/news/${escapeXml(article.slug)}') && !sitemap.includes('/en/news/${escapeXml(article.slug)}'))
 check('browser tests cover canonicals, language switch and untranslated news', browserTest.includes('canonical y alternates') && browserTest.includes('Noticias no publica una traducción inglesa inexistente'))
 
 let failed = 0
-for (const [name, ok] of checks) {
-  console.log(`${ok ? 'PASS' : 'FAIL'} ${name}`)
+for (const [name, ok, detail] of checks) {
+  console.log(`${ok ? 'PASS' : 'FAIL'} ${name}${!ok && detail ? `: ${detail}` : ''}`)
   if (!ok) failed += 1
 }
 
