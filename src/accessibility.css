@@ -1,0 +1,14 @@
+/* WCAG 2 AA contrast corrections verified by the browser quality suite. */
+.xk-rb-home .xk-rb-signal,
+.xk-rb-home .xk-rb-footer {
+  color: rgba(255, 255, 255, 0.56);
+}
+
+#password-policy li.text-gray-500,
+a[href='/profile'].text-gray-500 {
+  color: #9ca3af;
+}
+
+a[href='/confirm-email'].text-neon {
+  color: #fb923c;
+}
