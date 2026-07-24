@@ -28,7 +28,7 @@ test.describe('orden y navegación de secciones', () => {
     await expect(page.getByText('98.7%', { exact: true })).toHaveCount(0)
     await expect(page.getByRole('region', { name: /Choose what to do next in Gaming/i })).toHaveCount(0)
 
-    await navigation.getByRole('button', { name: 'Live', exact: true }).click()
+    await navigation.getByRole('button', { name: /Live$/ }).click()
     await expect(page).toHaveURL(/\/en\/gaming\?section=live$/)
     await expect(page.getByRole('heading', { name: 'Streams and videos in one place' })).toBeVisible()
   })
