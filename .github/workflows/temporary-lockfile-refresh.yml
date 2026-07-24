@@ -1,0 +1,35 @@
+name: Temporary Lockfile Refresh
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  refresh-lockfile:
+    if: github.head_ref == 'agent/browser-ci-159' || github.ref_name == 'agent/browser-ci-159'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Refresh package-lock.json
+        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+
+      - name: Upload refreshed lockfile
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-ci-package-lock
+          path: package-lock.json
+          retention-days: 1
