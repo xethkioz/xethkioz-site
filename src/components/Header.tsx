@@ -66,12 +66,12 @@ const labels = {
 } as const
 
 export default function Header() {
-  const { lang, setLang } = useLang()
+  const { lang, setLang, localizePath } = useLang()
   const { account } = useHud()
   const { triggerGreenPortal } = useWisp()
   const navigate = useNavigate()
-  const nav = navigation[lang]
-  const rail = launcher[lang]
+  const nav = navigation[lang].map((item) => ({ ...item, to: localizePath(item.to) }))
+  const rail = launcher[lang].map((item) => ({ ...item, to: localizePath(item.to) }))
   const t = labels[lang]
 
   const switchLang = () => setLang(lang === 'es' ? 'en' : 'es')
@@ -98,7 +98,7 @@ export default function Header() {
 
       <header className="xk-aaa-header pointer-events-none sticky top-0 z-[65] px-3 py-3 md:px-8 md:py-4" aria-label={t.header}>
         <div className="pointer-events-auto mx-auto grid max-w-[1600px] grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-[2rem] border border-white/10 bg-black/70 px-4 py-3 shadow-[0_0_28px_rgba(0,0,0,.35)] backdrop-blur-xl sm:gap-3 lg:grid-cols-[auto_1fr_auto] lg:gap-4 lg:bg-black/28 lg:px-6">
-          <Link to="/" className="xk-broken-logo min-w-0 justify-self-start truncate font-black uppercase leading-none tracking-[0.08em] text-xl min-[360px]:text-2xl sm:text-3xl md:text-4xl" aria-label={t.brand}>
+          <Link to={localizePath('/')} className="xk-broken-logo min-w-0 justify-self-start truncate font-black uppercase leading-none tracking-[0.08em] text-xl min-[360px]:text-2xl sm:text-3xl md:text-4xl" aria-label={t.brand}>
             XETHKIOZ
           </Link>
 
