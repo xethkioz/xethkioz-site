@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import { useLang } from '../lib/LangContext'
-import { UniverseTransitRail } from './universe/UniverseTransitRail'
 
 export type NexusDistrictTone = 'home' | 'gaming' | 'fun' | 'science' | 'green'
 type Lang = 'es' | 'en'
@@ -9,87 +8,82 @@ type DistrictLink = { code: string; glyph: string; title: string; detail: string
 const districtLinks: Record<Lang, Record<NexusDistrictTone, DistrictLink[]>> = {
   es: {
     home: [
-      { code: '遊戯区', glyph: '01', title: 'Gaming District', detail: 'Misiones · builds · directos', to: '/gaming' },
-      { code: '未来区', glyph: '02', title: 'Future Lab', detail: 'Ciencia · IA · tecnología', to: '/science' },
-      { code: '笑街', glyph: '03', title: 'Chaos Alley', detail: 'Memes · clips · rarezas', to: '/fun' },
-      { code: '禁制区', glyph: '13', title: 'Green Node', detail: 'Archivos · señales · anomalías', to: '/green-node' },
+      { code: '01', glyph: 'G', title: 'Gaming', detail: 'Noticias, guías y directos', to: '/gaming' },
+      { code: '02', glyph: 'S', title: 'Science & Tech', detail: 'Ciencia, IA y tecnología', to: '/science' },
+      { code: '03', glyph: 'F', title: 'Diversión', detail: 'Memes, clips y rarezas', to: '/fun' },
     ],
     gaming: [
-      { code: '接続', glyph: 'LIVE', title: 'Arena Online', detail: 'Directos y transmisiones', to: '/gaming' },
-      { code: '任務', glyph: 'XP', title: 'Mission Board', detail: 'Noticias, guías y builds', to: '/news?category=gaming' },
-      { code: '部隊', glyph: 'CO-OP', title: 'Squad Station', detail: 'Comunidad y compañeros', to: '/community' },
+      { code: 'LIVE', glyph: '●', title: 'Directos y videos', detail: 'Kick, YouTube y estado del canal', to: '/gaming?section=live' },
+      { code: 'RADAR', glyph: '⌁', title: 'Noticias Gaming', detail: 'Lanzamientos y señales verificadas', to: '/news?category=gaming' },
+      { code: 'PARTY', glyph: '◆', title: 'Comunidad', detail: 'Grupos, perfiles y compañeros', to: '/community' },
     ],
     fun: [
-      { code: '笑い', glyph: 'LOL', title: 'Meme Arcade', detail: 'Humor para robar y compartir', to: '/fun#meme-wall' },
-      { code: '放送', glyph: 'CLIP', title: 'Viral Broadcast', detail: 'El clip de la semana', to: '/fun#weekly-clip' },
-      { code: '混沌', glyph: '?!', title: 'Chaos Club', detail: 'Entrá al desastre colectivo', to: '/community' },
+      { code: 'MEME', glyph: '☺', title: 'Meme Arcade', detail: 'Humor y publicaciones de la comunidad', to: '/fun#meme-wall' },
+      { code: 'CLIP', glyph: '▶', title: 'Clip semanal', detail: 'Videos y momentos destacados', to: '/fun#weekly-clip' },
+      { code: 'CLUB', glyph: '?!', title: 'Comunidad', detail: 'Entrá, participá y compartí', to: '/community' },
     ],
     science: [
-      { code: '未来', glyph: 'AI', title: 'Future Lab', detail: 'IA aplicada y herramientas', to: '/science#lab-assistant' },
-      { code: '解析', glyph: 'DATA', title: 'Signal Analysis', detail: 'Noticias con fuentes', to: '/news?category=science' },
-      { code: '創造', glyph: 'WEB', title: 'Creation Studio', detail: 'Ideas convertidas en sistemas', to: '/creacion-web' },
+      { code: 'DATA', glyph: '⌁', title: 'Noticias con fuentes', detail: 'Ciencia y tecnología verificadas', to: '/news?category=science' },
+      { code: 'TOOLS', glyph: 'AI', title: 'Herramientas y respuestas', detail: 'IA práctica y recursos locales', to: '/science#lab-assistant' },
+      { code: 'BUILD', glyph: 'WEB', title: 'Creación Web', detail: 'Ideas convertidas en proyectos', to: '/creacion-web' },
     ],
     green: [
-      { code: '禁制', glyph: '13', title: 'Restricted Archive', detail: 'Expedientes clasificados', to: '/green-node?view=dossiers#archive' },
-      { code: '異常', glyph: '>_', title: 'Signal Terminal', detail: 'Intervenir la transmisión', to: '/green-node?view=terminal#terminal' },
-      { code: '検証', glyph: 'EYE', title: 'Evidence Room', detail: 'Fuente, hipótesis o ficción', to: '/green-node?view=signals#evidence' },
+      { code: 'ARCHIVO', glyph: '13', title: 'Expedientes', detail: 'Casos y archivos clasificados', to: '/green-node?view=dossiers#archive' },
+      { code: 'SEÑAL', glyph: '>_', title: 'Terminal', detail: 'Intervenir la transmisión', to: '/green-node?view=terminal#terminal' },
+      { code: 'PRUEBA', glyph: 'EYE', title: 'Evidencia', detail: 'Separar fuente, hipótesis y ficción', to: '/green-node?view=signals#evidence' },
     ],
   },
   en: {
     home: [
-      { code: '遊戯区', glyph: '01', title: 'Gaming District', detail: 'Missions · builds · streams', to: '/gaming' },
-      { code: '未来区', glyph: '02', title: 'Future Lab', detail: 'Science · AI · technology', to: '/science' },
-      { code: '笑街', glyph: '03', title: 'Chaos Alley', detail: 'Memes · clips · oddities', to: '/fun' },
-      { code: '禁制区', glyph: '13', title: 'Green Node', detail: 'Files · signals · anomalies', to: '/green-node' },
+      { code: '01', glyph: 'G', title: 'Gaming', detail: 'News, guides and streams', to: '/gaming' },
+      { code: '02', glyph: 'S', title: 'Science & Tech', detail: 'Science, AI and technology', to: '/science' },
+      { code: '03', glyph: 'F', title: 'Fun', detail: 'Memes, clips and oddities', to: '/fun' },
     ],
     gaming: [
-      { code: '接続', glyph: 'LIVE', title: 'Online Arena', detail: 'Live streams and broadcasts', to: '/gaming' },
-      { code: '任務', glyph: 'XP', title: 'Mission Board', detail: 'News, guides and builds', to: '/news?category=gaming' },
-      { code: '部隊', glyph: 'CO-OP', title: 'Squad Station', detail: 'Community and teammates', to: '/community' },
+      { code: 'LIVE', glyph: '●', title: 'Streams and videos', detail: 'Kick, YouTube and channel status', to: '/gaming?section=live' },
+      { code: 'RADAR', glyph: '⌁', title: 'Gaming news', detail: 'Releases and verified signals', to: '/news?category=gaming' },
+      { code: 'PARTY', glyph: '◆', title: 'Community', detail: 'Groups, profiles and teammates', to: '/community' },
     ],
     fun: [
-      { code: '笑い', glyph: 'LOL', title: 'Meme Arcade', detail: 'Humor to steal and share', to: '/fun#meme-wall' },
-      { code: '放送', glyph: 'CLIP', title: 'Viral Broadcast', detail: 'Clip of the week', to: '/fun#weekly-clip' },
-      { code: '混沌', glyph: '?!', title: 'Chaos Club', detail: 'Join the collective disaster', to: '/community' },
+      { code: 'MEME', glyph: '☺', title: 'Meme Arcade', detail: 'Humor and community posts', to: '/fun#meme-wall' },
+      { code: 'CLIP', glyph: '▶', title: 'Weekly clip', detail: 'Videos and featured moments', to: '/fun#weekly-clip' },
+      { code: 'CLUB', glyph: '?!', title: 'Community', detail: 'Join, participate and share', to: '/community' },
     ],
     science: [
-      { code: '未来', glyph: 'AI', title: 'Future Lab', detail: 'Applied AI and tools', to: '/science#lab-assistant' },
-      { code: '解析', glyph: 'DATA', title: 'Signal Analysis', detail: 'News with visible sources', to: '/news?category=science' },
-      { code: '創造', glyph: 'WEB', title: 'Creation Studio', detail: 'Ideas transformed into systems', to: '/creacion-web' },
+      { code: 'DATA', glyph: '⌁', title: 'Sourced news', detail: 'Verified science and technology', to: '/news?category=science' },
+      { code: 'TOOLS', glyph: 'AI', title: 'Tools and answers', detail: 'Practical AI and local resources', to: '/science#lab-assistant' },
+      { code: 'BUILD', glyph: 'WEB', title: 'Web Creation', detail: 'Ideas transformed into projects', to: '/creacion-web' },
     ],
     green: [
-      { code: '禁制', glyph: '13', title: 'Restricted Archive', detail: 'Classified case files', to: '/green-node?view=dossiers#archive' },
-      { code: '異常', glyph: '>_', title: 'Signal Terminal', detail: 'Intervene in the transmission', to: '/green-node?view=terminal#terminal' },
-      { code: '検証', glyph: 'EYE', title: 'Evidence Room', detail: 'Source, hypothesis or fiction', to: '/green-node?view=signals#evidence' },
+      { code: 'FILES', glyph: '13', title: 'Case files', detail: 'Cases and classified archives', to: '/green-node?view=dossiers#archive' },
+      { code: 'SIGNAL', glyph: '>_', title: 'Terminal', detail: 'Intervene in the transmission', to: '/green-node?view=terminal#terminal' },
+      { code: 'PROOF', glyph: 'EYE', title: 'Evidence', detail: 'Separate source, hypothesis and fiction', to: '/green-node?view=signals#evidence' },
     ],
   },
 }
 
 const headings: Record<Lang, Record<NexusDistrictTone, { eyebrow: string; title: string; status: string }>> = {
   es: {
-    home: { eyebrow: 'XETHKIOZ // NEXUS CITY', title: 'Elegí un distrito. Entrá a la Red de Portales.', status: 'RED ACTIVA' },
-    gaming: { eyebrow: '遊戯区 // GAMING DISTRICT', title: 'La ciudad nunca deja de jugar.', status: 'JUGADORES CONECTADOS' },
-    fun: { eyebrow: '笑街 // CHAOS ALLEY', title: 'Una avenida donde todo puede ser meme.', status: 'SOBRECARGA DE RISAS' },
-    science: { eyebrow: '未来研究区 // FUTURE LAB', title: 'El futuro se investiga con las luces encendidas.', status: 'INVESTIGACIÓN ACTIVA' },
-    green: { eyebrow: '禁制記録 // RESTRICTED SECTOR', title: 'La señal prohibida vive debajo de la ciudad.', status: 'ANOMALÍA DETECTADA' },
+    home: { eyebrow: 'ACCESOS RÁPIDOS', title: 'Elegí qué parte de XETHKIOZ querés explorar.', status: '3 PORTALES' },
+    gaming: { eyebrow: 'SIGUIENTE MISIÓN', title: 'Elegí qué hacer ahora en Gaming.', status: '3 RUTAS' },
+    fun: { eyebrow: 'ENTRADA DIRECTA', title: 'Encontrá memes, clips o comunidad sin rodeos.', status: '3 RUTAS' },
+    science: { eyebrow: 'PROFUNDIZAR', title: 'Fuentes, herramientas y proyectos en un solo lugar.', status: '3 RUTAS' },
+    green: { eyebrow: 'ARCHIVO NEGRO', title: 'Elegí cómo investigar la señal.', status: '3 ACCESOS' },
   },
   en: {
-    home: { eyebrow: 'XETHKIOZ // NEXUS CITY', title: 'Choose a district. Enter the Portal Network.', status: 'NETWORK ONLINE' },
-    gaming: { eyebrow: '遊戯区 // GAMING DISTRICT', title: 'The city never stops playing.', status: 'PLAYERS CONNECTED' },
-    fun: { eyebrow: '笑街 // CHAOS ALLEY', title: 'An avenue where anything can become a meme.', status: 'LAUGHTER OVERLOAD' },
-    science: { eyebrow: '未来研究区 // FUTURE LAB', title: 'The future is researched with the lights on.', status: 'RESEARCH ACTIVE' },
-    green: { eyebrow: '禁制記録 // RESTRICTED SECTOR', title: 'The forbidden signal lives beneath the city.', status: 'ANOMALY DETECTED' },
+    home: { eyebrow: 'QUICK ACCESS', title: 'Choose which part of XETHKIOZ to explore.', status: '3 PORTALS' },
+    gaming: { eyebrow: 'NEXT MISSION', title: 'Choose what to do next in Gaming.', status: '3 ROUTES' },
+    fun: { eyebrow: 'DIRECT ACCESS', title: 'Find memes, clips or community without detours.', status: '3 ROUTES' },
+    science: { eyebrow: 'GO DEEPER', title: 'Sources, tools and projects in one place.', status: '3 ROUTES' },
+    green: { eyebrow: 'BLACK ARCHIVE', title: 'Choose how to investigate the signal.', status: '3 ACCESS POINTS' },
   },
 }
 
 export function NexusDistrict({ tone, compact = false }: { tone: NexusDistrictTone; compact?: boolean }) {
-  const { lang } = useLang()
+  const { lang, localizePath } = useLang()
   const heading = headings[lang][tone]
   const links = districtLinks[lang][tone]
   const accessLabel = lang === 'es' ? `${heading.title} — accesos` : `${heading.title} — access points`
-  const transit = lang === 'es'
-    ? '次の駅 · PRÓXIMO DISTRITO · SEÑAL ACTIVA · 次の駅 · PRÓXIMO DISTRITO · SEÑAL ACTIVA'
-    : '次の駅 · NEXT DISTRICT · SIGNAL ACTIVE · 次の駅 · NEXT DISTRICT · SIGNAL ACTIVE'
 
   return (
     <section className={`xk-nexus-district is-${tone}${compact ? ' is-compact' : ''}`} aria-labelledby={`nexus-${tone}-title`}>
@@ -100,13 +94,11 @@ export function NexusDistrict({ tone, compact = false }: { tone: NexusDistrictTo
       </header>
       <nav className="xk-nexus-signs" aria-label={accessLabel}>
         {links.map((item, index) => (
-          <Link key={`${item.code}-${item.title}`} to={item.to} className={`xk-nexus-sign sign-${index + 1}`}>
-            <small>{item.code}</small><i aria-hidden="true">{item.glyph}</i><strong>{item.title}</strong><span>{item.detail}</span><b aria-hidden="true">↗</b>
+          <Link key={`${item.code}-${item.title}`} to={localizePath(item.to)} className={`xk-nexus-sign sign-${index + 1}`}>
+            <small>{item.code}</small><i aria-hidden="true">{item.glyph}</i><strong>{item.title}</strong><span>{item.detail}</span><b aria-hidden="true">→</b>
           </Link>
         ))}
       </nav>
-      <div className="xk-nexus-transit" aria-hidden="true"><span>NEXUS LINE 7</span><i /><b>{transit}</b></div>
-      {tone !== 'home' ? <UniverseTransitRail compact /> : null}
     </section>
   )
 }
