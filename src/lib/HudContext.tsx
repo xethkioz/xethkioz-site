@@ -22,6 +22,7 @@ interface HudContextType {
   toggleSound: () => void
   setVolume: (value: number) => void
   toggleAccount: () => void
+  signOutAccount: () => Promise<void>
   setAccountName: (value: string) => void
   refreshAccount: () => Promise<void>
 }
@@ -90,12 +91,10 @@ const readStoredVolume = (): number => {
 
 const readStoredAccount = (): HudAccountState => {
   if (typeof window === 'undefined') return guestAccount
-  const status = safeStorage.get(STORAGE_ACCOUNT_STATUS) === 'connected' ? 'connected' : 'guest'
+  const hadConnectedCache = safeStorage.get(STORAGE_ACCOUNT_STATUS) === 'connected'
   const name = safeStorage.get(STORAGE_ACCOUNT_NAME)?.trim() || 'XETHKIOZ'
-  const email = safeStorage.get(STORAGE_ACCOUNT_EMAIL)?.trim() || undefined
-  const userId = safeStorage.get(STORAGE_ACCOUNT_USER_ID)?.trim() || undefined
-  return status === 'connected'
-    ? { status: 'connected', name, email, userId, source: 'stored', checked: false }
+  return hadConnectedCache
+    ? { status: 'loading', name, source: 'stored', checked: false }
     : { ...guestAccount, checked: false }
 }
 
@@ -107,12 +106,13 @@ function accountFromSupabaseUser(user: { id?: string; email?: string; user_metad
 }
 
 function writeStoredAccount(account: HudAccountState) {
-  safeStorage.set(STORAGE_ACCOUNT_STATUS, account.status === 'connected' ? 'connected' : 'guest')
+  const verified = account.status === 'connected' && account.source === 'supabase' && account.checked === true
+  safeStorage.set(STORAGE_ACCOUNT_STATUS, verified ? 'connected' : 'guest')
   safeStorage.set(STORAGE_ACCOUNT_NAME, account.name)
-  if (account.email) safeStorage.set(STORAGE_ACCOUNT_EMAIL, account.email)
-  if (!account.email || account.status !== 'connected') safeStorage.remove(STORAGE_ACCOUNT_EMAIL)
-  if (account.userId) safeStorage.set(STORAGE_ACCOUNT_USER_ID, account.userId)
-  if (!account.userId || account.status !== 'connected') safeStorage.remove(STORAGE_ACCOUNT_USER_ID)
+  if (verified && account.email) safeStorage.set(STORAGE_ACCOUNT_EMAIL, account.email)
+  else safeStorage.remove(STORAGE_ACCOUNT_EMAIL)
+  if (verified && account.userId) safeStorage.set(STORAGE_ACCOUNT_USER_ID, account.userId)
+  else safeStorage.remove(STORAGE_ACCOUNT_USER_ID)
 }
 
 export function HudProvider({ children }: { children: ReactNode }) {
@@ -127,19 +127,27 @@ export function HudProvider({ children }: { children: ReactNode }) {
       return
     }
 
-    setAccount((current) => ({ ...current, status: current.status === 'connected' ? 'connected' : 'loading', checked: false, issue: undefined }))
+    setAccount((current) => current.source === 'supabase' && current.status === 'connected'
+      ? { ...current, checked: false, issue: undefined }
+      : { status: 'loading', name: current.name, source: current.source, checked: false, issue: undefined })
+
     const { data, error } = await module.supabase.auth.getSession()
     if (error) {
-      setAccount((current) => current.status === 'connected'
+      setAccount((current) => current.source === 'supabase' && current.status === 'connected'
         ? { ...current, checked: true, issue: 'network' }
-        : { ...guestAccount, checked: true, issue: 'network' })
+        : { status: 'loading', name: current.name, source: current.source, checked: true, issue: 'network' })
       return
     }
-    if (!data.session?.user) {
+    setAccount(data.session?.user ? accountFromSupabaseUser(data.session.user) : { ...guestAccount, checked: true })
+  }, [])
+
+  const signOutAccount = useCallback(async () => {
+    const module = await loadSupabaseModule()
+    try {
+      if (module?.isSupabaseConfigured) await module.supabase.auth.signOut({ scope: 'local' })
+    } finally {
       setAccount({ ...guestAccount, checked: true })
-      return
     }
-    setAccount(accountFromSupabaseUser(data.session.user))
   }, [])
 
   useEffect(() => {
@@ -166,7 +174,7 @@ export function HudProvider({ children }: { children: ReactNode }) {
       return () => { active = false }
     }
 
-    const hadStoredSession = readStoredAccount().status === 'connected'
+    const hadStoredSession = readStoredAccount().status === 'loading'
     const cancelBootstrap = scheduleDeferred(() => {
       void loadSupabaseModule().then(async (module) => {
         if (!active || !module?.isSupabaseConfigured) return
@@ -184,18 +192,18 @@ export function HudProvider({ children }: { children: ReactNode }) {
         const { data, error } = await module.supabase.auth.getSession()
         if (!active) return
         if (error) {
-          setAccount((current) => current.status === 'connected'
+          setAccount((current) => current.source === 'supabase' && current.status === 'connected'
             ? { ...current, checked: true, issue: 'network' }
-            : { ...guestAccount, checked: true, issue: 'network' })
+            : { status: 'loading', name: current.name, source: current.source, checked: true, issue: 'network' })
           return
         }
         setAccount(data.session?.user ? accountFromSupabaseUser(data.session.user) : { ...guestAccount, checked: true })
       }).catch(() => {
-        if (active) setAccount((current) => current.status === 'connected'
+        if (active) setAccount((current) => current.source === 'supabase' && current.status === 'connected'
           ? { ...current, checked: true, issue: 'network' }
-          : { ...guestAccount, checked: true, issue: 'network' })
+          : { status: 'loading', name: current.name, source: current.source, checked: true, issue: 'network' })
       })
-    }, hadStoredSession ? 350 : 1600)
+    }, hadStoredSession ? 100 : 1200)
 
     return () => {
       active = false
@@ -209,12 +217,17 @@ export function HudProvider({ children }: { children: ReactNode }) {
       if (document.visibilityState === 'visible') void refreshAccount()
     }
     const refreshWhenOnline = () => void refreshAccount()
+    const refreshWhenAuthStorageChanges = (event: StorageEvent) => {
+      if (!event.key || event.key.includes('auth-token')) void refreshAccount()
+    }
     window.addEventListener('online', refreshWhenOnline)
     window.addEventListener('pageshow', refreshWhenOnline)
+    window.addEventListener('storage', refreshWhenAuthStorageChanges)
     document.addEventListener('visibilitychange', refreshWhenVisible)
     return () => {
       window.removeEventListener('online', refreshWhenOnline)
       window.removeEventListener('pageshow', refreshWhenOnline)
+      window.removeEventListener('storage', refreshWhenAuthStorageChanges)
       document.removeEventListener('visibilitychange', refreshWhenVisible)
     }
   }, [refreshAccount])
@@ -227,21 +240,16 @@ export function HudProvider({ children }: { children: ReactNode }) {
     toggleSound: () => setSoundOn((current) => !current),
     setVolume: (next) => setVolumeState(Math.min(1, Math.max(0, next))),
     toggleAccount: () => {
-      if (account.status === 'connected' && HAS_SUPABASE_ENV) {
-        void loadSupabaseModule()
-          .then((module) => module?.supabase.auth.signOut())
-          .finally(() => setAccount({ ...guestAccount, checked: true }))
-        return
-      }
       if (account.status === 'connected') {
-        setAccount({ ...guestAccount, checked: true })
+        void signOutAccount()
         return
       }
       if (typeof window !== 'undefined') window.location.assign('/account?mode=signin')
     },
+    signOutAccount,
     setAccountName: (next) => setAccount((current) => ({ ...current, name: next.trim() || current.name })),
     refreshAccount,
-  }), [soundOn, volume, account, refreshAccount])
+  }), [soundOn, volume, account, refreshAccount, signOutAccount])
 
   return <HudContext.Provider value={value}>{children}</HudContext.Provider>
 }
