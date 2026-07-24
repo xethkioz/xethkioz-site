@@ -7,6 +7,8 @@
     "dev": "npm run generate:css-split && vite",
     "build": "npm run generate:css-split && npm run typecheck && npm run audit:routes && npm run audit:runtime-seo && npm run audit:privacy-consent && npm run audit:css-source && npm run generate:seo-shells && vite build && npm run audit:initial-bundle",
     "preview": "vite preview",
+    "test:e2e": "playwright test",
+    "test:e2e:report": "playwright show-report",
     "audit": "node scripts/audit.js",
     "audit:tree": "node scripts/print-tree.mjs",
     "audit:inventory": "node scripts/project-inventory.mjs",
@@ -61,6 +63,8 @@
     "react-router-dom": "7.18.1"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.12.1",
+    "@playwright/test": "1.61.1",
     "@types/node": "^22.20.1",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
