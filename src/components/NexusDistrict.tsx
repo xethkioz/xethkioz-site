@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useLang } from '../lib/LangContext'
+import type { PublicNewsArticle } from '../services/news/publicNewsService'
 
 export type NexusDistrictTone = 'home' | 'gaming' | 'fun' | 'science' | 'green'
 type Lang = 'es' | 'en'
@@ -79,11 +81,45 @@ const headings: Record<Lang, Record<NexusDistrictTone, { eyebrow: string; title:
   },
 }
 
+const homeNewsCopy = {
+  es: { eyebrow: 'ÚLTIMAS PUBLICACIONES', title: 'Lo nuevo en XETHKIOZ', loading: 'Actualizando radar...', empty: 'El radar editorial no está disponible.', all: 'Ver todas las noticias' },
+  en: { eyebrow: 'LATEST FROM THE SPANISH NEWSROOM', title: 'New on XETHKIOZ', loading: 'Updating radar...', empty: 'The editorial radar is unavailable.', all: 'Open Spanish news' },
+} as const
+
+function formatDate(value: string | null, lang: Lang) {
+  const date = new Date(value ?? '')
+  if (Number.isNaN(date.getTime())) return ''
+  return new Intl.DateTimeFormat(lang === 'es' ? 'es-AR' : 'en-US', { dateStyle: 'medium' }).format(date)
+}
+
 export function NexusDistrict({ tone, compact = false }: { tone: NexusDistrictTone; compact?: boolean }) {
   const { lang, localizePath } = useLang()
+  const [homeArticles, setHomeArticles] = useState<PublicNewsArticle[]>([])
+  const [homeRadarReady, setHomeRadarReady] = useState(tone !== 'home')
   const heading = headings[lang][tone]
   const links = districtLinks[lang][tone]
   const accessLabel = lang === 'es' ? `${heading.title} — accesos` : `${heading.title} — access points`
+  const radarCopy = homeNewsCopy[lang]
+
+  useEffect(() => {
+    if (tone !== 'home') return
+    let active = true
+    setHomeRadarReady(false)
+
+    void import('../services/news/publicNewsService')
+      .then(({ fetchPublishedNews }) => fetchPublishedNews('all'))
+      .then((articles) => {
+        if (active) setHomeArticles(articles.slice(0, 3))
+      })
+      .catch(() => {
+        if (active) setHomeArticles([])
+      })
+      .finally(() => {
+        if (active) setHomeRadarReady(true)
+      })
+
+    return () => { active = false }
+  }, [tone])
 
   return (
     <section className={`xk-nexus-district is-${tone}${compact ? ' is-compact' : ''}`} aria-labelledby={`nexus-${tone}-title`}>
@@ -99,6 +135,18 @@ export function NexusDistrict({ tone, compact = false }: { tone: NexusDistrictTo
           </Link>
         ))}
       </nav>
+
+      {tone === 'home' ? (
+        <section className="mt-6 min-h-[210px] rounded-[1.5rem] border border-white/10 bg-black/35 p-4 md:p-5" aria-labelledby="home-recent-radar-title" data-home-recent-radar>
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div><p className="font-mono text-[9px] font-black uppercase tracking-[0.22em] text-orange-300">{radarCopy.eyebrow}</p><h3 id="home-recent-radar-title" className="mt-1 text-xl font-black text-white">{radarCopy.title}</h3></div>
+            <Link to="/news" className="font-mono text-[10px] font-black uppercase tracking-[0.16em] text-orange-200 hover:text-white">{radarCopy.all} →</Link>
+          </div>
+          {!homeRadarReady ? <p className="mt-6 font-mono text-xs text-slate-400" role="status">{radarCopy.loading}</p> : null}
+          {homeRadarReady && homeArticles.length === 0 ? <p className="mt-6 text-sm text-slate-400" role="status">{radarCopy.empty}</p> : null}
+          {homeArticles.length > 0 ? <div className="mt-4 grid gap-3 md:grid-cols-3">{homeArticles.map((article) => <Link key={article.slug} to={`/news/${article.slug}`} className="rounded-2xl border border-white/10 bg-white/[0.035] p-4 transition hover:border-orange-300/35 hover:bg-white/[0.055]"><small className="font-mono text-[9px] uppercase tracking-[0.16em] text-violet-200">{article.category} · {formatDate(article.published_at ?? article.created_at, lang)}</small><strong className="mt-2 line-clamp-3 block text-sm leading-5 text-white">{article.title}</strong></Link>)}</div> : null}
+        </section>
+      ) : null}
     </section>
   )
 }
