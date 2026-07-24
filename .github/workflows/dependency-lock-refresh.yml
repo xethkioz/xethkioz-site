@@ -1,0 +1,32 @@
+name: Dependency Lock Refresh
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  generate-lock:
+    if: github.head_ref == 'agent/content-refresh-170'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Generate safe lockfile
+        run: npm install react-router-dom@7.11.0 --save-exact --package-lock-only --ignore-scripts
+      - name: Verify production dependencies
+        run: npm audit --omit=dev
+      - name: Upload generated manifests
+        uses: actions/upload-artifact@v4
+        with:
+          name: safe-react-router-lock
+          path: |
+            package.json
+            package-lock.json
+          retention-days: 1
