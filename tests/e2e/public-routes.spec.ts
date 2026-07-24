@@ -120,3 +120,54 @@ test.describe('navegación y estados especiales', () => {
     expect(reducedMotionEnabled).toBe(true)
   })
 })
+
+test.describe('telemetría con consentimiento', () => {
+  test('no envía eventos sin consentimiento de analítica', async ({ page }) => {
+    let requests = 0
+    await page.route('**/api/visit-log', async (route) => {
+      requests += 1
+      await route.fulfill({ status: 202, contentType: 'application/json', body: '{"ok":true}' })
+    })
+
+    await expectHealthyDocument(page, '/about')
+    await page.waitForTimeout(700)
+    expect(requests).toBe(0)
+  })
+
+  test('reintenta un fallo transitorio con el mismo eventId', async ({ page }) => {
+    const payloads: Array<{ eventId?: string; route?: string }> = []
+
+    await page.addInitScript(() => {
+      window.localStorage.setItem('xethkioz.privacy-consent.v1', JSON.stringify({
+        version: 1,
+        analytics: true,
+        marketing: false,
+        updatedAt: new Date().toISOString(),
+      }))
+    })
+
+    await page.route('**/api/visit-log', async (route) => {
+      const payload = route.request().postDataJSON() as { eventId?: string; route?: string }
+      payloads.push(payload)
+      if (payloads.length === 1) {
+        await route.fulfill({
+          status: 503,
+          contentType: 'application/json',
+          body: '{"ok":false,"error":"SERVICE_UNAVAILABLE"}',
+        })
+        return
+      }
+      await route.fulfill({ status: 202, contentType: 'application/json', body: '{"ok":true}' })
+    })
+
+    await expectHealthyDocument(page, '/about')
+    await expect.poll(() => payloads.length, { timeout: 6_000 }).toBe(2)
+
+    expect(payloads[0].route).toBe('/about')
+    expect(payloads[0].eventId).toMatch(/^[0-9a-f-]{36}$/i)
+    expect(payloads[1].eventId).toBe(payloads[0].eventId)
+
+    await expect.poll(async () => page.evaluate(() => window.sessionStorage.getItem('xethkioz.telemetry./about')))
+      .toMatch(/^sent:/)
+  })
+})
