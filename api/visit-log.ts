@@ -50,6 +50,10 @@ function cleanHostname(value: unknown) {
     : null
 }
 
+function isAutomatedClient(userAgent: string) {
+  return /\b(bot|crawler|spider|slurp|bingpreview|facebookexternalhit|facebot|googleother|google-inspectiontool|headlesschrome|lighthouse|pagespeed|pingdom|uptimerobot|vercel-screenshot)\b/i.test(userAgent)
+}
+
 function detectClient(userAgent: string) {
   const ua = userAgent.toLowerCase()
   const os = /android/.test(ua) ? 'Android' : /iphone|ipad|ios/.test(ua) ? 'iOS' : /windows/.test(ua) ? 'Windows' : /mac os|macintosh/.test(ua) ? 'macOS' : /linux/.test(ua) ? 'Linux' : 'Otro'
@@ -192,6 +196,11 @@ export default async function handler(request: any, response: any) {
     return response.status(400).json({ ok: false, error: 'INVALID_REQUEST' })
   }
 
+  const userAgent = cleanText(request.headers['user-agent'], 700) || 'unknown'
+  if (isAutomatedClient(userAgent)) {
+    return response.status(202).json({ ok: true, ignored: 'automated-client' })
+  }
+
   const networkPrefix = anonymizeIp(getRawIp(request))
   const rate = checkRateLimit(networkPrefix || 'unknown-network')
   if (!rate.ok) {
@@ -205,7 +214,6 @@ export default async function handler(request: any, response: any) {
     return response.status(503).json({ ok: false, error: 'SERVICE_UNAVAILABLE' })
   }
 
-  const userAgent = cleanText(request.headers['user-agent'], 700) || 'unknown'
   const client = detectClient(userAgent)
   const countryCode = cleanText(request.headers['x-vercel-ip-country'], 3)?.toUpperCase() || null
   const regionCode = cleanText(request.headers['x-vercel-ip-country-region'], 16)?.toUpperCase() || null
