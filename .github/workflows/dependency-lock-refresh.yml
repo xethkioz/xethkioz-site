@@ -18,15 +18,22 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - name: Generate safe lockfile
+      - name: Generate candidate lockfile
         run: npm install react-router-dom@6.30.4 --save-exact --package-lock-only --ignore-scripts
-      - name: Upload generated manifests
+      - name: Generate dependency audit report
+        shell: bash
+        run: |
+          set +e
+          npm audit --omit=dev --json > generated-npm-audit.json
+          exit 0
+      - name: Upload generated manifests and audit
         uses: actions/upload-artifact@v4
         with:
           name: safe-react-router-lock
           path: |
             package.json
             package-lock.json
+            generated-npm-audit.json
           retention-days: 1
-      - name: Verify production dependencies
-        run: npm audit --omit=dev
+      - name: Enforce clean production dependency audit
+        run: node -e "const fs=require('node:fs');const report=JSON.parse(fs.readFileSync('generated-npm-audit.json','utf8'));const total=report.metadata?.vulnerabilities?.total ?? 1;if(total){console.error(report.vulnerabilities);process.exit(1)}"
