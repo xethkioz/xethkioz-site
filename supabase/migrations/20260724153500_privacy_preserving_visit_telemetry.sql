@@ -146,12 +146,42 @@ security definer
 set search_path = ''
 as $$
 declare
+  cleanup_key constant text := 'visit_log_retention_cleanup';
+  previous_cleanup_at timestamptz;
   deleted_count integer;
 begin
+  perform pg_advisory_xact_lock(hashtextextended(cleanup_key, 0));
+
+  select updated_at
+    into previous_cleanup_at
+  from public.site_settings
+  where key = cleanup_key
+  for update;
+
+  if previous_cleanup_at is not null
+    and previous_cleanup_at >= now() - interval '6 hours'
+  then
+    return 0;
+  end if;
+
   delete from public.site_visit_logs
   where visited_at < now() - interval '30 days';
-
   get diagnostics deleted_count = row_count;
+
+  insert into public.site_settings (key, value, updated_at)
+  values (
+    cleanup_key,
+    jsonb_build_object(
+      'last_cleanup_at', now(),
+      'retention_days', 30,
+      'deleted_rows', deleted_count
+    ),
+    now()
+  )
+  on conflict (key) do update
+  set value = excluded.value,
+      updated_at = excluded.updated_at;
+
   return deleted_count;
 end;
 $$;
@@ -159,4 +189,4 @@ $$;
 revoke all on function public.xethkioz_cleanup_site_visits() from public, anon, authenticated;
 grant execute on function public.xethkioz_cleanup_site_visits() to service_role;
 comment on function public.xethkioz_cleanup_site_visits() is
-  'Service-role-only retention cleanup for visit telemetry older than 30 days.';
+  'Service-role-only retention cleanup, persisted through site_settings and limited to once per six hours.';
