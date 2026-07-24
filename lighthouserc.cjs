@@ -1,4 +1,4 @@
-const auditedRoutes = ['/', '/gaming', '/science', '/fun', '/news', '/account']
+const auditedRoutes = ['/', '/gaming', '/science', '/fun', '/news', '/account', '/en', '/en/gaming', '/en/science']
 
 const median = { aggregationMethod: 'median' }
 const pessimistic = { aggregationMethod: 'pessimistic' }
@@ -34,7 +34,7 @@ module.exports = {
           },
         },
         {
-          matchingUrlPattern: '^http://localhost(?::\\d+)?/(?:$|gaming(?:[/?#].*)?|science(?:[/?#].*)?|fun(?:[/?#].*)?|news(?:[/?#].*)?)$',
+          matchingUrlPattern: '^http://localhost(?::\\d+)?/(?:$|gaming(?:[/?#].*)?|science(?:[/?#].*)?|fun(?:[/?#].*)?|news(?:[/?#].*)?|en(?:[/?#].*)?)$',
           assertions: {
             'categories:seo': ['error', { minScore: 1, ...pessimistic }],
           },
