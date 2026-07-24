@@ -19,6 +19,8 @@ src/generated/*.css
 .cache/
 .vite/
 coverage/
+.lighthouseci/
+lighthouse-reports/
 
 # Logs
 npm-debug.log*
