@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   refresh-lockfile:
@@ -15,8 +15,10 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Checkout
+      - name: Checkout branch
         uses: actions/checkout@v4
+        with:
+          ref: agent/browser-ci-159
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -27,9 +29,15 @@ jobs:
       - name: Refresh package-lock.json
         run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
 
-      - name: Upload refreshed lockfile
-        uses: actions/upload-artifact@v4
-        with:
-          name: browser-ci-package-lock
-          path: package-lock.json
-          retention-days: 1
+      - name: Commit refreshed lockfile
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package-lock.json
+          if git diff --cached --quiet; then
+            echo "package-lock.json already synchronized"
+            exit 0
+          fi
+          git commit -m "chore(deps): refresh lockfile for browser tests"
+          git push origin HEAD:agent/browser-ci-159
