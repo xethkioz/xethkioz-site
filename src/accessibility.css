@@ -12,3 +12,23 @@ a[href='/profile'].text-gray-500 {
 a[href='/confirm-email'].text-neon {
   color: #fb923c;
 }
+
+/*
+ * Header is lazy-loaded on public routes. Keep it fixed and reserve its final
+ * height from the first frame so the route content cannot jump when it arrives.
+ */
+.xk-has-mobile-dock > .xk-aaa-header {
+  position: fixed;
+  inset: 0 0 auto;
+  width: 100%;
+}
+
+.xk-has-mobile-dock > #main-content {
+  padding-top: 125px;
+}
+
+@media (max-width: 767px) {
+  .xk-has-mobile-dock > #main-content {
+    padding-top: 96px;
+  }
+}
