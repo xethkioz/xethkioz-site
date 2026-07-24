@@ -7,6 +7,7 @@ const district = read('src/components/NexusDistrict.tsx')
 const pulse = read('src/components/PortalPulseRail.tsx')
 const gaming = read('src/pages/GamingHub.tsx')
 const science = read('src/pages/ScienceLab.tsx')
+const accessibility = read('src/accessibility.css')
 const browserTest = read('tests/e2e/content-design.spec.ts')
 const checks = []
 const check = (name, ok) => checks.push([name, Boolean(ok)])
@@ -29,6 +30,9 @@ check('Gaming places section navigation before overview content', gaming.indexOf
 check('Gaming uses honest route count instead of fake percentage', gaming.includes('RUTAS DISPONIBLES') && !gaming.includes('98.7%'))
 check('Gaming replaces unverified hardware placeholders', gaming.includes('Prepará tu perfil para encontrar grupo') && !gaming.includes('Especificaciones en verificación'))
 check('Gaming localizes translated internal links', gaming.includes("localizePath('/gaming/guides')") && gaming.includes("localizePath('/community')"))
+check('Gaming hero reserves height before image decoding', accessibility.includes('.xk-gaming-hero {') && accessibility.includes('min-height: clamp(620px, 72vh, 780px)'))
+check('Gaming hero illustration is removed from document flow', accessibility.includes('.xk-gaming-hero > .xk-anime-hero-media') && accessibility.includes('position: absolute') && accessibility.includes('inset: 0') && accessibility.includes('object-fit: cover'))
+check('Gaming mobile hero keeps a stable minimum height', accessibility.includes('min-height: 640px'))
 
 check('Science primary content precedes external network and learning modules', science.indexOf('data-science-primary-content') < science.indexOf('xk-argenciencia-link') && science.indexOf('data-science-primary-content') < science.indexOf('xk-learning-routes'))
 check('Science gives each learning card a concrete destination', science.includes("title: 'Explorar con chicos'") && science.includes("to: '/news?category=science'") && science.includes("to: '#tech-stack'") && science.includes("to: '#lab-assistant'") && science.includes("to: '/news?category=tech'"))
