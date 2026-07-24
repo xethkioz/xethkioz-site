@@ -8,6 +8,7 @@ import './index.css'
 import './visibility-fixes.css'
 import './generated/xethkioz-core.css'
 import './experience.css'
+import './accessibility.css'
 
 try {
   document.documentElement.dataset.xkGraphics = window.localStorage.getItem('xethkioz.experience.graphics.v1') === 'lite' ? 'lite' : 'full'
