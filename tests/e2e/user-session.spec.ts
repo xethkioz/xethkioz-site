@@ -1,8 +1,8 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
 
 const E2E_SESSION_KEY = 'xethkioz.e2e.auth-session'
 
-async function installConnectedHarness(page: Parameters<typeof test>[0]['page']) {
+async function installConnectedHarness(page: Page) {
   await page.addInitScript((key) => {
     window.sessionStorage.setItem(key, 'connected')
   }, E2E_SESSION_KEY)
