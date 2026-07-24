@@ -5,6 +5,7 @@ import { HudProvider } from './lib/HudContext'
 import { GREEN_NODE_UNLOCK_KEY, WispProvider } from './providers/WispProvider'
 import { ProfileProgressProvider } from './lib/ProfileProgressContext'
 import { PrivacyConsentProvider } from './lib/PrivacyConsentContext'
+import { stripEnglishPrefix } from './lib/localizedRoutes'
 import ScrollToTop from './components/ScrollToTop'
 import ConsentAwareAnalytics from './components/ConsentAwareAnalytics'
 import PrivacyConsentPanel from './components/PrivacyConsentPanel'
@@ -100,6 +101,11 @@ const routeNames = {
     '/profile': 'Perfil',
     '/account': 'Cuenta',
     '/login': 'Iniciar sesión',
+    '/about': 'Quiénes somos',
+    '/contact': 'Contacto',
+    '/support': 'Apoyar el proyecto',
+    '/privacy': 'Privacidad',
+    '/editorial-policy': 'Política editorial',
     '/cms': 'Panel editorial',
   },
   en: {
@@ -118,6 +124,11 @@ const routeNames = {
     '/profile': 'Profile',
     '/account': 'Account',
     '/login': 'Sign in',
+    '/about': 'About us',
+    '/contact': 'Contact',
+    '/support': 'Support the project',
+    '/privacy': 'Privacy',
+    '/editorial-policy': 'Editorial policy',
     '/cms': 'Editorial dashboard',
   },
 } as const
@@ -129,17 +140,18 @@ function RouteAccessibility({ pathname }: { pathname: string }) {
   const [announcement, setAnnouncement] = useState('')
 
   useEffect(() => {
-    const routeName = pathname.startsWith('/news/')
+    const basePath = stripEnglishPrefix(pathname)
+    const routeName = basePath.startsWith('/news/')
       ? (lang === 'es' ? 'Artículo de noticias' : 'News article')
-      : pathname.startsWith('/nexus-city/u/')
+      : basePath.startsWith('/nexus-city/u/')
         ? (lang === 'es' ? 'Pasaporte Nexus' : 'Nexus passport')
-        : pathname === '/nexus-city/room/xethkioz'
+        : basePath === '/nexus-city/room/xethkioz'
           ? (lang === 'es' ? 'Plaza Nexus' : 'Nexus Plaza')
-          : pathname.startsWith('/nexus-city/room/')
+          : basePath.startsWith('/nexus-city/room/')
             ? (lang === 'es' ? 'Cápsula Nexus' : 'Nexus capsule')
-            : pathname.startsWith('/cms/')
+            : basePath.startsWith('/cms/')
               ? (lang === 'es' ? 'Panel editorial' : 'Editorial dashboard')
-              : routeNames[lang][pathname as keyof typeof routeNames.es]
+              : routeNames[lang][basePath as keyof typeof routeNames.es]
                 ?? (lang === 'es' ? 'Sección XETHKIOZ' : 'XETHKIOZ section')
 
     setAnnouncement(lang === 'es' ? `Página cargada: ${routeName}` : `Page loaded: ${routeName}`)
@@ -155,23 +167,24 @@ function RouteAccessibility({ pathname }: { pathname: string }) {
 function AppShell() {
   const location = useLocation()
   const { lang } = useLang()
+  const basePath = stripEnglishPrefix(location.pathname)
   const isCmsRoute = location.pathname === '/cms' || location.pathname.startsWith('/cms/')
-  const isHomeRoute = location.pathname === '/'
+  const isHomeRoute = basePath === '/'
   const hasPublicNavigation = !isCmsRoute && !isHomeRoute
-  const isPixelGameRoute = location.pathname === '/nexus-city/room/xethkioz'
+  const isPixelGameRoute = basePath === '/nexus-city/room/xethkioz'
 
   useEffect(() => {
-    if (!activityTrackedPortals.has(location.pathname)) return
+    if (!activityTrackedPortals.has(basePath)) return
     const day = new Date().toISOString().slice(0, 10)
-    const storageKey = `xethkioz.portal-visit.${day}.${location.pathname}`
+    const storageKey = `xethkioz.portal-visit.${day}.${basePath}`
     try {
       if (window.localStorage.getItem(storageKey)) return
       window.localStorage.setItem(storageKey, 'recorded')
-      addWispXp(5, 'portal', location.pathname)
+      addWispXp(5, 'portal', basePath)
     } catch {
       // Activity tracking is optional when browser storage is unavailable.
     }
-  }, [location.pathname])
+  }, [basePath])
 
   const errorLabels = lang === 'es'
     ? { controls: 'Controles globales', wisp: 'Wisp global', routes: 'Rutas' }
@@ -211,21 +224,35 @@ function AppShell() {
               <Route path="/science" element={<ScienceLab />} />
               <Route path="/fun" element={<FunPortal />} />
               <Route path="/creacion-web" element={<WebCreation />} />
-              <Route path="/web-creation" element={<Navigate to="/creacion-web" replace />} />
-              <Route path="/green-node" element={<GreenNodeGate />} />
-              <Route path="/news" element={<News />} />
-              <Route path="/news/:slug" element={<NewsArticle />} />
               <Route path="/community" element={<Community />} />
-              <Route path="/nexus-city" element={<Navigate to="/fun#nexus-city" replace />} />
-              <Route path="/nexus-city/u/:handle" element={<NexusPassport />} />
-              <Route path="/nexus-city/room/xethkioz" element={<NexusPixelWorld />} />
-              <Route path="/nexus-city/vip" element={<NexusVipRooms />} />
-              <Route path="/nexus-city/room/:handle" element={<NexusRoom />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/support" element={<Support />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/editorial-policy" element={<EditorialPolicy />} />
+
+              <Route path="/en" element={<Home />} />
+              <Route path="/en/gaming" element={<GamingHub />} />
+              <Route path="/en/gaming/guides" element={<GamingGuides />} />
+              <Route path="/en/science" element={<ScienceLab />} />
+              <Route path="/en/fun" element={<FunPortal />} />
+              <Route path="/en/creacion-web" element={<WebCreation />} />
+              <Route path="/en/community" element={<Community />} />
+              <Route path="/en/about" element={<About />} />
+              <Route path="/en/contact" element={<Contact />} />
+              <Route path="/en/support" element={<Support />} />
+              <Route path="/en/privacy" element={<Privacy />} />
+              <Route path="/en/editorial-policy" element={<EditorialPolicy />} />
+
+              <Route path="/web-creation" element={<Navigate to="/creacion-web" replace />} />
+              <Route path="/green-node" element={<GreenNodeGate />} />
+              <Route path="/news" element={<News />} />
+              <Route path="/news/:slug" element={<NewsArticle />} />
+              <Route path="/nexus-city" element={<Navigate to="/fun#nexus-city" replace />} />
+              <Route path="/nexus-city/u/:handle" element={<NexusPassport />} />
+              <Route path="/nexus-city/room/xethkioz" element={<NexusPixelWorld />} />
+              <Route path="/nexus-city/vip" element={<NexusVipRooms />} />
+              <Route path="/nexus-city/room/:handle" element={<NexusRoom />} />
               <Route path="/profile" element={<ProfileHub />} />
               <Route path="/login" element={<AccountAccess />} />
               <Route path="/account" element={<AccountAccess />} />
