@@ -1,15 +1,22 @@
 import { expect, test } from '@playwright/test'
 
 test.describe('orden y navegación de secciones', () => {
-  test('Inicio ofrece tres accesos principales sin un segundo carril decorativo', async ({ page }) => {
+  test('Inicio ofrece tres accesos principales y un radar editorial compacto', async ({ page }) => {
     await page.goto('/')
 
     const district = page.getByRole('region', { name: /Elegí qué parte de XETHKIOZ querés explorar/i })
+    const access = district.getByRole('navigation', { name: /accesos/i })
     await expect(district).toBeVisible()
-    await expect(district.getByRole('link')).toHaveCount(3)
-    await expect(district.getByRole('link', { name: /Gaming/i })).toHaveAttribute('href', '/gaming')
-    await expect(district.getByRole('link', { name: /Science & Tech/i })).toHaveAttribute('href', '/science')
+    await expect(access.getByRole('link')).toHaveCount(3)
+    await expect(access.getByRole('link', { name: /Gaming/i })).toHaveAttribute('href', '/gaming')
+    await expect(access.getByRole('link', { name: /Science & Tech/i })).toHaveAttribute('href', '/science')
     await expect(district.locator('.xk-nexus-transit')).toHaveCount(0)
+
+    const radar = page.locator('[data-home-recent-radar]')
+    await expect(radar).toBeVisible()
+    await expect(radar.getByRole('heading', { name: 'Lo nuevo en XETHKIOZ' })).toBeVisible()
+    await expect(radar.getByRole('link', { name: /Ver todas las noticias/i })).toHaveAttribute('href', '/news')
+    await expect.poll(async () => radar.getByRole('link').count()).toBeGreaterThanOrEqual(1)
   })
 
   test('Gaming muestra una sola navegación antes del contenido y conserva inglés', async ({ page }) => {
@@ -49,7 +56,7 @@ test.describe('orden y navegación de secciones', () => {
     expect(primaryComesFirst).toBe(true)
 
     const district = page.getByRole('region', { name: /Sources, tools and projects in one place/i })
-    const links = district.getByRole('link')
+    const links = district.getByRole('navigation').getByRole('link')
     await expect(links.nth(0)).toContainText('Sourced news')
     await expect(links.nth(0)).toHaveAttribute('href', '/news?category=science')
     await expect(district.getByRole('link', { name: /Tools and answers/i })).toHaveAttribute('href', '/en/science#lab-assistant')
