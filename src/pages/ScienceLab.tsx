@@ -44,13 +44,13 @@ const argenCienciaCopy = {
 const content = {
   es: {
     title: 'Tecnología / Ciencia',
-    description: 'Laboratorio técnico para IA, ciencia, hardware, software e infraestructura verificable.',
+    description: 'Noticias verificadas, fuentes, herramientas y proyectos sobre IA, ciencia y tecnología.',
     switchLanguage: 'Cambiar a inglés',
     switchCode: 'EN',
     back: 'Volver al núcleo',
-    open: 'Abrir laboratorio',
+    open: 'Ver contenido',
     status: 'Estado: sección conectada al radar real de IA, tecnología y ciencia. Cada tarjeta abre lectura ampliada con fuente original.',
-    articleTitle: 'Laboratorio // IA + Tech + Ciencia',
+    articleTitle: 'Radar verificable // IA + Tech + Ciencia',
     read: 'Leer completa',
     officialSource: 'fuente oficial',
     syncing: 'SINCRONIZANDO DATOS',
@@ -58,25 +58,25 @@ const content = {
     empty: 'LAB OFFLINE // No hay señales disponibles para esta ruta en este momento.',
     sponsor: 'SPONSOR DE XETHKIOZ TECH',
     blocks: [
-      { id: 'ai', title: 'IA / Modelos', text: 'Análisis, prompts, automatización, gobernanza y modelos locales.' },
+      { id: 'ai', title: 'IA / Modelos', text: 'Análisis, automatización, gobernanza y modelos locales.' },
       { id: 'science', title: 'Ciencia', text: 'Fuentes, evidencia, pensamiento crítico y contexto.' },
-      { id: 'tech', title: 'Tecnología', text: 'Hardware, software, infraestructura, streaming y rendimiento.' },
+      { id: 'tech', title: 'Tecnología', text: 'Hardware, software, infraestructura y rendimiento.' },
     ] as SectionBlock[],
     learning: {
-      eyebrow: 'OASIS_LAB // ELEGÍ PARA QUIÉN',
+      eyebrow: 'RUTAS PRÁCTICAS // ELEGÍ PARA QUIÉN',
       title: 'Tecnología que termina en algo útil',
-      description: 'No hace falta saber programar. Cada ruta tendrá edad sugerida, dificultad, materiales, tiempo, costo y advertencias claras.',
+      description: 'Elegí una ruta concreta según la persona, la experiencia y el resultado buscado.',
       routes: [
-        { code: 'KIDS', icon: '🧪', title: 'Explorar con chicos', level: '8–13 años', description: 'Experimentos seguros, espacio, programación visual y preguntas para aprender jugando.', action: 'Ver ideas familiares' },
-        { code: 'START', icon: '🛠️', title: 'Primer proyecto', level: 'Desde cero', description: 'Proyectos pequeños con materiales claros, dificultad, costo aproximado y resultado esperado.', action: 'Elegir un proyecto' },
-        { code: 'ADULT', icon: '🧠', title: 'Tecnología para adultos', level: 'Uso cotidiano', description: 'IA útil, privacidad, compras inteligentes, automatización y herramientas para trabajo o estudio.', action: 'Resolver algo real' },
-        { code: 'GADGET', icon: '⌚', title: 'Radar de gadgets', level: 'Mercado mundial', description: 'Qué salió, para quién sirve, cuánto aporta y qué es solamente marketing.', action: 'Abrir el radar' },
+        { code: 'KIDS', icon: '🧪', title: 'Explorar con chicos', level: '8–13 años', description: 'Experimentos seguros, espacio y programación visual para aprender jugando.', action: 'Ver ciencia', to: '/news?category=science' },
+        { code: 'START', icon: '🛠️', title: 'Primer proyecto', level: 'Desde cero', description: 'Conocé las herramientas reales y cómo se conectan en un proyecto.', action: 'Abrir herramientas', to: '#tech-stack' },
+        { code: 'ADULT', icon: '🧠', title: 'Tecnología para adultos', level: 'Uso cotidiano', description: 'IA útil, privacidad, automatización y recursos para trabajo o estudio.', action: 'Consultar al laboratorio', to: '#lab-assistant' },
+        { code: 'GADGET', icon: '⌚', title: 'Radar de tecnología', level: 'Mercado mundial', description: 'Qué salió, para quién sirve y qué aporta más allá del marketing.', action: 'Ver tecnología', to: '/news?category=tech' },
       ],
     },
     loop: {
       eyebrow: 'LAB_LOOP // APRENDER HACIENDO',
       title: 'La tecnología sirve cuando podés usarla',
-      description: 'Abrí la caja de herramientas, probá una respuesta guiada o llevate una señal semanal con contexto.',
+      description: 'Abrí herramientas, probá una respuesta guiada o recibí una señal semanal con contexto.',
       items: [
         { code: 'STACK', title: 'Abrir herramientas', detail: 'El stack real detrás del proyecto', to: '/science#tech-stack', action: 'Inspeccionar' },
         { code: 'ASK', title: 'Consultar al laboratorio', detail: 'Respuestas locales sobre IA y web', to: '/science#lab-assistant', action: 'Probar' },
@@ -125,13 +125,13 @@ const content = {
   },
   en: {
     title: 'Technology / Science',
-    description: 'Technical lab for AI, science, hardware, software and verifiable infrastructure.',
+    description: 'Verified news, sources, tools and projects covering AI, science and technology.',
     switchLanguage: 'Switch to Spanish',
     switchCode: 'ES',
     back: 'Back to core',
-    open: 'Open lab',
+    open: 'View content',
     status: 'Status: this section is connected to the real AI, technology and science radar. Each card opens expanded reading with its original source.',
-    articleTitle: 'Lab // AI + Tech + Science',
+    articleTitle: 'Verified radar // AI + Tech + Science',
     read: 'Read full article',
     officialSource: 'official source',
     syncing: 'SYNCING DATA',
@@ -139,25 +139,25 @@ const content = {
     empty: 'LAB OFFLINE // No signals are available for this route right now.',
     sponsor: 'XETHKIOZ TECH SPONSOR',
     blocks: [
-      { id: 'ai', title: 'AI / Models', text: 'Analysis, prompts, automation, governance and local models.' },
+      { id: 'ai', title: 'AI / Models', text: 'Analysis, automation, governance and local models.' },
       { id: 'science', title: 'Science', text: 'Sources, evidence, critical thinking and context.' },
-      { id: 'tech', title: 'Technology', text: 'Hardware, software, infrastructure, streaming and performance.' },
+      { id: 'tech', title: 'Technology', text: 'Hardware, software, infrastructure and performance.' },
     ] as SectionBlock[],
     learning: {
-      eyebrow: 'OASIS_LAB // CHOOSE THE AUDIENCE',
+      eyebrow: 'PRACTICAL ROUTES // CHOOSE THE AUDIENCE',
       title: 'Technology that becomes useful',
-      description: 'No programming knowledge is required. Every route includes suggested age, difficulty, materials, time, approximate cost and clear warnings.',
+      description: 'Choose a concrete route based on the person, experience and desired result.',
       routes: [
-        { code: 'KIDS', icon: '🧪', title: 'Explore with children', level: 'Ages 8–13', description: 'Safe experiments, space, visual programming and questions for learning through play.', action: 'View family ideas' },
-        { code: 'START', icon: '🛠️', title: 'First project', level: 'From zero', description: 'Small projects with clear materials, difficulty, approximate cost and expected result.', action: 'Choose a project' },
-        { code: 'ADULT', icon: '🧠', title: 'Technology for adults', level: 'Everyday use', description: 'Useful AI, privacy, smart purchases, automation and tools for work or study.', action: 'Solve something real' },
-        { code: 'GADGET', icon: '⌚', title: 'Gadget radar', level: 'Global market', description: 'What launched, who it serves, what value it adds and what is only marketing.', action: 'Open the radar' },
+        { code: 'KIDS', icon: '🧪', title: 'Explore with children', level: 'Ages 8–13', description: 'Safe experiments, space and visual programming for learning through play.', action: 'View science', to: '/news?category=science' },
+        { code: 'START', icon: '🛠️', title: 'First project', level: 'From zero', description: 'See the real tools and how they connect inside a project.', action: 'Open tools', to: '#tech-stack' },
+        { code: 'ADULT', icon: '🧠', title: 'Technology for adults', level: 'Everyday use', description: 'Useful AI, privacy, automation and resources for work or study.', action: 'Ask the laboratory', to: '#lab-assistant' },
+        { code: 'GADGET', icon: '⌚', title: 'Technology radar', level: 'Global market', description: 'What launched, who it serves and what it adds beyond marketing.', action: 'View technology', to: '/news?category=tech' },
       ],
     },
     loop: {
       eyebrow: 'LAB_LOOP // LEARN BY BUILDING',
       title: 'Technology matters when you can use it',
-      description: 'Open the toolbox, try a guided answer or receive a weekly signal with context.',
+      description: 'Open tools, try a guided answer or receive a weekly signal with context.',
       items: [
         { code: 'STACK', title: 'Open tools', detail: 'The real stack behind the project', to: '/science#tech-stack', action: 'Inspect' },
         { code: 'ASK', title: 'Ask the lab', detail: 'Local answers about AI and web', to: '/science#lab-assistant', action: 'Try it' },
@@ -207,7 +207,7 @@ const content = {
 } as const
 
 export default function ScienceLab() {
-  const { lang, setLang } = useLang()
+  const { lang, setLang, localizePath } = useLang()
   const t = content[lang]
   const argenCiencia = argenCienciaCopy[lang]
   const [activeId, setActiveId] = useState<string>(t.blocks[0].id)
@@ -268,19 +268,6 @@ export default function ScienceLab() {
             <p className="mt-4 max-w-3xl font-mono text-sm leading-relaxed text-blue-100/80">{t.description}</p>
           </section>
 
-          <aside className="xk-argenciencia-link" aria-label={argenCiencia.title}>
-            <i aria-hidden="true">AR</i>
-            <div><small>{argenCiencia.eyebrow}</small><strong>{argenCiencia.title}</strong><span>{argenCiencia.text}</span></div>
-            <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer" aria-label={`${argenCiencia.action} · ${argenCiencia.external}`}>{argenCiencia.action} ↗</a>
-          </aside>
-
-          <NexusDistrict tone="science" />
-
-          <section className="xk-learning-routes" aria-labelledby="learning-routes-title">
-            <div className="xk-learning-routes-head"><p>{t.learning.eyebrow}</p><h2 id="learning-routes-title">{t.learning.title}</h2><span>{t.learning.description}</span></div>
-            <div>{t.learning.routes.map((route) => <a key={route.code} href="#lab-assistant"><span aria-hidden="true">{route.icon}</span><small>{route.code} // {route.level}</small><h3>{route.title}</h3><p>{route.description}</p><b>{route.action} →</b></a>)}</div>
-          </section>
-
           <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3" role="tablist" aria-label={t.articleTitle}>
             {t.blocks.map((item, index) => (
               <button
@@ -305,32 +292,7 @@ export default function ScienceLab() {
             ))}
           </div>
 
-          <PortalPulseRail tone="cyan" eyebrow={t.loop.eyebrow} title={t.loop.title} description={t.loop.description} items={t.loop.items} />
-
-          <section id="tech-stack" className="xk-tech-stack scroll-mt-28" aria-labelledby="tech-stack-title">
-            <div><p>{t.stack.eyebrow}</p><h2 id="tech-stack-title">{t.stack.title}</h2><span>{t.stack.description}</span></div>
-            <div>{t.stack.items.map((tool) => <article key={tool.name}><span aria-hidden="true">{tool.icon}</span><div><h3>{tool.name}</h3><p>{tool.detail}</p></div></article>)}</div>
-          </section>
-
-          <section className="xk-science-references" aria-labelledby="science-references-title">
-            <div><p>{t.references.eyebrow}</p><h2 id="science-references-title">{t.references.title}</h2><span>{t.references.description}</span></div>
-            <div>{referenceSites.map((site) => <a key={site.name} href={site.url} target="_blank" rel="noreferrer noopener" aria-label={`${t.references.externalLabel}: ${site.name}`}><i aria-hidden="true">{site.mark}</i><span><b>{site.name}</b><small>{site.scope[lang]}</small></span><em aria-hidden="true">↗</em></a>)}</div>
-          </section>
-
-          <section id="lab-assistant" className="xk-lab-assistant scroll-mt-28" aria-labelledby="lab-assistant-title">
-            <div className="xk-assistant-console">
-              <p>{t.assistant.eyebrow}</p>
-              <h2 id="lab-assistant-title">{t.assistant.title}</h2>
-              <span>{t.assistant.description}</span>
-              <div role="tablist" aria-label={t.assistant.topicsLabel}>{assistantEntries.map(([id, item], index) => <button key={id} id={`assistant-tab-${id}`} type="button" role="tab" aria-selected={assistantTopic === id} aria-controls="assistant-answer" tabIndex={assistantTopic === id ? 0 : -1} onClick={() => setAssistantTopic(id)} onKeyDown={(event) => {
-                if (event.key === 'ArrowRight' || event.key === 'ArrowDown') { event.preventDefault(); moveAssistantFocus(index, 1) }
-                if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') { event.preventDefault(); moveAssistantFocus(index, -1) }
-              }}>{item.label}</button>)}</div>
-            </div>
-            <div id="assistant-answer" className="xk-assistant-answer" role="tabpanel" aria-labelledby={`assistant-tab-${assistantTopic}`} aria-live="polite"><small>{t.assistant.response} // {assistant.label}</small><p>{assistant.answer}</p><Link to={assistant.link}>{t.assistant.related} →</Link></div>
-          </section>
-
-          <section id="science-article-panel" className="mt-8 rounded-3xl border border-blue-300/25 bg-black/55 p-5 md:p-7" role="tabpanel" aria-labelledby={`science-tab-${active.id}`}>
+          <section id="science-article-panel" className="mt-8 rounded-3xl border border-blue-300/25 bg-black/55 p-5 md:p-7" role="tabpanel" aria-labelledby={`science-tab-${active.id}`} data-science-primary-content>
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div><p className="font-mono text-[10px] uppercase tracking-[0.28em] text-blue-200">{t.articleTitle}</p><h2 className="mt-2 text-2xl font-black uppercase text-white">{active.title}</h2></div>
               <span className="rounded-full border border-[#32FF8A]/30 px-4 py-2 font-mono text-[9px] uppercase tracking-[0.18em] text-[#32FF8A]" role="status" aria-live="polite">{loadingNews ? t.syncing : `${articles.length} ${t.verifiedSignals}`}</span>
@@ -352,10 +314,48 @@ export default function ScienceLab() {
 
           <div className="mt-8"><PublicAdSlot slotId="section-sidebar" fallbackLabel={t.sponsor} /></div>
 
+          <aside className="xk-argenciencia-link" aria-label={argenCiencia.title}>
+            <i aria-hidden="true">AR</i>
+            <div><small>{argenCiencia.eyebrow}</small><strong>{argenCiencia.title}</strong><span>{argenCiencia.text}</span></div>
+            <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer" aria-label={`${argenCiencia.action} · ${argenCiencia.external}`}>{argenCiencia.action} ↗</a>
+          </aside>
+
+          <NexusDistrict tone="science" />
+
+          <section className="xk-learning-routes" aria-labelledby="learning-routes-title">
+            <div className="xk-learning-routes-head"><p>{t.learning.eyebrow}</p><h2 id="learning-routes-title">{t.learning.title}</h2><span>{t.learning.description}</span></div>
+            <div>{t.learning.routes.map((route) => <a key={route.code} href={route.to.startsWith('#') ? route.to : localizePath(route.to)}><span aria-hidden="true">{route.icon}</span><small>{route.code} // {route.level}</small><h3>{route.title}</h3><p>{route.description}</p><b>{route.action} →</b></a>)}</div>
+          </section>
+
+          <PortalPulseRail tone="cyan" eyebrow={t.loop.eyebrow} title={t.loop.title} description={t.loop.description} items={t.loop.items} />
+
+          <section id="tech-stack" className="xk-tech-stack scroll-mt-28" aria-labelledby="tech-stack-title">
+            <div><p>{t.stack.eyebrow}</p><h2 id="tech-stack-title">{t.stack.title}</h2><span>{t.stack.description}</span></div>
+            <div>{t.stack.items.map((tool) => <article key={tool.name}><span aria-hidden="true">{tool.icon}</span><div><h3>{tool.name}</h3><p>{tool.detail}</p></div></article>)}</div>
+          </section>
+
+          <section id="lab-assistant" className="xk-lab-assistant scroll-mt-28" aria-labelledby="lab-assistant-title">
+            <div className="xk-assistant-console">
+              <p>{t.assistant.eyebrow}</p>
+              <h2 id="lab-assistant-title">{t.assistant.title}</h2>
+              <span>{t.assistant.description}</span>
+              <div role="tablist" aria-label={t.assistant.topicsLabel}>{assistantEntries.map(([id, item], index) => <button key={id} id={`assistant-tab-${id}`} type="button" role="tab" aria-selected={assistantTopic === id} aria-controls="assistant-answer" tabIndex={assistantTopic === id ? 0 : -1} onClick={() => setAssistantTopic(id)} onKeyDown={(event) => {
+                if (event.key === 'ArrowRight' || event.key === 'ArrowDown') { event.preventDefault(); moveAssistantFocus(index, 1) }
+                if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') { event.preventDefault(); moveAssistantFocus(index, -1) }
+              }}>{item.label}</button>)}</div>
+            </div>
+            <div id="assistant-answer" className="xk-assistant-answer" role="tabpanel" aria-labelledby={`assistant-tab-${assistantTopic}`} aria-live="polite"><small>{t.assistant.response} // {assistant.label}</small><p>{assistant.answer}</p><Link to={localizePath(assistant.link)}>{t.assistant.related} →</Link></div>
+          </section>
+
+          <section className="xk-science-references" aria-labelledby="science-references-title">
+            <div><p>{t.references.eyebrow}</p><h2 id="science-references-title">{t.references.title}</h2><span>{t.references.description}</span></div>
+            <div>{referenceSites.map((site) => <a key={site.name} href={site.url} target="_blank" rel="noreferrer noopener" aria-label={`${t.references.externalLabel}: ${site.name}`}><i aria-hidden="true">{site.mark}</i><span><b>{site.name}</b><small>{site.scope[lang]}</small></span><em aria-hidden="true">↗</em></a>)}</div>
+          </section>
+
           <section id="science-newsletter" className="xk-science-newsletter scroll-mt-28" aria-label={t.newsletter.label}><div><p>{t.newsletter.eyebrow}</p><h2>{t.newsletter.title}</h2><span>{t.newsletter.description}</span></div><Newsletter /></section>
 
           <div className="mt-8 rounded-3xl border border-[#32FF8A]/25 bg-black/45 p-5 font-mono text-xs leading-relaxed text-gray-300">{t.status}</div>
-          <Link to="/" className="mt-8 inline-flex rounded-full border border-blue-300/40 px-4 py-3 font-mono text-xs uppercase tracking-[0.18em] text-blue-100 transition hover:border-[#32FF8A] hover:text-[#32FF8A]">{t.back}</Link>
+          <Link to={localizePath('/')} className="mt-8 inline-flex rounded-full border border-blue-300/40 px-4 py-3 font-mono text-xs uppercase tracking-[0.18em] text-blue-100 transition hover:border-[#32FF8A] hover:text-[#32FF8A]">{t.back}</Link>
         </div>
       </main>
     </>

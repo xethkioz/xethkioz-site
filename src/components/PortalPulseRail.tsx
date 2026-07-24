@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { addWispXp } from '../lib/realtimeCommunity'
+import { useLang } from '../lib/LangContext'
 
 export type PortalPulseTone = 'violet' | 'cyan' | 'orange' | 'green' | 'gold'
 
@@ -32,6 +33,8 @@ function recordPulseAction(code: string, to: string) {
 }
 
 export function PortalPulseRail({ tone, eyebrow, title, description, items }: PortalPulseRailProps) {
+  const { localizePath } = useLang()
+
   return (
     <section className={`xk-portal-pulse is-${tone}`} aria-labelledby={`portal-pulse-${tone}`}>
       <div className="xk-portal-pulse-copy">
@@ -41,15 +44,17 @@ export function PortalPulseRail({ tone, eyebrow, title, description, items }: Po
       </div>
       <div className="xk-portal-pulse-actions">
         {items.map((item) => {
+          const external = /^https?:\/\//i.test(item.to)
+          const destination = external ? item.to : localizePath(item.to)
           const content = <>
             <i>{item.code}</i>
             <span><strong>{item.title}</strong><small>{item.detail}</small></span>
             <b>{item.action} →</b>
           </>
-          return item.to.startsWith('http') ? (
-            <a key={item.code} href={item.to} target="_blank" rel="noopener noreferrer" onClick={() => recordPulseAction(item.code, item.to)}>{content}</a>
+          return external ? (
+            <a key={item.code} href={destination} target="_blank" rel="noopener noreferrer" onClick={() => recordPulseAction(item.code, destination)}>{content}</a>
           ) : (
-            <Link key={item.code} to={item.to} onClick={() => recordPulseAction(item.code, item.to)}>{content}</Link>
+            <Link key={item.code} to={destination} onClick={() => recordPulseAction(item.code, destination)}>{content}</Link>
           )
         })}
       </div>
