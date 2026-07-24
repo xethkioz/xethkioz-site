@@ -3,24 +3,21 @@ import { Link, useSearchParams } from 'react-router-dom'
 import SEO from '../components/SEO'
 import SafeImage from '../components/SafeImage'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
-import PortalWispGuide from '../components/PortalWispGuide'
 import GamingGuideRotation from '../components/gaming/GamingGuideRotation'
-import { NexusDistrict } from '../components/NexusDistrict'
 import { useLang } from '../lib/LangContext'
-import { addWispXp } from '../lib/realtimeCommunity'
 import { STREAM_LINKS } from '../lib/siteConfig'
 import { supabase } from '../lib/supabase'
 import type { Stream } from '../lib/types'
 import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import { fetchPublishedNews, formatPublicNewsDate, type PublicNewsArticle } from '../services/news/publicNewsService'
 
-type SectionBlock = { id: string; code: string; title: string; text: string; icon: string }
+type GamingSection = 'overview' | 'guides' | 'live' | 'news' | 'community'
 
 const content = {
   es: {
     title: 'NEXUS GAMING',
     kicker: 'TEMPORADA 01 // EL PORTAL ESTÁ ABIERTO',
-    description: 'Entrá al radar donde los lanzamientos, MMORPG, esports y señales de Asia se sienten como una misión.',
+    description: 'Noticias, guías, directos y comunidad gamer organizados por ruta para encontrar rápido qué jugar o hacer.',
     heroAlt: 'Guerrero anime frente a un portal gamer de neón',
     switchLanguage: 'Cambiar a inglés',
     switchCode: 'EN',
@@ -28,21 +25,20 @@ const content = {
     guides: 'Guías',
     radar: 'Radar gamer',
     community: 'Buscar escuadrón',
-    active: 'RUTA ACTIVA',
-    dispatch: 'TRANSMISIONES DEL NEXUS',
-    read: 'Abrir misión',
-    signal: 'señales en vivo',
-    systemStatus: 'Estado del enlace Nexus',
-    nexusLink: 'ENLACE NEXUS',
-    ticker: 'NEXUS ONLINE ◆ NUEVOS MUNDOS DETECTADOS ◆ SEÑAL DE ASIA ADQUIRIDA ◆ ESCUADRÓN DE RAID REQUERIDO',
+    dispatch: 'RADAR GAMING',
+    read: 'Abrir noticia',
+    signal: 'señales disponibles',
+    systemStatus: 'Resumen de Gaming',
+    nexusLink: 'RUTAS DISPONIBLES',
+    routeCount: '5',
     stream: {
       label: 'RADAR_STREAM',
       syncing: 'SINCRONIZANDO',
       liveCms: 'SEÑAL MARCADA EN VIVO EN EL CMS',
       standby: 'CANAL EN ESPERA',
-      heading: 'Directos, VOD y comunidad en un solo punto',
+      heading: 'Directos y videos en un solo punto',
       liveDescription: 'La señal está marcada como activa en el CMS. Podés entrar al canal y seguir la transmisión.',
-      standbyDescription: 'Abrí Kick para comprobar el directo. Si el canal está offline, podés seguir con los últimos videos y noticias sin salir del Nexus.',
+      standbyDescription: 'Abrí Kick para comprobar el directo o continuá con los últimos videos de YouTube.',
       openLive: 'ENTRAR AL DIRECTO',
       openKick: 'ABRIR KICK',
       latestVod: 'VER ÚLTIMO VOD',
@@ -50,25 +46,15 @@ const content = {
       live: 'LIVE',
       offline: 'ESPERA',
     },
-    loop: {
-      eyebrow: 'PLAYER_LOOP // ELEGÍ TU PRÓXIMA MISIÓN',
-      title: 'Que entrar a Gaming siempre tenga algo para hacer',
-      description: 'Seguí la señal, buscá escuadrón o llevate una guía. Cada acción alimenta el recorrido de tu perfil.',
+    utilityLabel: 'Opciones para participar en Gaming',
+    communityInfo: {
+      eyebrow: 'PARTY_READY // ANTES DE ENTRAR',
+      title: 'Prepará tu perfil para encontrar grupo',
+      text: 'Tres datos simples ayudan a conectar con personas que buscan la misma experiencia.',
       items: [
-        { code: 'LIVE', title: 'Perseguir la señal', detail: 'Directos y últimos videos', to: STREAM_LINKS.kick, action: 'Abrir canal' },
-        { code: 'PARTY', title: 'Armar escuadrón', detail: 'Comunidad, servidores y compañeros', to: '/community', action: 'Entrar' },
-        { code: 'BUILD', title: 'Preparar personaje', detail: 'Noticias, builds y archivo gamer', to: '/news?category=gaming', action: 'Explorar' },
-      ],
-    },
-    utilityLabel: 'Armería y tablero de juego',
-    armory: {
-      eyebrow: 'ARMORY // MI SETUP',
-      title: 'Hardware sin humo',
-      text: 'La ficha queda preparada para sumar componentes y enlaces afiliados, pero los modelos se publicarán recién cuando estén confirmados.',
-      items: [
-        ['PC PRINCIPAL', 'Especificaciones en verificación'],
-        ['PERIFÉRICOS', 'Mouse, teclado y audio por confirmar'],
-        ['PRODUCCIÓN', 'OBS + flujo audiovisual del ecosistema'],
+        ['PERFIL', 'Usá un nombre reconocible y una presentación breve'],
+        ['JUEGO', 'Indicá servidor, plataforma y horario habitual'],
+        ['CONVIVENCIA', 'Respetá las reglas y evitá compartir datos privados'],
       ],
     },
     party: {
@@ -77,30 +63,30 @@ const content = {
       items: [
         { code: '4 GUÍAS', title: 'WoW, Diablo IV, FFXIV y Path of Exile', action: 'Abrir biblioteca', to: '/gaming/guides' },
         { code: 'RADAR', title: 'Estrenos y juegos que vienen', action: 'Ver tendencias', to: '/news?category=gaming' },
-        { code: 'PARTY', title: 'Compartí tu build y armá grupo', action: 'Entrar al Nexus', to: '/community' },
+        { code: 'PARTY', title: 'Compartí tu build y armá grupo', action: 'Entrar a la comunidad', to: '/community' },
       ],
     },
-    featured: 'RAID DESTACADA',
-    offline: 'NEXUS OFFLINE // Las transmisiones volverán en breve.',
+    featured: 'NOTICIA DESTACADA',
+    offline: 'NEXUS OFFLINE // Las señales volverán en breve.',
     sponsor: 'SPONSOR DE XETHKIOZ GAMING',
     sectionLabel: 'Secciones de Gaming',
     sections: { overview: 'Inicio', guides: 'Guías', live: 'Directos', news: 'Radar', community: 'Comunidad' },
-    start: { eyebrow: 'NEXUS GAMING // ELEGÍ UNA RUTA', title: 'Todo Gaming, sin perderte', description: 'Entrá directamente a lo que buscás. Las secciones pesadas cargan sólo cuando las abrís.', cards: [
-      { id: 'guides', code: 'BUILD', title: 'Guías y builds completas', detail: 'WoW, Diablo IV, FFXIV y PoE 2 por clase, equipo y rotación.', action: 'ABRIR GUÍAS', to: '/gaming/guides' },
-      { id: 'news', code: 'RADAR', title: 'Noticias y lanzamientos', detail: 'Señales gaming verificadas y ordenadas por fecha.', action: 'VER RADAR', to: '?section=news' },
-      { id: 'live', code: 'LIVE', title: 'Directos y videos', detail: 'Kick, YouTube y estado de transmisión.', action: 'ABRIR SEÑAL', to: '?section=live' },
-      { id: 'community', code: 'PARTY', title: 'Comunidad y escuadrones', detail: 'Buscá grupo, compartí builds y entrá al Nexus.', action: 'BUSCAR PARTY', to: '?section=community' },
-    ] },
-    blocks: [
-      { id: 'radar', code: '01', title: 'Radar gamer', text: 'Lanzamientos, industria y mundos que están por abrir sus puertas.', icon: '◈' },
-      { id: 'guides', code: '02', title: 'Guías y builds', text: 'Estrategias, comparativas y configuraciones elegidas por la comunidad.', icon: '⚔' },
-      { id: 'asia', code: '03', title: 'Asia Gaming', text: 'Señales de Corea, Japón, China y SEA antes de que lleguen al resto.', icon: '界' },
-    ] as SectionBlock[],
+    start: {
+      eyebrow: 'NEXUS GAMING // ELEGÍ UNA RUTA',
+      title: 'Todo Gaming, sin perderte',
+      description: 'Abrí solamente la sección que necesitás. El resto permanece fuera del camino.',
+      cards: [
+        { id: 'guides', code: 'BUILD', title: 'Guías y builds completas', detail: 'WoW, Diablo IV, FFXIV y PoE 2 por clase, equipo y rotación.', action: 'ABRIR GUÍAS', to: '/gaming/guides' },
+        { id: 'news', code: 'RADAR', title: 'Noticias y lanzamientos', detail: 'Señales gaming verificadas y ordenadas por fecha.', action: 'VER RADAR', to: '?section=news' },
+        { id: 'live', code: 'LIVE', title: 'Directos y videos', detail: 'Kick, YouTube y estado de transmisión.', action: 'ABRIR SEÑAL', to: '?section=live' },
+        { id: 'community', code: 'PARTY', title: 'Comunidad y escuadrones', detail: 'Buscá grupo, compartí builds y entrá al Nexus.', action: 'BUSCAR PARTY', to: '?section=community' },
+      ],
+    },
   },
   en: {
     title: 'GAMING NEXUS',
     kicker: 'SEASON 01 // THE PORTAL IS OPEN',
-    description: 'Enter the radar where releases, MMORPGs, esports and signals from Asia feel like a mission.',
+    description: 'Gaming news, guides, streams and community organized by route so you can quickly find what to play or do.',
     heroAlt: 'Anime warrior standing before a neon gaming portal',
     switchLanguage: 'Switch to Spanish',
     switchCode: 'ES',
@@ -108,21 +94,20 @@ const content = {
     guides: 'Guides',
     radar: 'Gaming radar',
     community: 'Find a squad',
-    active: 'ACTIVE ROUTE',
-    dispatch: 'NEXUS TRANSMISSIONS',
-    read: 'Open mission',
-    signal: 'live signals',
-    systemStatus: 'Nexus link status',
-    nexusLink: 'NEXUS LINK',
-    ticker: 'NEXUS ONLINE ◆ NEW WORLDS DETECTED ◆ ASIA SIGNAL ACQUIRED ◆ RAID PARTY REQUIRED',
+    dispatch: 'GAMING RADAR',
+    read: 'Open story',
+    signal: 'available signals',
+    systemStatus: 'Gaming summary',
+    nexusLink: 'AVAILABLE ROUTES',
+    routeCount: '5',
     stream: {
       label: 'STREAM_RADAR',
       syncing: 'SYNCING',
       liveCms: 'SIGNAL MARKED LIVE IN THE CMS',
       standby: 'CHANNEL STANDBY',
-      heading: 'Live streams, VOD and community in one place',
+      heading: 'Streams and videos in one place',
       liveDescription: 'The signal is marked active in the CMS. Open the channel to follow the broadcast.',
-      standbyDescription: 'Open Kick to check the live channel. When it is offline, continue with the latest videos and news without leaving the Nexus.',
+      standbyDescription: 'Open Kick to check the live channel or continue with the latest YouTube videos.',
       openLive: 'ENTER LIVE STREAM',
       openKick: 'OPEN KICK',
       latestVod: 'WATCH LATEST VOD',
@@ -130,25 +115,15 @@ const content = {
       live: 'LIVE',
       offline: 'STANDBY',
     },
-    loop: {
-      eyebrow: 'PLAYER_LOOP // CHOOSE YOUR NEXT MISSION',
-      title: 'Every Gaming visit should offer something to do',
-      description: 'Follow the signal, find a squad or take a guide with you. Every action feeds your profile journey.',
+    utilityLabel: 'Ways to participate in Gaming',
+    communityInfo: {
+      eyebrow: 'PARTY_READY // BEFORE JOINING',
+      title: 'Prepare your profile to find a group',
+      text: 'Three simple details help connect you with people looking for the same experience.',
       items: [
-        { code: 'LIVE', title: 'Follow the signal', detail: 'Live streams and latest videos', to: STREAM_LINKS.kick, action: 'Open channel' },
-        { code: 'PARTY', title: 'Build a squad', detail: 'Community, servers and teammates', to: '/community', action: 'Enter' },
-        { code: 'BUILD', title: 'Prepare your character', detail: 'News, builds and gaming archive', to: '/news?category=gaming', action: 'Explore' },
-      ],
-    },
-    utilityLabel: 'Armory and gaming board',
-    armory: {
-      eyebrow: 'ARMORY // MY SETUP',
-      title: 'Hardware without hype',
-      text: 'This card is ready for confirmed components and affiliate links. Specific models will only be published after verification.',
-      items: [
-        ['MAIN PC', 'Specifications under verification'],
-        ['PERIPHERALS', 'Mouse, keyboard and audio to be confirmed'],
-        ['PRODUCTION', 'OBS + ecosystem audiovisual workflow'],
+        ['PROFILE', 'Use a recognizable name and a short introduction'],
+        ['GAME', 'Add your server, platform and usual schedule'],
+        ['SAFETY', 'Follow the rules and avoid sharing private data'],
       ],
     },
     party: {
@@ -157,40 +132,38 @@ const content = {
       items: [
         { code: '4 GUIDES', title: 'WoW, Diablo IV, FFXIV and Path of Exile', action: 'Open library', to: '/gaming/guides' },
         { code: 'RADAR', title: 'Releases and upcoming games', action: 'View trends', to: '/news?category=gaming' },
-        { code: 'PARTY', title: 'Share your build and form a group', action: 'Enter the Nexus', to: '/community' },
+        { code: 'PARTY', title: 'Share your build and form a group', action: 'Enter the community', to: '/community' },
       ],
     },
-    featured: 'FEATURED RAID',
-    offline: 'NEXUS OFFLINE // Transmissions will return shortly.',
+    featured: 'FEATURED STORY',
+    offline: 'NEXUS OFFLINE // Signals will return shortly.',
     sponsor: 'XETHKIOZ GAMING SPONSOR',
     sectionLabel: 'Gaming sections',
     sections: { overview: 'Start', guides: 'Guides', live: 'Live', news: 'Radar', community: 'Community' },
-    start: { eyebrow: 'GAMING NEXUS // CHOOSE A ROUTE', title: 'All of Gaming, without getting lost', description: 'Go straight to what you need. Heavy sections load only when opened.', cards: [
-      { id: 'guides', code: 'BUILD', title: 'Complete guides and builds', detail: 'WoW, Diablo IV, FFXIV and PoE 2 by class, gear and rotation.', action: 'OPEN GUIDES', to: '/gaming/guides' },
-      { id: 'news', code: 'RADAR', title: 'News and releases', detail: 'Verified gaming signals ordered by date.', action: 'OPEN RADAR', to: '?section=news' },
-      { id: 'live', code: 'LIVE', title: 'Streams and videos', detail: 'Kick, YouTube and live status.', action: 'OPEN SIGNAL', to: '?section=live' },
-      { id: 'community', code: 'PARTY', title: 'Community and squads', detail: 'Find a group, share builds and enter the Nexus.', action: 'FIND PARTY', to: '?section=community' },
-    ] },
-    blocks: [
-      { id: 'radar', code: '01', title: 'Gaming radar', text: 'Releases, industry moves and worlds about to open their gates.', icon: '◈' },
-      { id: 'guides', code: '02', title: 'Guides and builds', text: 'Strategies, comparisons and community-picked configurations.', icon: '⚔' },
-      { id: 'asia', code: '03', title: 'Asia Gaming', text: 'Signals from Korea, Japan, China and SEA before they reach everyone.', icon: '界' },
-    ] as SectionBlock[],
+    start: {
+      eyebrow: 'GAMING NEXUS // CHOOSE A ROUTE',
+      title: 'All of Gaming, without getting lost',
+      description: 'Open only the section you need. Everything else stays out of the way.',
+      cards: [
+        { id: 'guides', code: 'BUILD', title: 'Complete guides and builds', detail: 'WoW, Diablo IV, FFXIV and PoE 2 by class, gear and rotation.', action: 'OPEN GUIDES', to: '/gaming/guides' },
+        { id: 'news', code: 'RADAR', title: 'News and releases', detail: 'Verified gaming signals ordered by date.', action: 'OPEN RADAR', to: '?section=news' },
+        { id: 'live', code: 'LIVE', title: 'Streams and videos', detail: 'Kick, YouTube and live status.', action: 'OPEN SIGNAL', to: '?section=live' },
+        { id: 'community', code: 'PARTY', title: 'Community and squads', detail: 'Find a group, share builds and enter the Nexus.', action: 'FIND PARTY', to: '?section=community' },
+      ],
+    },
   },
 } as const
 
 export default function GamingHub() {
-  const { lang, setLang } = useLang()
+  const { lang, setLang, localizePath } = useLang()
   const t = content[lang]
-  const [activeId, setActiveId] = useState<string>(t.blocks[0].id)
   const [published, setPublished] = useState<PublicNewsArticle[]>([])
   const [liveStream, setLiveStream] = useState<Stream | null>(null)
   const [latestVod, setLatestVod] = useState<Stream | null>(null)
   const [streamRadarReady, setStreamRadarReady] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
   const requestedSection = searchParams.get('section')
-  const activeSection = requestedSection === 'guides' || requestedSection === 'live' || requestedSection === 'news' || requestedSection === 'community' ? requestedSection : 'overview'
-  const active = t.blocks.find((block) => block.id === activeId) ?? t.blocks[0]
+  const activeSection: GamingSection = requestedSection === 'guides' || requestedSection === 'live' || requestedSection === 'news' || requestedSection === 'community' ? requestedSection : 'overview'
   const seen = new Set<string>()
   const articles = [...published, ...getCuratedExternalNews('gaming')]
     .filter((article) => !seen.has(article.slug) && Boolean(seen.add(article.slug)))
@@ -219,27 +192,11 @@ export default function GamingHub() {
     return () => { alive = false }
   }, [])
 
-  function selectBlock(id: string) {
-    setActiveId(id)
-    addWispXp(2, 'portal', `/gaming#${id}`)
-  }
-
-  function selectSection(section: typeof activeSection) {
+  function selectSection(section: GamingSection) {
     const next = new URLSearchParams(searchParams)
     if (section === 'overview') next.delete('section')
     else next.set('section', section)
     setSearchParams(next, { replace: true })
-  }
-
-  function navigateWithElementalWisp(destination: string) {
-    if (destination === 'overview' || destination === 'guides' || destination === 'live' || destination === 'news' || destination === 'community') selectSection(destination)
-  }
-
-  function moveMissionFocus(currentIndex: number, direction: 1 | -1) {
-    const nextIndex = (currentIndex + direction + t.blocks.length) % t.blocks.length
-    const next = t.blocks[nextIndex]
-    selectBlock(next.id)
-    document.getElementById(`gaming-tab-${next.id}`)?.focus()
   }
 
   return (
@@ -268,18 +225,14 @@ export default function GamingHub() {
                 <span className="xk-hud-chip xk-hud-chip-violet">MMORPG / RPG / ESPORTS</span>
               </div>
             </div>
-            <div className="xk-hero-status" aria-label={t.systemStatus}><span>{t.nexusLink}</span><b>98.7%</b><i aria-hidden="true" /></div>
+            <div className="xk-hero-status" aria-label={t.systemStatus}><span>{t.nexusLink}</span><b>{t.routeCount}</b><i aria-hidden="true" /></div>
           </section>
 
-          <PortalWispGuide variant="gaming" activeDestination={activeSection} onNavigate={navigateWithElementalWisp} />
-
-          <NexusDistrict tone="gaming" />
           <nav className="xk-gaming-section-nav" aria-label={t.sectionLabel}>
-            {(Object.keys(t.sections) as Array<keyof typeof t.sections>).map((section) => <button key={section} type="button" onClick={() => selectSection(section)} aria-pressed={activeSection === section}><span>{section === 'overview' ? '◈' : section === 'guides' ? '⚔' : section === 'live' ? '●' : section === 'news' ? '⌁' : '◆'}</span><b>{t.sections[section]}</b></button>)}
+            {(Object.keys(t.sections) as GamingSection[]).map((section) => <button key={section} type="button" onClick={() => selectSection(section)} aria-pressed={activeSection === section}><span>{section === 'overview' ? '◈' : section === 'guides' ? '⚔' : section === 'live' ? '●' : section === 'news' ? '⌁' : '◆'}</span><b>{t.sections[section]}</b></button>)}
           </nav>
-          <div className="xk-gaming-ticker" aria-hidden="true"><div>{t.ticker} ◆ {t.ticker} ◆</div></div>
 
-          {activeSection === 'overview' ? <section className="xk-gaming-start" aria-labelledby="gaming-start-title"><header><small>{t.start.eyebrow}</small><h2 id="gaming-start-title">{t.start.title}</h2><p>{t.start.description}</p></header><div>{t.start.cards.map((card) => card.id === 'guides' ? <Link key={card.id} to={card.to}><span>{card.code}</span><b>{card.title}</b><small>{card.detail}</small><strong>{card.action} →</strong></Link> : <button key={card.id} type="button" onClick={() => selectSection(card.id as typeof activeSection)}><span>{card.code}</span><b>{card.title}</b><small>{card.detail}</small><strong>{card.action} →</strong></button>)}</div></section> : null}
+          {activeSection === 'overview' ? <section className="xk-gaming-start" aria-labelledby="gaming-start-title"><header><small>{t.start.eyebrow}</small><h2 id="gaming-start-title">{t.start.title}</h2><p>{t.start.description}</p></header><div>{t.start.cards.map((card) => card.id === 'guides' ? <Link key={card.id} to={localizePath(card.to)}><span>{card.code}</span><b>{card.title}</b><small>{card.detail}</small><strong>{card.action} →</strong></Link> : <button key={card.id} type="button" onClick={() => selectSection(card.id as GamingSection)}><span>{card.code}</span><b>{card.title}</b><small>{card.detail}</small><strong>{card.action} →</strong></button>)}</div></section> : null}
           {activeSection === 'guides' ? <GamingGuideRotation lang={lang} /> : null}
 
           {activeSection === 'live' ? <section className="xk-creator-signal" aria-labelledby="creator-signal-title">
@@ -297,18 +250,18 @@ export default function GamingHub() {
 
           {activeSection === 'community' ? <section className="xk-gaming-utility-grid" aria-label={t.utilityLabel}>
             <article className="xk-armory-panel">
-              <p>{t.armory.eyebrow}</p>
-              <h2>{t.armory.title}</h2>
-              <span>{t.armory.text}</span>
+              <p>{t.communityInfo.eyebrow}</p>
+              <h2>{t.communityInfo.title}</h2>
+              <span>{t.communityInfo.text}</span>
               <div>
-                {t.armory.items.map(([label, value], index) => <div key={label}><b>0{index + 1}</b><small>{label}</small><strong>{value}</strong></div>)}
+                {t.communityInfo.items.map(([label, value], index) => <div key={label}><b>0{index + 1}</b><small>{label}</small><strong>{value}</strong></div>)}
               </div>
             </article>
             <article className="xk-build-board">
               <p>{t.party.eyebrow}</p>
               <h2>{t.party.title}</h2>
               <div>
-                {t.party.items.map((item) => <Link key={item.code} to={item.to}><span>{item.code}</span><b>{item.title}</b><small>{item.action} →</small></Link>)}
+                {t.party.items.map((item) => <Link key={item.code} to={localizePath(item.to)}><span>{item.code}</span><b>{item.title}</b><small>{item.action} →</small></Link>)}
               </div>
             </article>
           </section> : null}
@@ -333,10 +286,10 @@ export default function GamingHub() {
 
           {activeSection === 'news' ? <div className="mt-10"><PublicAdSlot slotId="section-sidebar" fallbackLabel={t.sponsor} /></div> : null}
           <nav className="mt-8 flex flex-wrap gap-3 font-mono text-xs uppercase tracking-[0.18em]" aria-label={lang === 'es' ? 'Navegación de Gaming' : 'Gaming navigation'}>
-            <Link to="/" className="xk-hud-button">{t.back}</Link>
-            <Link to="/gaming/guides" className="xk-hud-button">{t.guides}</Link>
+            <Link to={localizePath('/')} className="xk-hud-button">{t.back}</Link>
+            <Link to={localizePath('/gaming/guides')} className="xk-hud-button">{t.guides}</Link>
             <Link to="/news?category=gaming" className="xk-hud-button">{t.radar}</Link>
-            <Link to="/community" className="xk-hud-button">{t.community}</Link>
+            <Link to={localizePath('/community')} className="xk-hud-button">{t.community}</Link>
           </nav>
         </div>
       </main>
