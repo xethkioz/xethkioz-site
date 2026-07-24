@@ -248,14 +248,14 @@ check(
     && realtimeCommunity.includes('WISP_EVENTS_KEY'),
 )
 check(
-  'Games and Memes expose visual live content',
+  'Games and Memes expose real visual content without decorative duplication',
   gamingHub.includes("fetchPublishedNews('gaming')")
     && gamingHub.includes('gaming-anime-nexus-v1.webp')
     && gamingHub.includes('xk-gaming-start')
     && gamingHub.includes("activeSection === 'news'")
-    && gamingHub.includes('xk-gaming-ticker')
     && gamingHub.includes('xk-feature-rank')
     && gamingHub.includes('<SafeImage')
+    && !gamingHub.includes('xk-gaming-ticker')
     && funPortal.includes("fetchPublishedNews('community')")
     && funPortal.includes('memes-anime-chaos-v1.webp')
     && funPortal.includes('xk-meme-bento')
@@ -270,11 +270,12 @@ check(
     && redesignCss.includes('.xk-meme-ambient'),
 )
 check(
-  'Creator hubs expose honest live, setup, build and sharing utilities',
+  'Creator hubs expose honest live, community and sharing utilities',
   gamingHub.includes("from('streams')")
     && gamingHub.includes('SEÑAL MARCADA EN VIVO EN EL CMS')
-    && gamingHub.includes('Especificaciones en verificación')
+    && gamingHub.includes('Prepará tu perfil para encontrar grupo')
     && gamingHub.includes('PARTY_BOARD')
+    && !gamingHub.includes('Especificaciones en verificación')
     && !gamingHub.includes('fallbackStreams')
     && funPortal.includes('navigator.share')
     && funPortal.includes('wa.me')
@@ -306,11 +307,14 @@ check(
     && redesignCss.includes('scrollbar-width:none'),
 )
 check(
-  'All public worlds retain shared responsive transit outside the Home theatre',
-  nexusDistrict.includes('<UniverseTransitRail compact />')
-    && gamingHub.includes('<NexusDistrict tone="gaming"')
+  'Public worlds use focused responsive navigation without forcing duplicate transit',
+  nexusDistrict.includes('localizePath(item.to)')
+    && !nexusDistrict.includes('UniverseTransitRail')
+    && gamingHub.includes('xk-gaming-section-nav')
+    && !gamingHub.includes('<NexusDistrict tone="gaming"')
     && funPortal.includes('<NexusDistrict tone="fun"')
     && scienceLab.includes('<NexusDistrict tone="science"')
+    && scienceLab.includes('data-science-primary-content')
     && greenNode.includes('<NexusDistrict tone="green"')
     && nexusCity.includes('<UniverseTransitRail />')
     && webCreation.includes('<UniverseTransitRail />')
@@ -358,6 +362,7 @@ runNodeAudit('buttons, links, images and translations audit', 'scripts/ui-contra
 runNodeAudit('news factory audit', 'scripts/news-factory-check.mjs')
 runNodeAudit('web services audit', 'scripts/web-services-check.mjs')
 runNodeAudit('Green, Games and Guides depth audit', 'scripts/green-games-guides-check.mjs')
+runNodeAudit('content design audit', 'scripts/content-design-check.mjs')
 
 let failed = 0
 for (const item of checks) {

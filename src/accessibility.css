@@ -29,6 +29,24 @@ a[href='/confirm-email'].text-neon {
   padding-block: 8px;
 }
 
+/*
+ * Gaming uses a full-bleed illustration. Keep the hero geometry independent of
+ * the image's intrinsic dimensions so async decoding cannot move the copy.
+ */
+.xk-gaming-hero {
+  position: relative;
+  min-height: clamp(620px, 72vh, 780px);
+  overflow: hidden;
+}
+
+.xk-gaming-hero > .xk-anime-hero-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 /* Loading geometry stays stable without forcing animation on sensitive users. */
 @media (prefers-reduced-motion: reduce) {
   [data-news-loading-skeleton] * {
@@ -53,5 +71,9 @@ a[href='/confirm-email'].text-neon {
 @media (max-width: 767px) {
   .xk-has-mobile-dock > #main-content {
     padding-top: 96px;
+  }
+
+  .xk-gaming-hero {
+    min-height: 640px;
   }
 }
