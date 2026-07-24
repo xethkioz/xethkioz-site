@@ -28,13 +28,13 @@ export function LangProvider({ children }: { children: ReactNode }) {
   const location = useLocation()
   const navigate = useNavigate()
   const [preferredLang, setPreferredLang] = useState<Lang>(getInitialLang)
-  const routeLang: Lang | null = isEnglishPath(location.pathname) ? 'en' : null
+  const routeLang: Lang | null = isEnglishPath(location.pathname)
+    ? 'en'
+    : isLocalizedPublicPath(location.pathname)
+      ? 'es'
+      : null
   const lang = routeLang ?? preferredLang
   const t = translations[lang] as Translation
-
-  useEffect(() => {
-    if (routeLang && routeLang !== preferredLang) setPreferredLang(routeLang)
-  }, [preferredLang, routeLang])
 
   useEffect(() => {
     try {
@@ -46,10 +46,10 @@ export function LangProvider({ children }: { children: ReactNode }) {
   }, [lang])
 
   useEffect(() => {
-    if (lang !== 'en' || isEnglishPath(location.pathname) || !isLocalizedPublicPath(location.pathname)) return
+    if (preferredLang !== 'en' || isEnglishPath(location.pathname) || !isLocalizedPublicPath(location.pathname)) return
     const destination = buildLocalizedPath(`${location.pathname}${location.search}${location.hash}`, 'en')
     navigate(destination, { replace: true })
-  }, [lang, location.hash, location.pathname, location.search, navigate])
+  }, [location.hash, location.pathname, location.search, navigate, preferredLang])
 
   const value = useMemo<LangContextType>(() => ({
     lang,
