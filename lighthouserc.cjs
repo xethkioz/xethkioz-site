@@ -1,11 +1,14 @@
 const auditedRoutes = ['/', '/gaming', '/science', '/fun', '/news', '/account']
 
+const median = { aggregationMethod: 'median' }
+const pessimistic = { aggregationMethod: 'pessimistic' }
+
 module.exports = {
   ci: {
     collect: {
       staticDistDir: './dist',
       isSinglePageApplication: true,
-      numberOfRuns: 1,
+      numberOfRuns: 3,
       url: auditedRoutes.map((route) => `http://localhost${route}`),
       settings: {
         preset: 'desktop',
@@ -16,17 +19,27 @@ module.exports = {
       },
     },
     assert: {
-      assertions: {
-        'categories:performance': ['warn', { minScore: 0.5 }],
-        'categories:accessibility': ['warn', { minScore: 0.9 }],
-        'categories:best-practices': ['warn', { minScore: 0.85 }],
-        'categories:seo': ['warn', { minScore: 0.9 }],
-        'first-contentful-paint': ['warn', { maxNumericValue: 3000 }],
-        'largest-contentful-paint': ['warn', { maxNumericValue: 5000 }],
-        'cumulative-layout-shift': ['warn', { maxNumericValue: 0.1 }],
-        'total-blocking-time': ['warn', { maxNumericValue: 800 }],
-        'total-byte-weight': ['warn', { maxNumericValue: 4000000 }],
-      },
+      assertMatrix: [
+        {
+          matchingUrlPattern: '.*',
+          assertions: {
+            'categories:performance': ['error', { minScore: 0.85, ...median }],
+            'categories:accessibility': ['error', { minScore: 1, ...pessimistic }],
+            'categories:best-practices': ['error', { minScore: 1, ...pessimistic }],
+            'first-contentful-paint': ['error', { maxNumericValue: 1800, ...median }],
+            'largest-contentful-paint': ['error', { maxNumericValue: 2500, ...median }],
+            'cumulative-layout-shift': ['error', { maxNumericValue: 0.1, ...pessimistic }],
+            'total-blocking-time': ['error', { maxNumericValue: 300, ...pessimistic }],
+            'total-byte-weight': ['error', { maxNumericValue: 3200000, ...pessimistic }],
+          },
+        },
+        {
+          matchingUrlPattern: '^http://localhost(?::\\d+)?/(?:$|gaming(?:[/?#].*)?|science(?:[/?#].*)?|fun(?:[/?#].*)?|news(?:[/?#].*)?)$',
+          assertions: {
+            'categories:seo': ['error', { minScore: 1, ...pessimistic }],
+          },
+        },
+      ],
     },
     upload: {
       target: 'filesystem',
