@@ -17,11 +17,12 @@ test.describe('internacionalización indexable', () => {
 
   test('el selector de idioma conserva la sección actual', async ({ page }) => {
     await page.goto('/gaming')
-    await page.getByRole('button', { name: 'Cambiar a inglés' }).click()
+    const header = page.getByRole('banner')
+    await header.getByRole('button', { name: 'Cambiar a inglés' }).click()
     await expect(page).toHaveURL(/\/en\/gaming$/)
     await expect(page.locator('html')).toHaveAttribute('lang', 'en')
 
-    await page.getByRole('button', { name: 'Switch to Spanish' }).click()
+    await header.getByRole('button', { name: 'Switch to Spanish' }).click()
     await expect(page).toHaveURL(/\/gaming$/)
     await expect(page.locator('html')).toHaveAttribute('lang', 'es-AR')
   })
