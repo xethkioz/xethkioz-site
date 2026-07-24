@@ -11,7 +11,8 @@ const seoShells = read('scripts/generate-seo-shells.mjs')
 const notFound = read('api/not-found.ts')
 const streamsMigration = read('supabase/migrations/20260723153000_streams_public_radar.sql')
 const streamsIndexMigration = read('supabase/migrations/20260723154500_streams_created_by_index.sql')
-const visitLog = read('supabase/functions/visit-log/index.ts')
+const visitLog = read('api/visit-log.ts')
+const visitLogMigration = read('supabase/migrations/20260724153500_privacy_preserving_visit_telemetry.sql')
 
 const redirectMap = new Map((vercel.redirects ?? []).map((item) => [item.source, item]))
 const nexusRedirect = redirectMap.get('/nexus-city')
@@ -63,8 +64,10 @@ assert(streamsIndexMigration.includes('streams_created_by_idx') && streamsIndexM
 
 assert(visitLog.includes('isAutomatedClient'), 'Visit telemetry must identify automated clients.')
 assert(visitLog.includes("ignored: 'automated-client'"), 'Automated clients must be excluded from stored visit analytics.')
-assert(visitLog.includes("CLEANUP_SETTING_KEY = 'visit_log_retention_cleanup'"), 'Visit-log retention must persist its cleanup marker across cold starts.')
-assert(visitLog.includes("if (route === '/') await cleanupExpiredVisits(admin)"), 'Retention cleanup must not execute on every route visit.')
+assert(visitLog.includes("if (route !== '/'"), 'Retention cleanup must not execute on every route visit.')
+assert(visitLogMigration.includes("cleanup_key constant text := 'visit_log_retention_cleanup'"), 'Visit-log retention must persist its cleanup marker across cold starts.')
+assert(visitLogMigration.includes("previous_cleanup_at >= now() - interval '6 hours'"), 'Visit-log cleanup must be limited across all runtime instances.')
+assert(visitLogMigration.includes('on conflict (key) do update'), 'Visit-log retention must atomically refresh its persisted marker.')
 
 if (issues.length) {
   issues.forEach((issue) => console.error(`FAIL ${issue}`))
