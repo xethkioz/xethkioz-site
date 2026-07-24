@@ -19,9 +19,7 @@ jobs:
           node-version: 22
           cache: npm
       - name: Generate safe lockfile
-        run: npm install react-router-dom@7.11.0 --save-exact --package-lock-only --ignore-scripts
-      - name: Verify production dependencies
-        run: npm audit --omit=dev
+        run: npm install react-router-dom@6.30.4 --save-exact --package-lock-only --ignore-scripts
       - name: Upload generated manifests
         uses: actions/upload-artifact@v4
         with:
@@ -30,3 +28,5 @@ jobs:
             package.json
             package-lock.json
           retention-days: 1
+      - name: Verify production dependencies
+        run: npm audit --omit=dev
