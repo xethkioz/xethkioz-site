@@ -8,6 +8,7 @@ import { PrivacyConsentProvider } from './lib/PrivacyConsentContext'
 import ScrollToTop from './components/ScrollToTop'
 import ConsentAwareAnalytics from './components/ConsentAwareAnalytics'
 import PrivacyConsentPanel from './components/PrivacyConsentPanel'
+import UserSessionInactivityGuard from './components/UserSessionInactivityGuard'
 import AppErrorBoundary from './components/AppErrorBoundary'
 import { WorldRuntimeIntegration, WorldRuntimeProvider } from './engines/world/runtime'
 import { WorldStateProvider } from './engines/world/state'
@@ -182,6 +183,7 @@ function AppShell() {
         {lang === 'es' ? 'Saltar al contenido principal' : 'Skip to main content'}
       </a>
       <ConsentAwareAnalytics />
+      <UserSessionInactivityGuard />
       <ScrollToTop />
       <RouteAccessibility pathname={location.pathname} />
       {hasPublicNavigation && (
