@@ -9,6 +9,9 @@ const publicRoutes = [
   '/news',
   '/about',
   '/account',
+  '/en',
+  '/en/gaming',
+  '/en/science',
 ] as const
 
 function observeRuntimeErrors(page: Page) {
