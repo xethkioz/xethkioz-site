@@ -23,10 +23,12 @@ check('collector rejects untrusted origins', api.includes('isTrustedSiteRequest'
 check('collector requires JSON media type', api.includes("contentType.startsWith('application/json')") && api.includes("error: 'UNSUPPORTED_MEDIA_TYPE'"))
 check('collector enforces a four KiB payload budget', api.includes('MAX_BODY_BYTES = 4_096') && api.includes('Buffer.byteLength'))
 check('collector validates UUID event ids and local routes', api.includes('uuidPattern') && api.includes('cleanRoute'))
-check('collector anonymizes IPv4 and IPv6 before storage', api.includes('anonymizeIp') && api.includes("return `${octets[0]}.${octets[1]}.${octets[2]}.0`") && api.includes("expanded.slice(0, 3)"))
-check('collector uses the protected ingestion RPC', api.includes('/rest/v1/rpc/xethkioz_record_site_visit') && !api.includes("/rest/v1/site_visit_logs"))
+check('collector excludes automated clients', api.includes('isAutomatedClient') && api.includes("ignored: 'automated-client'"))
+check('collector anonymizes IPv4 and IPv6 before storage', api.includes('anonymizeIp') && api.includes("return `${octets[0]}.${octets[1]}.${octets[2]}.0`") && api.includes('expanded.slice(0, 3)'))
+check('collector uses the protected ingestion RPC', api.includes('/rest/v1/rpc/xethkioz_record_site_visit') && !api.includes('/rest/v1/site_visit_logs'))
 check('collector exposes no raw IP or user-agent in responses', !api.includes('ip_address: getRawIp') && !api.includes('user_agent: userAgent'))
 check('collector has instance and database rate-limit handling', api.includes('INSTANCE_LIMIT') && api.includes("result?.status === 'rate_limited'"))
+check('retention RPC is invoked only from the root route', api.includes("if (route !== '/'"))
 
 check('legacy Edge ingestion is retired', edge.includes("error: 'ENDPOINT_RETIRED'") && edge.includes('status: 410'))
 check('retired Edge function requires a JWT', /\[functions\.visit-log\][\s\S]*?verify_jwt\s*=\s*true/.test(config))
@@ -35,6 +37,9 @@ check('database adds unique idempotency keys', migration.includes('site_visit_lo
 check('database serializes network rate checks', migration.includes('pg_advisory_xact_lock') && migration.includes("interval '1 minute'"))
 check('database stores only redacted user agent values', migration.includes("'redacted'") && migration.includes('Never a complete client IP'))
 check('ingestion RPC is service-role only', migration.includes('revoke all on function public.xethkioz_record_site_visit') && migration.includes('to service_role'))
+check('retention marker survives runtime cold starts', migration.includes("cleanup_key constant text := 'visit_log_retention_cleanup'") && migration.includes("interval '6 hours'"))
+check('retention cleanup is concurrency-safe', migration.includes('hashtextextended(cleanup_key, 0)') && migration.includes('on conflict (key) do update'))
+check('cleanup RPC is service-role only', migration.includes('revoke all on function public.xethkioz_cleanup_site_visits()') && migration.includes('grant execute on function public.xethkioz_cleanup_site_visits() to service_role'))
 
 let failed = 0
 for (const [name, ok] of checks) {
