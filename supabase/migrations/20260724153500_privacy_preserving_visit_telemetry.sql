@@ -1,5 +1,5 @@
 -- Privacy-preserving, idempotent telemetry ingestion.
--- The public schema function is callable only by service_role through the Vercel proxy.
+-- Public-schema RPCs are callable only by service_role through the Vercel proxy.
 
 alter table public.site_visit_logs
   add column if not exists event_id uuid;
@@ -85,9 +85,6 @@ begin
     return;
   end if;
 
-  delete from public.site_visit_logs
-  where visited_at < now() - interval '30 days';
-
   begin
     insert into public.site_visit_logs (
       event_id,
@@ -140,4 +137,26 @@ grant execute on function public.xethkioz_record_site_visit(
 
 comment on function public.xethkioz_record_site_visit(
   uuid, text, inet, text, text, text, integer, integer, text, text, text, text, text
-) is 'Service-role-only telemetry ingestion with idempotency, rate limiting, 30-day retention and anonymized networks.';
+) is 'Service-role-only telemetry ingestion with idempotency, rate limiting and anonymized networks.';
+
+create or replace function public.xethkioz_cleanup_site_visits()
+returns integer
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  deleted_count integer;
+begin
+  delete from public.site_visit_logs
+  where visited_at < now() - interval '30 days';
+
+  get diagnostics deleted_count = row_count;
+  return deleted_count;
+end;
+$$;
+
+revoke all on function public.xethkioz_cleanup_site_visits() from public, anon, authenticated;
+grant execute on function public.xethkioz_cleanup_site_visits() to service_role;
+comment on function public.xethkioz_cleanup_site_visits() is
+  'Service-role-only retention cleanup for visit telemetry older than 30 days.';
