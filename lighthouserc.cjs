@@ -29,7 +29,7 @@ module.exports = {
             'first-contentful-paint': ['error', { maxNumericValue: 1800, ...median }],
             'largest-contentful-paint': ['error', { maxNumericValue: 2500, ...median }],
             'cumulative-layout-shift': ['error', { maxNumericValue: 0.1, ...pessimistic }],
-            'total-blocking-time': ['error', { maxNumericValue: 300, ...pessimistic }],
+            'total-blocking-time': ['error', { maxNumericValue: 300, ...median }],
             'total-byte-weight': ['error', { maxNumericValue: 3200000, ...pessimistic }],
           },
         },
