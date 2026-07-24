@@ -1,0 +1,160 @@
+-- Editorial refresh: current, primary-source reporting for 24 July 2026.
+-- Idempotent by slug so staging and production can apply the same migration safely.
+-- Reuses the most active existing editorial author when available without hardcoding generated IDs.
+
+with editorial_author as (
+  select author_id
+  from public.news_articles
+  where author_id is not null
+  group by author_id
+  order by count(*) desc
+  limit 1
+)
+insert into public.news_articles (
+  slug,
+  title,
+  summary,
+  content,
+  category,
+  author_id,
+  status,
+  published_at,
+  tags,
+  source_urls,
+  ai_generated,
+  review_status,
+  editor_notes,
+  metrics,
+  cover_image_url,
+  cover_image_alt,
+  updated_at
+)
+values
+(
+  'ai-chatgpt-health-connected-records',
+  'ChatGPT Health conecta registros médicos y Apple Health',
+  'OpenAI comenzó a desplegar en Estados Unidos una experiencia que permite vincular datos de salud con permisos explícitos y controles adicionales.',
+  $json$[
+    {"type":"heading","text":"La señal que encendió el distrito"},
+    {"type":"paragraph","text":"OpenAI presentó Health in ChatGPT para usuarios registrados mayores de 18 años en Estados Unidos. El despliegue comienza en web e iOS para los planes Free, Go, Plus y Pro, y permite conectar Apple Health y registros médicos compatibles. La función busca reunir información que normalmente queda repartida entre portales de pacientes, aplicaciones, wearables y conversaciones aisladas."},
+    {"type":"heading","text":"Qué cambia para quien entra al portal"},
+    {"type":"paragraph","text":"Con autorización del usuario, ChatGPT puede comparar un resultado reciente con estudios anteriores, resumir cambios desde una consulta o relacionar sueño, actividad y entrenamiento con una rutina. El acceso no es automático por defecto: el sistema solicita permiso antes de usar información conectada, aunque la persona puede autorizar el uso permanente y modificar esa decisión después."},
+    {"type":"heading","text":"Privacidad, seguridad y límites"},
+    {"type":"paragraph","text":"OpenAI afirma que los registros médicos conectados, la información de Apple Health y las conversaciones que los utilizan no se emplean para entrenar modelos fundacionales ni para orientar publicidad. También indica protecciones adicionales de cifrado y la posibilidad de desconectar una fuente; los datos sincronizados desde esa fuente se eliminan de sus sistemas dentro de 30 días, mientras que lo ya incorporado al historial permanece hasta que el usuario borre esas conversaciones."},
+    {"type":"heading","text":"Lectura XETHKIOZ"},
+    {"type":"paragraph","text":"La utilidad real está en ordenar contexto y preparar mejores preguntas, no en reemplazar diagnóstico, seguimiento ni criterio profesional. La disponibilidad inicial está limitada a Estados Unidos y la información sincronizada puede estar incompleta o desactualizada. Antes de actuar sobre medicación, síntomas o decisiones clínicas, corresponde verificar el dato original y consultar a un profesional de salud. La función todavía no está disponible en Codex."}
+  ]$json$::jsonb,
+  'ai',
+  (select author_id from editorial_author),
+  'published',
+  now() - interval '3 minutes',
+  array['openai','chatgpt','health','privacy','apple-health','fuente-oficial'],
+  array['https://openai.com/index/health-in-chatgpt/'],
+  true,
+  'approved',
+  'Fuente primaria de OpenAI verificada el 24/07/2026. Texto editorial asistido por IA y revisado para separar anuncio, disponibilidad y límites médicos.',
+  '{}'::jsonb,
+  '/assets/portal-science-clean-v1.webp',
+  'Interfaz tecnológica de XETHKIOZ para una noticia sobre ChatGPT Health y datos médicos conectados',
+  now()
+),
+(
+  'tech-steam-wishlist-categories-gifting-2026',
+  'Steam renueva las listas de deseados y los regalos',
+  'Valve añadió categorías personalizadas, búsquedas mejoradas, enlaces filtrados y nuevas formas de regalar juegos desde Steam.',
+  $json$[
+    {"type":"heading","text":"La señal que encendió el distrito"},
+    {"type":"paragraph","text":"Valve actualizó las listas de deseados de Steam con categorías personalizadas, búsqueda con autocompletado, avisos de demos y enlaces para compartir vistas filtradas. La idea responde a bibliotecas cada vez más extensas: ya no alcanza con ordenar por prioridad o precio cuando una misma lista mezcla próximos lanzamientos, juegos para mando, ofertas y posibles regalos."},
+    {"type":"heading","text":"Organizar también cambia las notificaciones"},
+    {"type":"paragraph","text":"Cada usuario puede crear categorías propias, asignarlas desde la tienda y filtrar la lista con un clic. Steam permite limitar ciertas notificaciones a categorías concretas, resalta cuando existe una demo y puede avisar cuando una nueva demo aparece. También suma microtráilers al pasar sobre las cápsulas y mejora la continuidad al volver a la lista desde navegador, cliente, móvil o SteamOS."},
+    {"type":"heading","text":"Regalos con menos fricción"},
+    {"type":"paragraph","text":"La actualización amplía el checkout como invitado para comprar cualquier juego, no sólo tarjetas digitales o hardware. También permite enviar juegos y tarjetas a una dirección de correo. Un regalo por email no aceptado dentro de 30 días se reembolsa automáticamente. En compras entre regiones con precios diferentes, Steam puede ajustar el importe al valor de la región receptora; para ese caso la persona debe estar en la lista de amigos."},
+    {"type":"heading","text":"Lectura XETHKIOZ"},
+    {"type":"paragraph","text":"Las categorías convierten la wishlist en una herramienta de decisión y no sólo en un depósito infinito. Los enlaces compartidos pueden mostrar una categoría o filtro específico incluso cuando la lista general es privada, por lo que conviene tratarlos como enlaces revocables y compartirlos sólo con quien corresponda. Para regalar, revisar región, precio final, destinatario y plazo de aceptación evita sorpresas."}
+  ]$json$::jsonb,
+  'tech',
+  (select author_id from editorial_author),
+  'published',
+  now() - interval '2 minutes',
+  array['steam','valve','wishlist','regalos','pc-gaming','tecnologia','fuente-oficial'],
+  array['https://store.steampowered.com/news/154742'],
+  true,
+  'approved',
+  'Fuente primaria de Valve/Steam verificada el 24/07/2026. Se distinguieron funciones de wishlist, regalos, restricciones regionales y privacidad de enlaces.',
+  '{}'::jsonb,
+  '/images/articles/pc-gaming.svg',
+  'Biblioteca de juegos de PC representando las nuevas listas de deseados y opciones de regalo de Steam',
+  now()
+),
+(
+  'science-roman-telescope-launch-august-2026',
+  'El telescopio Roman apunta al 30 de agosto',
+  'NASA prepara el lanzamiento del Nancy Grace Roman Space Telescope, un observatorio de campo amplio que estudiará el universo a gran escala.',
+  $json$[
+    {"type":"heading","text":"La señal que encendió el distrito"},
+    {"type":"paragraph","text":"NASA programó para el 29 de julio una conferencia sobre el estado del Nancy Grace Roman Space Telescope y mantiene como fecha prevista de lanzamiento el domingo 30 de agosto desde el Kennedy Space Center, en Florida. El observatorio llegó a esta etapa aproximadamente nueve meses antes del calendario que la agencia había manejado inicialmente."},
+    {"type":"heading","text":"Un mapa amplio del universo"},
+    {"type":"paragraph","text":"Roman fue diseñado para observar áreas del cielo mucho mayores que las de Hubble: NASA estima un campo de visión al menos 100 veces más amplio. Esa combinación de profundidad y panorama permitirá realizar grandes relevamientos, detectar enormes cantidades de objetos y estudiar preguntas relacionadas con la expansión del universo, la materia oscura y la evolución de estructuras cósmicas."},
+    {"type":"heading","text":"Tecnología para mirar otros mundos"},
+    {"type":"paragraph","text":"La misión también probará tecnología avanzada para obtener imágenes directas de planetas alrededor de estrellas cercanas. No es todavía una campaña dedicada a encontrar una segunda Tierra, sino una demostración clave para instrumentos futuros. Roman es gestionado por Goddard con participación de JPL, Caltech/IPAC, Space Telescope Science Institute y contribuciones internacionales de ESA, JAXA, CNES y el Instituto Max Planck de Astronomía."},
+    {"type":"heading","text":"Lectura XETHKIOZ"},
+    {"type":"paragraph","text":"El valor de Roman no está en reemplazar a Hubble o Webb, sino en sumar una mirada complementaria: explorar mucho territorio con suficiente detalle para señalar dónde conviene enfocar instrumentos más especializados. La fecha del 30 de agosto sigue siendo una programación de lanzamiento y puede cambiar por condiciones técnicas, operativas o meteorológicas; la referencia válida será siempre la actualización oficial de NASA."}
+  ]$json$::jsonb,
+  'science',
+  (select author_id from editorial_author),
+  'published',
+  now() - interval '1 minute',
+  array['nasa','roman','telescopio-espacial','astronomia','ciencia','fuente-oficial'],
+  array['https://www.nasa.gov/news-release/nasa-to-host-media-briefing-on-roman-telescope-launching-next-month/'],
+  true,
+  'approved',
+  'Fuente primaria de NASA verificada el 24/07/2026. La fecha se presenta como programación sujeta a cambios, no como lanzamiento garantizado.',
+  '{}'::jsonb,
+  '/assets/portal-science-clean-v1.webp',
+  'Telescopio espacial y mapa estelar para la cobertura del lanzamiento previsto del observatorio Roman',
+  now()
+),
+(
+  'gaming-xbox-streaming-gratis-anuncios-insiders',
+  'Xbox prueba streaming gratuito con anuncios',
+  'Microsoft inició una prueba limitada para que Xbox Insiders transmitan juegos propios sin pagar streaming, con anuncios antes de cada sesión.',
+  $json$[
+    {"type":"heading","text":"La señal que encendió el distrito"},
+    {"type":"paragraph","text":"Xbox comenzó una prueba para que integrantes del programa Insider transmitan una selección de juegos que ya poseen sin pagar por la sesión de streaming. El acceso gratuito se financia con anuncios y está limitado a dispositivos y regiones compatibles. Durante la prueba, cada sesión puede durar hasta una hora."},
+    {"type":"heading","text":"Cómo funciona la prueba"},
+    {"type":"paragraph","text":"Microsoft indica que los anuncios aparecen antes de comenzar y que no interrumpen la partida. La experiencia central del juego no cambia y el uso es opcional: quien tenga otras formas de jugar puede elegirlas. La propuesta también busca que dispositivos existentes, incluidos algunos equipos que no ejecutan localmente juegos nuevos, funcionen como puerta de entrada mediante la nube."},
+    {"type":"heading","text":"Monetización bajo observación"},
+    {"type":"paragraph","text":"Xbox declara cinco principios para este modelo: crear valor para el jugador, no cortar el flujo de juego, aplicar controles de calidad, identificar claramente la publicidad y adaptar los anuncios a cada plataforma. Son objetivos de una prueba, no garantías de un servicio definitivo. El resultado dependerá de frecuencia, selección de anunciantes, privacidad, disponibilidad regional y respuesta de los participantes."},
+    {"type":"heading","text":"Lectura XETHKIOZ"},
+    {"type":"paragraph","text":"Un acceso financiado por publicidad puede ampliar el público en regiones donde hardware y suscripciones pesan más, pero sólo funciona si la alternativa sigue siendo transparente y realmente opcional. El punto crítico será evitar que una etapa presentada como pre-roll limitado se convierta después en interrupciones frecuentes o recopilación excesiva. Por ahora no es un lanzamiento general: es un Test & Learn para Xbox Insiders."}
+  ]$json$::jsonb,
+  'gaming',
+  (select author_id from editorial_author),
+  'published',
+  now(),
+  array['xbox','cloud-gaming','streaming','publicidad','xbox-insider','monetizacion','fuente-oficial'],
+  array['https://news.xbox.com/en-us/2026/07/23/game-streaming-ad-supported-xbox-insiders/'],
+  true,
+  'approved',
+  'Fuente primaria de Xbox Wire verificada el 24/07/2026. El texto distingue prueba Insider, límites de sesión y condiciones no confirmadas para un servicio general.',
+  '{}'::jsonb,
+  '/assets/identity/gaming-anime-nexus-v1.webp',
+  'Jugador conectado a Xbox Cloud Gaming durante una prueba opcional de streaming financiado con anuncios',
+  now()
+)
+on conflict (slug) do update set
+  title = excluded.title,
+  summary = excluded.summary,
+  content = excluded.content,
+  category = excluded.category,
+  author_id = coalesce(excluded.author_id, public.news_articles.author_id),
+  status = excluded.status,
+  published_at = coalesce(public.news_articles.published_at, excluded.published_at),
+  tags = excluded.tags,
+  source_urls = excluded.source_urls,
+  ai_generated = excluded.ai_generated,
+  review_status = excluded.review_status,
+  editor_notes = excluded.editor_notes,
+  cover_image_url = excluded.cover_image_url,
+  cover_image_alt = excluded.cover_image_alt,
+  updated_at = now();

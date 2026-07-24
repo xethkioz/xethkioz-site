@@ -70,14 +70,8 @@ jobs:
           if-no-files-found: warn
           retention-days: 7
 
-      - name: Dependency vulnerability audit
-        shell: bash
-        run: |
-          set +e
-          npm audit --omit=dev --json > npm-audit.json
-          status=$?
-          node -e "const fs=require('node:fs');const report=JSON.parse(fs.readFileSync('npm-audit.json','utf8'));console.log('npm audit summary:',report.metadata?.vulnerabilities ?? 'unavailable')"
-          exit "$status"
+      - name: Dependency vulnerability policy
+        run: npm run audit:dependencies
 
       - name: Upload dependency audit evidence
         if: always()
