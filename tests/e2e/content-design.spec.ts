@@ -12,16 +12,26 @@ test.describe('orden y navegación de secciones', () => {
     await expect(district.locator('.xk-nexus-transit')).toHaveCount(0)
   })
 
-  test('Gaming abre Directos dentro de la sección y conserva inglés', async ({ page }) => {
+  test('Gaming muestra una sola navegación antes del contenido y conserva inglés', async ({ page }) => {
     await page.goto('/en/gaming')
 
-    const district = page.getByRole('region', { name: /Choose what to do next in Gaming/i })
-    const live = district.getByRole('link', { name: /Streams and videos/i })
-    await expect(live).toHaveAttribute('href', '/en/gaming?section=live')
+    const navigation = page.getByRole('navigation', { name: 'Gaming sections' })
+    await expect(navigation).toBeVisible()
+    await expect(page.locator('.xk-gaming-ticker')).toHaveCount(0)
+    await expect(page.getByText('98.7%', { exact: true })).toHaveCount(0)
+    await expect(page.getByRole('region', { name: /Choose what to do next in Gaming/i })).toHaveCount(0)
 
-    await live.click()
+    await navigation.getByRole('button', { name: 'Live', exact: true }).click()
     await expect(page).toHaveURL(/\/en\/gaming\?section=live$/)
-    await expect(page.getByRole('heading', { name: /Live streams, VOD and community/i })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Streams and videos in one place' })).toBeVisible()
+  })
+
+  test('Gaming reemplaza placeholders de hardware por información útil de comunidad', async ({ page }) => {
+    await page.goto('/gaming?section=community')
+
+    await expect(page.getByRole('heading', { name: 'Prepará tu perfil para encontrar grupo' })).toBeVisible()
+    await expect(page.getByText('Especificaciones en verificación', { exact: true })).toHaveCount(0)
+    await expect(page.getByRole('link', { name: /Abrir biblioteca/i })).toHaveAttribute('href', '/gaming/guides')
   })
 
   test('Science prioriza fuentes y mantiene localizadas las herramientas traducidas', async ({ page }) => {
