@@ -34,8 +34,19 @@ test.describe('orden y navegación de secciones', () => {
     await expect(page.getByRole('link', { name: /Abrir biblioteca/i })).toHaveAttribute('href', '/gaming/guides')
   })
 
-  test('Science prioriza fuentes y mantiene localizadas las herramientas traducidas', async ({ page }) => {
+  test('Science muestra el radar verificable antes de módulos secundarios', async ({ page }) => {
     await page.goto('/en/science')
+
+    const primary = page.locator('[data-science-primary-content]')
+    await expect(primary).toBeVisible()
+    const primaryComesFirst = await primary.evaluate((element) => {
+      const learning = document.querySelector('.xk-learning-routes')
+      const network = document.querySelector('.xk-argenciencia-link')
+      if (!learning || !network) return false
+      return Boolean(element.compareDocumentPosition(learning) & Node.DOCUMENT_POSITION_FOLLOWING)
+        && Boolean(element.compareDocumentPosition(network) & Node.DOCUMENT_POSITION_FOLLOWING)
+    })
+    expect(primaryComesFirst).toBe(true)
 
     const district = page.getByRole('region', { name: /Sources, tools and projects in one place/i })
     const links = district.getByRole('link')
@@ -43,5 +54,14 @@ test.describe('orden y navegación de secciones', () => {
     await expect(links.nth(0)).toHaveAttribute('href', '/news?category=science')
     await expect(district.getByRole('link', { name: /Tools and answers/i })).toHaveAttribute('href', '/en/science#lab-assistant')
     await expect(district.getByRole('link', { name: /Web Creation/i })).toHaveAttribute('href', '/en/creacion-web')
+  })
+
+  test('Science dirige cada ruta práctica a un destino distinto y concreto', async ({ page }) => {
+    await page.goto('/en/science')
+
+    await expect(page.getByRole('link', { name: /View science/i })).toHaveAttribute('href', '/news?category=science')
+    await expect(page.getByRole('link', { name: /Open tools/i }).first()).toHaveAttribute('href', '#tech-stack')
+    await expect(page.getByRole('link', { name: /Ask the laboratory/i }).first()).toHaveAttribute('href', '#lab-assistant')
+    await expect(page.getByRole('link', { name: /View technology/i })).toHaveAttribute('href', '/news?category=tech')
   })
 })
