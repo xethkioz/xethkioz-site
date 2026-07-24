@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useLang } from '../lib/LangContext'
 import './PortalWispGuide.css'
@@ -85,10 +85,6 @@ const completionKeys: Record<PortalWispVariant, string> = {
   gaming: 'xethkioz.gaming.wisp-guide.v1',
 }
 
-function wasCompleted(variant: PortalWispVariant) {
-  try { return window.localStorage.getItem(completionKeys[variant]) === 'complete' } catch { return false }
-}
-
 function PortalWispVisual({ variant, energy }: { variant: PortalWispVariant; energy: WispEnergy }) {
   return <span className="xk-portal-wisp-visual" data-variant={variant} data-energy={energy} aria-hidden="true"><span className="xk-portal-wisp-aura" /><span className="xk-portal-wisp-orbit is-outer" /><span className="xk-portal-wisp-orbit is-inner" /><span className="xk-portal-wisp-core"><i className="xk-portal-wisp-eye is-left" /><i className="xk-portal-wisp-eye is-right" /><i className="xk-portal-wisp-mouth" /><i className="xk-portal-wisp-sigil">✦</i></span><span className="xk-portal-wisp-tail is-one" /><span className="xk-portal-wisp-tail is-two" /><span className="xk-portal-wisp-particles">{Array.from({ length: 7 }, (_, index) => <i key={index} />)}</span></span>
 }
@@ -104,16 +100,8 @@ export default function PortalWispGuide({ variant, activeDestination, onNavigate
   const t = copy[lang][variant]
   const [open, setOpen] = useState(false)
   const [stepIndex, setStepIndex] = useState(0)
-  const autoOpened = useRef(false)
   const panelRef = useRef<HTMLElement>(null)
   const step = t.steps[stepIndex]
-
-  useEffect(() => {
-    if (autoOpened.current || wasCompleted(variant)) return
-    autoOpened.current = true
-    const timer = window.setTimeout(() => setOpen(true), 380)
-    return () => window.clearTimeout(timer)
-  }, [variant])
 
   function showStep(nextIndex: number) {
     const boundedIndex = Math.max(0, Math.min(t.steps.length - 1, nextIndex))
