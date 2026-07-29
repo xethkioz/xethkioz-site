@@ -131,6 +131,12 @@ const steps = [
     requiredFiles: ['scripts/portal-wisp-guides-check.mjs']
   },
   {
+    name: 'COMICON Portal',
+    command: 'node',
+    args: ['scripts/comicon-portal-check.mjs'],
+    requiredFiles: ['scripts/comicon-portal-check.mjs']
+  },
+  {
     name: 'Media Assets',
     command: 'node',
     args: ['scripts/media-assets-review.mjs'],
@@ -157,8 +163,8 @@ const steps = [
   {
     name: 'Dependency Security',
     command: 'npm',
-    args: ['audit', '--omit=dev'],
-    requiredFiles: ['package.json', 'package-lock.json']
+    args: ['run', 'audit:dependencies'],
+    requiredFiles: ['package.json', 'package-lock.json', 'scripts/dependency-audit-policy.mjs']
   },
   {
     name: 'Production Build',

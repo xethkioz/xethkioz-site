@@ -132,14 +132,15 @@ check(
     && home.includes('aria-labelledby="home-title"'),
 )
 check(
-  'Home restores three primary magical portals with real interior depth',
+  'Home exposes four primary magical portals with real interior depth',
   home.includes("frame: '/assets/portal-games-clean-v1.webp'")
     && home.includes("frame: '/assets/portal-science-clean-v1.webp'")
+    && home.includes("world: '/assets/portal-comicon-world.svg'")
     && home.includes("frame: '/assets/portal-fun-chaos-v2.webp'")
     && home.includes('className="xk-rb-window"')
     && home.includes('className="xk-rb-frame"')
     && homeCss.includes('.xk-rb-portals{')
-    && homeCss.includes('grid-template-columns:.88fr 1.16fr .88fr')
+    && homeCss.includes('grid-template-columns:.78fr 1.02fr 1.02fr .78fr')
     && homeCss.includes('scroll-snap-type:x mandatory'),
 )
 check(

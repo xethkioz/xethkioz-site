@@ -12,6 +12,7 @@ const localizedRoutes: LocalizedRoute[] = [
   { es: '/gaming', en: '/en/gaming', changefreq: 'weekly', priority: '0.8' },
   { es: '/gaming/guides', en: '/en/gaming/guides', changefreq: 'weekly', priority: '0.8' },
   { es: '/science', en: '/en/science', changefreq: 'weekly', priority: '0.8' },
+  { es: '/comicon', en: '/en/comicon', changefreq: 'daily', priority: '0.8' },
   { es: '/fun', en: '/en/fun', changefreq: 'weekly', priority: '0.8' },
   { es: '/community', en: '/en/community', changefreq: 'weekly', priority: '0.8' },
   { es: '/creacion-web', en: '/en/creacion-web', changefreq: 'weekly', priority: '0.8' },

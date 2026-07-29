@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useState, type CSSProperties } from 'react'
+import { useEffect, useState, type CSSProperties, type ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import SafeImage from '../components/SafeImage'
 import SEO from '../components/SEO'
@@ -9,8 +9,6 @@ import { useWisp } from '../providers/WispProvider'
 import { useExperience } from '../lib/ExperienceContext'
 import type { WebServiceOffer } from '../types/webServices'
 import './HomeReborn.css'
-
-const SciencePortalGateway = lazy(() => import('../components/SciencePortalGateway'))
 
 type DataSavingConnection = {
   saveData?: boolean
@@ -30,6 +28,7 @@ type PortalCard = {
   subtitle: string
   action: string
   route: string
+  external?: boolean
   world: string
   frame: string
   tone: string
@@ -53,13 +52,13 @@ const copy = {
     kicker: 'XETHKIOZ // WORLD GATE',
     titleTop: 'EL GAMING ES',
     titleBottom: 'MI PASIÓN',
-    intro: 'Una entrada viva hacia tres mundos principales. Gaming, ciencia y caos vuelven a sentirse como portales reales, con identidad propia y sin convertir el Home en una grilla técnica.',
-    seoDescription: 'Entrada inmersiva a la Red de Portales XETHKIOZ: gaming, ciencia, diversión, Nexus City, Green Node y creación web.',
+    intro: 'Una entrada viva hacia cuatro mundos principales. Gaming, ciencia, cultura fan y caos se sienten como portales reales, con identidad propia y sin convertir el Home en una grilla técnica.',
+    seoDescription: 'Entrada inmersiva a la Red de Portales XETHKIOZ: gaming, ArgenCiencia, Universo COMICON, diversión, Nexus City, Green Node y creación web.',
     primaryCta: 'ELEGIR UN PORTAL',
     newsCta: 'ABRIR RADAR DE NOTICIAS',
     news: 'NOTICIAS',
     portalLabel: 'PORTALES PRINCIPALES // SEÑAL ESTABLE',
-    liveSignal: '3 PORTALES PRINCIPALES ACTIVOS',
+    liveSignal: '4 PORTALES PRINCIPALES ACTIVOS',
     nexusSignal: 'NEXUS CITY EN LÍNEA',
     safeSignal: 'SISTEMA SEGURO 24/7',
     secondaryEyebrow: 'OTRAS PUERTAS DEL NEXUS',
@@ -80,9 +79,10 @@ const copy = {
         id: 'science',
         code: 'XK-02',
         title: 'CIENCIA & TECH',
-        subtitle: 'IA · Física · Hardware · Futuro',
-        action: 'ATRAVESAR PORTAL',
-        route: '/science',
+        subtitle: 'ArgenCiencia · Divulgación · Tecnología',
+        action: 'ABRIR ARGENCIENCIA',
+        route: 'https://argenciencia.com/',
+        external: true,
         world: '/assets/portal-science-world-v3.webp',
         frame: '/assets/portal-science-clean-v1.webp',
         tone: '#22d3ee',
@@ -101,6 +101,18 @@ const copy = {
         position: '50% 52%',
       },
       {
+        id: 'comicon',
+        code: 'XK-04',
+        title: 'UNIVERSO COMICON',
+        subtitle: 'Marvel · DC · Anime · Cultura Fan',
+        action: 'ABRIR MULTIVERSO',
+        route: '/comicon',
+        world: '/assets/portal-comicon-world.svg',
+        frame: '/assets/portal-games-clean-v1.webp',
+        tone: '#ffe45c',
+        position: '50% 50%',
+      },
+      {
         id: 'fun',
         code: 'XK-03',
         title: 'DIVERSIÓN',
@@ -116,7 +128,7 @@ const copy = {
     destinations: [
       {
         id: 'nexus',
-        code: 'XK-04 // CIUDAD VIVA',
+        code: 'XK-05 // CIUDAD VIVA',
         title: 'NEXUS CITY',
         text: 'Creá tu identidad, recorré salas y conectate con la comunidad.',
         action: 'ENTRAR A LA CIUDAD',
@@ -127,7 +139,7 @@ const copy = {
       },
       {
         id: 'web',
-        code: 'XK-05 // ESTUDIO CREATIVO',
+        code: 'XK-06 // ESTUDIO CREATIVO',
         title: 'CREACIÓN WEB',
         text: 'Proyectos digitales personalizados con estética, velocidad y estrategia.',
         action: 'VER EL ESTUDIO',
@@ -138,7 +150,7 @@ const copy = {
       },
       {
         id: 'green',
-        code: 'XK-06 // SEÑAL INFECTADA',
+        code: 'XK-13 // SEÑAL INFECTADA',
         title: 'GREEN NODE',
         text: 'El Archivo Negro permanece oculto hasta que Wisp abra el acceso.',
         action: 'INTERCEPTAR SEÑAL',
@@ -154,13 +166,13 @@ const copy = {
     kicker: 'XETHKIOZ // WORLD GATE',
     titleTop: 'GAMING IS',
     titleBottom: 'MY PASSION',
-    intro: 'A living entrance into three main worlds. Gaming, science and chaos feel like real portals again, each with its own identity and without turning the Home into a technical grid.',
-    seoDescription: 'An immersive entrance to the XETHKIOZ Portal Network: gaming, science, fun, Nexus City, Green Node and web creation.',
+    intro: 'A living entrance into four main worlds. Gaming, science, fan culture and chaos feel like real portals again, each with its own identity and without turning the Home into a technical grid.',
+    seoDescription: 'An immersive entrance to the XETHKIOZ Portal Network: gaming, ArgenCiencia, COMICON Universe, fun, Nexus City, Green Node and web creation.',
     primaryCta: 'CHOOSE A PORTAL',
     newsCta: 'OPEN NEWS RADAR',
     news: 'NEWS',
     portalLabel: 'MAIN PORTALS // STABLE SIGNAL',
-    liveSignal: '3 MAIN PORTALS ACTIVE',
+    liveSignal: '4 MAIN PORTALS ACTIVE',
     nexusSignal: 'NEXUS CITY ONLINE',
     safeSignal: 'SECURE SYSTEM 24/7',
     secondaryEyebrow: 'OTHER NEXUS GATES',
@@ -181,9 +193,10 @@ const copy = {
         id: 'science',
         code: 'XK-02',
         title: 'SCIENCE & TECH',
-        subtitle: 'AI · Physics · Hardware · Future',
-        action: 'CROSS PORTAL',
-        route: '/science',
+        subtitle: 'ArgenCiencia · Outreach · Technology',
+        action: 'OPEN ARGENCIENCIA',
+        route: 'https://argenciencia.com/',
+        external: true,
         world: '/assets/portal-science-world-v3.webp',
         frame: '/assets/portal-science-clean-v1.webp',
         tone: '#22d3ee',
@@ -202,6 +215,18 @@ const copy = {
         position: '50% 52%',
       },
       {
+        id: 'comicon',
+        code: 'XK-04',
+        title: 'COMICON UNIVERSE',
+        subtitle: 'Marvel · DC · Anime · Fan Culture',
+        action: 'OPEN MULTIVERSE',
+        route: '/comicon',
+        world: '/assets/portal-comicon-world.svg',
+        frame: '/assets/portal-games-clean-v1.webp',
+        tone: '#ffe45c',
+        position: '50% 50%',
+      },
+      {
         id: 'fun',
         code: 'XK-03',
         title: 'FUN',
@@ -217,7 +242,7 @@ const copy = {
     destinations: [
       {
         id: 'nexus',
-        code: 'XK-04 // LIVING CITY',
+        code: 'XK-05 // LIVING CITY',
         title: 'NEXUS CITY',
         text: 'Create your identity, explore rooms and connect with the community.',
         action: 'ENTER THE CITY',
@@ -228,7 +253,7 @@ const copy = {
       },
       {
         id: 'web',
-        code: 'XK-05 // CREATIVE STUDIO',
+        code: 'XK-06 // CREATIVE STUDIO',
         title: 'WEB CREATION',
         text: 'Custom digital projects built around aesthetics, speed and strategy.',
         action: 'OPEN THE STUDIO',
@@ -239,7 +264,7 @@ const copy = {
       },
       {
         id: 'green',
-        code: 'XK-06 // INFECTED SIGNAL',
+        code: 'XK-13 // INFECTED SIGNAL',
         title: 'GREEN NODE',
         text: 'The Black Archive stays hidden until Wisp opens the access point.',
         action: 'INTERCEPT SIGNAL',
@@ -328,11 +353,9 @@ export default function Home() {
   const { triggerGreenPortal } = useWisp()
   const { lang, setLang } = useLang()
   const { graphicsMode } = useExperience()
-  const [scienceGatewayOpen, setScienceGatewayOpen] = useState(false)
   const videoEnabled = useAmbientVideoEnabled(graphicsMode)
   const featuredWebOffer = useFeaturedWebService()
   const t = copy[lang]
-  const closeScienceGateway = useCallback(() => setScienceGatewayOpen(false), [])
 
   const openWisp = () => {
     triggerGreenPortal()
@@ -383,7 +406,8 @@ export default function Home() {
 
             <nav className="xk-rb-nav" aria-label={lang === 'es' ? 'Navegación principal' : 'Primary navigation'}>
               <Link to="/gaming">{lang === 'es' ? 'Juegos' : 'Gaming'}</Link>
-              <Link to="/science">{lang === 'es' ? 'Ciencia' : 'Science'}</Link>
+              <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ArgenCiencia ↗</a>
+              <Link to="/comicon">COMICON</Link>
               <Link to="/fun">{lang === 'es' ? 'Diversión' : 'Fun'}</Link>
               <Link to="/nexus-city">Nexus City</Link>
               <Link to="/creacion-web">{lang === 'es' ? 'Creación Web' : 'Web Creation'}</Link>
@@ -422,7 +446,7 @@ export default function Home() {
             <div id="portals" className="xk-rb-theatre" aria-label={lang === 'es' ? 'Portales principales' : 'Main portals'}>
               <p className="xk-rb-theatre-label">{t.portalLabel}</p>
               <div className="xk-rb-portals">
-                {t.primary.map((portal) => <PrimaryPortal key={portal.id} portal={portal} onOpenScience={() => setScienceGatewayOpen(true)} />)}
+                {t.primary.map((portal) => <PrimaryPortal key={portal.id} portal={portal} />)}
               </div>
             </div>
 
@@ -468,26 +492,14 @@ export default function Home() {
           </footer>
         </div>
       </main>
-      {scienceGatewayOpen ? <Suspense fallback={null}><SciencePortalGateway onClose={closeScienceGateway} /></Suspense> : null}
     </>
   )
 }
 
-function PrimaryPortal({ portal, onOpenScience }: { portal: PortalCard; onOpenScience: () => void }) {
+function PrimaryPortal({ portal }: { portal: PortalCard }) {
   const isFeatured = portal.id === 'gaming'
-
-  return (
-    <Link
-      to={portal.route}
-      className="xk-rb-portal"
-      style={{ '--tone': portal.tone } as CSSProperties}
-      aria-label={`${portal.action}: ${portal.title}`}
-      onClick={(event) => {
-        if (portal.id !== 'science') return
-        event.preventDefault()
-        onOpenScience()
-      }}
-    >
+  const content: ReactNode = (
+    <>
       <span className="xk-rb-gate">
         <span className="xk-rb-aura" aria-hidden="true" />
         <span className="xk-rb-window">
@@ -510,8 +522,16 @@ function PrimaryPortal({ portal, onOpenScience }: { portal: PortalCard; onOpenSc
         <span>{portal.subtitle}</span>
         <b>{portal.action} ↗</b>
       </span>
-    </Link>
+    </>
   )
+  const commonProps = {
+    className: 'xk-rb-portal',
+    style: { '--tone': portal.tone } as CSSProperties,
+    'aria-label': `${portal.action}: ${portal.title}`,
+  }
+
+  if (portal.external) return <a {...commonProps} href={portal.route} target="_blank" rel="noopener noreferrer">{content}</a>
+  return <Link {...commonProps} to={portal.route}>{content}</Link>
 }
 
 function Destination({ destination, onOpenWisp }: { destination: DestinationCard; onOpenWisp: () => void }) {

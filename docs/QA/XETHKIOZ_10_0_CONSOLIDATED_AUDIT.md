@@ -1,7 +1,7 @@
 # XETHKIOZ 10.0 — Consolidated Audit
 
-- Started: 2026-07-22T18:23:07.866Z
-- Finished: 2026-07-22T18:23:20.410Z
+- Started: 2026-07-29T16:59:06.467Z
+- Finished: 2026-07-29T16:59:24.231Z
 - Result: PASS
 
 ## Checks
@@ -20,11 +20,13 @@
 | Web Services | SUCCESS | node scripts/web-services-check.mjs |
 | News Factory | SUCCESS | node scripts/news-factory-check.mjs |
 | Wisp Engine | SUCCESS | node scripts/wisp-engine-check.mjs |
+| Portal Wisp Guides | SUCCESS | node scripts/portal-wisp-guides-check.mjs |
+| COMICON Portal | SUCCESS | node scripts/comicon-portal-check.mjs |
 | Media Assets | SUCCESS | node scripts/media-assets-review.mjs |
 | Code Structure | SUCCESS | node scripts/code-structure-review.mjs |
 | SQL Inventory | SUCCESS | node scripts/sql-inventory.mjs |
 | Production Readiness | SUCCESS | node scripts/production-ready-check.mjs |
-| Dependency Security | SUCCESS | npm audit --omit=dev |
+| Dependency Security | SUCCESS | npm run audit:dependencies |
 | Production Build | SUCCESS | npm run build |
 
 ## Gate

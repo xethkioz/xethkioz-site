@@ -21,6 +21,7 @@ src/generated/*.css
 coverage/
 .lighthouseci/
 lighthouse-reports/
+npm-audit.json
 
 # Logs
 npm-debug.log*

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useLang } from '../../lib/LangContext'
 import { supabase } from '../../services/supabaseClient'
 
-type NewsCategory = 'gaming' | 'tech' | 'science' | 'ai' | 'community' | 'green' | 'programming'
+type NewsCategory = 'gaming' | 'tech' | 'science' | 'ai' | 'community' | 'green' | 'programming' | 'comicon'
 type Language = 'es' | 'en'
 
 type GenerateResponse = {
@@ -22,6 +22,7 @@ const categories: { value: NewsCategory; es: string; en: string }[] = [
   { value: 'community', es: 'Comunidad', en: 'Community' },
   { value: 'green', es: 'Green Node', en: 'Green Node' },
   { value: 'programming', es: 'Programación', en: 'Programming' },
+  { value: 'comicon', es: 'Universo COMICON', en: 'COMICON Universe' },
 ]
 
 const copy = {

@@ -3,7 +3,7 @@ import { join } from 'node:path'
 
 const root = process.cwd()
 const checks = [
-  ['src/pages/Home.tsx', ['xk-rb-portals', 'portal-games-world-v3.webp', 'portal-science-world-v3.webp', 'portal-fun-world-v3.webp']],
+  ['src/pages/Home.tsx', ['xk-rb-portals', 'portal-games-world-v3.webp', 'portal-science-world-v3.webp', 'portal-comicon-world.svg', 'portal-fun-world-v3.webp']],
   ['src/components/fusion/FusionWorldStageV5.tsx', ['getPortalRegistry', 'panel-cyber']],
   ['src/engines/portal/portalRegistry.ts', ['portalRegistry', 'wispWatching']],
   ['src/design/designTokens.ts', ['designTokens', 'fusionAccent']],

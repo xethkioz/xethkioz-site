@@ -129,7 +129,8 @@ export const GREEN_NODE_CONFIG = {
 export const VERIFIED_LINKS = [
   { area: 'Dominio', label: 'Web oficial', url: SITE_DOMAIN, status: 'confirmed' },
   { area: 'Gaming & Tech', label: 'Portal Gaming', url: '/gaming', status: 'internal' },
-  { area: 'Science Lab', label: 'Portal Ciencia', url: '/science', status: 'internal' },
+  { area: 'Science & Technology', label: 'ArgenCiencia', url: 'https://argenciencia.com/', status: 'confirmed' },
+  { area: 'Universo COMICON', label: 'Marvel, DC, Anime y cultura fan', url: '/comicon', status: 'internal' },
   { area: 'Fun Portal', label: 'Portal Fun', url: '/fun', status: 'internal' },
   { area: 'Community', label: 'Comunidad', url: '/community', status: 'internal' },
   { area: 'Creación Web', label: 'Servicios web', url: '/creacion-web', status: 'internal' },
@@ -243,7 +244,7 @@ export const GREEN_NODE_EASTER_EGGS = [
 ]
 
 export const LIVE_INTERNAL_LINKS = [
-  '/', '/news', '/gaming', '/science', '/fun', '/creacion-web', '/community', '/profile', '/login', '/account', '/cms', '/green-node'
+  '/', '/news', '/gaming', '/science', '/comicon', '/fun', '/creacion-web', '/community', '/profile', '/login', '/account', '/cms', '/green-node'
 ] as const
 
 export const SCIENCE_LAB_POLICY = {

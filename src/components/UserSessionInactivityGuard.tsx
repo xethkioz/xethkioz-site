@@ -2,12 +2,13 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useHud } from '../lib/HudContext'
 import { useLang } from '../lib/LangContext'
-import { isSupabaseConfigured, supabase } from '../services/supabaseClient'
 
 export const PROFILE_INACTIVITY_MS = 5 * 60_000
 export const PROFILE_LOGOUT_GRACE_SECONDS = 10
 const CHANNEL_NAME = 'xethkioz-auth-session'
 const E2E_SESSION_KEY = 'xethkioz.e2e.auth-session'
+type SupabaseClientModule = typeof import('../services/supabaseClient')
+let supabaseModulePromise: Promise<SupabaseClientModule> | null = null
 
 type SessionMessage = { type: 'continued' | 'signed-out'; at: number }
 
@@ -15,6 +16,11 @@ function hasE2eSession() {
   return import.meta.env.VITE_E2E_AUTH_SESSION === '1'
     && typeof window !== 'undefined'
     && window.sessionStorage.getItem(E2E_SESSION_KEY) === 'connected'
+}
+
+function loadSupabaseModule() {
+  supabaseModulePromise ??= import('../services/supabaseClient')
+  return supabaseModulePromise
 }
 
 export default function UserSessionInactivityGuard() {
@@ -67,6 +73,7 @@ export default function UserSessionInactivityGuard() {
 
   const continueSession = useCallback(async () => {
     if (!hasE2eSession()) {
+      const { isSupabaseConfigured, supabase } = await loadSupabaseModule()
       if (!isSupabaseConfigured) {
         await signOutForInactivity()
         return

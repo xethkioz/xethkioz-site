@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1500" role="img" aria-labelledby="title desc">
+  <title id="title">Portal original Universo COMICON de XETHKIOZ</title>
+  <desc id="desc">Un multiverso abstracto de viñetas rojas, azules y violetas alrededor de un portal luminoso.</desc>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="42%" r="70%">
+      <stop offset="0" stop-color="#4b176f"/>
+      <stop offset=".45" stop-color="#11152e"/>
+      <stop offset="1" stop-color="#05050a"/>
+    </radialGradient>
+    <radialGradient id="portal" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset=".18" stop-color="#ffe45c"/>
+      <stop offset=".46" stop-color="#ff3b45"/>
+      <stop offset=".72" stop-color="#9b5cff" stop-opacity=".78"/>
+      <stop offset="1" stop-color="#39b7ff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="4" r="3" fill="#fff" opacity=".17"/>
+    </pattern>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#bg)"/>
+  <rect width="1200" height="1500" fill="url(#dots)"/>
+  <path d="M65 212 469 79l84 382-400 95z" fill="#ff3b45" stroke="#fff" stroke-width="18"/>
+  <path d="m731 102 409 126-102 397-394-116z" fill="#39b7ff" stroke="#fff" stroke-width="18"/>
+  <path d="m114 980 395-185 151 394-404 184z" fill="#9b5cff" stroke="#fff" stroke-width="18"/>
+  <path d="m750 833 363 184-192 371-355-196z" fill="#ffe45c" stroke="#fff" stroke-width="18"/>
+  <circle cx="600" cy="717" r="365" fill="#9b5cff" opacity=".32" filter="url(#glow)"/>
+  <circle cx="600" cy="717" r="330" fill="none" stroke="#39b7ff" stroke-width="18" stroke-dasharray="35 22"/>
+  <circle cx="600" cy="717" r="280" fill="none" stroke="#ff3b45" stroke-width="25"/>
+  <circle cx="600" cy="717" r="225" fill="url(#portal)"/>
+  <path d="m600 405 42 205 200-73-153 143 181 104-218-30-6 220-66-211-195 97 143-165-202-82 223 4z" fill="#fff" opacity=".9"/>
+  <path d="M159 640 53 708l124 42-57 109 118-59 53 119 15-134 135 4-121-66 73-109-111 78z" fill="#ffe45c" stroke="#05050a" stroke-width="12"/>
+  <text x="212" y="761" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="63" fill="#05050a" transform="rotate(-8 212 761)">NEXUS!</text>
+  <g fill="#fff">
+    <circle cx="164" cy="124" r="9"/><circle cx="1048" cy="126" r="12"/><circle cx="1091" cy="809" r="8"/>
+    <circle cx="148" cy="1394" r="10"/><circle cx="1017" cy="1440" r="7"/><circle cx="545" cy="75" r="8"/>
+  </g>
+</svg>

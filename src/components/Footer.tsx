@@ -5,7 +5,7 @@ import { SOCIAL_LINKS } from '../lib/siteConfig'
 
 const copy = {
   es: {
-    description: 'Gaming, tecnología, ciencia, humor y archivos extraños conectados por una Red de Portales independiente creada en Argentina.',
+    description: 'Gaming, tecnología, ciencia, Universo COMICON, humor y archivos extraños conectados por una Red de Portales independiente creada en Argentina.',
     support: 'Apoyar el proyecto',
     informationLabel: 'Información',
     trust: 'Confianza',
@@ -20,7 +20,7 @@ const copy = {
     rights: 'Todos los derechos reservados.',
   },
   en: {
-    description: 'Gaming, technology, science, humor and unusual archives connected through an independent Portal Network created in Argentina.',
+    description: 'Gaming, technology, science, COMICON Universe, humor and unusual archives connected through an independent Portal Network created in Argentina.',
     support: 'Support the project',
     informationLabel: 'Information',
     trust: 'Trust',

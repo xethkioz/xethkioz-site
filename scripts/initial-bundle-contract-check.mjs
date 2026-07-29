@@ -9,6 +9,7 @@ const publicHtmlFiles = [
   'seo-shells/gaming.html',
   'seo-shells/gaming-guides.html',
   'seo-shells/science.html',
+  'seo-shells/comicon.html',
   'seo-shells/fun.html',
   'seo-shells/news.html',
   'seo-shells/community.html',
