@@ -40,8 +40,8 @@ const spanishRoutes = [
     title: 'Universo COMICON | Marvel, DC, Anime y cultura fan | XETHKIOZ',
     description: 'Noticias, estrenos, personajes y cultura fan de Marvel, DC Universe, anime, manga, cine, series y cómics.',
     keywords: 'Marvel, DC Universe, anime, manga, cómics, cine, series, cultura fan, XETHKIOZ',
-    image: '/assets/portal-comicon-world.svg',
-    imageAlt: 'Portal Universo COMICON de XETHKIOZ',
+    image: '/assets/xethkioz-light-shadow-comic-anime.webp',
+    imageAlt: 'Xethkioz como superhéroe de luz y villano de oscuridad en estilo cómic anime',
   },
   {
     file: 'fun.html',
@@ -161,8 +161,8 @@ const englishRoutes = [
     title: 'COMICON Universe | Marvel, DC, Anime and fan culture | XETHKIOZ',
     description: 'News, releases, characters and fan culture across Marvel, DC Universe, anime, manga, movies, series and comics.',
     keywords: 'Marvel, DC Universe, anime, manga, comics, movies, series, fan culture, XETHKIOZ',
-    image: '/assets/portal-comicon-world.svg',
-    imageAlt: 'XETHKIOZ COMICON Universe portal',
+    image: '/assets/xethkioz-light-shadow-comic-anime.webp',
+    imageAlt: 'Xethkioz as a light superhero and dark villain in comic anime style',
   },
   {
     file: 'en-fun.html',
