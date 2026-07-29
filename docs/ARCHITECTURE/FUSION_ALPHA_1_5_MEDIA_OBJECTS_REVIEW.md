@@ -1,13 +1,13 @@
 # Fusion Alpha 1.5 Visual / Audio Objects Review
 
-Generated: 2026-07-23T03:35:07.468Z
+Generated: 2026-07-29T16:59:07.182Z
 
 ## Asset summary
-- Total media assets: 101
-- Images/SVG: 93
+- Total media assets: 103
+- Images/SVG: 95
 - Videos: 8
 - Audio files: 0
-- By extension: svg=73, mp4=8, webp=13, png=7
+- By extension: svg=74, mp4=8, webp=14, png=7
 
 ## Video assets
 - public/assets/bg-dragon-animated.mp4

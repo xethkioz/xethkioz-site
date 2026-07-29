@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 
-type NewsCategory = 'gaming' | 'tech' | 'science' | 'ai' | 'community' | 'green' | 'programming'
+type NewsCategory = 'gaming' | 'tech' | 'science' | 'ai' | 'community' | 'green' | 'programming' | 'comicon'
 type Language = 'es' | 'en'
 
 type ContentBlock = {
@@ -25,7 +25,7 @@ type RateEntry = {
   resetAt: number
 }
 
-const allowedCategories: NewsCategory[] = ['gaming', 'tech', 'science', 'ai', 'community', 'green', 'programming']
+const allowedCategories: NewsCategory[] = ['gaming', 'tech', 'science', 'ai', 'community', 'green', 'programming', 'comicon']
 const allowedLanguages: Language[] = ['es', 'en']
 const rateBucket = new Map<string, RateEntry>()
 const idempotencyBucket = new Map<string, { expiresAt: number; response: unknown }>()

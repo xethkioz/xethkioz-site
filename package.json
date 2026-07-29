@@ -22,6 +22,7 @@
     "audit:media": "node scripts/media-assets-review.mjs",
     "audit:wisp-engine": "node scripts/wisp-engine-check.mjs",
     "audit:portal-wisp-guides": "node scripts/portal-wisp-guides-check.mjs",
+    "audit:comicon": "node scripts/comicon-portal-check.mjs",
     "audit:functionality": "node scripts/functionality-core-check.mjs",
     "audit:portal": "node scripts/portal-registry-check.mjs",
     "audit:runtime": "node scripts/runtime-integration-check.mjs",

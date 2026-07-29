@@ -1,6 +1,6 @@
 import { isSupabaseConfigured, supabase } from '../supabaseClient'
 
-export type PublicNewsCategory = 'gaming' | 'tech' | 'science' | 'ai' | 'community' | 'green' | 'programming'
+export type PublicNewsCategory = 'gaming' | 'tech' | 'science' | 'ai' | 'community' | 'green' | 'programming' | 'comicon'
 export type PublicNewsStatus = 'draft' | 'review' | 'published' | 'archived'
 
 export type PublicNewsContentBlock = {
@@ -50,7 +50,7 @@ type RawNewsArticle = {
   cover_image_alt: string | null
 }
 
-export const publicNewsCategories = ['gaming', 'tech', 'science', 'ai', 'community', 'green', 'programming'] as const
+export const publicNewsCategories = ['gaming', 'tech', 'science', 'ai', 'community', 'green', 'programming', 'comicon'] as const
 
 export const publicNewsCategoryLabels = {
   es: {
@@ -62,6 +62,7 @@ export const publicNewsCategoryLabels = {
     community: 'Comunidad',
     green: 'Green Node',
     programming: 'Programación',
+    comicon: 'Universo COMICON',
   },
   en: {
     all: 'All',
@@ -72,6 +73,7 @@ export const publicNewsCategoryLabels = {
     community: 'Community',
     green: 'Green Node',
     programming: 'Programming',
+    comicon: 'COMICON Universe',
   },
 } as const
 

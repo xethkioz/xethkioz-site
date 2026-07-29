@@ -8,14 +8,16 @@ const navigation = {
   es: [
     { to: '/', label: 'INICIO' },
     { to: '/gaming', label: 'JUEGOS' },
-    { to: '/science', label: 'CIENCIA & TECH' },
+    { to: 'https://argenciencia.com/', label: 'CIENCIA & TECH', external: true },
+    { to: '/comicon', label: 'COMICON' },
     { to: '/fun', label: 'DIVERSIÓN' },
     { to: '/creacion-web', label: 'CREACIÓN WEB' },
   ],
   en: [
     { to: '/', label: 'HOME' },
     { to: '/gaming', label: 'GAMING' },
-    { to: '/science', label: 'SCIENCE & TECH' },
+    { to: 'https://argenciencia.com/', label: 'SCIENCE & TECH', external: true },
+    { to: '/comicon', label: 'COMICON' },
     { to: '/fun', label: 'FUN' },
     { to: '/creacion-web', label: 'WEB CREATION' },
   ],
@@ -25,14 +27,16 @@ const launcher = {
   es: [
     { to: '/', label: 'Inicio', icon: '⌂' },
     { to: '/gaming', label: 'Juegos', icon: '🎮' },
-    { to: '/science', label: 'Ciencia', icon: '◈' },
+    { to: 'https://argenciencia.com/', label: 'ArgenCiencia', icon: '◈', external: true },
+    { to: '/comicon', label: 'COMICON', icon: '✹' },
     { to: '/fun', label: 'Diversión', icon: '☻' },
     { to: '/creacion-web', label: 'Creación web', icon: '▣' },
   ],
   en: [
     { to: '/', label: 'Home', icon: '⌂' },
     { to: '/gaming', label: 'Gaming', icon: '🎮' },
-    { to: '/science', label: 'Science', icon: '◈' },
+    { to: 'https://argenciencia.com/', label: 'ArgenCiencia', icon: '◈', external: true },
+    { to: '/comicon', label: 'COMICON', icon: '✹' },
     { to: '/fun', label: 'Fun', icon: '☻' },
     { to: '/creacion-web', label: 'Web creation', icon: '▣' },
   ],
@@ -70,8 +74,8 @@ export default function Header() {
   const { account } = useHud()
   const { triggerGreenPortal } = useWisp()
   const navigate = useNavigate()
-  const nav = navigation[lang].map((item) => ({ ...item, to: localizePath(item.to) }))
-  const rail = launcher[lang].map((item) => ({ ...item, to: localizePath(item.to) }))
+  const nav = navigation[lang].map((item) => 'external' in item ? item : ({ ...item, to: localizePath(item.to) }))
+  const rail = launcher[lang].map((item) => 'external' in item ? item : ({ ...item, to: localizePath(item.to) }))
   const t = labels[lang]
 
   const switchLang = () => setLang(lang === 'es' ? 'en' : 'es')
@@ -87,9 +91,15 @@ export default function Header() {
     <>
       <aside className="fixed left-4 top-1/2 z-[72] hidden -translate-y-1/2 flex-col gap-3 rounded-[2rem] border border-white/10 bg-black/45 p-2 shadow-[0_0_34px_rgba(139,92,246,.22)] backdrop-blur-xl md:flex" aria-label={t.launcher}>
         {rail.map((item) => (
-          <NavLink key={item.to} to={item.to} aria-label={item.label} className={({ isActive }) => `grid h-12 w-12 place-items-center rounded-2xl border bg-white/[0.035] text-lg text-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 ${isActive ? 'border-[#FF6B1A] shadow-[0_0_18px_rgba(255,107,26,.5)]' : 'border-white/10 hover:border-[#8B5CF6] hover:shadow-[0_0_18px_rgba(139,92,246,.55)]'}`} title={item.label}>
-            <span aria-hidden="true">{item.icon}</span>
-          </NavLink>
+          'external' in item ? (
+            <a key={item.to} href={item.to} target="_blank" rel="noopener noreferrer" aria-label={item.label} className="grid h-12 w-12 place-items-center rounded-2xl border border-white/10 bg-white/[0.035] text-lg text-white transition hover:border-[#22d3ee] hover:shadow-[0_0_18px_rgba(34,211,238,.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300" title={item.label}>
+              <span aria-hidden="true">{item.icon}</span>
+            </a>
+          ) : (
+            <NavLink key={item.to} to={item.to} aria-label={item.label} className={({ isActive }) => `grid h-12 w-12 place-items-center rounded-2xl border bg-white/[0.035] text-lg text-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 ${isActive ? 'border-[#FF6B1A] shadow-[0_0_18px_rgba(255,107,26,.5)]' : 'border-white/10 hover:border-[#8B5CF6] hover:shadow-[0_0_18px_rgba(139,92,246,.55)]'}`} title={item.label}>
+              <span aria-hidden="true">{item.icon}</span>
+            </NavLink>
+          )
         ))}
         <button type="button" onClick={openGreen} aria-label={t.green} className="grid h-12 w-12 place-items-center rounded-2xl border border-[#32FF8A]/35 bg-[#32FF8A]/10 text-lg text-[#32FF8A] transition hover:border-[#32FF8A] hover:shadow-[0_0_20px_rgba(50,255,138,.65)]" title="Green Node">
           <span aria-hidden="true">✦</span>
@@ -104,9 +114,15 @@ export default function Header() {
 
           <nav className="hidden justify-self-center rounded-full border border-white/10 bg-black/35 px-2 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-gray-300 lg:flex" aria-label={t.topNav}>
             {nav.map((item) => (
-              <NavLink key={item.to} to={item.to} className={({ isActive }) => `rounded-full px-4 py-2 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 ${isActive ? 'bg-[#8B5CF6]/20 text-white shadow-[0_0_14px_rgba(139,92,246,.35)]' : 'hover:bg-[#8B5CF6]/15 hover:text-white'}`}>
-                {item.label}
-              </NavLink>
+              'external' in item ? (
+                <a key={item.to} href={item.to} target="_blank" rel="noopener noreferrer" className="rounded-full px-4 py-2 transition hover:bg-cyan-400/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300">
+                  {item.label} ↗
+                </a>
+              ) : (
+                <NavLink key={item.to} to={item.to} className={({ isActive }) => `rounded-full px-4 py-2 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 ${isActive ? 'bg-[#8B5CF6]/20 text-white shadow-[0_0_14px_rgba(139,92,246,.35)]' : 'hover:bg-[#8B5CF6]/15 hover:text-white'}`}>
+                  {item.label}
+                </NavLink>
+              )
             ))}
             <button type="button" onClick={openGreen} aria-label={t.green} className="rounded-full px-4 py-2 text-[#32FF8A] transition hover:bg-[#32FF8A]/10 hover:shadow-[0_0_14px_rgba(50,255,138,.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#32FF8A]">
               {t.greenShort}
@@ -127,10 +143,17 @@ export default function Header() {
 
       <nav className="xk-mobile-dock" aria-label={t.mobileNav}>
         {rail.map((item) => (
-          <NavLink key={item.to} to={item.to} aria-label={item.label} className={({ isActive }) => isActive ? 'is-active' : undefined}>
-            <span aria-hidden="true">{item.icon}</span>
-            <small>{item.label}</small>
-          </NavLink>
+          'external' in item ? (
+            <a key={item.to} href={item.to} target="_blank" rel="noopener noreferrer" aria-label={item.label}>
+              <span aria-hidden="true">{item.icon}</span>
+              <small>{item.label}</small>
+            </a>
+          ) : (
+            <NavLink key={item.to} to={item.to} aria-label={item.label} className={({ isActive }) => isActive ? 'is-active' : undefined}>
+              <span aria-hidden="true">{item.icon}</span>
+              <small>{item.label}</small>
+            </NavLink>
+          )
         ))}
       </nav>
     </>

@@ -33,7 +33,7 @@ const report = [
   `- Lib/config/context files: ${libs.length}`,
   '',
   '## Public route contract detected in App.tsx',
-  ...['/','/gaming','/science','/fun','/green-node'].map((route) => `- ${route}: ${app.includes(`path="${route}"`) ? 'present' : 'missing'}`),
+  ...['/','/gaming','/science','/comicon','/fun','/green-node'].map((route) => `- ${route}: ${app.includes(`path="${route}"`) ? 'present' : 'missing'}`),
   '',
   '## Fusion components',
   ...fusion.map((file) => `- ${file}`),
