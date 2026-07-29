@@ -135,7 +135,8 @@ check(
   'Home exposes four primary magical portals with real interior depth',
   home.includes("frame: '/assets/portal-games-clean-v1.webp'")
     && home.includes("frame: '/assets/portal-science-clean-v1.webp'")
-    && home.includes("world: '/assets/portal-comicon-world.svg'")
+    && home.includes("world: '/assets/xethkioz-light-shadow-comic-anime.webp'")
+    && exists('public/assets/xethkioz-light-shadow-comic-anime.webp')
     && home.includes("frame: '/assets/portal-fun-chaos-v2.webp'")
     && home.includes('className="xk-rb-window"')
     && home.includes('className="xk-rb-frame"')
