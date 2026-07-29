@@ -28,6 +28,7 @@ const copy = {
     intro: 'Noticias, estrenos, teorías, personajes y cultura fan reunidos en un universo propio. Cada publicación mantiene fuente, contexto y aviso de spoilers.',
     status: 'PORTAL EN LÍNEA',
     feed: 'Radar completo',
+    heroAlt: 'Xethkioz dividido entre un superhéroe de luz y un villano de oscuridad, ilustrado en estilo cómic anime.',
     channelsLabel: 'Canales del multiverso',
     contentTitle: 'Transmisiones del universo',
     contentText: 'Las publicaciones aprobadas desde el CMS aparecen automáticamente en este panel.',
@@ -65,6 +66,7 @@ const copy = {
     intro: 'News, releases, theories, characters and fan culture gathered in a universe of their own. Every post keeps its source, context and spoiler warning.',
     status: 'PORTAL ONLINE',
     feed: 'Complete radar',
+    heroAlt: 'Xethkioz split between a light superhero and a dark villain, illustrated in comic anime style.',
     channelsLabel: 'Multiverse channels',
     contentTitle: 'Universe transmissions',
     contentText: 'CMS-approved posts appear automatically in this panel.',
@@ -170,7 +172,7 @@ export default function ComicUniverse() {
         title={t.seoTitle}
         description={t.seoDescription}
         url="/comicon"
-        image="/assets/portal-comicon-world.svg"
+        image="/assets/xethkioz-light-shadow-comic-anime.webp"
         tags={['Marvel', 'DC Universe', 'anime', 'manga', 'cómics', 'cine', 'series']}
       />
 
@@ -188,13 +190,15 @@ export default function ComicUniverse() {
             </nav>
           </div>
 
-          <div className="xk-comicon-art" aria-hidden="true">
-            <span className="is-burst">NEXUS!</span>
-            <span className="is-panel is-marvel">M</span>
-            <span className="is-panel is-dc">DC</span>
-            <span className="is-panel is-anime">ア</span>
-            <i /><i /><i />
-          </div>
+          <figure className="xk-comicon-art">
+            <SafeImage
+              src="/assets/xethkioz-light-shadow-comic-anime.webp"
+              fallback="/assets/portal-comicon-world.svg"
+              alt={t.heroAlt}
+              loading="eager"
+              fetchPriority="high"
+            />
+          </figure>
         </section>
 
         <section id="comicon-channels" className="xk-comicon-channels" aria-labelledby="comicon-channels-title">
