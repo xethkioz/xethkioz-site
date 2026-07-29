@@ -44,6 +44,7 @@ export default function SafeImage({
   style,
 }: SafeImageProps) {
   const safeSrc = cleanImageUrl(src, fallback)
+  const resolvedLoading = fetchPriority === 'low' && loading === 'eager' ? 'lazy' : loading
 
   const handleError = (event: SyntheticEvent<HTMLImageElement>) => {
     const img = event.currentTarget
@@ -56,7 +57,7 @@ export default function SafeImage({
       src={safeSrc}
       alt={alt}
       className={className}
-      loading={loading}
+      loading={resolvedLoading}
       decoding="async"
       fetchPriority={fetchPriority}
       style={style}
