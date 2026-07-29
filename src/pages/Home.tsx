@@ -107,10 +107,10 @@ const copy = {
         subtitle: 'Marvel · DC · Anime · Cultura Fan',
         action: 'ABRIR MULTIVERSO',
         route: '/comicon',
-        world: '/assets/portal-comicon-world.svg',
+        world: '/assets/xethkioz-light-shadow-comic-anime.webp',
         frame: '/assets/portal-games-clean-v1.webp',
         tone: '#ffe45c',
-        position: '50% 50%',
+        position: '50% 42%',
       },
       {
         id: 'fun',
@@ -221,10 +221,10 @@ const copy = {
         subtitle: 'Marvel · DC · Anime · Fan Culture',
         action: 'OPEN MULTIVERSE',
         route: '/comicon',
-        world: '/assets/portal-comicon-world.svg',
+        world: '/assets/xethkioz-light-shadow-comic-anime.webp',
         frame: '/assets/portal-games-clean-v1.webp',
         tone: '#ffe45c',
-        position: '50% 50%',
+        position: '50% 42%',
       },
       {
         id: 'fun',
@@ -295,18 +295,41 @@ function useAmbientVideoEnabled(graphicsMode: 'full' | 'lite') {
   useEffect(() => {
     const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)')
     const connection = (navigator as Navigator & { connection?: DataSavingConnection }).connection
-    let cancelScheduled: (() => void) | undefined
+    let armed = false
+    let activated = false
+
+    const removeInteractionListeners = () => {
+      if (!armed) return
+      window.removeEventListener('pointerdown', activate)
+      window.removeEventListener('keydown', activate)
+      window.removeEventListener('scroll', activate)
+      armed = false
+    }
+
+    const activate = () => {
+      if (graphicsMode === 'lite' || motionPreference.matches || connection?.saveData) return
+      activated = true
+      setEnabled(true)
+      removeInteractionListeners()
+    }
+
+    const armInteractionListeners = () => {
+      if (armed || activated) return
+      window.addEventListener('pointerdown', activate, { passive: true })
+      window.addEventListener('keydown', activate)
+      window.addEventListener('scroll', activate, { passive: true })
+      armed = true
+    }
 
     const syncPreference = () => {
-      cancelScheduled?.()
-      cancelScheduled = undefined
-
       if (graphicsMode === 'lite' || motionPreference.matches || connection?.saveData) {
+        activated = false
         setEnabled(false)
+        removeInteractionListeners()
         return
       }
 
-      cancelScheduled = scheduleIdleTask(() => setEnabled(true))
+      armInteractionListeners()
     }
 
     syncPreference()
@@ -314,7 +337,7 @@ function useAmbientVideoEnabled(graphicsMode: 'full' | 'lite') {
     connection?.addEventListener?.('change', syncPreference)
 
     return () => {
-      cancelScheduled?.()
+      removeInteractionListeners()
       motionPreference.removeEventListener('change', syncPreference)
       connection?.removeEventListener?.('change', syncPreference)
     }
