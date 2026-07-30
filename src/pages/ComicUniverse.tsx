@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import SEO from '../components/SEO'
 import SafeImage from '../components/SafeImage'
+import OriginalComicFeature from '../components/comicon/OriginalComicFeature'
+import ComiconLibrary from '../components/comicon/ComiconLibrary'
 import { useLang } from '../lib/LangContext'
 import type { PublicNewsArticle } from '../services/news/publicNewsService'
 import './ComicUniverse.css'
@@ -163,7 +165,7 @@ export default function ComicUniverse() {
     if (channel === 'all') next.delete('channel')
     else next.set('channel', channel)
     setSearchParams(next, { replace: true })
-    window.requestAnimationFrame(() => document.getElementById('comicon-transmissions')?.focus({ preventScroll: true }))
+    window.requestAnimationFrame(() => document.getElementById('comicon-library-title')?.focus({ preventScroll: true }))
   }
 
   return (
@@ -185,7 +187,7 @@ export default function ComicUniverse() {
             <strong><i aria-hidden="true" /> {t.status}</strong>
             <div>{t.intro}</div>
             <nav aria-label={t.channelsLabel}>
-              <a href="#comicon-channels">{t.channelsLabel} ↓</a>
+              <a href="#comicon-original-title">{lang === 'es' ? 'Cómic original' : 'Original comic'} ↓</a>
               <Link to={localizePath('/news?category=comicon')}>{t.feed} ↗</Link>
             </nav>
           </div>
@@ -200,6 +202,8 @@ export default function ComicUniverse() {
             />
           </figure>
         </section>
+
+        <OriginalComicFeature lang={lang} />
 
         <section id="comicon-channels" className="xk-comicon-channels" aria-labelledby="comicon-channels-title">
           <header>
@@ -224,6 +228,8 @@ export default function ComicUniverse() {
             })}
           </div>
         </section>
+
+        <ComiconLibrary lang={lang} channel={activeChannel} />
 
         <section id="comicon-transmissions" tabIndex={-1} className="xk-comicon-transmissions" aria-labelledby="comicon-content-title">
           <header>
