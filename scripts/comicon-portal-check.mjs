@@ -32,7 +32,7 @@ check('Database constraint allows COMICON', migration.includes("'comicon'") && m
 check('Portal is responsive and motion-safe', css.includes('@media(max-width:620px)') && css.includes('@media(prefers-reduced-motion:reduce)'))
 check('Editorial safeguards are visible', page.includes('Diferenciar anuncios oficiales, rumores y teorías') && page.includes('Avisar antes de revelar spoilers'))
 check('Comic anime hero is optimized and accessible', fs.existsSync(animeHero) && page.includes("src=\"/assets/xethkioz-light-shadow-comic-anime.webp\"") && page.includes('alt={t.heroAlt}') && page.includes('fetchPriority="high"'))
-check('Original XETHKIOZ comic is integrated', page.includes('<OriginalComicFeature') && originalFeature.includes('Dos almas, un guerrero') && originalFeature.includes('aria-controls="xk-original-comic-reader"'))
+check('Original XETHKIOZ comic is integrated', page.includes('<OriginalComicFeature') && catalog.includes('Dos almas, un guerrero') && originalFeature.includes('aria-controls="xk-original-comic-reader"'))
 check('Original comic includes a readable prologue', catalog.includes("id: 'prologo'") && originalFeature.includes('prologue.panels.map') && css.includes('.xk-comicon-panels'))
 check('Editorial library starts with at least 36 routes', catalogCount >= 36 && page.includes('<ComiconLibrary') && library.includes('data-catalog-count={comiconCatalog.length}'))
 check('Library scales without rendering every card initially', library.includes('slice(0, visibleCount)') && library.includes('current + 12'))
