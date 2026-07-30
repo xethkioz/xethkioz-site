@@ -73,7 +73,7 @@ export default function ComiconLibrary({ lang, channel }: Props) {
       <header>
         <div>
           <p>{t.eyebrow}</p>
-          <h2 id="comicon-library-title">{t.title}</h2>
+          <h2 id="comicon-library-title" tabIndex={-1}>{t.title}</h2>
         </div>
         <span>{t.description}</span>
       </header>
