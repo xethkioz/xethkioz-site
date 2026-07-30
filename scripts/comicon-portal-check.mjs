@@ -13,7 +13,11 @@ const service = read('src/services/news/publicNewsService.ts')
 const generator = read('src/cms/routes/CmsGenerate.tsx')
 const api = read('api/generate-news/index.ts')
 const migration = read('supabase/migrations/20260729140000_add_comicon_news_category.sql')
+const catalog = read('src/data/comiconCatalog.ts')
+const originalFeature = read('src/components/comicon/OriginalComicFeature.tsx')
+const library = read('src/components/comicon/ComiconLibrary.tsx')
 const animeHero = 'public/assets/xethkioz-light-shadow-comic-anime.webp'
+const catalogCount = (catalog.match(/id: 'catalog-/g) ?? []).length
 
 check('COMICON has localized public routes', app.includes('path="/comicon"') && app.includes('path="/en/comicon"'))
 check('Home exposes the fourth portal', home.includes("id: 'comicon'") && home.includes("route: '/comicon'"))
@@ -28,6 +32,10 @@ check('Database constraint allows COMICON', migration.includes("'comicon'") && m
 check('Portal is responsive and motion-safe', css.includes('@media(max-width:620px)') && css.includes('@media(prefers-reduced-motion:reduce)'))
 check('Editorial safeguards are visible', page.includes('Diferenciar anuncios oficiales, rumores y teorías') && page.includes('Avisar antes de revelar spoilers'))
 check('Comic anime hero is optimized and accessible', fs.existsSync(animeHero) && page.includes("src=\"/assets/xethkioz-light-shadow-comic-anime.webp\"") && page.includes('alt={t.heroAlt}') && page.includes('fetchPriority="high"'))
+check('Original XETHKIOZ comic is integrated', page.includes('<OriginalComicFeature') && originalFeature.includes('Dos almas, un guerrero') && originalFeature.includes('aria-controls="xk-original-comic-reader"'))
+check('Original comic includes a readable prologue', catalog.includes("id: 'prologo'") && originalFeature.includes('prologue.panels.map') && css.includes('.xk-comicon-panels'))
+check('Editorial library starts with at least 36 routes', catalogCount >= 36 && page.includes('<ComiconLibrary') && library.includes('data-catalog-count={comiconCatalog.length}'))
+check('Library scales without rendering every card initially', library.includes('slice(0, visibleCount)') && library.includes('current + 12'))
 
 for (const item of checks) console.log(`${item.ok ? 'PASS' : 'FAIL'} ${item.name}`)
 const failed = checks.filter((item) => !item.ok)
