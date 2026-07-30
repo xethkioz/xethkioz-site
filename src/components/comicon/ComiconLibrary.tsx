@@ -223,7 +223,7 @@ export default function ComiconLibrary({ lang, channel }: Props) {
                 <h4>{t.sources}</h4>
                 <div>
                   {selectedItem.source_urls.map((url) => (
-                    <a key={url} href={url} target="_blank" rel="noreferrer">
+                    <a key={url} href={url} target="_blank" rel="noopener noreferrer">
                       {sourceLabel(url, t.source)} ↗
                     </a>
                   ))}
