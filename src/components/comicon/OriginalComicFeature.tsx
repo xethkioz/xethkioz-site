@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import SafeImage from '../SafeImage'
 import { originalComic } from '../../data/comiconCatalog'
+import '../../pages/ComicUniverseExpansion.css'
 
 type Props = {
   lang: 'es' | 'en'
