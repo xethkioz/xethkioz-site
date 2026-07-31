@@ -16,7 +16,15 @@ export type ComicChapter = {
   panels?: readonly ComicPanel[]
 }
 
-export const originalComicSaga = {
+export type OriginalComicSaga = {
+  slug: string
+  title: Record<ComicLang, string>
+  saga: Record<ComicLang, string>
+  synopsis: Record<ComicLang, string>
+  chapters: readonly ComicChapter[]
+}
+
+export const originalComicSaga: OriginalComicSaga = {
   slug: 'dos-almas-un-guerrero',
   title: { es: 'Dos almas, un guerrero', en: 'Two souls, one warrior' },
   saga: { es: 'Saga I · El Umbral', en: 'Saga I · The Threshold' },
@@ -59,5 +67,5 @@ export const originalComicSaga = {
     { id: 'capitulo-3', number: '03', status: 'planned', title: { es: 'El precio de la luz', en: 'The price of light' } },
     { id: 'capitulo-4', number: '04', status: 'planned', title: { es: 'La libertad de la sombra', en: 'The freedom of shadow' } },
     { id: 'capitulo-5', number: '05', status: 'planned', title: { es: 'Más allá del juego', en: 'Beyond the game' } },
-  ] satisfies readonly ComicChapter[],
-} as const
+  ],
+}
