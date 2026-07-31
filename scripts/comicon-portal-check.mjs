@@ -7,6 +7,7 @@ const check = (name, ok) => checks.push({ name, ok: Boolean(ok) })
 const app = read('src/App.tsx')
 const page = read('src/pages/ComicUniverse.tsx')
 const css = read('src/pages/ComicUniverse.css')
+const expansionCss = read('src/pages/ComicUniverseExpansion.css')
 const realLibraryCss = read('src/components/comicon/ComiconLibraryReal.css')
 const home = read('src/pages/Home.tsx')
 const header = read('src/components/Header.tsx')
@@ -18,12 +19,14 @@ const migration = read('supabase/migrations/20260729140000_add_comicon_news_cate
 const catalogMigration = read('supabase/migrations/20260730223000_comicon_real_catalog.sql')
 const realLoad = read('docs/OPERATIONS/COMICON_REAL_LOAD_2026-07-30.md')
 const catalog = read('src/data/comiconCatalog.ts')
+const originalSaga = read('src/data/originalComicSaga.ts')
 const originalFeature = read('src/components/comicon/OriginalComicFeature.tsx')
 const library = read('src/components/comicon/ComiconLibrary.tsx')
 const animeHero = 'public/assets/xethkioz-light-shadow-comic-anime.webp'
 const editorialRouteCount = (catalog.match(/id: 'catalog-/g) ?? []).length
 const realCatalogCount = (realLoad.match(/^- `[-a-z0-9]+` · (?:marvel|dc|anime|screen|comics) ·/gm) ?? []).length
 const realComiconArticles = (realLoad.match(/^- `comicon-[-a-z0-9]+` · comicon ·/gm) ?? []).length
+const readableOriginalChapters = (originalSaga.match(/status: 'available'/g) ?? []).length
 
 check('COMICON has localized public routes', app.includes('path="/comicon"') && app.includes('path="/en/comicon"'))
 check('Home exposes the fourth portal', home.includes("id: 'comicon'") && home.includes("route: '/comicon'"))
@@ -38,8 +41,10 @@ check('Database constraint allows COMICON', migration.includes("'comicon'") && m
 check('Portal is responsive and motion-safe', css.includes('@media(max-width:620px)') && css.includes('@media(prefers-reduced-motion:reduce)'))
 check('Editorial safeguards are visible', page.includes('Diferenciar anuncios oficiales, rumores y teorías') && page.includes('Avisar antes de revelar spoilers'))
 check('Comic anime hero is optimized and accessible', fs.existsSync(animeHero) && page.includes("src=\"/assets/xethkioz-light-shadow-comic-anime.webp\"") && page.includes('alt={t.heroAlt}') && page.includes('fetchPriority="high"'))
-check('Original XETHKIOZ comic is integrated', page.includes('<OriginalComicFeature') && catalog.includes('Dos almas, un guerrero') && originalFeature.includes('aria-controls="xk-original-comic-reader"'))
-check('Original comic includes a readable prologue', catalog.includes("id: 'prologo'") && originalFeature.includes('prologue.panels.map') && css.includes('.xk-comicon-panels'))
+check('Original XETHKIOZ comic is integrated', page.includes('<OriginalComicFeature') && originalSaga.includes('Dos almas, un guerrero') && originalFeature.includes('aria-controls="xk-original-comic-reader"'))
+check('Original comic includes prologue and chapter 01', readableOriginalChapters >= 2 && originalSaga.includes("id: 'prologo'") && originalSaga.includes("id: 'capitulo-1'") && originalSaga.includes('El guardián sin reino'))
+check('Original comic reader selects available chapters', originalFeature.includes('selectedChapterId') && originalFeature.includes('selectChapter') && originalFeature.includes('selectedChapter.panels.map'))
+check('Original comic chapter controls are responsive', expansionCss.includes('.xk-comicon-chapter-card') && expansionCss.includes('@media(max-width:700px)'))
 check('Editorial library keeps at least 36 development routes', editorialRouteCount >= 36)
 check('Structured COMICON catalog is protected by RLS', catalogMigration.includes('create table if not exists public.comicon_catalog') && catalogMigration.includes('comicon_catalog_public_read') && catalogMigration.includes("xethkioz_has_role(array['ADMIN'])"))
 check('Real catalog load records at least 40 sourced profiles', realCatalogCount >= 40 && realLoad.includes('Cada ficha incluye editorial/estudio') && realLoad.includes('imágenes'))

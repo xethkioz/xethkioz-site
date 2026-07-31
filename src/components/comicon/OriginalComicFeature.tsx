@@ -1,46 +1,69 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import SafeImage from '../SafeImage'
-import { originalComic } from '../../data/comiconCatalog'
+import { originalComicSaga, type ComicChapter, type ComicPanel } from '../../data/originalComicSaga'
 import '../../pages/ComicUniverseExpansion.css'
 
 type Props = {
   lang: 'es' | 'en'
 }
 
+type ReadableChapter = ComicChapter & { panels: readonly ComicPanel[] }
+
 const copy = {
   es: {
     eyebrow: 'XETHKIOZ ORIGINAL // SERIE 01',
     title: 'Cómic original',
-    available: 'Prólogo disponible',
+    available: 'Disponible',
     planned: 'En desarrollo',
     chapters: 'Capítulos de la primera saga',
-    read: 'Leer prólogo',
+    read: 'Abrir lector',
     close: 'Cerrar lector',
-    reader: 'Lector vertical · Prólogo',
-    continue: 'Continuará en el Capítulo 01',
-    note: 'Historia original de XETHKIOZ. La serie crecerá con nuevas páginas, capítulos y portadas desde el portal COMICON.',
+    reader: 'Lector vertical',
+    continue: 'Continuará',
+    complete: 'Fin del contenido disponible',
+    note: 'Historia original de XETHKIOZ. El prólogo y el Capítulo 01 ya pueden leerse completos dentro del portal COMICON.',
+    availableCount: 'capítulos disponibles',
+    choose: 'Seleccionar capítulo',
   },
   en: {
     eyebrow: 'XETHKIOZ ORIGINAL // SERIES 01',
     title: 'Original comic',
-    available: 'Prologue available',
+    available: 'Available',
     planned: 'In development',
     chapters: 'First saga chapters',
-    read: 'Read prologue',
+    read: 'Open reader',
     close: 'Close reader',
-    reader: 'Vertical reader · Prologue',
-    continue: 'Continued in Chapter 01',
-    note: 'An original XETHKIOZ story. The series will grow with new pages, chapters and covers inside the COMICON portal.',
+    reader: 'Vertical reader',
+    continue: 'Continued',
+    complete: 'End of available content',
+    note: 'An original XETHKIOZ story. The prologue and Chapter 01 can now be read in full inside the COMICON portal.',
+    availableCount: 'chapters available',
+    choose: 'Select chapter',
   },
 } as const
 
 export default function OriginalComicFeature({ lang }: Props) {
+  const readableChapters = useMemo(
+    () => originalComicSaga.chapters.filter(
+      (chapter): chapter is ReadableChapter => chapter.status === 'available' && Array.isArray(chapter.panels),
+    ),
+    [],
+  )
+  const [selectedChapterId, setSelectedChapterId] = useState(readableChapters[0]?.id ?? '')
   const [readerOpen, setReaderOpen] = useState(false)
   const t = copy[lang]
-  const prologue = originalComic.chapters[0]
+  const selectedChapter = readableChapters.find((chapter) => chapter.id === selectedChapterId) ?? readableChapters[0]
+  const chapterIndex = originalComicSaga.chapters.findIndex((chapter) => chapter.id === selectedChapter?.id)
+  const nextChapter = chapterIndex >= 0 ? originalComicSaga.chapters[chapterIndex + 1] : null
+
+  function selectChapter(chapter: ReadableChapter) {
+    setSelectedChapterId(chapter.id)
+    setReaderOpen(true)
+    window.requestAnimationFrame(() => document.getElementById('xk-original-comic-reader')?.focus({ preventScroll: true }))
+  }
 
   return (
-    <section className="xk-comicon-original" aria-labelledby="comicon-original-title" data-original-comic={originalComic.slug}>
+    <section className="xk-comicon-original" aria-labelledby="comicon-original-title" data-original-comic={originalComicSaga.slug}>
       <header>
         <p>{t.eyebrow}</p>
         <h2 id="comicon-original-title">{t.title}</h2>
@@ -51,17 +74,17 @@ export default function OriginalComicFeature({ lang }: Props) {
           <SafeImage
             src="/assets/xethkioz-light-shadow-comic-anime.webp"
             fallback="/assets/portal-comicon-world.svg"
-            alt={originalComic.title[lang]}
+            alt={originalComicSaga.title[lang]}
             loading="lazy"
             fetchPriority="low"
           />
-          <figcaption>{originalComic.saga[lang]}</figcaption>
+          <figcaption>{originalComicSaga.saga[lang]}</figcaption>
         </figure>
 
         <div className="xk-comicon-original-copy">
-          <span>{t.available}</span>
-          <h3>{originalComic.title[lang]}</h3>
-          <p>{originalComic.synopsis[lang]}</p>
+          <span>{readableChapters.length} {t.availableCount}</span>
+          <h3>{originalComicSaga.title[lang]}</h3>
+          <p>{originalComicSaga.synopsis[lang]}</p>
           <button
             type="button"
             aria-expanded={readerOpen}
@@ -74,25 +97,43 @@ export default function OriginalComicFeature({ lang }: Props) {
         </div>
       </div>
 
-      <div className="xk-comicon-chapter-strip" aria-label={t.chapters}>
-        {originalComic.chapters.map((chapter) => (
-          <article key={chapter.id} data-status={chapter.status}>
-            <span>{chapter.number}</span>
-            <div>
-              <b>{chapter.title[lang]}</b>
-              <small>{chapter.status === 'available' ? t.available : t.planned}</small>
-            </div>
-          </article>
-        ))}
+      <div className="xk-comicon-chapter-strip" role="group" aria-label={`${t.chapters}. ${t.choose}`}>
+        {originalComicSaga.chapters.map((chapter) => {
+          const readable = readableChapters.find((item) => item.id === chapter.id)
+          return (
+            <button
+              key={chapter.id}
+              type="button"
+              className="xk-comicon-chapter-card"
+              data-status={chapter.status}
+              data-selected={selectedChapter?.id === chapter.id}
+              disabled={!readable}
+              aria-pressed={readable ? selectedChapter?.id === chapter.id : undefined}
+              onClick={() => readable && selectChapter(readable)}
+            >
+              <span>{chapter.number}</span>
+              <span>
+                <b>{chapter.title[lang]}</b>
+                <small>{readable ? t.available : t.planned}</small>
+              </span>
+            </button>
+          )
+        })}
       </div>
 
-      {readerOpen ? (
-        <div id="xk-original-comic-reader" className="xk-comicon-reader" role="region" aria-label={t.reader}>
-          <header><span>{prologue.number}</span><h3>{prologue.title[lang]}</h3></header>
+      {readerOpen && selectedChapter ? (
+        <div
+          id="xk-original-comic-reader"
+          className="xk-comicon-reader"
+          role="region"
+          tabIndex={-1}
+          aria-label={`${t.reader} · ${selectedChapter.title[lang]}`}
+        >
+          <header><span>{selectedChapter.number}</span><h3>{selectedChapter.title[lang]}</h3></header>
           <div className="xk-comicon-panels">
-            {prologue.panels.map((panel, index) => (
-              <article key={`${panel.tone}-${index}`} data-tone={panel.tone}>
-                {index === 4 ? (
+            {selectedChapter.panels.map((panel, index) => (
+              <article key={`${selectedChapter.id}-${panel.tone}-${index}`} data-tone={panel.tone}>
+                {panel.art === 'identity' ? (
                   <SafeImage
                     src="/assets/xethkioz-light-shadow-comic-anime.webp"
                     fallback="/assets/portal-comicon-world.svg"
@@ -106,7 +147,7 @@ export default function OriginalComicFeature({ lang }: Props) {
               </article>
             ))}
           </div>
-          <footer>{t.continue}</footer>
+          <footer>{nextChapter ? `${t.continue}: ${nextChapter.title[lang]}` : t.complete}</footer>
         </div>
       ) : null}
     </section>
