@@ -2,6 +2,7 @@ const places=['Puan','Darregueira','Bordenave','Villa Iris','Felipe Solá','17 d
 const MAX_IMAGES=2;
 const VALID_DAYS=15;
 const DAY=86400000;
+const castIcon=document.querySelector('.action-cast .icon');if(castIcon)castIcon.textContent='🩹';
 const nowIso=()=>new Date().toISOString();
 const basePosts=[
   {id:'barby-2026',type:'Perdido',name:'Barby',species:'Perra tipo galgo',locality:'Puan',zone:'Zona céntrica',description:'Desaparecida desde el 11/07. Pelaje atigrado y blanco, hocico blanco, patas largas blancas y orejas paradas. Está castrada y tiene una C marcada en la oreja.',phone:'2923413848',castrated:'Sí',real:true,staticImages:['/assets/barby-real.svg'],publishedAt:'2026-08-01T12:00:00.000Z'},
