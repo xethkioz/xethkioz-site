@@ -26,10 +26,10 @@ export const UNIVERSE_PORTALS: readonly UniversePortal[] = [
     signal: { es: 'OBSERVATORIO VIVO', en: 'LIVING OBSERVATORY' },
   },
   {
-    id: 'fun', code: 'XK-03', glyph: '笑', route: '/fun', tone: '#fb923c', image: '/assets/portal-fun-world-v3.webp',
-    title: { es: 'Chaos Alley', en: 'Chaos Alley' },
-    subtitle: { es: 'Memes, clips, rarezas y humor participativo.', en: 'Memes, clips, oddities and participatory humor.' },
-    signal: { es: 'CALLE DEL CAOS', en: 'CHAOS ALLEY' },
+    id: 'fun', code: 'XK-03', glyph: '🐾', route: '/fun', tone: '#34d399', image: '/assets/portal-mascotas-huellas.svg',
+    title: { es: 'Huellas de Puan', en: 'Huellas de Puan' },
+    subtitle: { es: 'Perdidos, encontrados, adopciones, rescate y cuidado animal.', en: 'Lost pets, found animals, adoption, rescue and animal care.' },
+    signal: { es: 'RED COMUNITARIA ANIMAL', en: 'COMMUNITY ANIMAL NETWORK' },
   },
   {
     id: 'nexus', code: 'XK-04', glyph: '界', route: '/nexus-city', tone: '#f97316', image: '/assets/xethkioz-cover.webp',
