@@ -2,10 +2,11 @@ import { lazy, Suspense, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
 const NexusCity = lazy(() => import('./NexusCity'))
+const MASCOTAS_URL = 'https://www.xethkioz.com.ar/mascotas/'
 
 function MascotasRedirect() {
   useEffect(() => {
-    window.location.replace('/mascotas/')
+    window.location.replace(MASCOTAS_URL)
   }, [])
 
   return (
@@ -14,7 +15,7 @@ function MascotasRedirect() {
         <p className="text-sm font-black uppercase tracking-[0.18em] text-emerald-300">XETHKIOZ</p>
         <h1 className="mt-3 text-3xl font-black">Abriendo Huellas de Puan…</h1>
         <p className="mt-3 text-slate-300">El antiguo portal de memes fue reemplazado por la red comunitaria animal.</p>
-        <a className="mt-6 inline-block rounded-xl bg-emerald-600 px-5 py-3 font-black" href="/mascotas/">Entrar a Mascotas</a>
+        <a className="mt-6 inline-block rounded-xl bg-emerald-600 px-5 py-3 font-black" href={MASCOTAS_URL}>Entrar a Mascotas</a>
       </div>
     </main>
   )
