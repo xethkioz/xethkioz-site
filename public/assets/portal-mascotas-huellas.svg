@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Huellas de Puan</title><desc id="desc">Ilustración de un perro y un gato protegidos por manos, con paisaje de laguna y pastizal.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#dff7ef"/><stop offset="1" stop-color="#8fd3c0"/></linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#27765b"/><stop offset="1" stop-color="#0d4937"/></linearGradient>
+    <filter id="shadow"><feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#0b3025" flood-opacity=".25"/></filter>
+  </defs>
+  <rect width="1200" height="720" rx="44" fill="url(#sky)"/>
+  <circle cx="1030" cy="112" r="58" fill="#ffe59a" opacity=".9"/>
+  <path d="M0 420C180 345 320 470 500 402s340-5 700-95v413H0Z" fill="url(#ground)"/>
+  <path d="M0 505c260-55 415 55 648 6 203-43 319-112 552-83v106c-250-40-369 31-563 69-250 48-408-49-637 1Z" fill="#78b8b3" opacity=".7"/>
+  <g opacity=".9" fill="#f4df9b"><path d="M100 516q20-75 38 0q19-98 40 0q13-57 30 0Z"/><path d="M945 480q18-76 37 0q17-92 39 0q15-61 32 0Z"/></g>
+  <g filter="url(#shadow)" transform="translate(280 145)">
+    <path d="M33 389c77 31 134 7 190-54 44-47 92-74 155-77 72-4 122 29 174 86 51 56 112 73 183 43-26 78-97 139-203 150H225C122 526 55 468 33 389Z" fill="#f6c99b"/>
+    <path d="M96 387c60 9 100-19 142-72l37 29c-48 74-112 113-191 101Z" fill="#efb77f"/>
+    <path d="M672 387c-60 9-100-19-142-72l-37 29c48 74 112 113 191 101Z" fill="#efb77f"/>
+    <g transform="translate(168 64)">
+      <path d="M43 174 20 66l86 54Z" fill="#b66f46"/><path d="m276 174 23-108-86 54Z" fill="#b66f46"/>
+      <ellipse cx="160" cy="199" rx="137" ry="151" fill="#d9905f"/>
+      <ellipse cx="160" cy="226" rx="97" ry="93" fill="#f5c99d"/>
+      <ellipse cx="114" cy="179" rx="15" ry="20" fill="#16241f"/><ellipse cx="207" cy="179" rx="15" ry="20" fill="#16241f"/>
+      <path d="M143 218q17-17 34 0l-17 18Z" fill="#16241f"/><path d="M118 251q42 37 84 0" fill="none" stroke="#7b402b" stroke-width="9" stroke-linecap="round"/>
+      <path d="M78 107 37 41l89 43Z" fill="#d9905f"/><path d="m241 107 41-66-89 43Z" fill="#d9905f"/>
+    </g>
+    <g transform="translate(422 142)">
+      <path d="M40 87 16 6l71 45Z" fill="#656f76"/><path d="m174 87 24-81-71 45Z" fill="#656f76"/>
+      <ellipse cx="107" cy="126" rx="91" ry="104" fill="#87939a"/>
+      <ellipse cx="107" cy="151" rx="63" ry="62" fill="#d9d3c4"/>
+      <ellipse cx="77" cy="112" rx="11" ry="15" fill="#16241f"/><ellipse cx="139" cy="112" rx="11" ry="15" fill="#16241f"/>
+      <path d="M96 143q11-12 23 0l-12 12Z" fill="#cf7b80"/><path d="M76 168q31 23 62 0" fill="none" stroke="#4e5559" stroke-width="6" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(332 8)" fill="#fff" opacity=".95"><ellipse cx="40" cy="55" rx="21" ry="29"/><ellipse cx="77" cy="32" rx="17" ry="23"/><ellipse cx="112" cy="45" rx="18" ry="25"/><ellipse cx="139" cy="78" rx="18" ry="25"/><path d="M49 70c20-28 61-28 82 0 23 31 1 72-40 72S26 101 49 70Z"/></g>
+  </g>
+  <text x="68" y="92" font-family="system-ui, sans-serif" font-size="34" font-weight="800" fill="#104c39">HUELLAS DE PUAN</text>
+  <text x="68" y="130" font-family="system-ui, sans-serif" font-size="20" font-weight="600" fill="#2a6f5a">Rescate · Adopción · Cuidado animal</text>
+</svg>
