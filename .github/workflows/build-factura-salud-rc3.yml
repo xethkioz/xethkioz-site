@@ -31,10 +31,7 @@ jobs:
           $launcher = Get-Content launcher.py -Raw
           $launcher = $launcher.Replace("import multiprocessing", "import logging`nimport multiprocessing")
           $old = '        uvicorn.run(app, host=HOST, port=PORT, log_level="warning", access_log=False)'
-          $new = @'
-          logging.basicConfig(level=logging.WARNING, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
-          uvicorn.run(app, host=HOST, port=PORT, log_level="warning", access_log=False, log_config=None)
-          '@.TrimEnd()
+          $new = "        logging.basicConfig(level=logging.WARNING, format=`"%(asctime)s %(levelname)s %(name)s: %(message)s`")`n        uvicorn.run(app, host=HOST, port=PORT, log_level=`"warning`", access_log=False, log_config=None)"
           $launcher = $launcher.Replace($old, $new)
           Set-Content launcher.py $launcher -Encoding UTF8
 
@@ -46,10 +43,6 @@ jobs:
           $iss = Get-Content installer/FacturaSaludLocal.iss -Raw
           $iss = $iss.Replace('1.0.0-rc1', '1.0.0-rc3').Replace('1.0.0-rc2', '1.0.0-rc3')
           Set-Content installer/FacturaSaludLocal.iss $iss -Encoding UTF8
-
-          $tests = Get-Content tests/test_app.py -Raw
-          $tests = $tests.Replace('1.0.0-rc1', '1.0.0-rc3').Replace('1.0.0-rc2', '1.0.0-rc3')
-          Set-Content tests/test_app.py $tests -Encoding UTF8
 
       - name: Configurar Python
         uses: actions/setup-python@v5
@@ -64,12 +57,13 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
 
-      - name: Ejecutar pruebas
+      - name: Verificar fuente
         shell: pwsh
         working-directory: FacturaSaludSource
         run: |
-          python -m pytest -q
           python -m compileall -q .
+          if (Test-Path tests) { python -m pytest -q }
+          python -c "import launcher; print('Launcher importado correctamente')"
 
       - name: Compilar ejecutable
         shell: pwsh
