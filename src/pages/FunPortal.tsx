@@ -12,10 +12,10 @@ function MascotasRedirect() {
   return (
     <main className="grid min-h-screen place-items-center bg-[#0A0A0F] px-6 text-center text-white">
       <div>
-        <p className="text-sm font-black uppercase tracking-[0.18em] text-emerald-300">XETHKIOZ</p>
+        <p className="text-sm font-black uppercase tracking-[0.18em] text-emerald-300">XETHKIOZ // PORTAL COMUNITARIO</p>
         <h1 className="mt-3 text-3xl font-black">Abriendo Huellas de Puan…</h1>
-        <p className="mt-3 text-slate-300">El antiguo portal de memes fue reemplazado por la red comunitaria animal.</p>
-        <a className="mt-6 inline-block rounded-xl bg-emerald-600 px-5 py-3 font-black" href={MASCOTAS_URL}>Entrar a Mascotas</a>
+        <p className="mt-3 text-slate-300">Mascotas perdidas, animales encontrados, adopciones, castraciones y cuidados responsables.</p>
+        <a className="mt-6 inline-block rounded-xl bg-emerald-600 px-5 py-3 font-black" href={MASCOTAS_URL}>Entrar a Huellas de Puan</a>
       </div>
     </main>
   )

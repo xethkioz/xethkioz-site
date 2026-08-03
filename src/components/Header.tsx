@@ -10,7 +10,7 @@ const navigation = {
     { to: '/gaming', label: 'JUEGOS' },
     { to: 'https://argenciencia.com/', label: 'CIENCIA & TECH', external: true },
     { to: '/comicon', label: 'COMICON' },
-    { to: '/fun', label: 'DIVERSIÓN' },
+    { to: '/fun', label: 'HUELLAS DE PUAN' },
     { to: '/creacion-web', label: 'CREACIÓN WEB' },
   ],
   en: [
@@ -18,7 +18,7 @@ const navigation = {
     { to: '/gaming', label: 'GAMING' },
     { to: 'https://argenciencia.com/', label: 'SCIENCE & TECH', external: true },
     { to: '/comicon', label: 'COMICON' },
-    { to: '/fun', label: 'FUN' },
+    { to: '/fun', label: 'PETS' },
     { to: '/creacion-web', label: 'WEB CREATION' },
   ],
 } as const
@@ -29,7 +29,7 @@ const launcher = {
     { to: '/gaming', label: 'Juegos', icon: '🎮' },
     { to: 'https://argenciencia.com/', label: 'ArgenCiencia', icon: '◈', external: true },
     { to: '/comicon', label: 'COMICON', icon: '✹' },
-    { to: '/fun', label: 'Diversión', icon: '☻' },
+    { to: '/fun', label: 'Mascotas', icon: '🐾' },
     { to: '/creacion-web', label: 'Creación web', icon: '▣' },
   ],
   en: [
@@ -37,7 +37,7 @@ const launcher = {
     { to: '/gaming', label: 'Gaming', icon: '🎮' },
     { to: 'https://argenciencia.com/', label: 'ArgenCiencia', icon: '◈', external: true },
     { to: '/comicon', label: 'COMICON', icon: '✹' },
-    { to: '/fun', label: 'Fun', icon: '☻' },
+    { to: '/fun', label: 'Pets', icon: '🐾' },
     { to: '/creacion-web', label: 'Web creation', icon: '▣' },
   ],
 } as const
