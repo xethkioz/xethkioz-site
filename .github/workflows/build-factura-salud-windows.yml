@@ -1,0 +1,81 @@
+name: Build Factura Salud Windows
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "tools/factura-salud-pro/source.parts/**"
+      - ".github/workflows/build-factura-salud-windows.yml"
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Reconstruir fuente
+        shell: pwsh
+        run: |
+          $parts = Get-ChildItem "tools/factura-salud-pro/source.parts/part*.txt" | Sort-Object Name
+          if ($parts.Count -lt 8) { throw "Faltan partes del archivo fuente" }
+          $b64 = ($parts | ForEach-Object { (Get-Content $_.FullName -Raw).Trim() }) -join ""
+          [IO.File]::WriteAllBytes("FacturaSaludSource.zip", [Convert]::FromBase64String($b64))
+          Expand-Archive "FacturaSaludSource.zip" -DestinationPath "FacturaSaludSource" -Force
+          Get-ChildItem FacturaSaludSource
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependencias
+        shell: pwsh
+        working-directory: FacturaSaludSource
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Ejecutar pruebas
+        shell: pwsh
+        working-directory: FacturaSaludSource
+        run: |
+          if (Test-Path tests) { python -m pytest -q }
+          python -m compileall -q .
+
+      - name: Compilar ejecutable
+        shell: pwsh
+        working-directory: FacturaSaludSource
+        run: pyinstaller --noconfirm --clean FacturaSaludLocal.spec
+
+      - name: Instalar Inno Setup
+        shell: pwsh
+        run: choco install innosetup --no-progress -y
+
+      - name: Crear instalador
+        shell: pwsh
+        working-directory: FacturaSaludSource
+        run: '& "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "installer\FacturaSaludLocal.iss"'
+
+      - name: Reunir archivos
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path release -Force | Out-Null
+          Copy-Item "FacturaSaludSource\dist\FacturaSaludLocal.exe" "release\FacturaSaludLocal.exe"
+          $installers = Get-ChildItem "FacturaSaludSource" -Recurse -Filter "*Setup*.exe"
+          if (-not $installers) { throw "No se generó el instalador" }
+          $installers | Copy-Item -Destination release
+          Get-ChildItem release\*.exe | Get-FileHash -Algorithm SHA256 |
+            ForEach-Object { "$($_.Hash)  $([IO.Path]::GetFileName($_.Path))" } |
+            Set-Content release\SHA256SUMS.txt
+          Get-ChildItem release
+
+      - name: Subir ejecutables
+        uses: actions/upload-artifact@v4
+        with:
+          name: FacturaSaludLocal-Windows
+          path: release/*
+          retention-days: 30
