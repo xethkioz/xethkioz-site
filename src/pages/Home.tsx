@@ -52,8 +52,8 @@ const copy = {
     kicker: 'XETHKIOZ // WORLD GATE',
     titleTop: 'EL GAMING ES',
     titleBottom: 'MI PASIÓN',
-    intro: 'Una entrada viva hacia cuatro mundos principales. Gaming, ciencia, cultura fan y caos se sienten como portales reales, con identidad propia y sin convertir el Home en una grilla técnica.',
-    seoDescription: 'Entrada inmersiva a la Red de Portales XETHKIOZ: gaming, ArgenCiencia, Universo COMICON, diversión, Nexus City, Green Node y creación web.',
+    intro: 'Una entrada viva hacia cuatro mundos principales: gaming, ciencia, cultura fan y una red comunitaria para proteger a los animales de Puan y la región.',
+    seoDescription: 'Entrada inmersiva a la Red de Portales XETHKIOZ: gaming, ArgenCiencia, Universo COMICON, Huellas de Puan, Nexus City, Green Node y creación web.',
     primaryCta: 'ELEGIR UN PORTAL',
     newsCta: 'ABRIR RADAR DE NOTICIAS',
     news: 'NOTICIAS',
@@ -113,16 +113,16 @@ const copy = {
         position: '50% 42%',
       },
       {
-        id: 'fun',
+        id: 'pets',
         code: 'XK-03',
-        title: 'DIVERSIÓN',
-        subtitle: 'Juego · Memes · Clips · Caos',
-        action: 'JUGAR AHORA',
+        title: 'HUELLAS DE PUAN',
+        subtitle: 'Perdidos · Encontrados · Adopciones · Cuidados',
+        action: 'AYUDAR A UNA MASCOTA',
         route: '/fun',
-        world: '/assets/portal-fun-world-v3.webp',
+        world: '/assets/huellas-hero-real.svg',
         frame: '/assets/portal-fun-chaos-v2.webp',
-        tone: '#ff6b1a',
-        position: '50% 53%',
+        tone: '#7ba563',
+        position: '50% 50%',
       },
     ] as PortalCard[],
     destinations: [
@@ -166,8 +166,8 @@ const copy = {
     kicker: 'XETHKIOZ // WORLD GATE',
     titleTop: 'GAMING IS',
     titleBottom: 'MY PASSION',
-    intro: 'A living entrance into four main worlds. Gaming, science, fan culture and chaos feel like real portals again, each with its own identity and without turning the Home into a technical grid.',
-    seoDescription: 'An immersive entrance to the XETHKIOZ Portal Network: gaming, ArgenCiencia, COMICON Universe, fun, Nexus City, Green Node and web creation.',
+    intro: 'A living entrance into four main worlds: gaming, science, fan culture and a community network dedicated to protecting animals in Puan and the surrounding region.',
+    seoDescription: 'An immersive entrance to the XETHKIOZ Portal Network: gaming, ArgenCiencia, COMICON Universe, Huellas de Puan, Nexus City, Green Node and web creation.',
     primaryCta: 'CHOOSE A PORTAL',
     newsCta: 'OPEN NEWS RADAR',
     news: 'NEWS',
@@ -227,16 +227,16 @@ const copy = {
         position: '50% 42%',
       },
       {
-        id: 'fun',
+        id: 'pets',
         code: 'XK-03',
-        title: 'FUN',
-        subtitle: 'Game · Memes · Clips · Chaos',
-        action: 'PLAY NOW',
+        title: 'HUELLAS DE PUAN',
+        subtitle: 'Lost · Found · Adoption · Care',
+        action: 'HELP A PET',
         route: '/fun',
-        world: '/assets/portal-fun-world-v3.webp',
+        world: '/assets/huellas-hero-real.svg',
         frame: '/assets/portal-fun-chaos-v2.webp',
-        tone: '#ff6b1a',
-        position: '50% 53%',
+        tone: '#7ba563',
+        position: '50% 50%',
       },
     ] as PortalCard[],
     destinations: [
@@ -431,7 +431,7 @@ export default function Home() {
               <Link to="/gaming">{lang === 'es' ? 'Juegos' : 'Gaming'}</Link>
               <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ArgenCiencia ↗</a>
               <Link to="/comicon">COMICON</Link>
-              <Link to="/fun">{lang === 'es' ? 'Diversión' : 'Fun'}</Link>
+              <Link to="/fun">{lang === 'es' ? 'Mascotas' : 'Pets'}</Link>
               <Link to="/nexus-city">Nexus City</Link>
               <Link to="/creacion-web">{lang === 'es' ? 'Creación Web' : 'Web Creation'}</Link>
             </nav>
