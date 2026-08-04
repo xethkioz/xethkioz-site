@@ -1,6 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 753" preserveAspectRatio="xMidYMid slice">
-  <title>Perro y gato juntos</title>
-  <desc>Fotografía usada como portada de Huellas de Puan. Autor: Pankajdhiman2310, licencia CC BY-SA 4.0, Wikimedia Commons.</desc>
-  <rect width="1280" height="753" fill="#29451f"/>
-  <image width="1280" height="753" preserveAspectRatio="xMidYMid slice" href="https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Dog_and_Cat-Petsfriend.jpg/1280px-Dog_and_Cat-Petsfriend.jpg"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 753" preserveAspectRatio="xMidYMid slice" role="img" aria-labelledby="title desc">
+  <title id="title">Huellas de Puan</title>
+  <desc id="desc">Un perro y un gato juntos frente a la laguna y los pastizales de Puan.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#dff7ef"/><stop offset="1" stop-color="#73c7b0"/></linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2c825f"/><stop offset="1" stop-color="#0b3b2d"/></linearGradient>
+    <radialGradient id="sun" cx="50%" cy="50%" r="50%"><stop stop-color="#fff7c2"/><stop offset="1" stop-color="#ffd66b"/></radialGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#071c16" flood-opacity=".38"/></filter>
+  </defs>
+  <rect width="1280" height="753" fill="url(#sky)"/>
+  <circle cx="1070" cy="105" r="64" fill="url(#sun)" opacity=".95"/>
+  <path d="M0 410C170 330 330 464 510 394c190-74 366-23 770-118v477H0Z" fill="url(#ground)"/>
+  <path d="M0 516c251-58 426 48 669-5 211-46 367-110 611-73v120c-257-37-400 33-603 73-257 51-430-45-677 10Z" fill="#8ed3d0" opacity=".74"/>
+  <g fill="#e8d490" opacity=".92"><path d="M80 533q21-84 43 0q22-104 45 0q15-67 34 0Z"/><path d="M1030 494q20-85 42 0q21-101 46 0q16-68 36 0Z"/></g>
+  <g filter="url(#shadow)" transform="translate(235 118)">
+    <path d="M45 429c89 36 156 8 221-62 50-55 107-85 180-89 84-4 143 34 203 99 59 65 129 84 211 49-30 90-112 161-235 174H267C147 588 70 520 45 429Z" fill="#f4c28f"/>
+    <path d="M118 426c69 10 116-22 165-83l43 34c-56 85-130 131-221 117Z" fill="#e9aa70"/>
+    <path d="M789 426c-69 10-116-22-165-83l-43 34c56 85 130 131 221 117Z" fill="#e9aa70"/>
+    <g transform="translate(183 72)">
+      <path d="M49 199 22 76l99 62Z" fill="#a95f38"/><path d="m315 199 27-123-99 62Z" fill="#a95f38"/>
+      <ellipse cx="182" cy="228" rx="156" ry="172" fill="#d98854"/>
+      <ellipse cx="182" cy="259" rx="111" ry="106" fill="#f5c799"/>
+      <ellipse cx="130" cy="205" rx="17" ry="23" fill="#13211c"/><ellipse cx="235" cy="205" rx="17" ry="23" fill="#13211c"/>
+      <path d="M163 250q19-20 39 0l-20 21Z" fill="#13211c"/><path d="M134 287q48 43 96 0" fill="none" stroke="#713a25" stroke-width="10" stroke-linecap="round"/>
+      <path d="M90 123 43 47l102 49Z" fill="#d98854"/><path d="m274 123 47-76-102 49Z" fill="#d98854"/>
+    </g>
+    <g transform="translate(475 160)">
+      <path d="M45 99 18 7l81 51Z" fill="#5c676e"/><path d="m198 99 27-92-81 51Z" fill="#5c676e"/>
+      <ellipse cx="122" cy="143" rx="104" ry="119" fill="#7f8c93"/>
+      <ellipse cx="122" cy="172" rx="72" ry="71" fill="#d9d2c2"/>
+      <ellipse cx="88" cy="127" rx="13" ry="17" fill="#13211c"/><ellipse cx="158" cy="127" rx="13" ry="17" fill="#13211c"/>
+      <path d="M109 162q13-14 27 0l-14 14Z" fill="#cc737b"/><path d="M87 191q35 27 70 0" fill="none" stroke="#485056" stroke-width="7" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(373 5)" fill="#fff" opacity=".94"><ellipse cx="45" cy="63" rx="24" ry="33"/><ellipse cx="87" cy="36" rx="19" ry="26"/><ellipse cx="127" cy="51" rx="20" ry="28"/><ellipse cx="158" cy="88" rx="20" ry="28"/><path d="M56 80c23-32 69-32 93 0 26 35 1 82-46 82S30 115 56 80Z"/></g>
+  </g>
+  <g transform="translate(66 60)">
+    <rect width="430" height="112" rx="24" fill="#07281f" opacity=".72"/>
+    <text x="28" y="50" font-family="system-ui, sans-serif" font-size="34" font-weight="900" fill="#fff">HUELLAS DE PUAN</text>
+    <text x="28" y="82" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="#d8ffe9">Rescate · Adopción · Cuidado animal</text>
+  </g>
 </svg>
