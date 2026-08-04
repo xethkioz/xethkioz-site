@@ -1,0 +1,97 @@
+name: Build Factura Salud Windows x86
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/build-factura-salud-x86.yml"
+  workflow_dispatch:
+
+jobs:
+  build-x86:
+    runs-on: windows-2022
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Reconstruir fuente
+        shell: pwsh
+        run: |
+          $parts = Get-ChildItem "tools/factura-salud-pro/source.parts/part*.txt" | Sort-Object Name
+          if ($parts.Count -lt 8) { throw "Faltan partes del archivo fuente" }
+          $b64 = ($parts | ForEach-Object { (Get-Content $_.FullName -Raw).Trim() }) -join ""
+          [IO.File]::WriteAllBytes("FacturaSaludSource.zip", [Convert]::FromBase64String($b64))
+          Expand-Archive "FacturaSaludSource.zip" -DestinationPath "FacturaSaludSource" -Force
+
+      - name: Configurar Python x86
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          architecture: "x86"
+
+      - name: Instalar dependencias x86
+        shell: pwsh
+        working-directory: FacturaSaludSource
+        run: |
+          python -c "import struct; assert struct.calcsize('P') * 8 == 32"
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Corregir Uvicorn para PyInstaller
+        shell: pwsh
+        working-directory: FacturaSaludSource
+        run: |
+          $launcher = Get-Content launcher.py -Raw
+          if ($launcher -notmatch 'import logging') { $launcher = $launcher.Replace("import multiprocessing", "import logging`nimport multiprocessing") }
+          $launcher = $launcher.Replace('uvicorn.run(app, host=HOST, port=PORT, log_level="warning", access_log=False)', 'uvicorn.run(app, host=HOST, port=PORT, log_level="warning", access_log=False, log_config=None)')
+          Set-Content launcher.py $launcher -Encoding UTF8
+          $spec = Get-Content FacturaSaludLocal.spec -Raw
+          if ($spec -notmatch "collect_submodules\('uvicorn'\)") { $spec = $spec.Replace("hiddenimports = collect_submodules('keyring.backends')", "hiddenimports = collect_submodules('keyring.backends') + collect_submodules('uvicorn')") }
+          Set-Content FacturaSaludLocal.spec $spec -Encoding UTF8
+
+      - name: Verificar fuente
+        shell: pwsh
+        working-directory: FacturaSaludSource
+        run: |
+          python -m compileall -q .
+          python -c "import launcher; print('Launcher x86 OK')"
+
+      - name: Compilar portátil x86
+        shell: pwsh
+        working-directory: FacturaSaludSource
+        run: pyinstaller --noconfirm --clean FacturaSaludLocal.spec
+
+      - name: Instalar Inno Setup
+        shell: pwsh
+        run: choco install innosetup --no-progress -y
+
+      - name: Preparar instalador x86
+        shell: pwsh
+        working-directory: FacturaSaludSource
+        run: |
+          $iss = Get-Content installer/FacturaSaludLocal.iss -Raw
+          $iss = $iss.Replace('ArchitecturesAllowed=x64compatible', 'ArchitecturesAllowed=x86 x64compatible')
+          $iss = $iss.Replace('ArchitecturesInstallIn64BitMode=x64compatible', '; Instalación x86')
+          $iss = $iss.Replace('FacturaSaludLocal-Setup-1.0.0-rc1', 'FacturaSaludLocal-Setup-x86-1.0.0-rc3')
+          Set-Content installer/FacturaSaludLocal.iss $iss -Encoding UTF8
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "installer\FacturaSaludLocal.iss"
+
+      - name: Reunir archivos
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path release -Force | Out-Null
+          Copy-Item "FacturaSaludSource\dist\FacturaSaludLocal.exe" "release\FacturaSaludLocal-x86-Portable.exe"
+          $setup = Get-ChildItem "FacturaSaludSource" -Recurse -Filter "*Setup*x86*.exe" | Select-Object -First 1
+          if (-not $setup) { $setup = Get-ChildItem "FacturaSaludSource" -Recurse -Filter "*Setup*.exe" | Select-Object -First 1 }
+          if (-not $setup) { throw "No se generó el instalador x86" }
+          Copy-Item $setup.FullName "release\FacturaSaludLocal-Setup-x86.exe"
+          Get-ChildItem release\*.exe | Get-FileHash -Algorithm SHA256 | ForEach-Object { "$($_.Hash)  $([IO.Path]::GetFileName($_.Path))" } | Set-Content release\SHA256SUMS-x86.txt
+
+      - name: Subir versión x86
+        uses: actions/upload-artifact@v4
+        with:
+          name: FacturaSaludLocal-Windows-x86
+          path: release/*
+          retention-days: 30
