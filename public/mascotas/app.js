@@ -34,3 +34,31 @@ async function uploadImages(id){const urls=[];for(let index=0;index<selectedImag
 const postForm=document.querySelector('#postForm');
 if(postForm)postForm.onsubmit=async e=>{e.preventDefault();const button=e.currentTarget.querySelector('.submit');button.disabled=true;button.textContent='Enviando…';if(notice)notice.style.display='none';try{const lastSubmit=Number(localStorage.getItem('huellas-last-submit')||0);if(Date.now()-lastSubmit<SUBMIT_COOLDOWN)throw new Error('Esperá unos segundos antes de enviar otro aviso.');const f=new FormData(e.currentTarget),id=crypto.randomUUID(),phone=String(f.get('phone')||'').replace(/\D/g,''),zone=String(f.get('zone')||'').trim(),description=String(f.get('description')||'').trim(),name=String(f.get('name')||'Sin nombre').trim();if(phone.length<8||phone.length>15)throw new Error('Ingresá un número de WhatsApp válido.');if(zone.length<3)throw new Error('Indicá una zona aproximada.');if(description.length<20)throw new Error('Agregá una descripción de al menos 20 caracteres.');if(name.length>80)throw new Error('El nombre es demasiado largo.');const image_urls=await uploadImages(id);const payload={id,type:f.get('type'),name:name||'Sin nombre',species:f.get('species'),locality:f.get('locality'),zone:zone.slice(0,140),description:description.slice(0,1200),phone,castrated:f.get('castrated'),image_urls,status:'pending'};const res=await fetch(`${SUPABASE_URL}/rest/v1/pet_posts`,{method:'POST',headers:{...API_HEADERS,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(payload)});if(!res.ok)throw new Error('No se pudo registrar el aviso.');localStorage.setItem('huellas-last-submit',String(Date.now()));localStorage.setItem('huellas-last-receipt',id);e.currentTarget.reset();selectedImages=[];renderPreview();setNotice(`Aviso recibido. Código de seguimiento: ${id.slice(0,8).toUpperCase()}. Será revisado antes de publicarse.`);button.textContent='Enviado';setTimeout(()=>{button.textContent='Publicar información'},1800)}catch(error){console.error(error);setNotice(error.message||'No se pudo enviar la publicación. Intentá nuevamente.','error')}finally{button.disabled=false;if(button.textContent==='Enviando…')button.textContent='Publicar información'}};
 loadPosts();const initial=location.hash.slice(1);if(document.getElementById(initial))show(initial);
+
+// Encabezado de Huellas: distribución independiente del ancho del contenido.
+const headerStyle=document.createElement('style');
+headerStyle.textContent=`
+.top .header-row{width:min(1480px,calc(100% - 32px));display:grid;grid-template-columns:max-content minmax(0,1fr) max-content;gap:18px;padding:0;}
+.top .brand{min-width:136px;gap:8px;}
+.top .brand-mark{font-size:31px;line-height:1;}
+.top .brand-text strong{font-size:1.32rem;line-height:.9;}
+.top .brand-text small{font-size:.86rem;}
+.top .nav{min-width:0;justify-content:flex-start;gap:2px;padding:7px 0;overflow-x:auto;overscroll-behavior-inline:contain;scroll-padding-inline:8px;}
+.top .nav button{flex:0 0 auto;padding:9px 10px;font-size:.86rem;}
+.top .back{padding:10px 15px;font-size:.85rem;}
+@media(max-width:1180px){
+ .top .header-row{grid-template-columns:1fr max-content;gap:8px 14px;padding:9px 0;}
+ .top .nav{grid-column:1/-1;grid-row:2;order:initial;width:100%;padding:2px 0 5px;}
+ .top .back{grid-column:2;grid-row:1;}
+}
+@media(max-width:600px){
+ .top .header-row{width:calc(100% - 20px);}
+ .top .brand{min-width:0;}
+ .top .brand-mark{font-size:27px;}
+ .top .brand-text strong{font-size:1.12rem;}
+ .top .brand-text small{font-size:.74rem;}
+ .top .back{font-size:.7rem;padding:8px 9px;}
+ .top .nav button{font-size:.78rem;padding:8px 9px;}
+}
+`;
+document.head.appendChild(headerStyle);
