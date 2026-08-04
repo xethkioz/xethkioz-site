@@ -1,0 +1,25 @@
+/* Corrección específica del World Gate de Huellas de Puan.
+   El marco heredado de Diversión era opaco y cubría la ilustración. */
+.xk-rb-portal[aria-label*="HUELLAS DE PUAN"] .xk-rb-frame,
+.xk-rb-portal[aria-label*="Huellas de Puan"] .xk-rb-frame,
+.xk-rb-portal[aria-label*="HELP A PET"] .xk-rb-frame {
+  display: none !important;
+}
+
+.xk-rb-portal[aria-label*="HUELLAS DE PUAN"] .xk-rb-window,
+.xk-rb-portal[aria-label*="Huellas de Puan"] .xk-rb-window,
+.xk-rb-portal[aria-label*="HELP A PET"] .xk-rb-window {
+  background: #173f2f;
+}
+
+.xk-rb-portal[aria-label*="HUELLAS DE PUAN"] .xk-rb-window img,
+.xk-rb-portal[aria-label*="Huellas de Puan"] .xk-rb-window img,
+.xk-rb-portal[aria-label*="HELP A PET"] .xk-rb-window img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: 50% 50% !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
