@@ -1,0 +1,11 @@
+/mascotas/
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/mascotas/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/mascotas/app.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/mascotas/stats.js
+  Cache-Control: no-cache, no-store, must-revalidate
