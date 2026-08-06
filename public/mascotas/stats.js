@@ -9,6 +9,46 @@
 
   const style = document.createElement('style');
   style.textContent = `
+    /* Layout final del encabezado. Se aplica al final para evitar regresiones. */
+    .top .header-row{
+      width:min(1480px,calc(100% - 32px))!important;
+      max-width:none!important;
+      display:grid!important;
+      grid-template-columns:max-content minmax(0,1fr) max-content!important;
+      align-items:center!important;
+      gap:18px!important;
+      padding:0!important;
+      overflow:visible!important;
+    }
+    .top .brand{min-width:142px!important;position:relative;z-index:2;gap:8px!important}
+    .top .brand-mark{font-size:31px!important;line-height:1!important}
+    .top .brand-text strong{font-size:1.32rem!important;line-height:.9!important}
+    .top .brand-text small{font-size:.86rem!important}
+    .top .nav{
+      min-width:0!important;
+      width:100%!important;
+      display:flex!important;
+      justify-content:flex-start!important;
+      gap:2px!important;
+      padding:7px 0!important;
+      margin:0!important;
+      overflow-x:auto!important;
+      overflow-y:visible!important;
+      scroll-padding-inline:8px!important;
+      scrollbar-width:none!important;
+    }
+    .top .nav::-webkit-scrollbar{display:none!important}
+    .top .nav button{flex:0 0 auto!important;padding:9px 10px!important;font-size:.86rem!important}
+    .top .nav button:first-child{margin-left:0!important}
+    .top .back{flex:0 0 auto!important;padding:10px 15px!important;font-size:.85rem!important}
+
+    /* Recupera la identidad visual de las tarjetas principales. */
+    .action-card{border:1px solid var(--line)!important;box-shadow:var(--shadow)!important}
+    .action-lost{background:#fff0ed!important}
+    .action-found{background:#eff6ea!important}
+    .action-adopt{background:#f8effc!important}
+    .action-cast{background:#fff4df!important}
+
     .community-stats{width:min(1120px,calc(100% - 30px));margin:0 auto 34px;padding:22px 24px;border:1px solid var(--line);border-radius:25px;background:linear-gradient(135deg,#f0f5e8,#fffdf8 58%,#fff3e6);box-shadow:var(--shadow)}
     .community-stats-head{display:flex;align-items:end;justify-content:space-between;gap:14px;margin-bottom:18px}
     .community-stats-head h2{margin:0;font-size:clamp(1.6rem,3vw,2.25rem);line-height:1;color:var(--ink)}
@@ -21,8 +61,32 @@
     .community-stat strong{display:block;font-size:clamp(1.45rem,2.5vw,2rem);line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
     .community-stat span:last-child{display:block;margin-top:5px;color:var(--muted);font-size:.86rem;font-weight:750}
     .community-stats-note{margin:14px 0 0;color:var(--muted);font-size:.78rem;text-align:center}
-    @media(max-width:800px){.community-stats-grid{grid-template-columns:1fr 1fr}.community-stats-head{align-items:flex-start;flex-direction:column}}
-    @media(max-width:480px){.community-stats{padding:18px 14px}.community-stats-grid{gap:8px}.community-stat{grid-template-columns:1fr;text-align:center;justify-items:center;min-height:126px;padding:13px 8px}.community-stat-icon{width:44px;height:44px}.community-stat span:last-child{font-size:.78rem}}
+
+    @media(max-width:1180px){
+      .top .header-row{grid-template-columns:1fr max-content!important;gap:8px 14px!important;padding:9px 0!important}
+      .top .nav{grid-column:1/-1!important;grid-row:2!important;width:100%!important;padding:2px 0 5px!important}
+      .top .back{grid-column:2!important;grid-row:1!important}
+    }
+    @media(max-width:800px){
+      .community-stats-grid{grid-template-columns:1fr 1fr}
+      .community-stats-head{align-items:flex-start;flex-direction:column}
+    }
+    @media(max-width:600px){
+      .top .header-row{width:calc(100% - 20px)!important}
+      .top .brand{min-width:0!important}
+      .top .brand-mark{font-size:27px!important}
+      .top .brand-text strong{font-size:1.12rem!important}
+      .top .brand-text small{font-size:.74rem!important}
+      .top .back{font-size:.7rem!important;padding:8px 9px!important}
+      .top .nav button{font-size:.78rem!important;padding:8px 9px!important}
+    }
+    @media(max-width:480px){
+      .community-stats{padding:18px 14px}
+      .community-stats-grid{gap:8px}
+      .community-stat{grid-template-columns:1fr;text-align:center;justify-items:center;min-height:126px;padding:13px 8px}
+      .community-stat-icon{width:44px;height:44px}
+      .community-stat span:last-child{font-size:.78rem}
+    }
   `;
   document.head.appendChild(style);
 
