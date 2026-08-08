@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = '20260806-3';
+  const VERSION = '20260808-1';
   const BASE_PATH = '/mascotas/';
 
   const loadScript = (file) => new Promise((resolve, reject) => {
@@ -55,13 +55,38 @@
     nav.scrollLeft = 0;
   };
 
+  const installAccessibilityHardening = () => {
+    if (!document.getElementById('huellas-accessibility-hardening')) {
+      const style = document.createElement('style');
+      style.id = 'huellas-accessibility-hardening';
+      style.textContent = `
+        .action-lost span:last-child{background:#b83227!important;color:#fff!important;}
+        .action-found span:last-child{background:#326e3c!important;color:#fff!important;}
+        .action-cast strong{color:#994400!important;}
+        .action-cast span:last-child{background:#f39a0a!important;color:#3b2400!important;}
+        .expiry strong{color:#8a3b00!important;}
+      `;
+      document.head.appendChild(style);
+    }
+
+    const heroPhoto = document.querySelector('.hero-photo');
+    if (heroPhoto instanceof HTMLImageElement && !heroPhoto.src.includes('/assets/huellas-portal-pets.svg')) {
+      heroPhoto.src = '/assets/huellas-portal-pets.svg';
+      heroPhoto.removeAttribute('srcset');
+    }
+  };
+
   loadScript('app-core.js')
     .then(() => {
       installStableHeader();
+      installAccessibilityHardening();
       window.addEventListener('resize', installStableHeader, { passive: true });
       return loadScript('stats.js');
     })
-    .then(installStableHeader)
+    .then(() => {
+      installStableHeader();
+      installAccessibilityHardening();
+    })
     .catch((error) => {
       console.error('No se pudo iniciar Huellas de Puan.', error);
       const notice = document.createElement('div');
