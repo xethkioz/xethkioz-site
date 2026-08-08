@@ -60,6 +60,19 @@ VITE_SUPABASE_ANON_KEY
 
 No usar `service_role`, `sb_secret_*` ni claves privadas en variables `VITE_*`.
 
+## Telemetría propia opcional
+
+El registro privado de visitas mediante `/api/visit-log` está desactivado por defecto. Para habilitarlo en Vercel deben existir **las dos** variables siguientes:
+
+```txt
+VITE_VISIT_TELEMETRY_ENABLED=true
+SUPABASE_SERVICE_ROLE_KEY=<secret server-side>
+```
+
+`SUPABASE_SERVICE_ROLE_KEY` es un secreto exclusivo del runtime de Vercel. Nunca debe usar el prefijo `VITE_`, nunca debe incluirse en el bundle del navegador y nunca debe subirse al repositorio.
+
+El RPC `xethkioz_record_site_visit` acepta únicamente `service_role`. Si la telemetría propia no se necesita, dejar `VITE_VISIT_TELEMETRY_ENABLED` sin definir mantiene el sitio operativo sin realizar llamadas a `/api/visit-log`. GA4, Clarity y Pixel mantienen sus controles de consentimiento independientes.
+
 ## Validacion local
 
 ```bash
@@ -77,3 +90,4 @@ npm run build
 - Si el chat aparece en modo LOCAL, revisar variables de Vercel y redeploy.
 - Si `/news` no muestra datos, revisar Supabase `news_articles` con `status = published`.
 - Si `/cms` muestra Supabase pendiente, revisar variables y ejecutar redeploy posterior a la carga.
+- No habilitar `VITE_VISIT_TELEMETRY_ENABLED=true` sin configurar también `SUPABASE_SERVICE_ROLE_KEY` en el entorno server-side de Vercel.
