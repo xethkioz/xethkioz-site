@@ -5,7 +5,6 @@ const publicRoutes = [
   '/',
   '/gaming',
   '/science',
-  '/fun',
   '/news',
   '/about',
   '/account',
@@ -68,6 +67,14 @@ test.describe('rutas públicas', () => {
       expect(runtime.consoleErrors, `console.error detectado en ${path}`).toEqual([])
     })
   }
+
+  test('Huellas de Puan carga como portal estático dedicado', async ({ page }) => {
+    const response = await page.goto('/mascotas/', { waitUntil: 'domcontentloaded' })
+    expect(response?.status()).toBeLessThan(400)
+    await expect(page.getByRole('heading', { level: 1, name: /Huellas/i })).toBeVisible()
+    await expect(page.getByRole('navigation', { name: 'Navegación' })).toBeVisible()
+    await expect(page.getByRole('link', { name: 'Volver a XETHKIOZ' })).toHaveAttribute('href', '/')
+  })
 })
 
 test.describe('accesibilidad automatizada', () => {
@@ -94,6 +101,19 @@ test.describe('accesibilidad automatizada', () => {
       ).toEqual([])
     })
   }
+
+  test('Huellas no tiene violaciones Axe serias o críticas', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'chromium-desktop', 'Axe se ejecuta una vez en escritorio')
+    await page.goto('/mascotas/', { waitUntil: 'domcontentloaded' })
+    const result = await new AxeBuilder({ page })
+      .include('main')
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze()
+    const blockingViolations = result.violations.filter(
+      (violation) => violation.impact === 'serious' || violation.impact === 'critical',
+    )
+    expect(blockingViolations).toEqual([])
+  })
 })
 
 test.describe('navegación y estados especiales', () => {
@@ -106,6 +126,12 @@ test.describe('navegación y estados especiales', () => {
 
     await page.goto('/nexus-city')
     await expect(page).toHaveURL(/\/fun#nexus-city$/)
+  })
+
+  test('/fun conserva compatibilidad y deriva al portal Huellas del mismo origen', async ({ page }) => {
+    await page.goto('/fun')
+    await expect(page).toHaveURL(/\/mascotas\/$/)
+    await expect(page.getByRole('heading', { level: 1, name: /Huellas/i })).toBeVisible()
   })
 
   test('una ruta inexistente muestra el estado 404', async ({ page }) => {
@@ -137,7 +163,7 @@ test.describe('telemetría con consentimiento', () => {
     expect(requests).toBe(0)
   })
 
-  test('reintenta un fallo transitorio con el mismo eventId', async ({ page }) => {
+  test('reintenta un fallo transitorio con el mismo eventId cuando la telemetría está habilitada', async ({ page }) => {
     const payloads: Array<{ eventId?: string; route?: string }> = []
 
     await page.addInitScript(() => {
