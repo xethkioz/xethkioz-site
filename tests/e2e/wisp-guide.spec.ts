@@ -1,10 +1,15 @@
 import { expect, test } from '@playwright/test'
 
-test('la guía Wisp permanece estable y abre por interacción', async ({ page }) => {
-  await page.goto('/fun', { waitUntil: 'domcontentloaded' })
+test('la guía WISP de Green Node permanece estable y abre por interacción', async ({ page }) => {
+  await page.addInitScript(() => {
+    window.sessionStorage.setItem('xethkioz.greenNodeUnlocked', String(Date.now()))
+    window.localStorage.setItem('xethkioz.green-node.wisp-guide.v1', 'complete')
+  })
 
-  const launcher = page.locator('.xk-portal-wisp-launcher[data-variant="fun"]')
-  const guide = page.locator('.xk-portal-wisp-guide[data-variant="fun"]')
+  await page.goto('/green-node', { waitUntil: 'domcontentloaded' })
+
+  const launcher = page.locator('.xk-wisp-guide-launcher')
+  const guide = page.locator('.xk-wisp-guide')
 
   await expect(launcher).toBeVisible()
   await page.waitForTimeout(600)
@@ -14,6 +19,6 @@ test('la guía Wisp permanece estable y abre por interacción', async ({ page })
   await expect(guide).toBeVisible()
   await expect(guide.getByRole('heading', { level: 2 })).toBeVisible()
 
-  await guide.getByRole('button', { name: /cerrar la guía|close lumina guide/i }).click()
+  await guide.getByRole('button', { name: /cerrar la guía de wisp|close wisp guide/i }).click()
   await expect(launcher).toBeVisible()
 })
