@@ -1,0 +1,52 @@
+name: Temporary Huellas Static Hardening
+
+on:
+  push:
+    branches:
+      - fix/telemetry-failsafe-20260808
+
+permissions:
+  contents: write
+
+jobs:
+  patch-huellas:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: fix/telemetry-failsafe-20260808
+          fetch-depth: 0
+      - name: Patch static Huellas source
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('public/mascotas/index.html')
+          s = p.read_text()
+          replacements = {
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Dog_and_Cat-Petsfriend.jpg/1280px-Dog_and_Cat-Petsfriend.jpg': '/assets/huellas-portal-pets.svg',
+            '.action-lost span:last-child{background:var(--red)}': '.action-lost span:last-child{background:#b83227}',
+            '.action-found span:last-child{background:#43864e}': '.action-found span:last-child{background:#326e3c}',
+            '.action-cast strong{color:#e47c10}': '.action-cast strong{color:#994400}',
+            '.action-cast span:last-child{background:#f39a0a}': '.action-cast span:last-child{background:#f39a0a;color:#3b2400}',
+            '.expiry strong{color:var(--orange)}': '.expiry strong{color:#8a3b00}',
+          }
+          for old, new in replacements.items():
+            if old not in s:
+              raise SystemExit(f'Missing expected source token: {old}')
+            s = s.replace(old, new)
+          p.write_text(s)
+          PY
+      - name: Verify no runtime Wikimedia dependency remains
+        run: |
+          ! grep -q 'src="https://upload.wikimedia.org' public/mascotas/index.html
+          grep -q 'src="/assets/huellas-portal-pets.svg"' public/mascotas/index.html
+      - name: Commit patch and remove temporary workflow
+        run: |
+          rm .github/workflows/huellas-static-hardening-temp.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/mascotas/index.html .github/workflows/huellas-static-hardening-temp.yml
+          git commit -m 'fix(huellas): localize hero and harden static contrast'
+          git push origin HEAD:fix/telemetry-failsafe-20260808
