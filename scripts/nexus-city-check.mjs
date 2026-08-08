@@ -38,7 +38,7 @@ const vipMigration = read('supabase/migrations/20260723123000_nexus_vip_rooms.sq
 const vipRuntimeHardening = read('supabase/migrations/20260723124500_nexus_vip_rooms_runtime_hardening.sql')
 const profileHub = read('src/pages/ProfileHub.tsx')
 
-check('public Nexus entry integrated into Fun', app.includes('path="/nexus-city"') && app.includes('<Navigate to="/fun#nexus-city"') && fun.includes("const NexusCity = lazy(() => import('./NexusCity'))") && fun.includes('<NexusCity embedded'))
+check('public Nexus entry preserved through Fun compatibility gateway', app.includes('path="/nexus-city"') && app.includes('<Navigate to="/fun#nexus-city"') && fun.includes("const NexusCity = lazy(() => import('./NexusCity'))") && fun.includes("location.hash === '#nexus-city'") && fun.includes('if (isNexusAccess)') && fun.includes('<NexusCity />'))
 check('public passport route', app.includes("import('./pages/NexusPassport')") && app.includes('path="/nexus-city/u/:handle"'))
 check('visitable capsule route', app.includes("import('./pages/NexusRoom')") && app.includes('path="/nexus-city/room/:handle"'))
 check('global and Home navigation', header.includes("to: '/fun'") && home.includes("route: '/nexus-city'") && page.includes("id={embedded ? 'nexus-city' : undefined}"))
@@ -101,7 +101,7 @@ check('VIP inserts can return owner rows without widening membership access', vi
 check('VIP default grants are replaced by column-level privileges', vipMigration.includes('from public, anon, authenticated') && vipRuntimeHardening.includes('grant update (status, responded_at)'))
 check('VIP relationship foreign keys are indexed', vipMigration.includes('nexus_vip_members_inviter_created_idx') && vipMigration.includes('(invited_by, created_at desc)'))
 check('VIP communication is not monetized', vipMigration.includes('never paid communication access') && vipRooms.includes('The ability to talk is not for sale'))
-check('Fun defaults directly to interactive arcade', fun.includes("type MemeSection = 'arcade' | 'clips' | 'wall'") && !fun.includes("activeMemeSection === 'home'"))
+check('Fun defaults to Huellas without eager Nexus mount', fun.includes('return <MascotasRedirect />') && fun.includes('if (isNexusAccess)') && fun.includes("get('mode') === 'play'"))
 check('profile exposes live world shortcuts', profileHub.includes("to: '/nexus-city/vip'") && profileHub.includes("to: '/nexus-city/room/xethkioz'"))
 
 for (const item of checks) console.log(`${item.ok ? 'PASS' : 'FAIL'} ${item.name}`)
