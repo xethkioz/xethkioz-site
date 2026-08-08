@@ -53,3 +53,7 @@ Carga aplicada directamente al CMS/Supabase productivo.
 ## Hallazgo técnico de la misma revisión
 
 Vercel registró tres respuestas `503` consecutivas en `/api/visit-log`. El frontend reintentaba hasta tres veces una telemetría opcional cuyo RPC requiere `service_role`. La corrección de esta rama hace que la telemetría propia sea opt-in mediante `VITE_VISIT_TELEMETRY_ENABLED=true`, evitando generar errores cuando el secreto server-side no está configurado.
+
+## Gate de dependencias
+
+La auditoría de seguridad detectó el advisory de React Router que afecta versiones anteriores a `7.18.2`. La rama se actualizó a `react-router` y `react-router-dom` `7.18.2`, regenerando `package-lock.json` contra el registro real de npm. Este commit documental fuerza una ejecución normal de CI después del commit automatizado del lockfile para validar nuevamente build, navegador y Lighthouse antes del merge.
