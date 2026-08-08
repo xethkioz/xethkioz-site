@@ -57,7 +57,8 @@ export default function Analytics() {
 
     if (preferences.analytics && GA4_ID && window.gtag) window.gtag('config', GA4_ID, { page_path: pagePath })
     if (preferences.marketing && PIXEL_ID && window.fbq) window.fbq('track', 'PageView')
-    if (!preferences.analytics || !VISIT_TELEMETRY_ENABLED) return
+    if (!preferences.analytics) return
+    if (!VISIT_TELEMETRY_ENABLED) return
 
     const storageKey = `xethkioz.telemetry.${pagePath}`
     const storedEvent = readEventId(storageKey)
