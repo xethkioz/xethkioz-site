@@ -137,7 +137,7 @@ export default function MascotasPortal() {
               <Field label="Descripción"><textarea name="description" required rows={5} className="input" placeholder="Color, tamaño, collar, comportamiento y cualquier dato útil." /></Field>
               <div className="grid gap-5 sm:grid-cols-2"><Field label="¿Está castrado?"><select name="castrated" className="input"><option>Sí</option><option>No</option><option>Desconocido</option></select></Field><Field label="Teléfono o WhatsApp"><input name="phone" required inputMode="tel" className="input" placeholder="Solo se mostrará en el detalle" /></Field></div>
               <label className="flex items-start gap-3 rounded-xl bg-amber-50 p-4 text-sm text-amber-950"><input type="checkbox" required className="mt-1 h-5 w-5" />Confirmo que la información es real y autorizo mostrar el contacto en esta publicación.</label>
-              <button className="min-h-14 rounded-2xl bg-emerald-700 px-6 text-lg font-black text-white hover:bg-emerald-800">Publicar información</button>
+              <button type="submit" className="min-h-14 rounded-2xl bg-emerald-700 px-6 text-lg font-black text-white hover:bg-emerald-800">Publicar información</button>
             </form>
           </section>
         )}

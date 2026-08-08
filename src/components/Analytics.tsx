@@ -16,6 +16,7 @@ const GA4_ID = import.meta.env.VITE_GA4_ID as string | undefined
 const CLARITY_ID = import.meta.env.VITE_CLARITY_ID as string | undefined
 const PIXEL_ID = import.meta.env.VITE_FACEBOOK_PIXEL_ID as string | undefined
 const TELEMETRY_ENDPOINT = '/api/visit-log'
+const VISIT_TELEMETRY_ENABLED = import.meta.env.VITE_VISIT_TELEMETRY_ENABLED === 'true'
 const MAX_SEND_ATTEMPTS = 3
 
 function createEventId() {
@@ -57,6 +58,7 @@ export default function Analytics() {
     if (preferences.analytics && GA4_ID && window.gtag) window.gtag('config', GA4_ID, { page_path: pagePath })
     if (preferences.marketing && PIXEL_ID && window.fbq) window.fbq('track', 'PageView')
     if (!preferences.analytics) return
+    if (!VISIT_TELEMETRY_ENABLED) return
 
     const storageKey = `xethkioz.telemetry.${pagePath}`
     const storedEvent = readEventId(storageKey)

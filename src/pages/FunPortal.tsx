@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
 const NexusCity = lazy(() => import('./NexusCity'))
-const MASCOTAS_URL = 'https://www.xethkioz.com.ar/mascotas/'
+const MASCOTAS_URL = '/mascotas/'
 
 function MascotasRedirect() {
   useEffect(() => {

@@ -31,7 +31,7 @@ test.describe('internacionalización indexable', () => {
     await page.goto('/en/science')
 
     await expect(page.getByRole('link', { name: 'Gaming', exact: true }).first()).toHaveAttribute('href', '/en/gaming')
-    await expect(page.getByRole('link', { name: 'Fun', exact: true }).first()).toHaveAttribute('href', '/en/fun')
+    await expect(page.getByRole('link', { name: 'Pets', exact: true }).first()).toHaveAttribute('href', '/en/fun')
     await expect(page.getByRole('link', { name: 'About us', exact: true })).toHaveAttribute('href', '/en/about')
     await expect(page.getByRole('link', { name: 'Editorial policy', exact: true })).toHaveAttribute('href', '/en/editorial-policy')
   })
