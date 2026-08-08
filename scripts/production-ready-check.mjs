@@ -49,6 +49,7 @@ const scienceLab = read('src/pages/ScienceLab.tsx')
 const profileHub = read('src/pages/ProfileHub.tsx')
 const gamingHub = read('src/pages/GamingHub.tsx')
 const funPortal = read('src/pages/FunPortal.tsx')
+const mascotasPortal = read('src/pages/MascotasPortal.tsx')
 const funCss = read('src/pages/FunNexusFusion.css')
 const newsletter = read('src/components/Newsletter.tsx')
 const fusionShell = read('src/components/fusion/FusionShell.tsx')
@@ -250,7 +251,7 @@ check(
     && realtimeCommunity.includes('WISP_EVENTS_KEY'),
 )
 check(
-  'Games and Memes expose real visual content without decorative duplication',
+  'Gaming and Huellas expose real content without decorative duplication',
   gamingHub.includes("fetchPublishedNews('gaming')")
     && gamingHub.includes('gaming-anime-nexus-v1.webp')
     && gamingHub.includes('xk-gaming-start')
@@ -258,31 +259,22 @@ check(
     && gamingHub.includes('xk-feature-rank')
     && gamingHub.includes('<SafeImage')
     && !gamingHub.includes('xk-gaming-ticker')
-    && funPortal.includes("fetchPublishedNews('community')")
-    && funPortal.includes('memes-anime-chaos-v1.webp')
-    && funPortal.includes('xk-meme-bento')
-    && funPortal.includes('xk-chaos-console')
-    && funPortal.includes("activeMemeSection === 'arcade'")
-    && funPortal.includes("activeMemeSection === 'wall'")
-    && funPortal.includes('unleashChaos')
-    && funPortal.includes('<SafeImage')
-    && redesignCss.includes('@keyframes xk-anime-zoom')
-    && funCss.includes('.xk-meme-section-nav')
-    && redesignCss.includes('.xk-gaming-ambient')
-    && redesignCss.includes('.xk-meme-ambient'),
+    && mascotasPortal.includes('PostGrid')
+    && mascotasPortal.includes('fauna.map')
+    && mascotasPortal.includes('/mascotas/publicar')
+    && mascotasPortal.includes('Publicaciones recientes'),
 )
 check(
-  'Creator hubs expose honest live, community and sharing utilities',
+  'Gaming live and Huellas contact flows stay honest about their state',
   gamingHub.includes("from('streams')")
     && gamingHub.includes('SEÑAL MARCADA EN VIVO EN EL CMS')
     && gamingHub.includes('Prepará tu perfil para encontrar grupo')
     && gamingHub.includes('PARTY_BOARD')
     && !gamingHub.includes('Especificaciones en verificación')
     && !gamingHub.includes('fallbackStreams')
-    && funPortal.includes('navigator.share')
-    && funPortal.includes('wa.me')
-    && funPortal.includes('xk-weekly-clip')
-    && funPortal.includes('SOCIAL_WALL'),
+    && mascotasPortal.includes("window.localStorage.setItem('huellas-puan.posts'")
+    && mascotasPortal.includes('En la siguiente etapa se conectará con la base comunitaria.')
+    && mascotasPortal.includes('wa.me/54'),
 )
 check(
   'Science exposes the real stack, a local assistant and a private newsletter',
@@ -303,9 +295,8 @@ check(
     && appShell.includes('clearMobileDock={hasPublicNavigation}')
     && gamingHub.includes('xk-gaming-section-nav')
     && gamingHub.includes('aria-live="polite"')
-    && funPortal.includes('role="tablist"')
-    && funPortal.includes('xk-meme-section-nav')
-    && funCss.includes('grid-template-columns:1fr 1fr')
+    && mascotasPortal.includes('overflow-x-auto')
+    && mascotasPortal.includes('whitespace-nowrap')
     && redesignCss.includes('scrollbar-width:none'),
 )
 check(
@@ -314,7 +305,8 @@ check(
     && !nexusDistrict.includes('UniverseTransitRail')
     && gamingHub.includes('xk-gaming-section-nav')
     && !gamingHub.includes('<NexusDistrict tone="gaming"')
-    && funPortal.includes('<NexusDistrict tone="fun"')
+    && funPortal.includes('return <MascotasRedirect />')
+    && funPortal.includes('if (isNexusAccess)')
     && scienceLab.includes('<NexusDistrict tone="science"')
     && scienceLab.includes('data-science-primary-content')
     && greenNode.includes('<NexusDistrict tone="green"')
