@@ -56,4 +56,10 @@ Vercel registró tres respuestas `503` consecutivas en `/api/visit-log`. El fron
 
 ## Gate de dependencias
 
-La auditoría de seguridad detectó el advisory de React Router que afecta versiones anteriores a `7.18.2`. La rama se actualizó a `react-router` y `react-router-dom` `7.18.2`, regenerando `package-lock.json` contra el registro real de npm. Este commit documental fuerza una ejecución normal de CI después del commit automatizado del lockfile para validar nuevamente build, navegador y Lighthouse antes del merge.
+La auditoría de seguridad detectó el advisory de React Router que afecta versiones anteriores a `7.18.2`. La rama se actualizó a `react-router` y `react-router-dom` `7.18.2`, regenerando `package-lock.json` contra el registro real de npm. La política de dependencias vuelve a bloquear cualquier advisory alto o crítico que afecte dependencias de producción.
+
+## Hardening de Huellas de Puan
+
+La auditoría Axe detectó contrastes insuficientes en llamadas a la acción y fechas de publicaciones; se corrigieron los colores manteniendo la identidad verde/naranja. Lighthouse reveló además que la foto principal todavía se solicitaba desde Wikimedia antes de que el JavaScript la sustituyera, lo que generaba una cookie de tercero y un Issue de Chrome. El HTML inicial ahora referencia directamente `/assets/huellas-portal-pets.svg`, por lo que Huellas no depende de Wikimedia en tiempo de ejecución.
+
+El presupuesto Lighthouse también dejó de medir `/fun` como si fuera el portal final. `/fun` es sólo una ruta heredada de compatibilidad que redirige a Huellas y mantiene el acceso explícito a Nexus City; la ruta de producto que se audita ahora es `/mascotas/`. Los umbrales de rendimiento, accesibilidad, Best Practices, SEO y CLS no fueron relajados.
