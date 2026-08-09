@@ -503,6 +503,32 @@ export default function Home() {
             offer={featuredWebOffer}
           />
 
+          <section className="xk-rb-contact" aria-labelledby="home-contact-title">
+            <div className="xk-rb-contact-copy">
+              <p>{lang === 'es' ? 'XETHKIOZ // CONTACTO DIRECTO' : 'XETHKIOZ // DIRECT CONTACT'}</p>
+              <h2 id="home-contact-title">{lang === 'es' ? '¿Tenés una idea, consulta o proyecto?' : 'Have an idea, question or project?'}</h2>
+              <span>{lang === 'es' ? 'Escribime por el canal que te resulte más cómodo.' : 'Reach me through whichever channel works best for you.'}</span>
+            </div>
+
+            <div className="xk-rb-contact-links">
+              <a href="https://www.instagram.com/xethkioz" target="_blank" rel="noopener noreferrer" aria-label="Instagram de XETHKIOZ">
+                <span>Instagram</span>
+                <strong>@xethkioz</strong>
+                <b aria-hidden="true">↗</b>
+              </a>
+              <a href="mailto:Xethkioz@gmail.com" aria-label="Enviar correo a XETHKIOZ">
+                <span>{lang === 'es' ? 'Correo electrónico' : 'Email'}</span>
+                <strong>Xethkioz@gmail.com</strong>
+                <b aria-hidden="true">↗</b>
+              </a>
+              <a href="https://wa.me/5492923483054" target="_blank" rel="noopener noreferrer" aria-label="Contactar a XETHKIOZ por WhatsApp">
+                <span>WhatsApp</span>
+                <strong>2923 483054</strong>
+                <b aria-hidden="true">↗</b>
+              </a>
+            </div>
+          </section>
+
           <footer className="xk-rb-footer">
             <div>
               <span>{t.copyright}</span>
