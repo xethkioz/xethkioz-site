@@ -10,7 +10,7 @@ const navigation = {
     { to: '/gaming', label: 'JUEGOS' },
     { to: 'https://argenciencia.com/', label: 'CIENCIA & TECH', external: true },
     { to: '/comicon', label: 'COMICON' },
-    { to: '/fun', label: 'HUELLAS DE PUAN' },
+    { to: '/mascotas/', label: 'HUELLAS DE PUAN', external: true, sameTab: true },
     { to: '/creacion-web', label: 'CREACIÓN WEB' },
   ],
   en: [
@@ -18,7 +18,7 @@ const navigation = {
     { to: '/gaming', label: 'GAMING' },
     { to: 'https://argenciencia.com/', label: 'SCIENCE & TECH', external: true },
     { to: '/comicon', label: 'COMICON' },
-    { to: '/fun', label: 'PETS' },
+    { to: '/mascotas/', label: 'PETS', external: true, sameTab: true },
     { to: '/creacion-web', label: 'WEB CREATION' },
   ],
 } as const
@@ -29,7 +29,7 @@ const launcher = {
     { to: '/gaming', label: 'Juegos', icon: '🎮' },
     { to: 'https://argenciencia.com/', label: 'ArgenCiencia', icon: '◈', external: true },
     { to: '/comicon', label: 'COMICON', icon: '✹' },
-    { to: '/fun', label: 'Mascotas', icon: '🐾' },
+    { to: '/mascotas/', label: 'Mascotas', icon: '🐾', external: true, sameTab: true },
     { to: '/creacion-web', label: 'Creación web', icon: '▣' },
   ],
   en: [
@@ -37,7 +37,7 @@ const launcher = {
     { to: '/gaming', label: 'Gaming', icon: '🎮' },
     { to: 'https://argenciencia.com/', label: 'ArgenCiencia', icon: '◈', external: true },
     { to: '/comicon', label: 'COMICON', icon: '✹' },
-    { to: '/fun', label: 'Pets', icon: '🐾' },
+    { to: '/mascotas/', label: 'Pets', icon: '🐾', external: true, sameTab: true },
     { to: '/creacion-web', label: 'Web creation', icon: '▣' },
   ],
 } as const
@@ -92,7 +92,7 @@ export default function Header() {
       <aside className="fixed left-4 top-1/2 z-[72] hidden -translate-y-1/2 flex-col gap-3 rounded-[2rem] border border-white/10 bg-black/45 p-2 shadow-[0_0_34px_rgba(139,92,246,.22)] backdrop-blur-xl md:flex" aria-label={t.launcher}>
         {rail.map((item) => (
           'external' in item ? (
-            <a key={item.to} href={item.to} target="_blank" rel="noopener noreferrer" aria-label={item.label} className="grid h-12 w-12 place-items-center rounded-2xl border border-white/10 bg-white/[0.035] text-lg text-white transition hover:border-[#22d3ee] hover:shadow-[0_0_18px_rgba(34,211,238,.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300" title={item.label}>
+            <a key={item.to} href={item.to} target={'sameTab' in item && item.sameTab ? undefined : '_blank'} rel={'sameTab' in item && item.sameTab ? undefined : 'noopener noreferrer'} aria-label={item.label} className="grid h-12 w-12 place-items-center rounded-2xl border border-white/10 bg-white/[0.035] text-lg text-white transition hover:border-[#22d3ee] hover:shadow-[0_0_18px_rgba(34,211,238,.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300" title={item.label}>
               <span aria-hidden="true">{item.icon}</span>
             </a>
           ) : (
@@ -144,7 +144,7 @@ export default function Header() {
       <nav className="xk-mobile-dock" aria-label={t.mobileNav}>
         {rail.map((item) => (
           'external' in item ? (
-            <a key={item.to} href={item.to} target="_blank" rel="noopener noreferrer" aria-label={item.label}>
+            <a key={item.to} href={item.to} target={'sameTab' in item && item.sameTab ? undefined : '_blank'} rel={'sameTab' in item && item.sameTab ? undefined : 'noopener noreferrer'} aria-label={item.label}>
               <span aria-hidden="true">{item.icon}</span>
               <small>{item.label}</small>
             </a>

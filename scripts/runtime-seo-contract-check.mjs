@@ -15,18 +15,24 @@ const visitLog = read('api/visit-log.ts')
 const visitLogMigration = read('supabase/migrations/20260724153500_privacy_preserving_visit_telemetry.sql')
 
 const redirectMap = new Map((vercel.redirects ?? []).map((item) => [item.source, item]))
-const nexusRedirect = redirectMap.get('/nexus-city')
-assert(nexusRedirect?.destination === '/fun#nexus-city' && nexusRedirect?.permanent === true, 'Nexus City must use a permanent HTTP redirect to the embedded Fun district.')
+assert(!redirectMap.has('/nexus-city'), 'Nexus City must remain a standalone route instead of redirecting through /fun.')
+assert(redirectMap.get('/fun')?.destination === '/mascotas/' && redirectMap.get('/fun')?.permanent === true, 'Legacy /fun must redirect permanently to Huellas.')
+assert(redirectMap.get('/en/fun')?.destination === '/mascotas/' && redirectMap.get('/en/fun')?.permanent === true, 'Legacy /en/fun must redirect permanently to Huellas without inventing an English translation.')
 assert(redirectMap.get('/web-creation')?.destination === '/creacion-web', 'Legacy web creation path must redirect at the HTTP layer.')
 assert(redirectMap.get('/register')?.destination === '/account', 'Legacy register path must redirect at the HTTP layer.')
 assert(redirectMap.get('/admin')?.destination === '/cms', 'Legacy admin path must redirect at the HTTP layer.')
 
 const rewrites = vercel.rewrites ?? []
 const rewriteMap = new Map(rewrites.map((item) => [item.source, item.destination]))
-assert(!rewrites.some((item) => item.source === '/nexus-city'), 'Redirected Nexus City must not have an indexable SEO-shell rewrite.')
-assert(!sitemap.includes("'/nexus-city'"), 'Redirected Nexus City must not remain in the sitemap.')
-assert(!seoShells.includes("path: '/nexus-city'"), 'Redirected Nexus City must not generate a standalone SEO shell.')
-assert(rewriteMap.get('/green-node') === '/index.html', 'Green Node deep links must remain valid without exposing it in navigation.')
+assert(rewriteMap.get('/nexus-city') === '/seo-shells/nexus-city.html', 'Nexus City must use its own indexable SEO shell.')
+assert(sitemap.includes("path: '/nexus-city'"), 'Nexus City must be present in the sitemap.')
+assert(sitemap.includes("path: '/mascotas/'"), 'Huellas must be present in the sitemap under its real route.')
+assert(seoShells.includes("path: '/nexus-city'"), 'Nexus City must generate a standalone SEO shell.')
+assert(!sitemap.includes("{ es: '/fun'"), 'Legacy /fun must not remain as an indexable localized portal.')
+assert(rewriteMap.get('/green-node') === '/seo-shells/green-node.html', 'Public Green Node Protect must use its own indexable SEO shell.')
+assert(rewriteMap.get('/green-node/vault') === '/index.html', 'Vault 13 deep links must remain available through the SPA gate.')
+assert(sitemap.includes("path: '/green-node'"), 'Public Green Node Protect must be present in the sitemap.')
+assert(seoShells.includes("path: '/green-node'"), 'Public Green Node Protect must generate a standalone SEO shell.')
 assert(rewriteMap.get('/news/:slug') === '/api/news-page?slug=:slug', 'Article routes must preserve the slug query for the dynamic SEO shell.')
 assert(newsPage.includes("new URL(rawUrl, 'http://localhost').searchParams.get(key)"), 'The article SEO shell must parse its slug with the WHATWG URL API.')
 assert(!newsPage.includes('request.query'), 'The article SEO shell must not access Vercel request.query because legacy runtimes invoke url.parse().')
@@ -40,6 +46,8 @@ assert(notFound.includes("'X-Robots-Tag', 'noindex, nofollow, noarchive, nosnipp
 const headerMap = new Map((vercel.headers ?? []).map((item) => [item.source, item.headers ?? []]))
 const globalHeaders = headerMap.get('/(.*)') ?? []
 const passportHeaders = headerMap.get('/nexus-city/u/(.*)') ?? []
+const greenHubHeaders = headerMap.get('/green-node') ?? []
+const greenVaultHeaders = headerMap.get('/green-node/vault') ?? []
 const enforcedCsp = globalHeaders.find((item) => item.key === 'Content-Security-Policy')?.value ?? ''
 const observedCsp = globalHeaders.find((item) => item.key === 'Content-Security-Policy-Report-Only')?.value ?? ''
 assert(Boolean(enforcedCsp), 'An enforced Content-Security-Policy header is required in production.')
@@ -55,6 +63,8 @@ assert(!enforcedCsp.includes('script-src https:'), 'Enforced CSP must not allow 
 assert(!observedCsp.match(/script-src[^;]*'unsafe-inline'/), 'Report-only CSP must observe the future removal of inline scripts.')
 assert(observedCsp.includes("form-action 'self'"), 'Report-only CSP must observe same-origin-only form submissions.')
 assert(passportHeaders.some((item) => item.key === 'X-Robots-Tag' && item.value.includes('noindex') && item.value.includes('noimageindex')), 'Nexus passports must remain server-side noindex until dynamic per-profile SEO exists.')
+assert(!greenHubHeaders.some((item) => item.key === 'X-Robots-Tag' && item.value.includes('noindex')), 'Public Green Node Protect must not carry a server-side noindex header.')
+assert(greenVaultHeaders.some((item) => item.key === 'X-Robots-Tag' && item.value.includes('noindex')), 'Vault 13 must remain server-side noindex.')
 
 assert(streamsMigration.includes('create table if not exists public.streams'), 'The Gaming stream radar requires a real streams table migration.')
 assert(streamsMigration.includes('alter table public.streams enable row level security'), 'The streams table must enable RLS.')

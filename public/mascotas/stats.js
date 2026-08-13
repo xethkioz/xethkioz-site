@@ -4,7 +4,6 @@
   const headers = {
     apikey: SUPABASE_KEY,
     Authorization: `Bearer ${SUPABASE_KEY}`,
-    'Content-Type': 'application/json',
   };
 
   const style = document.createElement('style');
@@ -33,17 +32,17 @@
     <div class="community-stats-head">
       <div>
         <h2 id="community-stats-title">🐾 Nuestra comunidad</h2>
-        <p>El impacto real de Huellas de Puan, actualizado automáticamente.</p>
+        <p>Métricas agregadas de avisos aprobados y casos resueltos.</p>
       </div>
-      <span class="community-stats-live">Datos en vivo</span>
+      <span class="community-stats-live">Datos públicos</span>
     </div>
     <div class="community-stats-grid" aria-live="polite">
-      <div class="community-stat"><span class="community-stat-icon">👀</span><div><strong data-stat="visits">—</strong><span>Visitas al portal</span></div></div>
+      <div class="community-stat"><span class="community-stat-icon">📚</span><div><strong data-stat="total_cases">—</strong><span>Casos registrados</span></div></div>
       <div class="community-stat"><span class="community-stat-icon">📢</span><div><strong data-stat="active_posts">—</strong><span>Publicaciones activas</span></div></div>
       <div class="community-stat"><span class="community-stat-icon">❤️</span><div><strong data-stat="reunited">—</strong><span>Mascotas reunidas</span></div></div>
       <div class="community-stat"><span class="community-stat-icon">🏡</span><div><strong data-stat="adoptions">—</strong><span>Adopciones concretadas</span></div></div>
     </div>
-    <p class="community-stats-note">Las cifras se generan a partir de visitas y publicaciones reales del portal.</p>
+    <p class="community-stats-note">La página sólo consulta una tabla agregada de lectura pública. No incrementa contadores ni necesita permisos de escritura.</p>
   `;
 
   const inicio = document.querySelector('#inicio');
@@ -51,33 +50,27 @@
 
   const format = new Intl.NumberFormat('es-AR');
   function renderStats(stats) {
-    ['visits', 'active_posts', 'reunited', 'adoptions'].forEach((key) => {
+    ['total_cases', 'active_posts', 'reunited', 'adoptions'].forEach((key) => {
       const element = block.querySelector(`[data-stat="${key}"]`);
       if (element) element.textContent = format.format(Number(stats?.[key] || 0));
     });
   }
 
-  async function requestStats(registerVisit) {
-    const endpoint = registerVisit ? 'register_huellas_visit' : 'get_huellas_stats';
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${endpoint}`, {
-      method: 'POST',
+  async function requestStats() {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/huellas_public_stats?id=eq.1&select=total_cases,active_posts,reunited,adoptions`, {
+      method: 'GET',
       headers,
-      body: '{}',
       cache: 'no-store',
     });
     if (!response.ok) throw new Error(`Stats HTTP ${response.status}`);
-    return response.json();
+    const rows = await response.json();
+    return Array.isArray(rows) ? rows[0] : null;
   }
 
-  const sessionKey = 'huellas-visit-counted-v1';
-  const shouldRegister = !sessionStorage.getItem(sessionKey);
-  requestStats(shouldRegister)
-    .then((stats) => {
-      if (shouldRegister) sessionStorage.setItem(sessionKey, '1');
-      renderStats(stats);
-    })
+  requestStats()
+    .then((stats) => renderStats(stats))
     .catch((error) => {
-      console.error('No se pudieron cargar las estadísticas de Huellas.', error);
+      console.error('No se pudieron cargar las estadísticas públicas de Huellas.', error);
       const status = block.querySelector('.community-stats-live');
       if (status) status.textContent = 'Datos temporalmente no disponibles';
     });

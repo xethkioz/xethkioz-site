@@ -13,7 +13,6 @@ const localizedRoutes: LocalizedRoute[] = [
   { es: '/gaming/guides', en: '/en/gaming/guides', changefreq: 'weekly', priority: '0.8' },
   { es: '/science', en: '/en/science', changefreq: 'weekly', priority: '0.8' },
   { es: '/comicon', en: '/en/comicon', changefreq: 'daily', priority: '0.8' },
-  { es: '/fun', en: '/en/fun', changefreq: 'weekly', priority: '0.8' },
   { es: '/community', en: '/en/community', changefreq: 'weekly', priority: '0.8' },
   { es: '/creacion-web', en: '/en/creacion-web', changefreq: 'weekly', priority: '0.8' },
   { es: '/about', en: '/en/about', changefreq: 'weekly', priority: '0.7' },
@@ -25,6 +24,9 @@ const localizedRoutes: LocalizedRoute[] = [
 
 const spanishOnlyRoutes = [
   { path: '/news', changefreq: 'daily', priority: '0.9' },
+  { path: '/green-node', changefreq: 'daily', priority: '0.8' },
+  { path: '/nexus-city', changefreq: 'weekly', priority: '0.8' },
+  { path: '/mascotas/', changefreq: 'daily', priority: '0.8' },
 ]
 
 function alternateLinks(route: LocalizedRoute) {

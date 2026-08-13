@@ -6,6 +6,8 @@ const publicRoutes = [
   '/gaming',
   '/science',
   '/news',
+  '/comicon',
+  '/nexus-city',
   '/about',
   '/account',
   '/en',
@@ -124,8 +126,12 @@ test.describe('navegación y estados especiales', () => {
     await page.goto('/web-creation')
     await expect(page).toHaveURL(/\/creacion-web$/)
 
+  })
+
+  test('Nexus City es una ruta propia y no depende de Fun', async ({ page }) => {
     await page.goto('/nexus-city')
-    await expect(page).toHaveURL(/\/fun#nexus-city$/)
+    await expect(page).toHaveURL(/\/nexus-city$/)
+    await expect(page.getByRole('heading', { level: 1 }).first()).toBeVisible()
   })
 
   test('/fun conserva compatibilidad y deriva al portal Huellas del mismo origen', async ({ page }) => {

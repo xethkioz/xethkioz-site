@@ -29,6 +29,7 @@ type PortalCard = {
   action: string
   route: string
   external?: boolean
+  sameTab?: boolean
   world: string
   frame: string
   tone: string
@@ -118,7 +119,9 @@ const copy = {
         title: 'HUELLAS DE PUAN',
         subtitle: 'Perdidos · Encontrados · Adopciones · Cuidados',
         action: 'AYUDAR A UNA MASCOTA',
-        route: '/fun',
+        route: '/mascotas/',
+        external: true,
+        sameTab: true,
         world: '/assets/huellas-hero-real.svg',
         frame: '/assets/portal-fun-chaos-v2.webp',
         tone: '#7ba563',
@@ -232,7 +235,9 @@ const copy = {
         title: 'HUELLAS DE PUAN',
         subtitle: 'Lost · Found · Adoption · Care',
         action: 'HELP A PET',
-        route: '/fun',
+        route: '/mascotas/',
+        external: true,
+        sameTab: true,
         world: '/assets/huellas-hero-real.svg',
         frame: '/assets/portal-fun-chaos-v2.webp',
         tone: '#7ba563',
@@ -431,7 +436,7 @@ export default function Home() {
               <Link to="/gaming">{lang === 'es' ? 'Juegos' : 'Gaming'}</Link>
               <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ArgenCiencia ↗</a>
               <Link to="/comicon">COMICON</Link>
-              <Link to="/fun">{lang === 'es' ? 'Mascotas' : 'Pets'}</Link>
+              <a href="/mascotas/">{lang === 'es' ? 'Mascotas' : 'Pets'}</a>
               <Link to="/nexus-city">Nexus City</Link>
               <Link to="/creacion-web">{lang === 'es' ? 'Creación Web' : 'Web Creation'}</Link>
             </nav>
@@ -579,7 +584,11 @@ function PrimaryPortal({ portal }: { portal: PortalCard }) {
     'aria-label': `${portal.action}: ${portal.title}`,
   }
 
-  if (portal.external) return <a {...commonProps} href={portal.route} target="_blank" rel="noopener noreferrer">{content}</a>
+  if (portal.external) {
+    const target = portal.sameTab ? undefined : '_blank'
+    const rel = portal.sameTab ? undefined : 'noopener noreferrer'
+    return <a {...commonProps} href={portal.route} target={target} rel={rel}>{content}</a>
+  }
   return <Link {...commonProps} to={portal.route}>{content}</Link>
 }
 

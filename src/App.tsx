@@ -31,7 +31,9 @@ const GamingGuides = lazy(() => import('./pages/GamingGuides'))
 const ScienceLab = lazy(() => import('./pages/ScienceLab'))
 const ComicUniverse = lazy(() => import('./pages/ComicUniverse'))
 const FunPortal = lazy(() => import('./pages/FunPortal'))
+const NexusCity = lazy(() => import('./pages/NexusCity'))
 const WebCreation = lazy(() => import('./pages/WebCreation'))
+const GreenNodeHub = lazy(() => import('./pages/GreenNodeHub'))
 const GreenNode = lazy(() => import('./pages/GreenNode'))
 const ProfileHub = lazy(() => import('./pages/ProfileHub'))
 const NexusPassport = lazy(() => import('./pages/NexusPassport'))
@@ -67,7 +69,7 @@ const EditorialPolicy = lazy(() => import('./pages/EditorialPolicy'))
 
 function GreenNodeGate() {
   const unlocked = typeof window !== 'undefined' && Boolean(window.sessionStorage.getItem(GREEN_NODE_UNLOCK_KEY))
-  return unlocked ? <GreenNode /> : <Navigate to="/" replace />
+  return unlocked ? <GreenNode /> : <Navigate to="/green-node" replace />
 }
 
 function RouteFallback() {
@@ -92,9 +94,11 @@ const routeNames = {
     '/gaming/guides': 'Guías de juegos',
     '/science': 'Ciencia y tecnología',
     '/comicon': 'Universo COMICON',
-    '/fun': 'Diversión',
+    '/fun': 'Huellas de Puan (ruta heredada)',
+    '/mascotas': 'Huellas de Puan',
     '/creacion-web': 'Creación web',
-    '/green-node': 'Green Node',
+    '/green-node': 'Green Node Protect',
+    '/green-node/vault': 'Green Node Vault 13',
     '/news': 'Noticias',
     '/community': 'Comunidad',
     '/nexus-city': 'Nexus City',
@@ -116,9 +120,11 @@ const routeNames = {
     '/gaming/guides': 'Gaming guides',
     '/science': 'Science and technology',
     '/comicon': 'COMICON Universe',
-    '/fun': 'Fun',
+    '/fun': 'Huellas de Puan (legacy route)',
+    '/mascotas': 'Huellas de Puan',
     '/creacion-web': 'Web creation',
-    '/green-node': 'Green Node',
+    '/green-node': 'Green Node Protect',
+    '/green-node/vault': 'Green Node Vault 13',
     '/news': 'News',
     '/community': 'Community',
     '/nexus-city': 'Nexus City',
@@ -136,7 +142,7 @@ const routeNames = {
   },
 } as const
 
-const activityTrackedPortals = new Set(['/gaming', '/science', '/comicon', '/fun', '/creacion-web', '/green-node', '/nexus-city'])
+const activityTrackedPortals = new Set(['/gaming', '/science', '/comicon', '/fun', '/creacion-web', '/green-node', '/green-node/vault', '/nexus-city'])
 
 function RouteAccessibility({ pathname }: { pathname: string }) {
   const { lang } = useLang()
@@ -227,6 +233,7 @@ function AppShell() {
               <Route path="/science" element={<ScienceLab />} />
               <Route path="/comicon" element={<ComicUniverse />} />
               <Route path="/fun" element={<FunPortal />} />
+              <Route path="/mascotas" element={<Navigate to="/mascotas/" replace />} />
               <Route path="/creacion-web" element={<WebCreation />} />
               <Route path="/community" element={<Community />} />
               <Route path="/about" element={<About />} />
@@ -250,10 +257,11 @@ function AppShell() {
               <Route path="/en/editorial-policy" element={<EditorialPolicy />} />
 
               <Route path="/web-creation" element={<Navigate to="/creacion-web" replace />} />
-              <Route path="/green-node" element={<GreenNodeGate />} />
+              <Route path="/green-node" element={<GreenNodeHub />} />
+              <Route path="/green-node/vault" element={<GreenNodeGate />} />
               <Route path="/news" element={<News />} />
               <Route path="/news/:slug" element={<NewsArticle />} />
-              <Route path="/nexus-city" element={<Navigate to="/fun#nexus-city" replace />} />
+              <Route path="/nexus-city" element={<NexusCity />} />
               <Route path="/nexus-city/u/:handle" element={<NexusPassport />} />
               <Route path="/nexus-city/room/xethkioz" element={<NexusPixelWorld />} />
               <Route path="/nexus-city/vip" element={<NexusVipRooms />} />

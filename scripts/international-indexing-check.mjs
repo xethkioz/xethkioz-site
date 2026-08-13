@@ -21,7 +21,7 @@ const webCreation = read('creacion-web.html')
 const browserTest = read('tests/e2e/internationalization.spec.ts')
 
 const localizedPaths = [
-  '/', '/gaming', '/gaming/guides', '/science', '/comicon', '/fun', '/creacion-web',
+  '/', '/gaming', '/gaming/guides', '/science', '/comicon', '/creacion-web',
   '/community', '/about', '/contact', '/support', '/privacy', '/editorial-policy',
 ]
 const englishPaths = localizedPaths.map((route) => route === '/' ? '/en' : `/en${route}`)
