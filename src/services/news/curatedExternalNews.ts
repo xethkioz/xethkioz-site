@@ -1,10 +1,12 @@
 import type { PublicNewsArticle, PublicNewsCategory } from './publicNewsService'
+import { editorialArticlesAugust2026 } from '../../data/editorialArticles202608'
 
 const PUBLISHED_AT = '2026-07-01T11:30:00.000Z'
 const RADAR_UPDATE_AT = '2026-07-02T17:20:00.000Z'
 const ARGENTINA_UPDATE_AT = '2026-07-08T17:30:00.000Z'
 
 export const curatedExternalNews: PublicNewsArticle[] = [
+  ...editorialArticlesAugust2026,
   {
     id: 'curated-argentina-duendes-2026-07-08',
     slug: 'fun-argentina-mundial-duendes-cuartos',

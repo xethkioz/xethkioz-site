@@ -21,7 +21,10 @@ const copy = {
     reader: 'Lector vertical',
     continue: 'Continuará',
     complete: 'Fin del contenido disponible',
-    note: 'Historia original de XETHKIOZ. El prólogo y el Capítulo 01 ya pueden leerse completos dentro del portal COMICON.',
+    note: 'Historia original de XETHKIOZ. El prólogo y los capítulos 01 y 02 ya pueden leerse completos dentro del portal COMICON.',
+    latest: 'Última entrega',
+    next: 'Próximo episodio',
+    released: 'Publicado',
     availableCount: 'capítulos disponibles',
     choose: 'Seleccionar capítulo',
   },
@@ -36,7 +39,10 @@ const copy = {
     reader: 'Vertical reader',
     continue: 'Continued',
     complete: 'End of available content',
-    note: 'An original XETHKIOZ story. The prologue and Chapter 01 can now be read in full inside the COMICON portal.',
+    note: 'An original XETHKIOZ story. The prologue and Chapters 01 and 02 can now be read in full inside the COMICON portal.',
+    latest: 'Latest episode',
+    next: 'Next episode',
+    released: 'Released',
     availableCount: 'chapters available',
     choose: 'Select chapter',
   },
@@ -55,6 +61,12 @@ export default function OriginalComicFeature({ lang }: Props) {
   const selectedChapter = readableChapters.find((chapter) => chapter.id === selectedChapterId) ?? readableChapters[0]
   const chapterIndex = originalComicSaga.chapters.findIndex((chapter) => chapter.id === selectedChapter?.id)
   const nextChapter = chapterIndex >= 0 ? originalComicSaga.chapters[chapterIndex + 1] : null
+  const latestChapter = readableChapters.at(-1)
+  const upcomingChapter = originalComicSaga.chapters.find((chapter) => chapter.status === 'planned' && chapter.scheduledFor)
+  const dateLocale = lang === 'es' ? 'es-AR' : 'en-US'
+  const formatDate = (value?: string) => value
+    ? new Intl.DateTimeFormat(dateLocale, { dateStyle: 'medium', timeZone: 'UTC' }).format(new Date(`${value}T12:00:00Z`))
+    : ''
 
   function selectChapter(chapter: ReadableChapter) {
     setSelectedChapterId(chapter.id)
@@ -82,7 +94,7 @@ export default function OriginalComicFeature({ lang }: Props) {
         </figure>
 
         <div className="xk-comicon-original-copy">
-          <span>{readableChapters.length} {t.availableCount}</span>
+          <span>{originalComicSaga.cadence[lang]} · {readableChapters.length} {t.availableCount}</span>
           <h3>{originalComicSaga.title[lang]}</h3>
           <p>{originalComicSaga.synopsis[lang]}</p>
           <button
@@ -93,7 +105,7 @@ export default function OriginalComicFeature({ lang }: Props) {
           >
             {readerOpen ? t.close : t.read} <b aria-hidden="true">{readerOpen ? '×' : '→'}</b>
           </button>
-          <small>{t.note}</small>
+          <small>{t.note} {latestChapter?.releaseDate ? `${t.latest}: ${latestChapter.title[lang]} · ${formatDate(latestChapter.releaseDate)}.` : ''} {upcomingChapter?.scheduledFor ? `${t.next}: ${formatDate(upcomingChapter.scheduledFor)}.` : ''}</small>
         </div>
       </div>
 
@@ -114,7 +126,7 @@ export default function OriginalComicFeature({ lang }: Props) {
               <span>{chapter.number}</span>
               <span>
                 <b>{chapter.title[lang]}</b>
-                <small>{readable ? t.available : t.planned}</small>
+                <small>{readable ? `${t.released} · ${formatDate(chapter.releaseDate)}` : `${t.planned}${chapter.scheduledFor ? ` · ${formatDate(chapter.scheduledFor)}` : ''}`}</small>
               </span>
             </button>
           )

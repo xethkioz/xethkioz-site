@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "npm run generate:css-split && vite",
-    "build": "npm run generate:css-split && npm run typecheck && npm run audit:routes && npm run audit:runtime-seo && npm run audit:privacy-consent && npm run audit:telemetry-security && npm run audit:auth-session-security && npm run audit:editorial-integrity && npm run audit:ads-monetization && npm run audit:international-indexing && npm run audit:news-layout-stability && npm run audit:content-design && npm run audit:css-source && npm run generate:seo-shells && vite build && npm run audit:initial-bundle",
+    "build": "npm run generate:css-split && npm run typecheck && npm run audit:routes && npm run audit:runtime-seo && npm run audit:privacy-consent && npm run audit:telemetry-security && npm run audit:auth-session-security && npm run audit:editorial-integrity && npm run audit:editorial-depth && npm run audit:ads-monetization && npm run audit:international-indexing && npm run audit:news-layout-stability && npm run audit:content-design && npm run audit:css-source && npm run generate:seo-shells && vite build && npm run audit:initial-bundle",
     "preview": "vite preview",
     "test:e2e": "playwright test",
     "test:e2e:report": "playwright show-report",
@@ -40,6 +40,7 @@
     "audit:telemetry-security": "node scripts/telemetry-security-check.mjs",
     "audit:auth-session-security": "node scripts/auth-session-security-check.mjs",
     "audit:editorial-integrity": "node scripts/editorial-integrity-check.mjs",
+    "audit:editorial-depth": "node scripts/editorial-depth-check.mjs",
     "audit:ads-monetization": "node scripts/ads-monetization-security-check.mjs",
     "audit:international-indexing": "node scripts/international-indexing-check.mjs",
     "audit:news-layout-stability": "node scripts/news-layout-stability-check.mjs",

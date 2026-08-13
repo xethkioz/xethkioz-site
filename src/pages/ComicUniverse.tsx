@@ -5,7 +5,8 @@ import SafeImage from '../components/SafeImage'
 import OriginalComicFeature from '../components/comicon/OriginalComicFeature'
 import ComiconLibrary from '../components/comicon/ComiconLibrary'
 import { useLang } from '../lib/LangContext'
-import type { PublicNewsArticle } from '../services/news/publicNewsService'
+import { getPublicNewsReadingMetrics, publicNewsReadingDepthLabels, type PublicNewsArticle } from '../services/news/publicNewsService'
+import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import './ComicUniverse.css'
 
 type ChannelId = 'all' | 'marvel' | 'dc' | 'anime' | 'screen' | 'comics'
@@ -40,6 +41,7 @@ const copy = {
     noChannelTitle: 'Todavía no hay señales en este canal',
     noChannelText: 'Probá otro universo o volvé a ver todas las publicaciones.',
     read: 'Abrir transmisión',
+    officialSource: 'Fuente oficial',
     source: 'fuente',
     sources: 'fuentes',
     minutes: 'min',
@@ -78,6 +80,7 @@ const copy = {
     noChannelTitle: 'No signals in this channel yet',
     noChannelText: 'Try another universe or return to all posts.',
     read: 'Open transmission',
+    officialSource: 'Official source',
     source: 'source',
     sources: 'sources',
     minutes: 'min',
@@ -119,20 +122,30 @@ function formatArticleDate(value: string, lang: 'es' | 'en') {
   return new Intl.DateTimeFormat(lang === 'es' ? 'es-AR' : 'en-US', { dateStyle: 'medium' }).format(date)
 }
 
-function getReadingMinutes(article: PublicNewsArticle) {
-  const words = [article.summary ?? '', ...article.content.map((block) => block.text)]
-    .join(' ')
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean)
-    .length
-  return Math.max(1, Math.ceil(words / 180))
+function mergeUniqueArticles(primary: PublicNewsArticle[], fallback: PublicNewsArticle[]) {
+  const slugs = new Set<string>()
+  return [...primary, ...fallback]
+    .filter((article) => {
+      if (slugs.has(article.slug)) return false
+      slugs.add(article.slug)
+      return true
+    })
+    .sort((a, b) => new Date(b.published_at ?? b.created_at).getTime() - new Date(a.published_at ?? a.created_at).getTime())
+}
+
+function getSourceHost(value: string) {
+  try {
+    return new URL(value).hostname.replace(/^www\./, '')
+  } catch {
+    return value
+  }
 }
 
 export default function ComicUniverse() {
   const { lang, localizePath } = useLang()
   const [searchParams, setSearchParams] = useSearchParams()
-  const [articles, setArticles] = useState<PublicNewsArticle[]>([])
+  const fallbackArticles = useMemo(() => getCuratedExternalNews('comicon'), [])
+  const [articles, setArticles] = useState<PublicNewsArticle[]>(fallbackArticles)
   const [loading, setLoading] = useState(true)
   const t = copy[lang]
   const requestedChannel = searchParams.get('channel') as ChannelId | null
@@ -144,16 +157,16 @@ export default function ComicUniverse() {
     void import('../services/news/publicNewsService')
       .then(({ fetchPublishedNews }) => fetchPublishedNews('comicon'))
       .then((nextArticles) => {
-        if (active) setArticles(nextArticles)
+        if (active) setArticles(mergeUniqueArticles(nextArticles, fallbackArticles))
       })
       .catch(() => {
-        if (active) setArticles([])
+        if (active) setArticles(fallbackArticles)
       })
       .finally(() => {
         if (active) setLoading(false)
       })
     return () => { active = false }
-  }, [])
+  }, [fallbackArticles])
 
   const visibleArticles = useMemo(
     () => articles.filter((article) => matchesChannel(article, activeChannel)),
@@ -256,7 +269,8 @@ export default function ComicUniverse() {
           {visibleArticles.length > 0 ? (
             <div className="xk-comicon-articles">
               {visibleArticles.map((article) => {
-                const readingMinutes = getReadingMinutes(article)
+                const reading = getPublicNewsReadingMetrics(article)
+                const officialSource = article.source_urls[0]
                 return (
                   <article key={article.id}>
                     <SafeImage
@@ -270,8 +284,11 @@ export default function ComicUniverse() {
                       <p><b>{t.channels[activeChannel].label}</b><span>{formatArticleDate(article.published_at ?? article.created_at, lang)}</span></p>
                       <h3>{article.title}</h3>
                       <div>{article.summary}</div>
-                      <small>{readingMinutes} {t.minutes} · {article.source_urls.length} {article.source_urls.length === 1 ? t.source : t.sources}</small>
-                      <Link to={`/news/${article.slug}`}>{t.read} ↗</Link>
+                      <small>{reading.minutes} {t.minutes} · {publicNewsReadingDepthLabels[lang][reading.depth]} · {article.source_urls.length} {article.source_urls.length === 1 ? t.source : t.sources}</small>
+                      <div className="xk-comicon-article-actions">
+                        <Link to={`/news/${article.slug}`}>{t.read} ↗</Link>
+                        {officialSource ? <a href={officialSource} target="_blank" rel="noopener noreferrer">{t.officialSource}: {getSourceHost(officialSource)} ↗</a> : null}
+                      </div>
                     </div>
                   </article>
                 )

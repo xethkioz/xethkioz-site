@@ -87,6 +87,7 @@ npm run audit:portal
 npm run audit:news-factory
 npm run audit:auth-nexus
 npm run audit:supabase-hydration
+npm run audit:editorial-depth
 ```
 
 ## Variables de entorno requeridas
