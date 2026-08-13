@@ -22,7 +22,9 @@ const sitemapIsStatic = exists('public/sitemap.xml')
 const sitemap = read(sitemapIsStatic ? 'public/sitemap.xml' : 'api/sitemap.ts')
 const webCreationHtml = read('creacion-web.html')
 const viteConfig = read('vite.config.ts')
-const vercelConfig = read('vercel.json')
+const vercelSource = read('vercel.json')
+const vercelConfig = JSON.parse(vercelSource)
+const vercelRewrites = new Map((vercelConfig.rewrites ?? []).map((item) => [item.source, item.destination]))
 
 check('public web creation route exists', app.includes('path="/creacion-web"') && app.includes("import('./pages/WebCreation')"))
 check('home exposes the web creation feature', home.includes('<WebCreationFeature') && home.includes('to="/creacion-web"'))
@@ -46,13 +48,13 @@ check('catalog policies avoid duplicate authenticated reads', securityFollowup.i
 check('web-service foreign keys are indexed', securityFollowup.includes('web_quote_requests_service_id_idx') && securityFollowup.includes('web_service_offers_created_by_idx'))
 check('admin authorization ignores user_metadata', adminSession.includes('app_metadata?.role') && !adminSession.includes('user_metadata?.role'))
 check('catalog assets exist', ['landing-premium.svg', 'tienda-digital.svg', 'sitio-profesional.svg'].every((file) => exists(`public/web-services/${file}`)))
-check('public route is included in sitemap', sitemap.includes('/creacion-web') && (sitemapIsStatic || (vercelConfig.includes('"source": "/sitemap.xml"') && vercelConfig.includes('"destination": "/api/sitemap"'))))
+check('public route is included in sitemap', sitemap.includes('/creacion-web') && (sitemapIsStatic || vercelRewrites.get('/sitemap.xml') === '/api/sitemap'))
 check('web creation has crawlable static metadata', webCreationHtml.includes('<title>Creación Web') && webCreationHtml.includes('rel="canonical" href="https://www.xethkioz.com.ar/creacion-web"') && webCreationHtml.includes('"@type": "Service"'))
 check('web creation uses a raster social preview', exists('public/web-services/creacion-web-og.png') && fs.statSync(path.join(root, 'public/web-services/creacion-web-og.png')).size > 10000 && webCreationHtml.includes('/web-services/creacion-web-og.png') && webCreationHtml.includes('content="1200"') && webCreationHtml.includes('content="630"'))
 check('quote flow is mobile-friendly and actionable', page.includes('type QuoteStep = 1 | 2') && page.includes('continueQuote') && page.includes('required={form.contactPreference') && page.includes('messages[code]'))
 check('commercial objections are covered accessibly', page.includes('t.faqs.map') && page.includes('<details') && page.includes('<summary'))
 check('web creation is emitted as a dedicated HTML entry', viteConfig.includes("webCreation: resolve(process.cwd(), 'creacion-web.html')"))
-check('production routes web creation to its dedicated HTML', vercelConfig.includes('"source": "/creacion-web", "destination": "/creacion-web.html"'))
+check('production routes web creation to its dedicated HTML', vercelRewrites.get('/creacion-web') === '/creacion-web.html')
 
 let failed = 0
 for (const [name, ok] of checks) {
