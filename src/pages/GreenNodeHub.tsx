@@ -114,7 +114,7 @@ export default function GreenNodeHub() {
             {!loading && radar.length === 0 ? <p className="xk-gn2-loading">{es ? 'No hay intercepciones publicadas en este momento.' : 'No published interceptions right now.'}</p> : null}
             <div className="xk-gn2-radar-grid">
               {radar.map((article) => <Link key={article.id} to={`/news/${article.slug}`}>
-                <div><span>GREEN NODE</span><time>{formatPublicNewsDate(article.published_at, lang)}</time></div>
+                <div><span>GREEN NODE</span><time>{formatPublicNewsDate(article.published_at ?? article.created_at, lang)}</time></div>
                 <strong>{article.title}</strong>
                 <p>{article.summary ?? (es ? 'Abrí el dossier para revisar contexto y fuentes.' : 'Open the dossier for context and sources.')}</p>
                 <small>{article.source_urls.length ? `${article.source_urls.length} ${es ? 'fuente(s)' : 'source(s)'}` : (es ? 'Revisar evidencia' : 'Review evidence')}</small>
