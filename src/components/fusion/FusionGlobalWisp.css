@@ -502,6 +502,7 @@
 @media (min-width: 1280px) {
   .xk-wisp.is-home-entry {
     --wisp-size: clamp(188px, 13vw, 238px);
+    position: absolute;
     display: grid !important;
     right: clamp(3.5rem, 7vw, 8rem);
     top: clamp(9rem, 21vh, 13rem);
