@@ -67,11 +67,11 @@ const nexusDistrict = read('src/components/NexusDistrict.tsx')
 const nexusCity = read('src/pages/NexusCity.tsx')
 const webCreation = read('src/pages/WebCreation.tsx')
 
-check('10.0 production version stamped', pkg.version === '10.0.0')
+check('11.0 release version stamped', pkg.version === '11.0.0')
 check(
   'installable web manifest is linked and versioned',
   indexHtml.includes('rel="manifest" href="/manifest.webmanifest"')
-    && webManifest.includes('XETHKIOZ Web 10.0')
+    && webManifest.includes('XETHKIOZ Web 11.0')
     && webManifest.includes('"display": "standalone"'),
 )
 check('production audit script registered', pkg.scripts['audit:production-ready'] === 'node scripts/production-ready-check.mjs')
@@ -372,4 +372,4 @@ if (failed) {
   process.exit(1)
 }
 
-console.log('XETHKIOZ 10.0 production-ready audit PASS')
+console.log('XETHKIOZ 11.0 production-ready audit PASS')

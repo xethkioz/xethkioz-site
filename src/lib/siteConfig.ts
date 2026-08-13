@@ -1,6 +1,6 @@
-export const SITE_VERSION = 'v10.0.0'
-export const SITE_RELEASE = 'Nexus City · Multiverse Production Release'
-export const SITE_BUILD_DATE = '2026-07-19'
+export const SITE_VERSION = 'v11.0.0'
+export const SITE_RELEASE = 'World Gate Harmony Release'
+export const SITE_BUILD_DATE = '2026-08-13'
 export const SITE_DOMAIN = 'https://xethkioz.com.ar'
 
 export const DONATION_LINKS = {

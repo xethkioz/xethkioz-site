@@ -1,8 +1,8 @@
 # XETHKIOZ Network
 
-**Versión actual:** `v10.0.0`
+**Versión actual:** `v11.0.0`
 **Estado:** producción activa con flujo de revisión controlado.
-**Última revisión operativa:** `2026-07-19`
+**Última revisión operativa:** `2026-08-13`
 **Dominio principal:** `https://xethkioz.com.ar`
 **Dominio público:** `https://www.xethkioz.com.ar`
 

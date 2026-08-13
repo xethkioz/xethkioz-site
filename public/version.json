@@ -1,17 +1,17 @@
 {
-  "version": "7.0.0-fusion-rc4",
-  "label": "RC4 Validated Candidate",
+  "version": "11.0.0",
+  "label": "World Gate Harmony Release",
   "stage": "release-candidate",
-  "channel": "rc4",
-  "codename": "XETHKIOZ Fusion Platform RC4",
-  "buildDate": "2026-06-29",
-  "sourcePackage": "XETHKIOZ_FUSION_PLATFORM_RC4_VALIDATED_2026-06-29",
+  "channel": "v11",
+  "codename": "XETHKIOZ Web 11.0",
+  "buildDate": "2026-08-13",
+  "sourcePackage": "xethkioz-site",
   "validation": {
     "localDeployCheck": "PASS",
     "productionReadyAudit": "PASS",
     "viteBuild": "PASS",
     "npmAudit": "0 vulnerabilities",
-    "modulesTransformed": 427,
-    "vercelProduction": "READY"
+    "modulesTransformed": 277,
+    "vercelPreview": "READY"
   }
 }

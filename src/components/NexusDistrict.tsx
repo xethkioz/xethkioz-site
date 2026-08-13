@@ -10,9 +10,9 @@ type DistrictLink = { code: string; glyph: string; title: string; detail: string
 const districtLinks: Record<Lang, Record<NexusDistrictTone, DistrictLink[]>> = {
   es: {
     home: [
-      { code: '01', glyph: 'G', title: 'Gaming', detail: 'Noticias, guías y directos', to: '/gaming' },
-      { code: '02', glyph: 'S', title: 'Science & Tech', detail: 'Ciencia, IA y tecnología', to: '/science' },
-      { code: '03', glyph: 'F', title: 'Diversión', detail: 'Memes, clips y rarezas', to: '/fun' },
+      { code: 'GUÍA', glyph: '≡', title: 'Guías Gaming', detail: 'Builds, rutas y progreso', to: '/gaming/guides' },
+      { code: 'NEWS', glyph: '⌁', title: 'Noticias', detail: 'Radar editorial y análisis', to: '/news' },
+      { code: 'RED', glyph: '◆', title: 'Comunidad', detail: 'Perfiles, grupos y conexión', to: '/community' },
     ],
     gaming: [
       { code: 'LIVE', glyph: '●', title: 'Directos y videos', detail: 'Kick, YouTube y estado del canal', to: '/gaming?section=live' },
@@ -37,9 +37,9 @@ const districtLinks: Record<Lang, Record<NexusDistrictTone, DistrictLink[]>> = {
   },
   en: {
     home: [
-      { code: '01', glyph: 'G', title: 'Gaming', detail: 'News, guides and streams', to: '/gaming' },
-      { code: '02', glyph: 'S', title: 'Science & Tech', detail: 'Science, AI and technology', to: '/science' },
-      { code: '03', glyph: 'F', title: 'Fun', detail: 'Memes, clips and oddities', to: '/fun' },
+      { code: 'GUIDE', glyph: '≡', title: 'Gaming Guides', detail: 'Builds, routes and progression', to: '/gaming/guides' },
+      { code: 'NEWS', glyph: '⌁', title: 'News', detail: 'Editorial radar and analysis', to: '/news' },
+      { code: 'NET', glyph: '◆', title: 'Community', detail: 'Profiles, groups and connection', to: '/community' },
     ],
     gaming: [
       { code: 'LIVE', glyph: '●', title: 'Streams and videos', detail: 'Kick, YouTube and channel status', to: '/gaming?section=live' },
@@ -66,14 +66,14 @@ const districtLinks: Record<Lang, Record<NexusDistrictTone, DistrictLink[]>> = {
 
 const headings: Record<Lang, Record<NexusDistrictTone, { eyebrow: string; title: string; status: string }>> = {
   es: {
-    home: { eyebrow: 'ACCESOS RÁPIDOS', title: 'Elegí qué parte de XETHKIOZ querés explorar.', status: '3 PORTALES' },
+    home: { eyebrow: 'CONTENIDO ORDENADO', title: 'Entrá directo a guías, noticias o comunidad.', status: '3 RUTAS' },
     gaming: { eyebrow: 'SIGUIENTE MISIÓN', title: 'Elegí qué hacer ahora en Gaming.', status: '3 RUTAS' },
     fun: { eyebrow: 'ENTRADA DIRECTA', title: 'Encontrá memes, clips o comunidad sin rodeos.', status: '3 RUTAS' },
     science: { eyebrow: 'PROFUNDIZAR', title: 'Fuentes, herramientas y proyectos en un solo lugar.', status: '3 RUTAS' },
     green: { eyebrow: 'ARCHIVO NEGRO', title: 'Elegí cómo investigar la señal.', status: '3 ACCESOS' },
   },
   en: {
-    home: { eyebrow: 'QUICK ACCESS', title: 'Choose which part of XETHKIOZ to explore.', status: '3 PORTALS' },
+    home: { eyebrow: 'ORGANIZED CONTENT', title: 'Go directly to guides, news or community.', status: '3 ROUTES' },
     gaming: { eyebrow: 'NEXT MISSION', title: 'Choose what to do next in Gaming.', status: '3 ROUTES' },
     fun: { eyebrow: 'DIRECT ACCESS', title: 'Find memes, clips or community without detours.', status: '3 ROUTES' },
     science: { eyebrow: 'GO DEEPER', title: 'Sources, tools and projects in one place.', status: '3 ROUTES' },

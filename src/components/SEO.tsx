@@ -128,7 +128,7 @@ export default function SEO({
               '@type': 'WebSite',
               '@id': `${SITE_URL}/#website`,
               name: SITE,
-              alternateName: 'XETHKIOZ Web 10.0 · Nexus City',
+              alternateName: 'XETHKIOZ Web 11.0 · World Gate',
               url: SITE_URL,
               inLanguage: ['es-AR', 'en'],
               audience: { '@type': 'PeopleAudience', audienceType },

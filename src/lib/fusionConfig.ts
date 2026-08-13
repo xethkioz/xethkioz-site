@@ -1,6 +1,6 @@
-export const FUSION_VERSION = '10.0.0'
-export const FUSION_LABEL = 'XETHKIOZ 10.0'
-export const FUSION_STAGE = 'Nexus City · production multiverse'
+export const FUSION_VERSION = '11.0.0'
+export const FUSION_LABEL = 'XETHKIOZ 11.0'
+export const FUSION_STAGE = 'World Gate · harmony release candidate'
 
 export const PUBLIC_ROUTES = [
   { path: '/', name: 'Home', status: 'public-core', owner: 'core' },

@@ -1,3 +1,12 @@
+# 11.0.0 — World Gate Harmony Release
+
+- Inicio reorganizado mediante un índice visible para portales, red, contenido, guías, estudio y contacto.
+- Portales y ventanas con mayor claridad, contraste, bordes armónicos y paneles de lectura unificados.
+- Carga inicial reducida: solo los mundos esenciales se solicitan inmediatamente; el resto se difiere.
+- Accesos de contenido simplificados para entrar directamente a guías, noticias y comunidad.
+- Versión pública, manifiesto, SEO, health check y documentación sincronizados en 11.0.0.
+- Dependencias y controles internos de seguridad revisados para el candidato de publicación.
+
 # 10.0.0 — Nexus City Multiverse Production Release
 
 - Profundización editorial de noticias con lectura extensa, fuentes oficiales y jerarquía visual más clara.

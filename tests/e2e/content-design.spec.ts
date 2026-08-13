@@ -1,15 +1,16 @@
 import { expect, test } from '@playwright/test'
 
 test.describe('orden y navegación de secciones', () => {
-  test('Inicio ofrece tres accesos principales y un radar editorial compacto', async ({ page }) => {
+  test('Inicio ordena guías, noticias y comunidad antes del radar editorial', async ({ page }) => {
     await page.goto('/')
 
-    const district = page.getByRole('region', { name: /Elegí qué parte de XETHKIOZ querés explorar/i })
+    const district = page.getByRole('region', { name: /Entrá directo a guías, noticias o comunidad/i })
     const access = district.getByRole('navigation', { name: /accesos/i })
     await expect(district).toBeVisible()
     await expect(access.getByRole('link')).toHaveCount(3)
-    await expect(access.getByRole('link', { name: /Gaming/i })).toHaveAttribute('href', '/gaming')
-    await expect(access.getByRole('link', { name: /Science & Tech/i })).toHaveAttribute('href', '/science')
+    await expect(access.getByRole('link', { name: /Guías Gaming/i })).toHaveAttribute('href', '/gaming/guides')
+    await expect(access.getByRole('link', { name: /Noticias/i })).toHaveAttribute('href', '/news')
+    await expect(access.getByRole('link', { name: /Comunidad/i })).toHaveAttribute('href', '/community')
     await expect(district.locator('.xk-nexus-transit')).toHaveCount(0)
 
     const radar = page.locator('[data-home-recent-radar]')
