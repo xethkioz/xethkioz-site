@@ -1,9 +1,7 @@
-name: XETHKIOZ v11 Deep Audit
+name: XETHKIOZ v11 Deep Audit (manual)
 
 on:
-  push:
-    branches:
-      - v11-audit-20260813
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -64,7 +62,7 @@ jobs:
       - name: Dependency audit
         run: npm run audit:dependencies > audit-v11/dependencies.txt 2>&1
 
-      - name: Public asset size inventory
+      - name: Public asset size and duplicate inventory
         shell: bash
         run: |
           echo "TOTAL PUBLIC SIZE" > audit-v11/public-assets.txt
@@ -73,8 +71,8 @@ jobs:
           echo "TOP 100 FILES BY SIZE" >> audit-v11/public-assets.txt
           find public -type f -printf '%s\t%p\n' | sort -nr | head -100 >> audit-v11/public-assets.txt
           echo >> audit-v11/public-assets.txt
-          echo "FILE COUNT BY EXTENSION" >> audit-v11/public-assets.txt
-          find public -type f | awk -F. 'NF>1{print tolower($NF)}' | sort | uniq -c | sort -nr >> audit-v11/public-assets.txt
+          echo "DUPLICATE SHA256 GROUPS" >> audit-v11/public-assets.txt
+          find public -type f -print0 | xargs -0 sha256sum | sort | awk 'BEGIN{prev=""; group=""; count=0} {hash=$1; $1=""; sub(/^  /,""); file=$0; if(hash==prev){if(count==1) print prevFile; print file; count++} else {if(count>1) print ""; prev=hash; prevFile=file; count=1}} END{if(count>1) print ""}' >> audit-v11/public-assets.txt
 
       - name: Build production bundle
         run: npm run build > audit-v11/build.txt 2>&1
