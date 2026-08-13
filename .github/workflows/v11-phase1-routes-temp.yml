@@ -1,0 +1,190 @@
+name: XETHKIOZ v11 Phase 1 Route Refactor
+
+on:
+  push:
+    branches:
+      - v11-audit-20260813
+
+permissions:
+  contents: write
+
+jobs:
+  refactor:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v11-audit-20260813
+          fetch-depth: 0
+
+      - name: Apply v11 route and SEO architecture
+        shell: python
+        run: |
+          from pathlib import Path
+          import json
+          import re
+
+          def read(path):
+              return Path(path).read_text(encoding='utf-8')
+
+          def write(path, text):
+              Path(path).write_text(text, encoding='utf-8')
+
+          def replace_once(text, old, new, label):
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{label}: expected exactly 1 occurrence, found {count}')
+              return text.replace(old, new, 1)
+
+          # Home: Huellas is a direct hard navigation to its static portal.
+          p = 'src/pages/Home.tsx'
+          s = read(p)
+          s = replace_once(s, "  external?: boolean\n  world: string", "  external?: boolean\n  sameTab?: boolean\n  world: string", 'PortalCard sameTab')
+          s = s.replace("        route: '/fun',\n        world: '/assets/huellas-hero-real.svg',", "        route: '/mascotas/',\n        external: true,\n        sameTab: true,\n        world: '/assets/huellas-hero-real.svg',")
+          if s.count("route: '/mascotas/'") < 2:
+              raise SystemExit('Home pets route was not updated in both languages')
+          s = replace_once(s, '<Link to="/fun">{lang === \'es\' ? \'Mascotas\' : \'Pets\'}</Link>', '<a href="/mascotas/">{lang === \'es\' ? \'Mascotas\' : \'Pets\'}</a>', 'Home top pets link')
+          s = replace_once(s, "  if (portal.external) return <a {...commonProps} href={portal.route} target=\"_blank\" rel=\"noopener noreferrer\">{content}</a>", "  if (portal.external) {\n    const target = portal.sameTab ? undefined : '_blank'\n    const rel = portal.sameTab ? undefined : 'noopener noreferrer'\n    return <a {...commonProps} href={portal.route} target={target} rel={rel}>{content}</a>\n  }", 'PrimaryPortal external behavior')
+          write(p, s)
+
+          # Header: hard navigate Huellas in the same tab, so React Router does not swallow the static route.
+          p = 'src/components/Header.tsx'
+          s = read(p)
+          s = s.replace("{ to: '/fun', label: 'HUELLAS DE PUAN' }", "{ to: '/mascotas/', label: 'HUELLAS DE PUAN', external: true, sameTab: true }")
+          s = s.replace("{ to: '/fun', label: 'PETS' }", "{ to: '/mascotas/', label: 'PETS', external: true, sameTab: true }")
+          s = s.replace("{ to: '/fun', label: 'Mascotas', icon: '🐾' }", "{ to: '/mascotas/', label: 'Mascotas', icon: '🐾', external: true, sameTab: true }")
+          s = s.replace("{ to: '/fun', label: 'Pets', icon: '🐾' }", "{ to: '/mascotas/', label: 'Pets', icon: '🐾', external: true, sameTab: true }")
+          if s.count("sameTab: true") != 4:
+              raise SystemExit('Header Huellas hard-navigation entries were not all updated')
+          s = s.replace('target="_blank" rel="noopener noreferrer" aria-label={item.label}', "target={'sameTab' in item && item.sameTab ? undefined : '_blank'} rel={'sameTab' in item && item.sameTab ? undefined : 'noopener noreferrer'} aria-label={item.label}")
+          write(p, s)
+
+          # App: mount Nexus City as the real route.
+          p = 'src/App.tsx'
+          s = read(p)
+          s = replace_once(s, "const FunPortal = lazy(() => import('./pages/FunPortal'))\n", "const FunPortal = lazy(() => import('./pages/FunPortal'))\nconst NexusCity = lazy(() => import('./pages/NexusCity'))\n", 'NexusCity import')
+          s = replace_once(s, '<Route path="/nexus-city" element={<Navigate to="/fun#nexus-city" replace />} />', '<Route path="/nexus-city" element={<NexusCity />} />', 'NexusCity route')
+          s = s.replace("    '/fun': 'Diversión',", "    '/fun': 'Huellas de Puan (ruta heredada)',")
+          s = s.replace("    '/fun': 'Fun',", "    '/fun': 'Huellas de Puan (legacy route)',")
+          write(p, s)
+
+          # /fun is no longer a localized product contract.
+          p = 'src/lib/localizedRoutes.ts'
+          s = read(p)
+          s = replace_once(s, "  '/fun',\n", '', 'localized /fun removal')
+          write(p, s)
+
+          # SEO shells: retire Chaos Alley /fun shell; add real Nexus City shell.
+          p = 'scripts/generate-seo-shells.mjs'
+          s = read(p)
+          s, n1 = re.subn(r"\n  \{\n    file: 'fun\.html',[\s\S]*?\n  \},", '', s, count=1)
+          s, n2 = re.subn(r"\n  \{\n    file: 'en-fun\.html',[\s\S]*?\n  \},", '', s, count=1)
+          if n1 != 1 or n2 != 1:
+              raise SystemExit(f'Could not retire fun SEO shells: es={n1} en={n2}')
+          nexus_shell = """
+  {
+    file: 'nexus-city.html',
+    path: '/nexus-city',
+    title: 'Nexus City | Mundo social y comunidad | XETHKIOZ',
+    description: 'El mundo social de XETHKIOZ: avatar, distritos, salas, actividad, identidad y comunidad conectadas a la Red de Portales.',
+    keywords: 'Nexus City, comunidad gamer, avatar, mundo social, salas, identidad digital, XETHKIOZ',
+    image: '/assets/xethkioz-cover.webp',
+    imageAlt: 'Nexus City, el mundo social de XETHKIOZ',
+    localized: false,
+  },
+"""
+          marker = "  {\n    file: 'news.html',"
+          if marker not in s:
+              raise SystemExit('Could not locate news SEO shell insertion point')
+          s = s.replace(marker, nexus_shell + marker, 1)
+          s = s.replace("  ['/fun', '/en/fun'],\n", '')
+          write(p, s)
+
+          # Vercel: server-level legacy redirects and standalone Nexus rewrite.
+          p = 'vercel.json'
+          cfg = json.loads(read(p))
+          redirects = [r for r in cfg.get('redirects', []) if r.get('source') not in {'/nexus-city', '/fun', '/en/fun'}]
+          redirects = [
+              {'source': '/fun', 'destination': '/mascotas/', 'permanent': True},
+              {'source': '/en/fun', 'destination': '/mascotas/', 'permanent': True},
+              *redirects,
+          ]
+          cfg['redirects'] = redirects
+          rewrites = [r for r in cfg.get('rewrites', []) if r.get('source') not in {'/fun', '/en/fun', '/nexus-city'}]
+          nexus_index = next((i for i, r in enumerate(rewrites) if r.get('source') == '/nexus-city/u/:handle'), len(rewrites))
+          rewrites.insert(nexus_index, {'source': '/nexus-city', 'destination': '/seo-shells/nexus-city.html'})
+          cfg['rewrites'] = rewrites
+          write(p, json.dumps(cfg, ensure_ascii=False, indent=2) + '\n')
+
+          # Sitemap: Huellas and Nexus are now first-class Spanish routes; /fun is retired.
+          p = 'api/sitemap.ts'
+          s = read(p)
+          s = replace_once(s, "  { es: '/fun', en: '/en/fun', changefreq: 'weekly', priority: '0.8' },\n", '', 'sitemap /fun removal')
+          s = replace_once(s, "const spanishOnlyRoutes = [\n  { path: '/news', changefreq: 'daily', priority: '0.9' },\n]", "const spanishOnlyRoutes = [\n  { path: '/news', changefreq: 'daily', priority: '0.9' },\n  { path: '/nexus-city', changefreq: 'weekly', priority: '0.8' },\n  { path: '/mascotas/', changefreq: 'daily', priority: '0.8' },\n]", 'sitemap first-class routes')
+          write(p, s)
+
+          # Static Huellas: own canonical/social contract and accurate local artwork credit.
+          p = 'public/mascotas/index.html'
+          s = read(p)
+          needle = '<meta name="description" content="Huellas de Puan: animales perdidos, encontrados, adopciones, rescate, castración y cuidado responsable.">'
+          metadata = needle + '''\n<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">\n<link rel="canonical" href="https://www.xethkioz.com.ar/mascotas/">\n<meta property="og:site_name" content="XETHKIOZ">\n<meta property="og:type" content="website">\n<meta property="og:title" content="Huellas de Puan | Mascotas, adopciones y cuidado responsable">\n<meta property="og:description" content="Portal comunitario para animales perdidos, encontrados, adopciones, castraciones y cuidado responsable en Puan y la región.">\n<meta property="og:url" content="https://www.xethkioz.com.ar/mascotas/">\n<meta property="og:image" content="https://www.xethkioz.com.ar/assets/huellas-portal-pets.svg">\n<meta property="og:image:alt" content="Perro y gato, identidad visual de Huellas de Puan">\n<meta name="twitter:card" content="summary_large_image">\n<meta name="twitter:title" content="Huellas de Puan | XETHKIOZ">\n<meta name="twitter:description" content="Encontrá, protegé y ayudá a los animales de Puan y la región.">\n<meta name="twitter:image" content="https://www.xethkioz.com.ar/assets/huellas-portal-pets.svg">'''
+          s = replace_once(s, needle, metadata, 'Huellas metadata')
+          s = s.replace('Foto de portada: Pankajdhiman2310 · CC BY-SA 4.0 · Wikimedia Commons.', 'Ilustración de portada: XETHKIOZ · recurso local del portal.')
+          write(p, s)
+
+          # General SPA shell should not load Huellas-only CSS.
+          p = 'index.html'
+          s = read(p)
+          s = s.replace('    <link rel="stylesheet" href="/huellas-portal-inline.css?v=20260804-2" />\n', '')
+          write(p, s)
+
+          # Runtime SEO audit follows the new architecture instead of enforcing the legacy redirect.
+          p = 'scripts/runtime-seo-contract-check.mjs'
+          s = read(p)
+          old = "const nexusRedirect = redirectMap.get('/nexus-city')\nassert(nexusRedirect?.destination === '/fun#nexus-city' && nexusRedirect?.permanent === true, 'Nexus City must use a permanent HTTP redirect to the embedded Fun district.')"
+          new = "assert(!redirectMap.has('/nexus-city'), 'Nexus City must remain a standalone route instead of redirecting through /fun.')\nassert(redirectMap.get('/fun')?.destination === '/mascotas/' && redirectMap.get('/fun')?.permanent === true, 'Legacy /fun must redirect permanently to Huellas.')\nassert(redirectMap.get('/en/fun')?.destination === '/mascotas/' && redirectMap.get('/en/fun')?.permanent === true, 'Legacy /en/fun must redirect permanently to Huellas without inventing an English translation.')"
+          s = replace_once(s, old, new, 'runtime SEO redirect contract')
+          old = "assert(!rewrites.some((item) => item.source === '/nexus-city'), 'Redirected Nexus City must not have an indexable SEO-shell rewrite.')\nassert(!sitemap.includes(\"'/nexus-city'\"), 'Redirected Nexus City must not remain in the sitemap.')\nassert(!seoShells.includes(\"path: '/nexus-city'\"), 'Redirected Nexus City must not generate a standalone SEO shell.')"
+          new = "assert(rewriteMap.get('/nexus-city') === '/seo-shells/nexus-city.html', 'Nexus City must use its own indexable SEO shell.')\nassert(sitemap.includes(\"path: '/nexus-city'\"), 'Nexus City must be present in the sitemap.')\nassert(sitemap.includes(\"path: '/mascotas/'\"), 'Huellas must be present in the sitemap under its real route.')\nassert(seoShells.includes(\"path: '/nexus-city'\"), 'Nexus City must generate a standalone SEO shell.')\nassert(!sitemap.includes(\"{ es: '/fun'\"), 'Legacy /fun must not remain as an indexable localized portal.')"
+          s = replace_once(s, old, new, 'runtime SEO Nexus shell contract')
+          write(p, s)
+
+          # Nexus foundation audit now protects the standalone route.
+          p = 'scripts/nexus-city-check.mjs'
+          s = read(p)
+          s = re.sub(r"check\('public Nexus entry preserved through Fun compatibility gateway',[^\n]+", "check('public Nexus entry is standalone', app.includes(\"const NexusCity = lazy(() => import('./pages/NexusCity'))\") && app.includes('path=\"/nexus-city\" element={<NexusCity />}'))", s, count=1)
+          s = s.replace("check('global and Home navigation', header.includes(\"to: '/fun'\") && home.includes(\"route: '/nexus-city'\") && page.includes(\"id={embedded ? 'nexus-city' : undefined}\"))", "check('global and Home navigation', header.includes(\"to: '/mascotas/'\") && home.includes(\"route: '/nexus-city'\") && page.includes(\"id={embedded ? 'nexus-city' : undefined}\"))")
+          s = re.sub(r"check\('canonical integrated route',[^\n]+", "check('canonical integrated route', sitemap.includes(\"path: '/nexus-city'\") && vercel.includes('\\\"source\\\": \\\"/nexus-city\\\"') && vercel.includes('\\\"destination\\\": \\\"/seo-shells/nexus-city.html\\\"') && seo.includes('SearchAction'))", s, count=1)
+          write(p, s)
+
+          # International indexing: /fun is not a translated portal; Huellas remains Spanish-only.
+          p = 'scripts/international-indexing-check.mjs'
+          s = read(p)
+          s = replace_once(s, "  '/', '/gaming', '/gaming/guides', '/science', '/comicon', '/fun', '/creacion-web',", "  '/', '/gaming', '/gaming/guides', '/science', '/comicon', '/creacion-web',", 'international localized paths')
+          write(p, s)
+
+          # Browser contracts.
+          p = 'tests/e2e/public-routes.spec.ts'
+          s = read(p)
+          s = replace_once(s, "  '/news',\n  '/about',", "  '/news',\n  '/comicon',\n  '/nexus-city',\n  '/about',", 'public routes add Nexus/COMICON')
+          s = replace_once(s, "    await page.goto('/nexus-city')\n    await expect(page).toHaveURL(/\\/fun#nexus-city$/)\n", '', 'remove legacy Nexus redirect expectation')
+          anchor = "  test('/fun conserva compatibilidad y deriva al portal Huellas del mismo origen', async ({ page }) => {"
+          nexus_test = "  test('Nexus City es una ruta propia y no depende de Fun', async ({ page }) => {\n    await page.goto('/nexus-city')\n    await expect(page).toHaveURL(/\\/nexus-city$/)\n    await expect(page.getByRole('heading', { level: 1 }).first()).toBeVisible()\n  })\n\n"
+          if anchor not in s:
+              raise SystemExit('Could not insert standalone Nexus browser test')
+          s = s.replace(anchor, nexus_test + anchor, 1)
+          write(p, s)
+
+          p = 'tests/e2e/internationalization.spec.ts'
+          s = read(p)
+          s = replace_once(s, "await expect(page.getByRole('link', { name: 'Pets', exact: true }).first()).toHaveAttribute('href', '/en/fun')", "await expect(page.getByRole('link', { name: 'Pets', exact: true }).first()).toHaveAttribute('href', '/mascotas/')", 'English Huellas link')
+          write(p, s)
+
+      - name: Commit phase 1
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/pages/Home.tsx src/components/Header.tsx src/App.tsx src/lib/localizedRoutes.ts scripts/generate-seo-shells.mjs vercel.json api/sitemap.ts public/mascotas/index.html index.html scripts/runtime-seo-contract-check.mjs scripts/nexus-city-check.mjs scripts/international-indexing-check.mjs tests/e2e/public-routes.spec.ts tests/e2e/internationalization.spec.ts
+          git commit -m "refactor(v11): separate Huellas, Nexus City and legacy Fun routes"
+          git push origin HEAD:v11-audit-20260813
