@@ -15,7 +15,46 @@ type UrlResult = {
   signals: UrlSignal[]
 }
 
+type RecoveryStep = {
+  id: string
+  title: string
+  detail: string
+}
+
 const MAX_HASH_BYTES = 100 * 1024 * 1024
+
+const RECOVERY_STEPS: RecoveryStep[] = [
+  {
+    id: 'clean-device',
+    title: 'Aislá el dispositivo si ejecutaste algo sospechoso',
+    detail: 'Si hubo descarga, comando extraño o control remoto inesperado, cortá la conexión y analizá el equipo antes de volver a usarlo para cambiar credenciales.',
+  },
+  {
+    id: 'email-first',
+    title: 'Protegé primero tu correo principal',
+    detail: 'El email suele permitir recuperar otras cuentas. Cambiá la clave desde un dispositivo confiable y revisá métodos de recuperación, reenvíos y reglas que no reconozcas.',
+  },
+  {
+    id: 'sessions',
+    title: 'Cerrá sesiones y dispositivos que no reconozcas',
+    detail: 'Usá la página oficial de seguridad de cada servicio. No sigas enlaces de mensajes que afirman que ya hubo un acceso extraño.',
+  },
+  {
+    id: 'mfa',
+    title: 'Activá o renová el segundo factor',
+    detail: 'Preferí passkeys o un autenticador cuando el servicio los ofrezca. Guardá códigos de recuperación en un lugar separado y seguro.',
+  },
+  {
+    id: 'payments',
+    title: 'Revisá pagos, compras y cambios sensibles',
+    detail: 'Si aparecen operaciones que no hiciste, contactá al banco o proveedor desde sus canales oficiales y conservá evidencia del incidente.',
+  },
+  {
+    id: 'reuse',
+    title: 'Buscá otras cuentas con la misma contraseña',
+    detail: 'Si reutilizabas esa clave, cambiala en los demás servicios. No hagas variaciones mínimas de una contraseña que ya quedó expuesta.',
+  },
+]
 
 function inspectUrl(rawValue: string): UrlResult {
   const trimmed = rawValue.trim()
@@ -77,9 +116,15 @@ export default function InternetSOS() {
   const [expectedHash, setExpectedHash] = useState('')
   const [hashStatus, setHashStatus] = useState('')
   const [hashing, setHashing] = useState(false)
+  const [recoveryDone, setRecoveryDone] = useState<string[]>([])
 
   const normalizedExpected = useMemo(() => expectedHash.trim().toLowerCase().replace(/^sha256:/, '').replace(/\s+/g, ''), [expectedHash])
   const hashesMatch = hashValue && /^[a-f0-9]{64}$/.test(normalizedExpected) ? hashValue === normalizedExpected : null
+  const recoveryPercent = Math.round((recoveryDone.length / RECOVERY_STEPS.length) * 100)
+
+  const toggleRecovery = (id: string) => {
+    setRecoveryDone((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id])
+  }
 
   const submitUrl = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -122,7 +167,7 @@ export default function InternetSOS() {
       <div className="xk-sos-head">
         <p>GREEN NODE // PROTECT</p>
         <h2 id="internet-sos-title">Internet SOS</h2>
-        <span>Herramientas de diagnóstico local. No abrimos la URL que pegás y no subimos el archivo que seleccionás.</span>
+        <span>Herramientas y protocolos de diagnóstico local. No abrimos la URL que pegás, no subimos el archivo que seleccionás y no pedimos credenciales.</span>
       </div>
 
       <div className="xk-sos-grid">
@@ -162,6 +207,28 @@ export default function InternetSOS() {
           {hashValue ? <div className="xk-sos-hash-output"><small>SHA-256 LOCAL</small><code>{hashValue}</code><button type="button" onClick={() => navigator.clipboard?.writeText(hashValue)}>COPIAR</button></div> : null}
           {hashesMatch !== null ? <p className={`xk-sos-match ${hashesMatch ? 'is-match' : 'is-different'}`}>{hashesMatch ? 'COINCIDE con el SHA-256 de referencia.' : 'NO COINCIDE con el SHA-256 de referencia.'}</p> : null}
           <p className="xk-sos-note">Una coincidencia confirma bytes idénticos al hash de referencia. No demuestra por sí sola que el archivo sea benigno ni que la fuente del hash sea auténtica.</p>
+        </article>
+
+        <article className="xk-sos-tool xk-sos-tool-wide">
+          <div className="xk-sos-tool-title"><span aria-hidden="true">SOS</span><div><strong>Me comprometieron una cuenta</strong><small>Protocolo local de recuperación, sin recopilar datos.</small></div></div>
+          <div className="xk-sos-progress" aria-label={`Progreso de recuperación ${recoveryPercent}%`}>
+            <div><span>PROTOCOLO DE RECUPERACIÓN</span><strong>{recoveryDone.length}/{RECOVERY_STEPS.length}</strong></div>
+            <span><i style={{ width: `${recoveryPercent}%` }} /></span>
+          </div>
+          <div className="xk-sos-recovery">
+            {RECOVERY_STEPS.map((step) => {
+              const checked = recoveryDone.includes(step.id)
+              return <label key={step.id} className={checked ? 'is-done' : ''}>
+                <input type="checkbox" checked={checked} onChange={() => toggleRecovery(step.id)} />
+                <span><strong>{step.title}</strong><small>{step.detail}</small></span>
+              </label>
+            })}
+          </div>
+          <div className="xk-sos-captcha-alert">
+            <strong>ALERTA // CAPTCHA FALSO</strong>
+            <span>Una verificación web legítima no necesita que abras “Ejecutar” con Win + R ni que pegues comandos con Ctrl + V. Si una página te pide eso, cerrala y tratá el equipo como potencialmente comprometido si ya ejecutaste las instrucciones.</span>
+          </div>
+          <p className="xk-sos-note">El checklist no se guarda en una cuenta ni se envía al servidor. Es una ayuda de orden y no reemplaza el soporte oficial del servicio, de tu banco o de un profesional ante un incidente grave.</p>
         </article>
       </div>
     </section>
