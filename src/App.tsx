@@ -94,6 +94,7 @@ const routeNames = {
     '/science': 'Ciencia y tecnología',
     '/comicon': 'Universo COMICON',
     '/fun': 'Huellas de Puan (ruta heredada)',
+    '/mascotas': 'Huellas de Puan',
     '/creacion-web': 'Creación web',
     '/green-node': 'Green Node',
     '/news': 'Noticias',
@@ -118,6 +119,7 @@ const routeNames = {
     '/science': 'Science and technology',
     '/comicon': 'COMICON Universe',
     '/fun': 'Huellas de Puan (legacy route)',
+    '/mascotas': 'Huellas de Puan',
     '/creacion-web': 'Web creation',
     '/green-node': 'Green Node',
     '/news': 'News',
@@ -228,6 +230,7 @@ function AppShell() {
               <Route path="/science" element={<ScienceLab />} />
               <Route path="/comicon" element={<ComicUniverse />} />
               <Route path="/fun" element={<FunPortal />} />
+              <Route path="/mascotas" element={<Navigate to="/mascotas/" replace />} />
               <Route path="/creacion-web" element={<WebCreation />} />
               <Route path="/community" element={<Community />} />
               <Route path="/about" element={<About />} />
