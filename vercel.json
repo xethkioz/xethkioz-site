@@ -5,181 +5,420 @@
   "framework": "vite",
   "trailingSlash": false,
   "redirects": [
-    { "source": "/nexus-city", "destination": "/fun#nexus-city", "permanent": true },
-    { "source": "/web-creation", "destination": "/creacion-web", "permanent": true },
-    { "source": "/register", "destination": "/account", "permanent": true },
-    { "source": "/admin", "destination": "/cms", "permanent": true }
+    {
+      "source": "/fun",
+      "destination": "/mascotas/",
+      "permanent": true
+    },
+    {
+      "source": "/en/fun",
+      "destination": "/mascotas/",
+      "permanent": true
+    },
+    {
+      "source": "/web-creation",
+      "destination": "/creacion-web",
+      "permanent": true
+    },
+    {
+      "source": "/register",
+      "destination": "/account",
+      "permanent": true
+    },
+    {
+      "source": "/admin",
+      "destination": "/cms",
+      "permanent": true
+    }
   ],
   "rewrites": [
-    { "source": "/sitemap.xml", "destination": "/api/sitemap" },
-    { "source": "/news-sitemap.xml", "destination": "/api/news-sitemap" },
-    { "source": "/feed.xml", "destination": "/api/feed" },
-    { "source": "/", "destination": "/index.html" },
-    { "source": "/en", "destination": "/seo-shells/en-home.html" },
-    { "source": "/en/gaming/guides", "destination": "/seo-shells/en-gaming-guides.html" },
-    { "source": "/en/gaming", "destination": "/seo-shells/en-gaming.html" },
-    { "source": "/en/science", "destination": "/seo-shells/en-science.html" },
-    { "source": "/en/comicon", "destination": "/seo-shells/en-comicon.html" },
-    { "source": "/en/fun", "destination": "/seo-shells/en-fun.html" },
-    { "source": "/en/creacion-web", "destination": "/seo-shells/en-creacion-web.html" },
-    { "source": "/en/community", "destination": "/seo-shells/en-community.html" },
-    { "source": "/en/about", "destination": "/seo-shells/en-about.html" },
-    { "source": "/en/contact", "destination": "/seo-shells/en-contact.html" },
-    { "source": "/en/support", "destination": "/seo-shells/en-support.html" },
-    { "source": "/en/privacy", "destination": "/seo-shells/en-privacy.html" },
-    { "source": "/en/editorial-policy", "destination": "/seo-shells/en-editorial-policy.html" },
-    { "source": "/gaming/guides", "destination": "/seo-shells/gaming-guides.html" },
-    { "source": "/gaming", "destination": "/seo-shells/gaming.html" },
-    { "source": "/science", "destination": "/seo-shells/science.html" },
-    { "source": "/comicon", "destination": "/seo-shells/comicon.html" },
-    { "source": "/fun", "destination": "/seo-shells/fun.html" },
-    { "source": "/news", "destination": "/seo-shells/news.html" },
-    { "source": "/news/:slug", "destination": "/api/news-page?slug=:slug" },
-    { "source": "/community", "destination": "/seo-shells/community.html" },
-    { "source": "/about", "destination": "/seo-shells/about.html" },
-    { "source": "/contact", "destination": "/seo-shells/contact.html" },
-    { "source": "/support", "destination": "/seo-shells/support.html" },
-    { "source": "/privacy", "destination": "/seo-shells/privacy.html" },
-    { "source": "/editorial-policy", "destination": "/seo-shells/editorial-policy.html" },
-    { "source": "/creacion-web", "destination": "/creacion-web.html" },
-    { "source": "/green-node", "destination": "/index.html" },
-    { "source": "/nexus-city/u/:handle", "destination": "/index.html" },
-    { "source": "/nexus-city/room/xethkioz", "destination": "/index.html" },
-    { "source": "/nexus-city/vip", "destination": "/private.html" },
-    { "source": "/nexus-city/room/:handle", "destination": "/index.html" },
-    { "source": "/cms", "destination": "/cms.html" },
-    { "source": "/cms/(.*)", "destination": "/cms.html" },
-    { "source": "/cms-legacy", "destination": "/cms.html" },
-    { "source": "/account", "destination": "/private.html" },
-    { "source": "/login", "destination": "/private.html" },
-    { "source": "/confirm-email", "destination": "/private.html" },
-    { "source": "/profile", "destination": "/private.html" },
-    { "source": "/((?!api/).*)", "destination": "/api/not-found" }
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/news-sitemap.xml",
+      "destination": "/api/news-sitemap"
+    },
+    {
+      "source": "/feed.xml",
+      "destination": "/api/feed"
+    },
+    {
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/en",
+      "destination": "/seo-shells/en-home.html"
+    },
+    {
+      "source": "/en/gaming/guides",
+      "destination": "/seo-shells/en-gaming-guides.html"
+    },
+    {
+      "source": "/en/gaming",
+      "destination": "/seo-shells/en-gaming.html"
+    },
+    {
+      "source": "/en/science",
+      "destination": "/seo-shells/en-science.html"
+    },
+    {
+      "source": "/en/comicon",
+      "destination": "/seo-shells/en-comicon.html"
+    },
+    {
+      "source": "/en/creacion-web",
+      "destination": "/seo-shells/en-creacion-web.html"
+    },
+    {
+      "source": "/en/community",
+      "destination": "/seo-shells/en-community.html"
+    },
+    {
+      "source": "/en/about",
+      "destination": "/seo-shells/en-about.html"
+    },
+    {
+      "source": "/en/contact",
+      "destination": "/seo-shells/en-contact.html"
+    },
+    {
+      "source": "/en/support",
+      "destination": "/seo-shells/en-support.html"
+    },
+    {
+      "source": "/en/privacy",
+      "destination": "/seo-shells/en-privacy.html"
+    },
+    {
+      "source": "/en/editorial-policy",
+      "destination": "/seo-shells/en-editorial-policy.html"
+    },
+    {
+      "source": "/gaming/guides",
+      "destination": "/seo-shells/gaming-guides.html"
+    },
+    {
+      "source": "/gaming",
+      "destination": "/seo-shells/gaming.html"
+    },
+    {
+      "source": "/science",
+      "destination": "/seo-shells/science.html"
+    },
+    {
+      "source": "/comicon",
+      "destination": "/seo-shells/comicon.html"
+    },
+    {
+      "source": "/news",
+      "destination": "/seo-shells/news.html"
+    },
+    {
+      "source": "/news/:slug",
+      "destination": "/api/news-page?slug=:slug"
+    },
+    {
+      "source": "/community",
+      "destination": "/seo-shells/community.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/seo-shells/about.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/seo-shells/contact.html"
+    },
+    {
+      "source": "/support",
+      "destination": "/seo-shells/support.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/seo-shells/privacy.html"
+    },
+    {
+      "source": "/editorial-policy",
+      "destination": "/seo-shells/editorial-policy.html"
+    },
+    {
+      "source": "/creacion-web",
+      "destination": "/creacion-web.html"
+    },
+    {
+      "source": "/green-node",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/nexus-city",
+      "destination": "/seo-shells/nexus-city.html"
+    },
+    {
+      "source": "/nexus-city/u/:handle",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/nexus-city/room/xethkioz",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/nexus-city/vip",
+      "destination": "/private.html"
+    },
+    {
+      "source": "/nexus-city/room/:handle",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/cms",
+      "destination": "/cms.html"
+    },
+    {
+      "source": "/cms/(.*)",
+      "destination": "/cms.html"
+    },
+    {
+      "source": "/cms-legacy",
+      "destination": "/cms.html"
+    },
+    {
+      "source": "/account",
+      "destination": "/private.html"
+    },
+    {
+      "source": "/login",
+      "destination": "/private.html"
+    },
+    {
+      "source": "/confirm-email",
+      "destination": "/private.html"
+    },
+    {
+      "source": "/profile",
+      "destination": "/private.html"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/api/not-found"
+    }
   ],
   "headers": [
     {
       "source": "/api/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "no-store, max-age=0" },
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
       ]
     },
     {
       "source": "/index.html",
       "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
       ]
     },
     {
       "source": "/cms.html",
       "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
       ]
     },
     {
       "source": "/private.html",
       "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
       ]
     },
     {
       "source": "/creacion-web",
       "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
       ]
     },
     {
       "source": "/creacion-web.html",
       "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
       ]
     },
     {
       "source": "/cms",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
       ]
     },
     {
       "source": "/cms/(.*)",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
       ]
     },
     {
       "source": "/cms-legacy",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
       ]
     },
     {
       "source": "/account",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
       ]
     },
     {
       "source": "/login",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
       ]
     },
     {
       "source": "/confirm-email",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
       ]
     },
     {
       "source": "/profile",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
       ]
     },
     {
       "source": "/green-node",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
       ]
     },
     {
       "source": "/nexus-city/u/(.*)",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive, nosnippet, noimageindex" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive, nosnippet, noimageindex"
+        }
       ]
     },
     {
       "source": "/nexus-city/vip",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
       ]
     },
     {
       "source": "/nexus-city/room/(.*)",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
       ]
     },
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-DNS-Prefetch-Control", "value": "off" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin-allow-popups" },
-        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=()" },
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self' 'unsafe-inline' https://*.googletagmanager.com https://*.clarity.ms https://connect.facebook.net; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://c.bing.com https://www.facebook.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://player.twitch.tv https://www.twitch.tv; worker-src 'self' blob:; manifest-src 'self'; form-action 'self' https:; upgrade-insecure-requests" },
-        { "key": "Content-Security-Policy-Report-Only", "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self' https://*.googletagmanager.com https://*.clarity.ms https://connect.facebook.net; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://c.bing.com https://www.facebook.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://player.twitch.tv https://www.twitch.tv; worker-src 'self' blob:; manifest-src 'self'; form-action 'self'; upgrade-insecure-requests" }
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-DNS-Prefetch-Control",
+          "value": "off"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin-allow-popups"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self' 'unsafe-inline' https://*.googletagmanager.com https://*.clarity.ms https://connect.facebook.net; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://c.bing.com https://www.facebook.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://player.twitch.tv https://www.twitch.tv; worker-src 'self' blob:; manifest-src 'self'; form-action 'self' https:; upgrade-insecure-requests"
+        },
+        {
+          "key": "Content-Security-Policy-Report-Only",
+          "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self' https://*.googletagmanager.com https://*.clarity.ms https://connect.facebook.net; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://c.bing.com https://www.facebook.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://player.twitch.tv https://www.twitch.tv; worker-src 'self' blob:; manifest-src 'self'; form-action 'self'; upgrade-insecure-requests"
+        }
       ]
     },
     {
       "source": "/assets/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
       ]
     }
   ]

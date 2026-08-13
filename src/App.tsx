@@ -31,6 +31,7 @@ const GamingGuides = lazy(() => import('./pages/GamingGuides'))
 const ScienceLab = lazy(() => import('./pages/ScienceLab'))
 const ComicUniverse = lazy(() => import('./pages/ComicUniverse'))
 const FunPortal = lazy(() => import('./pages/FunPortal'))
+const NexusCity = lazy(() => import('./pages/NexusCity'))
 const WebCreation = lazy(() => import('./pages/WebCreation'))
 const GreenNode = lazy(() => import('./pages/GreenNode'))
 const ProfileHub = lazy(() => import('./pages/ProfileHub'))
@@ -92,7 +93,7 @@ const routeNames = {
     '/gaming/guides': 'Guías de juegos',
     '/science': 'Ciencia y tecnología',
     '/comicon': 'Universo COMICON',
-    '/fun': 'Diversión',
+    '/fun': 'Huellas de Puan (ruta heredada)',
     '/creacion-web': 'Creación web',
     '/green-node': 'Green Node',
     '/news': 'Noticias',
@@ -116,7 +117,7 @@ const routeNames = {
     '/gaming/guides': 'Gaming guides',
     '/science': 'Science and technology',
     '/comicon': 'COMICON Universe',
-    '/fun': 'Fun',
+    '/fun': 'Huellas de Puan (legacy route)',
     '/creacion-web': 'Web creation',
     '/green-node': 'Green Node',
     '/news': 'News',
@@ -253,7 +254,7 @@ function AppShell() {
               <Route path="/green-node" element={<GreenNodeGate />} />
               <Route path="/news" element={<News />} />
               <Route path="/news/:slug" element={<NewsArticle />} />
-              <Route path="/nexus-city" element={<Navigate to="/fun#nexus-city" replace />} />
+              <Route path="/nexus-city" element={<NexusCity />} />
               <Route path="/nexus-city/u/:handle" element={<NexusPassport />} />
               <Route path="/nexus-city/room/xethkioz" element={<NexusPixelWorld />} />
               <Route path="/nexus-city/vip" element={<NexusVipRooms />} />
