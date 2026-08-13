@@ -6,7 +6,7 @@ Disallow: /cms-legacy
 Disallow: /account
 Disallow: /login
 Disallow: /register
-Disallow: /green-node
+Disallow: /green-node/vault
 Disallow: /api/
 
 Sitemap: https://www.xethkioz.com.ar/sitemap.xml

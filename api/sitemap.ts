@@ -24,6 +24,7 @@ const localizedRoutes: LocalizedRoute[] = [
 
 const spanishOnlyRoutes = [
   { path: '/news', changefreq: 'daily', priority: '0.9' },
+  { path: '/green-node', changefreq: 'daily', priority: '0.8' },
   { path: '/nexus-city', changefreq: 'weekly', priority: '0.8' },
   { path: '/mascotas/', changefreq: 'daily', priority: '0.8' },
 ]
