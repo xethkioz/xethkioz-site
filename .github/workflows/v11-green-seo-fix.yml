@@ -1,0 +1,86 @@
+name: XETHKIOZ v11 Green Node SEO Split Fix
+
+on:
+  push:
+    branches: [v11-foundation-20260813]
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v11-foundation-20260813
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Apply public hub/private Vault SEO contract
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+          import json
+          def rd(p): return Path(p).read_text(encoding='utf-8')
+          def wr(p,s): Path(p).write_text(s,encoding='utf-8')
+          def one(s,a,b,label):
+              n=s.count(a)
+              if n!=1: raise SystemExit(f'{label}: expected 1, got {n}')
+              return s.replace(a,b,1)
+
+          p='public/robots.txt'; s=rd(p)
+          s=s.replace('Disallow: /green-node\n','')
+          if 'Disallow: /green-node/vault\n' not in s:
+              s=s.replace('Disallow: /register\n','Disallow: /register\nDisallow: /green-node/vault\n')
+          wr(p,s)
+
+          p='api/sitemap.ts'; s=rd(p)
+          m="  { path: '/news', changefreq: 'daily', priority: '0.9' },\n"
+          if "path: '/green-node'" not in s: s=one(s,m,m+"  { path: '/green-node', changefreq: 'daily', priority: '0.8' },\n",'sitemap')
+          wr(p,s)
+
+          p='scripts/generate-seo-shells.mjs'; s=rd(p)
+          if "file: 'green-node.html'" not in s:
+              m="  {\n    file: 'news.html',"
+              block=("  {\n    file: 'green-node.html',\n    path: '/green-node',\n    title: 'Green Node Protect | Seguridad, privacidad e Internet SOS | XETHKIOZ',\n    description: 'Herramientas locales, guías de seguridad digital, privacidad, Linux y alertas verificadas. Green Node Protect ayuda a entender riesgos y actuar sin alarmismo.',\n    keywords: 'seguridad digital, privacidad, phishing, Linux, Internet SOS, SHA-256, passkeys, Green Node, XETHKIOZ',\n    image: '/assets/identity/green-node-occult-malware-v1.webp',\n    imageAlt: 'Green Node Protect de XETHKIOZ',\n    localized: false,\n  },\n")
+              s=one(s,m,block+m,'seo shell')
+          wr(p,s)
+
+          p='vercel.json'; cfg=json.loads(rd(p)); rw=cfg.get('rewrites',[])
+          target=next((x for x in rw if x.get('source')=='/green-node'),None)
+          if not target: raise SystemExit('green rewrite missing')
+          target['destination']='/seo-shells/green-node.html'
+          if not any(x.get('source')=='/green-node/vault' for x in rw):
+              i=next((i for i,x in enumerate(rw) if x.get('source')=='/nexus-city'),len(rw))
+              rw.insert(i,{'source':'/green-node/vault','destination':'/index.html'})
+          cfg['rewrites']=rw
+          hs=[x for x in cfg.get('headers',[]) if x.get('source')!='/green-node']
+          ni=[{'key':'X-Robots-Tag','value':'noindex, nofollow, noarchive'}]
+          if not any(x.get('source')=='/green-node/vault' for x in hs): hs.append({'source':'/green-node/vault','headers':ni})
+          if not any(x.get('source')=='/green-node/vault/(.*)' for x in hs): hs.append({'source':'/green-node/vault/(.*)','headers':ni})
+          cfg['headers']=hs; wr(p,json.dumps(cfg,ensure_ascii=False,indent=2)+'\n')
+
+          p='scripts/runtime-seo-contract-check.mjs'; s=rd(p)
+          old="assert(rewriteMap.get('/green-node') === '/index.html', 'Green Node deep links must remain valid without exposing it in navigation.')"
+          new="assert(rewriteMap.get('/green-node') === '/seo-shells/green-node.html', 'Public Green Node Protect must use its own indexable SEO shell.')\nassert(rewriteMap.get('/green-node/vault') === '/index.html', 'Vault 13 deep links must remain available through the SPA gate.')\nassert(sitemap.includes(\"path: '/green-node'\"), 'Public Green Node Protect must be present in the sitemap.')\nassert(seoShells.includes(\"path: '/green-node'\"), 'Public Green Node Protect must generate a standalone SEO shell.')"
+          s=one(s,old,new,'runtime rewrite')
+          m="const passportHeaders = headerMap.get('/nexus-city/u/(.*)') ?? []\n"
+          s=one(s,m,m+"const greenHubHeaders = headerMap.get('/green-node') ?? []\nconst greenVaultHeaders = headerMap.get('/green-node/vault') ?? []\n",'header vars')
+          m="assert(passportHeaders.some((item) => item.key === 'X-Robots-Tag' && item.value.includes('noindex') && item.value.includes('noimageindex')), 'Nexus passports must remain server-side noindex until dynamic per-profile SEO exists.')\n"
+          s=one(s,m,m+"assert(!greenHubHeaders.some((item) => item.key === 'X-Robots-Tag' && item.value.includes('noindex')), 'Public Green Node Protect must not carry a server-side noindex header.')\nassert(greenVaultHeaders.some((item) => item.key === 'X-Robots-Tag' && item.value.includes('noindex')), 'Vault 13 must remain server-side noindex.')\n",'header assertions')
+          wr(p,s)
+          PY
+      - run: npm ci
+      - run: npm run build
+      - name: Commit verified changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/robots.txt api/sitemap.ts scripts/generate-seo-shells.mjs vercel.json scripts/runtime-seo-contract-check.mjs
+          git commit -m "feat(v11): index Green Node Protect and isolate Vault 13"
+          git push origin HEAD:v11-foundation-20260813
