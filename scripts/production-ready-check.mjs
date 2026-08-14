@@ -313,7 +313,8 @@ check(
     && funPortal.includes('if (isNexusAccess)')
     && scienceLab.includes('<NexusDistrict tone="science"')
     && scienceLab.includes('data-science-primary-content')
-    && greenNode.includes('<NexusDistrict tone="green"')
+    && !greenNode.includes('<NexusDistrict tone="green"')
+    && greenNode.includes('xk-green-view-nav')
     && nexusCity.includes('<UniverseTransitRail />')
     && webCreation.includes('<UniverseTransitRail />')
     && universeTransit.includes('aria-current'),
