@@ -10,6 +10,7 @@ const green = read('src/pages/GreenNode.tsx')
 const science = read('src/pages/ScienceLab.tsx')
 const home = read('src/pages/Home.tsx')
 const rootDocument = read('index.html')
+const routeCssLoader = read('src/components/RouteCssLoader.tsx')
 const accessibility = read('src/accessibility.css')
 const browserTest = read('tests/e2e/content-design.spec.ts')
 const checks = []
@@ -44,6 +45,7 @@ check('Gaming localizes translated internal links', gaming.includes("localizePat
 check('Gaming hero reserves height before image decoding', accessibility.includes('.xk-gaming-hero {') && accessibility.includes('min-height: clamp(620px, 72vh, 780px)'))
 check('Gaming hero illustration is removed from document flow', accessibility.includes('.xk-gaming-hero > .xk-anime-hero-media') && accessibility.includes('position: absolute') && accessibility.includes('inset: 0') && accessibility.includes('object-fit: cover'))
 check('Gaming mobile hero keeps a stable minimum height', accessibility.includes('min-height: 640px'))
+check('Localized English portals load their route-owned visual styles', routeCssLoader.includes("pathname.startsWith('/en/')") && routeCssLoader.includes('pathname.slice(3)'))
 
 check('Green Node keeps one primary section navigator instead of a duplicate district', !green.includes('NexusDistrict') && green.includes('xk-green-view-nav'))
 check('Green Node clears the desktop launcher without changing mobile spacing', green.includes('lg:pl-24 lg:pr-8'))
@@ -53,7 +55,7 @@ check('Science gives each learning card a concrete destination', science.include
 check('Science localizes translated assistant and home links', science.includes('localizePath(assistant.link)') && science.includes("localizePath('/')"))
 
 check('Browser tests cover ordered Home content and editorial radar', browserTest.includes('ordena guías, noticias y comunidad') && browserTest.includes('data-home-recent-radar'))
-check('Browser tests cover streamlined Gaming hierarchy', browserTest.includes('una sola navegación antes del contenido') && browserTest.includes('Especificaciones en verificación'))
+check('Browser tests cover streamlined and styled localized Gaming hierarchy', browserTest.includes('una sola navegación antes del contenido') && browserTest.includes("toHaveCSS('display', 'grid')") && browserTest.includes('Especificaciones en verificación'))
 check('Browser tests cover the streamlined Green Node entry', browserTest.includes('Green Node evita navegación duplicada'))
 check('Browser tests cover content-first Science order', browserTest.includes('radar verificable antes de módulos secundarios') && browserTest.includes('compareDocumentPosition'))
 check('Browser tests cover distinct Science learning destinations', browserTest.includes('destino distinto y concreto') && browserTest.includes("'#tech-stack'"))

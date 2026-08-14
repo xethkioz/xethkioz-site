@@ -25,6 +25,8 @@ test.describe('orden y navegación de secciones', () => {
 
     const navigation = page.getByRole('navigation', { name: 'Gaming sections' })
     await expect(navigation).toBeVisible()
+    await expect(navigation).toHaveCSS('display', 'grid')
+    await expect(page.getByRole('heading', { name: 'GAMING NEXUS' })).toBeVisible()
     await expect(page.locator('.xk-gaming-ticker')).toHaveCount(0)
     await expect(page.getByText('98.7%', { exact: true })).toHaveCount(0)
     await expect(page.getByRole('region', { name: /Choose what to do next in Gaming/i })).toHaveCount(0)

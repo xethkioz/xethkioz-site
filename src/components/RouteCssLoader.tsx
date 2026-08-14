@@ -21,8 +21,13 @@ function loadStyle(key: string, loader: () => Promise<unknown>): StylePromise {
 }
 
 function normalizeRoute(pathname: string) {
-  if (pathname === '/nexus-city') return '/fun'
-  return pathname
+  const route = pathname === '/en'
+    ? '/'
+    : pathname.startsWith('/en/')
+      ? pathname.slice(3)
+      : pathname
+  if (route === '/nexus-city') return '/fun'
+  return route
 }
 
 function isPortalRoute(pathname: string) {
