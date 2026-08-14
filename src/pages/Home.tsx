@@ -116,10 +116,10 @@ const copy = {
         subtitle: 'Marvel · DC · Anime · Cultura Fan',
         action: 'ABRIR MULTIVERSO',
         route: '/comicon',
-        world: '/assets/xethkioz-light-shadow-comic-anime.webp',
+        world: '/assets/portal-comicon-duality-v11.webp',
         frame: '/assets/portal-games-clean-v1.webp',
-        tone: '#ffe45c',
-        position: '50% 42%',
+        tone: '#ff9d00',
+        position: '50% 50%',
       },
       {
         id: 'pets',
@@ -128,9 +128,9 @@ const copy = {
         subtitle: 'Perdidos · Encontrados · Adopciones · Cuidados',
         action: 'AYUDAR A UNA MASCOTA',
         route: '/fun',
-        world: '/assets/huellas-hero-real.svg',
+        world: '/assets/portal-mascotas-nature-v11.webp',
         frame: '/assets/portal-fun-chaos-v2.webp',
-        tone: '#7ba563',
+        tone: '#48f59b',
         position: '50% 50%',
       },
     ] as PortalCard[],
@@ -239,10 +239,10 @@ const copy = {
         subtitle: 'Marvel · DC · Anime · Fan Culture',
         action: 'OPEN MULTIVERSE',
         route: '/comicon',
-        world: '/assets/xethkioz-light-shadow-comic-anime.webp',
+        world: '/assets/portal-comicon-duality-v11.webp',
         frame: '/assets/portal-games-clean-v1.webp',
-        tone: '#ffe45c',
-        position: '50% 42%',
+        tone: '#ff9d00',
+        position: '50% 50%',
       },
       {
         id: 'pets',
@@ -251,9 +251,9 @@ const copy = {
         subtitle: 'Lost · Found · Adoption · Care',
         action: 'HELP A PET',
         route: '/fun',
-        world: '/assets/huellas-hero-real.svg',
+        world: '/assets/portal-mascotas-nature-v11.webp',
         frame: '/assets/portal-fun-chaos-v2.webp',
-        tone: '#7ba563',
+        tone: '#48f59b',
         position: '50% 50%',
       },
     ] as PortalCard[],
@@ -578,6 +578,7 @@ export default function Home() {
 function PrimaryPortal({ portal }: { portal: PortalCard }) {
   const isFeatured = portal.id === 'gaming'
   const isImmediate = portal.id === 'gaming' || portal.id === 'pets'
+  const hasEnhancedLighting = portal.id === 'comicon' || portal.id === 'pets'
   const { localizePath } = useLang()
   const content: ReactNode = (
     <>
@@ -594,7 +595,10 @@ function PrimaryPortal({ portal }: { portal: PortalCard }) {
           />
         </span>
         <span className="xk-rb-frame" aria-hidden="true" />
-        <span className="xk-rb-sparks" aria-hidden="true"><i /><i /><i /></span>
+        <span className="xk-rb-sparks" aria-hidden="true">
+          <i /><i /><i />
+          {hasEnhancedLighting && <><i /><i /></>}
+        </span>
       </span>
 
       <span className="xk-rb-portal-copy">
@@ -608,6 +612,7 @@ function PrimaryPortal({ portal }: { portal: PortalCard }) {
   const commonProps = {
     className: 'xk-rb-portal',
     style: { '--tone': portal.tone } as CSSProperties,
+    'data-portal': portal.id,
     'aria-label': `${portal.action}: ${portal.title}`,
   }
 
