@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type CSSProperties } from 'react'
 import SafeImage from '../SafeImage'
 import './ComiconLibraryReal.css'
 import {
@@ -17,6 +17,18 @@ type Props = {
 }
 
 const entityOrder: EntityFilter[] = ['all', 'hero', 'villain', 'antihero', 'team', 'comic', 'manga', 'screen']
+
+const genericCatalogArtwork = /^\/assets\/comicon\/catalog-[a-z0-9-]+\.svg(?:[?#].*)?$/i
+
+const entityMarks: Record<ComiconCatalogEntityType, string> = {
+  hero: 'H',
+  villain: 'V',
+  antihero: 'A',
+  team: 'T',
+  comic: 'C',
+  manga: 'M',
+  screen: 'S',
+}
 
 const copy = {
   es: {
@@ -39,6 +51,7 @@ const copy = {
     facts: 'Datos clave',
     sources: 'Fuentes',
     source: 'Fuente oficial',
+    editorialCover: 'Portada editorial de archivo',
     entities: {
       all: 'Todo',
       hero: 'Héroes',
@@ -71,6 +84,7 @@ const copy = {
     facts: 'Key facts',
     sources: 'Sources',
     source: 'Official source',
+    editorialCover: 'Editorial archive cover',
     entities: {
       all: 'All',
       hero: 'Heroes',
@@ -84,6 +98,81 @@ const copy = {
     channels: { marvel: 'Marvel', dc: 'DC Universe', anime: 'Anime + Manga', screen: 'Movies + TV', comics: 'Comics + Authors' },
   },
 } as const
+
+function isGenericCatalogArtwork(url: string) {
+  return genericCatalogArtwork.test(url)
+}
+
+function artworkSeed(value: string) {
+  let hash = 2166136261
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index)
+    hash = Math.imul(hash, 16777619)
+  }
+  const normalized = hash >>> 0
+  return {
+    hue: normalized % 360,
+    variant: normalized % 6,
+    serial: String((normalized % 899) + 101),
+  }
+}
+
+function artworkMonogram(title: string) {
+  const words = title
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z0-9]+/g, ' ')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+
+  if (!words.length) return 'XK'
+  if (words.length === 1) return words[0].slice(0, 2).toUpperCase()
+  return words.slice(0, 3).map((word) => word[0]).join('').toUpperCase()
+}
+
+type CatalogArtworkProps = {
+  item: ComiconCatalogItem
+  lang: 'es' | 'en'
+  detail?: boolean
+}
+
+function CatalogArtwork({ item, lang, detail = false }: CatalogArtworkProps) {
+  if (!isGenericCatalogArtwork(item.image_url)) {
+    return (
+      <SafeImage
+        src={item.image_url}
+        fallback="/assets/portal-comicon-world.svg"
+        alt={detail ? item.image_alt : ''}
+        className={`xk-comicon-catalog-image${detail ? ' is-detail' : ''}`}
+        loading="lazy"
+        fetchPriority="low"
+      />
+    )
+  }
+
+  const seed = artworkSeed(`${item.slug}:${item.title}`)
+  const style = { '--xk-art-hue': seed.hue } as CSSProperties
+
+  return (
+    <div
+      className={`xk-comicon-catalog-art${detail ? ' is-detail' : ''}`}
+      data-channel={item.channel}
+      data-entity={item.entity_type}
+      data-variant={seed.variant}
+      style={style}
+      role={detail ? 'img' : undefined}
+      aria-label={detail ? `${copy[lang].editorialCover}: ${item.title}` : undefined}
+      aria-hidden={detail ? undefined : true}
+    >
+      <span>{copy[lang].channels[item.channel]} // {seed.serial}</span>
+      <i>{entityMarks[item.entity_type]}</i>
+      <strong>{artworkMonogram(item.title)}</strong>
+      <b>{item.title}</b>
+      <small>XETHKIOZ // {copy[lang].editorialCover}</small>
+    </div>
+  )
+}
 
 function sourceLabel(url: string, fallback: string) {
   try {
@@ -175,13 +264,7 @@ export default function ComiconLibrary({ lang, channel }: Props) {
                 aria-label={`${t.inspect}: ${item.title}`}
                 onClick={() => setSelectedId(item.id)}
               >
-                <SafeImage
-                  src={item.image_url}
-                  fallback="/assets/portal-comicon-world.svg"
-                  alt=""
-                  loading="lazy"
-                  fetchPriority="low"
-                />
+                <CatalogArtwork item={item} lang={lang} />
                 <span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
                 <small>{t.channels[item.channel]} · {t.entities[item.entity_type]}</small>
                 <b>{item.title}</b>
@@ -192,13 +275,7 @@ export default function ComiconLibrary({ lang, channel }: Props) {
 
           <aside className="xk-comicon-library-detail xk-comicon-library-detail-real" aria-live="polite">
             <p>{t.selected}</p>
-            <SafeImage
-              src={selectedItem.image_url}
-              fallback="/assets/portal-comicon-world.svg"
-              alt={selectedItem.image_alt}
-              loading="lazy"
-              fetchPriority="low"
-            />
+            <CatalogArtwork item={selectedItem} lang={lang} detail />
             <small>{t.channels[selectedItem.channel]} · {t.entities[selectedItem.entity_type]}</small>
             <h3>{selectedItem.title}</h3>
             <div>{selectedItem.summary[lang]}</div>
