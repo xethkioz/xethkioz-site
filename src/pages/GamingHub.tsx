@@ -28,7 +28,7 @@ const content = {
     community: 'Buscar escuadrón',
     dispatch: 'RADAR GAMING',
     read: 'Abrir noticia',
-    signal: 'señales disponibles',
+    signal: 'noticias en radar',
     systemStatus: 'Resumen de Gaming',
     nexusLink: 'RUTAS DISPONIBLES',
     routeCount: '5',
@@ -97,7 +97,7 @@ const content = {
     community: 'Find a squad',
     dispatch: 'GAMING RADAR',
     read: 'Open story',
-    signal: 'available signals',
+    signal: 'stories in radar',
     systemStatus: 'Gaming summary',
     nexusLink: 'AVAILABLE ROUTES',
     routeCount: '5',
@@ -175,8 +175,16 @@ export default function GamingHub() {
   const streamDescription = liveStream ? t.stream.liveDescription : t.stream.standbyDescription
 
   useEffect(() => {
+    if (activeSection !== 'news') return
     let alive = true
     void fetchPublishedNews('gaming').then((next) => { if (alive) setPublished(next) }).catch(() => undefined)
+    return () => { alive = false }
+  }, [activeSection])
+
+  useEffect(() => {
+    if (activeSection !== 'live') return
+    let alive = true
+    setStreamRadarReady(false)
     void (async () => {
       try {
         const { data } = await supabase.from('streams').select('*').order('published_at', { ascending: false }).limit(12)
@@ -191,7 +199,7 @@ export default function GamingHub() {
       }
     })()
     return () => { alive = false }
-  }, [])
+  }, [activeSection])
 
   function selectSection(section: GamingSection) {
     const next = new URLSearchParams(searchParams)

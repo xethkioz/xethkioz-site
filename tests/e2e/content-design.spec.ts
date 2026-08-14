@@ -25,6 +25,8 @@ test.describe('orden y navegación de secciones', () => {
 
     const navigation = page.getByRole('navigation', { name: 'Gaming sections' })
     await expect(navigation).toBeVisible()
+    await expect(navigation).toHaveCSS('display', 'grid')
+    await expect(page.getByRole('heading', { name: 'GAMING NEXUS' })).toBeVisible()
     await expect(page.locator('.xk-gaming-ticker')).toHaveCount(0)
     await expect(page.getByText('98.7%', { exact: true })).toHaveCount(0)
     await expect(page.getByRole('region', { name: /Choose what to do next in Gaming/i })).toHaveCount(0)
@@ -40,6 +42,17 @@ test.describe('orden y navegación de secciones', () => {
     await expect(page.getByRole('heading', { name: 'Prepará tu perfil para encontrar grupo' })).toBeVisible()
     await expect(page.getByText('Especificaciones en verificación', { exact: true })).toHaveCount(0)
     await expect(page.getByRole('link', { name: /Abrir biblioteca/i })).toHaveAttribute('href', '/gaming/guides')
+  })
+
+  test('Green Node evita navegación duplicada y conserva sus cuatro secciones', async ({ page }) => {
+    await page.goto('/')
+    await page.evaluate(() => window.sessionStorage.setItem('xethkioz.greenNodeUnlocked', String(Date.now())))
+    await page.goto('/green-node')
+
+    await expect(page.locator('.xk-nexus-district.is-green')).toHaveCount(0)
+    const navigation = page.getByRole('navigation', { name: 'Elegir sección de Green Node' })
+    await expect(navigation).toBeVisible()
+    await expect(navigation.getByRole('button')).toHaveCount(4)
   })
 
   test('Science muestra el radar verificable antes de módulos secundarios', async ({ page }) => {

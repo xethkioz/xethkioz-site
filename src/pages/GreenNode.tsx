@@ -6,7 +6,6 @@ import SEO from '../components/SEO'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
 import PortalKnowledgeBriefing from '../components/PortalKnowledgeBriefing'
 import { PortalPulseRail } from '../components/PortalPulseRail'
-import { NexusDistrict } from '../components/NexusDistrict'
 import { greenNodeDossiers, type GreenDossierCategory } from '../data/greenNodeDossiers'
 import { useLang } from '../lib/LangContext'
 import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
@@ -524,7 +523,7 @@ export default function GreenNode() {
         <code>0x66 :: W1SP :: SAFE_SIMULATION</code>
       </div> : null}
 
-      <main className={`xk-green-shell px-4 py-12 sm:px-6 lg:px-8${deepMode ? ' xk-deep-mode' : ''}`}>
+      <main className={`xk-green-shell px-4 py-12 sm:px-6 lg:pl-24 lg:pr-8${deepMode ? ' xk-deep-mode' : ''}`}>
         <div className="xk-green-matrix" aria-hidden="true" />
         <div className="mx-auto max-w-7xl">
           <section className="xk-green-frame xk-occult-frame rounded-[2rem] bg-black/78 p-6 md:p-10" aria-labelledby="green-title">
@@ -548,8 +547,6 @@ export default function GreenNode() {
                   </div>
                 </div>
               </div>
-
-              <NexusDistrict tone="green" />
 
               <nav className="xk-green-view-nav" aria-label={t.views.aria}>
                 {([
