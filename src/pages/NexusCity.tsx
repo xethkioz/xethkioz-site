@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type CSSProperties } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import SEO from '../components/SEO'
+import PortalKnowledgeBriefing from '../components/PortalKnowledgeBriefing'
 import { UniverseTransitRail } from '../components/universe/UniverseTransitRail'
 import NexusSocialLoop from '../components/nexus/NexusSocialLoop'
 import { useHud } from '../lib/HudContext'
@@ -304,6 +305,8 @@ export default function NexusCity({ embedded = false }: { embedded?: boolean }) 
         </section>
 
         <div id="social-loop"><NexusSocialLoop lang={lang} account={account} avatar={avatar} onNotice={setNotice} /></div>
+
+        <PortalKnowledgeBriefing sector="nexus" lang={lang} />
 
         <section className="xk-city-roadmap" aria-labelledby="city-roadmap-title">
           <div><p>{t.roadmapEyebrow}</p><h2 id="city-roadmap-title">{t.roadmapTitle}</h2><span>{t.roadmapText}</span></div>

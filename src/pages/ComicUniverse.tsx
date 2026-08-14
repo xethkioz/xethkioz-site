@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import SEO from '../components/SEO'
 import SafeImage from '../components/SafeImage'
+import PortalKnowledgeBriefing from '../components/PortalKnowledgeBriefing'
 import OriginalComicFeature from '../components/comicon/OriginalComicFeature'
 import ComiconLibrary from '../components/comicon/ComiconLibrary'
 import { useLang } from '../lib/LangContext'
@@ -296,6 +297,8 @@ export default function ComicUniverse() {
             </div>
           ) : null}
         </section>
+
+        <PortalKnowledgeBriefing sector="comicon" lang={lang} />
 
         <aside className="xk-comicon-editorial" aria-labelledby="comicon-editorial-title">
           <div><span aria-hidden="true">!</span><h2 id="comicon-editorial-title">{t.editorialTitle}</h2></div>

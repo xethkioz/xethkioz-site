@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import SEO from '../components/SEO'
 import SafeImage from '../components/SafeImage'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
+import PortalKnowledgeBriefing from '../components/PortalKnowledgeBriefing'
 import GamingGuideRotation from '../components/gaming/GamingGuideRotation'
 import { useLang } from '../lib/LangContext'
 import { STREAM_LINKS } from '../lib/siteConfig'
@@ -285,6 +286,7 @@ export default function GamingHub() {
           </section> : null}
 
           {activeSection === 'news' ? <div className="mt-10"><PublicAdSlot slotId="section-sidebar" fallbackLabel={t.sponsor} /></div> : null}
+          <PortalKnowledgeBriefing sector="gaming" lang={lang} />
           <nav className="mt-8 flex flex-wrap gap-3 font-mono text-xs uppercase tracking-[0.18em]" aria-label={lang === 'es' ? 'Navegación de Gaming' : 'Gaming navigation'}>
             <Link to={localizePath('/')} className="xk-hud-button">{t.back}</Link>
             <Link to={localizePath('/gaming/guides')} className="xk-hud-button">{t.guides}</Link>

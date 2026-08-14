@@ -4,6 +4,7 @@ import SafeImage from '../components/SafeImage'
 import GreenNodeWispGuide, { type GreenNodeView } from '../components/GreenNodeWispGuide'
 import SEO from '../components/SEO'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
+import PortalKnowledgeBriefing from '../components/PortalKnowledgeBriefing'
 import { PortalPulseRail } from '../components/PortalPulseRail'
 import { NexusDistrict } from '../components/NexusDistrict'
 import { greenNodeDossiers, type GreenDossierCategory } from '../data/greenNodeDossiers'
@@ -685,6 +686,7 @@ export default function GreenNode() {
 
               </div>
 
+              <PortalKnowledgeBriefing sector="green" lang={lang} />
               <div className="mt-8"><PublicAdSlot slotId="section-sidebar" fallbackLabel={t.sponsor} /></div>
               <div className="mt-8 rounded-2xl border border-[#32FF8A]/25 bg-black/70 p-5 font-mono text-xs leading-relaxed text-[#B9FFD1]">{t.status}</div>
               <Link to="/" className="mt-8 inline-flex rounded-full border border-[#32FF8A]/50 px-4 py-3 font-mono text-xs uppercase tracking-[0.18em] text-[#D8FFE8] transition hover:bg-[#32FF8A]/10 hover:shadow-[0_0_18px_rgba(50,255,138,.24)]">{t.close}</Link>

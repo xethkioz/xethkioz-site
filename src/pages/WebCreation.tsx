@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import SafeImage from '../components/SafeImage'
 import SEO from '../components/SEO'
+import PortalKnowledgeBriefing from '../components/PortalKnowledgeBriefing'
 import { UniverseTransitRail } from '../components/universe/UniverseTransitRail'
 import { PortalPulseRail } from '../components/PortalPulseRail'
 import { useLang } from '../lib/LangContext'
@@ -511,6 +512,10 @@ export default function WebCreation() {
           </form>
         </div>
       </section>
+
+      <div className="relative z-10 mx-auto max-w-[1500px] px-5 md:px-10 lg:px-14">
+        <PortalKnowledgeBriefing sector="web" lang={lang} />
+      </div>
 
       <section className="border-t border-white/10 bg-white/[0.02] px-5 py-24 md:px-10 lg:px-14" aria-labelledby="web-faq-title"><div className="mx-auto grid max-w-[1500px] gap-12 xl:grid-cols-[0.7fr_1.3fr]"><div><p className="font-mono text-xs font-black uppercase tracking-[0.3em] text-orange-300">{t.faqEyebrow}</p><h2 id="web-faq-title" className="mt-4 max-w-xl text-4xl font-black tracking-[-0.035em] md:text-6xl">{t.faqTitle}</h2></div><div className="space-y-3">{t.faqs.map(([question, answer], index) => <details key={question} className="group rounded-[1.5rem] border border-white/10 bg-black/25 open:border-purple-400/35 open:bg-purple-500/[0.055]"><summary className="flex cursor-pointer list-none items-center justify-between gap-5 px-5 py-5 text-left text-base font-black marker:hidden md:px-6"><span className="flex items-center gap-4"><span className="font-mono text-[10px] text-orange-300" aria-hidden="true">0{index + 1}</span>{question}</span><span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/10 text-purple-200 transition group-open:rotate-45 group-open:border-orange-300/40 group-open:text-orange-200" aria-hidden="true">+</span></summary><p className="px-5 pb-6 pr-14 text-sm leading-7 text-white/60 md:px-6 md:pr-20">{answer}</p></details>)}</div></div></section>
     </main>

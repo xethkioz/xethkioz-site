@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
 import SafeImage from '../components/SafeImage'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
+import PortalKnowledgeBriefing from '../components/PortalKnowledgeBriefing'
 import { PortalPulseRail } from '../components/PortalPulseRail'
 import { NexusDistrict } from '../components/NexusDistrict'
 import Newsletter from '../components/Newsletter'
@@ -346,6 +347,8 @@ export default function ScienceLab() {
             </div>
             <div id="assistant-answer" className="xk-assistant-answer" role="tabpanel" aria-labelledby={`assistant-tab-${assistantTopic}`} aria-live="polite"><small>{t.assistant.response} // {assistant.label}</small><p>{assistant.answer}</p><Link to={localizePath(assistant.link)}>{t.assistant.related} →</Link></div>
           </section>
+
+          <PortalKnowledgeBriefing sector="science" lang={lang} />
 
           <section className="xk-science-references" aria-labelledby="science-references-title">
             <div><p>{t.references.eyebrow}</p><h2 id="science-references-title">{t.references.title}</h2><span>{t.references.description}</span></div>
