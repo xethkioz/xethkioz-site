@@ -33,7 +33,7 @@ if (home.includes('alpha6-portal-world') || home.includes('<img')) {
 
 mkdirSync(join(root, 'docs/QA'), { recursive: true })
 const report = [
-  '# XETHKIOZ 10.0 Live Candidate Check',
+  '# XETHKIOZ 11.0 Live Candidate Check',
   '',
   `Generated: ${new Date().toISOString()}`,
   '',

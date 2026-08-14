@@ -1,5 +1,6 @@
 import { FormEvent, useMemo, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import PortalKnowledgeBriefing from '../components/PortalKnowledgeBriefing'
 
 const localities = ['Puan', 'Darregueira', 'Bordenave', 'Villa Iris', 'Felipe Solá', '17 de Agosto', 'Azopardo', 'Erize', 'San Germán']
 
@@ -122,6 +123,7 @@ export default function MascotasPortal() {
               <div className="mb-5 flex flex-wrap items-end justify-between gap-4"><div><h2 className="text-3xl font-black text-emerald-950">Publicaciones recientes</h2><p className="mt-1 text-slate-600">Información de la comunidad, ordenada de forma clara.</p></div><select value={filter} onChange={(event) => setFilter(event.target.value)} className="min-h-12 rounded-xl border border-slate-300 bg-white px-4 font-semibold"><option>Todas</option>{localities.map((place) => <option key={place}>{place}</option>)}</select></div>
               <PostGrid posts={listedPosts} />
             </section>
+            <PortalKnowledgeBriefing sector="pets" light />
           </>
         )}
 
@@ -144,7 +146,7 @@ export default function MascotasPortal() {
 
         {category && <section><h1 className="text-4xl font-black text-emerald-950">Animales {category === 'Adopción' ? 'en adopción' : category.toLowerCase() + 's'}</h1><p className="mt-2 text-slate-600">Filtrá por localidad y contactá directamente desde cada publicación.</p><div className="my-6"><select value={filter} onChange={(event) => setFilter(event.target.value)} className="min-h-12 rounded-xl border border-slate-300 bg-white px-4 font-semibold"><option>Todas</option>{localities.map((place) => <option key={place}>{place}</option>)}</select></div><PostGrid posts={listedPosts} /></section>}
 
-        {section === 'castraciones' && <section><h1 className="text-4xl font-black text-emerald-950">Castraciones</h1><p className="mt-2 max-w-3xl text-slate-600">Este espacio reunirá campañas municipales, veterinarias y lugares permanentes. Los datos oficiales todavía deben verificarse antes de publicarse.</p><div className="mt-8 grid gap-5 md:grid-cols-2"><InfoCard title="Campañas próximas" text="No hay fechas verificadas cargadas todavía. Las instituciones podrán publicar día, horario, requisitos y cupos." /><InfoCard title="Lugares permanentes" text="Próximamente se incorporarán veterinarias y servicios habilitados de Puan y la zona." /></div></section>}
+        {section === 'castraciones' && <section><h1 className="text-4xl font-black text-emerald-950">Castraciones y cuidado responsable</h1><p className="mt-2 max-w-3xl leading-relaxed text-slate-600">No publicamos fechas o turnos sin confirmación de la institución responsable. Mientras se completa la agenda local, esta sección ofrece criterios seguros para prepararse y reconocer qué dato debe verificarse.</p><div className="mt-8 grid gap-5 md:grid-cols-2"><InfoCard title="Antes de pedir un turno" text="Consultá edad, estado de salud, ayuno, traslado y cuidados posteriores con la veterinaria o campaña que realizará el procedimiento. No uses indicaciones reenviadas como reemplazo de esa evaluación." /><InfoCard title="Cómo validamos una campaña" text="La publicación debe indicar organismo responsable, lugar, fecha, horario, cupos, requisitos y un canal oficial de contacto. Si falta alguno, se mostrará como dato pendiente y no como turno confirmado." /></div><PortalKnowledgeBriefing sector="pets" light /></section>}
 
         {section === 'fauna-flora' && <section><h1 className="text-4xl font-black text-emerald-950">Fauna y flora de nuestra región</h1><p className="mt-2 max-w-3xl text-slate-600">Conocer las especies locales ayuda a protegerlas y evita acciones que pueden dañarlas.</p><div className="mt-8 grid gap-5 md:grid-cols-2">{fauna.map(([name, text]) => <InfoCard key={name} title={name} text={text} />)}</div><div className="mt-8 rounded-3xl bg-sky-100 p-6 md:p-8"><h2 className="text-2xl font-black text-sky-950">Cómo cuidar el ambiente</h2><p className="mt-3 leading-relaxed text-sky-950">No arrojes residuos en lagunas o caminos, respetá nidos y madrigueras, evitá incendios, no captures fauna silvestre y mantené a tus mascotas controladas cerca de humedales y áreas rurales.</p></div></section>}
       </main>

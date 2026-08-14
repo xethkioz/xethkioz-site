@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = '20260808-3';
+  const VERSION = '20260813-1';
   const BASE_PATH = '/mascotas/';
 
   const stableHeader = document.createElement('style');
@@ -18,6 +18,17 @@
     @media(max-width:600px){.top .header-row{width:calc(100% - 20px)!important}.top .brand{min-width:0!important}.top .brand-mark{font-size:27px!important}.top .brand-text strong{font-size:1.12rem!important}.top .brand-text small{font-size:.74rem!important}.top .back{font-size:.7rem!important;padding:8px 9px!important}.top .nav button{font-size:.78rem!important;padding:8px 9px!important}}
   `;
   document.head.appendChild(stableHeader);
+
+  const careSection = document.querySelector('#cuidados');
+  careSection?.setAttribute('data-knowledge-sector', 'pets');
+  careSection?.classList.add('knowledge-sector');
+
+  const performanceStyles = document.createElement('style');
+  performanceStyles.textContent = '.knowledge-sector{content-visibility:auto;contain-intrinsic-size:auto 680px}.guide summary:focus-visible{outline:3px solid rgba(79,116,47,.42);outline-offset:5px;border-radius:8px}';
+  document.head.appendChild(performanceStyles);
+
+  const integrationCopy = document.querySelector('.footer-grid > div:nth-child(2) > p');
+  if (integrationCopy) integrationCopy.textContent = 'Proyecto comunitario independiente integrado a XETHKIOZ v11.0.';
 
   const loadScript = (file) => new Promise((resolve, reject) => {
     const script = document.createElement('script');

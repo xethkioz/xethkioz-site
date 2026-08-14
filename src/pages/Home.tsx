@@ -60,7 +60,16 @@ const copy = {
     portalLabel: 'PORTALES PRINCIPALES // SEÑAL ESTABLE',
     liveSignal: '4 PORTALES PRINCIPALES ACTIVOS',
     nexusSignal: 'NEXUS CITY EN LÍNEA',
-    safeSignal: 'SISTEMA SEGURO 24/7',
+    safeSignal: 'PRIVACIDAD Y NAVEGACIÓN VERIFICADAS',
+    sectionNavLabel: 'Índice de secciones de XETHKIOZ',
+    sectionNav: [
+      { code: '01', label: 'Portales', href: '#portals' },
+      { code: '02', label: 'Red Nexus', href: '#network' },
+      { code: '03', label: 'Contenido', href: '#radar' },
+      { code: '04', label: 'Guías', href: '/gaming/guides' },
+      { code: '05', label: 'Estudio', href: '#studio' },
+      { code: '06', label: 'Contacto', href: '#contact' },
+    ],
     secondaryEyebrow: 'OTRAS PUERTAS DEL NEXUS',
     secondaryTitle: 'La Red de Portales continúa más allá de la escena principal.',
     secondaryText: 'Destinos especiales para habitar, crear y descifrar XETHKIOZ sin competir con la escena principal.',
@@ -107,10 +116,10 @@ const copy = {
         subtitle: 'Marvel · DC · Anime · Cultura Fan',
         action: 'ABRIR MULTIVERSO',
         route: '/comicon',
-        world: '/assets/xethkioz-light-shadow-comic-anime.webp',
+        world: '/assets/portal-comicon-duality-v11.webp',
         frame: '/assets/portal-games-clean-v1.webp',
-        tone: '#ffe45c',
-        position: '50% 42%',
+        tone: '#ff9d00',
+        position: '50% 50%',
       },
       {
         id: 'pets',
@@ -119,9 +128,9 @@ const copy = {
         subtitle: 'Perdidos · Encontrados · Adopciones · Cuidados',
         action: 'AYUDAR A UNA MASCOTA',
         route: '/fun',
-        world: '/assets/huellas-hero-real.svg',
+        world: '/assets/portal-mascotas-nature-v11.webp',
         frame: '/assets/portal-fun-chaos-v2.webp',
-        tone: '#7ba563',
+        tone: '#48f59b',
         position: '50% 50%',
       },
     ] as PortalCard[],
@@ -160,7 +169,7 @@ const copy = {
         position: '50% 40%',
       },
     ] as DestinationCard[],
-    copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia · XETHKIOZ Web v10.0',
+    copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia · XETHKIOZ Web v11.0',
   },
   en: {
     kicker: 'XETHKIOZ // WORLD GATE',
@@ -174,7 +183,16 @@ const copy = {
     portalLabel: 'MAIN PORTALS // STABLE SIGNAL',
     liveSignal: '4 MAIN PORTALS ACTIVE',
     nexusSignal: 'NEXUS CITY ONLINE',
-    safeSignal: 'SECURE SYSTEM 24/7',
+    safeSignal: 'PRIVACY AND NAVIGATION VERIFIED',
+    sectionNavLabel: 'XETHKIOZ section index',
+    sectionNav: [
+      { code: '01', label: 'Portals', href: '#portals' },
+      { code: '02', label: 'Nexus Network', href: '#network' },
+      { code: '03', label: 'Content', href: '#radar' },
+      { code: '04', label: 'Guides', href: '/gaming/guides' },
+      { code: '05', label: 'Studio', href: '#studio' },
+      { code: '06', label: 'Contact', href: '#contact' },
+    ],
     secondaryEyebrow: 'OTHER NEXUS GATES',
     secondaryTitle: 'The Portal Network continues beyond the main gates.',
     secondaryText: 'Special destinations to inhabit, create and decode XETHKIOZ without competing with the main scene.',
@@ -221,10 +239,10 @@ const copy = {
         subtitle: 'Marvel · DC · Anime · Fan Culture',
         action: 'OPEN MULTIVERSE',
         route: '/comicon',
-        world: '/assets/xethkioz-light-shadow-comic-anime.webp',
+        world: '/assets/portal-comicon-duality-v11.webp',
         frame: '/assets/portal-games-clean-v1.webp',
-        tone: '#ffe45c',
-        position: '50% 42%',
+        tone: '#ff9d00',
+        position: '50% 50%',
       },
       {
         id: 'pets',
@@ -233,9 +251,9 @@ const copy = {
         subtitle: 'Lost · Found · Adoption · Care',
         action: 'HELP A PET',
         route: '/fun',
-        world: '/assets/huellas-hero-real.svg',
+        world: '/assets/portal-mascotas-nature-v11.webp',
         frame: '/assets/portal-fun-chaos-v2.webp',
-        tone: '#7ba563',
+        tone: '#48f59b',
         position: '50% 50%',
       },
     ] as PortalCard[],
@@ -274,7 +292,7 @@ const copy = {
         position: '50% 40%',
       },
     ] as DestinationCard[],
-    copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia · XETHKIOZ Web v10.0',
+    copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia · XETHKIOZ Web v11.0',
   },
 } as const
 
@@ -374,7 +392,7 @@ function useFeaturedWebService() {
 export default function Home() {
   const navigate = useNavigate()
   const { triggerGreenPortal } = useWisp()
-  const { lang, setLang } = useLang()
+  const { lang, setLang, localizePath } = useLang()
   const { graphicsMode } = useExperience()
   const videoEnabled = useAmbientVideoEnabled(graphicsMode)
   const featuredWebOffer = useFeaturedWebService()
@@ -428,12 +446,12 @@ export default function Home() {
             </Link>
 
             <nav className="xk-rb-nav" aria-label={lang === 'es' ? 'Navegación principal' : 'Primary navigation'}>
-              <Link to="/gaming">{lang === 'es' ? 'Juegos' : 'Gaming'}</Link>
+              <Link to={localizePath('/gaming')}>{lang === 'es' ? 'Juegos' : 'Gaming'}</Link>
               <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ArgenCiencia ↗</a>
-              <Link to="/comicon">COMICON</Link>
-              <Link to="/fun">{lang === 'es' ? 'Mascotas' : 'Pets'}</Link>
-              <Link to="/nexus-city">Nexus City</Link>
-              <Link to="/creacion-web">{lang === 'es' ? 'Creación Web' : 'Web Creation'}</Link>
+              <Link to={localizePath('/comicon')}>COMICON</Link>
+              <Link to={localizePath('/fun')}>{lang === 'es' ? 'Mascotas' : 'Pets'}</Link>
+              <Link to={localizePath('/nexus-city')}>Nexus City</Link>
+              <Link to={localizePath('/creacion-web')}>{lang === 'es' ? 'Creación Web' : 'Web Creation'}</Link>
             </nav>
 
             <div className="xk-rb-tools">
@@ -441,7 +459,7 @@ export default function Home() {
               <button type="button" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} aria-label={t.switchLanguage}>
                 {t.switchCode}
               </button>
-              <Link to="/login">{t.login}</Link>
+              <Link to={localizePath('/login')}>{t.login}</Link>
             </div>
           </header>
 
@@ -476,7 +494,15 @@ export default function Home() {
             <FloatingWisp ariaLabel={t.wispLabel} onClick={openWisp} />
           </section>
 
-          <section className="xk-rb-secondary" aria-labelledby="secondary-gates-title">
+          <nav className="xk-rb-section-map" aria-label={t.sectionNavLabel}>
+            {t.sectionNav.map((item) => item.href.startsWith('#') ? (
+              <a key={item.code} href={item.href}><small>{item.code}</small><strong>{item.label}</strong><span aria-hidden="true">↘</span></a>
+            ) : (
+              <Link key={item.code} to={localizePath(item.href)}><small>{item.code}</small><strong>{item.label}</strong><span aria-hidden="true">↗</span></Link>
+            ))}
+          </nav>
+
+          <section id="network" className="xk-rb-secondary xk-rb-deferred-section" aria-labelledby="secondary-gates-title">
             <div className="xk-rb-section-head">
               <div>
                 <p>{t.secondaryEyebrow}</p>
@@ -492,18 +518,22 @@ export default function Home() {
             </div>
           </section>
 
-          <NexusDistrict tone="home" compact />
+          <div id="radar" className="xk-rb-section-wrap xk-rb-deferred-section">
+            <NexusDistrict tone="home" compact />
+          </div>
 
-          <WebCreationFeature
-            eyebrow={t.webEyebrow}
-            title={t.webTitle}
-            text={t.webText}
-            cta={t.webCta}
-            featuredLabel={t.featured}
-            offer={featuredWebOffer}
-          />
+          <div id="studio" className="xk-rb-section-wrap xk-rb-deferred-section">
+            <WebCreationFeature
+              eyebrow={t.webEyebrow}
+              title={t.webTitle}
+              text={t.webText}
+              cta={t.webCta}
+              featuredLabel={t.featured}
+              offer={featuredWebOffer}
+            />
+          </div>
 
-          <section className="xk-rb-contact" aria-labelledby="home-contact-title">
+          <section id="contact" className="xk-rb-contact xk-rb-deferred-section" aria-labelledby="home-contact-title">
             <div className="xk-rb-contact-copy">
               <p>{lang === 'es' ? 'XETHKIOZ // CONTACTO DIRECTO' : 'XETHKIOZ // DIRECT CONTACT'}</p>
               <h2 id="home-contact-title">{lang === 'es' ? '¿Tenés una idea, consulta o proyecto?' : 'Have an idea, question or project?'}</h2>
@@ -533,9 +563,9 @@ export default function Home() {
             <div>
               <span>{t.copyright}</span>
               <nav aria-label={lang === 'es' ? 'Enlaces legales' : 'Legal links'}>
-                <Link to="/privacy">{lang === 'es' ? 'Privacidad' : 'Privacy'}</Link>
-                <Link to="/editorial-policy">{lang === 'es' ? 'Política editorial' : 'Editorial policy'}</Link>
-                <Link to="/contact">{lang === 'es' ? 'Contacto' : 'Contact'}</Link>
+                <Link to={localizePath('/privacy')}>{lang === 'es' ? 'Privacidad' : 'Privacy'}</Link>
+                <Link to={localizePath('/editorial-policy')}>{lang === 'es' ? 'Política editorial' : 'Editorial policy'}</Link>
+                <Link to={localizePath('/contact')}>{lang === 'es' ? 'Contacto' : 'Contact'}</Link>
               </nav>
             </div>
           </footer>
@@ -547,6 +577,9 @@ export default function Home() {
 
 function PrimaryPortal({ portal }: { portal: PortalCard }) {
   const isFeatured = portal.id === 'gaming'
+  const isImmediate = portal.id === 'gaming' || portal.id === 'pets'
+  const hasEnhancedLighting = portal.id === 'comicon' || portal.id === 'pets'
+  const { localizePath } = useLang()
   const content: ReactNode = (
     <>
       <span className="xk-rb-gate">
@@ -556,13 +589,16 @@ function PrimaryPortal({ portal }: { portal: PortalCard }) {
             src={portal.world}
             fallback="/images/articles/fallback.svg"
             alt=""
-            loading="eager"
-            fetchPriority={isFeatured ? 'high' : 'low'}
+            loading={isImmediate ? 'eager' : 'lazy'}
+            fetchPriority={isFeatured ? 'high' : 'auto'}
             style={{ objectPosition: portal.position }}
           />
         </span>
         <span className="xk-rb-frame" aria-hidden="true" />
-        <span className="xk-rb-sparks" aria-hidden="true"><i /><i /><i /></span>
+        <span className="xk-rb-sparks" aria-hidden="true">
+          <i /><i /><i />
+          {hasEnhancedLighting && <><i /><i /></>}
+        </span>
       </span>
 
       <span className="xk-rb-portal-copy">
@@ -576,20 +612,23 @@ function PrimaryPortal({ portal }: { portal: PortalCard }) {
   const commonProps = {
     className: 'xk-rb-portal',
     style: { '--tone': portal.tone } as CSSProperties,
+    'data-portal': portal.id,
     'aria-label': `${portal.action}: ${portal.title}`,
   }
 
   if (portal.external) return <a {...commonProps} href={portal.route} target="_blank" rel="noopener noreferrer">{content}</a>
-  return <Link {...commonProps} to={portal.route}>{content}</Link>
+  return <Link {...commonProps} to={localizePath(portal.route)}>{content}</Link>
 }
 
 function Destination({ destination, onOpenWisp }: { destination: DestinationCard; onOpenWisp: () => void }) {
+  const { localizePath } = useLang()
   const content = (
     <>
       <SafeImage
         src={destination.image}
         fallback="/images/articles/fallback.svg"
         alt=""
+        loading="lazy"
         fetchPriority="low"
         style={{ objectPosition: destination.position }}
       />
@@ -612,7 +651,7 @@ function Destination({ destination, onOpenWisp }: { destination: DestinationCard
     )
   }
 
-  return <Link to={destination.route} className="xk-rb-destination" style={style}>{content}</Link>
+  return <Link to={localizePath(destination.route)} className="xk-rb-destination" style={style}>{content}</Link>
 }
 
 function FloatingWisp({ ariaLabel, onClick }: { ariaLabel: string; onClick: () => void }) {
@@ -646,20 +685,22 @@ function WebCreationFeature({
   featuredLabel: string
   offer: WebServiceOffer
 }) {
+  const { localizePath } = useLang()
   return (
     <section className="xk-rb-web" aria-labelledby="web-creation-home-title">
       <div className="xk-rb-web-copy">
         <small>{eyebrow}</small>
         <h2 id="web-creation-home-title">{title}</h2>
         <p>{text}</p>
-        <Link to="/creacion-web">{cta} ↗</Link>
+        <Link to={localizePath('/creacion-web')}>{cta} ↗</Link>
       </div>
 
-      <Link to="/creacion-web" className="xk-rb-web-preview" aria-label={`${cta}: ${offer.title}`}>
+      <Link to={localizePath('/creacion-web')} className="xk-rb-web-preview" aria-label={`${cta}: ${offer.title}`}>
         <SafeImage
           src={offer.image_url}
           fallback="/web-services/landing-premium.svg"
           alt={offer.image_alt || offer.title}
+          loading="lazy"
           fetchPriority="low"
         />
         <div>

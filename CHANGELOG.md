@@ -1,3 +1,17 @@
+# 11.0.0 — World Gate Harmony Release
+
+- Inicio reorganizado mediante un índice visible para portales, red, contenido, guías, estudio y contacto.
+- Portales y ventanas con mayor claridad, contraste, bordes armónicos y paneles de lectura unificados.
+- Carga inicial reducida: solo los mundos esenciales se solicitan inmediatamente; el resto se difiere.
+- Accesos de contenido simplificados para entrar directamente a guías, noticias y comunidad.
+- Versión pública, manifiesto, SEO, health check y documentación sincronizados en 11.0.0.
+- Dependencias y controles internos de seguridad revisados para el candidato de publicación.
+- Nueve artículos y guías editoriales extensos incorporados con contexto, pasos prácticos, límites y fuentes primarias visibles.
+- Universo COMICON obtiene un radar estable de Marvel, DC y Anime aunque el CMS no tenga publicaciones cargadas.
+- Serie original COMICON convertida en entrega semanal: tres episodios disponibles, fechas de archivo y próximo capítulo anunciado.
+- Huellas de Puan suma guías verificadas de vacunación antirrábica, tenencia responsable y denuncia de maltrato.
+- Nueva auditoría de profundidad editorial para evitar notas breves, categorías vacías o contenido factual sin respaldo HTTPS.
+
 # 10.0.0 — Nexus City Multiverse Production Release
 
 - Profundización editorial de noticias con lectura extensa, fuentes oficiales y jerarquía visual más clara.

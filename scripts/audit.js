@@ -49,7 +49,7 @@ const runStep = ({ name, command, args, requiredFiles = [] }) => {
   return false;
 };
 
-banner('🛡️  XETHKIOZ 10.0 — AUDITORÍA CONSOLIDADA');
+banner('🛡️  XETHKIOZ 11.0 — AUDITORÍA CONSOLIDADA');
 
 const steps = [
   {
@@ -185,7 +185,7 @@ for (const step of steps) {
 
 const finishedAt = new Date();
 const summary = [
-  '# XETHKIOZ 10.0 — Consolidated Audit',
+  '# XETHKIOZ 11.0 — Consolidated Audit',
   '',
   `- Started: ${startedAt.toISOString()}`,
   `- Finished: ${finishedAt.toISOString()}`,

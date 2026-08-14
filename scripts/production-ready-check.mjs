@@ -67,11 +67,11 @@ const nexusDistrict = read('src/components/NexusDistrict.tsx')
 const nexusCity = read('src/pages/NexusCity.tsx')
 const webCreation = read('src/pages/WebCreation.tsx')
 
-check('10.0 production version stamped', pkg.version === '10.0.0')
+check('11.0 release version stamped', pkg.version === '11.0.0')
 check(
   'installable web manifest is linked and versioned',
   indexHtml.includes('rel="manifest" href="/manifest.webmanifest"')
-    && webManifest.includes('XETHKIOZ Web 10.0')
+    && webManifest.includes('XETHKIOZ Web 11.0')
     && webManifest.includes('"display": "standalone"'),
 )
 check('production audit script registered', pkg.scripts['audit:production-ready'] === 'node scripts/production-ready-check.mjs')
@@ -136,8 +136,10 @@ check(
   'Home exposes four primary magical portals with real interior depth',
   home.includes("frame: '/assets/portal-games-clean-v1.webp'")
     && home.includes("frame: '/assets/portal-science-clean-v1.webp'")
-    && home.includes("world: '/assets/xethkioz-light-shadow-comic-anime.webp'")
-    && exists('public/assets/xethkioz-light-shadow-comic-anime.webp')
+    && home.includes("world: '/assets/portal-comicon-duality-v11.webp'")
+    && exists('public/assets/portal-comicon-duality-v11.webp')
+    && home.includes("world: '/assets/portal-mascotas-nature-v11.webp'")
+    && exists('public/assets/portal-mascotas-nature-v11.webp')
     && home.includes("frame: '/assets/portal-fun-chaos-v2.webp'")
     && home.includes('className="xk-rb-window"')
     && home.includes('className="xk-rb-frame"')
@@ -372,4 +374,4 @@ if (failed) {
   process.exit(1)
 }
 
-console.log('XETHKIOZ 10.0 production-ready audit PASS')
+console.log('XETHKIOZ 11.0 production-ready audit PASS')
