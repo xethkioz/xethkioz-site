@@ -36,6 +36,7 @@ const perf = read('src/engines/world/sandbox/PerformanceMonitor.ts')
 const shaderManager = read('src/engines/world/sandbox/ShaderManager.ts')
 const appShell = read('src/App.tsx')
 const header = read('src/components/Header.tsx')
+const footer = read('src/components/Footer.tsx')
 const mainEntry = read('src/main.tsx')
 const home = read('src/pages/Home.tsx')
 const homeCss = read('src/pages/HomeReborn.css')
@@ -68,6 +69,7 @@ const nexusCity = read('src/pages/NexusCity.tsx')
 const webCreation = read('src/pages/WebCreation.tsx')
 
 check('11.0 release version stamped', pkg.version === '11.0.0')
+check('shared public footer exposes the centralized release version', footer.includes("import { SITE_VERSION, SOCIAL_LINKS }") && footer.includes('XETHKIOZ Web {SITE_VERSION}'))
 check(
   'installable web manifest is linked and versioned',
   indexHtml.includes('rel="manifest" href="/manifest.webmanifest"')

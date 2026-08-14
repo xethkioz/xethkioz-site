@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useLang } from '../lib/LangContext'
 import { usePrivacyConsent } from '../lib/PrivacyConsentContext'
-import { SOCIAL_LINKS } from '../lib/siteConfig'
+import { SITE_VERSION, SOCIAL_LINKS } from '../lib/siteConfig'
 
 const copy = {
   es: {
@@ -70,7 +70,7 @@ export default function Footer() {
         </nav>
       </div>
 
-      <p className="mx-auto mt-8 max-w-7xl border-t border-white/10 pt-5 text-center font-mono text-[9px] uppercase tracking-[0.12em]">© 2026 Alexis Ivan Diaz Sellanes Santajulia · XETHKIOZ · {t.rights}</p>
+      <p className="mx-auto mt-8 max-w-7xl border-t border-white/10 pt-5 text-center font-mono text-[9px] uppercase tracking-[0.12em]">© 2026 Alexis Ivan Diaz Sellanes Santajulia · XETHKIOZ Web {SITE_VERSION} · {t.rights}</p>
     </footer>
   )
 }
