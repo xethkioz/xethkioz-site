@@ -169,6 +169,7 @@ export class AuthNexusService {
       email: session.user.email ?? null,
       subscriptionTier: profile.subscription_tier,
       role: profile.role,
+      isSiteOwner: profile.is_site_owner,
       now: this.now,
     })
   }
@@ -188,6 +189,7 @@ export class AuthNexusService {
       id: userId,
       subscription_tier: DEFAULT_GUEST_PROFILE.subscription_tier,
       role: DEFAULT_GUEST_PROFILE.role,
+      is_site_owner: false,
       created_at: timestamp,
       updated_at: timestamp,
     } satisfies ProfileRow)
