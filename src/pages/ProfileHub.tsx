@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import SEO from '../components/SEO'
-import FusionContentPanel from '../components/fusion/FusionContentPanel'
 import FusionHero from '../components/fusion/FusionHero'
 import FusionShell from '../components/fusion/FusionShell'
 import { useHud } from '../lib/HudContext'
@@ -292,7 +291,6 @@ export default function ProfileHub() {
 
         {isConnected ? <section className="mt-6 rounded-[2rem] border border-white/10 bg-black/45 p-6 text-white md:p-8" aria-labelledby="recent-activity-title"><div className="flex items-center justify-between gap-4"><div><p className="font-mono text-[10px] uppercase tracking-[0.24em] text-orange-300">{c.recentEyebrow}</p><h2 id="recent-activity-title" className="mt-2 text-2xl font-black uppercase">{c.recentTitle}</h2></div><span className="rounded-full border border-white/10 px-3 py-2 font-mono text-[10px] text-slate-400">{c.latest} {combinedActivity.length}</span></div>{combinedActivity.length ? <ol className="mt-5 grid gap-3 md:grid-cols-2">{combinedActivity.slice(0, 12).map((event) => <li key={event.id} className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.035] p-4"><div><strong className="block text-sm">{eventLabel(event, lang)}</strong><time className="mt-1 block font-mono text-[9px] uppercase tracking-[0.15em] text-slate-500" dateTime={event.created_at}>{new Date(event.created_at).toLocaleString(locale)}</time></div><span className="shrink-0 font-mono text-sm font-black text-green-300">+{event.points}</span></li>)}</ol> : <p className="mt-5 rounded-2xl border border-dashed border-white/10 p-5 text-sm text-slate-400" role="status">{c.empty}</p>}</section> : null}
       </main>
-      <FusionContentPanel tone="gaming" mode="profile" />
     </FusionShell>
   )
 }
