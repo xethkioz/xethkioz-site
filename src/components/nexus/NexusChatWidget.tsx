@@ -49,6 +49,12 @@ function isCapsuleRoom(value: string) {
 }
 
 const LOCAL_STORAGE_MESSAGES = 'xethkioz.nexus.local.messages.v3'
+const CHAT_RETENTION_MS = 24 * 60 * 60 * 1000
+
+function isWithinChatRetention(createdAt: string, now = Date.now()) {
+  const timestamp = Date.parse(createdAt)
+  return Number.isFinite(timestamp) && timestamp >= now - CHAT_RETENTION_MS
+}
 
 const copy = {
   es: {
@@ -64,7 +70,8 @@ const copy = {
     localReady: 'Modo local activo. Para chat compartido hay que activar Supabase Realtime.',
     setup: 'Supabase no está configurado en producción.',
     sendError: 'No se pudo enviar al chat global. Se guardó localmente.',
-    reservedName: 'Nombre reservado. Solo el administrador puede usar XETHKIOZ o variantes similares.',
+    reservedName: 'Nombre reservado. Solo la cuenta propietaria puede usar XETHKIOZ o variantes similares.',
+    retention: 'HISTORIAL · 24 H',
     status: {
       setup: 'SETUP',
       syncing: 'SINCRONIZANDO',
@@ -86,7 +93,8 @@ const copy = {
     localReady: 'Local mode active. Enable Supabase Realtime for shared chat.',
     setup: 'Supabase is not configured in production.',
     sendError: 'Could not send to global chat. Saved locally.',
-    reservedName: 'Reserved name. Only the administrator can use XETHKIOZ or similar variants.',
+    reservedName: 'Reserved name. Only the owner account can use XETHKIOZ or similar variants.',
+    retention: 'HISTORY · 24 H',
     status: {
       setup: 'SETUP',
       syncing: 'SYNCING',
@@ -119,9 +127,9 @@ function cleanNickname(value: string) {
 
 function resolveSafeNickname(value: string, session: XethkiozAuthorizedSession | null) {
   const clean = cleanNickname(value)
-  const isAdmin = session?.role === 'ADMIN'
-  if (isReservedXethkiozName(clean) && !isAdmin) return { nickname: 'Visitante', reserved: true }
-  if (isReservedXethkiozName(clean) && isAdmin) return { nickname: 'XETHKIOZ', reserved: false }
+  const isOwner = session?.isSiteOwner === true
+  if (isReservedXethkiozName(clean) && !isOwner) return { nickname: 'Visitante', reserved: true }
+  if (isReservedXethkiozName(clean) && isOwner) return { nickname: 'XETHKIOZ', reserved: false }
   return { nickname: clean, reserved: false }
 }
 
@@ -157,7 +165,9 @@ function readLocalMessages(): NexusMessage[] {
   try {
     const saved = window.localStorage.getItem(LOCAL_STORAGE_MESSAGES)
     const parsed = saved ? JSON.parse(saved) : []
-    return Array.isArray(parsed) ? parsed.slice(-80) : []
+    return Array.isArray(parsed)
+      ? parsed.filter((message): message is NexusMessage => Boolean(message) && typeof message.createdAt === 'string' && isWithinChatRetention(message.createdAt)).slice(-80)
+      : []
   } catch {
     return []
   }
@@ -165,7 +175,7 @@ function readLocalMessages(): NexusMessage[] {
 
 function persistLocalMessages(messages: NexusMessage[]) {
   if (typeof window === 'undefined') return
-  try { window.localStorage.setItem(LOCAL_STORAGE_MESSAGES, JSON.stringify(messages.slice(-80))) } catch { /* Shared chat remains available. */ }
+  try { window.localStorage.setItem(LOCAL_STORAGE_MESSAGES, JSON.stringify(messages.filter((message) => isWithinChatRetention(message.createdAt)).slice(-80))) } catch { /* Shared chat remains available. */ }
 }
 
 function readLocalNickname() {
@@ -269,6 +279,16 @@ export default function NexusChatWidget({ clearMobileDock = false }: { clearMobi
   }, [messages])
 
   useEffect(() => {
+    const pruneExpiredMessages = () => setMessages((current) => {
+      const fresh = current.filter((message) => message.type === 'system' || isWithinChatRetention(message.createdAt))
+      return fresh.length === current.length ? current : fresh
+    })
+    pruneExpiredMessages()
+    const interval = window.setInterval(pruneExpiredMessages, 5 * 60 * 1000)
+    return () => window.clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
     if (!open) return undefined
     const frame = window.requestAnimationFrame(() => {
       if (followsLatestRef.current) scrollToLatest('auto')
@@ -301,6 +321,7 @@ export default function NexusChatWidget({ clearMobileDock = false }: { clearMobi
         .from('chat_messages')
         .select('id, room_id, display_name, role, body, created_at')
         .eq('room_id', room)
+        .gte('created_at', new Date(Date.now() - CHAT_RETENTION_MS).toISOString())
         .order('created_at', { ascending: true })
         .limit(80)
 
@@ -390,6 +411,7 @@ export default function NexusChatWidget({ clearMobileDock = false }: { clearMobi
               <div>
                 <p className="text-[10px] uppercase tracking-[0.32em] text-[#FF6B1A]">XETHKIOZ</p>
                 <h2 className="mt-1 text-lg font-black uppercase tracking-[0.18em] text-white">{t.title}</h2>
+                <p className="mt-1 text-[9px] uppercase tracking-[0.18em] text-white/45">{t.retention}</p>
               </div>
               <span className={`rounded-full border px-2 py-1 text-[10px] uppercase ${status === 'online' ? 'border-[#32FF8A]/40 text-[#32FF8A]' : status === 'error' ? 'border-red-400/40 text-red-200' : 'border-yellow-300/30 text-yellow-200'}`}>{t.status[status]}</span>
             </div>
