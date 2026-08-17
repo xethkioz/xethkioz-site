@@ -4,6 +4,10 @@ Fecha: 17 de agosto de 2026
 Commit funcional: `be474e694f6c9c5c49c0897f32784259085446ca`  
 Estado: aprobado para producción
 
+## Puerta de despliegue
+
+La publicación sólo debe fusionarse cuando el preview final de Vercel figure como `READY`. El preview fue comprobado con el historial de 24 horas visible, la identidad reservada bloqueada para visitantes y el panel público libre de contenido de demostración.
+
 ## Alcance revisado
 
 - portada y navegación pública;
