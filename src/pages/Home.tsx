@@ -7,6 +7,7 @@ import { fallbackWebServiceOffers } from '../data/webServiceFallbacks'
 import { useLang } from '../lib/LangContext'
 import { useWisp } from '../providers/WispProvider'
 import { useExperience } from '../lib/ExperienceContext'
+import { SITE_VERSION } from '../lib/siteConfig'
 import type { WebServiceOffer } from '../types/webServices'
 import './HomeReborn.css'
 
@@ -169,7 +170,7 @@ const copy = {
         position: '50% 40%',
       },
     ] as DestinationCard[],
-    copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia · XETHKIOZ Web v11.0',
+    copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia · XETHKIOZ Web',
   },
   en: {
     kicker: 'XETHKIOZ // WORLD GATE',
@@ -292,7 +293,7 @@ const copy = {
         position: '50% 40%',
       },
     ] as DestinationCard[],
-    copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia · XETHKIOZ Web v11.0',
+    copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia · XETHKIOZ Web',
   },
 } as const
 
@@ -561,7 +562,7 @@ export default function Home() {
 
           <footer className="xk-rb-footer">
             <div>
-              <span>{t.copyright}</span>
+              <span>{t.copyright} {SITE_VERSION}</span>
               <nav aria-label={lang === 'es' ? 'Enlaces legales' : 'Legal links'}>
                 <Link to={localizePath('/privacy')}>{lang === 'es' ? 'Privacidad' : 'Privacy'}</Link>
                 <Link to={localizePath('/editorial-policy')}>{lang === 'es' ? 'Política editorial' : 'Editorial policy'}</Link>
