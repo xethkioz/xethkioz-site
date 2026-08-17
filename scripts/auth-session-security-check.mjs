@@ -12,6 +12,10 @@ const client = read('src/services/supabaseClient.ts')
 const app = read('src/App.tsx')
 const browserWorkflow = read('.github/workflows/browser-quality.yml')
 const browserTest = read('tests/e2e/user-session.spec.ts')
+const chat = read('src/components/nexus/NexusChatWidget.tsx')
+const authSchema = read('src/services/auth/authSchema.ts')
+const ownerRetention = read('supabase/migrations/20260817135000_chat_owner_retention.sql')
+const profile = read('src/pages/ProfileHub.tsx')
 
 check('Supabase persists sessions', client.includes('persistSession: true'))
 check('Supabase automatically refreshes tokens', client.includes('autoRefreshToken: true'))
@@ -29,6 +33,10 @@ check('guard redirects with explicit inactivity reason', guard.includes('/accoun
 check('guard is mounted globally inside the router shell', app.includes('<UserSessionInactivityGuard />'))
 check('browser test harness is isolated to browser CI', browserWorkflow.includes("VITE_E2E_AUTH_SESSION: '1'") && guard.includes("import.meta.env.VITE_E2E_AUTH_SESSION === '1'"))
 check('browser tests cover fake cache, continue and auto logout', browserTest.includes('un estado HUD manipulado') && browserTest.includes('Continuar conectado') && browserTest.includes('cierra la sesión diez segundos'))
+check('reserved XETHKIOZ identity is tied to the owner flag', authSchema.includes('isSiteOwner: boolean') && chat.includes('session?.isSiteOwner === true') && !chat.includes("session?.role === 'ADMIN'"))
+check('database enforces one site owner and guards the reserved identity', ownerRetention.includes('profiles_one_site_owner_idx') && ownerRetention.includes('xethkioz_guard_chat_identity') && ownerRetention.includes('private.xethkioz_is_site_owner()'))
+check('chat retention is enforced in database and browser storage', ownerRetention.includes("interval '24 hours'") && ownerRetention.includes("cron.schedule") && chat.includes('CHAT_RETENTION_MS') && chat.includes(".gte('created_at'"))
+check('profile panel no longer renders demonstration content', !profile.includes('FusionContentPanel'))
 
 let failed = 0
 for (const [name, ok] of checks) {
