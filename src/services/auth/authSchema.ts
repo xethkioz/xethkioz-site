@@ -12,6 +12,7 @@ export interface ProfileRow {
   id: string
   subscription_tier: XethkiozSubscriptionTier
   role: XethkiozUserRole
+  is_site_owner: boolean
   created_at: string
   updated_at: string
 }
@@ -55,6 +56,7 @@ export interface XethkiozAuthorizedSession {
   readonly subscriptionTier: XethkiozSubscriptionTier
   readonly tier: XethkiozSubscriptionTier
   readonly role: XethkiozUserRole
+  readonly isSiteOwner: boolean
   readonly permissions: AuthPermissionSet
   readonly authorizedAt: number
   readonly source: AuthEventSource
@@ -119,6 +121,7 @@ export function createAuthorizedSession(input: {
   readonly email?: string | null
   readonly subscriptionTier?: string | null
   readonly role?: string | null
+  readonly isSiteOwner?: boolean | null
   readonly now?: () => number
 }): XethkiozAuthorizedSession {
   const rawSubscriptionTier = input.subscriptionTier ?? ''
@@ -134,6 +137,7 @@ export function createAuthorizedSession(input: {
     subscriptionTier,
     tier: subscriptionTier,
     role,
+    isSiteOwner: input.isSiteOwner === true,
     permissions: resolvePermissions(subscriptionTier, role),
     authorizedAt: input.now?.() ?? performance.now(),
     source: 'supabase-auth-nexus',
@@ -148,6 +152,7 @@ export function isAuthorizedSessionPayload(value: unknown): value is XethkiozAut
     candidate.userId.length >= 16 &&
     isSubscriptionTier(String(candidate.subscriptionTier ?? candidate.tier ?? '')) &&
     isUserRole(String(candidate.role ?? '')) &&
+    typeof candidate.isSiteOwner === 'boolean' &&
     candidate.source === 'supabase-auth-nexus' &&
     typeof candidate.authorizedAt === 'number' &&
     typeof candidate.permissions === 'object' &&
