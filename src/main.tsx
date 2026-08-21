@@ -4,17 +4,14 @@ import { BrowserRouter } from 'react-router-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import App from './App'
 import RouteCssLoader, { loadRouteStyles } from './components/RouteCssLoader'
+import { getInitialGraphicsMode } from './lib/experienceMode'
 import './index.css'
 import './visibility-fixes.css'
 import './generated/xethkioz-core.css'
 import './experience.css'
 import './accessibility.css'
 
-try {
-  document.documentElement.dataset.xkGraphics = window.localStorage.getItem('xethkioz.experience.graphics.v1') === 'lite' ? 'lite' : 'full'
-} catch {
-  document.documentElement.dataset.xkGraphics = 'full'
-}
+document.documentElement.dataset.xkGraphics = getInitialGraphicsMode()
 
 const rootElement = document.getElementById('root')
 

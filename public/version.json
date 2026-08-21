@@ -1,9 +1,9 @@
 {
-  "version": "11.1.0",
-  "label": "Experience Foundation",
+  "version": "11.1.1",
+  "label": "Adaptive Performance",
   "stage": "stable",
   "channel": "v11",
-  "codename": "XETHKIOZ Web 11.1",
+  "codename": "XETHKIOZ Web 11.1.1",
   "buildDate": "2026-08-21",
   "sourcePackage": "xethkioz-site",
   "validation": {
