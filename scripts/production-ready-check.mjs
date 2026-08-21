@@ -69,7 +69,7 @@ const nexusDistrict = read('src/components/NexusDistrict.tsx')
 const nexusCity = read('src/pages/NexusCity.tsx')
 const webCreation = read('src/pages/WebCreation.tsx')
 
-check('11.0 patch release version stamped', pkg.version === '11.0.2')
+check('11.1 experience release version stamped', pkg.version === '11.1.0')
 check('shared public footer exposes the centralized release version', footer.includes("import { SITE_VERSION, SOCIAL_LINKS }") && footer.includes('XETHKIOZ Web {SITE_VERSION}'))
 check(
   'installable web manifest is linked and versioned',
@@ -381,4 +381,4 @@ if (failed) {
   process.exit(1)
 }
 
-console.log('XETHKIOZ 11.0 production-ready audit PASS')
+console.log('XETHKIOZ 11.1 production-ready audit PASS')

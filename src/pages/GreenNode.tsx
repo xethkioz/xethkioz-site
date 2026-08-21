@@ -304,6 +304,7 @@ const content: Record<'es' | 'en', GreenCopy> = {
 }
 
 const GREEN_PROGRESS_KEY = 'xethkioz.green-investigation.v1'
+const GREEN_INTRO_SEEN_KEY = 'xethkioz.green-node.intro-seen.v1'
 
 type GreenProgress = {
   clearance: 1 | 2 | 3
@@ -334,6 +335,14 @@ function readGreenProgress(): GreenProgress {
   }
 }
 
+function readGreenIntroState() {
+  try {
+    return window.sessionStorage.getItem(GREEN_INTRO_SEEN_KEY) === 'complete' ? 4 : 0
+  } catch {
+    return 0
+  }
+}
+
 export default function GreenNode() {
   const { lang, setLang } = useLang()
   const t = content[lang]
@@ -351,7 +360,7 @@ export default function GreenNode() {
   const [deepMode, setDeepMode] = useState(false)
   const [terminalInput, setTerminalInput] = useState('')
   const [terminalLines, setTerminalLines] = useState<string[]>(() => [...t.terminal.initial])
-  const [accessSequence, setAccessSequence] = useState(0)
+  const [accessSequence, setAccessSequence] = useState(readGreenIntroState)
   const [clearance, setClearance] = useState<1 | 2 | 3>(() => readGreenProgress().clearance)
   const [readDossiers, setReadDossiers] = useState<Set<string>>(() => new Set(readGreenProgress().read))
   const [signalFragments, setSignalFragments] = useState<Set<string>>(() => new Set(readGreenProgress().signals))
@@ -361,9 +370,15 @@ export default function GreenNode() {
   const accessIndex = Math.min(accessSequence, 3)
 
   useEffect(() => {
+    if (readGreenIntroState() >= 4) return undefined
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const intervals = reducedMotion ? [80, 140, 200, 260] : [520, 1080, 1680, 2450]
-    const timers = intervals.map((delay, index) => window.setTimeout(() => setAccessSequence(index + 1), delay))
+    const intervals = reducedMotion ? [20, 40, 60, 80] : [240, 520, 820, 1150]
+    const timers = intervals.map((delay, index) => window.setTimeout(() => {
+      setAccessSequence(index + 1)
+      if (index === intervals.length - 1) {
+        try { window.sessionStorage.setItem(GREEN_INTRO_SEEN_KEY, 'complete') } catch { /* The intro can safely replay when storage is unavailable. */ }
+      }
+    }, delay))
     return () => timers.forEach((timer) => window.clearTimeout(timer))
   }, [])
 

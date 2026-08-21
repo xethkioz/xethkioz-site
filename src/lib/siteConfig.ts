@@ -1,4 +1,4 @@
-export const SITE_VERSION = 'v11.0.2'
+export const SITE_VERSION = 'v11.1.0'
 export const SITE_RELEASE = 'World Gate Harmony Release'
 export const SITE_BUILD_DATE = '2026-08-13'
 export const SITE_DOMAIN = 'https://xethkioz.com.ar'

@@ -1,9 +1,9 @@
 {
-  "version": "11.0.2",
-  "label": "Community Security Release",
-  "stage": "release-candidate",
+  "version": "11.1.0",
+  "label": "Experience Foundation",
+  "stage": "stable",
   "channel": "v11",
-  "codename": "XETHKIOZ Web 11.0",
+  "codename": "XETHKIOZ Web 11.1",
   "buildDate": "2026-08-21",
   "sourcePackage": "xethkioz-site",
   "validation": {
