@@ -24,11 +24,11 @@ const copy = {
   es: {
     accountEyebrow: 'ESTADO DE CUENTA',
     verifying: 'Verificando sesión',
-    disconnected: 'Sesión no iniciada',
+    disconnected: 'Tu espacio XETHKIOZ',
     verifyingText: 'Estamos verificando la sesión guardada en Supabase. No cierres la página todavía.',
     networkText: 'Tu sesión sigue preservada en este navegador. Hay una demora temporal para verificarla con Supabase, pero no te desconectamos por un fallo de red.',
-    connectedText: 'La cuenta está conectada al ecosistema XETHKIOZ. Desde acá se centralizan perfil, XP, comunidad y futuras funciones.',
-    disconnectedText: 'No hay sesión activa en este navegador. Ingresá nuevamente o reenviá la confirmación si la cuenta quedó pendiente.',
+    connectedText: 'Tu cuenta conecta perfil, XP, misiones, actividad reciente y accesos a la comunidad XETHKIOZ.',
+    disconnectedText: 'Ingresá para recuperar tu recorrido, XP y accesos. Si todavía no tenés una cuenta, podés crearla desde acá.',
     status: 'Estado',
     email: 'Email',
     source: 'Origen',
@@ -39,6 +39,7 @@ const copy = {
     refresh: 'Revisar sesión',
     signOut: 'Cerrar sesión',
     signIn: 'Ingresar',
+    createAccount: 'Crear cuenta',
     resend: 'Reenviar confirmación',
     shortcutsEyebrow: 'ACCESOS EN VIVO',
     shortcutsTitle: 'Volvé al multiverso',
@@ -87,11 +88,11 @@ const copy = {
   en: {
     accountEyebrow: 'ACCOUNT STATUS',
     verifying: 'Verifying session',
-    disconnected: 'No active session',
+    disconnected: 'Your XETHKIOZ space',
     verifyingText: 'We are checking the session stored in Supabase. Keep this page open for a moment.',
     networkText: 'Your session remains preserved in this browser. Supabase verification is temporarily delayed, but a network issue will not sign you out.',
-    connectedText: 'Your account is connected to the XETHKIOZ ecosystem. Profile, XP, community and future features are centralized here.',
-    disconnectedText: 'There is no active session in this browser. Sign in again or resend confirmation if the account is still pending.',
+    connectedText: 'Your account connects your profile, XP, missions, recent activity and XETHKIOZ community access.',
+    disconnectedText: 'Sign in to recover your journey, XP and access. If you do not have an account yet, you can create one here.',
     status: 'Status',
     email: 'Email',
     source: 'Source',
@@ -102,6 +103,7 @@ const copy = {
     refresh: 'Check session',
     signOut: 'Sign out',
     signIn: 'Sign in',
+    createAccount: 'Create account',
     resend: 'Resend confirmation',
     shortcutsEyebrow: 'LIVE SHORTCUTS',
     shortcutsTitle: 'Return to the multiverse',
@@ -262,7 +264,8 @@ export default function ProfileHub() {
           <div className="mt-6 flex flex-wrap gap-3 font-mono text-xs font-black uppercase tracking-[0.16em]">
             <button type="button" onClick={() => void refreshAccount()} disabled={isLoading} className="rounded-full border border-neon/40 px-4 py-3 text-neon transition hover:bg-neon/10 disabled:cursor-wait disabled:opacity-60">{c.refresh}</button>
             {isConnected ? <button type="button" onClick={toggleAccount} className="rounded-full border border-red-400/40 px-4 py-3 text-red-200 transition hover:bg-red-500/10">{c.signOut}</button> : <Link to="/account?mode=signin" className="rounded-full bg-orange px-4 py-3 text-black transition hover:shadow-glow-action">{c.signIn}</Link>}
-            {!isConnected ? <Link to="/confirm-email" className="rounded-full border border-violet-400/40 px-4 py-3 text-violet-100 transition hover:bg-violet-500/10">{c.resend}</Link> : null}
+            {!isConnected ? <Link to="/account?mode=signup" className="rounded-full border border-violet-400/40 px-4 py-3 text-violet-100 transition hover:bg-violet-500/10">{c.createAccount}</Link> : null}
+            {!isConnected ? <Link to="/confirm-email" className="rounded-full border border-white/15 px-4 py-3 text-slate-300 transition hover:bg-white/5">{c.resend}</Link> : null}
           </div>
         </section>
 

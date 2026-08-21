@@ -44,8 +44,8 @@ const argenCienciaCopy = {
 
 const content = {
   es: {
-    title: 'Tecnología / Ciencia',
-    description: 'Noticias verificadas, fuentes, herramientas y proyectos sobre IA, ciencia y tecnología.',
+    title: 'Laboratorio XETHKIOZ',
+    description: 'Herramientas prácticas, fuentes y proyectos de IA y tecnología. La actualidad científica editorial vive en ArgenCiencia.',
     switchLanguage: 'Cambiar a inglés',
     switchCode: 'EN',
     back: 'Volver al núcleo',
@@ -125,8 +125,8 @@ const content = {
     },
   },
   en: {
-    title: 'Technology / Science',
-    description: 'Verified news, sources, tools and projects covering AI, science and technology.',
+    title: 'XETHKIOZ Laboratory',
+    description: 'Practical tools, sources and AI/technology projects. ArgenCiencia is the main destination for editorial science coverage.',
     switchLanguage: 'Switch to Spanish',
     switchCode: 'ES',
     back: 'Back to core',

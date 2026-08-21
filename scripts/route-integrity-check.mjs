@@ -111,6 +111,7 @@ function shouldIgnoreDestination(destination) {
     '/feed.',
     '/og-',
     '/web-services/',
+    '/mascotas',
   ].some((prefix) => destination.startsWith(prefix))
 }
 

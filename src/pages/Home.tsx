@@ -30,6 +30,7 @@ type PortalCard = {
   action: string
   route: string
   external?: boolean
+  document?: boolean
   world: string
   frame: string
   tone: string
@@ -128,7 +129,8 @@ const copy = {
         title: 'HUELLAS DE PUAN',
         subtitle: 'Perdidos · Encontrados · Adopciones · Cuidados',
         action: 'AYUDAR A UNA MASCOTA',
-        route: '/fun',
+        route: '/mascotas/',
+        document: true,
         world: '/assets/portal-mascotas-nature-v11-r2.webp',
         frame: '/assets/portal-fun-chaos-v2.webp',
         tone: '#48f59b',
@@ -251,7 +253,8 @@ const copy = {
         title: 'HUELLAS DE PUAN',
         subtitle: 'Lost · Found · Adoption · Care',
         action: 'HELP A PET',
-        route: '/fun',
+        route: '/mascotas/',
+        document: true,
         world: '/assets/portal-mascotas-nature-v11-r2.webp',
         frame: '/assets/portal-fun-chaos-v2.webp',
         tone: '#48f59b',
@@ -450,7 +453,7 @@ export default function Home() {
               <Link to={localizePath('/gaming')}>{lang === 'es' ? 'Juegos' : 'Gaming'}</Link>
               <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ArgenCiencia ↗</a>
               <Link to={localizePath('/comicon')}>COMICON</Link>
-              <Link to={localizePath('/fun')}>{lang === 'es' ? 'Mascotas' : 'Pets'}</Link>
+              <a href="/mascotas/">{lang === 'es' ? 'Mascotas' : 'Pets'}</a>
               <Link to={localizePath('/nexus-city')}>Nexus City</Link>
               <Link to={localizePath('/creacion-web')}>{lang === 'es' ? 'Creación Web' : 'Web Creation'}</Link>
             </nav>
@@ -547,16 +550,16 @@ export default function Home() {
                 <strong>@xethkioz</strong>
                 <b aria-hidden="true">↗</b>
               </a>
-              <a href="mailto:Xethkioz@gmail.com" aria-label="Enviar correo a XETHKIOZ">
-                <span>{lang === 'es' ? 'Correo electrónico' : 'Email'}</span>
-                <strong>Xethkioz@gmail.com</strong>
-                <b aria-hidden="true">↗</b>
-              </a>
-              <a href="https://wa.me/5492923483054" target="_blank" rel="noopener noreferrer" aria-label="Contactar a XETHKIOZ por WhatsApp">
-                <span>WhatsApp</span>
-                <strong>2923 483054</strong>
-                <b aria-hidden="true">↗</b>
-              </a>
+              <Link to={localizePath('/contact')} aria-label={lang === 'es' ? 'Abrir formulario de contacto' : 'Open contact form'}>
+                <span>{lang === 'es' ? 'Formulario privado' : 'Private form'}</span>
+                <strong>{lang === 'es' ? 'Contacto XETHKIOZ' : 'Contact XETHKIOZ'}</strong>
+                <b aria-hidden="true">→</b>
+              </Link>
+              <Link to={localizePath('/creacion-web#presupuesto')} aria-label={lang === 'es' ? 'Solicitar presupuesto web' : 'Request a web quote'}>
+                <span>{lang === 'es' ? 'Presupuesto web' : 'Web quote'}</span>
+                <strong>{lang === 'es' ? 'Enviar solicitud' : 'Send request'}</strong>
+                <b aria-hidden="true">→</b>
+              </Link>
             </div>
           </section>
 
@@ -618,6 +621,7 @@ function PrimaryPortal({ portal }: { portal: PortalCard }) {
   }
 
   if (portal.external) return <a {...commonProps} href={portal.route} target="_blank" rel="noopener noreferrer">{content}</a>
+  if (portal.document) return <a {...commonProps} href={portal.route}>{content}</a>
   return <Link {...commonProps} to={localizePath(portal.route)}>{content}</Link>
 }
 

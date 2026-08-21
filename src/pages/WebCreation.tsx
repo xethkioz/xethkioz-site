@@ -467,7 +467,7 @@ export default function WebCreation() {
 
       <div className="relative z-10 mx-auto max-w-7xl px-5 pt-16 md:px-10 lg:px-14"><PortalPulseRail tone="gold" eyebrow={t.loop.eyebrow} title={t.loop.title} description={t.loop.description} items={t.loop.items} /></div>
 
-      <section id="propuestas" className="scroll-mt-28 px-5 py-24 md:px-10 lg:px-14" aria-labelledby="web-catalog-title">
+      <section id="propuestas" className="scroll-mt-28 px-5 py-16 md:px-10 lg:px-14" aria-labelledby="web-catalog-title">
         <div className="mx-auto max-w-[1500px]">
           <div className="max-w-3xl"><p className="font-mono text-xs font-black uppercase tracking-[0.3em] text-purple-300">{t.catalogEyebrow}</p><h2 id="web-catalog-title" className="mt-4 text-4xl font-black tracking-[-0.035em] md:text-6xl">{t.catalogTitle}</h2><p className="mt-5 text-base leading-7 text-white/65 md:text-lg">{t.catalogText}</p></div>
           {catalogNotice ? <p className="mt-8 max-w-3xl rounded-2xl border border-orange-400/25 bg-orange-400/[0.07] px-5 py-4 text-sm leading-6 text-orange-100" role="status"><strong className="mr-2 font-black uppercase tracking-[0.12em]">{t.fallbackNotice}:</strong>{lang === 'es' ? catalogNotice : t.fallbackDescription}</p> : null}
@@ -477,11 +477,11 @@ export default function WebCreation() {
         </div>
       </section>
 
-      <section id="proceso" className="scroll-mt-28 border-y border-white/10 bg-white/[0.025] px-5 py-24 md:px-10 lg:px-14" aria-labelledby="web-process-title">
+      <section id="proceso" className="scroll-mt-28 border-y border-white/10 bg-white/[0.025] px-5 py-16 md:px-10 lg:px-14" aria-labelledby="web-process-title">
         <div className="mx-auto max-w-[1500px]"><p className="font-mono text-xs font-black uppercase tracking-[0.3em] text-orange-300">{t.processEyebrow}</p><h2 id="web-process-title" className="mt-4 max-w-3xl text-4xl font-black tracking-[-0.035em] md:text-6xl">{t.processTitle}</h2><ol className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">{t.process.map(([title, description]) => <li key={title} className="rounded-[1.75rem] border border-white/10 bg-black/25 p-6"><h3 className="font-mono text-xs font-black uppercase tracking-[0.16em] text-purple-200">{title}</h3><p className="mt-4 text-sm leading-6 text-white/60">{description}</p></li>)}</ol></div>
       </section>
 
-      <section id="presupuesto" className="scroll-mt-28 px-5 py-24 md:px-10 lg:px-14" aria-labelledby="web-quote-title">
+      <section id="presupuesto" className="scroll-mt-28 px-5 py-16 md:px-10 lg:px-14" aria-labelledby="web-quote-title">
         <div className="mx-auto grid max-w-[1500px] gap-12 xl:grid-cols-[0.72fr_1.28fr]">
           <div><p className="font-mono text-xs font-black uppercase tracking-[0.3em] text-purple-300">{t.quoteEyebrow}</p><h2 id="web-quote-title" className="mt-4 text-4xl font-black tracking-[-0.035em] md:text-6xl">{t.quoteTitle}</h2><p className="mt-6 max-w-xl text-base leading-8 text-white/65">{t.quoteText}</p><div className="mt-8 rounded-[1.75rem] border border-orange-400/20 bg-orange-400/[0.055] p-6"><p className="font-mono text-[10px] font-black uppercase tracking-[0.22em] text-orange-200">{t.privacyLabel}</p><p className="mt-3 text-sm leading-6 text-orange-50/70">{t.privacy}</p></div></div>
 
@@ -517,7 +517,7 @@ export default function WebCreation() {
         <PortalKnowledgeBriefing sector="web" lang={lang} />
       </div>
 
-      <section className="border-t border-white/10 bg-white/[0.02] px-5 py-24 md:px-10 lg:px-14" aria-labelledby="web-faq-title"><div className="mx-auto grid max-w-[1500px] gap-12 xl:grid-cols-[0.7fr_1.3fr]"><div><p className="font-mono text-xs font-black uppercase tracking-[0.3em] text-orange-300">{t.faqEyebrow}</p><h2 id="web-faq-title" className="mt-4 max-w-xl text-4xl font-black tracking-[-0.035em] md:text-6xl">{t.faqTitle}</h2></div><div className="space-y-3">{t.faqs.map(([question, answer], index) => <details key={question} className="group rounded-[1.5rem] border border-white/10 bg-black/25 open:border-purple-400/35 open:bg-purple-500/[0.055]"><summary className="flex cursor-pointer list-none items-center justify-between gap-5 px-5 py-5 text-left text-base font-black marker:hidden md:px-6"><span className="flex items-center gap-4"><span className="font-mono text-[10px] text-orange-300" aria-hidden="true">0{index + 1}</span>{question}</span><span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/10 text-purple-200 transition group-open:rotate-45 group-open:border-orange-300/40 group-open:text-orange-200" aria-hidden="true">+</span></summary><p className="px-5 pb-6 pr-14 text-sm leading-7 text-white/60 md:px-6 md:pr-20">{answer}</p></details>)}</div></div></section>
+      <section className="border-t border-white/10 bg-white/[0.02] px-5 py-16 md:px-10 lg:px-14" aria-labelledby="web-faq-title"><div className="mx-auto grid max-w-[1500px] gap-12 xl:grid-cols-[0.7fr_1.3fr]"><div><p className="font-mono text-xs font-black uppercase tracking-[0.3em] text-orange-300">{t.faqEyebrow}</p><h2 id="web-faq-title" className="mt-4 max-w-xl text-4xl font-black tracking-[-0.035em] md:text-6xl">{t.faqTitle}</h2></div><div className="space-y-3">{t.faqs.map(([question, answer], index) => <details key={question} className="group rounded-[1.5rem] border border-white/10 bg-black/25 open:border-purple-400/35 open:bg-purple-500/[0.055]"><summary className="flex cursor-pointer list-none items-center justify-between gap-5 px-5 py-5 text-left text-base font-black marker:hidden md:px-6"><span className="flex items-center gap-4"><span className="font-mono text-[10px] text-orange-300" aria-hidden="true">0{index + 1}</span>{question}</span><span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/10 text-purple-200 transition group-open:rotate-45 group-open:border-orange-300/40 group-open:text-orange-200" aria-hidden="true">+</span></summary><p className="px-5 pb-6 pr-14 text-sm leading-7 text-white/60 md:px-6 md:pr-20">{answer}</p></details>)}</div></div></section>
     </main>
   )
 }

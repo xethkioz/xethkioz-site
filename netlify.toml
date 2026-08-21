@@ -17,6 +17,16 @@
   command = "npm run build"
 
 [[redirects]]
+  from = "/fun"
+  to = "/nexus-city"
+  status = 301
+
+[[redirects]]
+  from = "/en/fun"
+  to = "/en/nexus-city"
+  status = 301
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

@@ -54,11 +54,11 @@ export default function FunGameGateway({ lang }: FunGameGatewayProps) {
         <div className="xk-fun-game-actions">
           <Link
             to="/nexus-city/room/xethkioz"
-            onClick={() => addWispXp(5, 'portal', '/fun#play')}
+            onClick={() => addWispXp(5, 'portal', '/nexus-city')}
           >
             {t.primary} <span aria-hidden="true">▶</span>
           </Link>
-          <Link to="/fun?mode=memes#humor">{t.secondary} <span aria-hidden="true">↓</span></Link>
+          <Link to="/community">{t.secondary} <span aria-hidden="true">→</span></Link>
         </div>
       </div>
 
@@ -66,7 +66,7 @@ export default function FunGameGateway({ lang }: FunGameGatewayProps) {
         to="/nexus-city/room/xethkioz"
         className="xk-fun-game-portal"
         aria-label={`${t.primary}: ${t.preview}`}
-        onClick={() => addWispXp(5, 'portal', '/fun#portal-preview')}
+        onClick={() => addWispXp(5, 'portal', '/nexus-city')}
       >
         <span className="xk-fun-game-energy" aria-hidden="true" />
         <span className="xk-fun-game-confetti" aria-hidden="true"><i /><i /><i /><i /><i /><i /></span>

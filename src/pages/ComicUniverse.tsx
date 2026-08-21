@@ -11,8 +11,10 @@ import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import './ComicUniverse.css'
 
 type ChannelId = 'all' | 'marvel' | 'dc' | 'anime' | 'screen' | 'comics'
+type ComiconView = 'overview' | 'comic' | 'archive' | 'news'
 
 const channelOrder: ChannelId[] = ['all', 'marvel', 'dc', 'anime', 'screen', 'comics']
+const viewOrder: ComiconView[] = ['overview', 'comic', 'archive', 'news']
 
 const channelTags: Record<Exclude<ChannelId, 'all'>, string[]> = {
   marvel: ['marvel', 'mcu', 'x-men', 'avengers', 'spider-man'],
@@ -34,6 +36,16 @@ const copy = {
     feed: 'Radar completo',
     heroAlt: 'Xethkioz dividido entre un superhéroe de luz y un villano de oscuridad, ilustrado en estilo cómic anime.',
     channelsLabel: 'Canales del multiverso',
+    sectionsLabel: 'Secciones de Universo COMICON',
+    overviewTitle: 'Elegí qué querés explorar',
+    overviewText: 'La portada ahora funciona como un mapa: entrá al cómic original, al archivo de personajes o a las noticias sin recorrer todo el portal de una vez.',
+    latestTitle: 'Últimas transmisiones',
+    sections: {
+      overview: { label: 'Portada', glyph: '⌂', description: 'Mapa y últimas señales' },
+      comic: { label: 'Cómic original', glyph: '✎', description: 'La historia propia de XETHKIOZ' },
+      archive: { label: 'Archivo', glyph: '▦', description: 'Personajes, obras y canales' },
+      news: { label: 'Noticias', glyph: '◉', description: 'Estrenos y cultura fan' },
+    },
     contentTitle: 'Transmisiones del universo',
     contentText: 'Las publicaciones aprobadas desde el CMS aparecen automáticamente en este panel.',
     loading: 'Sincronizando señales del multiverso…',
@@ -73,6 +85,16 @@ const copy = {
     feed: 'Complete radar',
     heroAlt: 'Xethkioz split between a light superhero and a dark villain, illustrated in comic anime style.',
     channelsLabel: 'Multiverse channels',
+    sectionsLabel: 'COMICON Universe sections',
+    overviewTitle: 'Choose what you want to explore',
+    overviewText: 'The front page now works as a map: enter the original comic, character archive or news without scrolling through the entire portal at once.',
+    latestTitle: 'Latest transmissions',
+    sections: {
+      overview: { label: 'Overview', glyph: '⌂', description: 'Map and latest signals' },
+      comic: { label: 'Original comic', glyph: '✎', description: 'XETHKIOZ original story' },
+      archive: { label: 'Archive', glyph: '▦', description: 'Characters, works and channels' },
+      news: { label: 'News', glyph: '◉', description: 'Releases and fan culture' },
+    },
     contentTitle: 'Universe transmissions',
     contentText: 'CMS-approved posts appear automatically in this panel.',
     loading: 'Synchronizing multiverse signals…',
@@ -143,7 +165,7 @@ function getSourceHost(value: string) {
 }
 
 export default function ComicUniverse() {
-  const { lang, localizePath } = useLang()
+  const { lang } = useLang()
   const [searchParams, setSearchParams] = useSearchParams()
   const fallbackArticles = useMemo(() => getCuratedExternalNews('comicon'), [])
   const [articles, setArticles] = useState<PublicNewsArticle[]>(fallbackArticles)
@@ -151,6 +173,8 @@ export default function ComicUniverse() {
   const t = copy[lang]
   const requestedChannel = searchParams.get('channel') as ChannelId | null
   const activeChannel = requestedChannel && channelOrder.includes(requestedChannel) ? requestedChannel : 'all'
+  const requestedView = searchParams.get('view') as ComiconView | null
+  const activeView = requestedView && viewOrder.includes(requestedView) ? requestedView : 'overview'
 
   useEffect(() => {
     let active = true
@@ -173,13 +197,24 @@ export default function ComicUniverse() {
     () => articles.filter((article) => matchesChannel(article, activeChannel)),
     [activeChannel, articles],
   )
+  const displayedArticles = activeView === 'overview' ? visibleArticles.slice(0, 3) : visibleArticles
+
+  function selectView(view: ComiconView) {
+    const next = new URLSearchParams(searchParams)
+    if (view === 'overview') next.delete('view')
+    else next.set('view', view)
+    if (view !== 'archive' && view !== 'news') next.delete('channel')
+    setSearchParams(next, { replace: true })
+    window.requestAnimationFrame(() => document.getElementById(`comicon-view-${view}`)?.focus({ preventScroll: true }))
+  }
 
   function selectChannel(channel: ChannelId) {
     const next = new URLSearchParams(searchParams)
     if (channel === 'all') next.delete('channel')
     else next.set('channel', channel)
     setSearchParams(next, { replace: true })
-    window.requestAnimationFrame(() => document.getElementById('comicon-library-title')?.focus({ preventScroll: true }))
+    const target = activeView === 'archive' ? 'comicon-library-title' : 'comicon-content-title'
+    window.requestAnimationFrame(() => document.getElementById(target)?.focus({ preventScroll: true }))
   }
 
   return (
@@ -201,8 +236,8 @@ export default function ComicUniverse() {
             <strong><i aria-hidden="true" /> {t.status}</strong>
             <div>{t.intro}</div>
             <nav aria-label={t.channelsLabel}>
-              <a href="#comicon-original-title">{lang === 'es' ? 'Cómic original' : 'Original comic'} ↓</a>
-              <Link to={localizePath('/news?category=comicon')}>{t.feed} ↗</Link>
+              <button type="button" onClick={() => selectView('comic')}>{lang === 'es' ? 'Cómic original' : 'Original comic'} ↓</button>
+              <button type="button" onClick={() => selectView('news')}>{t.feed} ↓</button>
             </nav>
           </div>
 
@@ -217,9 +252,33 @@ export default function ComicUniverse() {
           </figure>
         </section>
 
-        <OriginalComicFeature lang={lang} />
+        <nav className="xk-comicon-section-nav" aria-label={t.sectionsLabel}>
+          {viewOrder.map((view) => {
+            const item = t.sections[view]
+            return (
+              <button key={view} type="button" aria-current={activeView === view ? 'page' : undefined} onClick={() => selectView(view)}>
+                <i aria-hidden="true">{item.glyph}</i>
+                <span><b>{item.label}</b><small>{item.description}</small></span>
+              </button>
+            )
+          })}
+        </nav>
 
-        <section id="comicon-channels" className="xk-comicon-channels" aria-labelledby="comicon-channels-title">
+        {activeView === 'overview' ? (
+          <section id="comicon-view-overview" tabIndex={-1} className="xk-comicon-overview" aria-labelledby="comicon-overview-title">
+            <header><p>MULTIVERSE_MAP // 03</p><h2 id="comicon-overview-title">{t.overviewTitle}</h2><span>{t.overviewText}</span></header>
+            <div>
+              {viewOrder.slice(1).map((view) => {
+                const item = t.sections[view]
+                return <button key={view} type="button" onClick={() => selectView(view)}><i aria-hidden="true">{item.glyph}</i><span><b>{item.label}</b><small>{item.description}</small></span><strong aria-hidden="true">→</strong></button>
+              })}
+            </div>
+          </section>
+        ) : null}
+
+        {activeView === 'comic' ? <div id="comicon-view-comic" tabIndex={-1}><OriginalComicFeature lang={lang} /></div> : null}
+
+        {activeView === 'archive' || activeView === 'news' ? <section id={`comicon-view-${activeView}`} tabIndex={-1} className="xk-comicon-channels" aria-labelledby="comicon-channels-title">
           <header>
             <p>CHANNEL_SELECTOR // 05</p>
             <h2 id="comicon-channels-title">{t.channelsLabel}</h2>
@@ -241,13 +300,13 @@ export default function ComicUniverse() {
               )
             })}
           </div>
-        </section>
+        </section> : null}
 
-        <ComiconLibrary lang={lang} channel={activeChannel} />
+        {activeView === 'archive' ? <ComiconLibrary lang={lang} channel={activeChannel} /> : null}
 
-        <section id="comicon-transmissions" tabIndex={-1} className="xk-comicon-transmissions" aria-labelledby="comicon-content-title">
+        {activeView === 'overview' || activeView === 'news' ? <section id="comicon-transmissions" tabIndex={-1} className="xk-comicon-transmissions" aria-labelledby="comicon-content-title">
           <header>
-            <div><p>LIVE_EDITORIAL_FEED</p><h2 id="comicon-content-title">{t.contentTitle}</h2></div>
+            <div><p>LIVE_EDITORIAL_FEED</p><h2 id="comicon-content-title">{activeView === 'overview' ? t.latestTitle : t.contentTitle}</h2></div>
             <span>{t.contentText}</span>
           </header>
 
@@ -267,9 +326,9 @@ export default function ComicUniverse() {
             </div>
           ) : null}
 
-          {visibleArticles.length > 0 ? (
+          {displayedArticles.length > 0 ? (
             <div className="xk-comicon-articles">
-              {visibleArticles.map((article) => {
+              {displayedArticles.map((article) => {
                 const reading = getPublicNewsReadingMetrics(article)
                 const officialSource = article.source_urls[0]
                 return (
@@ -296,14 +355,15 @@ export default function ComicUniverse() {
               })}
             </div>
           ) : null}
-        </section>
+          {activeView === 'overview' && visibleArticles.length > displayedArticles.length ? <button className="xk-comicon-more" type="button" onClick={() => selectView('news')}>{lang === 'es' ? 'Ver todas las noticias' : 'View all news'} →</button> : null}
+        </section> : null}
 
-        <PortalKnowledgeBriefing sector="comicon" lang={lang} />
+        {activeView === 'overview' ? <PortalKnowledgeBriefing sector="comicon" lang={lang} /> : null}
 
-        <aside className="xk-comicon-editorial" aria-labelledby="comicon-editorial-title">
+        {activeView === 'news' ? <aside className="xk-comicon-editorial" aria-labelledby="comicon-editorial-title">
           <div><span aria-hidden="true">!</span><h2 id="comicon-editorial-title">{t.editorialTitle}</h2></div>
           <ul>{t.editorialRules.map((rule) => <li key={rule}>{rule}</li>)}</ul>
-        </aside>
+        </aside> : null}
       </div>
     </main>
   )

@@ -7,7 +7,7 @@ const portals = [
   ['/green-node', 'green'],
   ['/mascotas/', 'pets'],
   ['/creacion-web', 'web'],
-  ['/fun#nexus-city', 'nexus'],
+  ['/nexus-city', 'nexus'],
 ] as const
 
 test.describe('guías verificadas de los portales', () => {
