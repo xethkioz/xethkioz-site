@@ -7,12 +7,14 @@ import { fallbackWebServiceOffers } from '../data/webServiceFallbacks'
 import { useLang } from '../lib/LangContext'
 import { useWisp } from '../providers/WispProvider'
 import { useExperience } from '../lib/ExperienceContext'
+import { supportsAmbientVideo } from '../lib/experienceMode'
 import { SITE_VERSION } from '../lib/siteConfig'
 import type { WebServiceOffer } from '../types/webServices'
 import './HomeReborn.css'
 
 type DataSavingConnection = {
   saveData?: boolean
+  effectiveType?: string
   addEventListener?: (type: 'change', listener: () => void) => void
   removeEventListener?: (type: 'change', listener: () => void) => void
 }
@@ -316,52 +318,43 @@ function useAmbientVideoEnabled(graphicsMode: 'full' | 'lite') {
 
   useEffect(() => {
     const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const desktopViewport = window.matchMedia('(min-width: 1024px)')
     const connection = (navigator as Navigator & { connection?: DataSavingConnection }).connection
-    let armed = false
-    let activated = false
+    let activationDelay: number | undefined
+    let cancelIdleTask: (() => void) | undefined
 
-    const removeInteractionListeners = () => {
-      if (!armed) return
-      window.removeEventListener('pointerdown', activate)
-      window.removeEventListener('keydown', activate)
-      window.removeEventListener('scroll', activate)
-      armed = false
-    }
-
-    const activate = () => {
-      if (graphicsMode === 'lite' || motionPreference.matches || connection?.saveData) return
-      activated = true
-      setEnabled(true)
-      removeInteractionListeners()
-    }
-
-    const armInteractionListeners = () => {
-      if (armed || activated) return
-      window.addEventListener('pointerdown', activate, { passive: true })
-      window.addEventListener('keydown', activate)
-      window.addEventListener('scroll', activate, { passive: true })
-      armed = true
+    const clearPendingActivation = () => {
+      window.clearTimeout(activationDelay)
+      cancelIdleTask?.()
+      cancelIdleTask = undefined
     }
 
     const syncPreference = () => {
-      if (graphicsMode === 'lite' || motionPreference.matches || connection?.saveData) {
-        activated = false
+      clearPendingActivation()
+      if (!supportsAmbientVideo(graphicsMode)) {
         setEnabled(false)
-        removeInteractionListeners()
         return
       }
 
-      armInteractionListeners()
+      activationDelay = window.setTimeout(() => {
+        cancelIdleTask = scheduleIdleTask(() => {
+          if (supportsAmbientVideo(graphicsMode)) setEnabled(true)
+        }, 1600)
+      }, 2200)
     }
 
     syncPreference()
     motionPreference.addEventListener('change', syncPreference)
+    desktopViewport.addEventListener('change', syncPreference)
     connection?.addEventListener?.('change', syncPreference)
+    document.addEventListener('visibilitychange', syncPreference)
 
     return () => {
-      removeInteractionListeners()
+      clearPendingActivation()
       motionPreference.removeEventListener('change', syncPreference)
+      desktopViewport.removeEventListener('change', syncPreference)
       connection?.removeEventListener?.('change', syncPreference)
+      document.removeEventListener('visibilitychange', syncPreference)
     }
   }, [graphicsMode])
 

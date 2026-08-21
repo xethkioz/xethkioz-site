@@ -1,8 +1,9 @@
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useLocation } from 'react-router-dom'
 import type { ProceduralMetalPlayer, SoundtrackId } from './proceduralMetal'
+import { GRAPHICS_STORAGE_KEY, getInitialGraphicsMode, recommendsLiteMode, type GraphicsMode } from './experienceMode'
 
-export type GraphicsMode = 'full' | 'lite'
+export type { GraphicsMode } from './experienceMode'
 
 type ExperienceContextValue = {
   graphicsMode: GraphicsMode
@@ -14,7 +15,6 @@ type ExperienceContextValue = {
   toggleMusic: () => Promise<void>
 }
 
-const STORAGE_KEY = 'xethkioz.experience.graphics.v1'
 const ExperienceContext = createContext<ExperienceContextValue | undefined>(undefined)
 
 function soundtrackMetaForPath(pathname: string): { id: SoundtrackId; label: string } {
@@ -24,26 +24,6 @@ function soundtrackMetaForPath(pathname: string): { id: SoundtrackId; label: str
   if (pathname.startsWith('/green-node')) return { id: 'death', label: 'BLACK / DEATH METAL' }
   if (pathname.startsWith('/nexus-city')) return { id: 'industrial', label: 'INDUSTRIAL METAL' }
   return { id: 'arcane', label: 'FANTASÍA ARCANA' }
-}
-
-function getInitialGraphicsMode(): GraphicsMode {
-  if (typeof window === 'undefined') return 'full'
-  try {
-    return window.localStorage.getItem(STORAGE_KEY) === 'lite' ? 'lite' : 'full'
-  } catch {
-    return 'full'
-  }
-}
-
-function recommendsLiteMode() {
-  if (typeof window === 'undefined') return false
-  const navigatorWithSignals = navigator as Navigator & { deviceMemory?: number; connection?: { saveData?: boolean } }
-  return Boolean(
-    navigatorWithSignals.connection?.saveData
-    || (navigatorWithSignals.deviceMemory !== undefined && navigatorWithSignals.deviceMemory <= 4)
-    || navigator.hardwareConcurrency <= 4
-    || window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-  )
 }
 
 export function ExperienceProvider({ children }: { children: ReactNode }) {
@@ -58,7 +38,7 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     document.documentElement.dataset.xkGraphics = graphicsMode
     try {
-      window.localStorage.setItem(STORAGE_KEY, graphicsMode)
+      window.localStorage.setItem(GRAPHICS_STORAGE_KEY, graphicsMode)
     } catch {
       // The mode remains active for the session when storage is unavailable.
     }

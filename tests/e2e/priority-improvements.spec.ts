@@ -56,6 +56,25 @@ test.describe('mejoras priorizadas de experiencia', () => {
     await expect(page.locator('.xk-green-access-sequence')).toHaveCount(0)
   })
 
+  test('equipos limitados arrancan en LITE y respetan una elección manual', async ({ page }) => {
+    await page.addInitScript(() => {
+      if (!window.sessionStorage.getItem('xethkioz.performance-test-ready')) {
+        window.localStorage.removeItem('xethkioz.experience.graphics.v2')
+        window.localStorage.setItem('xethkioz.experience.graphics.v1', 'full')
+        window.sessionStorage.setItem('xethkioz.performance-test-ready', '1')
+      }
+      Object.defineProperty(navigator, 'hardwareConcurrency', { configurable: true, value: 2 })
+    })
+    await page.goto('/')
+
+    await expect(page.locator('html')).toHaveAttribute('data-xk-graphics', 'lite')
+    await expect(page.locator('.xk-rb-bg-video')).toHaveCount(0)
+
+    await page.evaluate(() => window.localStorage.setItem('xethkioz.experience.graphics.v2', 'full'))
+    await page.reload()
+    await expect(page.locator('html')).toHaveAttribute('data-xk-graphics', 'full')
+  })
+
   test('Comunidad muestra funciones reales y abre Nexus Chat', async ({ page }) => {
     await page.goto('/community')
 

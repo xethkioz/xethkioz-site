@@ -5,13 +5,13 @@ const copy = {
   es: {
     title: 'Modo de experiencia',
     graphics: 'GRÁFICOS', full: 'ON · FULL', lite: 'OFF · LITE', music: 'MÚSICA', on: 'ON', off: 'OFF',
-    liteHelp: 'Carga rápida para PC de bajos recursos, TV y datos móviles.', fullHelp: 'Experiencia completa con animaciones, luces y video.',
+    liteHelp: 'Carga rápida para PC de bajos recursos, TV y datos móviles.', fullHelp: 'Experiencia completa con animaciones y luces; el video se activa sólo en dispositivos compatibles.',
     recommendation: 'LITE RECOMENDADO EN ESTE DISPOSITIVO', original: 'Banda sonora instrumental original', liteAudio: 'La música se apaga en modo Lite.',
   },
   en: {
     title: 'Experience mode',
     graphics: 'GRAPHICS', full: 'ON · FULL', lite: 'OFF · LITE', music: 'MUSIC', on: 'ON', off: 'OFF',
-    liteHelp: 'Fast mode for low-end PCs, TVs and mobile data.', fullHelp: 'Complete experience with animation, lighting and video.',
+    liteHelp: 'Fast mode for low-end PCs, TVs and mobile data.', fullHelp: 'Complete experience with animation and lighting; video only activates on compatible devices.',
     recommendation: 'LITE RECOMMENDED ON THIS DEVICE', original: 'Original instrumental soundtrack', liteAudio: 'Music is disabled in Lite mode.',
   },
 } as const
