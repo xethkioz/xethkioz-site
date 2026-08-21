@@ -143,12 +143,15 @@ export default async function handler(request: any, response: any) {
 
   const supabaseUrl = String(process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\/+$/, '')
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-  if (!supabaseUrl || !serviceKey) {
+  const publicKey = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY
+  const automated = isAutomatedClient(String(request.headers['user-agent'] || ''))
+  const canRegister = wantsRegistration && !automated && Boolean(serviceKey)
+  const endpoint = canRegister ? 'register_huellas_visit' : 'get_huellas_stats'
+  const upstreamKey = canRegister ? serviceKey : (serviceKey || publicKey)
+  if (!supabaseUrl || !upstreamKey) {
     return response.status(503).json({ ok: false, error: 'SERVICE_UNAVAILABLE' })
   }
 
-  const automated = isAutomatedClient(String(request.headers['user-agent'] || ''))
-  const endpoint = wantsRegistration && !automated ? 'register_huellas_visit' : 'get_huellas_stats'
   const payload = endpoint === 'register_huellas_visit'
     ? { p_event_id: eventId, p_network_prefix: networkPrefix }
     : {}
@@ -159,8 +162,8 @@ export default async function handler(request: any, response: any) {
     const upstream = await fetch(`${supabaseUrl}/rest/v1/rpc/${endpoint}`, {
       method: 'POST',
       headers: {
-        apikey: serviceKey,
-        Authorization: `Bearer ${serviceKey}`,
+        apikey: upstreamKey,
+        Authorization: `Bearer ${upstreamKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
@@ -185,6 +188,7 @@ export default async function handler(request: any, response: any) {
       adoptions: Math.max(0, Number(stats.adoptions) || 0),
       counted: stats.status === 'accepted' || stats.status === 'duplicate',
       rateLimited: stats.status === 'rate_limited',
+      registrationAvailable: Boolean(serviceKey),
     })
   } catch (error) {
     console.error(JSON.stringify({ level: 'error', message: 'Huellas metrics unavailable', reason: error instanceof Error ? error.name : 'unknown' }))

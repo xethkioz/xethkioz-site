@@ -1,8 +1,10 @@
 begin;
 
--- The new frontend now reaches Huellas only through /api/huellas-stats.
-revoke all on function public.get_huellas_stats() from public, anon, authenticated;
-grant execute on function public.get_huellas_stats() to service_role;
+-- The read-only aggregate remains callable by anon/authenticated so Vercel
+-- previews without production secrets can render Huellas safely. Only the
+-- mutating visit RPC is private.
+revoke all on function public.get_huellas_stats() from public;
+grant execute on function public.get_huellas_stats() to anon, authenticated, service_role;
 
 drop function if exists public.register_huellas_visit();
 
