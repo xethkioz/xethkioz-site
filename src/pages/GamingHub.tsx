@@ -29,6 +29,9 @@ const content = {
     dispatch: 'RADAR GAMING',
     read: 'Abrir noticia',
     signal: 'noticias en radar',
+    heroActionsLabel: 'Accesos principales de Gaming',
+    heroGuides: 'ABRIR GUÍAS',
+    heroRadar: 'VER RADAR',
     systemStatus: 'Resumen de Gaming',
     nexusLink: 'RUTAS DISPONIBLES',
     routeCount: '5',
@@ -98,6 +101,9 @@ const content = {
     dispatch: 'GAMING RADAR',
     read: 'Open story',
     signal: 'stories in radar',
+    heroActionsLabel: 'Primary Gaming shortcuts',
+    heroGuides: 'OPEN GUIDES',
+    heroRadar: 'OPEN RADAR',
     systemStatus: 'Gaming summary',
     nexusLink: 'AVAILABLE ROUTES',
     routeCount: '5',
@@ -229,7 +235,11 @@ export default function GamingHub() {
               <p className="xk-anime-kanji" aria-hidden="true">異界</p>
               <h1 className="xk-anime-title" data-text={t.title}>{t.title}</h1>
               <p className="mt-5 max-w-xl text-sm leading-relaxed text-gray-200 md:text-base">{t.description}</p>
-              <div className="mt-7 flex flex-wrap gap-3">
+              <div className="xk-gaming-hero-actions" aria-label={t.heroActionsLabel}>
+                <Link to={localizePath('/gaming/guides')}><span aria-hidden="true">⚔</span>{t.heroGuides}</Link>
+                <button type="button" onClick={() => selectSection('news')}><span aria-hidden="true">⌁</span>{t.heroRadar}</button>
+              </div>
+              <div className="mt-4 flex flex-wrap gap-3">
                 <span className="xk-hud-chip"><span aria-hidden="true">◉</span> {articles.length} {t.signal}</span>
                 <span className="xk-hud-chip xk-hud-chip-violet">MMORPG / RPG / ESPORTS</span>
               </div>

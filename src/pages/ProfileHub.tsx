@@ -41,6 +41,16 @@ const copy = {
     signIn: 'Ingresar',
     createAccount: 'Crear cuenta',
     resend: 'Reenviar confirmación',
+    guestEyebrow: 'CUENTA REAL // SIN DATOS DE DEMOSTRACIÓN',
+    guestTitle: 'Antes de crear tu cuenta',
+    guestText: 'El perfil se activa únicamente con tu sesión. No inventamos estadísticas, misiones ni identidades mientras navegás como invitado.',
+    guestItems: [
+      ['XP DEL SERVIDOR', 'La progresión conectada se calcula y valida fuera del navegador.'],
+      ['RECORRIDO CONTINUO', 'Tus portales, misiones y actividad vuelven cuando iniciás sesión.'],
+      ['IDENTIDAD PRIVADA', 'Tu email no se publica en el directorio ni en el chat comunitario.'],
+    ],
+    guestPrivacy: 'Revisar privacidad',
+    guestCommunity: 'Conocer la comunidad',
     shortcutsEyebrow: 'ACCESOS EN VIVO',
     shortcutsTitle: 'Volvé al multiverso',
     shortcuts: [
@@ -105,6 +115,16 @@ const copy = {
     signIn: 'Sign in',
     createAccount: 'Create account',
     resend: 'Resend confirmation',
+    guestEyebrow: 'REAL ACCOUNT // NO DEMO DATA',
+    guestTitle: 'Before creating your account',
+    guestText: 'Your profile activates only with your session. We do not invent statistics, missions or identities while you browse as a guest.',
+    guestItems: [
+      ['SERVER XP', 'Connected progression is calculated and validated outside the browser.'],
+      ['CONTINUOUS JOURNEY', 'Your portals, missions and activity return when you sign in.'],
+      ['PRIVATE IDENTITY', 'Your email is not published in the directory or community chat.'],
+    ],
+    guestPrivacy: 'Review privacy',
+    guestCommunity: 'Explore the community',
     shortcutsEyebrow: 'LIVE SHORTCUTS',
     shortcutsTitle: 'Return to the multiverse',
     shortcuts: [
@@ -161,7 +181,7 @@ function eventLabel(event: WispEvent, lang: Lang) {
 }
 
 export default function ProfileHub() {
-  const { t, lang } = useLang()
+  const { t, lang, localizePath } = useLang()
   const c = copy[lang]
   const { account, toggleAccount, refreshAccount } = useHud()
   const location = useLocation()
@@ -294,6 +314,19 @@ export default function ProfileHub() {
             {!isConnected ? <Link to="/confirm-email" className="rounded-full border border-white/15 px-4 py-3 text-slate-300 transition hover:bg-white/5">{c.resend}</Link> : null}
           </div>
         </section>
+
+        {!isConnected && !isLoading ? <section className="mt-6 rounded-[2rem] border border-violet-400/20 bg-[radial-gradient(circle_at_85%_0%,rgba(139,92,246,.16),transparent_34%),rgba(0,0,0,.48)] p-6 text-white md:p-8" aria-labelledby="guest-profile-title">
+          <p className="font-mono text-[10px] font-black uppercase tracking-[0.28em] text-violet-200">{c.guestEyebrow}</p>
+          <h2 id="guest-profile-title" className="mt-3 text-2xl font-black uppercase tracking-[0.06em] md:text-3xl">{c.guestTitle}</h2>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-300">{c.guestText}</p>
+          <ul className="mt-6 grid gap-3 md:grid-cols-3">
+            {c.guestItems.map(([label, detail], index) => <li key={label} className="rounded-2xl border border-white/10 bg-white/[0.035] p-4"><span className="font-mono text-[10px] font-black text-orange-300" aria-hidden="true">0{index + 1}</span><strong className="mt-3 block text-sm uppercase tracking-[0.08em]">{label}</strong><small className="mt-2 block text-xs leading-5 text-slate-400">{detail}</small></li>)}
+          </ul>
+          <div className="mt-6 flex flex-wrap gap-3 font-mono text-xs font-black uppercase tracking-[0.14em]">
+            <Link to={localizePath('/privacy')} className="rounded-full border border-violet-400/40 px-4 py-3 text-violet-100 transition hover:bg-violet-500/10">{c.guestPrivacy}</Link>
+            <Link to={localizePath('/community')} className="rounded-full border border-orange-400/40 px-4 py-3 text-orange-100 transition hover:bg-orange-500/10">{c.guestCommunity}</Link>
+          </div>
+        </section> : null}
 
         {isConnected ? <section className="mt-6 rounded-[2rem] border border-orange-300/20 bg-[radial-gradient(circle_at_90%_0%,rgba(249,115,22,.14),transparent_35%),rgba(0,0,0,.48)] p-6 text-white md:p-8" aria-labelledby="profile-shortcuts-title">
           <p className="font-mono text-[10px] font-black uppercase tracking-[0.28em] text-orange-300">{c.shortcutsEyebrow}</p>

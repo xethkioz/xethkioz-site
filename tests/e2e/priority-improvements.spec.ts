@@ -32,7 +32,28 @@ test.describe('mejoras priorizadas de experiencia', () => {
 
     await expect(page.getByRole('heading', { level: 2, name: /Tu espacio XETHKIOZ|Your XETHKIOZ space/i })).toBeVisible()
     await expect(page.getByRole('link', { name: /Crear cuenta|Create account/i })).toHaveAttribute('href', '/account?mode=signup')
+    await expect(page.getByRole('heading', { name: /Antes de crear tu cuenta|Before creating your account/i })).toBeVisible()
+    await expect(page.getByText(/XP DEL SERVIDOR|SERVER XP/i)).toBeVisible()
     await expect(page.getByText(/perfil local de prueba|local test profile|futuras insignias|future badges/i)).toHaveCount(0)
+  })
+
+  test('Gaming ofrece guías y radar desde el primer pantallazo', async ({ page }) => {
+    await page.goto('/gaming')
+
+    await expect(page.getByRole('link', { name: /Abrir guías|Open guides/i }).first()).toHaveAttribute('href', '/gaming/guides')
+    await page.getByRole('button', { name: /Ver radar|Open radar/i }).first().click()
+    await expect(page).toHaveURL(/\/gaming\?section=news$/)
+  })
+
+  test('Green Node acorta la primera entrada y no la repite en la sesión', async ({ page }) => {
+    await page.addInitScript(() => window.sessionStorage.setItem('xethkioz.greenNodeUnlocked', String(Date.now())))
+    await page.goto('/green-node', { waitUntil: 'domcontentloaded' })
+
+    const intro = page.locator('.xk-green-access-sequence')
+    await expect(intro).toBeVisible()
+    await expect(intro).toHaveCount(0, { timeout: 2000 })
+    await page.reload({ waitUntil: 'domcontentloaded' })
+    await expect(page.locator('.xk-green-access-sequence')).toHaveCount(0)
   })
 
   test('Comunidad muestra funciones reales y abre Nexus Chat', async ({ page }) => {
