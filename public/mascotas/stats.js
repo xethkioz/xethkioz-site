@@ -1,4 +1,5 @@
 (() => {
+  const HUELLAS_EDGE_URL = 'https://pascicauudfyydzknoop.supabase.co/functions/v1/huellas-stats';
   const style = document.createElement('style');
   style.textContent = `
     .community-stats{width:min(1120px,calc(100% - 30px));margin:34px auto;padding:22px 24px;border:1px solid var(--line);border-radius:25px;background:linear-gradient(135deg,#f0f5e8,#fffdf8 58%,#fff3e6);box-shadow:var(--shadow)}
@@ -63,6 +64,20 @@
     return response.json();
   }
 
+  async function registerThroughEdge(eventId) {
+    const response = await fetch(HUELLAS_EDGE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ registerVisit: true, eventId }),
+      cache: 'no-store',
+    });
+    const contentType = response.headers.get('content-type') || '';
+    if (!response.ok || !contentType.includes('application/json')) {
+      throw new Error(`Edge stats unavailable (${response.status})`);
+    }
+    return response.json();
+  }
+
   const eventKey = 'huellas-visit-event-v2';
   const countedKey = 'huellas-visit-counted-v2';
   let eventId = sessionStorage.getItem(eventKey);
@@ -72,9 +87,17 @@
   }
   const shouldRegister = !sessionStorage.getItem(countedKey);
   requestStats(shouldRegister, eventId)
-    .then((stats) => {
-      if (shouldRegister && (stats.counted || stats.rateLimited)) sessionStorage.setItem(countedKey, '1');
-      renderStats(stats);
+    .then(async (stats) => {
+      let finalStats = stats;
+      if (shouldRegister && stats.registrationAvailable === false) {
+        try {
+          finalStats = await registerThroughEdge(eventId);
+        } catch (error) {
+          console.warn('El registro de la visita no está disponible temporalmente.', error);
+        }
+      }
+      if (shouldRegister && (finalStats.counted || finalStats.rateLimited)) sessionStorage.setItem(countedKey, '1');
+      renderStats(finalStats);
     })
     .catch((error) => {
       console.warn('Las estadísticas de Huellas no están disponibles en este entorno.', error);
