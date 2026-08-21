@@ -16,6 +16,7 @@ const passwordPolicy = read('docs/SECURITY/AUTH_PASSWORD_POLICY_2026-07-23.md')
 
 check('Huellas browser uses the same-origin metrics endpoint', statsClient.includes("fetch('/api/huellas-stats'") && !statsClient.includes('.supabase.co'))
 check('Huellas browser sends an idempotency event id', statsClient.includes('crypto.randomUUID()') && statsClient.includes('eventId'))
+check('Huellas browser rejects non-JSON fallbacks without console errors', statsClient.includes("contentType.includes('application/json')") && !statsClient.includes('console.error'))
 check('Huellas endpoint accepts POST only and rejects foreign origins', statsApi.includes("request.method !== 'POST'") && statsApi.includes('isTrustedSiteRequest'))
 check('Huellas endpoint rate-limits before the database call', statsApi.includes('checkRateLimit') && statsApi.includes('INSTANCE_LIMIT'))
 check('Huellas endpoint stores only an anonymized network prefix', statsApi.includes('anonymizeIp') && !statsApi.includes('p_raw_ip'))

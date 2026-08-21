@@ -56,7 +56,10 @@
       body: JSON.stringify({ registerVisit, eventId }),
       cache: 'no-store',
     });
-    if (!response.ok) throw new Error(`Stats HTTP ${response.status}`);
+    const contentType = response.headers.get('content-type') || '';
+    if (!response.ok || !contentType.includes('application/json')) {
+      throw new Error(`Stats unavailable (${response.status})`);
+    }
     return response.json();
   }
 
@@ -74,7 +77,7 @@
       renderStats(stats);
     })
     .catch((error) => {
-      console.error('No se pudieron cargar las estadísticas de Huellas.', error);
+      console.warn('Las estadísticas de Huellas no están disponibles en este entorno.', error);
       const status = block.querySelector('.community-stats-live');
       if (status) status.textContent = 'Datos temporalmente no disponibles';
     });
