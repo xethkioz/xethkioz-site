@@ -1,10 +1,10 @@
 {
-  "version": "11.0.1",
-  "label": "World Gate Harmony Release",
+  "version": "11.0.2",
+  "label": "Community Security Release",
   "stage": "release-candidate",
   "channel": "v11",
   "codename": "XETHKIOZ Web 11.0",
-  "buildDate": "2026-08-13",
+  "buildDate": "2026-08-21",
   "sourcePackage": "xethkioz-site",
   "validation": {
     "localDeployCheck": "PASS",

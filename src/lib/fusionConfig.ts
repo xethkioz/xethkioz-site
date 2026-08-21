@@ -1,4 +1,4 @@
-export const FUSION_VERSION = '11.0.1'
+export const FUSION_VERSION = '11.0.2'
 export const FUSION_LABEL = 'XETHKIOZ 11.0'
 export const FUSION_STAGE = 'World Gate · harmony release candidate'
 
