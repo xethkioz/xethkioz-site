@@ -176,11 +176,12 @@ export default function ProfileHub() {
   const isLoading = account.status === 'loading'
   const combinedActivity = useMemo(() => {
     const unique = new Map<string, WispEvent>()
-    for (const event of [...syncedActivity, ...activity]) unique.set(event.id, event)
+    const source = isConnected ? syncedActivity : activity
+    for (const event of source) unique.set(event.id, event)
     return [...unique.values()].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 40)
-  }, [activity, syncedActivity])
+  }, [activity, isConnected, syncedActivity])
   const syncedXp = syncedActivity.reduce((total, event) => total + event.points, 0)
-  const effectiveProgress = getWispProgressForXp(Math.max(progress.xp, syncedXp))
+  const effectiveProgress = getWispProgressForXp(isConnected ? syncedXp : progress.xp)
   const uniquePortalVisits = new Set(combinedActivity.filter((event) => event.type === 'portal').map((event) => event.route.split('#')[0])).size
   const chatCount = combinedActivity.filter((event) => event.type === 'chat').length
   const dailyCount = combinedActivity.filter((event) => event.type === 'daily').length
@@ -197,9 +198,32 @@ export default function ProfileHub() {
       setProgress(getWispProgress())
       setActivity(getRecentWispEvents())
     }
+    const syncServerEvent = (rawEvent: Event) => {
+      const event = (rawEvent as CustomEvent<WispEvent>).detail
+      if (!event?.id) return
+      setSyncedActivity((current) => {
+        const unique = new Map(current.map((item) => [item.id, item]))
+        unique.set(event.id, event)
+        return [...unique.values()]
+          .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+          .slice(0, 200)
+      })
+    }
     window.addEventListener('xethkioz:wisp-xp', update)
-    return () => window.removeEventListener('xethkioz:wisp-xp', update)
+    window.addEventListener('xethkioz:wisp-server-event', syncServerEvent)
+    return () => {
+      window.removeEventListener('xethkioz:wisp-xp', update)
+      window.removeEventListener('xethkioz:wisp-server-event', syncServerEvent)
+    }
   }, [])
+
+  useEffect(() => {
+    if (isConnected) {
+      setDailyDone(syncedActivity.some((event) => event.type === 'daily' && event.created_at.slice(0, 10) === today))
+      return
+    }
+    setDailyDone(window.localStorage.getItem(DAILY_MISSION_KEY) === today)
+  }, [isConnected, syncedActivity, today])
 
   useEffect(() => {
     if (!isConnected || !account.userId || !isSupabaseConfigured) {
@@ -235,9 +259,11 @@ export default function ProfileHub() {
 
   function claimDailyMission() {
     if (dailyDone) return
-    window.localStorage.setItem(DAILY_MISSION_KEY, today)
+    if (!isConnected) {
+      window.localStorage.setItem(DAILY_MISSION_KEY, today)
+      setDailyDone(true)
+    }
     addWispXp(25, 'daily', '/profile')
-    setDailyDone(true)
   }
 
   const accountHeading = isLoading ? c.verifying : isConnected ? account.name : c.disconnected

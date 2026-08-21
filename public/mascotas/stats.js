@@ -1,12 +1,4 @@
 (() => {
-  const SUPABASE_URL = 'https://pascicauudfyydzknoop.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_baha-MZOxBr-2pQGaXlcwA_edqFjj-_';
-  const headers = {
-    apikey: SUPABASE_KEY,
-    Authorization: `Bearer ${SUPABASE_KEY}`,
-    'Content-Type': 'application/json',
-  };
-
   const style = document.createElement('style');
   style.textContent = `
     .community-stats{width:min(1120px,calc(100% - 30px));margin:34px auto;padding:22px 24px;border:1px solid var(--line);border-radius:25px;background:linear-gradient(135deg,#f0f5e8,#fffdf8 58%,#fff3e6);box-shadow:var(--shadow)}
@@ -57,27 +49,35 @@
     });
   }
 
-  async function requestStats(registerVisit) {
-    const endpoint = registerVisit ? 'register_huellas_visit' : 'get_huellas_stats';
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${endpoint}`, {
+  async function requestStats(registerVisit, eventId) {
+    const response = await fetch('/api/huellas-stats', {
       method: 'POST',
-      headers,
-      body: '{}',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ registerVisit, eventId }),
       cache: 'no-store',
     });
-    if (!response.ok) throw new Error(`Stats HTTP ${response.status}`);
+    const contentType = response.headers.get('content-type') || '';
+    if (!response.ok || !contentType.includes('application/json')) {
+      throw new Error(`Stats unavailable (${response.status})`);
+    }
     return response.json();
   }
 
-  const sessionKey = 'huellas-visit-counted-v1';
-  const shouldRegister = !sessionStorage.getItem(sessionKey);
-  requestStats(shouldRegister)
+  const eventKey = 'huellas-visit-event-v2';
+  const countedKey = 'huellas-visit-counted-v2';
+  let eventId = sessionStorage.getItem(eventKey);
+  if (!eventId) {
+    eventId = crypto.randomUUID();
+    sessionStorage.setItem(eventKey, eventId);
+  }
+  const shouldRegister = !sessionStorage.getItem(countedKey);
+  requestStats(shouldRegister, eventId)
     .then((stats) => {
-      if (shouldRegister) sessionStorage.setItem(sessionKey, '1');
+      if (shouldRegister && (stats.counted || stats.rateLimited)) sessionStorage.setItem(countedKey, '1');
       renderStats(stats);
     })
     .catch((error) => {
-      console.error('No se pudieron cargar las estadísticas de Huellas.', error);
+      console.warn('Las estadísticas de Huellas no están disponibles en este entorno.', error);
       const status = block.querySelector('.community-stats-live');
       if (status) status.textContent = 'Datos temporalmente no disponibles';
     });

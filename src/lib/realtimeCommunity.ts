@@ -23,6 +23,15 @@ export type WispEvent = {
   created_at: string
 }
 
+type ActivityClaimRow = {
+  id: string
+  event_type: WispEvent['type']
+  route: string
+  points: number
+  created_at: string
+  status: 'accepted' | 'duplicate' | 'limit_reached'
+}
+
 const CLIENT_ID_KEY = 'xethkioz_client_id'
 const DISPLAY_NAME_KEY = 'xethkioz_display_name'
 const LOCAL_MESSAGES_KEY = 'xethkioz_realtime_chat_cache_v4'
@@ -161,21 +170,28 @@ export function addWispXp(points: number, eventType: WispEvent['type'] = 'visit'
     try {
       supabase.auth.getSession().then(({ data }) => {
         if (data.session?.user) {
-          void supabase.from('user_activity_events').insert({
-            id: event.id,
-            event_type: event.type,
-            route: event.route,
-            points: event.points,
-          })
-          return
+          void supabase
+            .rpc('xethkioz_claim_activity', {
+              p_event_id: event.id,
+              p_event_type: event.type,
+              p_route: event.route,
+            })
+            .then(({ data: claimData, error }) => {
+              if (error || !Array.isArray(claimData)) return
+              const claim = claimData[0] as ActivityClaimRow | undefined
+              if (!claim || claim.status !== 'accepted') return
+              const serverEvent: WispEvent = {
+                id: claim.id,
+                type: claim.event_type,
+                route: claim.route,
+                points: claim.points,
+                created_at: claim.created_at,
+              }
+              try {
+                window.dispatchEvent(new CustomEvent('xethkioz:wisp-server-event', { detail: serverEvent }))
+              } catch {}
+            })
         }
-        void supabase.from('xeth_wisp_events').insert({
-          id: event.id,
-          client_id: getClientId(),
-          event_type: event.type,
-          route: event.route,
-          points: event.points,
-        })
       })
     } catch {}
   }
