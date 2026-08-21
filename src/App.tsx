@@ -92,7 +92,7 @@ const routeNames = {
     '/gaming/guides': 'Guías de juegos',
     '/science': 'Ciencia y tecnología',
     '/comicon': 'Universo COMICON',
-    '/fun': 'Diversión',
+    '/fun': 'Nexus City',
     '/creacion-web': 'Creación web',
     '/green-node': 'Green Node',
     '/news': 'Noticias',
@@ -116,7 +116,7 @@ const routeNames = {
     '/gaming/guides': 'Gaming guides',
     '/science': 'Science and technology',
     '/comicon': 'COMICON Universe',
-    '/fun': 'Fun',
+    '/fun': 'Nexus City',
     '/creacion-web': 'Web creation',
     '/green-node': 'Green Node',
     '/news': 'News',
@@ -136,7 +136,7 @@ const routeNames = {
   },
 } as const
 
-const activityTrackedPortals = new Set(['/gaming', '/science', '/comicon', '/fun', '/creacion-web', '/green-node', '/nexus-city'])
+const activityTrackedPortals = new Set(['/gaming', '/science', '/comicon', '/creacion-web', '/green-node', '/nexus-city'])
 
 function RouteAccessibility({ pathname }: { pathname: string }) {
   const { lang } = useLang()
@@ -226,7 +226,7 @@ function AppShell() {
               <Route path="/gaming/guides" element={<GamingGuides />} />
               <Route path="/science" element={<ScienceLab />} />
               <Route path="/comicon" element={<ComicUniverse />} />
-              <Route path="/fun" element={<FunPortal />} />
+              <Route path="/fun" element={<Navigate to="/nexus-city" replace />} />
               <Route path="/creacion-web" element={<WebCreation />} />
               <Route path="/community" element={<Community />} />
               <Route path="/about" element={<About />} />
@@ -240,7 +240,8 @@ function AppShell() {
               <Route path="/en/gaming/guides" element={<GamingGuides />} />
               <Route path="/en/science" element={<ScienceLab />} />
               <Route path="/en/comicon" element={<ComicUniverse />} />
-              <Route path="/en/fun" element={<FunPortal />} />
+              <Route path="/en/fun" element={<Navigate to="/en/nexus-city" replace />} />
+              <Route path="/en/nexus-city" element={<FunPortal />} />
               <Route path="/en/creacion-web" element={<WebCreation />} />
               <Route path="/en/community" element={<Community />} />
               <Route path="/en/about" element={<About />} />
@@ -253,7 +254,7 @@ function AppShell() {
               <Route path="/green-node" element={<GreenNodeGate />} />
               <Route path="/news" element={<News />} />
               <Route path="/news/:slug" element={<NewsArticle />} />
-              <Route path="/nexus-city" element={<Navigate to="/fun#nexus-city" replace />} />
+              <Route path="/nexus-city" element={<FunPortal />} />
               <Route path="/nexus-city/u/:handle" element={<NexusPassport />} />
               <Route path="/nexus-city/room/xethkioz" element={<NexusPixelWorld />} />
               <Route path="/nexus-city/vip" element={<NexusVipRooms />} />

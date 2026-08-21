@@ -52,7 +52,7 @@ check('guide cards do not add image requests', !component.includes('<img') && !c
 check('closed guides preserve a lightweight first view', component.includes('<details') && css.includes('content-visibility: auto'))
 check('mobile and reduced-motion states are defined', css.includes('@media (max-width: 640px)') && css.includes('@media (prefers-reduced-motion: reduce)'))
 check('Spanish and English copy are both present', catalog.includes("type KnowledgeLang = 'es' | 'en'") && component.includes("lang = 'es'"))
-check('public Mascotas portal exposes the verified-guide contract and version', petsBootstrap.includes("setAttribute('data-knowledge-sector', 'pets')") && petsBootstrap.includes('XETHKIOZ v11.0') && petsBootstrap.includes('content-visibility:auto'))
+check('public Mascotas portal exposes the verified-guide contract and live version', petsBootstrap.includes("setAttribute('data-knowledge-sector', 'pets')") && petsBootstrap.includes("fetch('/version.json'") && petsBootstrap.includes('content-visibility:auto'))
 
 let failed = 0
 for (const [name, ok] of checks) {

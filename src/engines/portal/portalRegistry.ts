@@ -61,7 +61,7 @@ export const portalRegistry: PortalMetadata[] = [
     id: 'fun',
     titleKey: 'fun',
     code: '04 / PORTAL',
-    route: '/fun',
+    route: '/nexus-city',
     theme: 'fun',
     engine: 'FunEngine',
     status: 'online',

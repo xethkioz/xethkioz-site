@@ -14,29 +14,29 @@ const videos: Record<'es' | 'en', ShortVideoFeed[]> = {
     { id: 1, title: 'Memes gamer de la comunidad', likes: 'Base', route: '/community' },
     { id: 2, title: 'Clips cortos para redes', likes: 'Soon', route: '/news' },
     { id: 3, title: 'Ideas visuales para XETHKIOZ', likes: 'Lab', route: '/profile' },
-    { id: 4, title: 'Humor, aventuras y rarezas', likes: 'Fun', route: '/fun' },
+    { id: 4, title: 'Humor, aventuras y rarezas', likes: 'Nexus', route: '/nexus-city' },
   ],
   en: [
     { id: 1, title: 'Gaming memes from the community', likes: 'Base', route: '/community' },
     { id: 2, title: 'Short clips for social media', likes: 'Soon', route: '/news' },
     { id: 3, title: 'Visual ideas for XETHKIOZ', likes: 'Lab', route: '/profile' },
-    { id: 4, title: 'Humor, adventures and oddities', likes: 'Fun', route: '/fun' },
+    { id: 4, title: 'Humor, adventures and oddities', likes: 'Nexus', route: '/en/nexus-city' },
   ],
 }
 
 const copy = {
   es: {
     back: '⏴ Volver al Núcleo',
-    label: 'XETHKIOZ // FUN_PORTAL',
-    title: 'Memes, ocio y comunidad',
+    label: 'XETHKIOZ // NEXUS_CITY',
+    title: 'Nexus City: ocio y comunidad',
     subtitle: 'Un sector liviano para humor gamer, clips, ideas visuales y contenido social sin mezclarlo con noticias serias.',
     feed: '// Matriz visual comunitaria',
     open: 'Abrir',
   },
   en: {
     back: '⏴ Back to Core',
-    label: 'XETHKIOZ // FUN_PORTAL',
-    title: 'Memes, fun and community',
+    label: 'XETHKIOZ // NEXUS_CITY',
+    title: 'Nexus City: fun and community',
     subtitle: 'A lightweight sector for gaming humor, clips, visual ideas and social content without mixing it with serious news.',
     feed: '// Community visual matrix',
     open: 'Open',

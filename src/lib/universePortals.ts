@@ -26,7 +26,7 @@ export const UNIVERSE_PORTALS: readonly UniversePortal[] = [
     signal: { es: 'OBSERVATORIO VIVO', en: 'LIVING OBSERVATORY' },
   },
   {
-    id: 'fun', code: 'XK-03', glyph: '🐾', route: '/fun', tone: '#34d399', image: '/assets/portal-mascotas-huellas.svg',
+    id: 'fun', code: 'XK-03', glyph: '🐾', route: '/mascotas/', tone: '#34d399', image: '/assets/portal-mascotas-huellas.svg',
     title: { es: 'Huellas de Puan', en: 'Huellas de Puan' },
     subtitle: { es: 'Perdidos, encontrados, adopciones, rescate y cuidado animal.', en: 'Lost pets, found animals, adoption, rescue and animal care.' },
     signal: { es: 'RED COMUNITARIA ANIMAL', en: 'COMMUNITY ANIMAL NETWORK' },

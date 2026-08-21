@@ -28,12 +28,12 @@ const copy = {
     seoDescription: 'Radar público de noticias, memes y tecnología curado por XETHKIOZ.',
     eyebrow: 'NEWS_ENGINE // HYBRID_FEED',
     heading: 'Radar XETHKIOZ',
-    description: 'Feed híbrido: noticias propias del CMS + radar externo curado con fuente visible. Lectura ampliada dentro de XETHKIOZ y link a la fuente original.',
-    statusReady: 'CMS + radar externo activo',
-    statusSetup: 'Radar externo activo. Supabase queda como capa editorial opcional.',
+    description: 'Noticias propias y señales externas seleccionadas, siempre con fecha, contexto y fuente visible.',
+    statusReady: 'Noticias y fuentes verificadas',
+    statusSetup: 'Selección editorial disponible',
     loading: 'Cargando radar público...',
     emptyTitle: 'Todavía no hay contenido publicado',
-    emptyText: 'El radar externo debería mostrar contenido aunque Supabase no responda. Revisar build si esto aparece.',
+    emptyText: 'Estamos preparando la próxima tanda editorial. Volvé a consultar en breve.',
     read: 'Leer completa',
     ai: 'IA',
     sources: 'fuentes',
@@ -55,12 +55,12 @@ const copy = {
     seoDescription: 'XETHKIOZ curated public radar for news, memes and technology.',
     eyebrow: 'NEWS_ENGINE // HYBRID_FEED',
     heading: 'XETHKIOZ Radar',
-    description: 'Hybrid feed: CMS articles plus curated external radar with visible sources. Expanded reading inside XETHKIOZ and link to original source.',
-    statusReady: 'CMS + external radar active',
-    statusSetup: 'External radar active. Supabase remains optional editorial layer.',
+    description: 'Original stories and selected external signals, always with date, context and visible sources.',
+    statusReady: 'News and verified sources',
+    statusSetup: 'Editorial selection available',
     loading: 'Loading public radar...',
     emptyTitle: 'No published content yet',
-    emptyText: 'The external radar should show content even if Supabase is unavailable. Check build if this appears.',
+    emptyText: 'We are preparing the next editorial batch. Check back soon.',
     read: 'Read full article',
     ai: 'AI',
     sources: 'sources',
@@ -107,7 +107,8 @@ function getArticleMark(article: PublicNewsArticle) {
   if (article.category === 'ai') return '🤖'
   if (article.category === 'tech') return '⚙️'
   if (article.category === 'science') return '🔬'
-  if (article.category === 'community') return '😂'
+  if (article.category === 'community') return '💬'
+  if (article.category === 'comicon') return '◆'
   if (article.category === 'green') return '🟢'
   return '⌨️'
 }

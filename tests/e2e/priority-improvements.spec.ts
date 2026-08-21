@@ -1,0 +1,54 @@
+import { expect, test } from '@playwright/test'
+
+test.describe('mejoras priorizadas de experiencia', () => {
+  test('Huellas y Nexus City tienen destinos inequívocos', async ({ page }) => {
+    await page.goto('/')
+
+    const petsLink = page.getByRole('link', { name: /Mascotas|Huellas de Puan/i }).first()
+    await expect(petsLink).toHaveAttribute('href', '/mascotas/')
+
+    await page.goto('/fun')
+    await expect(page).toHaveURL(/\/nexus-city$/)
+    await expect(page.getByText(/NEXUS CITY \/\//i).first()).toBeVisible()
+  })
+
+  test('COMICON abre con un mapa compacto y conserva vistas enlazables', async ({ page }) => {
+    await page.goto('/comicon')
+
+    await expect(page.getByRole('heading', { name: /Elegí qué querés explorar|Choose what you want to explore/i })).toBeVisible()
+    await expect(page.locator('.xk-comicon-library')).toHaveCount(0)
+
+    await page.getByRole('button', { name: /Archivo/i }).first().click()
+    await expect(page).toHaveURL(/\/comicon\?view=archive$/)
+    await expect(page.locator('.xk-comicon-library')).toBeVisible()
+
+    await page.getByRole('button', { name: /Noticias|News/i }).first().click()
+    await expect(page).toHaveURL(/\/comicon\?view=news$/)
+    await expect(page.locator('#comicon-transmissions')).toBeVisible()
+  })
+
+  test('el perfil invitado muestra acciones reales y no contenido de prueba', async ({ page }) => {
+    await page.goto('/profile')
+
+    await expect(page.getByRole('heading', { level: 2, name: /Tu espacio XETHKIOZ|Your XETHKIOZ space/i })).toBeVisible()
+    await expect(page.getByRole('link', { name: /Crear cuenta|Create account/i })).toHaveAttribute('href', '/account?mode=signup')
+    await expect(page.getByText(/perfil local de prueba|local test profile|futuras insignias|future badges/i)).toHaveCount(0)
+  })
+
+  test('Comunidad muestra funciones reales y abre Nexus Chat', async ({ page }) => {
+    await page.goto('/community')
+
+    await expect(page.getByRole('heading', { name: /Elegí cómo participar|Choose how to participate/i })).toBeVisible()
+    await expect(page.getByText(/Cola editorial|Editorial queue/i)).toHaveCount(0)
+    await page.getByRole('button', { name: /Abrir chat|Open chat/i }).click()
+    await expect(page.locator('#nexus-chat-panel')).toBeVisible()
+  })
+
+  test('Creación Web mantiene presupuesto y navegación sin desborde', async ({ page }) => {
+    await page.goto('/creacion-web')
+
+    await expect(page.locator('#presupuesto')).toBeVisible()
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
+    expect(overflow).toBeLessThanOrEqual(2)
+  })
+})

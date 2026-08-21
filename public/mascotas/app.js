@@ -28,7 +28,16 @@
   document.head.appendChild(performanceStyles);
 
   const integrationCopy = document.querySelector('.footer-grid > div:nth-child(2) > p');
-  if (integrationCopy) integrationCopy.textContent = 'Proyecto comunitario independiente integrado a XETHKIOZ v11.0.';
+  if (integrationCopy) {
+    integrationCopy.textContent = 'Proyecto comunitario independiente integrado a XETHKIOZ.';
+    fetch('/version.json', { cache: 'no-store' })
+      .then((response) => response.ok ? response.json() : null)
+      .then((payload) => {
+        const version = typeof payload?.version === 'string' ? payload.version.trim() : '';
+        if (version) integrationCopy.textContent = `Proyecto comunitario independiente integrado a XETHKIOZ v${version}.`;
+      })
+      .catch(() => {});
+  }
 
   const loadScript = (file) => new Promise((resolve, reject) => {
     const script = document.createElement('script');

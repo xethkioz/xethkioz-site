@@ -20,8 +20,8 @@ const districtLinks: Record<Lang, Record<NexusDistrictTone, DistrictLink[]>> = {
       { code: 'PARTY', glyph: '◆', title: 'Comunidad', detail: 'Grupos, perfiles y compañeros', to: '/community' },
     ],
     fun: [
-      { code: 'MEME', glyph: '☺', title: 'Meme Arcade', detail: 'Humor y publicaciones de la comunidad', to: '/fun#meme-wall' },
-      { code: 'CLIP', glyph: '▶', title: 'Clip semanal', detail: 'Videos y momentos destacados', to: '/fun#weekly-clip' },
+      { code: 'MEME', glyph: '☺', title: 'Meme Arcade', detail: 'Humor y publicaciones de la comunidad', to: '/nexus-city' },
+      { code: 'CLIP', glyph: '▶', title: 'Clip semanal', detail: 'Videos y momentos destacados', to: '/news?category=community' },
       { code: 'CLUB', glyph: '?!', title: 'Comunidad', detail: 'Entrá, participá y compartí', to: '/community' },
     ],
     science: [
@@ -47,8 +47,8 @@ const districtLinks: Record<Lang, Record<NexusDistrictTone, DistrictLink[]>> = {
       { code: 'PARTY', glyph: '◆', title: 'Community', detail: 'Groups, profiles and teammates', to: '/community' },
     ],
     fun: [
-      { code: 'MEME', glyph: '☺', title: 'Meme Arcade', detail: 'Humor and community posts', to: '/fun#meme-wall' },
-      { code: 'CLIP', glyph: '▶', title: 'Weekly clip', detail: 'Videos and featured moments', to: '/fun#weekly-clip' },
+      { code: 'MEME', glyph: '☺', title: 'Meme Arcade', detail: 'Humor and community posts', to: '/en/nexus-city' },
+      { code: 'CLIP', glyph: '▶', title: 'Weekly clip', detail: 'Videos and featured moments', to: '/news?category=community' },
       { code: 'CLUB', glyph: '?!', title: 'Community', detail: 'Join, participate and share', to: '/community' },
     ],
     science: [

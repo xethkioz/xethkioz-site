@@ -125,13 +125,14 @@ test.describe('navegación y estados especiales', () => {
     await expect(page).toHaveURL(/\/creacion-web$/)
 
     await page.goto('/nexus-city')
-    await expect(page).toHaveURL(/\/fun#nexus-city$/)
+    await expect(page).toHaveURL(/\/nexus-city$/)
+    await expect(page.getByText(/NEXUS CITY \/\//i).first()).toBeVisible()
   })
 
-  test('/fun conserva compatibilidad y deriva al portal Huellas del mismo origen', async ({ page }) => {
+  test('/fun conserva compatibilidad y deriva a Nexus City', async ({ page }) => {
     await page.goto('/fun')
-    await expect(page).toHaveURL(/\/mascotas\/$/)
-    await expect(page.getByRole('heading', { level: 1, name: /Huellas/i })).toBeVisible()
+    await expect(page).toHaveURL(/\/nexus-city$/)
+    await expect(page.getByText(/NEXUS CITY \/\//i).first()).toBeVisible()
   })
 
   test('una ruta inexistente muestra el estado 404', async ({ page }) => {

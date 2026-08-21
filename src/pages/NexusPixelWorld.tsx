@@ -76,7 +76,7 @@ const outfitColors: Record<string, string> = {
 const portalRoutes = {
   gaming: '/gaming',
   science: '/science',
-  fun: '/fun',
+  fun: '/nexus-city',
   home: '/',
 } as const
 

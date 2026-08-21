@@ -5,7 +5,8 @@
   "framework": "vite",
   "trailingSlash": false,
   "redirects": [
-    { "source": "/nexus-city", "destination": "/fun#nexus-city", "permanent": true },
+    { "source": "/fun", "destination": "/nexus-city", "permanent": true },
+    { "source": "/en/fun", "destination": "/en/nexus-city", "permanent": true },
     { "source": "/web-creation", "destination": "/creacion-web", "permanent": true },
     { "source": "/register", "destination": "/account", "permanent": true },
     { "source": "/admin", "destination": "/cms", "permanent": true }
@@ -20,7 +21,7 @@
     { "source": "/en/gaming", "destination": "/seo-shells/en-gaming.html" },
     { "source": "/en/science", "destination": "/seo-shells/en-science.html" },
     { "source": "/en/comicon", "destination": "/seo-shells/en-comicon.html" },
-    { "source": "/en/fun", "destination": "/seo-shells/en-fun.html" },
+    { "source": "/en/nexus-city", "destination": "/seo-shells/en-fun.html" },
     { "source": "/en/creacion-web", "destination": "/seo-shells/en-creacion-web.html" },
     { "source": "/en/community", "destination": "/seo-shells/en-community.html" },
     { "source": "/en/about", "destination": "/seo-shells/en-about.html" },
@@ -32,7 +33,7 @@
     { "source": "/gaming", "destination": "/seo-shells/gaming.html" },
     { "source": "/science", "destination": "/seo-shells/science.html" },
     { "source": "/comicon", "destination": "/seo-shells/comicon.html" },
-    { "source": "/fun", "destination": "/seo-shells/fun.html" },
+    { "source": "/nexus-city", "destination": "/seo-shells/fun.html" },
     { "source": "/news", "destination": "/seo-shells/news.html" },
     { "source": "/news/:slug", "destination": "/api/news-page?slug=:slug" },
     { "source": "/community", "destination": "/seo-shells/community.html" },
