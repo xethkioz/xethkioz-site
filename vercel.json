@@ -12,6 +12,8 @@
     { "source": "/admin", "destination": "/cms", "permanent": true }
   ],
   "rewrites": [
+    { "source": "/mascotas", "destination": "/mascotas/index.html" },
+    { "source": "/mascotas/", "destination": "/mascotas/index.html" },
     { "source": "/sitemap.xml", "destination": "/api/sitemap" },
     { "source": "/news-sitemap.xml", "destination": "/api/news-sitemap" },
     { "source": "/feed.xml", "destination": "/api/feed" },
