@@ -12,7 +12,7 @@ const statsEdge = read('supabase/functions/huellas-stats/index.ts')
 const community = read('src/lib/realtimeCommunity.ts')
 const profile = read('src/pages/ProfileHub.tsx')
 const migration = read('supabase/migrations/20260821155622_secure_public_metrics_and_activity.sql')
-const cleanup = read('supabase/post-deploy/retire_legacy_public_writes.sql')
+const cleanup = read('supabase/migrations/20260821164237_retire_legacy_public_writes.sql')
 const passwordPolicy = read('docs/SECURITY/AUTH_PASSWORD_POLICY_2026-07-23.md')
 
 check('Huellas browser uses same-origin metrics as its primary path', statsClient.includes("fetch('/api/huellas-stats'") && !statsClient.includes('/rest/v1/rpc/'))
