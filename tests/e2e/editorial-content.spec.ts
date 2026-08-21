@@ -13,6 +13,7 @@ test.describe('contenido editorial 11.0', () => {
     await page.goto('/comicon', { waitUntil: 'domcontentloaded' })
 
     await expect(page.getByRole('heading', { level: 1, name: /COMICON/i })).toBeVisible()
+    await page.getByRole('button', { name: /Cómic original/i }).first().click()
     await expect(page.getByText('Nueva entrega cada viernes')).toBeVisible()
     await expect(page.getByRole('button', { name: /02.*La ciudad detrás del código/i })).toBeEnabled()
 
@@ -20,6 +21,7 @@ test.describe('contenido editorial 11.0', () => {
     await expect(page.getByRole('region', { name: /Lector vertical.*La ciudad detrás del código/i })).toBeVisible()
     await expect(page.getByText(/La sombra reconoció esa voz/)).toBeVisible()
 
+    await page.getByRole('button', { name: /Noticias/i }).first().click()
     await expect(page.getByRole('heading', { name: /La semana Marvel del 12 de agosto/i })).toBeVisible()
     await expect(page.getByRole('link', { name: /Fuente oficial: marvel.com/i })).toHaveAttribute('href', /marvel\.com\/articles\/comics/)
   })
