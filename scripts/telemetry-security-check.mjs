@@ -11,6 +11,7 @@ const api = read('api/visit-log.ts')
 const edge = read('supabase/functions/visit-log/index.ts')
 const config = read('supabase/config.toml')
 const migration = read('supabase/migrations/20260724153500_privacy_preserving_visit_telemetry.sql')
+const retentionSchedule = read('supabase/migrations/20260823173000_maintenance_retention_and_expiry.sql')
 
 check('browser telemetry uses only the same-origin proxy', analytics.includes("const TELEMETRY_ENDPOINT = '/api/visit-log'") && !analytics.includes('/functions/v1/visit-log'))
 check('browser telemetry no longer reads public Supabase credentials', !analytics.includes('VITE_SUPABASE_URL') && !analytics.includes('VITE_SUPABASE_ANON_KEY'))
@@ -40,6 +41,8 @@ check('ingestion RPC is service-role only', migration.includes('revoke all on fu
 check('retention marker survives runtime cold starts', migration.includes("cleanup_key constant text := 'visit_log_retention_cleanup'") && migration.includes("interval '6 hours'"))
 check('retention cleanup is concurrency-safe', migration.includes('hashtextextended(cleanup_key, 0)') && migration.includes('on conflict (key) do update'))
 check('cleanup RPC is service-role only', migration.includes('revoke all on function public.xethkioz_cleanup_site_visits()') && migration.includes('grant execute on function public.xethkioz_cleanup_site_visits() to service_role'))
+check('30-day retention is scheduled and replay-safe', retentionSchedule.includes("xethkioz-site-visit-retention-30d") && retentionSchedule.includes('cron.unschedule') && retentionSchedule.includes('cron.schedule') && retentionSchedule.includes('xethkioz_cleanup_site_visits'))
+check('expired Huellas notice is resolved without deletion', retentionSchedule.includes("set status = 'resolved'") && retentionSchedule.includes("and expires_at < now()"))
 
 let failed = 0
 for (const [name, ok] of checks) {
