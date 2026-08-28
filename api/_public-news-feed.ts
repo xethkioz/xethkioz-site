@@ -1,6 +1,8 @@
 const SITE_URL = 'https://www.xethkioz.com.ar'
 const PUBLIC_SUPABASE_URL = 'https://pascicauudfyydzknoop.supabase.co'
 const PUBLIC_SUPABASE_KEY = 'sb_publishable_baha-MZOxBr-2pQGaXlcwA_edqFjj-_'
+const PUBLIC_REQUEST_TIMEOUT_MS = 4_500
+const PUBLIC_REQUEST_ATTEMPTS = 2
 
 export type FeedArticle = {
   slug: string
@@ -39,32 +41,51 @@ function requestPublicRows(url: string, key: string, query: URLSearchParams) {
     // Modern Supabase publishable keys are API keys, not JWT access tokens.
     // Sending them as Bearer tokens makes PostgREST reject an otherwise public request.
     headers: { apikey: key, Accept: 'application/json' },
+    signal: AbortSignal.timeout(PUBLIC_REQUEST_TIMEOUT_MS),
   })
 }
 
 async function resolvePublicRows<T>(query: URLSearchParams, label: string): Promise<T[]> {
   const config = getPublicSupabaseConfig()
-  let response = await requestPublicRows(config.url, config.key, query)
-  let usedFallback = false
+  const candidates = [
+    config,
+    { url: PUBLIC_SUPABASE_URL, key: PUBLIC_SUPABASE_KEY },
+  ].filter((candidate, index, list) => (
+    list.findIndex((item) => item.url === candidate.url && item.key === candidate.key) === index
+  ))
+  let lastNetworkError: unknown = null
+  let lastHttpFailure: { status: number; detail: string; usedFallback: boolean } | null = null
 
-  if (!response.ok && (config.url !== PUBLIC_SUPABASE_URL || config.key !== PUBLIC_SUPABASE_KEY)) {
-    usedFallback = true
-    response = await requestPublicRows(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_KEY, query)
+  for (const [candidateIndex, candidate] of candidates.entries()) {
+    for (let attempt = 0; attempt < PUBLIC_REQUEST_ATTEMPTS; attempt += 1) {
+      try {
+        const response = await requestPublicRows(candidate.url, candidate.key, query)
+        if (response.ok) return await response.json() as T[]
+
+        lastHttpFailure = {
+          status: response.status,
+          detail: (await response.text()).slice(0, 240),
+          usedFallback: candidateIndex > 0,
+        }
+        if (response.status < 500) break
+      } catch (error) {
+        lastNetworkError = error
+      }
+    }
   }
 
-  if (!response.ok) {
-    const detail = (await response.text()).slice(0, 240)
-    console.error(JSON.stringify({
-      level: 'error',
-      message: `${label} Supabase request failed`,
-      status: response.status,
-      usedFallback,
-      detail,
-    }))
-    return []
+  if (lastNetworkError) {
+    throw new Error(`${label.toUpperCase().replace(/-/g, '_')}_NETWORK_UNAVAILABLE`, { cause: lastNetworkError })
   }
 
-  return await response.json() as T[]
+  console.error(JSON.stringify({
+    level: 'error',
+    message: `${label} Supabase request failed`,
+    status: lastHttpFailure?.status ?? 503,
+    usedFallback: lastHttpFailure?.usedFallback ?? false,
+    detail: lastHttpFailure?.detail ?? 'No response received.',
+  }))
+  return []
 }
 
 export async function fetchFeedArticles(limit = 1000): Promise<FeedArticle[]> {
