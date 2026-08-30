@@ -13,6 +13,23 @@ function firstHeader(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value
 }
 
+function trustedShellOrigin(rawOrigin: string | undefined) {
+  if (!rawOrigin) return null
+  try {
+    const candidate = rawOrigin.includes('://') ? rawOrigin : `https://${rawOrigin}`
+    const url = new URL(candidate)
+    const hostname = url.hostname.toLowerCase()
+    const local = hostname === 'localhost' || hostname === '127.0.0.1'
+    const xethkiozHost = hostname === 'xethkioz.com.ar' || hostname === 'www.xethkioz.com.ar'
+    const vercelHost = hostname === 'xethkioz-site.vercel.app'
+      || /^xethkioz-site-[a-z0-9-]+-xethkioz-site\.vercel\.app$/i.test(hostname)
+    if ((!local && url.protocol !== 'https:') || (!local && !xethkiozHost && !vercelHost)) return null
+    return url.origin
+  } catch {
+    return null
+  }
+}
+
 function requestQueryValue(request: any, key: string) {
   const rawUrl = typeof request.url === 'string' ? request.url : '/'
   try {
@@ -51,24 +68,34 @@ function replaceRequired(html: string, pattern: RegExp, replacement: string, lab
 function requestOrigin(request: any) {
   const host = firstHeader(request.headers?.['x-forwarded-host']) || firstHeader(request.headers?.host)
   const protocol = firstHeader(request.headers?.['x-forwarded-proto']) || 'https'
-  return host ? `${protocol}://${host}` : SITE_URL
+  return trustedShellOrigin(host ? `${protocol}://${host}` : undefined)
+}
+
+function shellOrigins(request: any) {
+  return [...new Set([
+    trustedShellOrigin(process.env.VERCEL_URL),
+    trustedShellOrigin(process.env.VERCEL_PROJECT_PRODUCTION_URL),
+    requestOrigin(request),
+    SITE_URL,
+  ].filter((origin): origin is string => Boolean(origin)))]
 }
 
 async function fetchStaticNewsShell(request: any) {
   const cookie = firstHeader(request.headers?.cookie)
   const protectionBypass = firstHeader(request.headers?.['x-vercel-protection-bypass'])
-  const headers: Record<string, string> = {
-    Accept: 'text/html',
-    'User-Agent': 'XETHKIOZ-Article-Shell/1.0',
-  }
-  if (cookie) headers.Cookie = cookie
-  if (protectionBypass) headers['x-vercel-protection-bypass'] = protectionBypass
-
-  const origins = [...new Set([requestOrigin(request), SITE_URL])]
+  const incomingOrigin = requestOrigin(request)
   let lastError: unknown = null
 
-  for (const origin of origins) {
+  for (const origin of shellOrigins(request)) {
     try {
+      const headers: Record<string, string> = {
+        Accept: 'text/html',
+        'User-Agent': 'XETHKIOZ-Article-Shell/1.1',
+      }
+      if (cookie && origin === incomingOrigin) headers.Cookie = cookie
+      if (protectionBypass && origin.endsWith('.vercel.app')) {
+        headers['x-vercel-protection-bypass'] = protectionBypass
+      }
       const response = await fetch(`${origin}/seo-shells/news.html`, {
         headers,
         redirect: 'follow',

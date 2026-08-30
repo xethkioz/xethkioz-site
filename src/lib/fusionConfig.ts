@@ -1,5 +1,5 @@
-export const FUSION_VERSION = '11.1.1'
-export const FUSION_LABEL = 'XETHKIOZ 11.1.1'
+export const FUSION_VERSION = '11.1.2'
+export const FUSION_LABEL = 'XETHKIOZ 11.1.2'
 export const FUSION_STAGE = 'Adaptive performance · stable'
 
 export const PUBLIC_ROUTES = [
