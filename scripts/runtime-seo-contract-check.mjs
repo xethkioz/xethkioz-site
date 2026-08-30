@@ -28,8 +28,10 @@ assert(rewriteMap.get('/nexus-city') === '/seo-shells/fun.html', 'Nexus City mus
 assert(rewriteMap.get('/en/nexus-city') === '/seo-shells/en-fun.html', 'English Nexus City must have a localized SEO shell.')
 assert(sitemap.includes("es: '/nexus-city', en: '/en/nexus-city'"), 'Nexus City and its English counterpart must remain in the sitemap.')
 assert(seoShells.includes("path: '/nexus-city'") && seoShells.includes("path: '/en/nexus-city'"), 'Nexus City must generate standalone localized SEO shells.')
-assert(rewriteMap.get('/green-node') === '/index.html', 'Green Node Protect must resolve as a public SPA route.')
+assert(rewriteMap.get('/green-node') === '/seo-shells/green-node.html', 'Green Node Protect must use its dedicated public SEO shell.')
 assert(rewriteMap.get('/green-node/vault') === '/private.html', 'Green Node Vault 13 must resolve through the private noindex shell.')
+assert(sitemap.includes("path: '/green-node'"), 'Green Node Protect must remain discoverable in the sitemap.')
+assert(seoShells.includes("file: 'green-node.html'") && seoShells.includes("path: '/green-node'"), 'Green Node Protect must generate a dedicated SEO shell.')
 assert(rewriteMap.get('/news/:slug') === '/api/news-page?slug=:slug', 'Article routes must preserve the slug query for the dynamic SEO shell.')
 assert(newsPage.includes("new URL(rawUrl, 'http://localhost').searchParams.get(key)"), 'The article SEO shell must parse its slug with the WHATWG URL API.')
 assert(!newsPage.includes('request.query'), 'The article SEO shell must not access Vercel request.query because legacy runtimes invoke url.parse().')
@@ -85,4 +87,4 @@ if (issues.length) {
   process.exit(1)
 }
 
-console.log('PASS runtime/SEO contracts: public Green Node Protect, private Vault 13, real 404, article WHATWG query parsing, deep links, redirects, passport privacy, enforced CSP, streams RLS/indexes and telemetry hygiene.')
+console.log('PASS runtime/SEO contracts: indexable Green Node Protect, private Vault 13, real 404, article WHATWG query parsing, deep links, redirects, passport privacy, enforced CSP, streams RLS/indexes and telemetry hygiene.')
