@@ -45,7 +45,7 @@
     { "source": "/privacy", "destination": "/seo-shells/privacy.html" },
     { "source": "/editorial-policy", "destination": "/seo-shells/editorial-policy.html" },
     { "source": "/creacion-web", "destination": "/creacion-web.html" },
-    { "source": "/green-node", "destination": "/index.html" },
+    { "source": "/green-node", "destination": "/seo-shells/green-node.html" },
     { "source": "/green-node/vault", "destination": "/private.html" },
     { "source": "/nexus-city/u/:handle", "destination": "/index.html" },
     { "source": "/nexus-city/room/xethkioz", "destination": "/index.html" },
