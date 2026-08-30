@@ -32,6 +32,7 @@ const ScienceLab = lazy(() => import('./pages/ScienceLab'))
 const ComicUniverse = lazy(() => import('./pages/ComicUniverse'))
 const FunPortal = lazy(() => import('./pages/FunPortal'))
 const WebCreation = lazy(() => import('./pages/WebCreation'))
+const GreenNodeHub = lazy(() => import('./pages/GreenNodeHub'))
 const GreenNode = lazy(() => import('./pages/GreenNode'))
 const ProfileHub = lazy(() => import('./pages/ProfileHub'))
 const NexusPassport = lazy(() => import('./pages/NexusPassport'))
@@ -67,7 +68,13 @@ const EditorialPolicy = lazy(() => import('./pages/EditorialPolicy'))
 
 function GreenNodeGate() {
   const unlocked = typeof window !== 'undefined' && Boolean(window.sessionStorage.getItem(GREEN_NODE_UNLOCK_KEY))
-  return unlocked ? <GreenNode /> : <Navigate to="/" replace />
+  return unlocked ? <GreenNode /> : <Navigate to="/green-node" replace />
+}
+
+function GreenNodeEntry() {
+  const location = useLocation()
+  const legacyVaultView = new URLSearchParams(location.search).has('view')
+  return legacyVaultView ? <GreenNodeGate /> : <GreenNodeHub />
 }
 
 function RouteFallback() {
@@ -94,7 +101,8 @@ const routeNames = {
     '/comicon': 'Universo COMICON',
     '/fun': 'Nexus City',
     '/creacion-web': 'Creación web',
-    '/green-node': 'Green Node',
+    '/green-node': 'Green Node Protect',
+    '/green-node/vault': 'Green Node Vault 13',
     '/news': 'Noticias',
     '/community': 'Comunidad',
     '/nexus-city': 'Nexus City',
@@ -118,7 +126,8 @@ const routeNames = {
     '/comicon': 'COMICON Universe',
     '/fun': 'Nexus City',
     '/creacion-web': 'Web creation',
-    '/green-node': 'Green Node',
+    '/green-node': 'Green Node Protect',
+    '/green-node/vault': 'Green Node Vault 13',
     '/news': 'News',
     '/community': 'Community',
     '/nexus-city': 'Nexus City',
@@ -136,7 +145,7 @@ const routeNames = {
   },
 } as const
 
-const activityTrackedPortals = new Set(['/gaming', '/science', '/comicon', '/creacion-web', '/green-node', '/nexus-city'])
+const activityTrackedPortals = new Set(['/gaming', '/science', '/comicon', '/creacion-web', '/green-node', '/green-node/vault', '/nexus-city'])
 
 function RouteAccessibility({ pathname }: { pathname: string }) {
   const { lang } = useLang()
@@ -251,7 +260,8 @@ function AppShell() {
               <Route path="/en/editorial-policy" element={<EditorialPolicy />} />
 
               <Route path="/web-creation" element={<Navigate to="/creacion-web" replace />} />
-              <Route path="/green-node" element={<GreenNodeGate />} />
+              <Route path="/green-node" element={<GreenNodeEntry />} />
+              <Route path="/green-node/vault" element={<GreenNodeGate />} />
               <Route path="/news" element={<News />} />
               <Route path="/news/:slug" element={<NewsArticle />} />
               <Route path="/nexus-city" element={<FunPortal />} />
