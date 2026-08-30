@@ -25,6 +25,7 @@ const localizedRoutes: LocalizedRoute[] = [
 
 const spanishOnlyRoutes = [
   { path: '/news', changefreq: 'daily', priority: '0.9' },
+  { path: '/green-node', changefreq: 'weekly', priority: '0.8' },
 ]
 
 function alternateLinks(route: LocalizedRoute) {
