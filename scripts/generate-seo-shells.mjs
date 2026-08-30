@@ -53,6 +53,16 @@ const spanishRoutes = [
     imageAlt: 'Portal Chaos Alley de XETHKIOZ',
   },
   {
+    file: 'green-node.html',
+    path: '/green-node',
+    title: 'Green Node Protect | Seguridad, privacidad e Internet SOS | XETHKIOZ',
+    description: 'Herramientas locales, guías de seguridad digital, privacidad, Linux y alertas verificadas. Green Node Protect ayuda a entender riesgos y actuar sin alarmismo.',
+    keywords: 'seguridad digital, privacidad, phishing, Linux, Internet SOS, SHA-256, passkeys, Green Node, XETHKIOZ',
+    image: '/assets/identity/green-node-occult-malware-v1.webp',
+    imageAlt: 'Green Node Protect de XETHKIOZ',
+    localized: false,
+  },
+  {
     file: 'news.html',
     path: '/news',
     title: 'Noticias de gaming, tecnología e IA | XETHKIOZ',
