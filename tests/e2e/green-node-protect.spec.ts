@@ -4,7 +4,7 @@ import { expect, test } from '@playwright/test'
 test.describe('Green Node Protect público y local-first', () => {
   test('abre sin sesión y mantiene Vault 13 separado', async ({ page }) => {
     await page.goto('/')
-    await expect(page.getByRole('link', { name: 'ABRIR PROTECT: GREEN NODE PROTECT' })).toHaveAttribute('href', '/green-node')
+    await expect(page.locator('a.xk-rb-destination[href="/green-node"]')).toHaveAttribute('href', '/green-node')
 
     await page.goto('/green-node')
 
