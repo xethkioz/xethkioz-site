@@ -19,6 +19,7 @@ const check = (name, ok) => checks.push([name, Boolean(ok)])
 check('Nexus links preserve localized routes', district.includes('const { lang, localizePath } = useLang()') && district.includes('to={localizePath(item.to)}'))
 check('Science district prioritizes sourced news', district.indexOf("title: 'Noticias con fuentes'") < district.indexOf("title: 'Herramientas y respuestas'"))
 check('Home exposes four public primary portals', home.includes("id: 'comicon'") && home.includes('4 PORTALES PRINCIPALES ACTIVOS') && !district.includes("title: 'Green Node', detail: 'Archivos"))
+check('Home links directly to public Green Node Protect and keeps Vault classified', home.includes("title: 'GREEN NODE PROTECT'") && home.includes("action: 'ABRIR PROTECT'") && !home.includes('El Archivo Negro permanece oculto'))
 check('Home exposes an ordered six-section index', home.includes('xk-rb-section-map') && home.includes("label: 'Guías'") && home.includes("href: '#contact'"))
 check('Home content shortcuts avoid duplicated portal destinations', district.includes("title: 'Guías Gaming'") && district.includes("to: '/gaming/guides'") && district.includes("title: 'Noticias'") && district.includes("title: 'Comunidad'"))
 check('Home defers non-essential portal artwork', home.includes("portal.id === 'gaming' || portal.id === 'pets'") && home.includes("loading={isImmediate ? 'eager' : 'lazy'}"))
@@ -56,7 +57,7 @@ check('Science localizes translated assistant and home links', science.includes(
 
 check('Browser tests cover ordered Home content and editorial radar', browserTest.includes('ordena guías, noticias y comunidad') && browserTest.includes('data-home-recent-radar'))
 check('Browser tests cover streamlined and styled localized Gaming hierarchy', browserTest.includes('una sola navegación antes del contenido') && browserTest.includes("toHaveCSS('display', 'grid')") && browserTest.includes('Especificaciones en verificación'))
-check('Browser tests cover the streamlined Green Node entry', browserTest.includes('Green Node evita navegación duplicada'))
+check('Browser tests cover the public Green Node Protect entry', browserTest.includes('Green Node Protect evita navegación duplicada'))
 check('Browser tests cover content-first Science order', browserTest.includes('radar verificable antes de módulos secundarios') && browserTest.includes('compareDocumentPosition'))
 check('Browser tests cover distinct Science learning destinations', browserTest.includes('destino distinto y concreto') && browserTest.includes("'#tech-stack'"))
 

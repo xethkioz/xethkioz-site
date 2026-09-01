@@ -6,7 +6,7 @@ test('la guía WISP de Green Node permanece estable y abre por interacción', as
     window.localStorage.setItem('xethkioz.green-node.wisp-guide.v1', 'complete')
   })
 
-  await page.goto('/green-node', { waitUntil: 'domcontentloaded' })
+  await page.goto('/green-node/vault', { waitUntil: 'domcontentloaded' })
 
   const launcher = page.locator('.xk-wisp-guide-launcher')
   const guide = page.locator('.xk-wisp-guide')

@@ -1,6 +1,6 @@
-export const FUSION_VERSION = '11.1.2'
-export const FUSION_LABEL = 'XETHKIOZ 11.1.2'
-export const FUSION_STAGE = 'Adaptive performance · stable'
+export const FUSION_VERSION = '11.2.0'
+export const FUSION_LABEL = 'XETHKIOZ 11.2.0'
+export const FUSION_STAGE = 'Green Node Protect · stable'
 
 export const PUBLIC_ROUTES = [
   { path: '/', name: 'Home', status: 'public-core', owner: 'core' },
@@ -9,7 +9,8 @@ export const PUBLIC_ROUTES = [
   { path: '/nexus-city', name: 'Nexus City', status: 'public-social-alpha', owner: 'community' },
   { path: '/mascotas/', name: 'Huellas de Puan', status: 'public-community-service', owner: 'community' },
   { path: '/creacion-web', name: 'Creación Web', status: 'public-service', owner: 'commercial' },
-  { path: '/green-node', name: 'Green Node', status: 'hidden-portal', owner: 'wisp' },
+  { path: '/green-node', name: 'Green Node Protect', status: 'public-portal', owner: 'wisp' },
+  { path: '/green-node/vault', name: 'Green Node Vault 13', status: 'private-portal', owner: 'wisp' },
   { path: '/news', name: 'News Engine', status: 'preview-module', owner: 'content' },
   { path: '/community', name: 'Community Engine', status: 'preview-module', owner: 'community' },
   { path: '/profile', name: 'Profile Hub', status: 'preview-module', owner: 'community' },

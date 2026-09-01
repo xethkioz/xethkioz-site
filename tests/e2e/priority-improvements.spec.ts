@@ -47,7 +47,7 @@ test.describe('mejoras priorizadas de experiencia', () => {
 
   test('Green Node acorta la primera entrada y no la repite en la sesión', async ({ page }) => {
     await page.addInitScript(() => window.sessionStorage.setItem('xethkioz.greenNodeUnlocked', String(Date.now())))
-    await page.goto('/green-node', { waitUntil: 'domcontentloaded' })
+    await page.goto('/green-node/vault', { waitUntil: 'domcontentloaded' })
 
     const intro = page.locator('.xk-green-access-sequence')
     await expect(intro).toBeVisible()

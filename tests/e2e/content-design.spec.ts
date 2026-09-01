@@ -44,15 +44,17 @@ test.describe('orden y navegación de secciones', () => {
     await expect(page.getByRole('link', { name: /Abrir biblioteca/i })).toHaveAttribute('href', '/gaming/guides')
   })
 
-  test('Green Node evita navegación duplicada y conserva sus cuatro secciones', async ({ page }) => {
-    await page.goto('/')
-    await page.evaluate(() => window.sessionStorage.setItem('xethkioz.greenNodeUnlocked', String(Date.now())))
+  test('Green Node Protect evita navegación duplicada y separa sus cuatro zonas', async ({ page }) => {
     await page.goto('/green-node')
 
     await expect(page.locator('.xk-nexus-district.is-green')).toHaveCount(0)
-    const navigation = page.getByRole('navigation', { name: 'Elegir sección de Green Node' })
+    const navigation = page.getByRole('navigation', { name: 'Zonas de Green Node' })
     await expect(navigation).toBeVisible()
-    await expect(navigation.getByRole('button')).toHaveCount(4)
+    await expect(navigation.getByRole('link')).toHaveCount(3)
+    await expect(navigation.getByRole('button', { name: /VAULT/i })).toHaveCount(1)
+    await expect(page.locator('#protect')).toBeVisible()
+    await expect(page.locator('#radar')).toBeVisible()
+    await expect(page.locator('#lab')).toBeVisible()
   })
 
   test('Science muestra el radar verificable antes de módulos secundarios', async ({ page }) => {
