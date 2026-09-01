@@ -51,7 +51,7 @@ export default function LinkAuditPanel() {
       <div className="mt-5 rounded-xl border border-neon/20 bg-neon/5 p-4">
         <h3 className="font-display text-neon">Regla LIVE</h3>
         <p className="mt-2 text-sm leading-relaxed text-gray-300">
-          Antes de hacer merge a main, cada botón visible debe apuntar a una ruta interna existente o a una red confirmada. Green Node queda como acceso especial: existe ruta directa, pero la experiencia principal debe ser el Wisp.
+          Antes de hacer merge a main, cada botón visible debe apuntar a una ruta interna existente o a una red confirmada. Green Node Protect tiene acceso público directo; Wisp conserva la transición visual y Vault 13 mantiene su entrada clasificada.
         </p>
       </div>
     </section>

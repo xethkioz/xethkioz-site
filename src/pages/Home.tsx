@@ -164,10 +164,10 @@ const copy = {
       },
       {
         id: 'green',
-        code: 'XK-13 // SEÑAL INFECTADA',
-        title: 'GREEN NODE',
-        text: 'El Archivo Negro permanece oculto hasta que Wisp abra el acceso.',
-        action: 'INTERCEPTAR SEÑAL',
+        code: 'XK-13 // PROTECCIÓN PÚBLICA',
+        title: 'GREEN NODE PROTECT',
+        text: 'Herramientas locales, guías y alertas verificadas. Vault 13 conserva por separado el archivo clasificado.',
+        action: 'ABRIR PROTECT',
         route: '/green-node',
         image: '/assets/identity/green-node-occult-malware-v1.webp',
         tone: '#32ff8a',
@@ -288,10 +288,10 @@ const copy = {
       },
       {
         id: 'green',
-        code: 'XK-13 // INFECTED SIGNAL',
-        title: 'GREEN NODE',
-        text: 'The Black Archive stays hidden until Wisp opens the access point.',
-        action: 'INTERCEPT SIGNAL',
+        code: 'XK-13 // PUBLIC PROTECTION',
+        title: 'GREEN NODE PROTECT',
+        text: 'Local tools, practical guides and verified alerts. Vault 13 keeps the classified archive separate.',
+        action: 'OPEN PROTECT',
         route: '/green-node',
         image: '/assets/identity/green-node-occult-malware-v1.webp',
         tone: '#32ff8a',
@@ -510,7 +510,7 @@ export default function Home() {
 
             <div className="xk-rb-destinations">
               {t.destinations.map((destination) => (
-                <Destination key={destination.id} destination={destination} onOpenWisp={openWisp} />
+                <Destination key={destination.id} destination={destination} />
               ))}
             </div>
           </section>
@@ -618,7 +618,7 @@ function PrimaryPortal({ portal }: { portal: PortalCard }) {
   return <Link {...commonProps} to={localizePath(portal.route)}>{content}</Link>
 }
 
-function Destination({ destination, onOpenWisp }: { destination: DestinationCard; onOpenWisp: () => void }) {
+function Destination({ destination }: { destination: DestinationCard }) {
   const { localizePath } = useLang()
   const content = (
     <>
@@ -640,14 +640,6 @@ function Destination({ destination, onOpenWisp }: { destination: DestinationCard
   )
 
   const style = { '--tone': destination.tone } as CSSProperties
-
-  if (destination.id === 'green') {
-    return (
-      <button type="button" className="xk-rb-destination" style={style} onClick={onOpenWisp}>
-        {content}
-      </button>
-    )
-  }
 
   return <Link to={localizePath(destination.route)} className="xk-rb-destination" style={style}>{content}</Link>
 }
