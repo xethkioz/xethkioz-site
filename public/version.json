@@ -1,17 +1,17 @@
 {
-  "version": "11.1.2",
-  "label": "Adaptive Performance",
+  "version": "11.2.0",
+  "label": "Green Node Protect",
   "stage": "stable",
   "channel": "v11",
-  "codename": "XETHKIOZ Web 11.1.2",
-  "buildDate": "2026-08-28",
+  "codename": "XETHKIOZ Web 11.2.0",
+  "buildDate": "2026-09-01",
   "sourcePackage": "xethkioz-site",
   "validation": {
     "localDeployCheck": "PASS",
     "productionReadyAudit": "PASS",
     "viteBuild": "PASS",
     "npmAudit": "0 vulnerabilities",
-    "modulesTransformed": 277,
+    "modulesTransformed": 286,
     "vercelPreview": "READY"
   }
 }

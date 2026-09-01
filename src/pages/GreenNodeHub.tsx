@@ -9,16 +9,16 @@ import './GreenNodeHub.css'
 
 const quickHelp = {
   es: [
-    { code: 'PHISH', title: '¿Este mensaje es una estafa?', text: 'Aprendé a separar logo, remitente, enlace y dominio real antes de ingresar datos.', href: '/news' },
-    { code: 'PHONE', title: 'Perdí o me robaron el celular', text: 'Orden de recuperación: localizar, bloquear, proteger cuentas, línea, sesiones y evidencia.', href: '/news' },
-    { code: 'ACCOUNT', title: 'Creo que entraron a una cuenta', text: 'Priorizá correo principal, cierre de sesiones, cambio de credenciales y segundo factor.', href: '/news' },
-    { code: 'WIFI', title: 'Estoy usando Wi-Fi público', text: 'Reducí exposición: HTTPS, actualizaciones, compartir desactivado y operaciones sensibles postergadas.', href: '/news' },
+    { code: 'PHISH', title: '¿Este mensaje es una estafa?', text: 'Aprendé a separar logo, remitente, enlace y dominio real antes de ingresar datos.', href: '/news?category=green' },
+    { code: 'PHONE', title: 'Perdí o me robaron el celular', text: 'Orden de recuperación: localizar, bloquear, proteger cuentas, línea, sesiones y evidencia.', href: '/news?category=green' },
+    { code: 'ACCOUNT', title: 'Creo que entraron a una cuenta', text: 'Priorizá correo principal, cierre de sesiones, cambio de credenciales y segundo factor.', href: '/news?category=green' },
+    { code: 'WIFI', title: 'Estoy usando Wi-Fi público', text: 'Reducí exposición: HTTPS, actualizaciones, compartir desactivado y operaciones sensibles postergadas.', href: '/news?category=green' },
   ],
   en: [
-    { code: 'PHISH', title: 'Is this message a scam?', text: 'Separate branding, sender, link and real domain before entering any data.', href: '/news' },
-    { code: 'PHONE', title: 'My phone is lost or stolen', text: 'Recovery order: locate, lock, protect accounts, SIM, sessions and evidence.', href: '/news' },
-    { code: 'ACCOUNT', title: 'I think someone accessed my account', text: 'Prioritize your main email, revoke sessions, change credentials and renew MFA.', href: '/news' },
-    { code: 'WIFI', title: 'I am using public Wi-Fi', text: 'Reduce exposure: HTTPS, updates, sharing off and sensitive operations postponed.', href: '/news' },
+    { code: 'PHISH', title: 'Is this message a scam?', text: 'Separate branding, sender, link and real domain before entering any data.', href: '/news?category=green' },
+    { code: 'PHONE', title: 'My phone is lost or stolen', text: 'Recovery order: locate, lock, protect accounts, SIM, sessions and evidence.', href: '/news?category=green' },
+    { code: 'ACCOUNT', title: 'I think someone accessed my account', text: 'Prioritize your main email, revoke sessions, change credentials and renew MFA.', href: '/news?category=green' },
+    { code: 'WIFI', title: 'I am using public Wi-Fi', text: 'Reduce exposure: HTTPS, updates, sharing off and sensitive operations postponed.', href: '/news?category=green' },
   ],
 } as const
 
@@ -106,7 +106,7 @@ export default function GreenNodeHub() {
           </section>
 
           <section id="radar" className="xk-gn2-section" aria-labelledby="radar-title">
-            <div className="xk-gn2-section-head"><div><p>02 // SECURITY RADAR</p><h2 id="radar-title">{es ? 'Qué cambió y qué tenés que hacer.' : 'What changed and what you need to do.'}</h2></div><Link to="/news">{es ? 'VER NEWS RADAR →' : 'OPEN NEWS RADAR →'}</Link></div>
+            <div className="xk-gn2-section-head"><div><p>02 // SECURITY RADAR</p><h2 id="radar-title">{es ? 'Qué cambió y qué tenés que hacer.' : 'What changed and what you need to do.'}</h2></div><Link to="/news?category=green">{es ? 'VER NEWS RADAR →' : 'OPEN NEWS RADAR →'}</Link></div>
             {loading ? <p className="xk-gn2-loading">{es ? 'Sincronizando señales verificadas…' : 'Syncing verified signals…'}</p> : null}
             {!loading && radar.length === 0 ? <p className="xk-gn2-loading">{es ? 'No hay intercepciones publicadas en este momento.' : 'No published interceptions right now.'}</p> : null}
             <div className="xk-gn2-radar-grid">

@@ -56,7 +56,7 @@ check('Science localizes translated assistant and home links', science.includes(
 
 check('Browser tests cover ordered Home content and editorial radar', browserTest.includes('ordena guías, noticias y comunidad') && browserTest.includes('data-home-recent-radar'))
 check('Browser tests cover streamlined and styled localized Gaming hierarchy', browserTest.includes('una sola navegación antes del contenido') && browserTest.includes("toHaveCSS('display', 'grid')") && browserTest.includes('Especificaciones en verificación'))
-check('Browser tests cover the streamlined Green Node entry', browserTest.includes('Green Node evita navegación duplicada'))
+check('Browser tests cover the public Green Node Protect entry', browserTest.includes('Green Node Protect evita navegación duplicada'))
 check('Browser tests cover content-first Science order', browserTest.includes('radar verificable antes de módulos secundarios') && browserTest.includes('compareDocumentPosition'))
 check('Browser tests cover distinct Science learning destinations', browserTest.includes('destino distinto y concreto') && browserTest.includes("'#tech-stack'"))
 

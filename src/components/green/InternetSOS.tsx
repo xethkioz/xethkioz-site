@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 type UrlSignal = {
   level: 'ok' | 'info' | 'warn'
@@ -118,7 +118,7 @@ export default function InternetSOS() {
   const [hashing, setHashing] = useState(false)
   const [recoveryDone, setRecoveryDone] = useState<string[]>([])
 
-  const normalizedExpected = useMemo(() => expectedHash.trim().toLowerCase().replace(/^sha256:/, '').replace(/\s+/g, ''), [expectedHash])
+  const normalizedExpected = expectedHash.trim().toLowerCase().replace(/^sha256:/, '').replace(/\s+/g, '')
   const hashesMatch = hashValue && /^[a-f0-9]{64}$/.test(normalizedExpected) ? hashValue === normalizedExpected : null
   const recoveryPercent = Math.round((recoveryDone.length / RECOVERY_STEPS.length) * 100)
 

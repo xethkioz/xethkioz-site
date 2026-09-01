@@ -1,6 +1,6 @@
-export const SITE_VERSION = 'v11.1.2'
-export const SITE_RELEASE = 'Adaptive Performance Release'
-export const SITE_BUILD_DATE = '2026-08-28'
+export const SITE_VERSION = 'v11.2.0'
+export const SITE_RELEASE = 'Green Node Protect Release'
+export const SITE_BUILD_DATE = '2026-09-01'
 export const SITE_DOMAIN = 'https://xethkioz.com.ar'
 
 export const DONATION_LINKS = {

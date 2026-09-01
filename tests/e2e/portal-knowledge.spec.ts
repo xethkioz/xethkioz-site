@@ -4,7 +4,7 @@ const portals = [
   ['/gaming', 'gaming'],
   ['/science', 'science'],
   ['/comicon', 'comicon'],
-  ['/green-node', 'green'],
+  ['/green-node/vault', 'green'],
   ['/mascotas/', 'pets'],
   ['/creacion-web', 'web'],
   ['/nexus-city', 'nexus'],
