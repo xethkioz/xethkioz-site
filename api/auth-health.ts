@@ -15,7 +15,7 @@ export default function handler(_request: any, response: any) {
     release: '11.0.0',
     supabasePublicConfigReady: publicConfigReady,
     visitLoggingConfigured: supabaseUrlReady,
-    visitLoggingBackend: serviceRoleReady ? 'vercel' : 'supabase-edge',
+    visitLoggingBackend: serviceRoleReady ? (process.env.XETHKIOZ_SERVER_RUNTIME || 'vercel') : 'supabase-edge',
     serverRecoveryAvailable:
       serviceRoleReady &&
       hasValue(process.env.XETHKIOZ_ADMIN_RECOVERY_TOKEN),

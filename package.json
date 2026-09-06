@@ -63,7 +63,13 @@
     "audit:package-clean": "XETHKIOZ_STRICT_PACKAGE_AUDIT=1 node scripts/production-ready-check.mjs",
     "typecheck": "tsc -b --pretty false && tsc -p tsconfig.api.json --pretty false",
     "verify": "npm run audit:env && npm run audit:production-ready && npm run build",
-    "ci:check": "npm ci && npm run deploy:check"
+    "ci:check": "npm ci && npm run deploy:check",
+    "build:cloudflare": "node scripts/build-cloudflare.mjs",
+    "typecheck:cloudflare": "tsc -p cloudflare/tsconfig.json --pretty false",
+    "check:cloudflare": "npm run typecheck:cloudflare && npm run build:cloudflare && wrangler deploy --dry-run --outdir .cloudflare-build && npm run test:cloudflare",
+    "dev:cloudflare": "wrangler dev --local",
+    "deploy:cloudflare": "npm run check:cloudflare && wrangler deploy",
+    "test:cloudflare": "node scripts/test-cloudflare.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.7",
@@ -83,9 +89,11 @@
     "@vitejs/plugin-react": "^6.0.3",
     "autoprefixer": "^10.5.4",
     "esbuild": "^0.28.1",
+    "miniflare": "5.20260903.0-alpha",
     "postcss": "^8.5.26",
     "tailwindcss": "^3.4.10",
     "typescript": "^5.5.3",
-    "vite": "^8.1.5"
+    "vite": "^8.1.5",
+    "wrangler": "4.129.0"
   }
 }

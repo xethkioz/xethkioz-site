@@ -1,0 +1,24 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "xethkioz-site",
+  "main": "cloudflare/worker.ts",
+  "compatibility_date": "2026-09-06",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "preview_urls": true,
+  "send_metrics": false,
+  "assets": {
+    "directory": "./dist-cloudflare",
+    "binding": "ASSETS",
+    "html_handling": "none",
+    "not_found_handling": "none",
+    "run_worker_first": ["/api/*", "/news/*", "/sitemap.xml", "/news-sitemap.xml", "/feed.xml"]
+  },
+  "vars": {
+    "SUPABASE_URL": "https://pascicauudfyydzknoop.supabase.co",
+    "SUPABASE_ANON_KEY": "sb_publishable_baha-MZOxBr-2pQGaXlcwA_edqFjj-_",
+    "XETHKIOZ_SITE_URL": "https://www.xethkioz.com.ar",
+    "XETHKIOZ_SERVER_RUNTIME": "cloudflare"
+  },
+  "observability": { "enabled": false }
+}
