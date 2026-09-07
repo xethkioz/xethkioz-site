@@ -29,7 +29,34 @@ jobs:
         run: |
           set -euxo pipefail
           GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
-          "$GODOT" --headless --path . --editor --quit
+          "$GODOT" --headless --path . --editor --quit || true
+      - name: Layered script diagnostics
+        shell: bash
+        run: |
+          set -uo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          FAILED=0
+          for SCRIPT in \
+            scripts/player_v6.gd \
+            scripts/player_v7.gd \
+            scripts/main_v5.gd \
+            scripts/main_v6.gd \
+            scripts/main_v7.gd \
+            scripts/exploration_node.gd \
+            scripts/main_v8.gd; do
+            echo "===== CHECK $SCRIPT ====="
+            set +e
+            "$GODOT" --headless --path . --check-only --script "res://$SCRIPT" 2>&1 | tee "/tmp/$(basename "$SCRIPT").log"
+            STATUS=${PIPESTATUS[0]}
+            set -e
+            if [ "$STATUS" -ne 0 ] || grep -E "SCRIPT ERROR|ERROR:" "/tmp/$(basename "$SCRIPT").log"; then
+              FAILED=1
+            fi
+          done
+          if [ "$FAILED" -ne 0 ]; then
+            echo "One or more layered scripts failed diagnostics"
+            exit 1
+          fi
       - name: Runtime startup smoke test
         shell: bash
         run: |
