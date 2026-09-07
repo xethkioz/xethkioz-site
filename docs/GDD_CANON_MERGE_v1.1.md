@@ -1,17 +1,22 @@
-# Mundo de Xethkioz — Canon Fusionado v1.1
+# Mundo de Xethkioz — Canon Fusionado v1.2
 
-Este documento fusiona el GDD v1.0 original con la implementación jugable v0.3 de World of Xethkioz.
+Este documento fusiona el GDD v1.0 original con la implementación jugable actual de World of Xethkioz.
 
 ## Premisa
 Argentina, año 2150. La Fisura Prismática desgarra la región pampeana y superpone el mundo tecnológico futuro con Izrdralar, una dimensión primigenia de magia, naturaleza y espíritus. El jugador crea su propio Viajero y acompaña a los cuatro hermanos Ashley, Fermín, Isabella y Gael mientras reúnen poder para alcanzar Xiomalar y comprender la corrupción que afecta a Xethkioz.
 
+## Canon familiar bloqueado
+- Ashley — femenino — hermana — Bardo — soporte, control y buffs.
+- Fermín — masculino — hermano — Guerrero — tanque y fuerza bruta.
+- Gael — masculino — hermano — Arquero — ataque a distancia y trampas.
+- Isabella — femenino — hermana — Bruja del Caos — daño mágico en área y debuffs.
+- Alexis — masculino — padre de Ashley, Fermín, Gael e Isabella.
+- Elida — femenino — abuela de los cuatro hermanos.
+
+Estos géneros y relaciones deben conservarse de forma consistente en diálogos, retratos, sprites, animaciones, descripciones, cinemáticas y material promocional.
+
 ## Rol de los cuatro hermanos
 Los hermanos no son avatares obligatorios del jugador: son mentores de clase y protagonistas narrativos.
-
-- Ashley — Bardo — soporte, control y buffs.
-- Fermín — Guerrero — tanque y fuerza bruta.
-- Isabella — Brujo del Caos — daño mágico en área y debuffs.
-- Gael — Arquero — ataque a distancia y trampas.
 
 Mapas 1-5: tutorial narrativo y convivencia con las cuatro sendas. Tras derrotar al primer jefe en el mapa 5, el Viajero elige un mentor. La elección habilita las tres habilidades de clase.
 
