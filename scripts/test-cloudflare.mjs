@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import { readFileSync, readdirSync } from 'node:fs'
 import { Miniflare, Response, convertV4MiniflareOptions } from 'miniflare'
+import { verifyCloudflarePreview } from './smoke-cloudflare.mjs'
 
 const config = JSON.parse(readFileSync('wrangler.json', 'utf8'))
 const routes = JSON.parse(readFileSync('vercel.json', 'utf8'))
@@ -134,12 +135,21 @@ try {
     assert.match(result.response.headers.get('content-type'), /xml/)
   }
   for (const path of ['/', `/news/${article.slug}`]) {
-    const preview = await request(`https://xethkioz-site.example.workers.dev${path}`)
+    const preview = await request(`https://${config.name}.example.workers.dev${path}`)
     status(preview, 200)
     assert.match(preview.response.headers.get('x-robots-tag'), /noindex/)
   }
+  for (const invalid of [origin, 'http://xethkioz-site-pr236.example.workers.dev', 'https://other.example.workers.dev']) {
+    await assert.rejects(() => verifyCloudflarePreview(invalid, () => {
+      throw new Error('Invalid preview URLs must be rejected before any request')
+    }), /Use the HTTPS workers.dev root URL/)
+    checks += 1
+  }
+  const smoke = await verifyCloudflarePreview(`https://${config.name}.example.workers.dev`,
+    (url, options) => mf.dispatchFetch(url, options))
+  assert.ok(smoke.checks > 0)
   assert.equal(unexpectedRequests, 0, 'No unmocked outbound requests are allowed')
-  console.log(`Cloudflare runtime: ${checks} checks passed; all external requests were simulated.`)
+  console.log(`Cloudflare runtime: ${checks} checks and ${smoke.checks} preview HTTP checks passed; all external requests were simulated.`)
 } finally {
   await mf.dispose()
 }

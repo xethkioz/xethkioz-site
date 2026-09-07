@@ -44,16 +44,32 @@ npm run check:cloudflare
 El comando ejecuta TypeScript, las auditorías del build existente, un empaquetado
 de Wrangler sin publicar y pruebas en el runtime local de Cloudflare.
 Las peticiones externas de estas pruebas se simulan; no escriben en la base real.
+El mismo control se ejecuta en `XETHKIOZ CI` para verificar el empaquetado y el
+runtime en GitHub antes de integrar la PR. No publica ningún despliegue.
 
-Con la cuenta correcta de Cloudflare conectada y en Workers Free:
+Con la cuenta correcta de Cloudflare conectada, permiso para desplegar Workers
+y el plan **Workers Free** comprobado en esa cuenta:
 
 ```bash
 npm run deploy:cloudflare
 ```
 
-`wrangler.json` no contiene rutas ni dominios de producción. El primer despliegue
-se publica en `workers.dev`. No aceptar una ampliación de plan para completar
+El destino de `wrangler.json` es **`xethkioz-site-pr236`**, un Worker separado
+para esta prueba. Sus rutas de dominio están vacías. El primer despliegue se
+publica en su URL `workers.dev`; no actualiza el Worker `xethkioz-site`, los DNS
+ni el proyecto de Vercel. Confirmar que ese nombre no pertenece a otro servicio
+antes del primer despliegue. No aceptar una ampliación de plan para completar
 este paso sin revisar su coste y necesidad.
+
+Después del despliegue, copiar la URL estable exacta que devuelve Cloudflare y
+ejecutar `npm run smoke:cloudflare -- <URL>`, reemplazando `<URL>` por esa URL
+HTTPS de `xethkioz-site-pr236` en `workers.dev`.
+El control acepta únicamente ese Worker y comprueba páginas, JavaScript y CSS,
+redirecciones, 404, API de diagnóstico, XML, cabeceras de seguridad y `noindex`.
+Solo envía GET y HEAD; no inicia sesión, envía formularios ni publica contenido.
+Los 200 de `/account` y `/cms` verifican sus páginas de entrada, no la sesión ni
+las operaciones privadas. Un resultado aprobado tampoco comprueba el plan de
+la cuenta ni el consumo de CPU. Registrar esos resultados por separado.
 
 Las variables públicas de Supabase ya están declaradas. Para completar las
 funciones administrativas se necesita `SUPABASE_SERVICE_ROLE_KEY` como secreto
@@ -61,6 +77,21 @@ del Worker; la recuperación de administrador también usa
 `XETHKIOZ_ADMIN_RECOVERY_TOKEN`. Configurarlas mediante la gestión segura de
 secretos de Cloudflare. Nunca incluirlas en variables `VITE_*`, archivos públicos
 o Git. Los secretos no se trasladan automáticamente desde Vercel.
+
+### Estado de acceso de esta continuación (7 de septiembre de 2026)
+
+- GitHub y el proyecto de Vercel se pudieron consultar. La producción de Vercel
+  seguía en estado `READY`, con el commit `080670ab086aa6fc783d85610cbbe9fa79c04781`.
+- Esta sesión no expone una conexión de Cloudflare, y la búsqueda en el catálogo
+  no devolvió una integración instalable. La comprobación `wrangler whoami`
+  no pudo completarse por una restricción de red del entorno.
+- Por tanto, no se han verificado la cuenta ni su plan, no se han cargado secretos
+  y no se ha publicado ni validado una URL de Cloudflare. La PR continúa como
+  borrador; no se cambia Vercel ni la delegación del dominio.
+- TypeScript y `node scripts/test-cloudflare.mjs` aprobados localmente: 73
+  controles del runtime y 20 comprobaciones HTTP de la vista previa simulada.
+  La CLI de Wrangler no pudo completar su comprobación en este entorno; el
+  empaquetado del estado actualizado se comprueba además en GitHub CI.
 
 ## Antes de cambiar el dominio
 

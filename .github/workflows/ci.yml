@@ -70,6 +70,9 @@ jobs:
           if-no-files-found: warn
           retention-days: 7
 
+      - name: Cloudflare preview packaging and runtime checks
+        run: npm run check:cloudflare
+
       - name: Dependency vulnerability policy
         run: npm run audit:dependencies
 
