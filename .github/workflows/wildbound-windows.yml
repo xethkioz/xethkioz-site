@@ -1,0 +1,202 @@
+name: Build Mundo de Xethkioz Windows
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - game/xethkioz-environment-blocks
+
+jobs:
+  steam-demo-build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate demo pixel-art assets
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python -m pip install --quiet pillow
+          python tools/generate_v08_assets.py
+          python tools/generate_v08_pickups.py
+          python tools/generate_v09_demo_assets.py
+          python tools/generate_v09_boss_assets.py
+          for F in \
+            assets/v08/generated/izrdalar_bg.png \
+            assets/v08/generated/menu_bg.png \
+            assets/v08/generated/creator_bg.png \
+            assets/v08/generated/traveler.png \
+            assets/v08/generated/xethkioz.png \
+            assets/v08/generated/alexis_portrait.png \
+            assets/v08/generated/ashley_portrait.png \
+            assets/v09/generated/izrdalar_plains_bg.png \
+            assets/v09/generated/first_cism_bg.png \
+            assets/v09/generated/quebracho_prop.png \
+            assets/v09/generated/ruin_arch_prop.png \
+            assets/v09/generated/crystal_cluster_prop.png \
+            assets/v09/generated/mob_goblin.png \
+            assets/v09/generated/mob_scout.png \
+            assets/v09/generated/mob_slime.png \
+            assets/v09/generated/mob_beetle.png \
+            assets/v09/generated/boss_forest_guardian.png \
+            assets/v09/generated/boss_plains_sentinel.png \
+            assets/v09/generated/boss_cism_archon.png; do
+            test -f "$F"
+          done
+
+      - name: Download Godot 4.7.2 and templates
+        shell: bash
+        run: |
+          set -euxo pipefail
+          wget -q https://godot-releases.nbg1.your-objectstorage.com/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -O /tmp/godot.zip
+          unzip -q /tmp/godot.zip -d /tmp/godot
+          chmod +x /tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          wget -q https://godot-releases.nbg1.your-objectstorage.com/4.7.2-stable/Godot_v4.7.2-stable_export_templates.tpz -O /tmp/templates.tpz
+          mkdir -p "$HOME/.local/share/godot/export_templates/4.7.2.stable"
+          unzip -q /tmp/templates.tpz -d /tmp/templates
+          cp -r /tmp/templates/templates/* "$HOME/.local/share/godot/export_templates/4.7.2.stable/"
+
+      - name: Import assets
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --editor --quit 2>&1 | tee /tmp/import.log || true
+
+      - name: Validate scripts
+        shell: bash
+        run: |
+          set -uo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          FAILED=0
+          for SCRIPT in \
+            scripts/save_system.gd \
+            scripts/world_data.gd \
+            scripts/environment_data.gd \
+            scripts/overworld_data.gd \
+            scripts/armory_data.gd \
+            scripts/overworld_map_view.gd \
+            scripts/atmosphere_overlay.gd \
+            scripts/enemy.gd \
+            scripts/boss.gd \
+            scripts/pickup.gd \
+            scripts/pet.gd \
+            scripts/pet_v6.gd \
+            scripts/npc_actor.gd \
+            scripts/player.gd \
+            scripts/player_v3.gd \
+            scripts/player_v4.gd \
+            scripts/player_v6.gd \
+            scripts/player_v7.gd \
+            scripts/player_v8.gd \
+            scripts/main.gd \
+            scripts/main_v3.gd \
+            scripts/main_v4.gd \
+            scripts/main_v5.gd \
+            scripts/main_v6.gd \
+            scripts/main_v7.gd \
+            scripts/main_v8.gd \
+            scripts/exploration_node.gd \
+            scripts/main_v10.gd \
+            scripts/main_v11.gd \
+            scripts/main_v12.gd \
+            scripts/main_v12_traversal.gd \
+            scripts/main_v15.gd \
+            tools/demo_content_test.gd \
+            tools/demo_visual_smoke.gd \
+            tools/demo_block_visual_smoke.gd; do
+            echo "===== CHECK $SCRIPT ====="
+            set +e
+            "$GODOT" --headless --path . --check-only --script "res://$SCRIPT" 2>&1 | tee "/tmp/$(basename "$SCRIPT").log"
+            STATUS=${PIPESTATUS[0]}
+            set -e
+            if [ "$STATUS" -ne 0 ] || grep -E "SCRIPT ERROR|ERROR:" "/tmp/$(basename "$SCRIPT").log"; then FAILED=1; fi
+          done
+          if [ "$FAILED" -ne 0 ]; then exit 1; fi
+
+      - name: Validate content model
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --script res://tools/demo_content_test.gd 2>&1 | tee /tmp/demo-content.log
+          grep -q "Steam demo content model valid" /tmp/demo-content.log
+          "$GODOT" --headless --path . --script res://scripts/environment_matrix_test.gd 2>&1 | tee /tmp/environment.log
+          grep -q "Environment matrix: 32/32 profiles valid" /tmp/environment.log
+
+      - name: Runtime startup test
+        shell: bash
+        run: |
+          set -uo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          set +e
+          timeout 15s "$GODOT" --headless --path . --quit-after 180 2>&1 | tee /tmp/runtime.log
+          STATUS=${PIPESTATUS[0]}
+          set -e
+          if grep -E "SCRIPT ERROR|ERROR:" /tmp/runtime.log; then exit 1; fi
+          if [ "$STATUS" -ne 0 ] && [ "$STATUS" -ne 124 ]; then exit "$STATUS"; fi
+
+      - name: Install xvfb
+        shell: bash
+        run: |
+          if ! command -v xvfb-run >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y xvfb
+          fi
+
+      - name: Capture demo previews
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          mkdir -p build
+          xvfb-run -a "$GODOT" --path . --rendering-method gl_compatibility --script res://tools/visual_smoke.gd
+          xvfb-run -a "$GODOT" --path . --rendering-method gl_compatibility --script res://tools/demo_visual_smoke.gd
+          xvfb-run -a "$GODOT" --path . --rendering-method gl_compatibility --script res://tools/demo_block_visual_smoke.gd
+          for F in \
+            build/v08_menu_preview.png \
+            build/v08_creator_preview.png \
+            build/v08_gameplay_preview.png \
+            build/demo_overworld_preview.png \
+            build/demo_armory_preview.png \
+            build/demo_map_06.png \
+            build/demo_map_10.png \
+            build/demo_map_11.png \
+            build/demo_map_15.png; do
+            test -f "$F"
+          done
+
+      - name: Upload preview artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Mundo-de-Xethkioz-v0.9.2-Steam-Demo-Previews
+          path: |
+            build/v08_menu_preview.png
+            build/v08_creator_preview.png
+            build/v08_gameplay_preview.png
+            build/demo_overworld_preview.png
+            build/demo_armory_preview.png
+            build/demo_map_06.png
+            build/demo_map_10.png
+            build/demo_map_11.png
+            build/demo_map_15.png
+          if-no-files-found: error
+
+      - name: Export Windows x86_64
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          mkdir -p build
+          "$GODOT" --headless --path . --export-release "Windows Desktop" build/Mundo_de_Xethkioz.exe
+          cd build
+          zip -9 World_of_Xethkioz_Steam_Demo_v0.9.2_Windows.zip Mundo_de_Xethkioz.exe
+
+      - name: Upload Windows demo
+        uses: actions/upload-artifact@v4
+        with:
+          name: World-of-Xethkioz-Steam-Demo-v0.9.2-Windows
+          path: build/World_of_Xethkioz_Steam_Demo_v0.9.2_Windows.zip
+          if-no-files-found: error
