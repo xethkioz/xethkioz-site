@@ -70,7 +70,7 @@ jobs:
             scripts/main_v7.gd \
             scripts/exploration_node.gd \
             scripts/main_v8.gd \
-            scripts/main_v9.gd; do
+            scripts/main_v10.gd; do
             echo "===== CHECK $SCRIPT ====="
             set +e
             "$GODOT" --headless --path . --check-only --script "res://$SCRIPT" 2>&1 | tee "/tmp/$(basename "$SCRIPT").log"
