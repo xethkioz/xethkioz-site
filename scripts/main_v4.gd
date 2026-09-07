@@ -130,7 +130,7 @@ func pickup_collected(node: Node,kind: String,payload: Dictionary) -> void:
 	super.pickup_collected(node,kind,payload)
 
 func boss_defeated(boss: Node,kind: int) -> void:
-	var was_new := current_map not in state.get("bosses",[])
+	var was_new: bool = current_map not in state.get("bosses",[])
 	super.boss_defeated(boss,kind)
 	if was_new and current_map in [5,10,15,20,25,30]:
 		_toast("PIEZA DE CONJUNTO %d/4 — Casco • Pecho • Guantes • Botas" % min(4,int(state.get("set_pieces",0))),2.8)
