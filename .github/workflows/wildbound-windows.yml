@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Generate v0.8 pixel-art assets
+      - name: Generate pixel-art assets
         shell: bash
         run: |
           set -euxo pipefail
@@ -64,6 +64,9 @@ jobs:
             scripts/save_system.gd \
             scripts/world_data.gd \
             scripts/environment_data.gd \
+            scripts/overworld_data.gd \
+            scripts/armory_data.gd \
+            scripts/overworld_map_view.gd \
             scripts/atmosphere_overlay.gd \
             scripts/enemy.gd \
             scripts/pickup.gd \
@@ -87,9 +90,12 @@ jobs:
             scripts/main_v10.gd \
             scripts/main_v11.gd \
             scripts/main_v12.gd \
+            scripts/main_v13.gd \
             tools/visual_smoke.gd \
             tools/environment_visual_smoke.gd \
-            tools/block_progression_test.gd; do
+            tools/block_progression_test.gd \
+            tools/demo_content_test.gd \
+            tools/demo_visual_smoke.gd; do
             echo "===== CHECK $SCRIPT ====="
             set +e
             "$GODOT" --headless --path . --check-only --script "res://$SCRIPT" 2>&1 | tee "/tmp/$(basename "$SCRIPT").log"
@@ -111,6 +117,14 @@ jobs:
           GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
           "$GODOT" --headless --path . --script res://scripts/environment_matrix_test.gd 2>&1 | tee /tmp/environment-matrix.log
           grep -q "Environment matrix: 32/32 profiles valid" /tmp/environment-matrix.log
+
+      - name: Validate Steam demo content model
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --script res://tools/demo_content_test.gd 2>&1 | tee /tmp/demo-content.log
+          grep -q "Steam demo content model valid" /tmp/demo-content.log
 
       - name: Validate Izrdalar maps 1-5 progression
         shell: bash
@@ -138,20 +152,34 @@ jobs:
             exit "$STATUS"
           fi
 
-      - name: Visual smoke screenshots
+      - name: Install xvfb
+        shell: bash
+        run: |
+          set -euxo pipefail
+          if ! command -v xvfb-run >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y xvfb
+          fi
+
+      - name: Core visual smoke screenshots
         shell: bash
         run: |
           set -euxo pipefail
           GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
           mkdir -p build
-          if ! command -v xvfb-run >/dev/null 2>&1; then
-            sudo apt-get update -qq
-            sudo apt-get install -y xvfb
-          fi
           xvfb-run -a "$GODOT" --path . --rendering-method gl_compatibility --script res://tools/visual_smoke.gd
           test -f build/v08_menu_preview.png
           test -f build/v08_creator_preview.png
           test -f build/v08_gameplay_preview.png
+
+      - name: Demo overworld and armory screenshots
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          xvfb-run -a "$GODOT" --path . --rendering-method gl_compatibility --script res://tools/demo_visual_smoke.gd
+          test -f build/demo_overworld_preview.png
+          test -f build/demo_armory_preview.png
 
       - name: Environment progression screenshots 1-5
         shell: bash
@@ -164,11 +192,13 @@ jobs:
       - name: Upload visual previews
         uses: actions/upload-artifact@v4
         with:
-          name: Mundo-de-Xethkioz-v0.8.2-Izrdalar-Previews
+          name: Mundo-de-Xethkioz-v0.9.0-Steam-Demo-Previews
           path: |
             build/v08_menu_preview.png
             build/v08_creator_preview.png
             build/v08_gameplay_preview.png
+            build/demo_overworld_preview.png
+            build/demo_armory_preview.png
             build/env_map_01.png
             build/env_map_02.png
             build/env_map_03.png
@@ -189,6 +219,6 @@ jobs:
       - name: Upload Windows build
         uses: actions/upload-artifact@v4
         with:
-          name: Mundo-de-Xethkioz-Windows-v0.8.2
+          name: Mundo-de-Xethkioz-Windows-v0.9.0-Steam-Demo-Foundation
           path: build/Mundo_de_Xethkioz_Windows.zip
           if-no-files-found: error
