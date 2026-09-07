@@ -12,21 +12,23 @@ const PLAYER_BASE := {
 	"skills":["Sin mentor","Sin mentor","Sin mentor"]
 }
 
+# CANON FAMILIAR BLOQUEADO
+# Ashley: femenino | Fermín: masculino | Gael: masculino | Isabella: femenino.
 # Los cuatro hermanos son mentores de clase. La elección se realiza tras el jefe del mapa 5.
 # El orden mantiene compatibilidad con las partidas v0.3 anteriores.
 const HEROES := [
-	{"name":"Ashley","class":"Bardo","role":"Soporte / Control / Buffs","hp":94.0,"speed":1.05,"damage":0.95,"color":"#d96cff","weapon":"Laúd rúnico","skills":["Acorde Cortante","Balada de Vigor","Resonancia Arcana"]},
-	{"name":"Fermín","class":"Guerrero","role":"Tanque / Fuerza Bruta","hp":122.0,"speed":0.93,"damage":1.14,"color":"#ff754c","weapon":"Espada pesada","skills":["Corte Quebrador","Guardia de Hierro","Embate del León"]},
-	{"name":"Isabella","class":"Brujo del Caos","role":"Daño mágico en área / Debuffs","hp":88.0,"speed":1.00,"damage":1.18,"color":"#a66cff","weapon":"Códice del Caos","skills":["Orbe Inestable","Marca del Vacío","Ruptura Caótica"]},
-	{"name":"Gael","class":"Arquero","role":"Ataque a distancia / Trampas","hp":98.0,"speed":1.09,"damage":1.02,"color":"#6ed8ff","weapon":"Arco de Izrdralar","skills":["Flecha Gemela","Paso del Viento","Lluvia Astral"]}
+	{"name":"Ashley","gender":"Femenino","pronoun":"ella","relationship":"Hermana","class":"Bardo","role":"Soporte / Control / Buffs","hp":94.0,"speed":1.05,"damage":0.95,"color":"#d96cff","secondary":"#ffd166","weapon":"Laúd rúnico","skills":["Acorde Cortante","Balada de Vigor","Resonancia Arcana"]},
+	{"name":"Fermín","gender":"Masculino","pronoun":"él","relationship":"Hermano","class":"Guerrero","role":"Tanque / Fuerza Bruta","hp":122.0,"speed":0.93,"damage":1.14,"color":"#ff754c","secondary":"#d7dde8","weapon":"Espada pesada","skills":["Corte Quebrador","Guardia de Hierro","Embate del León"]},
+	{"name":"Isabella","gender":"Femenino","pronoun":"ella","relationship":"Hermana","class":"Bruja del Caos","role":"Daño mágico en área / Debuffs","hp":88.0,"speed":1.00,"damage":1.18,"color":"#a66cff","secondary":"#58d9ff","weapon":"Códice del Caos","skills":["Orbe Inestable","Marca del Vacío","Ruptura Caótica"]},
+	{"name":"Gael","gender":"Masculino","pronoun":"él","relationship":"Hermano","class":"Arquero","role":"Ataque a distancia / Trampas","hp":98.0,"speed":1.09,"damage":1.02,"color":"#6ed8ff","secondary":"#71df83","weapon":"Arco de Izrdralar","skills":["Flecha Gemela","Paso del Viento","Lluvia Astral"]}
 ]
 
 const NPCS := {
-	"Alexis":{"title":"El Padre Explorador","function":"Mapas, tácticas y Puntos de Paternidad"},
-	"Elida":{"title":"La Abuela Mística","function":"Curación, raciones, maldiciones y guardado"},
-	"Don Argento":{"title":"El Cambista","function":"Mercader de amuletos y suministros"},
-	"Chamán Nahuel":{"title":"Guardián de la Fauna","function":"Misiones de las ocho mascotas legendarias"},
-	"Anahí de Cristal":{"title":"Espíritu del Ceibo","function":"Revela accesos ilusorios a NigZen"}
+	"Alexis":{"gender":"Masculino","pronoun":"él","relationship":"Padre","title":"El Padre Explorador","function":"Mapas, tácticas y Puntos de Paternidad","color":"#ff8c42","secondary":"#8b5cf6"},
+	"Elida":{"gender":"Femenino","pronoun":"ella","relationship":"Abuela","title":"La Abuela Mística","function":"Curación, raciones, maldiciones y guardado","color":"#8fd694","secondary":"#f5d77a"},
+	"Don Argento":{"gender":"Masculino","pronoun":"él","relationship":"NPC","title":"El Cambista","function":"Mercader de amuletos y suministros","color":"#c4ccd7","secondary":"#ff8c42"},
+	"Chamán Nahuel":{"gender":"Masculino","pronoun":"él","relationship":"NPC","title":"Guardián de la Fauna","function":"Misiones de las ocho mascotas legendarias","color":"#6fbf73","secondary":"#d1a15f"},
+	"Anahí de Cristal":{"gender":"Femenino","pronoun":"ella","relationship":"NPC","title":"Espíritu del Ceibo","function":"Revela accesos ilusorios a NigZen","color":"#ff729f","secondary":"#9be7ff"}
 }
 
 const LEGENDARIES := [
@@ -73,6 +75,22 @@ const MAP_NAMES := [
 
 static func hero(index: int) -> Dictionary:
 	return HEROES[clamp(index,0,HEROES.size()-1)]
+
+static func hero_by_name(hero_name: String) -> Dictionary:
+	for profile in HEROES:
+		if str(profile.get("name","")) == hero_name:
+			return profile
+	return HEROES[0]
+
+static func family_profile(character_name: String) -> Dictionary:
+	for profile in HEROES:
+		if str(profile.get("name","")) == character_name:
+			return profile
+	if NPCS.has(character_name):
+		var npc: Dictionary = NPCS[character_name].duplicate(true)
+		npc["name"] = character_name
+		return npc
+	return {"name":character_name,"gender":"No definido","relationship":"NPC","color":"#8b5cf6","secondary":"#ff8c42"}
 
 static func player_base() -> Dictionary:
 	return PLAYER_BASE
