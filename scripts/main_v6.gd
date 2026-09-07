@@ -29,7 +29,7 @@ func _spawn_player() -> void:
 	var w: Dictionary = state.get("weapon",{})
 	var a: Dictionary = state.get("armor",{})
 	var c: Dictionary = state.get("charm",{})
-	var pp := int(state.get("parenting_points",0))
+	var pp: int = int(state.get("parenting_points",0))
 	player.setup(self,100.0+float(a.get("power",1.0))*2.0+pp*2.0,float(w.get("power",1.0))+pp*0.12,float(a.get("power",1.0)),float(c.get("power",1.0)))
 	var build: Dictionary = WorldData.hero(int(state.get("selected_hero",0))) if bool(state.get("mentor_chosen",false)) else WorldData.player_base()
 	player.configure_hero(build)
@@ -39,13 +39,13 @@ func _spawn_player() -> void:
 
 func _spawn_pet_if_owned() -> void:
 	pet = null
-	var idx := int(state.get("active_pet",-1))
+	var idx: int = int(state.get("active_pet",-1))
 	if idx < 0 or idx >= pet_defs.size(): return
 	pet = Node2D.new()
 	pet.set_script(PetV6Script)
 	world.add_child(pet)
 	pet.position = player.position+Vector2(-40,-25)
-	var bond := float(state.get("pet_bond",0.0))
+	var bond: float = float(state.get("pet_bond",0.0))
 	pet.setup(self,idx,float(pet_defs[idx]["power"])+current_map*0.06+bond*0.45)
 
 func update_hud() -> void:
@@ -55,7 +55,7 @@ func update_hud() -> void:
 		supply_label.size = Vector2(270,26)
 		health_label.text = "VIDA %d/%d • MANÁ %d/%d" % [int(max(0.0,player.health)),int(player.max_health),int(player.mana),int(player.max_mana)]
 		supply_label.text = "STA %d/%d • RACIONES %d%%" % [int(player.stamina),int(player.max_stamina),int(supplies)]
-	var idx := int(state.get("active_pet",0))
+	var idx: int = int(state.get("active_pet",0))
 	if idx >= 0 and idx < pet_defs.size():
 		var d: Dictionary = pet_defs[idx]
 		pet_label.text = "%s • %s • %s • TAB cambiar • K/C activar" % [str(d["name"]),str(d.get("element","Legendario")),str(d.get("bonus",""))]
@@ -70,13 +70,13 @@ func legendary_shield_feedback() -> void:
 	_toast("OKUNINUST — la burbuja absorbió el golpe",1.5)
 
 func player_attack(pos: Vector2,facing: int,power: float) -> void:
-	var crit := false
-	var chance := player.get_crit_chance() if player and player.has_method("get_crit_chance") else 0.05
+	var crit: bool = false
+	var chance: float = float(player.get_crit_chance()) if player and player.has_method("get_crit_chance") else 0.05
 	for e in get_tree().get_nodes_in_group("enemies"):
 		if not is_instance_valid(e): continue
-		var d: Vector2 = e.global_position-pos
-		if abs(d.y)<58.0 and d.x*facing>-10.0 and d.x*facing<78.0:
-			var final_power := power
+		var delta_to_enemy: Vector2 = e.global_position-pos
+		if abs(delta_to_enemy.y)<58.0 and delta_to_enemy.x*facing>-10.0 and delta_to_enemy.x*facing<78.0:
+			var final_power: float = power
 			if rng.randf() < chance:
 				final_power *= 1.75; crit = true
 			e.take_damage(final_power)
@@ -86,13 +86,13 @@ func use_hero_skill(slot: int,pos: Vector2,facing_dir: int,multiplier: float,her
 	if not bool(state.get("mentor_chosen",false)):
 		mentor_locked_feedback(); return
 	var hero: Dictionary = WorldData.hero(int(state.get("selected_hero",0)))
-	var names := {
+	var names: Dictionary = {
 		"Bardo":["Acorde Cortante","Balada de Vigor","Resonancia Arcana","Sinfonía Prismática"],
 		"Guerrero":["Corte Quebrador","Guardia de Hierro","Embate del León","Juramento del Bastión"],
 		"Arquero":["Flecha Gemela","Paso del Viento","Lluvia Astral","Tormenta de Xiomalar"],
 		"Bruja del Caos":["Orbe Inestable","Marca del Vacío","Ruptura Caótica","Eclipse del Caos"]
 	}
-	var power := (18.0+slot*9.0)*multiplier
+	var power: float = (18.0+slot*9.0)*multiplier
 	match hero_class:
 		"Bardo":
 			if slot == 0:
@@ -130,7 +130,9 @@ func use_hero_skill(slot: int,pos: Vector2,facing_dir: int,multiplier: float,her
 				_damage_radius(pos,365.0,power*1.60); player.heal(8.0)
 			else:
 				_damage_radius(pos,530.0,power*2.45); player.heal(16.0); player.apply_mana_regen(8.0,5.0)
-	var skill_name := str(names.get(hero_class,["Habilidad","Habilidad","Habilidad","Definitiva"])[slot])
+	var default_names: Array = ["Habilidad","Habilidad","Habilidad","Definitiva"]
+	var selected_names: Array = names.get(hero_class,default_names)
+	var skill_name: String = str(selected_names[slot])
 	_toast("%s — %s" % [hero_class,skill_name],1.5)
 	if slot == 3: screen_shake(9.0,0.22)
 	update_hud()
@@ -138,21 +140,21 @@ func use_hero_skill(slot: int,pos: Vector2,facing_dir: int,multiplier: float,her
 func _slow_enemies(pos: Vector2,radius: float,factor: float,seconds: float) -> void:
 	for e in get_tree().get_nodes_in_group("enemies"):
 		if not is_instance_valid(e) or pos.distance_to(e.global_position)>radius: continue
-		var old_speed := float(e.get("speed"))
+		var old_speed: float = float(e.get("speed"))
 		e.set("speed",old_speed*factor)
-		var target = e
+		var target: Node = e
 		get_tree().create_timer(seconds).timeout.connect(func():
 			if is_instance_valid(target): target.set("speed",old_speed)
 		)
 
 func legendary_auto_attack(idx: int,origin: Vector2,power: float) -> bool:
-	var target = _nearest_enemy_to(origin,285.0)
+	var target: Node = _nearest_enemy_to(origin,285.0)
 	if target == null: return false
 	match idx:
 		0:
 			target.take_damage(power)
 		1:
-			var hits := 0
+			var hits: int = 0
 			for e in get_tree().get_nodes_in_group("enemies"):
 				if is_instance_valid(e) and origin.distance_to(e.global_position)<300.0 and hits<2:
 					e.take_damage(power*0.82); hits+=1
@@ -172,18 +174,18 @@ func legendary_auto_attack(idx: int,origin: Vector2,power: float) -> bool:
 			target.take_damage(power*1.28); _freeze_target(target,0.75)
 	return true
 
-func _nearest_enemy_to(origin: Vector2,max_range: float):
-	var best = null
-	var best_dist := max_range
+func _nearest_enemy_to(origin: Vector2,max_range: float) -> Node:
+	var best: Node = null
+	var best_dist: float = max_range
 	for e in get_tree().get_nodes_in_group("enemies"):
 		if not is_instance_valid(e): continue
-		var dist := origin.distance_to(e.global_position)
+		var dist: float = origin.distance_to(e.global_position)
 		if dist<best_dist: best_dist=dist; best=e
 	return best
 
 func _freeze_target(target: Node,seconds: float) -> void:
 	if not is_instance_valid(target): return
-	var old_speed := float(target.get("speed"))
+	var old_speed: float = float(target.get("speed"))
 	target.set("speed",old_speed*0.55)
 	get_tree().create_timer(seconds).timeout.connect(func():
 		if is_instance_valid(target): target.set("speed",old_speed)
@@ -223,9 +225,9 @@ func _cycle_legendary() -> void:
 	if owned.size()<2:
 		_toast("Todavía no tenés otro legendario para cambiar.",1.6); return
 	owned.sort()
-	var current := int(state.get("active_pet",owned[0]))
-	var at := owned.find(current)
-	var next_idx := int(owned[(at+1)%owned.size()])
+	var current: int = int(state.get("active_pet",owned[0]))
+	var at: int = owned.find(current)
+	var next_idx: int = int(owned[(at+1)%owned.size()])
 	state["active_pet"] = next_idx
 	SaveSystem.save_state(state)
 	if pet and is_instance_valid(pet): pet.queue_free()
