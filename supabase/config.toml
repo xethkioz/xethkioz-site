@@ -1,8 +1,0 @@
-[functions.submit-web-quote]
-verify_jwt = false
-
-[functions.visit-log]
-verify_jwt = true
-
-[functions.admin-users]
-verify_jwt = true
