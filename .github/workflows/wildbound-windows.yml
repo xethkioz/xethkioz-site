@@ -30,6 +30,23 @@ jobs:
           set -euxo pipefail
           GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
           "$GODOT" --headless --path . --editor --quit
+      - name: Runtime startup smoke test
+        shell: bash
+        run: |
+          set -uo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          set +e
+          timeout 15s "$GODOT" --headless --path . --quit-after 180 2>&1 | tee /tmp/world-of-xethkioz-runtime.log
+          STATUS=${PIPESTATUS[0]}
+          set -e
+          if grep -E "SCRIPT ERROR|ERROR:" /tmp/world-of-xethkioz-runtime.log; then
+            echo "Runtime errors detected during startup smoke test"
+            exit 1
+          fi
+          if [ "$STATUS" -ne 0 ] && [ "$STATUS" -ne 124 ]; then
+            echo "Godot exited with status $STATUS"
+            exit "$STATUS"
+          fi
       - name: Export Windows x86_64
         shell: bash
         run: |
