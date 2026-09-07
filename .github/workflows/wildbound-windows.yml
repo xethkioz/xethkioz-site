@@ -86,7 +86,8 @@ jobs:
             scripts/main_v8.gd \
             scripts/main_v10.gd \
             scripts/main_v11.gd \
-            tools/visual_smoke.gd; do
+            tools/visual_smoke.gd \
+            tools/environment_visual_smoke.gd; do
             echo "===== CHECK $SCRIPT ====="
             set +e
             "$GODOT" --headless --path . --check-only --script "res://$SCRIPT" 2>&1 | tee "/tmp/$(basename "$SCRIPT").log"
@@ -142,6 +143,14 @@ jobs:
           test -f build/v08_creator_preview.png
           test -f build/v08_gameplay_preview.png
 
+      - name: Environment progression screenshots 1-5
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          xvfb-run -a "$GODOT" --path . --rendering-method gl_compatibility --script res://tools/environment_visual_smoke.gd
+          for N in 01 02 03 04 05; do test -f "build/env_map_${N}.png"; done
+
       - name: Upload visual previews
         uses: actions/upload-artifact@v4
         with:
@@ -150,6 +159,11 @@ jobs:
             build/v08_menu_preview.png
             build/v08_creator_preview.png
             build/v08_gameplay_preview.png
+            build/env_map_01.png
+            build/env_map_02.png
+            build/env_map_03.png
+            build/env_map_04.png
+            build/env_map_05.png
           if-no-files-found: error
 
       - name: Export Windows x86_64
