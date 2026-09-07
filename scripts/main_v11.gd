@@ -21,8 +21,25 @@ func _start_level() -> void:
 		atmosphere_layer.queue_free()
 		atmosphere_layer = null
 	super._start_level()
+	_refresh_map_intro_panel()
 	_apply_environment_atmosphere()
 	update_hud()
+
+func _refresh_map_intro_panel() -> void:
+	if not map_title_panel_v10:
+		return
+	var profile := EnvironmentData.profile_for_map(current_map)
+	for child in map_title_panel_v10.get_children():
+		if child is Label:
+			child.text = "%s — %s\n%02d • %s" % [
+				str(profile.get("region",WorldData.region_for_map(current_map))),
+				str(profile.get("biome",WorldData.biome_for_map(current_map))),
+				current_map,
+				WorldData.map_name(current_map)
+			]
+			break
+	map_title_panel_v10.visible = true
+	map_title_timer_v10 = 3.4
 
 func _apply_environment_atmosphere() -> void:
 	var profile := EnvironmentData.profile_for_map(current_map)
@@ -35,6 +52,14 @@ func _apply_environment_atmosphere() -> void:
 	overlay.set_script(AtmosphereOverlay)
 	atmosphere_layer.add_child(overlay)
 	overlay.setup(profile)
+
+# Maps 1-5 intentionally share one Izrdralar ecosystem base. Variety comes
+# from time, weather, encounters and routes instead of five separate art packs.
+func _build_background(biome: Dictionary,map_no: int) -> void:
+	if map_no >= 1 and map_no <= 5:
+		_add_visual_background()
+		return
+	super._build_background(biome,map_no)
 
 func _spawn_enemy(pos: Vector2,difficulty: float,kind: int) -> void:
 	var enemy := CharacterBody2D.new()
