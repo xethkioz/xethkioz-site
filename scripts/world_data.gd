@@ -13,33 +13,35 @@ const PLAYER_BASE := {
 }
 
 # CANON FAMILIAR BLOQUEADO
-# Ashley: femenino | Fermín: masculino | Gael: masculino | Isabella: femenino.
+# El colapso temporal detuvo el envejecimiento de los cuatro hermanos.
+# Ashley: femenino, 15 años | Fermín: masculino, 13 años |
+# Isabella: femenino, 8 años | Gael: masculino, 7 años.
 # Los cuatro hermanos son mentores de clase. La elección se realiza tras el jefe del mapa 5.
-# El orden mantiene compatibilidad con las partidas v0.3 anteriores.
 const HEROES := [
-	{"name":"Ashley","gender":"Femenino","pronoun":"ella","relationship":"Hermana","class":"Bardo","role":"Soporte / Control / Buffs","hp":94.0,"speed":1.05,"damage":0.95,"color":"#d96cff","secondary":"#ffd166","weapon":"Laúd rúnico","skills":["Acorde Cortante","Balada de Vigor","Resonancia Arcana"]},
-	{"name":"Fermín","gender":"Masculino","pronoun":"él","relationship":"Hermano","class":"Guerrero","role":"Tanque / Fuerza Bruta","hp":122.0,"speed":0.93,"damage":1.14,"color":"#ff754c","secondary":"#d7dde8","weapon":"Espada pesada","skills":["Corte Quebrador","Guardia de Hierro","Embate del León"]},
-	{"name":"Isabella","gender":"Femenino","pronoun":"ella","relationship":"Hermana","class":"Bruja del Caos","role":"Daño mágico en área / Debuffs","hp":88.0,"speed":1.00,"damage":1.18,"color":"#a66cff","secondary":"#58d9ff","weapon":"Códice del Caos","skills":["Orbe Inestable","Marca del Vacío","Ruptura Caótica"]},
-	{"name":"Gael","gender":"Masculino","pronoun":"él","relationship":"Hermano","class":"Arquero","role":"Ataque a distancia / Trampas","hp":98.0,"speed":1.09,"damage":1.02,"color":"#6ed8ff","secondary":"#71df83","weapon":"Arco de Izrdralar","skills":["Flecha Gemela","Paso del Viento","Lluvia Astral"]}
+	{"name":"Ashley","age":15,"gender":"Femenino","pronoun":"ella","relationship":"Hermana","temporal_lock":true,"class":"Bardo","role":"Soporte / Control / Buffs","hp":94.0,"speed":1.05,"damage":0.95,"color":"#d96cff","secondary":"#ffd166","weapon":"Laúd rúnico","skills":["Acorde Cortante","Balada de Vigor","Resonancia Arcana"]},
+	{"name":"Fermín","age":13,"gender":"Masculino","pronoun":"él","relationship":"Hermano","temporal_lock":true,"class":"Guerrero","role":"Tanque / Fuerza Bruta","hp":122.0,"speed":0.93,"damage":1.14,"color":"#ff754c","secondary":"#d7dde8","weapon":"Espada pesada","skills":["Corte Quebrador","Guardia de Hierro","Embate del León"]},
+	{"name":"Isabella","age":8,"gender":"Femenino","pronoun":"ella","relationship":"Hermana","temporal_lock":true,"class":"Bruja del Caos","role":"Daño mágico en área / Debuffs","hp":88.0,"speed":1.00,"damage":1.18,"color":"#a66cff","secondary":"#58d9ff","weapon":"Códice del Caos","skills":["Orbe Inestable","Marca del Vacío","Ruptura Caótica"]},
+	{"name":"Gael","age":7,"gender":"Masculino","pronoun":"él","relationship":"Hermano","temporal_lock":true,"class":"Arquero","role":"Ataque a distancia / Trampas","hp":98.0,"speed":1.09,"damage":1.02,"color":"#6ed8ff","secondary":"#71df83","weapon":"Arco de Izrdralar","skills":["Flecha Gemela","Paso del Viento","Lluvia Astral"]}
 ]
 
 const NPCS := {
-	"Alexis":{"gender":"Masculino","pronoun":"él","relationship":"Padre","title":"El Padre Explorador","function":"Mapas, tácticas y Puntos de Paternidad","color":"#ff8c42","secondary":"#8b5cf6"},
+	"Alexis":{"age":35,"gender":"Masculino","pronoun":"él","relationship":"Padre","title":"El Padre Explorador","function":"Mapas, tácticas y Puntos de Paternidad","visual":"Buzo/túnica negra con capucha, estilo toga de viajero","color":"#17131f","secondary":"#8b5cf6"},
 	"Elida":{"gender":"Femenino","pronoun":"ella","relationship":"Abuela","title":"La Abuela Mística","function":"Curación, raciones, maldiciones y guardado","color":"#8fd694","secondary":"#f5d77a"},
 	"Don Argento":{"gender":"Masculino","pronoun":"él","relationship":"NPC","title":"El Cambista","function":"Mercader de amuletos y suministros","color":"#c4ccd7","secondary":"#ff8c42"},
 	"Chamán Nahuel":{"gender":"Masculino","pronoun":"él","relationship":"NPC","title":"Guardián de la Fauna","function":"Misiones de las ocho mascotas legendarias","color":"#6fbf73","secondary":"#d1a15f"},
 	"Anahí de Cristal":{"gender":"Femenino","pronoun":"ella","relationship":"NPC","title":"Espíritu del Ceibo","function":"Revela accesos ilusorios a NigZen","color":"#ff729f","secondary":"#9be7ff"}
 }
 
+# Cada legendario tiene dos capas: combate + poder de exploración.
 const LEGENDARIES := [
-	{"name":"Xethkioz","power":7.0,"element":"Guardián Leal","bonus":"Restauración periódica de salud","auto":"Mordisco místico rápido"},
-	{"name":"Itzuke","power":8.0,"element":"Rayo","bonus":"Impulso de velocidad y daño al Dash","auto":"Descargas eléctricas automáticas"},
-	{"name":"Mozaruk","power":9.0,"element":"Tierra","bonus":"Aumento temporal de armadura física","auto":"Golpes sísmicos en área"},
-	{"name":"Killaruna","power":9.5,"element":"Luz Lunar","bonus":"Regeneración de maná y detección de secretos","auto":"Proyectiles de luz guiados"},
-	{"name":"Heller","power":10.0,"element":"Fuego Infernal","bonus":"Aura de quemadura continua","auto":"Orbes de fuego giratorios"},
-	{"name":"Kahezer","power":11.0,"element":"Viento del Abismo","bonus":"Dash a través de enemigos","auto":"Ráfagas cortantes"},
-	{"name":"Okuninust","power":12.0,"element":"Agua / Mareas","bonus":"Escudo de burbuja que absorbe un golpe","auto":"Chorros de agua a distancia"},
-	{"name":"Dvalin","power":13.0,"element":"Dragón Glacial","bonus":"+20% probabilidad de golpe crítico","auto":"Aliento de hielo congelante"}
+	{"name":"Xethkioz","power":7.0,"element":"Guardián Leal","bonus":"Restauración periódica de salud","auto":"Mordisco místico rápido","explore":"Percibe ecos espirituales, presencias ocultas y tesoros prismáticos"},
+	{"name":"Itzuke","power":8.0,"element":"Rayo","bonus":"Impulso de velocidad y daño al Dash","auto":"Descargas eléctricas automáticas","explore":"Activa mecanismos eléctricos, raíles prismáticos y puertas energéticas"},
+	{"name":"Mozaruk","power":9.0,"element":"Tierra","bonus":"Aumento temporal de armadura física","auto":"Golpes sísmicos en área","explore":"Rompe muros agrietados, bloques ancestrales y sellos de piedra"},
+	{"name":"Killaruna","power":9.5,"element":"Luz Lunar","bonus":"Regeneración de maná y detección de secretos","auto":"Proyectiles de luz guiados","explore":"Revela plataformas invisibles, glifos, ilusiones y accesos a NigZen"},
+	{"name":"Heller","power":10.0,"element":"Fuego Infernal","bonus":"Aura de quemadura continua","auto":"Orbes de fuego giratorios","explore":"Quema raíces corruptas, enciende altares y derrite sellos orgánicos"},
+	{"name":"Kahezer","power":11.0,"element":"Viento del Abismo","bonus":"Dash a través de enemigos","auto":"Ráfagas cortantes","explore":"Genera corrientes ascendentes y permite alcanzar rutas verticales"},
+	{"name":"Okuninust","power":12.0,"element":"Agua / Mareas","bonus":"Escudo de burbuja que absorbe un golpe","auto":"Chorros de agua a distancia","explore":"Manipula corrientes, protege bajo el agua y activa sellos de mareas"},
+	{"name":"Dvalin","power":13.0,"element":"Dragón Glacial","bonus":"+20% probabilidad de golpe crítico","auto":"Aliento de hielo congelante","explore":"Congela agua, cascadas y mecanismos para crear puentes de hielo"}
 ]
 
 const BOSS_NAMES := [
