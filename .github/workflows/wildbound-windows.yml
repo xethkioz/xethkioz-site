@@ -23,6 +23,7 @@ jobs:
           python tools/generate_v08_assets.py
           python tools/generate_v08_pickups.py
           python tools/generate_v09_demo_assets.py
+          python tools/generate_v09_boss_assets.py
           test -f assets/v08/generated/izrdalar_bg.png
           test -f assets/v08/generated/menu_bg.png
           test -f assets/v08/generated/creator_bg.png
@@ -40,6 +41,13 @@ jobs:
           test -f assets/v09/generated/quebracho_prop.png
           test -f assets/v09/generated/ruin_arch_prop.png
           test -f assets/v09/generated/crystal_cluster_prop.png
+          test -f assets/v09/generated/mob_goblin.png
+          test -f assets/v09/generated/mob_scout.png
+          test -f assets/v09/generated/mob_slime.png
+          test -f assets/v09/generated/mob_beetle.png
+          test -f assets/v09/generated/boss_forest_guardian.png
+          test -f assets/v09/generated/boss_plains_sentinel.png
+          test -f assets/v09/generated/boss_cism_archon.png
 
       - name: Download Godot 4.7.2 and templates
         shell: bash
@@ -75,6 +83,7 @@ jobs:
             scripts/overworld_map_view.gd \
             scripts/atmosphere_overlay.gd \
             scripts/enemy.gd \
+            scripts/boss.gd \
             scripts/pickup.gd \
             scripts/pet.gd \
             scripts/pet_v6.gd \
@@ -102,7 +111,8 @@ jobs:
             tools/environment_visual_smoke.gd \
             tools/block_progression_test.gd \
             tools/demo_content_test.gd \
-            tools/demo_visual_smoke.gd; do
+            tools/demo_visual_smoke.gd \
+            tools/demo_block_visual_smoke.gd; do
             echo "===== CHECK $SCRIPT ====="
             set +e
             "$GODOT" --headless --path . --check-only --script "res://$SCRIPT" 2>&1 | tee "/tmp/$(basename "$SCRIPT").log"
@@ -188,6 +198,14 @@ jobs:
           test -f build/demo_overworld_preview.png
           test -f build/demo_armory_preview.png
 
+      - name: Demo block 2 and 3 screenshots
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          xvfb-run -a "$GODOT" --path . --rendering-method gl_compatibility --script res://tools/demo_block_visual_smoke.gd
+          for N in 06 10 11 15; do test -f "build/demo_map_${N}.png"; done
+
       - name: Environment progression screenshots 1-5
         shell: bash
         run: |
@@ -211,6 +229,10 @@ jobs:
             build/env_map_03.png
             build/env_map_04.png
             build/env_map_05.png
+            build/demo_map_06.png
+            build/demo_map_10.png
+            build/demo_map_11.png
+            build/demo_map_15.png
           if-no-files-found: error
 
       - name: Export Windows x86_64
