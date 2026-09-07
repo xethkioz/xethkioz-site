@@ -33,8 +33,8 @@ var crit_bonus := 0.0
 var base_crit_chance := 0.05
 var shield_hits := 0
 
-func finalize_combat_stats(class_name: String) -> void:
-	match class_name:
+func finalize_combat_stats(hero_class_name: String) -> void:
+	match hero_class_name:
 		"Bardo":
 			max_mana = 125.0; max_stamina = 95.0; mana_regen = 7.0; stamina_regen = 23.0
 		"Guerrero":
@@ -57,12 +57,12 @@ func _physics_process(delta: float) -> void:
 		finalize_combat_stats(hero_class)
 	_update_combat_buffs(delta)
 	mana = min(max_mana,mana + (mana_regen + (mana_regen_bonus if mana_regen_buff_timer > 0.0 else 0.0))*delta)
-	var stamina_rate := stamina_regen * (1.15 if is_on_floor() else 0.72)
+	var stamina_rate: float = stamina_regen * (1.15 if is_on_floor() else 0.72)
 	if dash_timer <= 0.0:
 		stamina = min(max_stamina,stamina + stamina_rate*delta)
 
-	var dash_pressed := Input.is_action_just_pressed("dash")
-	var dash_allowed := dash_pressed and dash_cooldown <= 0.0 and stamina >= 18.0
+	var dash_pressed: bool = Input.is_action_just_pressed("dash")
+	var dash_allowed: bool = dash_pressed and dash_cooldown <= 0.0 and stamina >= 18.0
 	if dash_pressed:
 		if dash_allowed:
 			stamina -= 18.0
@@ -119,13 +119,13 @@ func _try_skill(slot: int) -> void:
 	if slot == 3 and not main_ref.is_set_skill_unlocked():
 		main_ref.skill_locked_feedback()
 		return
-	var costs := [14.0,22.0,34.0,58.0]
+	var costs: Array[float] = [14.0,22.0,34.0,58.0]
 	var cost: float = costs[slot]
 	if mana < cost:
 		if main_ref.has_method("mana_feedback"): main_ref.mana_feedback(cost,mana)
 		return
 	mana -= cost
-	var cds := [2.8,4.8,7.4,16.0]
+	var cds: Array[float] = [2.8,4.8,7.4,16.0]
 	skill_cooldowns[slot] = cds[slot]
 	main_ref.use_hero_skill(slot,global_position,facing,damage_multiplier,hero_class)
 
