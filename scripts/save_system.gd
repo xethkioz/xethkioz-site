@@ -1,7 +1,7 @@
 extends RefCounted
 
 const SAVE_PATH := "user://wildbound_save.json"
-const SAVE_VERSION := 2
+const SAVE_VERSION := 3
 
 static func default_state() -> Dictionary:
 	return {
@@ -20,7 +20,10 @@ static func default_state() -> Dictionary:
 		"bosses": [],
 		"deaths": 0,
 		"camp_visits": 0,
-		"demo_complete": false
+		"demo_complete": false,
+		"world_discoveries": [],
+		"exploration_mastery": 0,
+		"revisit_count": 0
 	}
 
 static func load_state() -> Dictionary:
