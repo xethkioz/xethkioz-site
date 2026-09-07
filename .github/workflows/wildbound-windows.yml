@@ -20,6 +20,7 @@ jobs:
           set -euxo pipefail
           python -m pip install --quiet pillow
           python tools/generate_v08_assets.py
+          python tools/generate_v08_pickups.py
           test -f assets/v08/generated/izrdalar_bg.png
           test -f assets/v08/generated/menu_bg.png
           test -f assets/v08/generated/creator_bg.png
@@ -27,6 +28,11 @@ jobs:
           test -f assets/v08/generated/xethkioz.png
           test -f assets/v08/generated/alexis_portrait.png
           test -f assets/v08/generated/ashley_portrait.png
+          test -f assets/v08/generated/crystal.png
+          test -f assets/v08/generated/food.png
+          test -f assets/v08/generated/chest.png
+          test -f assets/v08/generated/exit.png
+          test -f assets/v08/generated/spike.png
 
       - name: Download Godot 4.7.2 and templates
         shell: bash
@@ -56,6 +62,11 @@ jobs:
           for SCRIPT in \
             scripts/save_system.gd \
             scripts/world_data.gd \
+            scripts/enemy.gd \
+            scripts/pickup.gd \
+            scripts/pet.gd \
+            scripts/pet_v6.gd \
+            scripts/npc_actor.gd \
             scripts/player.gd \
             scripts/player_v3.gd \
             scripts/player_v4.gd \
