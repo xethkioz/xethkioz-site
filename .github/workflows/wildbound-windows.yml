@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - game/xethkioz-wildbound-prototype
+      - game/xethkioz-environment-blocks
 
 jobs:
   windows-build:
@@ -62,6 +63,8 @@ jobs:
           for SCRIPT in \
             scripts/save_system.gd \
             scripts/world_data.gd \
+            scripts/environment_data.gd \
+            scripts/atmosphere_overlay.gd \
             scripts/enemy.gd \
             scripts/pickup.gd \
             scripts/pet.gd \
@@ -82,6 +85,7 @@ jobs:
             scripts/exploration_node.gd \
             scripts/main_v8.gd \
             scripts/main_v10.gd \
+            scripts/main_v11.gd \
             tools/visual_smoke.gd; do
             echo "===== CHECK $SCRIPT ====="
             set +e
@@ -96,6 +100,14 @@ jobs:
             echo "One or more layered scripts failed diagnostics"
             exit 1
           fi
+
+      - name: Validate 32-map environment matrix
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --script res://scripts/environment_matrix_test.gd 2>&1 | tee /tmp/environment-matrix.log
+          grep -q "Environment matrix: 32/32 profiles valid" /tmp/environment-matrix.log
 
       - name: Runtime startup smoke test
         shell: bash
@@ -133,7 +145,7 @@ jobs:
       - name: Upload visual previews
         uses: actions/upload-artifact@v4
         with:
-          name: Mundo-de-Xethkioz-v0.8.0-Visual-Previews
+          name: Mundo-de-Xethkioz-v0.8.1-Environment-Previews
           path: |
             build/v08_menu_preview.png
             build/v08_creator_preview.png
@@ -153,6 +165,6 @@ jobs:
       - name: Upload Windows build
         uses: actions/upload-artifact@v4
         with:
-          name: Mundo-de-Xethkioz-Windows-v0.8.0
+          name: Mundo-de-Xethkioz-Windows-v0.8.1
           path: build/Mundo_de_Xethkioz_Windows.zip
           if-no-files-found: error
