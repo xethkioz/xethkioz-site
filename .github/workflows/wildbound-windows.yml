@@ -81,7 +81,8 @@ jobs:
             scripts/main_v7.gd \
             scripts/exploration_node.gd \
             scripts/main_v8.gd \
-            scripts/main_v10.gd; do
+            scripts/main_v10.gd \
+            tools/visual_smoke.gd; do
             echo "===== CHECK $SCRIPT ====="
             set +e
             "$GODOT" --headless --path . --check-only --script "res://$SCRIPT" 2>&1 | tee "/tmp/$(basename "$SCRIPT").log"
@@ -113,6 +114,31 @@ jobs:
             echo "Godot exited with status $STATUS"
             exit "$STATUS"
           fi
+
+      - name: Visual smoke screenshots
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          mkdir -p build
+          if ! command -v xvfb-run >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y xvfb
+          fi
+          xvfb-run -a "$GODOT" --path . --rendering-method gl_compatibility --script res://tools/visual_smoke.gd
+          test -f build/v08_menu_preview.png
+          test -f build/v08_creator_preview.png
+          test -f build/v08_gameplay_preview.png
+
+      - name: Upload visual previews
+        uses: actions/upload-artifact@v4
+        with:
+          name: Mundo-de-Xethkioz-v0.8.0-Visual-Previews
+          path: |
+            build/v08_menu_preview.png
+            build/v08_creator_preview.png
+            build/v08_gameplay_preview.png
+          if-no-files-found: error
 
       - name: Export Windows x86_64
         shell: bash
