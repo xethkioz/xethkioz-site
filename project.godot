@@ -1,5 +1,5 @@
 [application]
-config/name="XETHKIOZ: Wildbound"
+config/name="World of Xethkioz"
 run/main_scene="res://scenes/Main.tscn"
 config/features=PackedStringArray("4.7")
 
