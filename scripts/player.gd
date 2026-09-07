@@ -78,8 +78,8 @@ func _physics_process(delta: float) -> void:
 			main_ref.play_sfx("jump")
 	if Input.is_action_just_released("jump") and velocity.y < -180.0:
 		velocity.y *= 0.53
-	var direction := Input.get_axis("move_left","move_right")
-	var target_speed := direction*(base_speed+speed_bonus)
+	var direction: float = Input.get_axis("move_left","move_right")
+	var target_speed: float = direction*(base_speed+speed_bonus)
 	if abs(direction) > 0.01:
 		velocity.x = move_toward(velocity.x,target_speed,acceleration*delta)
 		facing = 1 if direction > 0.0 else -1
@@ -109,8 +109,8 @@ func _physics_process(delta: float) -> void:
 func _do_combo_attack() -> void:
 	combo_step = (combo_step%3)+1
 	combo_reset_timer = 0.62
-	var damages := [10.5,12.5,18.0]
-	var cooldowns := [0.20,0.23,0.32]
+	var damages: Array[float] = [10.5,12.5,18.0]
+	var cooldowns: Array[float] = [0.20,0.23,0.32]
 	attack_cooldown = cooldowns[combo_step-1]
 	if main_ref:
 		main_ref.player_attack(global_position,facing,damages[combo_step-1]*damage_multiplier)
@@ -121,7 +121,7 @@ func _do_combo_attack() -> void:
 func take_damage(amount: float,knockback: Vector2 = Vector2.ZERO) -> void:
 	if invuln_timer > 0.0:
 		return
-	var final_damage := max(1.0,amount*(1.0-armor_reduction))
+	var final_damage: float = max(1.0,amount*(1.0-armor_reduction))
 	health -= final_damage
 	invuln_timer = 0.58
 	velocity += knockback
@@ -141,9 +141,9 @@ func heal(amount: float) -> void:
 		main_ref.update_hud()
 
 func _draw() -> void:
-	var flip := float(facing)
-	var skin := Color(0.91,0.76,0.58)
-	var coat := Color(0.39,0.19,0.62)
+	var flip: float = float(facing)
+	var skin: Color = Color(0.91,0.76,0.58)
+	var coat: Color = Color(0.39,0.19,0.62)
 	if invuln_timer > 0.0 and int(Time.get_ticks_msec()/70)%2 == 0:
 		skin = skin.lightened(0.25)
 		coat = coat.lightened(0.35)
