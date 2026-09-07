@@ -294,7 +294,7 @@ func _generate_level(map_no: int) -> void:
 	var difficulty := _difficulty()
 	var enemy_count := min(18,4+int(map_no*0.45))
 	for i in range(enemy_count):
-		var ex := 420.0 + i*((LEVEL_WIDTH-850.0)/max(1,enemy_count-1)) + rng.randf_range(-60.0,60.0)
+		var ex: float = 420.0 + float(i)*((LEVEL_WIDTH-850.0)/float(max(1,enemy_count-1))) + rng.randf_range(-60.0,60.0)
 		_spawn_enemy(Vector2(ex,560.0),difficulty,(i+map_no)%4)
 	for i in range(4):
 		_spawn_pickup("food",Vector2(520.0+i*650.0,500.0-float(i%2)*90.0))
@@ -573,8 +573,8 @@ func player_attack(pos: Vector2,facing: int,power: float) -> void:
 	for e in get_tree().get_nodes_in_group("enemies"):
 		if not is_instance_valid(e):
 			continue
-		var delta := e.global_position-pos
-		if abs(delta.y) < 58.0 and delta.x*facing > -10.0 and delta.x*facing < 78.0:
+		var delta_to_enemy: Vector2 = e.global_position-pos
+		if abs(delta_to_enemy.y) < 58.0 and delta_to_enemy.x*facing > -10.0 and delta_to_enemy.x*facing < 78.0:
 			e.take_damage(power)
 
 func enemy_defeated(_enemy: Node,reward: int) -> void:
@@ -630,7 +630,7 @@ func boss_attack(boss: Node,kind: int,phase: int) -> void:
 				_spawn_projectile(origin,dir.rotated(i*0.18)*270.0,base_dmg,Color(0.89,0.42,1.0))
 		5:
 			for i in range(phase+2):
-				var vx := -320.0+i*(640.0/max(1,phase+1))
+				var vx: float = -320.0+float(i)*(640.0/float(max(1,phase+1)))
 				_spawn_projectile(origin+Vector2(0,-30),Vector2(vx,-80).normalized()*310.0,base_dmg+1.5,Color(1.0,0.69,0.37))
 		_:
 			boss_attack(boss,rng.randi_range(0,5),max(2,phase))
@@ -927,7 +927,7 @@ func update_hud() -> void:
 	var c: Dictionary = state.get("charm",{"name":"-","power":0})
 	gear_label.text = "W %s %.1f   A %s %.1f   C %s %.1f" % [w.get("name","-"),float(w.get("power",0)),a.get("name","-"),float(a.get("power",0)),c.get("name","-"),float(c.get("power",0))]
 	var pi := int(state.get("active_pet",-1))
-	var pet_name := pet_defs[pi]["name"] if pi >= 0 and pi < pet_defs.size() else "ninguno"
+	var pet_name: String = str(pet_defs[pi]["name"]) if pi >= 0 and pi < pet_defs.size() else "ninguno"
 	pet_label.text = "COMPAÑERO: %s   • vínculo %.0f   • K/C habilidad" % [pet_name,float(state.get("pet_bond",0.0))]
 	objective_label.text = _objective_text()
 
