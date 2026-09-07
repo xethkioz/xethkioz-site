@@ -176,7 +176,11 @@ function renderArticleShell(template: string, article: PublicArticleMetadata) {
   return html.replace('  </head>', `${articleMetadata}\n  </head>`)
 }
 
-export default async function handler(request: any, response: any) {
+export async function renderNewsPage(
+  request: any,
+  response: any,
+  loadShell: (request: any) => Promise<string> = fetchStaticNewsShell,
+) {
   const slug = requestQueryValue(request, 'slug')
   if (!slug) {
     response.setHeader('Content-Type', 'text/plain; charset=utf-8')
@@ -195,7 +199,7 @@ export default async function handler(request: any, response: any) {
       return
     }
 
-    const template = await fetchStaticNewsShell(request)
+    const template = await loadShell(request)
     const html = renderArticleShell(template, article)
     response.setHeader('Content-Type', 'text/html; charset=utf-8')
     response.setHeader('Content-Language', 'es-AR')
@@ -213,4 +217,8 @@ export default async function handler(request: any, response: any) {
     response.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive')
     response.status(503).send('Article metadata is temporarily unavailable.')
   }
+}
+
+export default async function handler(request: any, response: any) {
+  return renderNewsPage(request, response)
 }
