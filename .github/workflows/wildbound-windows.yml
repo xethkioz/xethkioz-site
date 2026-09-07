@@ -37,8 +37,12 @@ jobs:
           GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
           FAILED=0
           for SCRIPT in \
+            scripts/player_v3.gd \
+            scripts/player_v4.gd \
             scripts/player_v6.gd \
             scripts/player_v7.gd \
+            scripts/main_v3.gd \
+            scripts/main_v4.gd \
             scripts/main_v5.gd \
             scripts/main_v6.gd \
             scripts/main_v7.gd \
