@@ -13,6 +13,8 @@ var contact_timer := 0.0
 var archetype := 0
 var visual_sprite: Sprite2D
 var visual_time := 0.0
+var environment_variant: Dictionary = {}
+var base_variant_tint := Color.WHITE
 
 func _ready() -> void:
 	add_to_group("enemies")
@@ -40,9 +42,29 @@ func setup(main_node: Node, difficulty: float, kind: int) -> void:
 	damage = 5.0 + difficulty * 2.1
 	speed = 52.0 + difficulty * 6.0
 	reward = 1 + int(difficulty * 0.8)
-	if visual_sprite:
-		var variants := [Color.WHITE,Color(1.0,0.78,0.72),Color(0.72,0.86,1.0),Color(1.0,0.90,0.62)]
-		visual_sprite.modulate = variants[archetype]
+	_refresh_tint()
+
+func apply_environment_variant(profile: Dictionary) -> void:
+	environment_variant = profile.duplicate(true)
+	max_hp *= float(profile.get("hp",1.0))
+	hp = max_hp
+	damage *= float(profile.get("damage",1.0))
+	speed *= float(profile.get("speed",1.0))
+	reward = maxi(1,int(round(float(reward)*float(profile.get("reward",1.0)))))
+	base_variant_tint = Color.from_string(str(profile.get("tint","#ffffff")),Color.WHITE)
+	_refresh_tint()
+
+func _refresh_tint() -> void:
+	if not visual_sprite:
+		return
+	var archetype_tints := [Color.WHITE,Color(1.0,0.78,0.72),Color(0.72,0.86,1.0),Color(1.0,0.90,0.62)]
+	var archetype_tint: Color = archetype_tints[archetype]
+	visual_sprite.modulate = Color(
+		archetype_tint.r*base_variant_tint.r,
+		archetype_tint.g*base_variant_tint.g,
+		archetype_tint.b*base_variant_tint.b,
+		1.0
+	)
 
 func _physics_process(delta: float) -> void:
 	visual_time += delta
@@ -67,8 +89,7 @@ func take_damage(amount: float) -> void:
 		visual_sprite.modulate = Color(1.5,0.65,0.65,1.0)
 		get_tree().create_timer(0.08).timeout.connect(func():
 			if is_instance_valid(visual_sprite):
-				var variants := [Color.WHITE,Color(1.0,0.78,0.72),Color(0.72,0.86,1.0),Color(1.0,0.90,0.62)]
-				visual_sprite.modulate = variants[archetype]
+				_refresh_tint()
 		)
 	if hp <= 0.0:
 		if main_ref: main_ref.enemy_defeated(self, reward)
