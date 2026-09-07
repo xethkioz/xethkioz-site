@@ -29,15 +29,15 @@ func _physics_process(delta: float) -> void:
 	slide_timer_v7 = max(0.0,slide_timer_v7-delta)
 	slide_hit_tick = max(0.0,slide_hit_tick-delta)
 
-	var direction := Input.get_axis("move_left","move_right")
-	var requested_slide := Input.is_action_just_pressed("slide")
-	var did_wall_jump := false
-	var wall_push_dir := 0.0
+	var direction: float = Input.get_axis("move_left","move_right")
+	var requested_slide: bool = Input.is_action_just_pressed("slide")
+	var did_wall_jump: bool = false
+	var wall_push_dir: float = 0.0
 
 	# Wall bounce: keeps the retro traversal idea but leaves the player's
 	# normal air jump available after a successful bounce.
 	if Input.is_action_just_pressed("jump") and not is_on_floor() and is_on_wall_only() and wall_jump_lock <= 0.0:
-		var wall_normal := get_wall_normal()
+		var wall_normal: Vector2 = get_wall_normal()
 		if abs(wall_normal.x) > 0.5:
 			wall_push_dir = wall_normal.x
 			velocity.x = wall_push_dir*WALL_JUMP_X
@@ -64,10 +64,10 @@ func _physics_process(delta: float) -> void:
 		run_charge = max(0.0,run_charge-delta*(2.4 if is_on_floor() else 0.45))
 
 	if is_on_floor() and abs(direction) > 0.01 and dash_timer <= 0.0 and slide_timer_v7 <= 0.0:
-		var charge_t := clamp(run_charge/RUN_CHARGE_TIME,0.0,1.0)
-		var eased := charge_t*charge_t*(3.0-2.0*charge_t)
-		var run_mult := lerp(START_SPEED_MULT,SPRINT_SPEED_MULT,eased)
-		var sprint_target := direction*(base_speed+speed_bonus)*run_mult
+		var charge_t: float = clampf(run_charge/RUN_CHARGE_TIME,0.0,1.0)
+		var eased: float = charge_t*charge_t*(3.0-2.0*charge_t)
+		var run_mult: float = lerpf(START_SPEED_MULT,SPRINT_SPEED_MULT,eased)
+		var sprint_target: float = direction*(base_speed+speed_bonus)*run_mult
 		velocity.x = move_toward(velocity.x,sprint_target,SPRINT_ACCEL*delta)
 
 	# Momentum slide. It is intentionally unavailable from a standstill.
@@ -93,16 +93,16 @@ func _physics_process(delta: float) -> void:
 			stomp_cooldown = 0.18
 
 	# Camera look-ahead makes high-speed corridors readable instead of blind.
-	var cam := get_node_or_null("Camera2D") as Camera2D
+	var cam: Camera2D = get_node_or_null("Camera2D") as Camera2D
 	if cam:
-		var look_x := clamp(velocity.x*0.16,-82.0,112.0)
-		cam.position.x = lerp(cam.position.x,look_x,min(1.0,delta*4.8))
-		cam.position.y = lerp(cam.position.y,-18.0,min(1.0,delta*4.2))
+		var look_x: float = clampf(velocity.x*0.16,-82.0,112.0)
+		cam.position.x = lerpf(cam.position.x,look_x,minf(1.0,delta*4.8))
+		cam.position.y = lerpf(cam.position.y,-18.0,minf(1.0,delta*4.2))
 
 	queue_redraw()
 
 func traversal_speed_ratio() -> float:
-	return clamp(run_charge/RUN_CHARGE_TIME,0.0,1.0)
+	return clampf(run_charge/RUN_CHARGE_TIME,0.0,1.0)
 
 func is_traversal_sliding() -> bool:
 	return slide_timer_v7 > 0.0
