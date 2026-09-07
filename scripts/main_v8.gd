@@ -39,8 +39,8 @@ func _show_title() -> void:
 	super._show_title()
 	for node in menu_layer.get_children():
 		if node is Label and node.text.begins_with("v0.6 TRAVERSAL PASS"):
-			node.text = "v0.7 LIVING WORLD • exploración legendaria • secretos • revisita • rutas desbloqueables"
-	var atlas_btn := _menu_button("ATLAS / REVISITAR MAPAS",Vector2(440,525))
+			node.text = "v0.7.1 LIVING WORLD • exploración legendaria • secretos • revisita • rutas desbloqueables"
+	var atlas_btn: Button = _menu_button("ATLAS / REVISITAR MAPAS",Vector2(440,525))
 	atlas_btn.pressed.connect(_open_atlas_from_title)
 
 func _process(delta: float) -> void:
@@ -59,7 +59,8 @@ func _generate_level(map_no: int) -> void:
 		_remove_legacy_nigzen_portals()
 		_spawn_exploration_site({"id":"nigzen_distortion_%d" % map_no,"legendary":3,"pos":Vector2(1720,390),"title":"Distorsión de NigZen","kind":"nigzen"})
 	if EXPLORATION_SITES.has(map_no):
-		for site in EXPLORATION_SITES[map_no]:
+		for site_variant in EXPLORATION_SITES[map_no]:
+			var site: Dictionary = site_variant
 			_spawn_exploration_site(site)
 
 func _remove_legacy_nigzen_portals() -> void:
@@ -70,35 +71,37 @@ func _remove_legacy_nigzen_portals() -> void:
 
 func _spawn_exploration_site(site: Dictionary) -> void:
 	var discoveries: Array = state.get("world_discoveries",[])
-	var id := str(site.get("id","site"))
+	var id: String = str(site.get("id","site"))
 	if id in discoveries:
 		return
-	var idx := clamp(int(site.get("legendary",0)),0,WorldData.LEGENDARIES.size()-1)
-	var node := Node2D.new()
+	var idx: int = clampi(int(site.get("legendary",0)),0,WorldData.LEGENDARIES.size()-1)
+	var node: Node2D = Node2D.new()
 	node.set_script(ExplorationNodeScript)
 	world.add_child(node)
-	node.position = site.get("pos",Vector2(900,500))
+	var site_position: Vector2 = site.get("pos",Vector2(900,500))
+	node.position = site_position
 	node.setup(id,idx,str(site.get("title","Secreto")),str(site.get("kind","spirit")),EXPLORATION_COLORS[idx])
 	exploration_nodes.append(node)
 
-func _nearest_exploration_node(max_distance: float = 150.0):
+func _nearest_exploration_node(max_distance: float = 150.0) -> Node:
 	if not player or not is_instance_valid(player): return null
-	var best = null
-	var best_dist := max_distance
-	for node in exploration_nodes:
+	var best: Node = null
+	var best_dist: float = max_distance
+	for node_variant in exploration_nodes:
+		var node: Node = node_variant
 		if not is_instance_valid(node) or bool(node.completed): continue
-		var d := player.global_position.distance_to(node.global_position)
-		if d < best_dist:
-			best_dist = d
+		var distance_to_site: float = player.global_position.distance_to(node.global_position)
+		if distance_to_site < best_dist:
+			best_dist = distance_to_site
 			best = node
 	return best
 
 func _try_contextual_exploration() -> void:
-	var node = _nearest_exploration_node(165.0)
+	var node: Node = _nearest_exploration_node(165.0)
 	if node == null:
 		_toast("No hay ninguna resonancia legendaria cerca.",1.5)
 		return
-	var idx := int(node.required_legendary)
+	var idx: int = int(node.required_legendary)
 	var legendary: Dictionary = WorldData.LEGENDARIES[idx]
 	var owned: Array = state.get("pets",[])
 	if idx not in owned:
@@ -107,13 +110,13 @@ func _try_contextual_exploration() -> void:
 	_activate_exploration_site(node,idx)
 
 func _legendary_unlock_hint(idx: int) -> String:
-	var maps := [1,7,11,15,19,23,27,31]
+	var maps: Array = [1,7,11,15,19,23,27,31]
 	if idx == 0: return "Xethkioz ya viaja con vos."
-	return "Su vínculo aparece alrededor del Mapa %d." % maps[clamp(idx,0,maps.size()-1)]
+	return "Su vínculo aparece alrededor del Mapa %d." % int(maps[clampi(idx,0,maps.size()-1)])
 
 func _activate_exploration_site(node: Node,idx: int) -> void:
 	var discoveries: Array = state.get("world_discoveries",[])
-	var id := str(node.discovery_id)
+	var id: String = str(node.discovery_id)
 	if id in discoveries: return
 	discoveries.append(id)
 	state["world_discoveries"] = discoveries
@@ -168,9 +171,9 @@ func _apply_exploration_reward(idx: int,kind: String,pos: Vector2) -> void:
 func update_hud() -> void:
 	super.update_hud()
 	if not objective_label: return
-	var nearby = _nearest_exploration_node(175.0)
+	var nearby: Node = _nearest_exploration_node(175.0)
 	if nearby:
-		var idx := int(nearby.required_legendary)
+		var idx: int = int(nearby.required_legendary)
 		objective_label.text += "   •   G: %s" % str(WorldData.LEGENDARIES[idx]["name"])
 	else:
 		objective_label.text += "   •   G poder de exploración"
@@ -185,21 +188,21 @@ func _open_atlas_from_title() -> void:
 func _show_atlas_menu() -> void:
 	if menu_layer: menu_layer.queue_free()
 	menu_layer = CanvasLayer.new(); menu_layer.layer = 115; add_child(menu_layer)
-	var bg := ColorRect.new(); bg.position=Vector2.ZERO; bg.size=Vector2(1280,720); bg.color=Color(0.025,0.025,0.055); menu_layer.add_child(bg)
-	var title := Label.new(); title.position=Vector2(150,42); title.size=Vector2(980,58); title.text="ATLAS DE ELIDA — REVISITAR EL MUNDO"; title.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER; title.add_theme_font_size_override("font_size",30); title.add_theme_color_override("font_color",Color(0.70,0.48,1.0)); menu_layer.add_child(title)
-	var unlocked := clamp(int(state.get("unlocked_map",1)),1,32)
-	var info := Label.new(); info.position=Vector2(180,102); info.size=Vector2(920,54); info.text="Mapas alcanzados: %d/32   •   Secretos legendarios: %d   •   Revisitas: %d" % [unlocked,int(state.get("exploration_mastery",0)),int(state.get("revisit_count",0))]; info.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER; info.add_theme_font_size_override("font_size",15); menu_layer.add_child(info)
-	var first := atlas_page*8+1
+	var bg: ColorRect = ColorRect.new(); bg.position=Vector2.ZERO; bg.size=Vector2(1280,720); bg.color=Color(0.025,0.025,0.055); menu_layer.add_child(bg)
+	var title: Label = Label.new(); title.position=Vector2(150,42); title.size=Vector2(980,58); title.text="ATLAS DE ELIDA — REVISITAR EL MUNDO"; title.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER; title.add_theme_font_size_override("font_size",30); title.add_theme_color_override("font_color",Color(0.70,0.48,1.0)); menu_layer.add_child(title)
+	var unlocked: int = clampi(int(state.get("unlocked_map",1)),1,32)
+	var info: Label = Label.new(); info.position=Vector2(180,102); info.size=Vector2(920,54); info.text="Mapas alcanzados: %d/32   •   Secretos legendarios: %d   •   Revisitas: %d" % [unlocked,int(state.get("exploration_mastery",0)),int(state.get("revisit_count",0))]; info.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER; info.add_theme_font_size_override("font_size",15); menu_layer.add_child(info)
+	var first: int = atlas_page*8+1
 	for slot in range(8):
-		var map_no := first+slot
+		var map_no: int = first+slot
 		if map_no > unlocked or map_no > 32: continue
-		var b := Button.new(); b.position=Vector2(95+(slot%4)*285,205+int(slot/4)*150); b.size=Vector2(255,112); b.text="%02d — %s\n%s" % [map_no,WorldData.map_name(map_no),WorldData.region_for_map(map_no)]; b.add_theme_font_size_override("font_size",12); b.pressed.connect(_start_revisit.bind(map_no)); menu_layer.add_child(b)
-	var max_page := int((unlocked-1)/8)
+		var b: Button = Button.new(); b.position=Vector2(95+(slot%4)*285,205+int(slot/4)*150); b.size=Vector2(255,112); b.text="%02d — %s\n%s" % [map_no,WorldData.map_name(map_no),WorldData.region_for_map(map_no)]; b.add_theme_font_size_override("font_size",12); b.pressed.connect(_start_revisit.bind(map_no)); menu_layer.add_child(b)
+	var max_page: int = int((unlocked-1)/8)
 	if atlas_page > 0:
-		var prev := Button.new(); prev.position=Vector2(230,545); prev.size=Vector2(230,48); prev.text="◀ ANTERIORES"; prev.pressed.connect(func(): atlas_page-=1; _show_atlas_menu()); menu_layer.add_child(prev)
+		var prev: Button = Button.new(); prev.position=Vector2(230,545); prev.size=Vector2(230,48); prev.text="◀ ANTERIORES"; prev.pressed.connect(func(): atlas_page-=1; _show_atlas_menu()); menu_layer.add_child(prev)
 	if atlas_page < max_page:
-		var next := Button.new(); next.position=Vector2(820,545); next.size=Vector2(230,48); next.text="SIGUIENTES ▶"; next.pressed.connect(func(): atlas_page+=1; _show_atlas_menu()); menu_layer.add_child(next)
-	var back := Button.new(); back.position=Vector2(490,620); back.size=Vector2(300,48); back.text="VOLVER AL MENÚ"; back.pressed.connect(_show_title); menu_layer.add_child(back)
+		var next: Button = Button.new(); next.position=Vector2(820,545); next.size=Vector2(230,48); next.text="SIGUIENTES ▶"; next.pressed.connect(func(): atlas_page+=1; _show_atlas_menu()); menu_layer.add_child(next)
+	var back: Button = Button.new(); back.position=Vector2(490,620); back.size=Vector2(300,48); back.text="VOLVER AL MENÚ"; back.pressed.connect(_show_title); menu_layer.add_child(back)
 
 func _start_revisit(map_no: int) -> void:
 	revisit_mode = true
@@ -207,7 +210,7 @@ func _start_revisit(map_no: int) -> void:
 	revisit_unlocked_map = int(state.get("unlocked_map",1))
 	state["revisit_count"] = int(state.get("revisit_count",0))+1
 	SaveSystem.save_state(state)
-	current_map = clamp(map_no,1,revisit_unlocked_map)
+	current_map = clampi(map_no,1,revisit_unlocked_map)
 	supplies = float(state.get("supplies",100.0))
 	_start_level()
 	_toast("REVISITA • Mapa %02d — buscá rutas que antes no podías abrir." % current_map,3.0)
@@ -226,11 +229,11 @@ func _show_intermission() -> void:
 func _show_revisit_result() -> void:
 	if menu_layer: menu_layer.queue_free()
 	menu_layer = CanvasLayer.new(); menu_layer.layer=116; add_child(menu_layer)
-	var bg := ColorRect.new(); bg.position=Vector2.ZERO; bg.size=Vector2(1280,720); bg.color=Color(0.028,0.026,0.060); menu_layer.add_child(bg)
-	var title := Label.new(); title.position=Vector2(180,120); title.size=Vector2(920,70); title.text="REVISITA COMPLETADA"; title.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER; title.add_theme_font_size_override("font_size",34); title.add_theme_color_override("font_color",Color(1.0,0.72,0.34)); menu_layer.add_child(title)
-	var info := Label.new(); info.position=Vector2(250,220); info.size=Vector2(780,100); info.text="El progreso principal se mantiene intacto.\nSecretos legendarios descubiertos: %d" % int(state.get("exploration_mastery",0)); info.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER; info.add_theme_font_size_override("font_size",18); menu_layer.add_child(info)
-	var atlas := Button.new(); atlas.position=Vector2(390,380); atlas.size=Vector2(500,56); atlas.text="VOLVER AL ATLAS"; atlas.pressed.connect(_show_atlas_menu); menu_layer.add_child(atlas)
-	var campaign := Button.new(); campaign.position=Vector2(390,455); campaign.size=Vector2(500,56); campaign.text="CONTINUAR CAMPAÑA PRINCIPAL"; campaign.pressed.connect(_resume_campaign_after_revisit); menu_layer.add_child(campaign)
+	var bg: ColorRect = ColorRect.new(); bg.position=Vector2.ZERO; bg.size=Vector2(1280,720); bg.color=Color(0.028,0.026,0.060); menu_layer.add_child(bg)
+	var title: Label = Label.new(); title.position=Vector2(180,120); title.size=Vector2(920,70); title.text="REVISITA COMPLETADA"; title.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER; title.add_theme_font_size_override("font_size",34); title.add_theme_color_override("font_color",Color(1.0,0.72,0.34)); menu_layer.add_child(title)
+	var info: Label = Label.new(); info.position=Vector2(250,220); info.size=Vector2(780,100); info.text="El progreso principal se mantiene intacto.\nSecretos legendarios descubiertos: %d" % int(state.get("exploration_mastery",0)); info.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER; info.add_theme_font_size_override("font_size",18); menu_layer.add_child(info)
+	var atlas: Button = Button.new(); atlas.position=Vector2(390,380); atlas.size=Vector2(500,56); atlas.text="VOLVER AL ATLAS"; atlas.pressed.connect(_show_atlas_menu); menu_layer.add_child(atlas)
+	var campaign: Button = Button.new(); campaign.position=Vector2(390,455); campaign.size=Vector2(500,56); campaign.text="CONTINUAR CAMPAÑA PRINCIPAL"; campaign.pressed.connect(_resume_campaign_after_revisit); menu_layer.add_child(campaign)
 
 func _resume_campaign_after_revisit() -> void:
 	revisit_mode = false
