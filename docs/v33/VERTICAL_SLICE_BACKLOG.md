@@ -11,28 +11,30 @@
 - [x] HUD placeholder
 - [x] Quest objective placeholder
 - [x] Simplified weather + time
-- [ ] CI parse/smoke validation on v3.3 branch
+- [x] CI parse/smoke validation on v3.3 branch
 - [ ] Replace greybox with first production tileset chunk
-- [ ] First NPC interaction: Ivan or Alexis
+- [x] First NPC interaction: Ivan or Alexis
 - [ ] Lago Encantado path + Val/Rola/Mela
 - [ ] Deterministic first pet capture
-- [ ] One gathering profession + one recipe
+- [x] One gathering profession + one recipe
 - [ ] Inventory/equipment minimum viable UI
 - [ ] Miniboss
 - [ ] Small dungeon
 - [ ] Boss 5 + mentor reveal
 - [ ] Paso Prismático unlock
 - [ ] Refugio de Elida as explorable space
-- [ ] Secret cave visible but gated
+- [x] Secret cave visible but gated
+- [x] Five persistent lore seeds with reactive NPC dialogue
+- [ ] Connect first lore seed to a follow-up exploration objective
 
 ## P1 — presentation
 - [ ] Approved Viajero spritesheet
 - [ ] Approved Xethkioz spritesheet
 - [ ] 6 Golden Region creature bases
 - [ ] VFX telegraphs
-- [ ] Dialogue UI
+- [x] Dialogue UI
 - [ ] Ambient/audio pass
 - [ ] Accessibility pass
 
 ## Scope guard
-No Desfralar/Xiomalar/NigZen production content until Golden Region 1–5 reaches external-test quality.
+No Desfralar/Xiomalar/NigZen production content until Golden Region 1–5 reaches external-test quality. Future arcs may only appear as restrained lore seeds, environmental clues and dialogue foreshadowing inside Izrdralar.
