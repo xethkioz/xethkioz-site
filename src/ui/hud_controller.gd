@@ -4,6 +4,7 @@ var hp_label: Label
 var progress_label: Label
 var quest_label: Label
 var world_label: Label
+var lore_label: Label
 var inventory_label: Label
 var toast_label: Label
 var dialog_panel: ColorRect
@@ -12,6 +13,7 @@ var _toast_timer := 0.0
 var _dialog_timer := 0.0
 var _weather := "despejado"
 var _hour := 8.0
+var _lore_total_hint := 5
 
 func _ready() -> void:
 	_build_ui()
@@ -22,11 +24,13 @@ func _ready() -> void:
 	EventBus.quest_changed.connect(_on_quest)
 	EventBus.weather_changed.connect(_on_weather)
 	EventBus.time_changed.connect(_on_time)
+	EventBus.lore_discovered.connect(_on_lore_discovered)
 	EventBus.toast_requested.connect(_on_toast)
 	EventBus.dialog_requested.connect(_on_dialog)
 	_on_progress(GameState.player_level, GameState.player_xp, GameState.xp_to_next())
 	_on_currency(GameState.crystals)
 	_on_inventory(InventoryService.stacks)
+	_update_lore_label()
 
 func _process(delta: float) -> void:
 	_toast_timer = maxf(0.0, _toast_timer - delta)
@@ -47,6 +51,7 @@ func _build_ui() -> void:
 	progress_label = _make_label(Vector2(16, 34), Vector2(230, 30), "Nivel 1", 10)
 	quest_label = _make_label(Vector2(382, 12), Vector2(248, 54), "Misión", 10)
 	quest_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	lore_label = _make_label(Vector2(12, 288), Vector2(330, 18), "Atlas · Ecos 0/5", 8)
 	inventory_label = _make_label(Vector2(12, 310), Vector2(330, 18), "Bolsa", 8)
 	world_label = _make_label(Vector2(12, 332), Vector2(300, 20), "", 9)
 	toast_label = _make_label(Vector2(170, 217), Vector2(300, 24), "", 10)
@@ -91,6 +96,15 @@ func _on_currency(_crystals: int) -> void:
 func _on_inventory(_stacks: Dictionary) -> void:
 	if inventory_label:
 		inventory_label.text = "Bolsa · Manzana %d · Hongo %d · Ración %d" % [InventoryService.amount_of("manzana_bruma"), InventoryService.amount_of("hongo_azul_rocio"), InventoryService.amount_of("racion_bosque")]
+
+func _on_lore_discovered(_lore_id: String, _title: String, _discovered_count: int, total_hint: int) -> void:
+	if total_hint > 0:
+		_lore_total_hint = total_hint
+	_update_lore_label()
+
+func _update_lore_label() -> void:
+	if lore_label:
+		lore_label.text = "Atlas · Ecos %d/%d" % [GameState.discovered_lore.size(), _lore_total_hint]
 
 func _on_quest(title: String, objective: String, completed: bool) -> void:
 	if quest_label:
