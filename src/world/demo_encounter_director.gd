@@ -84,5 +84,6 @@ func _spawn_npc(root: Node, npc_id: String, display_name: String, pos: Vector2, 
 	npc.name = node_name
 	npc.set_script(NpcScript)
 	npc.position = pos
-	npc.configure(npc_id, display_name, [line], color, [])
+	var lines: Array[String] = [line]
+	npc.configure(npc_id, display_name, lines, color, [])
 	root.add_child(npc)
