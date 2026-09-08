@@ -9,7 +9,7 @@
 [ext_resource path="res://src/world/world_atmosphere.gd" type="Script" id="7_atmosphere"]
 [ext_resource path="res://src/world/lake_shore_director.gd" type="Script" id="8_lake"]
 [ext_resource path="res://src/world/regional_set_dressing.gd" type="Script" id="9_dressing"]
-[ext_resource path="res://src/ui/world_entry_sequence.gd" type="Script" id="10_entry"]
+[ext_resource path="res://src/ui/zone_title_overlay.gd" type="Script" id="10_zone"]
 
 [node name="GoldenRegion" type="Node2D"]
 script = ExtResource("1")
@@ -29,10 +29,6 @@ script = ExtResource("9_dressing")
 [node name="WorldAtmosphere" type="Node2D" parent="."]
 script = ExtResource("7_atmosphere")
 
-[node name="WorldEntrySequence" type="CanvasLayer" parent="."]
-layer = 80
-script = ExtResource("10_entry")
-
 [node name="RefugioDoor" type="Node2D" parent="."]
 position = Vector2(832, 1696)
 script = ExtResource("5_portal")
@@ -45,6 +41,16 @@ accent_color = Color(1, 0.549, 0.259, 1)
 
 [node name="AssistHUD" type="CanvasLayer" parent="."]
 layer = 20
+
+[node name="ZoneTitleOverlay" type="Control" parent="AssistHUD"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("10_zone")
 
 [node name="NavigationHint" type="Control" parent="AssistHUD"]
 offset_left = 202.0
