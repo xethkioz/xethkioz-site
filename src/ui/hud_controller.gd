@@ -8,6 +8,7 @@ const C_VIOLET := Color("8b5cf6")
 const C_ORANGE := Color("ff8c42")
 const C_GREEN := Color("79b99a")
 const C_WATER := Color("6ed4e8")
+const C_DANGER := Color("ff6b6b")
 const DIALOG_PORTRAITS := preload("res://assets/production/characters/dialog_portraits.svg")
 const PORTRAIT_INDEX := {
 	"alexis": 0,
@@ -37,11 +38,15 @@ var dialog_panel: Panel
 var dialog_label: Label
 var dialog_portrait: TextureRect
 var skill_name_labels: Dictionary = {}
-var _toast_timer := 0.0
-var _dialog_timer := 0.0
-var _weather := "despejado"
-var _hour := 8.0
-var _lore_total_hint := 5
+var skill_status_labels: Dictionary = {}
+var _toast_timer: float = 0.0
+var _dialog_timer: float = 0.0
+var _weather: String = "despejado"
+var _hour: float = 8.0
+var _lore_total_hint: int = 5
+var _mana_current: float = 80.0
+var _skill_refresh_timer: float = 0.0
+var _player: Node
 
 func _ready() -> void:
 	_build_ui()
@@ -58,6 +63,7 @@ func _ready() -> void:
 	EventBus.familiar_assessed.connect(_on_familiar_assessed)
 	EventBus.active_familiar_changed.connect(_on_active_familiar_changed)
 	EventBus.mentor_selected.connect(_on_mentor_selected)
+	EventBus.set_progress_changed.connect(_on_set_progress_changed)
 	EventBus.toast_requested.connect(_on_toast)
 	EventBus.dialog_requested.connect(_on_dialog)
 	_on_progress(GameState.player_level, GameState.player_xp, GameState.xp_to_next())
@@ -67,10 +73,15 @@ func _ready() -> void:
 	_update_lore_label()
 	_update_world_label()
 	_update_combat_loadout()
+	_update_skill_status()
 
 func _process(delta: float) -> void:
 	_toast_timer = maxf(0.0, _toast_timer - delta)
 	_dialog_timer = maxf(0.0, _dialog_timer - delta)
+	_skill_refresh_timer -= delta
+	if _skill_refresh_timer <= 0.0:
+		_skill_refresh_timer = 0.08
+		_update_skill_status()
 	if _toast_timer <= 0.0 and toast_label:
 		toast_label.visible = false
 	if _dialog_timer <= 0.0 and dialog_panel:
@@ -196,6 +207,9 @@ func _make_skill(pos: Vector2, key: String, name: String, accent: Color) -> Labe
 	panel.z_index = 1
 	var key_label := _make_label(pos + Vector2(4,3), Vector2(15,10), key, 8, C_TEXT, true)
 	key_label.z_index = 2
+	var status_label := _make_label(pos + Vector2(19,3), Vector2(25,10), "", 6, C_MUTED, true, HORIZONTAL_ALIGNMENT_RIGHT)
+	status_label.z_index = 2
+	skill_status_labels[key] = status_label
 	var skill_label := _make_label(pos + Vector2(4,17), Vector2(40,8), name, 5, accent, true, HORIZONTAL_ALIGNMENT_RIGHT)
 	skill_label.z_index = 2
 	return skill_label
@@ -205,8 +219,10 @@ func _on_health(current: float, maximum: float) -> void:
 		hp_bar.size.x = 128.0 * clampf(current / maxf(1.0, maximum), 0.0, 1.0)
 
 func _on_mana(current: float, maximum: float) -> void:
+	_mana_current = current
 	if mana_bar:
 		mana_bar.size.x = 96.0 * clampf(current / maxf(1.0, maximum), 0.0, 1.0)
+	_update_skill_status()
 
 func _on_progress(level: int, xp: int, xp_to_next: int) -> void:
 	if hp_label:
@@ -263,24 +279,75 @@ func _update_familiar_label() -> void:
 
 func _on_mentor_selected(_mentor_id: String) -> void:
 	_update_combat_loadout()
+	_update_skill_status()
+
+func _on_set_progress_changed(set_id: String, _pieces: int) -> void:
+	if set_id != "brote_vivo":
+		return
+	_update_combat_loadout()
+	_update_skill_status()
 
 func _update_combat_loadout() -> void:
 	if skill_name_labels.is_empty():
 		return
-	var names := {"Q":"CORTE", "E":"GUARDIA", "R":"DESTELLO", "F":"BLOQ."}
+	var pieces: int = GameState.set_piece_count("brote_vivo")
+	var f_name: String = "BROTE" if pieces >= 4 else "BLOQ."
+	var names := {"Q":"CORTE", "E":"GUARDIA", "R":"DESTELLO", "F":f_name}
 	match GameState.selected_mentor:
 		"ashley":
-			names = {"Q":"ONDA", "E":"MELODÍA", "R":"RESON.", "F":"BROTE"}
+			names = {"Q":"ONDA", "E":"MELODÍA", "R":"RESON.", "F":f_name}
 		"fermin":
-			names = {"Q":"BARRIDO", "E":"GUARDIA", "R":"EMBEST.", "F":"BROTE"}
+			names = {"Q":"BARRIDO", "E":"GUARDIA", "R":"EMBEST.", "F":f_name}
 		"isabella":
-			names = {"Q":"MARCA", "E":"RUNA", "R":"DETON.", "F":"BROTE"}
+			names = {"Q":"MARCA", "E":"RUNA", "R":"DETON.", "F":f_name}
 		"gael":
-			names = {"Q":"DISPARO", "E":"TRAMPA", "R":"CARGADO", "F":"BROTE"}
+			names = {"Q":"DISPARO", "E":"TRAMPA", "R":"CARGADO", "F":f_name}
 	for slot in names.keys():
 		var label: Label = skill_name_labels.get(slot)
 		if label:
 			label.text = str(names[slot])
+
+func _update_skill_status() -> void:
+	if skill_status_labels.is_empty():
+		return
+	if not is_instance_valid(_player):
+		_player = get_tree().get_first_node_in_group("player")
+	var cooldowns: Dictionary = {}
+	if is_instance_valid(_player):
+		var raw_cooldowns = _player.get("_ability_cooldowns")
+		if raw_cooldowns is Dictionary:
+			cooldowns = raw_cooldowns
+	var costs: Dictionary = _ability_costs()
+	var pieces: int = GameState.set_piece_count("brote_vivo")
+	for slot in ["Q", "E", "R", "F"]:
+		var label: Label = skill_status_labels.get(slot)
+		if label == null:
+			continue
+		if slot == "F" and pieces < 4:
+			label.text = "%d/4" % pieces
+			label.add_theme_color_override("font_color", C_ORANGE)
+			continue
+		var remaining: float = float(cooldowns.get(slot, 0.0))
+		if remaining > 0.05:
+			label.text = "%.1f" % remaining if remaining < 10.0 else "%d" % ceili(remaining)
+			label.add_theme_color_override("font_color", C_ORANGE)
+			continue
+		var mana_cost: int = int(costs.get(slot, 0))
+		label.text = "%dM" % mana_cost
+		label.add_theme_color_override("font_color", C_DANGER if _mana_current + 0.01 < float(mana_cost) else C_MUTED)
+
+func _ability_costs() -> Dictionary:
+	match GameState.selected_mentor:
+		"ashley":
+			return {"Q":12, "E":18, "R":24, "F":20}
+		"fermin":
+			return {"Q":12, "E":16, "R":24, "F":20}
+		"isabella":
+			return {"Q":12, "E":18, "R":26, "F":20}
+		"gael":
+			return {"Q":10, "E":16, "R":24, "F":20}
+		_:
+			return {"Q":8, "E":10, "R":15, "F":20}
 
 func _on_quest(title: String, objective: String, completed: bool) -> void:
 	if quest_label:
