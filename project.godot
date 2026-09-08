@@ -1,11 +1,12 @@
 [application]
 config/name="World of Xethkioz"
-run/main_scene="res://scenes/v33/VerticalSlice.tscn"
+run/main_scene="res://scenes/v34/GameBootstrap.tscn"
 config/features=PackedStringArray("4.7")
 
 [autoload]
 EventBus="*res://src/core/event_bus.gd"
 GameState="*res://src/core/game_state.gd"
+CharacterProfile="*res://src/core/character_profile.gd"
 InventoryService="*res://src/items/inventory_service.gd"
 SaveService="*res://src/core/save_service.gd"
 DemoEncounterDirector="*res://src/world/demo_encounter_director.gd"
