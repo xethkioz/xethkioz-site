@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" shape-rendering="crispEdges">
+<rect width="32" height="32" fill="none"/>
+<ellipse cx="16" cy="27" rx="10" ry="2" fill="#071019" opacity=".42"/>
+<path d="M7 10h18l3 4v10l-3 3H7l-3-3V14z" fill="#323b3f"/>
+<rect x="8" y="12" width="16" height="12" fill="#586266"/>
+<rect x="10" y="14" width="12" height="7" fill="#14262c"/>
+<rect x="11" y="15" width="10" height="5" fill="#244958"/>
+<rect x="11" y="15" width="2" height="1" fill="#9de9ef"/>
+<rect x="14" y="17" width="1" height="2" fill="#3fc7c9"/>
+<rect x="17" y="16" width="1" height="3" fill="#8b5cf6"/>
+<rect x="20" y="18" width="1" height="1" fill="#d9ceff"/>
+<rect x="6" y="15" width="2" height="6" fill="#9b6740"/>
+<rect x="24" y="15" width="2" height="6" fill="#9b6740"/>
+<rect x="9" y="24" width="4" height="2" fill="#1c2225"/>
+<rect x="19" y="24" width="4" height="2" fill="#1c2225"/>
+<polygon points="16,7 19,10 16,13 13,10" fill="#6548b6"/>
+<rect x="16" y="8" width="1" height="3" fill="#e6ddff"/>
+</svg>
