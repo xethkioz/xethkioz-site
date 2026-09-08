@@ -2,12 +2,14 @@ extends "res://src/player/player_controller.gd"
 
 const SHEET := preload("res://assets/production/characters/viajero_sheet.svg")
 const ProfileOverlayScript := preload("res://src/player/player_profile_overlay.gd")
+const FeedbackFxScript := preload("res://src/fx/world_feedback_fx.gd")
 const FRAME_SIZE := Vector2(32, 32)
 
 var _visual: Sprite2D
 var _profile_overlay: Node2D
-var _anim_clock := 0.0
-var _anim_frame := 1
+var _anim_clock: float = 0.0
+var _anim_frame: int = 1
+var _hit_flash_left: float = 0.0
 
 func _ready() -> void:
 	super._ready()
@@ -33,6 +35,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
+	_hit_flash_left = maxf(0.0, _hit_flash_left - delta)
 	_update_visual(delta)
 
 func _update_visual(delta: float) -> void:
@@ -53,7 +56,21 @@ func _update_visual(delta: float) -> void:
 	elif facing.y < 0.0:
 		row = 3
 	_visual.region_rect = Rect2(Vector2(_anim_frame * 32, row * 32), FRAME_SIZE)
-	_visual.modulate = Color.WHITE
+	_visual.modulate = Color(1.0, 0.62, 0.58, 1.0) if _hit_flash_left > 0.0 else Color.WHITE
+
+func _perform_melee_attack() -> void:
+	super._perform_melee_attack()
+	var accent: Color = CharacterProfile.accent_color_value()
+	_spawn_feedback("slash", global_position + facing * 17.0 + Vector2(0, -7), facing, accent, "")
+
+func take_damage(amount: float) -> void:
+	if amount <= 0.0:
+		return
+	var impact_position: Vector2 = global_position + Vector2(0, -8)
+	var applied: float = amount * (0.4 if _guard_time_left > 0.0 else 1.0)
+	_hit_flash_left = 0.13
+	super.take_damage(amount)
+	_spawn_feedback("hurt", impact_position, -facing, Color("ff6b6b"), "-%d" % roundi(applied))
 
 func _use_brote_vivo() -> void:
 	var pieces: int = GameState.set_piece_count("brote_vivo")
@@ -63,7 +80,17 @@ func _use_brote_vivo() -> void:
 	if not _spend_and_start("F", 20.0, 60.0):
 		return
 	_heal(max_health * 0.25)
+	_spawn_feedback("pickup", global_position + Vector2(0, -10), Vector2.UP, Color("8fcf78"), "+25% salud")
 	EventBus.toast_requested.emit("Brote Vivo · Renovación")
+
+func _spawn_feedback(kind_value: String, world_position: Vector2, direction_value: Vector2, color_value: Color, text_value: String) -> void:
+	var scene: Node = get_tree().current_scene
+	if scene == null:
+		return
+	var fx: Node2D = FeedbackFxScript.new() as Node2D
+	fx.global_position = world_position
+	scene.add_child(fx)
+	fx.call("configure", kind_value, direction_value, color_value, text_value)
 
 func _draw() -> void:
 	if _guard_time_left > 0.0:
