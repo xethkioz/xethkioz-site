@@ -2,6 +2,8 @@ class_name ProductionChunk
 extends Node2D
 
 const Factory := preload("res://src/world/production_tileset_factory.gd")
+const LARGE_PROPS := preload("res://assets/production/izrdralar/large_props.svg")
+const LANDMARKS := preload("res://assets/production/izrdralar/landmarks.svg")
 const TILE_SIZE := 16
 const CHUNK_TILES := 32
 const CHUNK_PIXELS := TILE_SIZE * CHUNK_TILES
@@ -12,6 +14,7 @@ var exits := {"n": false, "e": false, "s": false, "w": false}
 var seed_value := 0
 var _ground: TileMapLayer
 var _detail: TileMapLayer
+var _props: Node2D
 var _blockers: Node2D
 
 func configure(coord: Vector2i, data: Dictionary, world_seed: int) -> void:
@@ -37,6 +40,11 @@ func _build() -> void:
 	_detail.z_index = -10
 	add_child(_detail)
 
+	_props = Node2D.new()
+	_props.name = "LargeProps"
+	_props.z_index = -5
+	add_child(_props)
+
 	_blockers = Node2D.new()
 	_blockers.name = "Blockers"
 	add_child(_blockers)
@@ -45,14 +53,11 @@ func _build() -> void:
 	_carve_routes()
 	_apply_biome_features()
 	_decorate()
+	_place_chunk_landmarks()
 
 func _fill_base() -> void:
 	var base_tile: Vector2i = Factory.GRASS
-	if biome == "ruins":
-		base_tile = Factory.DARK_GRASS
-	elif biome == "lake":
-		base_tile = Factory.GRASS
-	elif biome == "boss":
+	if biome in ["ruins", "boss"]:
 		base_tile = Factory.DARK_GRASS
 	for y in range(CHUNK_TILES):
 		for x in range(CHUNK_TILES):
@@ -108,6 +113,8 @@ func _paint_river() -> void:
 	for x in range(3, 9):
 		_ground.set_cell(Vector2i(x, bridge_y), 0, Factory.BRIDGE)
 		_ground.set_cell(Vector2i(x, bridge_y + 1), 0, Factory.BRIDGE)
+	_add_rect_blocker(Rect2(48, 0, 96, float(bridge_y * TILE_SIZE)))
+	_add_rect_blocker(Rect2(48, float((bridge_y + 2) * TILE_SIZE), 96, float(CHUNK_PIXELS - (bridge_y + 2) * TILE_SIZE)))
 
 func _paint_lake() -> void:
 	var center := Vector2(21, 11)
@@ -118,6 +125,9 @@ func _paint_lake() -> void:
 				_ground.set_cell(Vector2i(x, y), 0, Factory.WATER)
 			elif d < 9.4:
 				_ground.set_cell(Vector2i(x, y), 0, Factory.WATER_FOAM)
+	_add_circle_blocker(Vector2(344, 184), 124.0)
+	for cell in [Vector2i(13,19), Vector2i(16,20), Vector2i(23,21), Vector2i(29,18)]:
+		_place_large_prop(cell, 5, false)
 
 func _paint_ruins() -> void:
 	for y in range(7, 23):
@@ -163,18 +173,66 @@ func _decorate() -> void:
 			if base in [Factory.PATH, Factory.WATER, Factory.WATER_FOAM, Factory.BRIDGE, Factory.RUIN_FLOOR]:
 				continue
 			var roll: int = _cell_roll(x, y)
-			if roll < 3:
-				_detail.set_cell(cell, 0, Factory.TREE)
-				_add_blocker(cell, Vector2(12, 10), Vector2(0, 3))
-			elif roll < 6:
+			if roll < 4:
+				_place_large_prop(cell, 0, true)
+			elif roll < 6 and biome in ["forest", "refuge", "lake"]:
+				_place_large_prop(cell, 1, true)
+			elif roll < 9:
 				_detail.set_cell(cell, 0, Factory.SHRUB)
-			elif roll == 7:
-				_detail.set_cell(cell, 0, Factory.ROCK)
-				_add_blocker(cell, Vector2(12, 8), Vector2(0, 4))
-			elif roll == 8:
+			elif roll < 11:
+				_place_large_prop(cell, 4, true)
+			elif roll == 11:
 				_detail.set_cell(cell, 0, Factory.FLOWERS)
-			elif roll == 9 and biome in ["ruins", "sanctuary", "boss"]:
-				_detail.set_cell(cell, 0, Factory.CRYSTAL)
+			elif roll == 12 and biome in ["ruins", "sanctuary", "boss"]:
+				_place_large_prop(cell, 2, true)
+			elif roll == 13 and biome in ["ruins", "sanctuary"]:
+				_place_large_prop(cell, 3, true)
+
+func _place_large_prop(cell: Vector2i, frame: int, collidable: bool) -> void:
+	var sprite := Sprite2D.new()
+	var atlas := AtlasTexture.new()
+	atlas.atlas = LARGE_PROPS
+	atlas.region = Rect2(Vector2(frame * 48, 0), Vector2(48, 48))
+	sprite.texture = atlas
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sprite.position = Vector2(cell.x * TILE_SIZE + 8, cell.y * TILE_SIZE - 8)
+	_props.add_child(sprite)
+	if collidable:
+		var size := Vector2(14, 10)
+		if frame == 4:
+			size = Vector2(22, 12)
+		elif frame in [2, 3]:
+			size = Vector2(16, 14)
+		_add_blocker(cell, size, Vector2(0, 3))
+
+func _place_landmark(frame: int, center: Vector2) -> void:
+	var sprite := Sprite2D.new()
+	var atlas := AtlasTexture.new()
+	atlas.atlas = LANDMARKS
+	atlas.region = Rect2(Vector2(frame * 96, 0), Vector2(96, 80))
+	sprite.texture = atlas
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sprite.position = center
+	_props.add_child(sprite)
+
+func _place_chunk_landmarks() -> void:
+	if chunk_coord == Vector2i(1, 3):
+		_place_landmark(0, Vector2(320, 128))
+		_add_rect_blocker(Rect2(272, 88, 96, 54))
+		_add_rect_blocker(Rect2(272, 142, 37, 24))
+		_add_rect_blocker(Rect2(331, 142, 37, 24))
+	elif chunk_coord == Vector2i(2, 3):
+		_place_landmark(1, Vector2(220, 190))
+		_place_landmark(1, Vector2(370, 335))
+		_add_rect_blocker(Rect2(172, 150, 96, 58))
+		_add_rect_blocker(Rect2(322, 295, 96, 58))
+	elif chunk_coord == Vector2i(3, 2):
+		_place_landmark(2, Vector2(256, 216))
+		_add_rect_blocker(Rect2(208, 196, 22, 60))
+		_add_rect_blocker(Rect2(282, 196, 22, 60))
+	elif chunk_coord == Vector2i(3, 1):
+		_place_landmark(3, Vector2(250, 200))
+		_add_rect_blocker(Rect2(226, 180, 48, 58))
 
 func _add_blocker(cell: Vector2i, size: Vector2, offset: Vector2) -> void:
 	var body := StaticBody2D.new()
@@ -185,6 +243,32 @@ func _add_blocker(cell: Vector2i, size: Vector2, offset: Vector2) -> void:
 	var rect := RectangleShape2D.new()
 	rect.size = size
 	collision.shape = rect
+	body.add_child(collision)
+	_blockers.add_child(body)
+
+func _add_rect_blocker(rect: Rect2) -> void:
+	if rect.size.x <= 0.0 or rect.size.y <= 0.0:
+		return
+	var body := StaticBody2D.new()
+	body.collision_layer = 4
+	body.collision_mask = 0
+	body.position = rect.position + rect.size * 0.5
+	var collision := CollisionShape2D.new()
+	var shape := RectangleShape2D.new()
+	shape.size = rect.size
+	collision.shape = shape
+	body.add_child(collision)
+	_blockers.add_child(body)
+
+func _add_circle_blocker(center: Vector2, radius: float) -> void:
+	var body := StaticBody2D.new()
+	body.collision_layer = 4
+	body.collision_mask = 0
+	body.position = center
+	var collision := CollisionShape2D.new()
+	var shape := CircleShape2D.new()
+	shape.radius = radius
+	collision.shape = shape
 	body.add_child(collision)
 	_blockers.add_child(body)
 
