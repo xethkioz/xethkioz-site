@@ -31,7 +31,8 @@ func interact(_actor: Node = null) -> void:
 		EventBus.toast_requested.emit("Necesitás una Manzana de Bruma")
 		return
 	if not bait_item_id.is_empty():
-		InventoryService.remove_items({bait_item_id: 1})
+		var bait_cost := {bait_item_id: 1}
+		InventoryService.remove_items(bait_cost)
 	if GameState.capture_familiar(species_id, display_name, affinity, mentor_id):
 		EventBus.dialog_requested.emit(display_name, "Acepta el alimento, toca el Prisma-Atlas con el hocico y decide quedarse cerca de vos.")
 		EventBus.toast_requested.emit("Familiar capturado · %s" % display_name)
@@ -41,7 +42,7 @@ func interaction_label() -> String:
 	return display_name
 
 func _draw() -> void:
-	draw_ellipse(Vector2.ZERO, Vector2(10, 7), accent_color)
+	_draw_body_ellipse(Vector2.ZERO, Vector2(10, 7), accent_color)
 	draw_circle(Vector2(8, -2), 5.0, accent_color.lightened(0.08))
 	draw_circle(Vector2(10, -3), 1.0, Color("12151a"))
 	draw_circle(Vector2(-5, 6), 3.0, accent_color.darkened(0.18))
@@ -49,9 +50,9 @@ func _draw() -> void:
 	var font := ThemeDB.fallback_font
 	draw_string(font, Vector2(-40, -14), display_name, HORIZONTAL_ALIGNMENT_CENTER, 80, 8, Color("f0f0f5"))
 
-func draw_ellipse(center: Vector2, radii: Vector2, color: Color) -> void:
+func _draw_body_ellipse(center: Vector2, radii: Vector2, color: Color) -> void:
 	var points := PackedVector2Array()
-	for i in 24:
+	for i in range(24):
 		var angle := TAU * float(i) / 24.0
 		points.append(center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y))
 	draw_colored_polygon(points, color)
