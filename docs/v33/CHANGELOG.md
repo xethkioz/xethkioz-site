@@ -1,4 +1,13 @@
-# World of Xethkioz — v3.3 development changelog
+# World of Xethkioz — development changelog
+
+## 2026-09-08 — Canon v3.4 / Expansion Structure
+- Defined **Izrdralar** as the complete base game of WORLD OF XETHKIOZ.
+- Defined **Desfralar** as Expansion I.
+- Defined **Xiomalar** as Expansion II.
+- Registered **Zodnight** as a possible Expansion III, intentionally undefined for now.
+- Locked production scope: current demo and launch development remain focused on Izrdralar.
+- Future-expansion lore may be seeded in the base game, but Desfralar/Xiomalar/Zodnight must not inflate the Steam demo or base-game production scope.
+- Added `docs/v34/CANON_EXPANSIONS_v3_4.md` as the authoritative delta over v3.3 for product/expansion structure.
 
 ## 2026-09-08 — v3.3-dev.4
 - Added persistent InventoryService and integrated it with SaveService.
@@ -31,7 +40,7 @@
 - Added EventBus, GameState and SaveService.
 - Added greybox player combat, enemy AI, XP/levels and Xethkioz follower.
 - Added simplified quest, weather, world clock and HUD.
-- Added Izrdralar art-direction seed and vertical-slice backlog.
+- Added Izrdalar art-direction seed and vertical-slice backlog.
 
 ### Compatibility note
 Historical scripts remain in the repository for traceability but are no longer the preferred extension point for v3.3 systems.
