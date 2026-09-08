@@ -1,7 +1,12 @@
 [application]
 config/name="World of Xethkioz"
-run/main_scene="res://scenes/Main.tscn"
+run/main_scene="res://scenes/v33/VerticalSlice.tscn"
 config/features=PackedStringArray("4.7")
+
+[autoload]
+EventBus="*res://src/core/event_bus.gd"
+GameState="*res://src/core/game_state.gd"
+SaveService="*res://src/core/save_service.gd"
 
 [debug]
 gdscript/warnings/inference_on_variant=1
@@ -16,5 +21,4 @@ window/stretch/mode="canvas_items"
 [rendering]
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
-textures/default_filters/use_nearest_mipmap_filter=false
-environment/defaults/default_clear_color=Color(0.035, 0.035, 0.06, 1)
+environment/defaults/default_clear_color=Color(0.027, 0.035, 0.045, 1)
