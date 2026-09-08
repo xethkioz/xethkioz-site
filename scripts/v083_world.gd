@@ -1,9 +1,24 @@
 extends RefCounted
 
+# Golden Slice map builder — maps 1–5.
+# Traversal physics stay lightweight, but all visible helpers are presented as
+# terrain/platform elements rather than debug geometry.
+
 const GROUND_Y := 620.0
 const LEVEL_WIDTH := 3200.0
+const PLATFORM_TEX: Texture2D = preload("res://assets/v08/generated/platform_tile.png")
+const GROUND_TEX: Texture2D = preload("res://assets/v08/generated/ground_tile.png")
 
-static func _add_one_way(main: Node,rect: Rect2,color: Color) -> void:
+static func _terrain_color(main: Node) -> Color:
+	var biome: Dictionary = main._biome()
+	return Color(biome.get("ground",Color(0.14,0.28,0.22)))
+
+static func _terrain_accent(main: Node) -> Color:
+	var biome: Dictionary = main._biome()
+	var c := Color(biome.get("accent",Color(0.35,0.72,0.55)))
+	return Color(c.r*0.82,c.g*0.88,c.b*0.82,0.96)
+
+static func _add_one_way(main: Node,rect: Rect2,_color: Color) -> void:
 	var body := StaticBody2D.new()
 	body.collision_layer = 2
 	body.collision_mask = 0
@@ -15,23 +30,31 @@ static func _add_one_way(main: Node,rect: Rect2,color: Color) -> void:
 	cs.one_way_collision = true
 	cs.one_way_collision_margin = 10.0
 	body.add_child(cs)
-	var poly := Polygon2D.new()
-	var hs := rect.size/2.0
-	poly.polygon = PackedVector2Array([Vector2(-hs.x,-hs.y),Vector2(hs.x,-hs.y),Vector2(hs.x,hs.y),Vector2(-hs.x,hs.y)])
-	poly.color = color
-	body.add_child(poly)
+	var visual := TextureRect.new()
+	visual.position = -rect.size/2.0
+	visual.size = rect.size
+	visual.texture = PLATFORM_TEX
+	visual.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	visual.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+	visual.stretch_mode = TextureRect.STRETCH_TILE
+	visual.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	body.add_child(visual)
 	main.world.add_child(body)
 
-static func _add_slope(main: Node,x: float,y: float,width: float,height: float,up_right: bool,color: Color) -> void:
+static func _add_slope(main: Node,x: float,y: float,width: float,height: float,up_right: bool,_color: Color) -> void:
 	var body := StaticBody2D.new()
 	body.collision_layer = 2
 	body.collision_mask = 0
 	body.position = Vector2(x,y)
 	var pts: PackedVector2Array
+	var top_a: Vector2
+	var top_b: Vector2
 	if up_right:
 		pts = PackedVector2Array([Vector2(0,0),Vector2(width,-height),Vector2(width,78),Vector2(0,78)])
+		top_a=Vector2(0,0); top_b=Vector2(width,-height)
 	else:
 		pts = PackedVector2Array([Vector2(0,-height),Vector2(width,0),Vector2(width,78),Vector2(0,78)])
+		top_a=Vector2(0,-height); top_b=Vector2(width,0)
 	var cs := CollisionShape2D.new()
 	var shape := ConvexPolygonShape2D.new()
 	shape.points = pts
@@ -39,8 +62,14 @@ static func _add_slope(main: Node,x: float,y: float,width: float,height: float,u
 	body.add_child(cs)
 	var poly := Polygon2D.new()
 	poly.polygon = pts
-	poly.color = color
+	poly.color = _terrain_color(main).darkened(0.08)
 	body.add_child(poly)
+	var lip := Line2D.new()
+	lip.points = PackedVector2Array([top_a,top_b])
+	lip.width = 9.0
+	lip.default_color = _terrain_accent(main)
+	lip.antialiased = false
+	body.add_child(lip)
 	main.world.add_child(body)
 
 static func _add_boost(main: Node,pos: Vector2,direction: int = 1,speed_value: float = 610.0) -> void:
@@ -50,18 +79,23 @@ static func _add_boost(main: Node,pos: Vector2,direction: int = 1,speed_value: f
 	area.position = pos
 	var cs := CollisionShape2D.new()
 	var sh := RectangleShape2D.new()
-	sh.size = Vector2(72,16)
+	sh.size = Vector2(58,13)
 	cs.shape = sh
 	area.add_child(cs)
-	var poly := Polygon2D.new()
-	poly.polygon = PackedVector2Array([Vector2(-36,8),Vector2(-28,-8),Vector2(36,-8),Vector2(28,8)])
-	poly.color = Color(0.28,0.88,1.0,0.88)
-	area.add_child(poly)
+	var plate := Polygon2D.new()
+	plate.polygon = PackedVector2Array([Vector2(-29,6),Vector2(-23,-5),Vector2(29,-5),Vector2(23,6)])
+	plate.color = Color(0.18,0.48,0.58,0.90)
+	area.add_child(plate)
+	var glow := Line2D.new()
+	glow.points = PackedVector2Array([Vector2(-17,0),Vector2(17,0)])
+	glow.width = 3.0
+	glow.default_color = Color(0.48,0.92,1.0,0.92)
+	area.add_child(glow)
 	area.body_entered.connect(func(body):
 		if body.is_in_group("player"):
 			body.velocity.x = float(direction)*maxf(absf(body.velocity.x),speed_value)
 			if main.has_method("_spawn_combat_fx"):
-				main._spawn_combat_fx("arrow",body.global_position,Color(0.30,0.92,1.0),90.0,0.20,direction,0.8)
+				main._spawn_combat_fx("arrow",body.global_position,Color(0.30,0.92,1.0),70.0,0.16,direction,0.55)
 	)
 	main.world.add_child(area)
 
@@ -72,18 +106,23 @@ static func _add_bounce(main: Node,pos: Vector2,power: float = 690.0) -> void:
 	area.position = pos
 	var cs := CollisionShape2D.new()
 	var sh := RectangleShape2D.new()
-	sh.size = Vector2(54,18)
+	sh.size = Vector2(48,15)
 	cs.shape = sh
 	area.add_child(cs)
-	var poly := Polygon2D.new()
-	poly.polygon = PackedVector2Array([Vector2(-27,8),Vector2(-20,-8),Vector2(20,-8),Vector2(27,8)])
-	poly.color = Color(0.78,0.38,1.0,0.92)
-	area.add_child(poly)
+	var plate := Polygon2D.new()
+	plate.polygon = PackedVector2Array([Vector2(-24,7),Vector2(-18,-6),Vector2(18,-6),Vector2(24,7)])
+	plate.color = Color(0.36,0.20,0.48,0.92)
+	area.add_child(plate)
+	var rune := Line2D.new()
+	rune.points = PackedVector2Array([Vector2(-11,1),Vector2(0,-4),Vector2(11,1)])
+	rune.width = 3.0
+	rune.default_color = Color(0.82,0.58,1.0,0.96)
+	area.add_child(rune)
 	area.body_entered.connect(func(body):
 		if body.is_in_group("player"):
 			body.velocity.y = -power
 			if main.has_method("_spawn_combat_fx"):
-				main._spawn_combat_fx("burst",body.global_position,Color(0.78,0.40,1.0),72.0,0.25,1,1.0)
+				main._spawn_combat_fx("burst",body.global_position,Color(0.78,0.40,1.0),64.0,0.20,1,0.65)
 	)
 	main.world.add_child(area)
 
