@@ -65,11 +65,23 @@ func _validate_mentor(mentor: String) -> void:
 			trial.call("_handle_pulse", 2)
 			trial.call("_handle_pulse", 1)
 		"fermin":
-			var weight := Node2D.new()
-			scene.add_child(weight)
+			var weight := trial.get_node_or_null("Trial_training_weight_0")
+			var counterweight := trial.get_node_or_null("Trial_counterweight_0")
+			_require(is_instance_valid(weight), "Fermin room must contain training weight")
+			_require(is_instance_valid(counterweight), "Fermin room must contain counterweight")
+			if _failed:
+				return
+			# Counterweight must not progress before the pressure plate is loaded.
+			trial.call("_handle_counterweight", counterweight)
+			_require(int(trial.get("counter_pushes")) == 0, "Fermin counterweight must remain locked without plate pressure")
+			trial.call("_handle_training_weight", weight)
+			await create_timer(0.25).timeout
+			trial.call("_handle_training_weight", weight)
+			await create_timer(0.30).timeout
+			_require(bool(trial.get("plate_loaded")), "Fermin training weight must hold the pressure plate")
 			for _i in range(4):
-				trial.call("_handle_counterweight", weight)
-			await create_timer(0.35).timeout
+				trial.call("_handle_counterweight", counterweight)
+				await create_timer(0.20).timeout
 		"isabella":
 			var rune_a := Node2D.new()
 			var rune_b := Node2D.new()
