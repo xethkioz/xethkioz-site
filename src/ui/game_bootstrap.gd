@@ -20,9 +20,10 @@ var skin_option: OptionButton
 var hair_option: OptionButton
 var hair_color_option: OptionButton
 var accent_option: OptionButton
-var preview_head: ColorRect
-var preview_hair: ColorRect
-var preview_body: ColorRect
+var preview_sprite: TextureRect
+var preview_skin_swatch: ColorRect
+var preview_hair_swatch: ColorRect
+var preview_accent_swatch: ColorRect
 var preview_name: Label
 
 const INTRO := [
@@ -158,19 +159,34 @@ func _show_creator() -> void:
 	var preview := _panel(Vector2(410,88), Vector2(198,238), Color(0.025,0.055,0.065,0.94), C_ORANGE)
 	preview_name = _local_label(Vector2(12,14), Vector2(174,20), "VIAJERO", 11, C_TEXT, true, HORIZONTAL_ALIGNMENT_CENTER)
 	preview.add_child(preview_name)
-	preview_hair = ColorRect.new()
-	preview_hair.position = Vector2(75,57)
-	preview_hair.size = Vector2(48,18)
-	preview.add_child(preview_hair)
-	preview_head = ColorRect.new()
-	preview_head.position = Vector2(80,70)
-	preview_head.size = Vector2(38,38)
-	preview.add_child(preview_head)
-	preview_body = ColorRect.new()
-	preview_body.position = Vector2(66,111)
-	preview_body.size = Vector2(66,76)
-	preview.add_child(preview_body)
-	var note := _local_label(Vector2(18,198), Vector2(162,26), "Vista provisional.\nEl sprite final reemplazará esta guía.", 7, C_MUTED, false, HORIZONTAL_ALIGNMENT_CENTER)
+	preview_sprite = TextureRect.new()
+	preview_sprite.position = Vector2(49,46)
+	preview_sprite.size = Vector2(100,100)
+	preview_sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	preview_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	preview_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	preview_sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var frame := AtlasTexture.new()
+	frame.atlas = load("res://assets/production/characters/viajero_sheet.svg")
+	frame.region = Rect2(32, 0, 32, 32)
+	preview_sprite.texture = frame
+	preview.add_child(preview_sprite)
+
+	var swatch_label := _local_label(Vector2(18,151), Vector2(162,14), "PERFIL VISUAL", 7, C_MUTED, true, HORIZONTAL_ALIGNMENT_CENTER)
+	preview.add_child(swatch_label)
+	preview_skin_swatch = ColorRect.new()
+	preview_skin_swatch.position = Vector2(48,171)
+	preview_skin_swatch.size = Vector2(26,12)
+	preview.add_child(preview_skin_swatch)
+	preview_hair_swatch = ColorRect.new()
+	preview_hair_swatch.position = Vector2(86,171)
+	preview_hair_swatch.size = Vector2(26,12)
+	preview.add_child(preview_hair_swatch)
+	preview_accent_swatch = ColorRect.new()
+	preview_accent_swatch.position = Vector2(124,171)
+	preview_accent_swatch.size = Vector2(26,12)
+	preview.add_child(preview_accent_swatch)
+	var note := _local_label(Vector2(18,194), Vector2(162,30), "Sprite real de gameplay.\nLa personalización se aplica al entrar.", 7, C_MUTED, false, HORIZONTAL_ALIGNMENT_CENTER)
 	preview.add_child(note)
 	_update_creator_preview()
 
@@ -188,7 +204,7 @@ func _creator_option(parent: Control, y: float, label_text: String, values: Arra
 	return option
 
 func _update_creator_preview() -> void:
-	if preview_head == null:
+	if preview_sprite == null:
 		return
 	var skin_index: int = skin_option.selected if skin_option else CharacterProfile.skin_tone
 	var hair_index: int = hair_color_option.selected if hair_color_option else CharacterProfile.hair_color
@@ -196,12 +212,13 @@ func _update_creator_preview() -> void:
 	var skin: Color = CharacterProfile.SKIN_COLORS[skin_index]
 	var hair: Color = CharacterProfile.HAIR_COLORS[hair_index]
 	var accent: Color = CharacterProfile.ACCENT_COLORS[accent_index]
-	preview_head.color = skin
-	preview_hair.color = hair
-	preview_body.color = accent
+	preview_skin_swatch.color = skin
+	preview_hair_swatch.color = hair
+	preview_accent_swatch.color = accent
 	var body_idx: int = body_option.selected if body_option else CharacterProfile.body_type
-	preview_body.size.x = [54.0,66.0,78.0][body_idx]
-	preview_body.position.x = 99.0 - preview_body.size.x * 0.5
+	var body_width: float = [88.0, 100.0, 112.0][body_idx]
+	preview_sprite.size.x = body_width
+	preview_sprite.position.x = 99.0 - body_width * 0.5
 	var display_name: String = name_edit.text.strip_edges() if name_edit else CharacterProfile.player_name
 	preview_name.text = display_name.to_upper() if not display_name.is_empty() else "VIAJERO"
 

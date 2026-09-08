@@ -201,8 +201,9 @@ func _use_gael_ability(slot: String) -> void:
 				EventBus.toast_requested.emit("Gael · Disparo cargado")
 
 func _use_brote_vivo() -> void:
-	if GameState.selected_mentor.is_empty():
-		EventBus.toast_requested.emit("F bloqueada · completa el conjunto Brote Vivo")
+	var pieces: int = GameState.set_piece_count("brote_vivo")
+	if pieces < 4:
+		EventBus.toast_requested.emit("F bloqueada · Brote Vivo %d/4" % pieces)
 		return
 	if not _spend_and_start("F", 20.0, 22.0):
 		return
