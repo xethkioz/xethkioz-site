@@ -33,6 +33,8 @@ Configuración narrativa propuesta para el arco largo:
 
 El jugador permanece como protagonista jugable central y no se cuenta dentro de estos siete NPC principales.
 
+CANON: Ashley, Fermín, Isabella, Gael y Elida son ejes permanentes del lore, no NPC de apoyo secundarios. Su presencia puede rotar y distribuirse entre regiones, pero la historia nunca debe perderlos de vista durante periodos prolongados.
+
 ## 4. Los ocho vínculos legendarios
 Existe Xethkioz como compañero legendario central del jugador.
 
@@ -144,6 +146,8 @@ Sus reapariciones no deben ser simples cameos. Deben modificar su relación con 
 
 Val, Rola, Mela, Alexis y Xethkioz pueden intervenir en distintas etapas de esos arcos para ayudar a que la relación entre cada hermano y su futuro legendario se construya de forma jugable, no solamente mediante cinemáticas.
 
+CANON: ninguno de los cuatro hermanos puede quedar narrativamente ausente durante una etapa completa de la saga sin que exista al menos una referencia, consecuencia, misión, carta, rumor, evento o desarrollo relacionado con él/ella.
+
 ## 8. Ivan — científico cuántico
 Ivan debe recibir un arco propio de alto peso narrativo en una de las expansiones.
 
@@ -172,7 +176,21 @@ Alexis no debe sentirse como acompañante pasivo de Ivan. Además, debe tener un
 
 Si finalmente Alexis recibe uno de los siete legendarios, ese vínculo debe sentirse ganado a lo largo de toda la saga y no entregado de forma repentina antes de Zodnight.
 
-## 10. Estructura narrativa por lanzamiento
+## 10. Elida — memoria, raíz y continuidad del lore
+CANON: Elida es eje principal del lore y no debe reducirse a figura familiar de fondo.
+
+Su función puede concentrar:
+- memoria histórica;
+- tradición oral;
+- conocimiento de acontecimientos anteriores a la etapa jugable;
+- relatos aparentemente menores que más tarde revelan claves mayores;
+- conexiones entre generaciones;
+- advertencias o intuiciones que ni la ciencia ni la experiencia inmediata explican;
+- participación gradual en la preparación de Zodnight.
+
+Elida no necesita acompañar al jugador físicamente de forma constante. Su importancia debe sentirse por medio de refugios, relatos, objetos, cartas, símbolos, recuerdos, decisiones y momentos clave donde su conocimiento cambie la interpretación de lo ocurrido.
+
+## 11. Estructura narrativa por lanzamiento
 ### IZRDRALAR — Juego base
 Objetivo narrativo: construir el vínculo jugador–Xethkioz, presentar a la familia y sembrar la existencia de los siete legendarios y una amenaza mayor sin resolverla.
 
@@ -185,12 +203,15 @@ Semillas de saga:
 - pistas casi incomprensibles sobre Zodnight;
 - encuentros, huellas o rumores de los siete legendarios;
 - presentación de Val/Rola/Mela como especialistas en vínculo y criaturas;
-- primeras Misiones de Convergencia en forma todavía pequeña.
+- primeras Misiones de Convergencia en forma todavía pequeña;
+- establecimiento temprano de Ashley, Fermín, Isabella, Gael y Elida como pilares del lore.
 
 ### DESFRALAR — Expansión I
 Tema sugerido: profundidad, memoria, supervivencia, secretos enterrados y fuerzas naturales/espirituales.
 
 Debe desarrollar de forma fuerte al menos a dos de los cuatro hermanos y comenzar a materializar vínculos legendarios auténticos.
+
+Los otros hermanos y Elida deben seguir presentes narrativamente aunque no acompañen al jugador físicamente.
 
 Val, Alexis y el jugador deben reencontrarse en misiones más complejas donde Rola y Mela también aporten pistas, rutas o soluciones.
 
@@ -202,6 +223,8 @@ Tema sugerido: altura, divinidad, conocimiento, poder y consecuencias de trascen
 Es el candidato natural para llevar a primer plano el arco científico-cuántico de Ivan con Alexis como contrapunto de experiencia, aunque esta asignación permanece revisable hasta cerrar Desfralar.
 
 Las Misiones de Convergencia deben alcanzar aquí su mayor complejidad previa a Zodnight, mezclando ciencia de Ivan, experiencia de Alexis, conocimiento de Val, rastreo de Rola, intuición de Mela y resonancia de Xethkioz.
+
+Ashley, Fermín, Isabella, Gael y Elida deben continuar desarrollándose mediante presencia directa o consecuencias narrativas activas.
 
 Debe revelar una parte importante del origen o naturaleza de Xethkioz y acercar la amenaza de Zodnight.
 
@@ -216,7 +239,19 @@ Objetivos propuestos:
 - construir una batalla o secuencia final donde cada vínculo sea necesario;
 - mantener a jugador + Xethkioz como centro emocional y jugable de la resolución.
 
-## 11. Jefe final de Zodnight — reserva de diseño
+## 12. Regla de presencia narrativa rotativa
+CANON: los personajes centrales no deben viajar todos juntos de forma permanente ni aparecer como un único grupo en cada misión.
+
+La saga usará una **presencia narrativa rotativa**:
+- cada región o arco tendrá 1–3 personajes centrales con presencia directa fuerte;
+- otros personajes podrán estar activos mediante misiones paralelas, mensajes, consecuencias, rumores, objetos, decisiones previas o escenas breves;
+- los grandes reencuentros se reservan para momentos de peso narrativo;
+- cada ausencia importante debe tener una razón diegética;
+- ningún personaje central debe desaparecer durante tanto tiempo que el jugador deje de percibirlo como parte de la historia principal.
+
+Objetivo: mantener un mundo amplio y creíble sin convertir cada capítulo en una comitiva permanente de NPC.
+
+## 13. Jefe final de Zodnight — reserva de diseño
 CANON: Zodnight culminará en un enfrentamiento final preparado por toda la saga.
 
 La identidad, forma, poderes, fases, lore, nombre y presentación del jefe final NO se definen todavía.
@@ -225,7 +260,7 @@ Ese jefe será objeto de una edición/diseño especial posterior y no debe impro
 
 Hasta entonces, toda la saga puede sembrar consecuencias, síntomas, símbolos y amenazas sin revelar de manera directa qué será el enemigo final.
 
-## 12. Regla de diseño para expansiones
+## 14. Regla de diseño para expansiones
 Cada expansión debe:
 - continuar sistemas del juego base en vez de reemplazarlos;
 - reutilizar y evolucionar profesiones, mascotas, equipo, builds y exploración;
@@ -234,9 +269,10 @@ Cada expansión debe:
 - desarrollar personajes existentes antes de multiplicar protagonistas nuevos;
 - avanzar el misterio de Xethkioz;
 - desarrollar progresivamente las Misiones de Convergencia Legendaria;
+- mantener activos a Ashley, Fermín, Isabella, Gael y Elida dentro del lore aunque su presencia física rote;
 - sembrar de forma gradual el conflicto de Zodnight.
 
-## 13. Regla anti-scope-creep
+## 15. Regla anti-scope-creep
 Nada de este arco futuro amplía el alcance de la Steam Demo.
 
 La demo sigue enfocada exclusivamente en Golden Region 1–5 de Izrdralar.
