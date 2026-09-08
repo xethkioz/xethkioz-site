@@ -4,25 +4,21 @@ const BACKGROUND := preload("res://assets/production/interiors/refugio_elida.svg
 const PlayerScript := preload("res://src/player/player_controller_production.gd")
 const XethkiozScript := preload("res://src/pets/xethkioz_companion_production.gd")
 const FamiliarScript := preload("res://src/pets/familiar_companion_production.gd")
-const NpcScript := preload("res://src/npc/npc_interactable_production.gd")
-const QuestScript := preload("res://src/quest/quest_manager.gd")
+const StoryNpcScript := preload("res://src/npc/story_npc_v36.gd")
+const QuestScript := preload("res://src/quest/quest_manager_v36.gd")
 const HudScript := preload("res://src/ui/hud_controller.gd")
 const PromptScript := preload("res://src/ui/interaction_prompt.gd")
 const PortalScript := preload("res://src/world/scene_portal.gd")
 const HotspotScript := preload("res://src/world/interior_hotspot.gd")
 const CraftingScript := preload("res://src/world/interior_crafting_spot.gd")
-const TrainingCoreScript := preload("res://src/npc/training_core_production.gd")
 
 const EXTERIOR_RETURN := Vector2(832, 1744)
-const TRAINING_STATE := 11
 
 var player: CharacterBody2D
 var _active_familiar: Node2D
-var _training_spawned := false
 
 func _ready() -> void:
 	_ensure_inputs()
-	EventBus.demo_stage_changed.connect(_on_stage_changed)
 	_build_background()
 	_build_collisions()
 	_spawn_player()
@@ -129,33 +125,19 @@ func _spawn_active_familiar() -> void:
 	add_child(_active_familiar)
 
 func _spawn_family() -> void:
-	_spawn_npc("elida", "Elida", Vector2(320, 145), 1, [
-		"Acá siempre vas a tener un lugar donde volver. Un refugio no es esconderse: es saber desde dónde podés salir otra vez.",
-		"El fogón mantiene caliente la casa y también las ideas. Descansá, prepará algo y hablá con los chicos."
-	])
-	_spawn_npc("gael", "Gael", Vector2(174, 242), 5, [
-		"Desde acá se escucha el bosque distinto. Afuera todo parece más urgente de lo que realmente es."
-	])
-	_spawn_npc("fermin", "Fermín", Vector2(238, 244), 3, [
-		"Impacto no es fuerza sin control. Si querés entrenar al Carpinchito, primero demostrame que sabés cuándo romper una defensa."
-	])
-	_spawn_npc("ashley", "Ashley", Vector2(292, 244), 2, [
-		"La resonancia sirve para escuchar el combate antes de que empiece. Hay ritmos que sólo se entienden cuando dejás de correr."
-	])
-	_spawn_npc("isabella", "Isabella", Vector2(388, 244), 4, [
-		"El caos no siempre está fuera de control. A veces solamente usa reglas que todavía no entendiste."
-	])
-	_spawn_npc("alexis", "Alexis", Vector2(458, 242), 0, [
-		"Elida convirtió este lugar en punto de regreso mucho antes de que nosotros entendiéramos lo importante que iba a ser.",
-		"Afuera te enseña el mundo. Acá adentro ordenás lo que aprendiste."
-	])
+	_spawn_story_npc("elida", "Elida", Vector2(320, 145), 1, "Sentate.")
+	_spawn_story_npc("gael", "Gael", Vector2(174, 242), 5, "Hay cosas que se ven mejor cuando dejás de mirar el centro.")
+	_spawn_story_npc("fermin", "Fermín", Vector2(238, 244), 3, "Yo sí te voy a enseñar a pegar más fuerte.")
+	_spawn_story_npc("ashley", "Ashley", Vector2(292, 244), 2, "Elegir ritmo también es elegir cuándo no atacar.")
+	_spawn_story_npc("isabella", "Isabella", Vector2(388, 244), 4, "Puedo hacer que algo explote después.")
+	_spawn_story_npc("alexis", "Alexis", Vector2(458, 242), 0, "Afuera aprendés el mundo. Acá ordenás lo que aprendiste.")
 
-func _spawn_npc(id_value: String, display_name: String, pos: Vector2, atlas_index: int, lines: Array[String]) -> Node2D:
+func _spawn_story_npc(id_value: String, display_name: String, pos: Vector2, atlas_index: int, fallback_line: String) -> Node2D:
 	var npc := Node2D.new()
-	npc.name = display_name
-	npc.set_script(NpcScript)
+	npc.name = "StoryNPC_%s" % id_value
+	npc.set_script(StoryNpcScript)
 	npc.position = pos
-	npc.configure_production(id_value, display_name, lines, atlas_index)
+	npc.configure_story(id_value, display_name, atlas_index, fallback_line)
 	add_child(npc)
 	return npc
 
@@ -166,7 +148,7 @@ func _spawn_hotspots() -> void:
 	archive.position = Vector2(122, 122)
 	archive.label_text = "Revisar archivo"
 	archive.speaker = "Archivo de Elida"
-	archive.body = "Hay anotaciones de botánica, mezclas, criaturas y mapas incompletos. Varias páginas tienen marcas prismáticas que no estaban en el papel original."
+	archive.body = "Cartas, recetas y mapas viejos conviven con anotaciones posteriores a la Fisura. Algunas historias de ríos y raíces describen los mismos fenómenos que Ivan registra con instrumentos."
 	add_child(archive)
 
 	var alchemy := Node2D.new()
@@ -175,7 +157,7 @@ func _spawn_hotspots() -> void:
 	alchemy.position = Vector2(126, 266)
 	alchemy.label_text = "Mesa de alquimia"
 	alchemy.speaker = "Elida"
-	alchemy.body = "Todavía no conocés todas las fórmulas. Los ingredientes que traigas del mundo van a abrir nuevas mezclas y mejoras."
+	alchemy.body = "Las mezclas de Elida no reemplazan la exploración: cada receta nace de materiales y observaciones que el Viajero trae de afuera."
 	add_child(alchemy)
 
 	var hearth := Node2D.new()
@@ -223,33 +205,3 @@ func _restore_player() -> void:
 	player.mana = player.max_mana
 	EventBus.player_health_changed.emit(player.health, player.max_health)
 	EventBus.player_mana_changed.emit(player.mana, player.max_mana)
-
-func _on_stage_changed(stage_id: String) -> void:
-	if stage_id != "fermin_training":
-		return
-	var snapshot := GameState.get_quest_snapshot()
-	var already_defeated := 0
-	if int(snapshot.get("state", -1)) == TRAINING_STATE:
-		already_defeated = clampi(int(snapshot.get("training_defeated", 0)), 0, 3)
-	_spawn_training_cores(3 - already_defeated)
-
-func _spawn_training_cores(count: int) -> void:
-	if _training_spawned or count <= 0:
-		return
-	_training_spawned = true
-	var positions := [Vector2(420, 150), Vector2(448, 188), Vector2(420, 220)]
-	for index in range(mini(count, positions.size())):
-		var core := CharacterBody2D.new()
-		core.name = "NucleoImpacto_%d" % (index + 1)
-		core.collision_layer = 2
-		core.collision_mask = 1 | 4
-		core.set_script(TrainingCoreScript)
-		core.position = positions[index]
-		var collision := CollisionShape2D.new()
-		var shape := CircleShape2D.new()
-		shape.radius = 10.0
-		collision.shape = shape
-		collision.position = Vector2(0, 3)
-		core.add_child(collision)
-		add_child(core)
-	EventBus.toast_requested.emit("Fermín · Prueba de Impacto activa")
