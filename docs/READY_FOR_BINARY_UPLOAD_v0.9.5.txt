@@ -1,0 +1,1 @@
+NPC and approved-screen binary assets are prepared locally and must be imported before v0.9.5 can be called visually complete.
