@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource path="res://src/world/golden_region_controller.gd" type="Script" id="1"]
 [ext_resource path="res://src/ui/interaction_prompt.gd" type="Script" id="2_prompt"]
@@ -6,6 +6,7 @@
 [ext_resource path="res://src/world/runtime_session.gd" type="Script" id="4_session"]
 [ext_resource path="res://src/world/scene_portal.gd" type="Script" id="5_portal"]
 [ext_resource path="res://src/world/world_scene_binder.gd" type="Script" id="6_binder"]
+[ext_resource path="res://src/world/world_atmosphere.gd" type="Script" id="7_atmosphere"]
 
 [node name="GoldenRegion" type="Node2D"]
 script = ExtResource("1")
@@ -15,6 +16,9 @@ script = ExtResource("4_session")
 
 [node name="WorldSceneBinder" type="Node" parent="."]
 script = ExtResource("6_binder")
+
+[node name="WorldAtmosphere" type="Node2D" parent="."]
+script = ExtResource("7_atmosphere")
 
 [node name="RefugioDoor" type="Node2D" parent="."]
 position = Vector2(832, 1696)
