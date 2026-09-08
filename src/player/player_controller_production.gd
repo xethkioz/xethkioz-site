@@ -27,7 +27,7 @@ func _physics_process(delta: float) -> void:
 func _update_visual(delta: float) -> void:
 	if not is_instance_valid(_visual):
 		return
-	var moving := velocity.length_squared() > 4.0
+	var moving: bool = velocity.length_squared() > 4.0
 	if moving:
 		_anim_clock += delta
 		if _anim_clock >= 0.12:
@@ -36,13 +36,24 @@ func _update_visual(delta: float) -> void:
 	else:
 		_anim_clock = 0.0
 		_anim_frame = 1
-	var row := 0
+	var row: int = 0
 	if absf(facing.x) > absf(facing.y):
 		row = 1 if facing.x < 0.0 else 2
 	elif facing.y < 0.0:
 		row = 3
 	_visual.region_rect = Rect2(Vector2(_anim_frame * 32, row * 32), FRAME_SIZE)
-	_visual.modulate = CharacterProfile.ACCENT_COLORS[clampi(CharacterProfile.accent_color, 0, CharacterProfile.ACCENT_COLORS.size() - 1)].lerp(Color.WHITE, 0.72)
+	var accent: Color = CharacterProfile.ACCENT_COLORS[clampi(CharacterProfile.accent_color, 0, CharacterProfile.ACCENT_COLORS.size() - 1)]
+	_visual.modulate = accent.lerp(Color.WHITE, 0.72)
+
+func _use_brote_vivo() -> void:
+	var pieces: int = GameState.set_piece_count("brote_vivo")
+	if pieces < 4:
+		EventBus.toast_requested.emit("F bloqueada · Brote Vivo %d/4" % pieces)
+		return
+	if not _spend_and_start("F", 20.0, 60.0):
+		return
+	_heal(max_health * 0.25)
+	EventBus.toast_requested.emit("Brote Vivo · Renovación")
 
 func _draw() -> void:
 	if _guard_time_left > 0.0:
