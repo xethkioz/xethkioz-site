@@ -1,14 +1,10 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource path="res://src/world/refugio_interior_controller.gd" type="Script" id="1_refugio"]
 [ext_resource path="res://src/ui/refugio_navigation_hint.gd" type="Script" id="2_nav"]
-[ext_resource path="res://src/vfx/world_feedback.gd" type="Script" id="3_feedback"]
 
 [node name="RefugioInterior" type="Node2D"]
 script = ExtResource("1_refugio")
-
-[node name="WorldFeedback" type="Node2D" parent="."]
-script = ExtResource("3_feedback")
 
 [node name="RefugioNavHUD" type="CanvasLayer" parent="."]
 layer = 20
