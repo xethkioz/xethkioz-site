@@ -9,6 +9,7 @@ var campaign_hito: int = 1
 var selected_mentor: String = ""
 var xethkioz_bond: int = 0
 var profession_xp: Dictionary = {"botanica": 0, "cocina": 0}
+var discovered_lore: Array[String] = []
 
 func _ready() -> void:
 	EventBus.enemy_defeated.connect(_on_enemy_defeated)
@@ -44,6 +45,17 @@ func add_pet_bond(amount: int) -> void:
 func add_profession_xp(profession_id: String, amount: int) -> void:
 	profession_xp[profession_id] = int(profession_xp.get(profession_id, 0)) + maxi(amount, 0)
 
+func has_lore(lore_id: String) -> bool:
+	return discovered_lore.has(lore_id)
+
+func discover_lore(lore_id: String, title: String, total_hint: int = 0) -> bool:
+	if lore_id.is_empty() or discovered_lore.has(lore_id):
+		return false
+	discovered_lore.append(lore_id)
+	EventBus.lore_discovered.emit(lore_id, title, discovered_lore.size(), total_hint)
+	add_xp(8)
+	return true
+
 func reset_new_game() -> void:
 	player_level = 1
 	player_xp = 0
@@ -52,20 +64,22 @@ func reset_new_game() -> void:
 	selected_mentor = ""
 	xethkioz_bond = 0
 	profession_xp = {"botanica": 0, "cocina": 0}
+	discovered_lore.clear()
 	EventBus.player_progress_changed.emit(player_level, player_xp, xp_to_next())
 	EventBus.currency_changed.emit(crystals)
 	EventBus.pet_bond_changed.emit(xethkioz_bond)
 
 func to_dict() -> Dictionary:
 	return {
-		"save_version": 3,
+		"save_version": 4,
 		"player_level": player_level,
 		"player_xp": player_xp,
 		"crystals": crystals,
 		"campaign_hito": campaign_hito,
 		"selected_mentor": selected_mentor,
 		"xethkioz_bond": xethkioz_bond,
-		"profession_xp": profession_xp.duplicate(true)
+		"profession_xp": profession_xp.duplicate(true),
+		"discovered_lore": discovered_lore.duplicate()
 	}
 
 func apply_dict(data: Dictionary) -> void:
@@ -76,6 +90,9 @@ func apply_dict(data: Dictionary) -> void:
 	selected_mentor = str(data.get("selected_mentor", ""))
 	xethkioz_bond = clampi(int(data.get("xethkioz_bond", 0)), 0, 100)
 	profession_xp = data.get("profession_xp", {"botanica": 0, "cocina": 0}).duplicate(true)
+	discovered_lore.clear()
+	for raw_id in data.get("discovered_lore", []):
+		discovered_lore.append(str(raw_id))
 	EventBus.player_progress_changed.emit(player_level, player_xp, 0 if player_level >= MAX_LEVEL else xp_to_next())
 	EventBus.currency_changed.emit(crystals)
 	EventBus.pet_bond_changed.emit(xethkioz_bond)
