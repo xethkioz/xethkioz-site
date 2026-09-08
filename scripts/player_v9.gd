@@ -4,6 +4,7 @@ const TRAVELER_MALE = preload("res://assets/v095/generated/traveler_male.png")
 const TRAVELER_FEMALE = preload("res://assets/v095/generated/traveler_female.png")
 
 var traveler_gender_v9 := "Masculino"
+var visual_tint_v9 := Color.WHITE
 
 # Golden Slice player presentation + apprentice skill bridge.
 func _ready() -> void:
@@ -17,18 +18,24 @@ func configure_traveler(name_value: String,palette_index: int) -> void:
 	super.configure_traveler(name_value,palette_index)
 	if main_ref:
 		traveler_gender_v9 = str(main_ref.state.get("player_gender","Masculino"))
+	var tints:Array[Color]=[Color.WHITE,Color(1.05,0.88,0.78),Color(0.78,1.03,1.0),Color(1.06,1.0,0.78)]
+	visual_tint_v9=tints[clampi(palette_index,0,3)]
 	if visual_sprite:
 		visual_sprite.texture = TRAVELER_FEMALE if traveler_gender_v9 == "Femenino" else TRAVELER_MALE
-		var tints:Array[Color]=[Color.WHITE,Color(1.05,0.88,0.78),Color(0.78,1.03,1.0),Color(1.06,1.0,0.78)]
-		visual_sprite.modulate=tints[clampi(palette_index,0,3)]
+		visual_sprite.modulate=visual_tint_v9
 
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
 	if visual_sprite:
 		if dash_timer>0.0:
 			visual_sprite.scale=Vector2(1.95,1.66)
+			visual_sprite.modulate=Color(visual_tint_v9.r*1.10,visual_tint_v9.g*1.04,min(1.25,visual_tint_v9.b*1.18),0.90)
+		elif invuln_timer>0.0:
+			visual_sprite.scale=Vector2(1.78,1.78)
+			visual_sprite.modulate=Color(1.15,1.15,1.15,0.82)
 		else:
 			visual_sprite.scale=Vector2(1.78,1.78)
+			visual_sprite.modulate=visual_tint_v9
 
 # The older player chain intentionally blocked skills before mentor selection.
 # The Golden Slice requires Q/E/R to work from Map 1 as neutral Prism skills.
