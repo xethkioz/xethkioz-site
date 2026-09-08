@@ -3,6 +3,8 @@ extends Node
 const ITEMS := {
 	"manzana_bruma": {"name": "Manzana de Bruma", "max_stack": 20},
 	"hongo_azul_rocio": {"name": "Hongo Azul de Rocío", "max_stack": 20},
+	"ferrita_pampeana": {"name": "Ferrita Pampeana", "max_stack": 40},
+	"cuarzo_prismatico": {"name": "Cuarzo Prismático", "max_stack": 30},
 	"racion_bosque": {"name": "Ración del Bosque", "max_stack": 10}
 }
 
