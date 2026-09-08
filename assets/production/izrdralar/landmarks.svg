@@ -1,11 +1,79 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="384" height="80" viewBox="0 0 384 80" shape-rendering="crispEdges">
 <rect width="384" height="80" fill="none"/>
-<!-- Refugio facade -->
-<g transform="translate(0)"><ellipse cx="48" cy="75" rx="42" ry="5" fill="#101714" opacity=".35"/><rect x="10" y="33" width="76" height="40" fill="#62452f"/><polygon points="5,35 48,8 91,35" fill="#3d2c27"/><polygon points="14,34 48,14 82,34" fill="#56392a"/><rect x="17" y="39" width="16" height="16" fill="#293b3a"/><rect x="63" y="39" width="16" height="16" fill="#293b3a"/><g fill="#8b5cf6"><rect x="20" y="42" width="4" height="10"/><rect x="72" y="42" width="4" height="10"/></g><rect x="39" y="46" width="19" height="27" fill="#2d2422"/><rect x="42" y="49" width="13" height="24" fill="#704a32"/><circle cx="53" cy="61" r="2" fill="#ffcf76"/><rect x="22" y="24" width="5" height="10" fill="#4d3327"/><path d="M24 23c-5-9 7-11 4-18 9 9-2 11 4 18z" fill="#8f8a8c" opacity=".45"/><g fill="#43714a"><rect x="9" y="66" width="17" height="7"/><rect x="70" y="65" width="17" height="8"/></g><g fill="#e85a5e"><rect x="12" y="64" width="3" height="3"/><rect x="78" y="63" width="3" height="3"/></g><rect x="2" y="73" width="92" height="4" fill="#403329"/></g>
-<!-- Aldea house -->
-<g transform="translate(96)"><ellipse cx="48" cy="75" rx="42" ry="5" fill="#101714" opacity=".35"/><rect x="12" y="36" width="72" height="37" fill="#70604d"/><polygon points="7,37 48,13 89,37" fill="#415f52"/><polygon points="15,36 48,18 81,36" fill="#527963"/><rect x="19" y="44" width="17" height="14" fill="#254a57"/><rect x="60" y="44" width="17" height="14" fill="#254a57"/><rect x="41" y="49" width="16" height="24" fill="#49352b"/><rect x="44" y="52" width="10" height="21" fill="#886247"/><path d="M23 48h9m32 0h9" stroke="#9ee0eb" stroke-width="2"/><rect x="14" y="64" width="20" height="5" fill="#4d8055"/><rect x="62" y="64" width="20" height="5" fill="#4d8055"/><polygon points="48,7 53,15 50,22 46,22 43,15" fill="#8b5cf6"/><polygon points="48,9 49,15 47,20" fill="#d8ceff"/></g>
-<!-- Sanctuary gate -->
-<g transform="translate(192)"><ellipse cx="48" cy="75" rx="43" ry="5" fill="#101714" opacity=".35"/><rect x="8" y="26" width="17" height="47" fill="#5f6565"/><rect x="71" y="26" width="17" height="47" fill="#5f6565"/><rect x="5" y="21" width="23" height="9" fill="#7a8080"/><rect x="68" y="21" width="23" height="9" fill="#7a8080"/><path d="M20 30c7-22 49-22 56 0v9h-9v-7c-4-14-34-14-38 0v7h-9z" fill="#4e5555"/><path d="M26 32c8-13 36-13 44 0" fill="none" stroke="#8b5cf6" stroke-width="4"/><g fill="#8b5cf6"><polygon points="16,8 22,17 19,27 13,27 10,17"/><polygon points="80,8 86,17 83,27 77,27 74,17"/></g><g fill="#d9d0ff"><polygon points="16,11 18,17 16,24 13,17"/><polygon points="80,11 82,17 80,24 77,17"/></g><path d="M10 54l12-8m52 8l12-8" stroke="#3d4343" stroke-width="3"/></g>
-<!-- Living ruin tower -->
-<g transform="translate(288)"><ellipse cx="48" cy="75" rx="40" ry="5" fill="#101714" opacity=".35"/><rect x="24" y="18" width="48" height="54" fill="#606767"/><rect x="18" y="13" width="60" height="10" fill="#7a8280"/><rect x="27" y="25" width="42" height="44" fill="#4c5353"/><rect x="36" y="31" width="9" height="28" fill="#262e30"/><rect x="53" y="31" width="9" height="28" fill="#262e30"/><g fill="#8b5cf6"><rect x="39" y="34" width="3" height="21"/><rect x="56" y="34" width="3" height="21"/></g><polygon points="48,2 56,14 52,25 44,25 40,14" fill="#7a5bd0"/><polygon points="48,4 51,14 48,22 44,14" fill="#d8ceff"/><path d="M27 46l11-7m18 21l12-8" stroke="#343b3b" stroke-width="3"/><g fill="#3d7148"><rect x="18" y="62" width="18" height="10"/><rect x="62" y="61" width="18" height="11"/></g></g>
+
+<!-- 0 Refugio de Elida: warm shelter + roots + salvaged 2150 tech -->
+<g transform="translate(0)">
+  <ellipse cx="48" cy="75" rx="45" ry="5" fill="#08100e" opacity=".52"/>
+  <rect x="8" y="35" width="80" height="38" fill="#553a2b"/><rect x="12" y="39" width="72" height="34" fill="#68472f"/>
+  <polygon points="3,37 48,7 93,37" fill="#2e2523"/><polygon points="10,36 48,12 86,36" fill="#473025"/>
+  <path d="M12 34l36-20 36 20" fill="none" stroke="#76523a" stroke-width="3"/>
+  <rect x="17" y="42" width="16" height="14" fill="#172c31"/><rect x="63" y="42" width="16" height="14" fill="#172c31"/>
+  <rect x="19" y="44" width="12" height="10" fill="#244b53"/><rect x="65" y="44" width="12" height="10" fill="#244b53"/>
+  <g fill="#7b5ad0"><rect x="22" y="45" width="3" height="8"/><rect x="72" y="45" width="3" height="8"/></g>
+  <g fill="#cfc2ff"><rect x="23" y="45" width="1" height="5"/><rect x="73" y="45" width="1" height="5"/></g>
+  <rect x="38" y="45" width="21" height="28" fill="#241d1b"/><rect x="42" y="49" width="13" height="24" fill="#795035"/>
+  <rect x="44" y="52" width="9" height="21" fill="#8c6040"/><circle cx="52" cy="61" r="2" fill="#ffd071"/>
+  <rect x="20" y="24" width="6" height="11" fill="#3d2b24"/><rect x="21" y="20" width="4" height="5" fill="#51372b"/>
+  <path d="M23 20c-5-8 6-9 3-15 8 8-1 9 4 15z" fill="#827f83" opacity=".48"/>
+  <rect x="6" y="61" width="18" height="12" fill="#2e5f3c"/><rect x="72" y="61" width="18" height="12" fill="#315f3d"/>
+  <g fill="#d8464c"><rect x="10" y="59" width="4" height="4"/><rect x="17" y="64" width="3" height="3"/><rect x="78" y="59" width="4" height="4"/><rect x="84" y="64" width="3" height="3"/></g>
+  <path d="M5 72c8-8 12-5 18-12m68 12c-8-8-13-4-20-12" fill="none" stroke="#426c43" stroke-width="3"/>
+  <rect x="2" y="73" width="92" height="4" fill="#342820"/>
+  <rect x="30" y="29" width="7" height="3" fill="#9d633e"/><rect x="59" y="27" width="8" height="3" fill="#806048"/>
+  <rect x="80" y="38" width="5" height="3" fill="#4d8177"/><rect x="11" y="39" width="4" height="2" fill="#8b5cf6"/>
+</g>
+
+<!-- 1 Aldea del Alba: improvised future home with copper and prism beacon -->
+<g transform="translate(96)">
+  <ellipse cx="48" cy="75" rx="44" ry="5" fill="#08100e" opacity=".5"/>
+  <rect x="10" y="38" width="76" height="35" fill="#645441"/><rect x="14" y="41" width="68" height="32" fill="#78654e"/>
+  <polygon points="5,39 48,11 91,39" fill="#30493f"/><polygon points="13,38 48,17 83,38" fill="#456a56"/>
+  <path d="M15 35l33-17 33 17" fill="none" stroke="#63856d" stroke-width="3"/>
+  <rect x="18" y="45" width="18" height="14" fill="#193944"/><rect x="60" y="45" width="18" height="14" fill="#193944"/>
+  <rect x="21" y="47" width="12" height="9" fill="#2a6572"/><rect x="63" y="47" width="12" height="9" fill="#2a6572"/>
+  <path d="M22 49h10m32 0h10" stroke="#b6f1f6" stroke-width="1"/>
+  <rect x="40" y="49" width="17" height="24" fill="#392a23"/><rect x="44" y="52" width="10" height="21" fill="#8b6244"/>
+  <rect x="12" y="64" width="24" height="6" fill="#3f744b"/><rect x="60" y="64" width="24" height="6" fill="#44784e"/>
+  <polygon points="48,5 55,15 52,24 45,24 41,15" fill="#6748b4"/><polygon points="48,7 51,15 48,21 44,15" fill="#e2d9ff"/>
+  <rect x="47" y="23" width="2" height="9" fill="#a96f46"/>
+  <rect x="25" y="34" width="7" height="2" fill="#b46c42"/><rect x="65" y="33" width="8" height="2" fill="#9c643f"/>
+  <rect x="8" y="54" width="5" height="11" fill="#4a3730"/><rect x="83" y="54" width="5" height="11" fill="#4a3730"/>
+  <g fill="#3fc7c9"><rect x="8" y="51" width="5" height="3"/><rect x="83" y="51" width="5" height="3"/></g>
+  <path d="M20 71h56" stroke="#3d3129" stroke-width="3"/>
+</g>
+
+<!-- 2 Santuario de las Raíces gate: ancient stone + living roots + prism locks -->
+<g transform="translate(192)">
+  <ellipse cx="48" cy="75" rx="45" ry="5" fill="#07100d" opacity=".54"/>
+  <rect x="7" y="27" width="19" height="46" fill="#525a59"/><rect x="70" y="27" width="19" height="46" fill="#525a59"/>
+  <rect x="10" y="30" width="13" height="40" fill="#6c7472"/><rect x="73" y="30" width="13" height="40" fill="#6c7472"/>
+  <rect x="4" y="21" width="25" height="9" fill="#747c79"/><rect x="67" y="21" width="25" height="9" fill="#747c79"/>
+  <path d="M20 32c6-24 50-24 56 0v9h-9v-8c-4-15-34-15-38 0v8h-9z" fill="#454d4c"/>
+  <path d="M27 33c8-14 34-14 42 0" fill="none" stroke="#7d5bd0" stroke-width="4"/>
+  <path d="M28 34c8-10 32-10 40 0" fill="none" stroke="#c8b9ff" stroke-width="1"/>
+  <polygon points="16,6 23,16 20,28 13,28 9,16" fill="#6849bb"/><polygon points="80,6 87,16 84,28 77,28 73,16" fill="#6849bb"/>
+  <polygon points="16,9 19,16 16,24 12,16" fill="#e6ddff"/><polygon points="80,9 83,16 80,24 76,16" fill="#e6ddff"/>
+  <path d="M8 50c12-10 12-19 19-25M88 50c-12-10-12-19-19-25" fill="none" stroke="#315f3d" stroke-width="3"/>
+  <path d="M9 69c10-12 18-7 24-18M87 69c-10-12-18-7-24-18" fill="none" stroke="#447a4a" stroke-width="3"/>
+  <g fill="#588a55"><rect x="4" y="62" width="10" height="8"/><rect x="82" y="62" width="10" height="8"/></g>
+  <path d="M13 39l9-6m55 8l8-7" stroke="#2a3030" stroke-width="2"/>
+  <rect x="13" y="53" width="3" height="5" fill="#b56d42"/><rect x="80" y="46" width="3" height="6" fill="#b56d42"/>
+</g>
+
+<!-- 3 Ruinas Vivas tower: broken future structure reclaimed by prism/nature -->
+<g transform="translate(288)">
+  <ellipse cx="48" cy="75" rx="43" ry="5" fill="#07100e" opacity=".52"/>
+  <rect x="22" y="19" width="52" height="53" fill="#515959"/><rect x="26" y="23" width="44" height="47" fill="#626b6a"/>
+  <rect x="17" y="13" width="62" height="10" fill="#747d7a"/><rect x="20" y="16" width="56" height="3" fill="#8a9290"/>
+  <rect x="34" y="31" width="11" height="29" fill="#20292b"/><rect x="53" y="31" width="11" height="29" fill="#20292b"/>
+  <rect x="37" y="34" width="4" height="22" fill="#6848b7"/><rect x="56" y="34" width="4" height="22" fill="#328f94"/>
+  <rect x="38" y="35" width="1" height="16" fill="#d8ceff"/><rect x="57" y="35" width="1" height="16" fill="#b8f0ed"/>
+  <polygon points="48,1 57,13 53,26 44,26 39,13" fill="#6748ba"/><polygon points="48,4 52,13 48,22 43,13" fill="#ded5ff"/>
+  <path d="M26 45l12-8-4 15 10 7m17-29l-5 13 12 7-7 13" fill="none" stroke="#303637" stroke-width="3"/>
+  <rect x="27" y="26" width="6" height="3" fill="#a1643f"/><rect x="65" y="43" width="5" height="3" fill="#b47749"/>
+  <path d="M21 66c10-13 16-8 23-20M75 67c-9-12-14-7-20-18" fill="none" stroke="#3c7448" stroke-width="3"/>
+  <g fill="#417b4b"><rect x="16" y="61" width="18" height="11"/><rect x="63" y="61" width="19" height="11"/></g>
+  <g fill="#6ba65e"><rect x="20" y="58" width="6" height="6"/><rect x="69" y="57" width="7" height="6"/></g>
+  <rect x="30" y="69" width="38" height="3" fill="#383e3e"/>
+</g>
 </svg>
