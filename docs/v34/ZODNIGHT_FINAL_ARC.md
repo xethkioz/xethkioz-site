@@ -131,19 +131,18 @@ Los detalles exactos del último enemigo, orden definitivo de las fases y relaci
 
 Por lo tanto, este documento fija el **clímax emocional y sistémico**, pero no obliga todavía a definir si el encuentro SSS es el último combate completo, la fase previa del combate final o parte de una secuencia mayor.
 
-## 11. Eco Resonante — Inframundo
+## 11. Eco Resonante — puerta a Saga II
 Después del cierre queda una única anomalía activa:
 
 un **Eco Resonante** proveniente de una brecha/portal hacia el **Inframundo**.
 
-Reglas:
-- no debe invalidar la victoria de Zodnight;
-- no debe convertir el final en un cliffhanger obligatorio;
-- debe funcionar como señal opcional de que algo respondió desde otro plano;
-- puede quedar como puerta para una futura saga, expansión o contenido posterior;
-- su naturaleza exacta permanece sin definir.
+CANON ACTUALIZADO:
+- el Inframundo **NO es una expansión adicional de la primera saga**;
+- es el punto de partida de una **segunda saga independiente** dentro del universo WORLD OF XETHKIOZ;
+- Zodnight debe seguir sintiéndose completamente terminado antes de mostrar esa brecha;
+- la brecha funciona como epílogo/semilla, no como deuda narrativa obligatoria.
 
-El jugador debe poder terminar Zodnight sintiendo que completó una historia, aunque exista un nuevo misterio.
+La dirección inicial de Saga II queda documentada en `docs/v34/INFRAMUNDO_SAGA_SEED.md`.
 
 ## 12. Principio de diseño del final
 El final debe comprobar todo lo que WORLD OF XETHKIOZ enseñó al jugador.
