@@ -61,6 +61,7 @@ func _handle_alexis() -> void:
 			GameState.add_xp(120)
 			GameState.add_pet_bond(5)
 			GameState.add_crystals(10)
+			_grant_brote_piece("Raíces alteradas")
 			var conclusion := "Bien. Esto no es una migración normal. Las raíces están respondiendo a algo más profundo. Seguimos desde acá."
 			if GameState.has_lore("nota_elida_raices"):
 				conclusion = "Bien. Y con la nota de Elida ya no puedo descartarlo: estas raíces están siguiendo un camino viejo, uno que nosotros todavía no vemos."
@@ -88,6 +89,7 @@ func _complete_familiar_assessment() -> void:
 		return
 	GameState.assess_familiar("carpinchito_cristal")
 	GameState.add_xp(60)
+	_grant_brote_piece("Evaluación de Val")
 	state = STATE_SANCTUARY_ACTIVE
 	EventBus.dialog_requested.emit("Val", "Es una afinidad de Impacto: estable, física y de ruptura. Fermín va a poder entrenarlo. Antes, el Santuario de las Raíces tiene que quedar libre: algo está cortando la resonancia del bosque.")
 	EventBus.toast_requested.emit("Afinidad descubierta · Impacto · Mentor recomendado: Fermín · +60 XP")
@@ -107,10 +109,11 @@ func _handle_sibling(npc_id: String) -> void:
 		GameState.choose_mentor(npc_id)
 		GameState.unlock_prism_step()
 		GameState.add_xp(80)
+		_grant_brote_piece("Primera mentoría")
 		state = STATE_TRAIN_WITH_FERMIN
 		var names := {"ashley":"Ashley", "fermin":"Fermín", "isabella":"Isabella", "gael":"Gael"}
-		EventBus.dialog_requested.emit(str(names.get(npc_id, npc_id)), "Empezamos por acá. No es una jaula: después vas a poder aprender de los demás. Alexis ya puede mostrarte cómo convertir tu dash en Paso Prismático.")
-		EventBus.toast_requested.emit("Mentoría inicial desbloqueada · Paso Prismático · +80 XP")
+		EventBus.dialog_requested.emit(str(names.get(npc_id, npc_id)), "Empezamos por acá. No es una jaula: después vas a poder aprender de los demás. Alexis ya puede mostrarte cómo convertir tu dash en Paso Prismático. Con cuatro piezas de Brote Vivo también queda habilitada tu habilidad F.")
+		EventBus.toast_requested.emit("Mentoría inicial · Paso Prismático · Brote Vivo 4/4 · F desbloqueada")
 		EventBus.demo_stage_changed.emit("training")
 		_update_quest()
 		return
@@ -139,6 +142,7 @@ func _on_enemy_defeated(enemy_id: String, _xp: int, _pos: Vector2) -> void:
 			_update_quest()
 		return
 	if state == STATE_SANCTUARY_ACTIVE and enemy_id == "custodio_raices_menor":
+		_grant_brote_piece("Santuario de las Raíces")
 		state = STATE_BOSS5_ACTIVE
 		EventBus.dialog_requested.emit("Alexis", "La presión del Santuario cayó. Ahora sí: el Guardián del Bosque Velado quedó expuesto. Mirá el terreno, no solamente su cuerpo.")
 		EventBus.demo_stage_changed.emit("boss5")
@@ -162,6 +166,13 @@ func _on_familiar_captured(species_id: String, _display_name: String) -> void:
 	if state == STATE_CAPTURE_ACTIVE or state == STATE_SEEK_VAL:
 		state = STATE_RETURN_TO_VAL
 		_update_quest()
+
+func _grant_brote_piece(source: String) -> void:
+	var current: int = GameState.set_piece_count("brote_vivo")
+	if current >= 4:
+		return
+	var pieces: int = GameState.add_set_piece("brote_vivo", 1)
+	EventBus.toast_requested.emit("Brote Vivo · pieza %d/4 · %s" % [pieces, source])
 
 func _update_quest() -> void:
 	match state:
