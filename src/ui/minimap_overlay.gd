@@ -89,8 +89,8 @@ func _draw_region_topology(inner: Rect2) -> void:
 		_draw_routes(_chunk_rect(coord, inner), raw.get("exits", {}))
 
 func _draw_biome(rect: Rect2, biome: String, coord: Vector2i) -> void:
-	var inset := Rect2(rect.position + Vector2(0.45, 0.45), rect.size - Vector2(0.9, 0.9))
-	var fill := C_FOREST if (coord.x + coord.y) % 2 == 0 else C_FOREST_ALT
+	var inset: Rect2 = Rect2(rect.position + Vector2(0.45, 0.45), rect.size - Vector2(0.9, 0.9))
+	var fill: Color = C_FOREST if (coord.x + coord.y) % 2 == 0 else C_FOREST_ALT
 	match biome:
 		"river":
 			fill = C_FOREST
@@ -108,11 +108,11 @@ func _draw_biome(rect: Rect2, biome: String, coord: Vector2i) -> void:
 
 	match biome:
 		"river":
-			var river_x := rect.position.x + rect.size.x * 0.23
+			var river_x: float = rect.position.x + rect.size.x * 0.23
 			draw_line(Vector2(river_x, rect.position.y + 1.0), Vector2(river_x, rect.end.y - 1.0), C_WATER, 4.0)
 			draw_line(Vector2(river_x + 0.8, rect.position.y + 1.0), Vector2(river_x + 0.8, rect.end.y - 1.0), C_WATER_LIGHT, 1.0)
 		"lake":
-			var center := rect.position + Vector2(rect.size.x * 0.65, rect.size.y * 0.42)
+			var center: Vector2 = rect.position + Vector2(rect.size.x * 0.65, rect.size.y * 0.42)
 			var lake := PackedVector2Array([
 				center + Vector2(-rect.size.x * 0.24, -rect.size.y * 0.12),
 				center + Vector2(-rect.size.x * 0.10, -rect.size.y * 0.27),
@@ -125,23 +125,25 @@ func _draw_biome(rect: Rect2, biome: String, coord: Vector2i) -> void:
 			draw_colored_polygon(lake, C_WATER)
 			draw_line(lake[0], lake[1], C_WATER_LIGHT, 1.0)
 		"ruins":
-			for offset in [Vector2(0.28,0.30), Vector2(0.58,0.22), Vector2(0.42,0.60), Vector2(0.72,0.55)]:
-				var p := rect.position + rect.size * offset
+			var ruin_offsets: Array[Vector2] = [Vector2(0.28,0.30), Vector2(0.58,0.22), Vector2(0.42,0.60), Vector2(0.72,0.55)]
+			for offset in ruin_offsets:
+				var p: Vector2 = rect.position + rect.size * offset
 				draw_rect(Rect2(p, Vector2(2.4, 2.4)), Color("818b84"), true)
 				if int((offset.x + offset.y) * 100.0) % 2 == 0:
 					draw_rect(Rect2(p + Vector2(0.7,0.3), Vector2(0.8,1.8)), C_PRISM, true)
 		"sanctuary":
-			var c := rect.position + rect.size * 0.5
+			var c: Vector2 = rect.position + rect.size * 0.5
 			draw_circle(c, minf(rect.size.x, rect.size.y) * 0.24, Color(0.55,0.36,0.96,0.18))
 			draw_arc(c, minf(rect.size.x, rect.size.y) * 0.22, 0.0, TAU, 12, C_PRISM, 1.0)
-			for direction in [Vector2.UP, Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT]:
+			var cardinal: Array[Vector2] = [Vector2.UP, Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT]
+			for direction in cardinal:
 				draw_circle(c + direction * 4.0, 1.1, Color("b9a8ff"))
 		"boss":
-			var c := rect.position + rect.size * 0.5
+			var c: Vector2 = rect.position + rect.size * 0.5
 			draw_circle(c, minf(rect.size.x, rect.size.y) * 0.31, Color(0.55,0.22,0.26,0.48))
 			draw_arc(c, minf(rect.size.x, rect.size.y) * 0.28, 0.0, TAU, 14, C_ORANGE, 1.0)
 		"refuge":
-			var base := rect.position + Vector2(rect.size.x * 0.64, rect.size.y * 0.34)
+			var base: Vector2 = rect.position + Vector2(rect.size.x * 0.64, rect.size.y * 0.34)
 			var roof := PackedVector2Array([base + Vector2(-4,2), base + Vector2(0,-2), base + Vector2(4,2)])
 			draw_colored_polygon(roof, C_ORANGE)
 			draw_rect(Rect2(base + Vector2(-3,2), Vector2(6,4)), Color("7b5a3e"), true)
@@ -150,11 +152,11 @@ func _draw_routes(rect: Rect2, raw_exits) -> void:
 	if raw_exits is not Dictionary:
 		return
 	var exits: Dictionary = raw_exits
-	var c := rect.position + rect.size * 0.5
-	var north := Vector2(c.x, rect.position.y)
-	var south := Vector2(c.x, rect.end.y)
-	var west := Vector2(rect.position.x, c.y)
-	var east := Vector2(rect.end.x, c.y)
+	var c: Vector2 = rect.position + rect.size * 0.5
+	var north: Vector2 = Vector2(c.x, rect.position.y)
+	var south: Vector2 = Vector2(c.x, rect.end.y)
+	var west: Vector2 = Vector2(rect.position.x, c.y)
+	var east: Vector2 = Vector2(rect.end.x, c.y)
 	if bool(exits.get("n", false)):
 		draw_line(c, north, C_PATH, 1.35)
 	if bool(exits.get("s", false)):
@@ -170,11 +172,11 @@ func _draw_poi(inner: Rect2) -> void:
 		if raw is not Dictionary:
 			continue
 		var entry: Dictionary = raw
-		var id := str(entry.get("id", ""))
-		var map_p := _to_map(_poi_world_position(entry), inner)
-		var discovered := GameState.has_poi(id)
-		var color := C_DISCOVERED if discovered else C_UNKNOWN
-		var radius := 2.5 if discovered else 1.5
+		var id: String = str(entry.get("id", ""))
+		var map_p: Vector2 = _to_map(_poi_world_position(entry), inner)
+		var discovered: bool = GameState.has_poi(id)
+		var color: Color = C_DISCOVERED if discovered else C_UNKNOWN
+		var radius: float = 2.5 if discovered else 1.5
 		match str(entry.get("kind", "")):
 			"boss":
 				if discovered:
@@ -194,7 +196,7 @@ func _draw_poi(inner: Rect2) -> void:
 func _draw_player(inner: Rect2) -> void:
 	if not is_instance_valid(_player):
 		return
-	var map_p := _to_map(_player.global_position, inner)
+	var map_p: Vector2 = _to_map(_player.global_position, inner)
 	draw_circle(map_p, 2.7, C_PLAYER)
 	draw_circle(map_p, 4.5, Color(C_PLAYER.r, C_PLAYER.g, C_PLAYER.b, 0.30), false, 1.0)
 	var facing = _player.get("facing")
@@ -202,7 +204,7 @@ func _draw_player(inner: Rect2) -> void:
 		draw_line(map_p, map_p + facing.normalized() * 4.2, Color("ffe0b8"), 1.1)
 
 func _chunk_rect(coord: Vector2i, inner: Rect2) -> Rect2:
-	var cell_size := Vector2(inner.size.x / float(MAP_COLS), inner.size.y / float(MAP_ROWS))
+	var cell_size: Vector2 = Vector2(inner.size.x / float(MAP_COLS), inner.size.y / float(MAP_ROWS))
 	return Rect2(inner.position + Vector2(coord.x * cell_size.x, coord.y * cell_size.y), cell_size)
 
 func _coord_from_key(key: String) -> Vector2i:
@@ -212,8 +214,8 @@ func _coord_from_key(key: String) -> Vector2i:
 	return Vector2i(int(parts[0]), int(parts[1]))
 
 func _to_map(world_pos: Vector2, inner: Rect2) -> Vector2:
-	var nx := clampf(world_pos.x / _world_size.x, 0.0, 1.0)
-	var ny := clampf(world_pos.y / _world_size.y, 0.0, 1.0)
+	var nx: float = clampf(world_pos.x / _world_size.x, 0.0, 1.0)
+	var ny: float = clampf(world_pos.y / _world_size.y, 0.0, 1.0)
 	return inner.position + Vector2(nx * inner.size.x, ny * inner.size.y)
 
 func _poi_world_position(entry: Dictionary) -> Vector2:
@@ -230,7 +232,7 @@ func _nearest_label() -> String:
 		if raw is not Dictionary:
 			continue
 		var entry: Dictionary = raw
-		var d := _player.global_position.distance_to(_poi_world_position(entry))
+		var d: float = _player.global_position.distance_to(_poi_world_position(entry))
 		if d < best_distance:
 			best_distance = d
 			best_name = str(entry.get("name", "REGIÓN DORADA"))
