@@ -47,7 +47,7 @@ func _build() -> void:
 	_decorate()
 
 func _fill_base() -> void:
-	var base_tile := Factory.GRASS
+	var base_tile: Vector2i = Factory.GRASS
 	if biome == "ruins":
 		base_tile = Factory.DARK_GRASS
 	elif biome == "lake":
@@ -59,10 +59,11 @@ func _fill_base() -> void:
 			_ground.set_cell(Vector2i(x, y), 0, base_tile)
 
 func _carve_routes() -> void:
-	var c := CHUNK_TILES / 2
-	var width := 5
-	for y in range(c - width / 2, c + width / 2 + 1):
-		for x in range(c - width / 2, c + width / 2 + 1):
+	var c: int = CHUNK_TILES >> 1
+	var width: int = 5
+	var half: int = width >> 1
+	for y in range(c - half, c + half + 1):
+		for x in range(c - half, c + half + 1):
 			_ground.set_cell(Vector2i(x, y), 0, Factory.PATH)
 	if bool(exits.get("n", false)):
 		for y in range(0, c + 1):
@@ -78,9 +79,9 @@ func _carve_routes() -> void:
 			_paint_path_band(Vector2i(x, c), width, false)
 
 func _paint_path_band(center: Vector2i, width: int, vertical := true) -> void:
-	var half := width / 2
+	var half: int = width >> 1
 	for offset in range(-half, half + 1):
-		var cell := center + (Vector2i(offset, 0) if vertical else Vector2i(0, offset))
+		var cell: Vector2i = center + (Vector2i(offset, 0) if vertical else Vector2i(0, offset))
 		if _inside(cell):
 			_ground.set_cell(cell, 0, Factory.PATH)
 
@@ -103,7 +104,7 @@ func _paint_river() -> void:
 	for y in range(CHUNK_TILES):
 		for x in range(3, 9):
 			_ground.set_cell(Vector2i(x, y), 0, Factory.WATER if x not in [3, 8] else Factory.WATER_FOAM)
-	var bridge_y := CHUNK_TILES / 2
+	var bridge_y: int = CHUNK_TILES >> 1
 	for x in range(3, 9):
 		_ground.set_cell(Vector2i(x, bridge_y), 0, Factory.BRIDGE)
 		_ground.set_cell(Vector2i(x, bridge_y + 1), 0, Factory.BRIDGE)
@@ -112,7 +113,7 @@ func _paint_lake() -> void:
 	var center := Vector2(21, 11)
 	for y in range(2, 22):
 		for x in range(11, 31):
-			var d := Vector2(x, y).distance_to(center)
+			var d: float = Vector2(x, y).distance_to(center)
 			if d < 8.4:
 				_ground.set_cell(Vector2i(x, y), 0, Factory.WATER)
 			elif d < 9.4:
@@ -132,17 +133,17 @@ func _paint_sanctuary() -> void:
 	var c := Vector2i(16, 16)
 	for y in range(6, 27):
 		for x in range(6, 27):
-			var d := Vector2(x, y).distance_to(Vector2(c.x, c.y))
+			var d: float = Vector2(x, y).distance_to(Vector2(c.x, c.y))
 			if d < 9.0:
 				_ground.set_cell(Vector2i(x, y), 0, Factory.RUIN_FLOOR)
-	for p in [Vector2i(10,10), Vector2i(22,10), Vector2i(10,22), Vector2i(22,22)]:
+	for p in [Vector2i(10, 10), Vector2i(22, 10), Vector2i(10, 22), Vector2i(22, 22)]:
 		_detail.set_cell(p, 0, Factory.CRYSTAL)
 
 func _paint_boss_arena() -> void:
 	var c := Vector2(16, 16)
 	for y in range(CHUNK_TILES):
 		for x in range(CHUNK_TILES):
-			var d := Vector2(x, y).distance_to(c)
+			var d: float = Vector2(x, y).distance_to(c)
 			if d < 11.5:
 				_ground.set_cell(Vector2i(x, y), 0, Factory.DIRT)
 			elif d < 13.0:
@@ -158,10 +159,10 @@ func _decorate() -> void:
 	for y in range(1, CHUNK_TILES - 1):
 		for x in range(1, CHUNK_TILES - 1):
 			var cell := Vector2i(x, y)
-			var base := _ground.get_cell_atlas_coords(cell)
+			var base: Vector2i = _ground.get_cell_atlas_coords(cell)
 			if base in [Factory.PATH, Factory.WATER, Factory.WATER_FOAM, Factory.BRIDGE, Factory.RUIN_FLOOR]:
 				continue
-			var roll := _cell_roll(x, y)
+			var roll: int = _cell_roll(x, y)
 			if roll < 3:
 				_detail.set_cell(cell, 0, Factory.TREE)
 				_add_blocker(cell, Vector2(12, 10), Vector2(0, 3))
@@ -188,7 +189,7 @@ func _add_blocker(cell: Vector2i, size: Vector2, offset: Vector2) -> void:
 	_blockers.add_child(body)
 
 func _cell_roll(x: int, y: int) -> int:
-	var n := seed_value ^ (x * 374761393) ^ (y * 668265263)
+	var n: int = seed_value ^ (x * 374761393) ^ (y * 668265263)
 	n = (n ^ (n >> 13)) * 1274126177
 	return absi(n) % 100
 
