@@ -19,45 +19,39 @@ func _ready() -> void:
 	queue_redraw()
 
 func _draw() -> void:
-	var skin := CharacterProfile.SKIN_COLORS[skin_tone]
-	var hair := CharacterProfile.HAIR_COLORS[hair_color]
-	var accent := CharacterProfile.ACCENT_COLORS[accent_color]
-	var body_width := [30.0, 36.0, 42.0][body_type]
-	var center_x := size.x * 0.5
-	var foot_y := size.y - 8.0
+	var skin: Color = CharacterProfile.SKIN_COLORS[skin_tone]
+	var hair: Color = CharacterProfile.HAIR_COLORS[hair_color]
+	var accent: Color = CharacterProfile.ACCENT_COLORS[accent_color]
+	var body_width: float = float([30.0, 36.0, 42.0][body_type])
+	var center_x: float = size.x * 0.5
+	var foot_y: float = size.y - 8.0
 
-	# shadow
-	draw_ellipse(Vector2(center_x, foot_y), Vector2(26, 6), Color(0.02, 0.03, 0.04, 0.45))
-	# legs
+	_draw_ellipse_shape(Vector2(center_x, foot_y), Vector2(26, 6), Color(0.02, 0.03, 0.04, 0.45))
 	draw_rect(Rect2(center_x - 14, foot_y - 30, 10, 24), Color("171b23"), true)
 	draw_rect(Rect2(center_x + 4, foot_y - 30, 10, 24), Color("171b23"), true)
-	# boots
 	draw_rect(Rect2(center_x - 16, foot_y - 9, 13, 7), Color("0f1218"), true)
 	draw_rect(Rect2(center_x + 3, foot_y - 9, 13, 7), Color("0f1218"), true)
-	# torso
 	draw_rect(Rect2(center_x - body_width * 0.5, foot_y - 67, body_width, 39), Color("222833"), true)
 	draw_rect(Rect2(center_x - body_width * 0.5, foot_y - 56, body_width, 7), accent, true)
 	draw_rect(Rect2(center_x - 5, foot_y - 53, 10, 11), accent.lightened(0.30), true)
-	# arms and hands
 	draw_rect(Rect2(center_x - body_width * 0.5 - 8, foot_y - 62, 8, 30), Color("171b23"), true)
 	draw_rect(Rect2(center_x + body_width * 0.5, foot_y - 62, 8, 30), Color("171b23"), true)
 	draw_rect(Rect2(center_x - body_width * 0.5 - 7, foot_y - 34, 7, 8), skin, true)
 	draw_rect(Rect2(center_x + body_width * 0.5, foot_y - 34, 7, 8), skin, true)
-	# head
 	draw_rect(Rect2(center_x - 14, foot_y - 94, 28, 28), skin, true)
 	draw_rect(Rect2(center_x - 9, foot_y - 83, 4, 4), Color("28343c"), true)
 	draw_rect(Rect2(center_x + 5, foot_y - 83, 4, 4), Color("28343c"), true)
 	_draw_hair(center_x, foot_y - 94, hair)
-	# prism clasp
-	draw_colored_polygon(PackedVector2Array([
+	var clasp_points := PackedVector2Array([
 		Vector2(center_x, foot_y - 51), Vector2(center_x + 5, foot_y - 45),
 		Vector2(center_x, foot_y - 38), Vector2(center_x - 5, foot_y - 45)
-	]), accent.lightened(0.35))
+	])
+	draw_colored_polygon(clasp_points, accent.lightened(0.35))
 
-func draw_ellipse(center: Vector2, radii: Vector2, color: Color) -> void:
+func _draw_ellipse_shape(center: Vector2, radii: Vector2, color: Color) -> void:
 	var points := PackedVector2Array()
 	for i in range(24):
-		var angle := TAU * float(i) / 24.0
+		var angle: float = TAU * float(i) / 24.0
 		points.append(center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y))
 	draw_colored_polygon(points, color)
 
