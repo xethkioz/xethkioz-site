@@ -20,6 +20,7 @@ jobs:
           python tools/generate_v08_pickups.py
           python tools/generate_v09_demo_assets.py
           python tools/generate_v09_boss_assets.py
+          python tools/generate_v095_golden_assets.py
       - name: Download Godot
         run: |
           wget -q https://godot-releases.nbg1.your-objectstorage.com/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -O /tmp/godot.zip
