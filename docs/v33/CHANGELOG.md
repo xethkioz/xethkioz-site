@@ -1,5 +1,14 @@
 # World of Xethkioz — development changelog
 
+## 2026-09-08 — v3.3-dev.9 / Bestiary + Legendary Separation
+- Added in-game Prisma-Atlas Familiar inspection overlay on `B`.
+- Bestiary now shows active Familiar name, primary affinity, recommended mentor, training rank, Familiar bond and unlocked technique.
+- Explicitly separated all eight legendary species from the common capture/assessment/training pipeline.
+- Common capture now rejects Xethkioz, Itzuke, Mozaruk, Killaruna, Heller, Kahezer, Okuninust and Dvalin.
+- Familiar training refreshes active Familiar UI state after Rank I unlock.
+- Closed issue #241 after completing Val assessment → sibling mentor → playable Fermín training → `embate_cristal` → inspect UI.
+- Godot 4.7.2 CI passed import/compile and vertical-slice boot on gameplay head `7e1ae718ecf7051b839620031ea4bd3c671a630e`.
+
 ## 2026-09-08 — v3.3-dev.8 / Steam Demo Closure Loop
 - Extended the playable Golden Region route from Lago Encantado through a complete demo ending.
 - Added `DemoEncounterDirector` to keep staged encounters/NPC reveals decoupled from the large world controller.
