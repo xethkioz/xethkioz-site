@@ -1,6 +1,6 @@
 extends Control
 
-const GAME_SCENE := "res://scenes/v33/VerticalSlice.tscn"
+const GAME_SCENE := "res://scenes/v34/GoldenRegion.tscn"
 const C_BG := Color("071019")
 const C_PANEL := Color(0.035, 0.045, 0.075, 0.94)
 const C_TEXT := Color("f0f0f5")
