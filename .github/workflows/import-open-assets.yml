@@ -1,0 +1,45 @@
+name: Import verified open terrain assets
+
+on:
+  push:
+    branches:
+      - game/xethkioz-v34-production-rebuild
+    paths:
+      - .github/workflows/import-open-assets.yml
+      - tools/import_open_assets.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout production rebuild
+        uses: actions/checkout@v4
+        with:
+          ref: game/xethkioz-v34-production-rebuild
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Download verified public-domain assets
+        run: python tools/import_open_assets.py
+
+      - name: Commit imported binary assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "xethkioz-build-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add assets/third_party/tuxemon_public_domain
+          if git diff --cached --quiet; then
+            echo "No asset changes to commit."
+            exit 0
+          fi
+          git commit -m "assets(izrdralar): import verified public-domain terrain sources [skip ci]"
+          git push origin HEAD:game/xethkioz-v34-production-rebuild
