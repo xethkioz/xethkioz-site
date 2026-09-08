@@ -16,6 +16,9 @@ var discovered_lore: Array[String] = []
 var discovered_pois: Array[String] = []
 var captured_familiars: Dictionary = {}
 var active_familiar_id: String = ""
+var quest_snapshot: Dictionary = {}
+var last_world_position := Vector2.ZERO
+var world_flags: Dictionary = {}
 
 func _ready() -> void:
 	EventBus.enemy_defeated.connect(_on_enemy_defeated)
@@ -88,6 +91,26 @@ func discover_poi(poi_id: String, display_name: String) -> int:
 		add_xp(reward)
 	EventBus.poi_discovered.emit(poi_id, display_name, discovered_pois.size(), reward)
 	return reward
+
+func set_quest_snapshot(snapshot: Dictionary) -> void:
+	quest_snapshot = snapshot.duplicate(true)
+
+func get_quest_snapshot() -> Dictionary:
+	return quest_snapshot.duplicate(true)
+
+func set_last_world_position(position_value: Vector2) -> void:
+	last_world_position = position_value
+
+func set_world_flag(flag_id: String, value: bool = true) -> void:
+	if flag_id.is_empty():
+		return
+	if value:
+		world_flags[flag_id] = true
+	else:
+		world_flags.erase(flag_id)
+
+func has_world_flag(flag_id: String) -> bool:
+	return bool(world_flags.get(flag_id, false))
 
 func is_legendary_species(species_id: String) -> bool:
 	return LEGENDARY_SPECIES.has(species_id.to_lower())
@@ -181,6 +204,9 @@ func reset_new_game() -> void:
 	discovered_pois.clear()
 	captured_familiars.clear()
 	active_familiar_id = ""
+	quest_snapshot.clear()
+	last_world_position = Vector2.ZERO
+	world_flags.clear()
 	EventBus.player_progress_changed.emit(player_level, player_xp, xp_to_next())
 	EventBus.currency_changed.emit(crystals)
 	EventBus.pet_bond_changed.emit(xethkioz_bond)
@@ -189,7 +215,7 @@ func reset_new_game() -> void:
 
 func to_dict() -> Dictionary:
 	return {
-		"save_version": 8,
+		"save_version": 9,
 		"player_level": player_level,
 		"player_xp": player_xp,
 		"crystals": crystals,
@@ -202,7 +228,10 @@ func to_dict() -> Dictionary:
 		"discovered_lore": discovered_lore.duplicate(),
 		"discovered_pois": discovered_pois.duplicate(),
 		"captured_familiars": captured_familiars.duplicate(true),
-		"active_familiar_id": active_familiar_id
+		"active_familiar_id": active_familiar_id,
+		"quest_snapshot": quest_snapshot.duplicate(true),
+		"last_world_position": [last_world_position.x, last_world_position.y],
+		"world_flags": world_flags.duplicate(true)
 	}
 
 func apply_dict(data: Dictionary) -> void:
@@ -225,6 +254,12 @@ func apply_dict(data: Dictionary) -> void:
 	active_familiar_id = str(data.get("active_familiar_id", ""))
 	if not active_familiar_id.is_empty() and not captured_familiars.has(active_familiar_id):
 		active_familiar_id = ""
+	quest_snapshot = data.get("quest_snapshot", {}).duplicate(true)
+	last_world_position = Vector2.ZERO
+	var raw_position = data.get("last_world_position", [])
+	if raw_position is Array and raw_position.size() >= 2:
+		last_world_position = Vector2(float(raw_position[0]), float(raw_position[1]))
+	world_flags = data.get("world_flags", {}).duplicate(true)
 	EventBus.player_progress_changed.emit(player_level, player_xp, 0 if player_level >= MAX_LEVEL else xp_to_next())
 	EventBus.currency_changed.emit(crystals)
 	EventBus.pet_bond_changed.emit(xethkioz_bond)
