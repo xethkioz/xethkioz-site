@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="144" viewBox="0 0 1024 144" shape-rendering="crispEdges">
+<rect width="1024" height="144" fill="#071019"/>
+<!-- PANEL 1 · ARGENTINA 2150 / FISURA -->
+<g transform="translate(0 0)">
+<rect width="256" height="144" fill="#101c26"/>
+<rect y="102" width="256" height="42" fill="#1c322d"/>
+<path d="M0 110C38 90 58 116 92 98s61-8 82 4 48-2 82-12v54H0z" fill="#29493d"/>
+<g fill="#24313a"><rect x="18" y="63" width="29" height="44"/><rect x="53" y="48" width="24" height="59"/><rect x="82" y="70" width="38" height="37"/><rect x="130" y="55" width="23" height="52"/><rect x="160" y="68" width="35" height="39"/></g>
+<g fill="#3fc7c9" opacity=".7"><rect x="26" y="72" width="4" height="8"/><rect x="37" y="83" width="4" height="8"/><rect x="60" y="58" width="4" height="10"/><rect x="91" y="79" width="5" height="8"/><rect x="138" y="64" width="4" height="10"/><rect x="176" y="77" width="5" height="8"/></g>
+<path d="M207-4l-23 38 14 11-25 37 15 5-24 48 36-46-14-8 29-37-15-12 27-36z" fill="#8b5cf6"/>
+<path d="M210 0l-15 30 8 8-18 27" stroke="#e7deff" stroke-width="4" fill="none"/>
+<g fill="#ff8c42"><rect x="212" y="66" width="4" height="4"/><rect x="226" y="89" width="3" height="3"/><rect x="201" y="111" width="4" height="4"/></g>
+<g fill="#4d8157"><circle cx="29" cy="112" r="13"/><circle cx="52" cy="116" r="16"/><circle cx="112" cy="119" r="15"/><circle cx="147" cy="117" r="14"/></g>
+<text x="10" y="18" fill="#f0f0f5" font-family="sans-serif" font-size="10" font-weight="bold">ARGENTINA · 2150</text>
+<text x="10" y="31" fill="#9b9baa" font-family="sans-serif" font-size="6">LA FISURA PRISMÁTICA</text>
+</g>
+<!-- PANEL 2 · IZRDRALAR -->
+<g transform="translate(256 0)">
+<rect width="256" height="144" fill="#173029"/>
+<path d="M0 105C35 82 58 108 90 87s63-8 83 6 45-7 83-14v65H0z" fill="#24513b"/>
+<path d="M0 120c35-9 64-7 96 1s70 8 160-8v31H0z" fill="#356642"/>
+<path d="M167 17c-13 21-6 40 1 54s-6 28-3 49" stroke="#3fc7c9" stroke-width="14" fill="none" opacity=".7"/>
+<path d="M167 17c-10 21-4 39 2 53s-7 29-4 50" stroke="#76dbea" stroke-width="5" fill="none" opacity=".8"/>
+<g><rect x="35" y="75" width="7" height="45" fill="#60432f"/><circle cx="38" cy="62" r="24" fill="#2e6745"/><circle cx="21" cy="70" r="16" fill="#285b3d"/><circle cx="55" cy="72" r="17" fill="#33754b"/></g>
+<g><rect x="210" y="70" width="8" height="49" fill="#61442f"/><circle cx="214" cy="57" r="25" fill="#2f6d47"/><circle cx="196" cy="68" r="17" fill="#285d3e"/><circle cx="231" cy="67" r="16" fill="#34794d"/></g>
+<g fill="#6b7373"><rect x="94" y="65" width="17" height="52"/><rect x="116" y="79" width="14" height="38"/><rect x="88" y="60" width="29" height="8"/></g>
+<g fill="#8b5cf6"><rect x="101" y="70" width="4" height="24"/><polygon points="123,45 132,60 128,79 118,79 114,60"/></g>
+<g fill="#e45d61"><rect x="60" y="111" width="4" height="4"/><rect x="72" y="118" width="3" height="3"/></g>
+<text x="10" y="18" fill="#f0f0f5" font-family="sans-serif" font-size="10" font-weight="bold">IZRDRALAR</text>
+<text x="10" y="31" fill="#b5d8c5" font-family="sans-serif" font-size="6">LAS RAÍCES VIVAS</text>
+</g>
+<!-- PANEL 3 · FOUR SIBLINGS -->
+<g transform="translate(512 0)">
+<rect width="256" height="144" fill="#151323"/>
+<path d="M128 4l-10 31 8 15-15 26 19 11-9 52h17l-4-50 16-12-14-27 10-14-10-32z" fill="#6c4bb0" opacity=".5"/>
+<path d="M128 5v132" stroke="#b4a2ff" stroke-width="2" opacity=".5"/>
+<!-- Ashley -->
+<g transform="translate(28 51)"><ellipse cx="20" cy="72" rx="16" ry="4" fill="#070910" opacity=".45"/><path d="M9 30h22v39H9z" fill="#bd5fa0"/><circle cx="20" cy="24" r="11" fill="#e5b08d"/><path d="M9 21c2-17 23-17 24 1l-6 3-1-9-8-6-9 13z" fill="#ee8fba"/><rect x="15" y="23" width="3" height="3" fill="#333946"/><rect x="23" y="23" width="3" height="3" fill="#333946"/><path d="M4 38h8m18 0h8" stroke="#8b5cf6" stroke-width="4"/><circle cx="4" cy="38" r="4" fill="#d8ceff"/></g>
+<!-- Fermin -->
+<g transform="translate(80 58)"><ellipse cx="20" cy="65" rx="16" ry="4" fill="#070910" opacity=".45"/><path d="M8 28h24v34H8z" fill="#8a3838"/><circle cx="20" cy="22" r="10" fill="#dfaa84"/><path d="M10 19c3-13 21-14 22 1l-7-4-8-4-7 9z" fill="#a95e37"/><path d="M4 42h32" stroke="#74797e" stroke-width="5"/><rect x="17" y="19" width="3" height="3" fill="#303846"/><rect x="24" y="19" width="3" height="3" fill="#303846"/></g>
+<!-- Isabella -->
+<g transform="translate(146 67)"><ellipse cx="17" cy="56" rx="14" ry="4" fill="#070910" opacity=".45"/><path d="M7 27h20v26H7z" fill="#4e2c73"/><circle cx="17" cy="22" r="9" fill="#e4b28e"/><path d="M5 17h24L23 7H11z" fill="#39204f"/><rect x="13" y="20" width="3" height="3" fill="#6546a0"/><rect x="20" y="20" width="3" height="3" fill="#6546a0"/><circle cx="29" cy="34" r="5" fill="#8b5cf6" opacity=".8"/></g>
+<!-- Gael -->
+<g transform="translate(198 72)"><ellipse cx="16" cy="51" rx="13" ry="4" fill="#070910" opacity=".45"/><path d="M7 25h18v23H7z" fill="#477348"/><circle cx="16" cy="20" r="8" fill="#e3ad88"/><path d="M8 17c2-10 16-11 18 1l-5-2-7-4-6 7z" fill="#b66a35"/><path d="M28 20v30" stroke="#806044" stroke-width="3"/><path d="M28 20c8 9 8 20 0 30" stroke="#d5c69c" stroke-width="2" fill="none"/></g>
+<text x="10" y="18" fill="#f0f0f5" font-family="sans-serif" font-size="10" font-weight="bold">CUATRO VOCES</text>
+<text x="10" y="31" fill="#c2b9dc" font-family="sans-serif" font-size="6">ATRAPADAS EN EL TIEMPO</text>
+</g>
+<!-- PANEL 4 · AWAKENING / XETHKIOZ -->
+<g transform="translate(768 0)">
+<rect width="256" height="144" fill="#162b27"/>
+<path d="M0 117c34-24 62-11 92-25s59-18 82-4 44 9 82-2v58H0z" fill="#2b5c42"/>
+<g fill="#294b38"><circle cx="29" cy="76" r="25"/><circle cx="57" cy="64" r="30"/><circle cx="213" cy="65" r="31"/><circle cx="236" cy="79" r="24"/></g>
+<path d="M112 110h28l8 16h-44z" fill="#20232c"/><circle cx="126" cy="99" r="10" fill="#d7a77f"/><path d="M116 95c1-13 19-15 21-1l-6-3-9-3-6 8z" fill="#20232c"/><path d="M108 114h36v6h-36z" fill="#8b5cf6"/>
+<!-- Xethkioz creature -->
+<g transform="translate(157 79)"><ellipse cx="28" cy="46" rx="22" ry="5" fill="#071019" opacity=".4"/><path d="M9 34c0-14 10-24 24-24 11 0 20 7 22 17l12-5-8 13 10 7-15 1c-4 7-12 11-22 11-14 0-23-8-23-20z" fill="#f0f0f5" stroke="#8b5cf6" stroke-width="3"/><path d="M19 17L12 3l14 9M43 15L52 2l-2 17" fill="#ece7ff" stroke="#8b5cf6" stroke-width="3"/><circle cx="27" cy="29" r="3" fill="#7b5ce0"/><circle cx="40" cy="29" r="3" fill="#7b5ce0"/><path d="M20 42c10 6 20 5 29 0" stroke="#ff8c42" stroke-width="3" fill="none"/><path d="M55 27c13-9 20-1 14 7" stroke="#3fc7c9" stroke-width="4" fill="none"/></g>
+<g fill="#8b5cf6"><rect x="95" y="55" width="3" height="3"/><rect x="142" y="39" width="4" height="4"/><rect x="184" y="54" width="3" height="3"/></g>
+<text x="10" y="18" fill="#f0f0f5" font-family="sans-serif" font-size="10" font-weight="bold">EL DESPERTAR</text>
+<text x="10" y="31" fill="#d8ceff" font-family="sans-serif" font-size="6">XETHKIOZ YA TE ESTÁ ESPERANDO</text>
+</g>
+</svg>
