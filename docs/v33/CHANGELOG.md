@@ -1,5 +1,12 @@
 # World of Xethkioz — v3.3 development changelog
 
+## 2026-09-08 — v3.3-dev.3
+- Added reusable NPC interaction architecture (`interactable` group + generic NPC controller).
+- Added `C` interaction input without consuming future Q/E/R/F combat slots.
+- Added Alexis, Ivan and Val to the Golden Region greybox with canon-aligned placeholder dialogue.
+- Reworked the intro quest into a real loop: talk to Alexis → investigate 3 altered creatures → return to Alexis → receive XP/crystals/bond reward.
+- Added dialogue presentation layer to HUD.
+
 ## 2026-09-08 — v3.3-dev.2 / Canon Freeze
 - Promoted the consolidated Game Bible v3.3 to production source of truth.
 - Locked campaign gates, XP formula `100 + 40L + 10L²`, level cap 60 and Steam demo scope.

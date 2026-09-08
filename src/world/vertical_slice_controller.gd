@@ -2,6 +2,7 @@ extends Node2D
 
 const PlayerScript = preload("res://src/player/player_controller.gd")
 const EnemyScript = preload("res://src/npc/enemy_controller.gd")
+const NpcScript = preload("res://src/npc/npc_interactable.gd")
 const PetScript = preload("res://src/pets/xethkioz_companion.gd")
 const HudScript = preload("res://src/ui/hud_controller.gd")
 const QuestScript = preload("res://src/quest/quest_manager.gd")
@@ -17,6 +18,7 @@ func _ready() -> void:
 	_build_greybox_world()
 	_spawn_player()
 	_spawn_xethkioz()
+	_spawn_npcs()
 	_spawn_enemies()
 	_spawn_systems()
 	EventBus.weather_changed.connect(_on_weather_changed)
@@ -30,7 +32,8 @@ func _ensure_inputs() -> void:
 		"move_up": [KEY_W, KEY_UP],
 		"move_down": [KEY_S, KEY_DOWN],
 		"attack": [KEY_J],
-		"dash": [KEY_SHIFT]
+		"dash": [KEY_SHIFT],
+		"interact": [KEY_C]
 	}
 	for action in actions.keys():
 		if not InputMap.has_action(action):
@@ -149,6 +152,19 @@ func _spawn_xethkioz() -> void:
 	pet.set_script(PetScript)
 	pet.position = Vector2(165, 225)
 	add_child(pet)
+
+func _spawn_npcs() -> void:
+	_spawn_npc("alexis", "Alexis", Vector2(250, 185), ["El bosque está cambiando. Necesito saber qué está alterando sus raíces."], Color("d58d5b"))
+	_spawn_npc("ivan", "Ivan", Vector2(320, 240), ["El Prisma-Atlas todavía es un prototipo. Cada anomalía que registremos lo vuelve más preciso."], Color("74a7d8"))
+	_spawn_npc("val", "Val", Vector2(560, 185), ["El lago calma a las criaturas. Cuando estés listo, te enseñaré a reconocer un vínculo verdadero."], Color("79b99a"))
+
+func _spawn_npc(id_value: String, display_name: String, pos: Vector2, lines: Array[String], color: Color) -> void:
+	var npc := Node2D.new()
+	npc.name = display_name
+	npc.set_script(NpcScript)
+	npc.position = pos
+	npc.configure(id_value, display_name, lines, color)
+	add_child(npc)
 
 func _spawn_enemies() -> void:
 	var positions := [Vector2(420, 390), Vector2(520, 470), Vector2(660, 410), Vector2(870, 300), Vector2(1010, 360)]
