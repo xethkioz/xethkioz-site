@@ -1,5 +1,19 @@
 # World of Xethkioz — development changelog
 
+## 2026-09-08 — v3.4-prod.1 / Golden Region Production Rebuild
+- Promoted active production work to branch `game/xethkioz-v34-production-rebuild` while preserving v3.3 as historical production baseline and applying v3.4 canon deltas.
+- Rebuilt the Golden Region presentation around the 640×360 production target: production menu, real character creator preview, illustrated Chapter Zero and one-time Cuenca del Despertar entrance sequence.
+- Added production Viajero rendering that reflects selected complexion, skin tone, hair style, hair color and equipment accent in gameplay.
+- Upgraded the Golden Region world with named landmarks, large props, walkable Lago shoreline placement, save migration for obsolete water positions, area title cards and lightweight region-specific ambience.
+- Added production Boss 5 presentation with larger silhouette, readable three-phase state, exposed/protected core feedback and a real 0.85 s root-pulse telegraph.
+- Added Boss resistance hooks for mentor slow/root/mark mechanics without removing the identity of the four combat schools.
+- Completed Brote Vivo four-piece progression: altered roots → Val assessment → Santuario Custodio → first mentorship; F remains locked until piece 4/4.
+- Added production Q/E/R/F cast feedback, melee slash FX, hit flash, floating damage, death/purification bursts, resource shimmer and pickup feedback.
+- Added live Q/E/R/F HUD status: mana costs, cooldown countdown, insufficient-mana indication and Brote Vivo progress while F is locked.
+- Preserved the playable route through Val/Rola/Mela, Carpinchito assessment, Santuario, Boss 5, Elida, sibling mentor choice, Paso Prismático and Fermín Rank I training.
+- Windows x86_64 production export, project boot, Golden Region runtime and Refugio runtime validated successfully through CI run #173 on head `e3277512ed40fc6a6a3a9c520d0a0b4b3581f279`.
+- This checkpoint is **not Steam-ready**: remaining work includes replacement/approval of remaining placeholder production visuals, real executable 640×360 screenshots, playtest/QA, balance and Steam packaging review.
+
 ## 2026-09-08 — v3.3-dev.9 / Bestiary + Legendary Separation
 - Added in-game Prisma-Atlas Familiar inspection overlay on `B`.
 - Bestiary now shows active Familiar name, primary affinity, recommended mentor, training rank, Familiar bond and unlocked technique.
