@@ -4,12 +4,17 @@ const SHEET := preload("res://assets/production/characters/viajero_sheet.svg")
 const ProfileOverlayScript := preload("res://src/player/player_profile_overlay.gd")
 const FeedbackFxScript := preload("res://src/fx/world_feedback_fx.gd")
 const FRAME_SIZE := Vector2(32, 32)
+const ATTACK_POSE_DURATION := 0.18
+const CAST_POSE_DURATION := 0.24
 
 var _visual: Sprite2D
 var _profile_overlay: Node2D
 var _anim_clock: float = 0.0
 var _anim_frame: int = 1
 var _hit_flash_left: float = 0.0
+var _attack_pose_left: float = 0.0
+var _cast_pose_left: float = 0.0
+var _body_scale: float = 1.0
 
 func _ready() -> void:
 	super._ready()
@@ -21,8 +26,8 @@ func _ready() -> void:
 	_visual.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_visual.position = Vector2(0, -7)
 	_visual.z_index = 2
-	var body_scale: float = float([0.95, 1.0, 1.05][clampi(CharacterProfile.body_type, 0, 2)])
-	_visual.scale = Vector2(body_scale, 1.0)
+	_body_scale = float([0.95, 1.0, 1.05][clampi(CharacterProfile.body_type, 0, 2)])
+	_visual.scale = Vector2(_body_scale, 1.0)
 	add_child(_visual)
 
 	_profile_overlay = Node2D.new()
@@ -36,13 +41,15 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
 	_hit_flash_left = maxf(0.0, _hit_flash_left - delta)
+	_attack_pose_left = maxf(0.0, _attack_pose_left - delta)
+	_cast_pose_left = maxf(0.0, _cast_pose_left - delta)
 	_update_visual(delta)
 
 func _update_visual(delta: float) -> void:
 	if not is_instance_valid(_visual):
 		return
 	var moving: bool = velocity.length_squared() > 4.0
-	if moving:
+	if moving and _attack_pose_left <= 0.0 and _cast_pose_left <= 0.0:
 		_anim_clock += delta
 		if _anim_clock >= 0.12:
 			_anim_clock = 0.0
@@ -57,8 +64,47 @@ func _update_visual(delta: float) -> void:
 		row = 3
 	_visual.region_rect = Rect2(Vector2(_anim_frame * 32, row * 32), FRAME_SIZE)
 	_visual.modulate = Color(1.0, 0.62, 0.58, 1.0) if _hit_flash_left > 0.0 else Color.WHITE
+	_apply_action_pose()
+
+func _apply_action_pose() -> void:
+	if not is_instance_valid(_visual):
+		return
+	var base_position := Vector2(0.0, -7.0)
+	var visual_position: Vector2 = base_position
+	var overlay_position: Vector2 = base_position
+	var visual_rotation: float = 0.0
+	var visual_scale := Vector2(_body_scale, 1.0)
+	var overlay_scale := Vector2.ONE
+
+	if _attack_pose_left > 0.0:
+		var progress: float = 1.0 - clampf(_attack_pose_left / ATTACK_POSE_DURATION, 0.0, 1.0)
+		var pulse: float = sin(progress * PI)
+		var action_offset: Vector2 = facing * (4.0 * pulse)
+		visual_position += action_offset
+		overlay_position += action_offset
+		visual_rotation = -facing.x * 0.10 * pulse
+		visual_scale = Vector2(_body_scale * (1.0 + 0.06 * pulse), 1.0 - 0.04 * pulse)
+		overlay_scale = Vector2(1.0 + 0.06 * pulse, 1.0 - 0.04 * pulse)
+	elif _cast_pose_left > 0.0:
+		var progress: float = 1.0 - clampf(_cast_pose_left / CAST_POSE_DURATION, 0.0, 1.0)
+		var pulse: float = sin(progress * PI)
+		var lift := Vector2(0.0, -2.5 * pulse)
+		visual_position += lift
+		overlay_position += lift
+		visual_scale = Vector2(_body_scale * (1.0 + 0.035 * pulse), 1.0 + 0.035 * pulse)
+		overlay_scale = Vector2.ONE * (1.0 + 0.035 * pulse)
+
+	_visual.position = visual_position
+	_visual.rotation = visual_rotation
+	_visual.scale = visual_scale
+	if is_instance_valid(_profile_overlay):
+		_profile_overlay.position = overlay_position
+		_profile_overlay.rotation = visual_rotation
+		_profile_overlay.scale = overlay_scale
 
 func _perform_melee_attack() -> void:
+	_attack_pose_left = ATTACK_POSE_DURATION
+	_cast_pose_left = 0.0
 	super._perform_melee_attack()
 	var accent: Color = CharacterProfile.accent_color_value()
 	_spawn_feedback("slash", global_position + facing * 17.0 + Vector2(0, -7), facing, accent, "")
@@ -70,6 +116,8 @@ func _use_ability(slot: String) -> void:
 	var current_cooldown: float = float(_ability_cooldowns.get(slot, 0.0))
 	var activated: bool = current_cooldown > previous_cooldown + 0.01 or mana < previous_mana - 0.01
 	if activated:
+		_cast_pose_left = CAST_POSE_DURATION
+		_attack_pose_left = 0.0
 		_spawn_ability_feedback(slot)
 
 func _spawn_ability_feedback(slot: String) -> void:
@@ -122,6 +170,8 @@ func _use_brote_vivo() -> void:
 	if not _spend_and_start("F", 20.0, 60.0):
 		return
 	_heal(max_health * 0.25)
+	_cast_pose_left = CAST_POSE_DURATION
+	_attack_pose_left = 0.0
 	_spawn_feedback("pickup", global_position + Vector2(0, -10), Vector2.UP, Color("8fcf78"), "+25% salud")
 	EventBus.toast_requested.emit("Brote Vivo · Renovación")
 
