@@ -1,7 +1,7 @@
 # WORLD OF XETHKIOZ — Reference Libraries Audit
 
 ## Scope
-This note catalogs two user-supplied RAR5 archives intended as technical/reference material for WORLD OF XETHKIOZ. These archives are not imported directly into the Godot project.
+This note catalogs external/user-supplied technical/reference material intended to accelerate WORLD OF XETHKIOZ. Reference projects are not imported wholesale into the Godot project. Mechanics, map structure, editor workflows and specifically compatible assets may be adapted after license review.
 
 ## Ruby Library 3.3.0.rar
 - ~1,444 entries.
@@ -15,27 +15,85 @@ This note catalogs two user-supplied RAR5 archives intended as technical/referen
 - High-value concepts to study/port into native GDScript architecture:
   - Advanced AI System
   - Continuous Weather Animations
-  - Caruban's Dynamic Darkness
+  - Dynamic Darkness
   - Map Zoom
   - Multi Save
   - damage numbers
-  - Following Pokemon EX (reference for companion following)
+  - companion following
   - Modular UI Scenes / Enhanced UI
   - Side Stairs
-  - Level Caps EX
-  - overworld encounters / VOE systems
+  - Level Caps
+  - overworld encounters
   - animated title screen
-  - switch/variable usage reporting and debugging utilities
+  - debugging utilities
   - Discord RPC / overlays as future optional integrations
 
+## Solarus 2.1.3 Windows x64
+- User-supplied package inspected: ~977 archive entries, including offline engine documentation, Lua API docs and file-format specifications for maps, tilesets, sprites, shaders, dialogs, sounds and quest data.
+- Solarus engine licensing documented in the supplied package: GNU GPL v3.
+- Solarus documentation explicitly separates engine licensing from quest/content licensing: the engine is GPL; quest files can use another license, but importing GPL Lua code into a quest can impose GPL obligations on that codebase.
+- WORLD OF XETHKIOZ remains on Godot 4.7.2; Solarus is a reference implementation, not a replacement engine.
+- High-value concepts to study:
+  - top-down action-adventure map/entity architecture
+  - tileset/map data separation
+  - Lua-style event-driven entity interactions
+  - hero/camera/map transitions
+  - collision and traversal conventions
+  - sprite/animation resource organization
+  - dungeon/interior/overworld composition
+  - quest packaging and data-driven content
+
+## Tuxemon / GitHub
+Repository: `Tuxemon/Tuxemon` (development branch inspected).
+
+### Code
+- Free/open-source monster RPG.
+- Code license: GNU GPL v3 or later, except bundled `lib` components which may have their own licenses.
+- Useful architecture described by its README:
+  - data-driven JSON game data
+  - maps authored in Tiled
+  - map scripting and NPC interactions
+  - localization
+  - keyboard/mouse/gamepad input
+  - animated maps
+  - CLI/live debugging
+  - documented save system
+- Do not paste GPL Python modules directly into WORLD OF XETHKIOZ unless we deliberately accept the corresponding GPL obligations. Prefer clean-room reimplementation of mechanics/architecture in GDScript.
+
+### Assets
+- Tuxemon maintains a detailed `ATTRIBUTIONS.md`; asset licenses are per-item, not one uniform license.
+- Examples include CC BY-SA 4.0, CC BY and CC0 assets.
+- Therefore landscape/structure/tileset assets may be candidates for direct reuse only when the exact source asset has a compatible license and required attribution/share-alike conditions are satisfied.
+- Prefer CC0/clearly permissive generic terrain/structure assets for direct production use; otherwise use them as visual reference and recreate/adapt a WORLD OF XETHKIOZ-specific equivalent.
+- Never carry over Tuxemon names, monsters, story, logos or distinctive branded elements.
+
 ## Integration policy
-1. Do not copy these Ruby plugins directly into the Godot project.
-2. Port only useful mechanics/architectural ideas into native GDScript modules.
-3. Keep WORLD OF XETHKIOZ naming, data models, combat rules, art and UX original.
-4. Verify per-plugin license/attribution before incorporating any substantial source-code fragment verbatim, because the archive mixes many authors/plugins and a single archive-level claim is not enough to establish one uniform license.
-5. Prioritize concepts that materially improve the Steam demo: readable overworld, companion behavior, AI, weather, lighting, save robustness, map/navigation and UI.
+1. Godot 4.7.2 remains the production engine.
+2. Use external projects to accelerate architecture, map design, tools, world density, UI patterns and workflow.
+3. Port mechanics into native GDScript rather than mixing foreign runtimes into the production build.
+4. Generic landscapes, structures, terrain and props may be reused when their exact asset license allows it; track attribution per asset.
+5. Do not use Pokémon-branded characters, creatures, names, logos or distinctive protected assets.
+6. Keep WORLD OF XETHKIOZ naming, lore, pets, characters, combat and visual identity original.
+7. Record provenance for every externally sourced production asset in an asset manifest before Steam release.
+8. Prefer assets that do not create viral/share-alike licensing across unrelated proprietary project content unless we intentionally choose that licensing model.
 
 ## Immediate shortlist for Izrdralar demo
-P0: companion following, weather continuity, dynamic darkness/lighting concepts, modular UI, map zoom/navigation, save robustness.
-P1: advanced enemy AI ideas, damage numbers, overworld encounter behavior, side-stair/terrain traversal patterns.
-P2: Discord RPC, overlays, randomizer/nuzlocke/monotype and Pokémon-specific battle systems are not relevant to the first Steam demo.
+P0:
+- large connected map/chunk architecture inspired by GBA-era readability + Solarus/Tuxemon data separation
+- Tiled/Godot TileMap-compatible workflow
+- companion following
+- weather continuity and dynamic darkness/lighting
+- map/minimap navigation
+- modular production HUD/menu/creator
+- save robustness and multi-slot design
+
+P1:
+- advanced enemy AI patterns
+- damage numbers/combat feedback
+- overworld creature ecology
+- stair/terrain traversal
+- reusable interior/dungeon transition system
+
+P2:
+- Discord RPC and nonessential overlays
+- randomizer/nuzlocke/genre-specific systems unrelated to WORLD OF XETHKIOZ
