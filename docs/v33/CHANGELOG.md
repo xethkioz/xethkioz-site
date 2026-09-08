@@ -1,17 +1,20 @@
 # World of Xethkioz — development changelog
 
+## 2026-09-08 — v3.3-dev.7 / Izrdralar Presentation Pass
+- Added `src/world/izrdralar_visual_layer.gd` as a presentation-only layer for the Golden Region vertical slice.
+- Added first non-greybox environmental shapes for terrain, Lago Encantado, ruins, vegetation and prism accents while keeping collisions/gameplay separated.
+- Redesigned the gameplay HUD around Viajero vitality, quest tracking, Xethkioz/Familiar, Q/E/R/F abilities, world/Atlas information and dialogue.
+- Created editable Figma reference `WORLD OF XETHKIOZ — HUD & Izrdralar UI v0.1` at 640×360.
+- Production visual work is tracked in issue #242.
+
 ## 2026-09-08 — v3.3-dev.6 / Lago Encantado + First Familiar
-- Added Rola and Mela to the functional Lago Encantado greybox with complementary capture guidance.
-- Added deterministic peaceful capture for **Carpinchito de Cristal** using one Manzana de Bruma.
-- Added persistent Familiar state: captured species, active Familiar, affinity, recommended mentor, assessment flag and training rank scaffold.
-- Bumped save schema to v5 for Familiar persistence.
-- Added visible active Familiar follower placeholder beside the player after capture/load.
-- Extended the first campaign flow: Alexis roots quest → Val → Rola/Mela → first capture → return to Val → affinity assessment.
-- Val now reveals the Carpinchito's **Impacto** affinity and recommends **Fermín** as its future trainer.
-- Added Familiar status to the HUD before and after assessment.
-- Fixed a Godot 4.7.2 native method collision in the capturable-creature drawing helper.
-- CI now stores diagnostics on every run and publishes a validated source snapshot after successful import/boot.
-- Godot CI run `34201725899` passed import/compile, vertical-slice boot and source snapshot packaging at head `b1824181475870a261c84a57bca37a0dfef5e3f0`.
+- Added first peaceful deterministic Familiar capture: Carpinchito de Cristal using Manzana de Bruma.
+- Added Rola and Mela to Lago Encantado with capture guidance dialogue.
+- Val can assess the active Familiar and reveal affinity + recommended sibling mentor.
+- First Familiar stores affinity, mentor, assessment and training-rank scaffold in persistent save state.
+- Active Familiar now follows the player and is shown in the HUD.
+- Added diagnostic artifacts and source snapshots to Godot CI.
+- Validated Godot 4.7.2 import/compile and vertical-slice boot on `b1824181475870a261c84a57bca37a0dfef5e3f0` and documentation head `33a88143326887a3e3277352a6a548d586749505`.
 
 ## 2026-09-08 — v3.3-dev.5 / Izrdralar Reactive Lore Seeds
 - Added persistent lore discovery state to GameState and save schema v4.
