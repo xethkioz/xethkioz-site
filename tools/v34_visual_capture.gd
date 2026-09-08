@@ -8,6 +8,7 @@ const REFUGIO := "res://scenes/v34/RefugioInterior.tscn"
 
 var _game_state: Node
 var _character_profile: Node
+var _fatal_error := false
 
 func _initialize() -> void:
 	call_deferred("_run")
@@ -18,60 +19,85 @@ func _run() -> void:
 	_game_state = root.get_node_or_null("GameState")
 	_character_profile = root.get_node_or_null("CharacterProfile")
 	if not is_instance_valid(_game_state) or not is_instance_valid(_character_profile):
-		push_error("Visual capture requires GameState and CharacterProfile autoloads")
-		quit(1)
+		_fail("Visual capture requires GameState and CharacterProfile autoloads")
+		return
+	if not _character_profile.has_method("reset_default"):
+		_fail("CharacterProfile.reset_default() is required by visual capture")
+		return
+	if not _game_state.has_method("reset_new_game"):
+		_fail("GameState.reset_new_game() is required by visual capture")
 		return
 
 	var absolute_dir: String = ProjectSettings.globalize_path(OUTPUT_DIR)
 	var err: Error = DirAccess.make_dir_recursive_absolute(absolute_dir)
 	if err != OK and err != ERR_ALREADY_EXISTS:
-		push_error("Could not create visual preview directory: %s" % error_string(err))
-		quit(1)
+		_fail("Could not create visual preview directory: %s" % error_string(err))
 		return
 
-	_character_profile.call("reset_defaults")
+	_character_profile.call("reset_default")
 	_game_state.call("reset_new_game")
 	await _capture_bootstrap()
+	if _fatal_error:
+		return
 	await _capture_golden_region()
+	if _fatal_error:
+		return
 	await _capture_refugio()
-	print("V3.4 visual capture complete: menu, creator, Cuenca, Lago, Refugio")
+	if _fatal_error:
+		return
+	print("V3.5 visual capture complete: menu, creator, Cuenca, Lago, Refugio")
 	quit(0)
 
 func _capture_bootstrap() -> void:
 	var scene: Node = await _mount_scene(BOOTSTRAP)
+	if _fatal_error:
+		return
 	await _wait_frames(8)
 	await _save_frame("v34_menu.png")
+	if _fatal_error:
+		return
 	if scene.has_method("_show_creator"):
 		scene.call("_show_creator")
 		await _wait_frames(8)
 		await _save_frame("v34_creator.png")
+	else:
+		_fail("GameBootstrap must expose _show_creator() for creator preview capture")
 
 func _capture_golden_region() -> void:
 	_game_state.call("reset_new_game")
 	var scene: Node = await _mount_scene(GOLDEN_REGION)
+	if _fatal_error:
+		return
 	await _wait_frames(24)
 	var title_overlay: CanvasItem = scene.get_node_or_null("AssistHUD/ZoneTitleOverlay") as CanvasItem
 	if is_instance_valid(title_overlay):
 		title_overlay.visible = false
 	var player: CharacterBody2D = scene.get_node_or_null("Player") as CharacterBody2D
-	if is_instance_valid(player):
-		player.global_position = Vector2(768, 1760)
-		_reset_player_camera(player)
+	if not is_instance_valid(player):
+		_fail("GoldenRegion visual capture could not find Player")
+		return
+	player.global_position = Vector2(768, 1760)
+	_reset_player_camera(player)
 	await _wait_frames(18)
 	await _save_frame("v34_cuenca.png")
+	if _fatal_error:
+		return
 
-	if is_instance_valid(player):
-		player.global_position = Vector2(742, 812)
-		_reset_player_camera(player)
+	player.global_position = Vector2(742, 812)
+	_reset_player_camera(player)
 	await _wait_frames(24)
 	await _save_frame("v34_lago.png")
 
 func _capture_refugio() -> void:
 	var scene: Node = await _mount_scene(REFUGIO)
+	if _fatal_error:
+		return
 	await _wait_frames(24)
 	var player: CharacterBody2D = scene.get_node_or_null("Player") as CharacterBody2D
-	if is_instance_valid(player):
-		player.global_position = Vector2(320, 284)
+	if not is_instance_valid(player):
+		_fail("Refugio visual capture could not find Player")
+		return
+	player.global_position = Vector2(320, 284)
 	await _wait_frames(12)
 	await _save_frame("v34_refugio.png")
 
@@ -81,8 +107,7 @@ func _mount_scene(path: String) -> Node:
 		await process_frame
 	var packed: PackedScene = load(path) as PackedScene
 	if packed == null:
-		push_error("Visual capture could not load %s" % path)
-		quit(1)
+		_fail("Visual capture could not load %s" % path)
 		return root
 	var scene: Node = packed.instantiate()
 	root.add_child(scene)
@@ -101,17 +126,20 @@ func _save_frame(filename: String) -> void:
 	await RenderingServer.frame_post_draw
 	var image: Image = root.get_texture().get_image()
 	if image == null or image.is_empty():
-		push_error("Visual capture returned an empty image for %s" % filename)
-		quit(1)
+		_fail("Visual capture returned an empty image for %s" % filename)
 		return
 	if image.get_width() != VIEWPORT_SIZE.x or image.get_height() != VIEWPORT_SIZE.y:
 		image.resize(VIEWPORT_SIZE.x, VIEWPORT_SIZE.y, Image.INTERPOLATE_NEAREST)
 	var path: String = ProjectSettings.globalize_path("%s/%s" % [OUTPUT_DIR, filename])
 	var err: Error = image.save_png(path)
 	if err != OK:
-		push_error("Failed saving %s: %s" % [filename, error_string(err)])
-		quit(1)
+		_fail("Failed saving %s: %s" % [filename, error_string(err)])
 
 func _wait_frames(count: int) -> void:
 	for _i in range(count):
 		await process_frame
+
+func _fail(message: String) -> void:
+	_fatal_error = true
+	push_error(message)
+	quit(1)
