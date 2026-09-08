@@ -3,9 +3,6 @@ extends "res://src/ui/game_bootstrap.gd"
 const GOLDEN_REGION_SCENE := "res://scenes/v34/GoldenRegion.tscn"
 const TITLE_BACKDROP := preload("res://assets/production/ui/title_izrdralar.svg")
 const INTRO_ART := preload("res://assets/production/ui/intro_chapters.svg")
-const CreatorPreviewScript := preload("res://src/ui/creator_avatar_preview.gd")
-
-var _creator_avatar: Control
 
 func _build_shell() -> void:
 	var background := TextureRect.new()
@@ -29,47 +26,11 @@ func _build_shell() -> void:
 
 func _show_creator() -> void:
 	super._show_creator()
-	if is_instance_valid(preview_sprite):
-		preview_sprite.visible = false
-	if is_instance_valid(preview_skin_swatch):
-		preview_skin_swatch.visible = false
-	if is_instance_valid(preview_hair_swatch):
-		preview_hair_swatch.visible = false
-	if is_instance_valid(preview_accent_swatch):
-		preview_accent_swatch.visible = false
-	var parent: Control = preview_sprite.get_parent() as Control if is_instance_valid(preview_sprite) else content
-	_creator_avatar = Control.new()
-	_creator_avatar.name = "ViajeroCreatorPreview"
-	_creator_avatar.position = Vector2(51, 42)
-	_creator_avatar.size = Vector2(96, 148)
-	_creator_avatar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_creator_avatar.set_script(CreatorPreviewScript)
-	parent.add_child(_creator_avatar)
-	for node in parent.get_children():
-		if node is Label and "Sprite real de gameplay" in node.text:
-			node.text = "Esta apariencia se conserva\nen partida y guardado."
-	_update_creator_preview()
+	if is_instance_valid(preview_name):
+		preview_name.text = CharacterProfile.player_name.to_upper()
 
 func _update_creator_preview() -> void:
-	if is_instance_valid(preview_sprite):
-		preview_sprite.visible = false
-	if is_instance_valid(preview_skin_swatch):
-		preview_skin_swatch.visible = false
-	if is_instance_valid(preview_hair_swatch):
-		preview_hair_swatch.visible = false
-	if is_instance_valid(preview_accent_swatch):
-		preview_accent_swatch.visible = false
-	if is_instance_valid(preview_name):
-		var display_name: String = name_edit.text.strip_edges() if is_instance_valid(name_edit) else CharacterProfile.player_name
-		preview_name.text = display_name.to_upper() if not display_name.is_empty() else "VIAJERO"
-	if not is_instance_valid(_creator_avatar):
-		return
-	var body_index: int = body_option.selected if is_instance_valid(body_option) else CharacterProfile.body_type
-	var skin_index: int = skin_option.selected if is_instance_valid(skin_option) else CharacterProfile.skin_tone
-	var hair_index: int = hair_option.selected if is_instance_valid(hair_option) else CharacterProfile.hair_style
-	var hair_color_index: int = hair_color_option.selected if is_instance_valid(hair_color_option) else CharacterProfile.hair_color
-	var accent_index: int = accent_option.selected if is_instance_valid(accent_option) else CharacterProfile.accent_color
-	_creator_avatar.configure(body_index, skin_index, hair_index, hair_color_index, accent_index)
+	super._update_creator_preview()
 
 func _show_intro() -> void:
 	_clear_content()
