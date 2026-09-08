@@ -8,6 +8,20 @@ const C_VIOLET := Color("8b5cf6")
 const C_ORANGE := Color("ff8c42")
 const C_GREEN := Color("79b99a")
 const C_WATER := Color("6ed4e8")
+const DIALOG_PORTRAITS := preload("res://assets/production/characters/dialog_portraits.svg")
+const PORTRAIT_INDEX := {
+	"alexis": 0,
+	"elida": 1,
+	"ashley": 2,
+	"fermin": 3,
+	"fermín": 3,
+	"isabella": 4,
+	"gael": 5,
+	"ivan": 6,
+	"val": 7,
+	"rola": 8,
+	"mela": 9
+}
 
 var hp_label: Label
 var hp_bar: ColorRect
@@ -21,6 +35,7 @@ var inventory_label: Label
 var toast_label: Label
 var dialog_panel: Panel
 var dialog_label: Label
+var dialog_portrait: TextureRect
 var skill_name_labels: Dictionary = {}
 var _toast_timer := 0.0
 var _dialog_timer := 0.0
@@ -61,6 +76,8 @@ func _process(delta: float) -> void:
 	if _dialog_timer <= 0.0 and dialog_panel:
 		dialog_panel.visible = false
 		dialog_label.visible = false
+		if dialog_portrait:
+			dialog_portrait.visible = false
 
 func _build_ui() -> void:
 	_make_panel(Vector2(8,8), Vector2(190,50), C_BG, C_VIOLET)
@@ -100,7 +117,17 @@ func _build_ui() -> void:
 
 	dialog_panel = _make_panel(Vector2(44,246), Vector2(552,76), Color(0.025,0.028,0.045,0.95), C_VIOLET)
 	dialog_panel.visible = false
-	dialog_label = _make_label(Vector2(58,256), Vector2(524,58), "", 9, C_TEXT)
+	dialog_portrait = TextureRect.new()
+	dialog_portrait.position = Vector2(52,252)
+	dialog_portrait.size = Vector2(62,62)
+	dialog_portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	dialog_portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	dialog_portrait.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	dialog_portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	dialog_portrait.visible = false
+	dialog_portrait.z_index = 3
+	add_child(dialog_portrait)
+	dialog_label = _make_label(Vector2(124,254), Vector2(458,62), "", 8, C_TEXT)
 	dialog_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	dialog_label.visible = false
 
@@ -279,7 +306,21 @@ func _on_toast(message: String) -> void:
 
 func _on_dialog(speaker: String, text: String) -> void:
 	if dialog_panel and dialog_label:
-		dialog_label.text = "[ %s ]\n%s" % [speaker.to_upper(), text]
+		dialog_label.text = "%s\n%s" % [speaker.to_upper(), text]
+		_set_dialog_portrait(speaker)
 		dialog_panel.visible = true
 		dialog_label.visible = true
 		_dialog_timer = 5.5
+
+func _set_dialog_portrait(speaker: String) -> void:
+	if dialog_portrait == null:
+		return
+	var key := speaker.strip_edges().to_lower()
+	if not PORTRAIT_INDEX.has(key):
+		dialog_portrait.visible = false
+		return
+	var atlas := AtlasTexture.new()
+	atlas.atlas = DIALOG_PORTRAITS
+	atlas.region = Rect2(Vector2(int(PORTRAIT_INDEX[key]) * 64, 0), Vector2(64, 64))
+	dialog_portrait.texture = atlas
+	dialog_portrait.visible = true
