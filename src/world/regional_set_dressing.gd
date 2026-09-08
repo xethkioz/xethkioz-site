@@ -1,7 +1,9 @@
 extends Node2D
 
 const ACCENTS := preload("res://assets/production/izrdralar/regional_accents.svg")
+const CUENCA_SETPIECES := preload("res://assets/production/izrdralar/cuenca_setpieces.svg")
 const FRAME_SIZE := Vector2(64, 64)
+const CUENCA_FRAME_SIZE := Vector2(128, 96)
 const CHUNK_PIXELS := 512
 
 var _shimmer: Array[Sprite2D] = []
@@ -25,8 +27,13 @@ func _process(delta: float) -> void:
 		sprite.modulate = Color(1.0, 1.0, 1.0, pulse)
 
 func _build_cuenca() -> void:
-	_add_accent(0, _world_pos(1, 3, 188, 242), true)
-	_add_accent(1, _world_pos(1, 3, 256, 70), false)
+	# Signature first-minute composition: awakening crater framed by native roots,
+	# recovered future hardware and restrained prism light.
+	_add_cuenca_setpiece(0, _world_pos(1, 3, 256, 154), false)
+	_add_cuenca_setpiece(1, _world_pos(1, 3, 256, 235), true)
+	_add_cuenca_setpiece(2, _world_pos(1, 3, 122, 205), true)
+	_add_accent(0, _world_pos(1, 3, 188, 286), true)
+	_add_accent(1, _world_pos(1, 3, 392, 112), false)
 	_add_accent(4, _world_pos(1, 3, 430, 252), true)
 	_add_accent(5, _world_pos(1, 3, 92, 356), true)
 
@@ -62,6 +69,20 @@ func _add_accent(frame: int, world_pos: Vector2, shimmer := false) -> Sprite2D:
 	var atlas := AtlasTexture.new()
 	atlas.atlas = ACCENTS
 	atlas.region = Rect2(Vector2(frame * int(FRAME_SIZE.x), 0), FRAME_SIZE)
+	var sprite := Sprite2D.new()
+	sprite.texture = atlas
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sprite.position = world_pos
+	sprite.centered = true
+	add_child(sprite)
+	if shimmer:
+		_shimmer.append(sprite)
+	return sprite
+
+func _add_cuenca_setpiece(frame: int, world_pos: Vector2, shimmer := false) -> Sprite2D:
+	var atlas := AtlasTexture.new()
+	atlas.atlas = CUENCA_SETPIECES
+	atlas.region = Rect2(Vector2(frame * int(CUENCA_FRAME_SIZE.x), 0), CUENCA_FRAME_SIZE)
 	var sprite := Sprite2D.new()
 	sprite.texture = atlas
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
