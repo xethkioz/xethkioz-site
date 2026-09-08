@@ -23,6 +23,7 @@ jobs:
           python tools/generate_v08_pickups.py
           python tools/generate_v09_demo_assets.py
           python tools/generate_v09_boss_assets.py
+          python tools/generate_v095_golden_assets.py
           for F in \
             assets/v08/generated/izrdalar_bg.png \
             assets/v08/generated/menu_bg.png \
@@ -31,6 +32,14 @@ jobs:
             assets/v08/generated/xethkioz.png \
             assets/v08/generated/alexis_portrait.png \
             assets/v08/generated/ashley_portrait.png \
+            assets/v095/generated/traveler_male.png \
+            assets/v095/generated/traveler_female.png \
+            assets/v095/generated/alexis.png \
+            assets/v095/generated/ashley.png \
+            assets/v095/generated/fermin.png \
+            assets/v095/generated/isabella.png \
+            assets/v095/generated/gael.png \
+            assets/v095/generated/elida.png \
             assets/v09/generated/izrdalar_plains_bg.png \
             assets/v09/generated/first_cism_bg.png \
             assets/v09/generated/quebracho_prop.png \
@@ -91,6 +100,7 @@ jobs:
             scripts/player_v6.gd \
             scripts/player_v7.gd \
             scripts/player_v8.gd \
+            scripts/player_v9.gd \
             scripts/main.gd \
             scripts/main_v3.gd \
             scripts/main_v4.gd \
@@ -105,6 +115,7 @@ jobs:
             scripts/main_v12_traversal.gd \
             scripts/main_v15.gd \
             scripts/main_v16.gd \
+            scripts/main_v18.gd \
             tools/demo_content_test.gd \
             tools/demo_visual_smoke.gd \
             tools/demo_block_visual_smoke.gd \
@@ -179,7 +190,7 @@ jobs:
       - name: Upload preview artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Mundo-de-Xethkioz-v0.9.3-Golden-Slice-Previews
+          name: Mundo-de-Xethkioz-v0.9.5-Golden-Slice-Previews
           path: |
             build/v08_menu_preview.png
             build/v08_creator_preview.png
@@ -205,11 +216,11 @@ jobs:
           mkdir -p build
           "$GODOT" --headless --path . --export-release "Windows Desktop" build/Mundo_de_Xethkioz.exe
           cd build
-          zip -9 World_of_Xethkioz_Golden_Slice_v0.9.3_Windows.zip Mundo_de_Xethkioz.exe
+          zip -9 World_of_Xethkioz_Golden_Slice_v0.9.5_Windows.zip Mundo_de_Xethkioz.exe
 
       - name: Upload Windows demo
         uses: actions/upload-artifact@v4
         with:
-          name: World-of-Xethkioz-Golden-Slice-v0.9.3-Windows
-          path: build/World_of_Xethkioz_Golden_Slice_v0.9.3_Windows.zip
+          name: World-of-Xethkioz-Golden-Slice-v0.9.5-Windows
+          path: build/World_of_Xethkioz_Golden_Slice_v0.9.5_Windows.zip
           if-no-files-found: error
