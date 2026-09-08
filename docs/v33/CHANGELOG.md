@@ -1,5 +1,15 @@
 # World of Xethkioz — development changelog
 
+## 2026-09-08 — v3.3-dev.5 / Izrdralar Reactive Lore Seeds
+- Added persistent lore discovery state to GameState and save schema v4.
+- Added reusable `lore_interactable.gd` for notes, signs, artifacts and environmental clues.
+- Added five playable Izrdralar lore seeds: Nota doblada, Piedra resonante, Hoja de cálculo, Reloj sin agujas and Cartel de mantenimiento.
+- Added Atlas HUD counter for discovered lore clues.
+- NPC dialogue can now react to discovered lore through reusable contextual rules.
+- Alexis, Ivan and Val now respond to specific environmental discoveries.
+- The first quest conclusion reacts to Elida's note if the player found it before returning to Alexis.
+- Added `docs/v34/IZRDRALAR_LORE_SEEDS.md` with diegetic foreshadowing rules for Desfralar, Xiomalar, Zodnight and Saga II without explicit expansion announcements.
+
 ## 2026-09-08 — Canon v3.4 / Expansion Structure
 - Defined **Izrdralar** as the complete base game of WORLD OF XETHKIOZ.
 - Defined **Desfralar** as Expansion I.
