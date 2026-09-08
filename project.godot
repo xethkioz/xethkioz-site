@@ -9,6 +9,7 @@ GameState="*res://src/core/game_state.gd"
 InventoryService="*res://src/items/inventory_service.gd"
 SaveService="*res://src/core/save_service.gd"
 DemoEncounterDirector="*res://src/world/demo_encounter_director.gd"
+BestiaryOverlay="*res://src/ui/bestiary_overlay.gd"
 
 [debug]
 gdscript/warnings/inference_on_variant=1
