@@ -35,7 +35,7 @@
     {"id":"awakening","name":"Cuenca del Despertar","chunk":[1,3],"local":[256,224],"kind":"story"},
     {"id":"elida_refuge","name":"Refugio de Elida","chunk":[1,3],"local":[320,160],"kind":"hub"},
     {"id":"initial_village","name":"Aldea del Alba","chunk":[2,3],"local":[220,230],"kind":"town"},
-    {"id":"enchanted_lake","name":"Lago Encantado","chunk":[1,1],"local":[255,220],"kind":"creatures"},
+    {"id":"enchanted_lake","name":"Lago Encantado","chunk":[1,1],"local":[230,300],"kind":"creatures"},
     {"id":"living_ruins","name":"Ruinas Vivas","chunk":[3,1],"local":[250,240],"kind":"ruins"},
     {"id":"roots_sanctuary","name":"Santuario de las Raíces","chunk":[3,2],"local":[255,255],"kind":"dungeon"},
     {"id":"silent_wing_cave","name":"Cueva del Ala Silente","chunk":[4,3],"local":[360,145],"kind":"secret_locked"},
