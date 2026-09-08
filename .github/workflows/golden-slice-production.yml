@@ -52,6 +52,7 @@ jobs:
           "$GODOT" --headless --path . --check-only --script res://scripts/save_system.gd
           "$GODOT" --headless --path . --check-only --script res://scripts/player_v10.gd
           "$GODOT" --headless --path . --check-only --script res://scripts/main_v20.gd
+          "$GODOT" --headless --path . --check-only --script res://tools/golden_slice_production_smoke.gd
 
       - name: Golden Slice functional smoke
         shell: bash
@@ -60,6 +61,14 @@ jobs:
           GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
           "$GODOT" --headless --path . --script res://tools/golden_slice_functional_smoke.gd 2>&1 | tee /tmp/golden.log
           grep -q "Golden Slice functional smoke: map1 NPCs/background/skills valid; map5 boss valid" /tmp/golden.log
+
+      - name: Validate creator intro mentor refuge and traversal unlock
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --script res://tools/golden_slice_production_smoke.gd 2>&1 | tee /tmp/production-flow.log
+          grep -q "Golden Slice production smoke: creator->intro->node1 and mentor->refuge->double-jump->node6 valid" /tmp/production-flow.log
 
       - name: Regression smoke 1-15
         shell: bash
@@ -80,6 +89,33 @@ jobs:
           set -e
           if grep -E "SCRIPT ERROR|Parse Error|ERROR:" /tmp/runtime.log; then exit 1; fi
           if [ "$STATUS" -ne 0 ] && [ "$STATUS" -ne 124 ]; then exit "$STATUS"; fi
+
+      - name: Capture real Golden Slice screens
+        shell: bash
+        run: |
+          set -euxo pipefail
+          if ! command -v xvfb-run >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y xvfb
+          fi
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          mkdir -p build
+          xvfb-run -a "$GODOT" --path . --rendering-method gl_compatibility --script res://tools/golden_slice_visual_smoke.gd
+          for F in build/golden_menu.png build/golden_creator.png build/golden_dialogue.png build/golden_transition.png build/golden_refuge.png; do
+            test -f "$F"
+          done
+
+      - name: Upload real Golden Slice previews
+        uses: actions/upload-artifact@v4
+        with:
+          name: World-of-Xethkioz-Golden-Slice-v0.10.0-Real-Previews
+          path: |
+            build/golden_menu.png
+            build/golden_creator.png
+            build/golden_dialogue.png
+            build/golden_transition.png
+            build/golden_refuge.png
+          if-no-files-found: error
 
       - name: Export Windows x86_64
         shell: bash
