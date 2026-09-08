@@ -1,10 +1,10 @@
-name: World of Xethkioz v3.3 CI
+name: World of Xethkioz v3.4 Production CI
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - game/xethkioz-v33-vertical-slice
+      - game/xethkioz-v34-production-rebuild
 
 permissions:
   contents: read
@@ -34,7 +34,7 @@ jobs:
             exit 1
           fi
 
-      - name: Boot vertical slice
+      - name: Boot production flow
         shell: bash
         run: |
           set -euxo pipefail
@@ -67,7 +67,7 @@ jobs:
           fi
           test -s "$TEMPLATE_DIR/windows_release_x86_64.exe"
 
-      - name: Export Windows Steam demo
+      - name: Export Windows internal production build
         shell: bash
         run: |
           set -euxo pipefail
@@ -77,11 +77,11 @@ jobs:
           test -s build/windows/WorldOfXethkiozDemo.exe
           sha256sum build/windows/WorldOfXethkiozDemo.exe > build/windows/SHA256SUMS.txt
 
-      - name: Upload Windows demo build
+      - name: Upload Windows internal build
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: world-of-xethkioz-windows-demo-${{ github.sha }}
+          name: world-of-xethkioz-v34-production-${{ github.sha }}
           path: build/windows/*
           retention-days: 30
           if-no-files-found: error
@@ -90,7 +90,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: xethkioz-ci-diagnostics-${{ github.sha }}
+          name: xethkioz-v34-ci-diagnostics-${{ github.sha }}
           path: |
             /tmp/import.log
             /tmp/boot.log
@@ -105,14 +105,14 @@ jobs:
           set -euxo pipefail
           SHORT_SHA="${GITHUB_SHA::8}"
           mkdir -p /tmp/xethkioz-snapshot
-          tar -czf "/tmp/xethkioz-snapshot/world-of-xethkioz-${SHORT_SHA}.tar.gz" \
-            project.godot export_presets.cfg src scenes docs/v33 docs/v34
+          tar -czf "/tmp/xethkioz-snapshot/world-of-xethkioz-v34-${SHORT_SHA}.tar.gz" \
+            project.godot export_presets.cfg src scenes data assets docs/v33 docs/v34
 
       - name: Upload source snapshot
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: world-of-xethkioz-source-${{ github.sha }}
+          name: world-of-xethkioz-v34-source-${{ github.sha }}
           path: /tmp/xethkioz-snapshot/*.tar.gz
           retention-days: 30
           if-no-files-found: error
