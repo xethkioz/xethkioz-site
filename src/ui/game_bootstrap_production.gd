@@ -29,13 +29,15 @@ func _build_shell() -> void:
 
 func _show_creator() -> void:
 	super._show_creator()
-	if is_instance_valid(preview_head):
-		preview_head.visible = false
-	if is_instance_valid(preview_hair):
-		preview_hair.visible = false
-	if is_instance_valid(preview_body):
-		preview_body.visible = false
-	var parent: Control = preview_head.get_parent() as Control if is_instance_valid(preview_head) else content
+	if is_instance_valid(preview_sprite):
+		preview_sprite.visible = false
+	if is_instance_valid(preview_skin_swatch):
+		preview_skin_swatch.visible = false
+	if is_instance_valid(preview_hair_swatch):
+		preview_hair_swatch.visible = false
+	if is_instance_valid(preview_accent_swatch):
+		preview_accent_swatch.visible = false
+	var parent: Control = preview_sprite.get_parent() as Control if is_instance_valid(preview_sprite) else content
 	_creator_avatar = Control.new()
 	_creator_avatar.name = "ViajeroCreatorPreview"
 	_creator_avatar.position = Vector2(51, 42)
@@ -44,17 +46,19 @@ func _show_creator() -> void:
 	_creator_avatar.set_script(CreatorPreviewScript)
 	parent.add_child(_creator_avatar)
 	for node in parent.get_children():
-		if node is Label and "Vista provisional" in node.text:
+		if node is Label and "Sprite real de gameplay" in node.text:
 			node.text = "Esta apariencia se conserva\nen partida y guardado."
 	_update_creator_preview()
 
 func _update_creator_preview() -> void:
-	if is_instance_valid(preview_head):
-		preview_head.visible = false
-	if is_instance_valid(preview_hair):
-		preview_hair.visible = false
-	if is_instance_valid(preview_body):
-		preview_body.visible = false
+	if is_instance_valid(preview_sprite):
+		preview_sprite.visible = false
+	if is_instance_valid(preview_skin_swatch):
+		preview_skin_swatch.visible = false
+	if is_instance_valid(preview_hair_swatch):
+		preview_hair_swatch.visible = false
+	if is_instance_valid(preview_accent_swatch):
+		preview_accent_swatch.visible = false
 	if is_instance_valid(preview_name):
 		var display_name: String = name_edit.text.strip_edges() if is_instance_valid(name_edit) else CharacterProfile.player_name
 		preview_name.text = display_name.to_upper() if not display_name.is_empty() else "VIAJERO"
