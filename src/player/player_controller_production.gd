@@ -19,7 +19,7 @@ func _ready() -> void:
 	_visual.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_visual.position = Vector2(0, -7)
 	_visual.z_index = 2
-	var body_scale := [0.95, 1.0, 1.05][clampi(CharacterProfile.body_type, 0, 2)]
+	var body_scale: float = float([0.95, 1.0, 1.05][clampi(CharacterProfile.body_type, 0, 2)])
 	_visual.scale = Vector2(body_scale, 1.0)
 	add_child(_visual)
 
