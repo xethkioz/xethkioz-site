@@ -19,6 +19,8 @@ var _attack_cooldown := 0.0
 var _pulse_cooldown := 2.8
 var _core_timer := 0.0
 var _defeated := false
+var _purgable := false
+var _purged := false
 var _pulse_pending := false
 var _pulse_windup := 0.0
 var _slow_multiplier := 1.0
@@ -36,6 +38,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if _defeated:
+		velocity = Vector2.ZERO
 		return
 	_attack_cooldown = maxf(0.0, _attack_cooldown - delta)
 	_pulse_cooldown = maxf(0.0, _pulse_cooldown - delta)
@@ -114,7 +117,9 @@ func pulse_windup_ratio() -> float:
 	return 1.0 - clampf(_pulse_windup / ROOT_PULSE_WINDUP, 0.0, 1.0)
 
 func take_damage(amount: float) -> void:
-	if _defeated:
+	if _defeated or _purged:
+		if _purgable:
+			EventBus.toast_requested.emit("El Guardián ya no pelea · ESTABILIZALO")
 		return
 	if phase == 3 and not core_exposed:
 		EventBus.toast_requested.emit("El núcleo está protegido")
@@ -123,12 +128,44 @@ func take_damage(amount: float) -> void:
 	_update_phase()
 	queue_redraw()
 	if health <= 0.0:
-		_defeated = true
-		EventBus.enemy_defeated.emit(enemy_id, xp_reward, global_position)
-		GameState.add_crystals(20)
-		GameState.add_pet_bond(8)
-		EventBus.toast_requested.emit("Guardián del Bosque Velado purificado")
+		_enter_purgable_state()
+
+func _enter_purgable_state() -> void:
+	if _purgable or _purged:
+		return
+	_defeated = true
+	_purgable = true
+	_pulse_pending = false
+	velocity = Vector2.ZERO
+	add_to_group("interactable")
+	GameState.set_world_flag("boss5_physical_defeated", true)
+	EventBus.toast_requested.emit("El Guardián se arrodilla · no lo ataques · ESTABILIZAR")
+	queue_redraw()
+
+func interact(_actor: Node = null) -> void:
+	if not _purgable or _purged:
+		return
+	_purgable = false
+	_purged = true
+	remove_from_group("interactable")
+	GameState.set_world_flag("boss5_purged", true)
+	EventBus.enemy_defeated.emit(enemy_id, xp_reward, global_position)
+	GameState.add_crystals(20)
+	GameState.add_pet_bond(8)
+	EventBus.toast_requested.emit("Guardián del Bosque Velado estabilizado")
+	queue_redraw()
+	await get_tree().create_timer(0.75).timeout
+	if is_instance_valid(self):
 		queue_free()
+
+func interaction_label() -> String:
+	return "ESTABILIZAR" if _purgable else "Guardián"
+
+func is_purgable() -> bool:
+	return _purgable
+
+func is_purged() -> bool:
+	return _purged
 
 func apply_slow(multiplier: float, duration: float) -> void:
 	_slow_multiplier = clampf(multiplier, 0.65, 1.0)
@@ -149,10 +186,12 @@ func consume_mark() -> bool:
 	return true
 
 func _draw() -> void:
-	var ratio := health / max_health if max_health > 0.0 else 0.0
+	var ratio: float = health / max_health if max_health > 0.0 else 0.0
 	var body_color := Color("375c45") if phase == 1 else Color("48643f")
 	if phase == 3:
 		body_color = Color("5a3f63")
+	if _purgable:
+		body_color = Color("6a6d55")
 	draw_circle(Vector2.ZERO, 20.0, body_color)
 	draw_arc(Vector2.ZERO, 25.0, 0.0, TAU, 32, Color("8b5cf6"), 2.0)
 	if phase == 3:
@@ -162,5 +201,10 @@ func _draw() -> void:
 		draw_arc(Vector2.ZERO, ROOT_PULSE_RADIUS, 0.0, TAU, 48, Color(0.9, 0.38 + pulse_ratio * 0.25, 1.0, 0.35 + pulse_ratio * 0.45), 3.0)
 	if _mark_time > 0.0:
 		draw_arc(Vector2.ZERO, 30.0, 0.0, TAU, 24, Color("c686ff"), 2.0)
+	if _purgable:
+		draw_arc(Vector2.ZERO, 34.0, 0.0, TAU, 32, Color("d8ceff"), 3.0)
+	var font := ThemeDB.fallback_font
 	draw_rect(Rect2(-28,-34,56,4), Color("1b1820"))
 	draw_rect(Rect2(-28,-34,56 * ratio,4), Color("ff8c42"))
+	if _purgable:
+		draw_string(font, Vector2(-42,-44), "ESTABILIZAR", HORIZONTAL_ALIGNMENT_CENTER, 84, 8, Color("d8ceff"))
