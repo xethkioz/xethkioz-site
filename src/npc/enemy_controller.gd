@@ -11,6 +11,10 @@ extends CharacterBody2D
 var health := 42.0
 var _attack_cooldown := 0.0
 var _player: Node2D
+var _slow_multiplier := 1.0
+var _slow_time := 0.0
+var _root_time := 0.0
+var _mark_time := 0.0
 
 func _ready() -> void:
 	add_to_group("enemies")
@@ -20,13 +24,18 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	_attack_cooldown = maxf(0.0, _attack_cooldown - delta)
+	_slow_time = maxf(0.0, _slow_time - delta)
+	_root_time = maxf(0.0, _root_time - delta)
+	_mark_time = maxf(0.0, _mark_time - delta)
+	if _slow_time <= 0.0:
+		_slow_multiplier = 1.0
 	if not is_instance_valid(_player):
 		_player = get_tree().get_first_node_in_group("player") as Node2D
 		return
 	var delta_to_player := _player.global_position - global_position
 	var distance := delta_to_player.length()
-	if distance <= aggro_range and distance > attack_range:
-		velocity = delta_to_player.normalized() * move_speed
+	if _root_time <= 0.0 and distance <= aggro_range and distance > attack_range:
+		velocity = delta_to_player.normalized() * move_speed * _slow_multiplier
 		move_and_slide()
 	else:
 		velocity = Vector2.ZERO
@@ -34,6 +43,7 @@ func _physics_process(delta: float) -> void:
 		_attack_cooldown = 1.0
 		if _player.has_method("take_damage"):
 			_player.take_damage(attack_damage)
+	queue_redraw()
 
 func take_damage(amount: float) -> void:
 	health = maxf(0.0, health - amount)
@@ -43,9 +53,31 @@ func take_damage(amount: float) -> void:
 		GameState.add_crystals(2)
 		queue_free()
 
+func apply_slow(multiplier: float, duration: float) -> void:
+	_slow_multiplier = clampf(multiplier, 0.2, 1.0)
+	_slow_time = maxf(_slow_time, duration)
+
+func apply_root(duration: float) -> void:
+	_root_time = maxf(_root_time, duration)
+
+func apply_mark(duration: float) -> void:
+	_mark_time = maxf(_mark_time, duration)
+	queue_redraw()
+
+func consume_mark() -> bool:
+	if _mark_time <= 0.0:
+		return false
+	_mark_time = 0.0
+	queue_redraw()
+	return true
+
 func _draw() -> void:
 	var health_ratio := health / max_health if max_health > 0.0 else 0.0
 	draw_circle(Vector2.ZERO, 10.0, Color("5f8f55"))
 	draw_circle(Vector2(3, -2), 2.0, Color("d8ff9f"))
+	if _mark_time > 0.0:
+		draw_arc(Vector2.ZERO, 14.0, 0.0, TAU, 18, Color("c686ff"), 2.0)
+	if _root_time > 0.0:
+		draw_line(Vector2(-10,8), Vector2(10,8), Color("9f7f5f"), 3.0)
 	draw_rect(Rect2(-12, -17, 24, 3), Color("241f22"))
 	draw_rect(Rect2(-12, -17, 24 * health_ratio, 3), Color("ff6b6b"))
