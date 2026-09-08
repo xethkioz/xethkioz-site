@@ -10,6 +10,8 @@ var selected_mentor: String = ""
 var xethkioz_bond: int = 0
 var profession_xp: Dictionary = {"botanica": 0, "cocina": 0}
 var discovered_lore: Array[String] = []
+var captured_familiars: Dictionary = {}
+var active_familiar_id: String = ""
 
 func _ready() -> void:
 	EventBus.enemy_defeated.connect(_on_enemy_defeated)
@@ -56,6 +58,45 @@ func discover_lore(lore_id: String, title: String, total_hint: int = 0) -> bool:
 	add_xp(8)
 	return true
 
+func has_familiar(species_id: String) -> bool:
+	return captured_familiars.has(species_id)
+
+func capture_familiar(species_id: String, display_name: String, affinity: String, mentor_id: String) -> bool:
+	if species_id.is_empty() or captured_familiars.has(species_id):
+		return false
+	captured_familiars[species_id] = {
+		"display_name": display_name,
+		"level": 1,
+		"bond": 0,
+		"affinity": affinity,
+		"mentor_id": mentor_id,
+		"assessed": false,
+		"training_rank": 0
+	}
+	active_familiar_id = species_id
+	EventBus.familiar_captured.emit(species_id, display_name)
+	EventBus.active_familiar_changed.emit(species_id)
+	return true
+
+func assess_familiar(species_id: String) -> bool:
+	if not captured_familiars.has(species_id):
+		return false
+	var data: Dictionary = captured_familiars[species_id]
+	if bool(data.get("assessed", false)):
+		return false
+	data["assessed"] = true
+	captured_familiars[species_id] = data
+	EventBus.familiar_assessed.emit(species_id, str(data.get("affinity", "")), str(data.get("mentor_id", "")))
+	return true
+
+func familiar_data(species_id: String) -> Dictionary:
+	if not captured_familiars.has(species_id):
+		return {}
+	return captured_familiars[species_id].duplicate(true)
+
+func active_familiar_data() -> Dictionary:
+	return familiar_data(active_familiar_id)
+
 func reset_new_game() -> void:
 	player_level = 1
 	player_xp = 0
@@ -65,13 +106,16 @@ func reset_new_game() -> void:
 	xethkioz_bond = 0
 	profession_xp = {"botanica": 0, "cocina": 0}
 	discovered_lore.clear()
+	captured_familiars.clear()
+	active_familiar_id = ""
 	EventBus.player_progress_changed.emit(player_level, player_xp, xp_to_next())
 	EventBus.currency_changed.emit(crystals)
 	EventBus.pet_bond_changed.emit(xethkioz_bond)
+	EventBus.active_familiar_changed.emit(active_familiar_id)
 
 func to_dict() -> Dictionary:
 	return {
-		"save_version": 4,
+		"save_version": 5,
 		"player_level": player_level,
 		"player_xp": player_xp,
 		"crystals": crystals,
@@ -79,7 +123,9 @@ func to_dict() -> Dictionary:
 		"selected_mentor": selected_mentor,
 		"xethkioz_bond": xethkioz_bond,
 		"profession_xp": profession_xp.duplicate(true),
-		"discovered_lore": discovered_lore.duplicate()
+		"discovered_lore": discovered_lore.duplicate(),
+		"captured_familiars": captured_familiars.duplicate(true),
+		"active_familiar_id": active_familiar_id
 	}
 
 func apply_dict(data: Dictionary) -> void:
@@ -93,9 +139,14 @@ func apply_dict(data: Dictionary) -> void:
 	discovered_lore.clear()
 	for raw_id in data.get("discovered_lore", []):
 		discovered_lore.append(str(raw_id))
+	captured_familiars = data.get("captured_familiars", {}).duplicate(true)
+	active_familiar_id = str(data.get("active_familiar_id", ""))
+	if not active_familiar_id.is_empty() and not captured_familiars.has(active_familiar_id):
+		active_familiar_id = ""
 	EventBus.player_progress_changed.emit(player_level, player_xp, 0 if player_level >= MAX_LEVEL else xp_to_next())
 	EventBus.currency_changed.emit(crystals)
 	EventBus.pet_bond_changed.emit(xethkioz_bond)
+	EventBus.active_familiar_changed.emit(active_familiar_id)
 
 func _on_enemy_defeated(_enemy_id: String, xp_reward: int, _world_position: Vector2) -> void:
 	add_xp(xp_reward)
