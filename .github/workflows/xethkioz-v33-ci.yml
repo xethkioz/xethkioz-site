@@ -39,6 +39,16 @@ jobs:
           timeout 8s "$GODOT" --headless --path . 2>&1 | tee /tmp/boot.log || code=$?
           if [ "${code:-0}" -ne 0 ] && [ "${code:-0}" -ne 124 ]; then exit "${code}"; fi
           if grep -E "SCRIPT ERROR|Parse Error|Compile Error" /tmp/boot.log; then exit 1; fi
+      - name: Upload CI diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xethkioz-ci-diagnostics-${{ github.sha }}
+          path: |
+            /tmp/import.log
+            /tmp/boot.log
+          retention-days: 7
+          if-no-files-found: ignore
       - name: Build source snapshot
         if: success()
         shell: bash
