@@ -4,6 +4,8 @@ const PlayerScript = preload("res://src/player/player_controller.gd")
 const EnemyScript = preload("res://src/npc/enemy_controller.gd")
 const NpcScript = preload("res://src/npc/npc_interactable.gd")
 const PetScript = preload("res://src/pets/xethkioz_companion.gd")
+const FamiliarScript = preload("res://src/pets/familiar_companion.gd")
+const CapturableScript = preload("res://src/pets/capturable_creature.gd")
 const HudScript = preload("res://src/ui/hud_controller.gd")
 const QuestScript = preload("res://src/quest/quest_manager.gd")
 const ClockScript = preload("res://src/world/world_clock.gd")
@@ -15,19 +17,23 @@ const LoreScript = preload("res://src/world/lore_interactable.gd")
 var player: CharacterBody2D
 var fog_overlay: ColorRect
 var night_overlay: ColorRect
+var active_familiar: Node2D
 
 func _ready() -> void:
 	_ensure_inputs()
 	_build_greybox_world()
 	_spawn_player()
 	_spawn_xethkioz()
+	_spawn_active_familiar_if_any()
 	_spawn_npcs()
 	_spawn_resources()
 	_spawn_lore_seeds()
+	_spawn_capturable_creatures()
 	_spawn_enemies()
 	_spawn_systems()
 	EventBus.weather_changed.connect(_on_weather_changed)
 	EventBus.time_changed.connect(_on_time_changed)
+	EventBus.familiar_captured.connect(_on_familiar_captured)
 	EventBus.toast_requested.emit("Izrdralar · Cuenca del Despertar")
 
 func _ensure_inputs() -> void:
@@ -158,6 +164,31 @@ func _spawn_xethkioz() -> void:
 	pet.position = Vector2(165, 225)
 	add_child(pet)
 
+func _spawn_active_familiar_if_any() -> void:
+	if GameState.active_familiar_id.is_empty():
+		return
+	var data := GameState.active_familiar_data()
+	if data.is_empty():
+		return
+	_spawn_familiar_companion(GameState.active_familiar_id, str(data.get("display_name", "Familiar")))
+
+func _spawn_familiar_companion(species_id: String, display_name: String) -> void:
+	if is_instance_valid(active_familiar):
+		active_familiar.queue_free()
+	active_familiar = Node2D.new()
+	active_familiar.name = "Familiar_%s" % species_id
+	active_familiar.set_script(FamiliarScript)
+	active_familiar.position = player.position + Vector2(-26, 24)
+	active_familiar.configure(species_id, display_name, _familiar_color(species_id))
+	add_child(active_familiar)
+
+func _familiar_color(species_id: String) -> Color:
+	match species_id:
+		"carpinchito_cristal":
+			return Color("8fd3c1")
+		_:
+			return Color("9fd6c0")
+
 func _spawn_npcs() -> void:
 	_spawn_npc(
 		"alexis",
@@ -184,12 +215,26 @@ func _spawn_npcs() -> void:
 	_spawn_npc(
 		"val",
 		"Val",
-		Vector2(560, 185),
+		Vector2(545, 180),
 		["El lago calma a las criaturas. Cuando estés listo, te enseñaré a reconocer un vínculo verdadero."],
 		Color("79b99a"),
 		[
 			{"lore_id": "eco_lago", "line": "Ese segundo latido no era tuyo ni de Xethkioz. Recordalo: una resonancia puede parecer un vínculo y aun así estar imitando algo vivo."}
 		]
+	)
+	_spawn_npc(
+		"rola",
+		"Rola",
+		Vector2(605, 155),
+		["Vi un Carpinchito de Cristal cerca de la orilla. No lo corras. Con una Manzana de Bruma suele acercarse solo."],
+		Color("9ab6cf")
+	)
+	_spawn_npc(
+		"mela",
+		"Mela",
+		Vector2(600, 205),
+		["Primero dejá que te mire. Si Xethkioz no se pone tenso, la criatura tampoco debería asustarse."],
+		Color("c7a0cf")
 	)
 
 func _spawn_npc(id_value: String, display_name: String, pos: Vector2, lines: Array[String], color: Color, rules: Array = []) -> void:
@@ -211,6 +256,16 @@ func _spawn_resources() -> void:
 	station.position = Vector2(125, 205)
 	add_child(station)
 
+func _spawn_capturable_creatures() -> void:
+	if GameState.has_familiar("carpinchito_cristal"):
+		return
+	var creature := Node2D.new()
+	creature.name = "CarpinchitoCristal"
+	creature.set_script(CapturableScript)
+	creature.position = Vector2(690, 205)
+	creature.configure("carpinchito_cristal", "Carpinchito de Cristal", "impacto", "fermin", "manzana_bruma", Color("8fd3c1"))
+	add_child(creature)
+
 func _spawn_lore_seeds() -> void:
 	_spawn_lore(
 		"nota_elida_raices",
@@ -225,7 +280,7 @@ func _spawn_lore_seeds() -> void:
 		"Piedra resonante",
 		"Lago Encantado",
 		"La piedra está tibia. Al tocarla aparece un segundo latido: no pertenece al Viajero ni a Xethkioz, y desaparece apenas intentás seguirlo.",
-		Vector2(640, 245),
+		Vector2(650, 265),
 		Color("6ed4e8")
 	)
 	_spawn_lore(
@@ -302,6 +357,9 @@ func _spawn_systems() -> void:
 	hud.name = "HUD"
 	hud.set_script(HudScript)
 	add_child(hud)
+
+func _on_familiar_captured(species_id: String, display_name: String) -> void:
+	_spawn_familiar_companion(species_id, display_name)
 
 func _on_weather_changed(weather_id: String) -> void:
 	if fog_overlay:
