@@ -1,5 +1,10 @@
 extends "res://scripts/player_v8.gd"
 
+const TRAVELER_MALE = preload("res://assets/v095/generated/traveler_male.png")
+const TRAVELER_FEMALE = preload("res://assets/v095/generated/traveler_female.png")
+
+var traveler_gender_v9 := "Masculino"
+
 # Golden Slice player presentation + apprentice skill bridge.
 func _ready() -> void:
 	super._ready()
@@ -7,6 +12,15 @@ func _ready() -> void:
 	if cam:
 		cam.zoom=Vector2(1.34,1.34)
 		cam.position_smoothing_speed=9.0
+
+func configure_traveler(name_value: String,palette_index: int) -> void:
+	super.configure_traveler(name_value,palette_index)
+	if main_ref:
+		traveler_gender_v9 = str(main_ref.state.get("player_gender","Masculino"))
+	if visual_sprite:
+		visual_sprite.texture = TRAVELER_FEMALE if traveler_gender_v9 == "Femenino" else TRAVELER_MALE
+		var tints:Array[Color]=[Color.WHITE,Color(1.05,0.88,0.78),Color(0.78,1.03,1.0),Color(1.06,1.0,0.78)]
+		visual_sprite.modulate=tints[clampi(palette_index,0,3)]
 
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
