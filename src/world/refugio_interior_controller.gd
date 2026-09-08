@@ -5,7 +5,7 @@ const PlayerScript := preload("res://src/player/player_controller_production.gd"
 const XethkiozScript := preload("res://src/pets/xethkioz_companion_production.gd")
 const FamiliarScript := preload("res://src/pets/familiar_companion_production.gd")
 const StoryNpcScript := preload("res://src/npc/story_npc_v36.gd")
-const QuestScript := preload("res://src/quest/quest_manager_v36.gd")
+const QuestScript := preload("res://src/quest/quest_manager_v36_live.gd")
 const HudScript := preload("res://src/ui/hud_controller_v36.gd")
 const PromptScript := preload("res://src/ui/interaction_prompt.gd")
 const PortalScript := preload("res://src/world/scene_portal.gd")
@@ -172,7 +172,6 @@ func _spawn_mentor_door() -> void:
 	var door := Node2D.new()
 	door.name = "PuertaEntrenamiento"
 	door.set_script(MentorDoorScript)
-	# Hotspot sobre el borde derecho de la puerta dibujada en el fondo, evitando competir con Elida.
 	door.position = Vector2(360, 126)
 	add_child(door)
 
