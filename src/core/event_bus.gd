@@ -9,6 +9,7 @@ signal familiar_assessed(species_id: String, affinity: String, mentor_id: String
 signal familiar_trained(species_id: String, rank: int, mentor_id: String)
 signal active_familiar_changed(species_id: String)
 signal player_health_changed(current: float, maximum: float)
+signal player_mana_changed(current: float, maximum: float)
 signal player_progress_changed(level: int, xp: int, xp_to_next: int)
 signal currency_changed(crystals: int)
 signal inventory_changed(stacks: Dictionary)
