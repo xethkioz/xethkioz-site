@@ -1,6 +1,6 @@
 [gd_scene load_steps=13 format=3]
 
-[ext_resource path="res://src/world/golden_region_controller.gd" type="Script" id="1"]
+[ext_resource path="res://src/world/golden_region_controller_real_v36.gd" type="Script" id="1"]
 [ext_resource path="res://src/ui/interaction_prompt.gd" type="Script" id="2_prompt"]
 [ext_resource path="res://src/ui/navigation_hint.gd" type="Script" id="3_nav"]
 [ext_resource path="res://src/world/runtime_session.gd" type="Script" id="4_session"]
@@ -8,10 +8,10 @@
 [ext_resource path="res://src/world/world_scene_binder.gd" type="Script" id="6_binder"]
 [ext_resource path="res://src/world/world_atmosphere.gd" type="Script" id="7_atmosphere"]
 [ext_resource path="res://src/world/lake_shore_director.gd" type="Script" id="8_lake"]
-[ext_resource path="res://src/world/regional_set_dressing.gd" type="Script" id="9_dressing"]
+[ext_resource path="res://src/world/regional_set_dressing_v36.gd" type="Script" id="9_dressing"]
 [ext_resource path="res://src/ui/zone_title_overlay.gd" type="Script" id="10_zone"]
 [ext_resource path="res://src/world/regional_ambience.gd" type="Script" id="11_ambience"]
-[ext_resource path="res://src/world/cuenca_visual_ground.gd" type="Script" id="12_cuenca_ground"]
+[ext_resource path="res://src/world/golden_south_authored_layout_v36.gd" type="Script" id="12_cuenca_ground"]
 
 [node name="GoldenRegion" type="Node2D"]
 script = ExtResource("1")
