@@ -24,11 +24,15 @@ var talked_rola := false
 var talked_mela := false
 
 func _ready() -> void:
+	add_to_group("quest_manager")
 	EventBus.enemy_defeated.connect(_on_enemy_defeated)
 	EventBus.npc_interacted.connect(_on_npc_interacted)
 	EventBus.familiar_captured.connect(_on_familiar_captured)
-	EventBus.quest_changed.emit("Primeras señales", "Habla con Alexis en la Cuenca del Despertar", false)
-	EventBus.demo_stage_changed.emit("intro")
+	var saved := GameState.get_quest_snapshot()
+	if not saved.is_empty():
+		_apply_snapshot(saved)
+	_update_quest()
+	EventBus.demo_stage_changed.emit(_stage_for_state())
 
 func _on_npc_interacted(npc_id: String) -> void:
 	if npc_id == "alexis":
@@ -129,9 +133,9 @@ func _handle_sibling(npc_id: String) -> void:
 			GameState.add_xp(80)
 			state = STATE_DEMO_COMPLETE
 			EventBus.dialog_requested.emit("Fermín", "Ahora sí. No necesitaba pegar más fuerte: necesitaba aprender cuándo romper la guardia. El Carpinchito ya puede usar Embate de Cristal. Esto recién empieza.")
-			EventBus.quest_changed.emit("Golden Region", "Demo completada · Izrdralar continúa más allá del Bosque Velado", true)
 			EventBus.toast_requested.emit("Familiar Rango I · Embate de Cristal desbloqueado")
 			EventBus.demo_stage_changed.emit("demo_complete")
+			_update_quest()
 
 func _on_enemy_defeated(enemy_id: String, _xp: int, _pos: Vector2) -> void:
 	if state == STATE_ROOTS_ACTIVE:
@@ -165,6 +169,7 @@ func _on_familiar_captured(species_id: String, _display_name: String) -> void:
 		return
 	if state == STATE_CAPTURE_ACTIVE or state == STATE_SEEK_VAL:
 		state = STATE_RETURN_TO_VAL
+		EventBus.demo_stage_changed.emit("seek_val")
 		_update_quest()
 
 func _grant_brote_piece(source: String) -> void:
@@ -176,6 +181,8 @@ func _grant_brote_piece(source: String) -> void:
 
 func _update_quest() -> void:
 	match state:
+		STATE_NOT_STARTED:
+			EventBus.quest_changed.emit("Primeras señales", "Habla con Alexis en la Cuenca del Despertar", false)
 		STATE_ROOTS_ACTIVE:
 			EventBus.quest_changed.emit("Raíces alteradas", "Investiga criaturas alteradas (%d/%d)" % [defeated, REQUIRED_KILLS], false)
 		STATE_RETURN_TO_ALEXIS:
@@ -203,3 +210,53 @@ func _update_quest() -> void:
 			EventBus.quest_changed.emit("Disciplina de Impacto", "Rompe los núcleos de entrenamiento (%d/%d)" % [training_defeated, REQUIRED_TRAINING_TARGETS], false)
 		STATE_RETURN_TO_FERMIN:
 			EventBus.quest_changed.emit("Disciplina de Impacto", "Vuelve con Fermín", false)
+		STATE_DEMO_COMPLETE:
+			EventBus.quest_changed.emit("Golden Region", "Demo completada · Izrdralar continúa más allá del Bosque Velado", true)
+	_sync_snapshot()
+
+func _sync_snapshot() -> void:
+	GameState.set_quest_snapshot({
+		"state": state,
+		"defeated": defeated,
+		"training_defeated": training_defeated,
+		"talked_rola": talked_rola,
+		"talked_mela": talked_mela
+	})
+
+func _apply_snapshot(snapshot: Dictionary) -> void:
+	state = clampi(int(snapshot.get("state", STATE_NOT_STARTED)), STATE_NOT_STARTED, STATE_DEMO_COMPLETE)
+	defeated = clampi(int(snapshot.get("defeated", 0)), 0, REQUIRED_KILLS)
+	training_defeated = clampi(int(snapshot.get("training_defeated", 0)), 0, REQUIRED_TRAINING_TARGETS)
+	talked_rola = bool(snapshot.get("talked_rola", false))
+	talked_mela = bool(snapshot.get("talked_mela", false))
+
+func _stage_for_state() -> String:
+	match state:
+		STATE_NOT_STARTED:
+			return "intro"
+		STATE_ROOTS_ACTIVE:
+			return "roots"
+		STATE_RETURN_TO_ALEXIS:
+			return "intro"
+		STATE_SEEK_VAL:
+			return "seek_val"
+		STATE_CAPTURE_ACTIVE:
+			return "capture"
+		STATE_RETURN_TO_VAL:
+			return "seek_val"
+		STATE_SANCTUARY_ACTIVE:
+			return "sanctuary"
+		STATE_BOSS5_ACTIVE:
+			return "boss5"
+		STATE_RETURN_TO_ELIDA:
+			return "refuge_after_boss"
+		STATE_MENTOR_CHOICE:
+			return "mentor_choice"
+		STATE_TRAIN_WITH_FERMIN:
+			return "training"
+		STATE_FERMIN_TRAINING_ACTIVE:
+			return "fermin_training"
+		STATE_RETURN_TO_FERMIN:
+			return "training"
+		_:
+			return "demo_complete"
