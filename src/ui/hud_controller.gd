@@ -1,6 +1,17 @@
 extends CanvasLayer
 
+const C_BG := Color(0.039, 0.039, 0.059, 0.90)
+const C_BG_SOFT := Color(0.039, 0.039, 0.059, 0.78)
+const C_TEXT := Color("f0f0f5")
+const C_MUTED := Color("9b9baa")
+const C_VIOLET := Color("8b5cf6")
+const C_ORANGE := Color("ff8c42")
+const C_GREEN := Color("79b99a")
+const C_WATER := Color("6ed4e8")
+
 var hp_label: Label
+var hp_bar: ColorRect
+var mana_bar: ColorRect
 var progress_label: Label
 var quest_label: Label
 var world_label: Label
@@ -8,7 +19,7 @@ var familiar_label: Label
 var lore_label: Label
 var inventory_label: Label
 var toast_label: Label
-var dialog_panel: ColorRect
+var dialog_panel: Panel
 var dialog_label: Label
 var _toast_timer := 0.0
 var _dialog_timer := 0.0
@@ -36,6 +47,7 @@ func _ready() -> void:
 	_on_inventory(InventoryService.stacks)
 	_update_familiar_label()
 	_update_lore_label()
+	_update_world_label()
 
 func _process(delta: float) -> void:
 	_toast_timer = maxf(0.0, _toast_timer - delta)
@@ -47,61 +59,138 @@ func _process(delta: float) -> void:
 		dialog_label.visible = false
 
 func _build_ui() -> void:
-	var panel := ColorRect.new()
-	panel.position = Vector2(8, 8)
-	panel.size = Vector2(250, 66)
-	panel.color = Color(0.02, 0.025, 0.04, 0.84)
-	add_child(panel)
-	hp_label = _make_label(Vector2(16, 13), Vector2(230, 18), "PV --", 11)
-	progress_label = _make_label(Vector2(16, 34), Vector2(230, 30), "Nivel 1", 10)
-	quest_label = _make_label(Vector2(382, 12), Vector2(248, 54), "Misión", 10)
-	quest_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	familiar_label = _make_label(Vector2(12, 270), Vector2(360, 18), "Familiar · Ninguno", 8)
-	lore_label = _make_label(Vector2(12, 288), Vector2(330, 18), "Atlas · Ecos 0/5", 8)
-	inventory_label = _make_label(Vector2(12, 310), Vector2(330, 18), "Bolsa", 8)
-	world_label = _make_label(Vector2(12, 332), Vector2(300, 20), "", 9)
-	toast_label = _make_label(Vector2(170, 217), Vector2(300, 24), "", 10)
-	toast_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	toast_label.visible = false
-	dialog_panel = ColorRect.new()
-	dialog_panel.position = Vector2(44, 246)
-	dialog_panel.size = Vector2(552, 76)
-	dialog_panel.color = Color(0.015, 0.02, 0.035, 0.92)
-	add_child(dialog_panel)
-	dialog_label = _make_label(Vector2(58, 256), Vector2(524, 58), "", 10)
-	dialog_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	dialog_panel.visible = false
-	dialog_label.visible = false
-	var controls := _make_label(Vector2(336, 333), Vector2(292, 18), "WASD mover · Shift dash · J atacar · C interactuar", 8)
-	controls.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	# Viajero / vitalidad
+	_make_panel(Vector2(8,8), Vector2(190,50), C_BG, C_VIOLET)
+	hp_label = _make_label(Vector2(16,13), Vector2(172,12), "VIAJERO · NIVEL 1", 8, C_TEXT, true)
+	_make_bar_back(Vector2(16,29), Vector2(128,7))
+	hp_bar = _make_bar_fill(Vector2(16,29), Vector2(128,7), C_ORANGE)
+	_make_bar_back(Vector2(16,42), Vector2(96,5))
+	mana_bar = _make_bar_fill(Vector2(16,42), Vector2(96,5), C_VIOLET)
+	progress_label = _make_label(Vector2(116,37), Vector2(72,12), "", 6, C_MUTED, false, HORIZONTAL_ALIGNMENT_RIGHT)
 
-func _make_label(pos: Vector2, size: Vector2, text: String, font_size: int) -> Label:
+	# Seguimiento de misión
+	_make_panel(Vector2(438,8), Vector2(194,58), C_BG_SOFT, C_ORANGE)
+	quest_label = _make_label(Vector2(448,14), Vector2(174,42), "Misión", 7, C_TEXT, true, HORIZONTAL_ALIGNMENT_RIGHT)
+	quest_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+
+	# Xethkioz + Familiar
+	_make_panel(Vector2(8,286), Vector2(168,64), C_BG, C_WATER)
+	_make_badge(Vector2(16,294), 26, Color("244958"), C_VIOLET)
+	_make_label(Vector2(48,294), Vector2(116,10), "XETHKIOZ", 7, Color("d8ceff"), true)
+	_make_label(Vector2(48,306), Vector2(116,9), "Vínculo activo", 6, C_MUTED)
+	familiar_label = _make_label(Vector2(16,323), Vector2(148,23), "Familiar · Ninguno", 6, C_TEXT, true)
+	familiar_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+
+	# Barra de habilidades
+	_make_panel(Vector2(194,304), Vector2(252,46), C_BG, C_VIOLET)
+	_make_skill(Vector2(204,311), "Q", "CORTE", C_VIOLET)
+	_make_skill(Vector2(262,311), "E", "GUARDIA", C_VIOLET)
+	_make_skill(Vector2(320,311), "R", "DESTELLO", C_VIOLET)
+	_make_skill(Vector2(378,311), "F", "SET", C_ORANGE)
+
+	# Mundo / Atlas
+	_make_panel(Vector2(458,292), Vector2(174,58), C_BG_SOFT, Color("244958"))
+	world_label = _make_label(Vector2(468,298), Vector2(154,19), "", 7, C_TEXT, true, HORIZONTAL_ALIGNMENT_RIGHT)
+	lore_label = _make_label(Vector2(468,321), Vector2(154,9), "Atlas · Ecos 0/5", 6, C_VIOLET, false, HORIZONTAL_ALIGNMENT_RIGHT)
+	inventory_label = _make_label(Vector2(468,334), Vector2(154,9), "", 6, C_ORANGE, false, HORIZONTAL_ALIGNMENT_RIGHT)
+
+	# Mensajes contextuales
+	toast_label = _make_label(Vector2(190,270), Vector2(260,20), "", 8, C_TEXT, true, HORIZONTAL_ALIGNMENT_CENTER)
+	toast_label.visible = false
+
+	dialog_panel = _make_panel(Vector2(44,246), Vector2(552,76), Color(0.025,0.028,0.045,0.95), C_VIOLET)
+	dialog_panel.visible = false
+	dialog_label = _make_label(Vector2(58,256), Vector2(524,58), "", 9, C_TEXT)
+	dialog_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	dialog_label.visible = false
+
+func _make_panel(pos: Vector2, size: Vector2, fill: Color, border: Color) -> Panel:
+	var panel := Panel.new()
+	panel.position = pos
+	panel.size = size
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var box := StyleBoxFlat.new()
+	box.bg_color = fill
+	box.border_color = Color(border.r, border.g, border.b, 0.65)
+	box.set_border_width_all(1)
+	box.set_corner_radius_all(6)
+	panel.add_theme_stylebox_override("panel", box)
+	add_child(panel)
+	return panel
+
+func _make_label(pos: Vector2, size: Vector2, text: String, font_size: int, color: Color = C_TEXT, bold := false, align := HORIZONTAL_ALIGNMENT_LEFT) -> Label:
 	var label := Label.new()
 	label.position = pos
 	label.size = size
 	label.text = text
+	label.horizontal_alignment = align
 	label.add_theme_font_size_override("font_size", font_size)
-	label.add_theme_color_override("font_color", Color("f0f0f5"))
-	label.add_theme_color_override("font_shadow_color", Color(0,0,0,0.9))
+	label.add_theme_color_override("font_color", color)
+	label.add_theme_color_override("font_shadow_color", Color(0,0,0,0.85))
 	label.add_theme_constant_override("shadow_offset_x", 1)
 	label.add_theme_constant_override("shadow_offset_y", 1)
+	if bold:
+		label.add_theme_constant_override("outline_size", 1)
 	add_child(label)
 	return label
 
+func _make_bar_back(pos: Vector2, size: Vector2) -> void:
+	var bar := ColorRect.new()
+	bar.position = pos
+	bar.size = size
+	bar.color = Color("20232b")
+	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(bar)
+
+func _make_bar_fill(pos: Vector2, size: Vector2, color: Color) -> ColorRect:
+	var bar := ColorRect.new()
+	bar.position = pos
+	bar.size = size
+	bar.color = color
+	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(bar)
+	return bar
+
+func _make_badge(pos: Vector2, diameter: float, fill: Color, border: Color) -> void:
+	var badge := Panel.new()
+	badge.position = pos
+	badge.size = Vector2(diameter, diameter)
+	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var box := StyleBoxFlat.new()
+	box.bg_color = fill
+	box.border_color = border
+	box.set_border_width_all(1)
+	box.set_corner_radius_all(roundi(diameter * 0.5))
+	badge.add_theme_stylebox_override("panel", box)
+	add_child(badge)
+
+func _make_skill(pos: Vector2, key: String, name: String, accent: Color) -> void:
+	var panel := _make_panel(pos, Vector2(48,30), Color(0.09,0.075,0.12,0.96), accent)
+	panel.z_index = 1
+	var key_label := _make_label(pos + Vector2(4,3), Vector2(15,10), key, 8, C_TEXT, true)
+	key_label.z_index = 2
+	var skill_label := _make_label(pos + Vector2(4,17), Vector2(40,8), name, 5, accent, true, HORIZONTAL_ALIGNMENT_RIGHT)
+	skill_label.z_index = 2
+
 func _on_health(current: float, maximum: float) -> void:
-	if hp_label:
-		hp_label.text = "PV %d / %d" % [roundi(current), roundi(maximum)]
+	if hp_bar:
+		hp_bar.size.x = 128.0 * clampf(current / maxf(1.0, maximum), 0.0, 1.0)
 
 func _on_progress(level: int, xp: int, xp_to_next: int) -> void:
+	if hp_label:
+		hp_label.text = "VIAJERO · NIVEL %d" % level
 	if progress_label:
-		progress_label.text = "Nivel %d · XP %d/%d · Cristales %d" % [level, xp, xp_to_next, GameState.crystals]
+		progress_label.text = "XP %d/%d" % [xp, xp_to_next]
 
 func _on_currency(_crystals: int) -> void:
-	_on_progress(GameState.player_level, GameState.player_xp, 0 if GameState.player_level >= GameState.MAX_LEVEL else GameState.xp_to_next())
+	_update_inventory_summary()
 
 func _on_inventory(_stacks: Dictionary) -> void:
+	_update_inventory_summary()
+
+func _update_inventory_summary() -> void:
 	if inventory_label:
-		inventory_label.text = "Bolsa · Manzana %d · Hongo %d · Ración %d" % [InventoryService.amount_of("manzana_bruma"), InventoryService.amount_of("hongo_azul_rocio"), InventoryService.amount_of("racion_bosque")]
+		inventory_label.text = "Cristales %d · Bolsa %d/%d/%d" % [GameState.crystals, InventoryService.amount_of("manzana_bruma"), InventoryService.amount_of("hongo_azul_rocio"), InventoryService.amount_of("racion_bosque")]
 
 func _on_lore_discovered(_lore_id: String, _title: String, _discovered_count: int, total_hint: int) -> void:
 	if total_hint > 0:
@@ -133,15 +222,16 @@ func _update_familiar_label() -> void:
 		return
 	var name := str(data.get("display_name", GameState.active_familiar_id))
 	if not bool(data.get("assessed", false)):
-		familiar_label.text = "Familiar · %s · Afinidad ?" % name
+		familiar_label.text = "%s\nAfinidad desconocida" % name
 		return
 	var affinity := str(data.get("affinity", "desconocida")).capitalize()
 	var mentor := str(data.get("mentor_id", "")).capitalize()
-	familiar_label.text = "Familiar · %s · %s · %s" % [name, affinity, mentor]
+	var rank := int(data.get("training_rank", 0))
+	familiar_label.text = "%s\n%s · %s · R%d" % [name, affinity, mentor, rank]
 
 func _on_quest(title: String, objective: String, completed: bool) -> void:
 	if quest_label:
-		quest_label.text = "%s%s\n%s" % ["✓ " if completed else "", title, objective]
+		quest_label.text = "%s%s\n%s" % ["✓ " if completed else "", title.to_upper(), objective]
 
 func _on_weather(weather_id: String) -> void:
 	_weather = weather_id
@@ -153,7 +243,7 @@ func _on_time(hour: float) -> void:
 
 func _update_world_label() -> void:
 	if world_label:
-		world_label.text = "Izrdralar · %02d:00 · %s" % [int(_hour), _weather.replace("_", " ").capitalize()]
+		world_label.text = "IZRDRALAR · %02d:00\n%s" % [int(_hour), _weather.replace("_", " ").capitalize()]
 
 func _on_toast(message: String) -> void:
 	if toast_label:
@@ -163,7 +253,7 @@ func _on_toast(message: String) -> void:
 
 func _on_dialog(speaker: String, text: String) -> void:
 	if dialog_panel and dialog_label:
-		dialog_label.text = "[ %s ]\n%s" % [speaker, text]
+		dialog_label.text = "[ %s ]\n%s" % [speaker.to_upper(), text]
 		dialog_panel.visible = true
 		dialog_label.visible = true
 		_dialog_timer = 5.5
