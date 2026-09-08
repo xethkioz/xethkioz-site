@@ -1,0 +1,1 @@
+Target build name: World of Xethkioz v0.9.5 — Golden Slice Foundation. Required runtime flow: menu -> creator -> map 1 -> map 2 -> map 3 -> map 4 -> map 5 boss -> transition -> Elida refuge/mentor selection. QA must include NPC grounding, HUD overlap, skill VFX, enemy edge behavior and background duplication checks.
