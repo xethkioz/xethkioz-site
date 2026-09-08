@@ -1,0 +1,54 @@
+extends "res://src/player/player_controller.gd"
+
+const SHEET := preload("res://assets/production/characters/viajero_sheet.svg")
+const FRAME_SIZE := Vector2(32, 32)
+
+var _visual: Sprite2D
+var _anim_clock := 0.0
+var _anim_frame := 1
+
+func _ready() -> void:
+	super._ready()
+	_visual = Sprite2D.new()
+	_visual.name = "ViajeroVisual"
+	_visual.texture = SHEET
+	_visual.region_enabled = true
+	_visual.region_rect = Rect2(Vector2(32, 0), FRAME_SIZE)
+	_visual.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_visual.position = Vector2(0, -7)
+	_visual.z_index = 2
+	add_child(_visual)
+	_update_visual(0.0)
+
+func _physics_process(delta: float) -> void:
+	super._physics_process(delta)
+	_update_visual(delta)
+
+func _update_visual(delta: float) -> void:
+	if not is_instance_valid(_visual):
+		return
+	var moving := velocity.length_squared() > 4.0
+	if moving:
+		_anim_clock += delta
+		if _anim_clock >= 0.12:
+			_anim_clock = 0.0
+			_anim_frame = (_anim_frame + 1) % 3
+	else:
+		_anim_clock = 0.0
+		_anim_frame = 1
+	var row := 0
+	if absf(facing.x) > absf(facing.y):
+		row = 1 if facing.x < 0.0 else 2
+	elif facing.y < 0.0:
+		row = 3
+	_visual.region_rect = Rect2(Vector2(_anim_frame * 32, row * 32), FRAME_SIZE)
+	_visual.modulate = CharacterProfile.ACCENT_COLORS[clampi(CharacterProfile.accent_color, 0, CharacterProfile.ACCENT_COLORS.size() - 1)].lerp(Color.WHITE, 0.72)
+
+func _draw() -> void:
+	if _guard_time_left > 0.0:
+		draw_arc(Vector2(0, -5), 18.0, 0.0, TAU, 24, Color("6ed4e8"), 2.0)
+	if _dash_time_left > 0.0:
+		var dash_color := Color("d8ceff") if GameState.prism_step_unlocked else Color("9d7bff")
+		draw_arc(Vector2(0, -5), 16.0, 0.0, TAU, 24, dash_color, 2.0)
+		if GameState.prism_step_unlocked:
+			draw_line(-facing * 8.0, -facing * 26.0, Color(0.55, 0.36, 0.96, 0.72), 3.0)
