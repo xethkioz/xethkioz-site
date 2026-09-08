@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource path="res://src/world/golden_region_controller.gd" type="Script" id="1"]
 [ext_resource path="res://src/ui/interaction_prompt.gd" type="Script" id="2_prompt"]
@@ -12,6 +12,7 @@
 [ext_resource path="res://src/ui/zone_title_overlay.gd" type="Script" id="10_zone"]
 [ext_resource path="res://src/world/regional_ambience.gd" type="Script" id="11_ambience"]
 [ext_resource path="res://src/world/cuenca_visual_ground.gd" type="Script" id="12_cuenca_ground"]
+[ext_resource path="res://src/vfx/world_feedback.gd" type="Script" id="13_feedback"]
 
 [node name="GoldenRegion" type="Node2D"]
 script = ExtResource("1")
@@ -36,6 +37,9 @@ script = ExtResource("11_ambience")
 
 [node name="WorldAtmosphere" type="Node2D" parent="."]
 script = ExtResource("7_atmosphere")
+
+[node name="WorldFeedback" type="Node2D" parent="."]
+script = ExtResource("13_feedback")
 
 [node name="RefugioDoor" type="Node2D" parent="."]
 position = Vector2(832, 1696)
