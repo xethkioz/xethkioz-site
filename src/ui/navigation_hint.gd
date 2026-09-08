@@ -16,6 +16,7 @@ const TARGETS := {
 
 var _player: Node2D
 var _stage := "intro"
+var _search_cooldown := 0.0
 
 func configure(player_ref: Node2D) -> void:
 	_player = player_ref
@@ -23,9 +24,14 @@ func configure(player_ref: Node2D) -> void:
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	EventBus.demo_stage_changed.connect(_on_stage_changed)
+	visible = TARGETS.has(_stage)
 	queue_redraw()
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	_search_cooldown = maxf(0.0, _search_cooldown - delta)
+	if not is_instance_valid(_player) and _search_cooldown <= 0.0:
+		_search_cooldown = 0.25
+		_player = get_tree().get_first_node_in_group("player") as Node2D
 	queue_redraw()
 
 func _on_stage_changed(stage_id: String) -> void:
@@ -46,6 +52,7 @@ func _draw() -> void:
 	var tip := center + dir * 11.0
 	var back := center - dir * 6.0
 	var points := PackedVector2Array([tip, back + side * 6.0, back - side * 6.0])
+	draw_rect(Rect2(Vector2.ZERO, size), Color(0.025, 0.03, 0.05, 0.72), true)
 	draw_colored_polygon(points, Color("ff8c42"))
 	var font := ThemeDB.fallback_font
 	draw_string(font, Vector2(36, 13), str(target.get("name", "Objetivo")), HORIZONTAL_ALIGNMENT_LEFT, size.x - 40.0, 7, Color("f0f0f5"))
