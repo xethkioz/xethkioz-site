@@ -13,6 +13,7 @@ const WeatherScript = preload("res://src/world/weather_controller.gd")
 const GatherableScript = preload("res://src/world/gatherable.gd")
 const CraftingStationScript = preload("res://src/world/crafting_station.gd")
 const LoreScript = preload("res://src/world/lore_interactable.gd")
+const VisualLayerScript = preload("res://src/world/izrdralar_visual_layer.gd")
 
 var player: CharacterBody2D
 var fog_overlay: ColorRect
@@ -21,6 +22,7 @@ var active_familiar: Node2D
 
 func _ready() -> void:
 	_ensure_inputs()
+	_spawn_visual_layer()
 	_build_greybox_world()
 	_spawn_player()
 	_spawn_xethkioz()
@@ -35,6 +37,12 @@ func _ready() -> void:
 	EventBus.time_changed.connect(_on_time_changed)
 	EventBus.familiar_captured.connect(_on_familiar_captured)
 	EventBus.toast_requested.emit("Izrdralar · Cuenca del Despertar")
+
+func _spawn_visual_layer() -> void:
+	var visual_layer := Node2D.new()
+	visual_layer.name = "IzrdralarVisualLayer"
+	visual_layer.set_script(VisualLayerScript)
+	add_child(visual_layer)
 
 func _ensure_inputs() -> void:
 	var actions := {
@@ -55,18 +63,11 @@ func _ensure_inputs() -> void:
 			InputMap.action_add_event(action, event)
 
 func _build_greybox_world() -> void:
-	var background := ColorRect.new()
-	background.position = Vector2.ZERO
-	background.size = Vector2(1280, 720)
-	background.color = Color("1c322d")
-	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	background.z_index = -50
-	add_child(background)
-	_add_zone(Rect2(40, 70, 330, 220), Color("29493d"), "Cuenca del Despertar")
-	_add_zone(Rect2(430, 60, 300, 250), Color("244958"), "Lago Encantado")
-	_add_zone(Rect2(760, 80, 430, 260), Color("3f3a34"), "Ruinas vivas")
-	_add_zone(Rect2(260, 380, 440, 250), Color("273c31"), "Bosque alterado")
-	_add_zone(Rect2(760, 400, 360, 220), Color("312d39"), "Entrada de dungeon")
+	_add_zone(Rect2(40, 70, 330, 220), Color(0.16,0.29,0.24,0.28), "Cuenca del Despertar")
+	_add_zone(Rect2(430, 60, 300, 250), Color(0.14,0.29,0.35,0.18), "Lago Encantado")
+	_add_zone(Rect2(760, 80, 430, 260), Color(0.25,0.23,0.20,0.18), "Ruinas vivas")
+	_add_zone(Rect2(260, 380, 440, 250), Color(0.15,0.24,0.19,0.20), "Bosque alterado")
+	_add_zone(Rect2(760, 400, 360, 220), Color(0.19,0.18,0.22,0.22), "Entrada de dungeon")
 	_add_landmark(Vector2(165, 165), "Refugio / primer pueblo", Color("ffb56b"))
 	_add_landmark(Vector2(560, 165), "Lago Encantado", Color("6ed4e8"))
 	_add_landmark(Vector2(930, 495), "Cueva visible — cerrada", Color("b18cff"))
@@ -190,52 +191,19 @@ func _familiar_color(species_id: String) -> Color:
 			return Color("9fd6c0")
 
 func _spawn_npcs() -> void:
-	_spawn_npc(
-		"alexis",
-		"Alexis",
-		Vector2(250, 185),
-		["El bosque está cambiando. Necesito saber qué está alterando sus raíces."],
-		Color("d58d5b"),
-		[
-			{"lore_id": "marca_tiempo_primigenio", "line": "Eso no es un reloj. Si vuelve a latir cuando Xethkioz se acerca, no lo fuerces. Hay cosas viejas que aprendí a no despertar."},
-			{"lore_id": "nota_elida_raices", "line": "Elida escribió eso hace años. Pensé que hablaba en sentido figurado. Ahora no estoy tan seguro."}
-		]
-	)
-	_spawn_npc(
-		"ivan",
-		"Ivan",
-		Vector2(320, 240),
-		["El Prisma-Atlas todavía es un prototipo. Cada anomalía que registremos lo vuelve más preciso."],
-		Color("74a7d8"),
-		[
-			{"lore_id": "marca_tiempo_primigenio", "line": "Ese pulso no coincide con ningún reloj local. Guardé la frecuencia. No vuelvas a tocarlo hasta que pueda medir qué está intentando sincronizar."},
-			{"lore_id": "carta_ivan_cielo", "line": "Encontraste mis cálculos viejos. Lo inquietante no es que haya energía arriba: es que la lectura se comporta como si existiera territorio donde nuestros instrumentos ven vacío."}
-		]
-	)
-	_spawn_npc(
-		"val",
-		"Val",
-		Vector2(545, 180),
-		["El lago calma a las criaturas. Cuando estés listo, te enseñaré a reconocer un vínculo verdadero."],
-		Color("79b99a"),
-		[
-			{"lore_id": "eco_lago", "line": "Ese segundo latido no era tuyo ni de Xethkioz. Recordalo: una resonancia puede parecer un vínculo y aun así estar imitando algo vivo."}
-		]
-	)
-	_spawn_npc(
-		"rola",
-		"Rola",
-		Vector2(605, 155),
-		["Vi un Carpinchito de Cristal cerca de la orilla. No lo corras. Con una Manzana de Bruma suele acercarse solo."],
-		Color("9ab6cf")
-	)
-	_spawn_npc(
-		"mela",
-		"Mela",
-		Vector2(600, 205),
-		["Primero dejá que te mire. Si Xethkioz no se pone tenso, la criatura tampoco debería asustarse."],
-		Color("c7a0cf")
-	)
+	_spawn_npc("alexis", "Alexis", Vector2(250,185), ["El bosque está cambiando. Necesito saber qué está alterando sus raíces."], Color("d58d5b"), [
+		{"lore_id":"marca_tiempo_primigenio","line":"Eso no es un reloj. Si vuelve a latir cuando Xethkioz se acerca, no lo fuerces. Hay cosas viejas que aprendí a no despertar."},
+		{"lore_id":"nota_elida_raices","line":"Elida escribió eso hace años. Pensé que hablaba en sentido figurado. Ahora no estoy tan seguro."}
+	])
+	_spawn_npc("ivan", "Ivan", Vector2(320,240), ["El Prisma-Atlas todavía es un prototipo. Cada anomalía que registremos lo vuelve más preciso."], Color("74a7d8"), [
+		{"lore_id":"marca_tiempo_primigenio","line":"Ese pulso no coincide con ningún reloj local. Guardé la frecuencia. No vuelvas a tocarlo hasta que pueda medir qué está intentando sincronizar."},
+		{"lore_id":"carta_ivan_cielo","line":"Encontraste mis cálculos viejos. Lo inquietante no es que haya energía arriba: es que la lectura se comporta como si existiera territorio donde nuestros instrumentos ven vacío."}
+	])
+	_spawn_npc("val", "Val", Vector2(545,180), ["El lago calma a las criaturas. Cuando estés listo, te enseñaré a reconocer un vínculo verdadero."], Color("79b99a"), [
+		{"lore_id":"eco_lago","line":"Ese segundo latido no era tuyo ni de Xethkioz. Recordalo: una resonancia puede parecer un vínculo y aun así estar imitando algo vivo."}
+	])
+	_spawn_npc("rola", "Rola", Vector2(610,195), ["Los Carpinchitos de Cristal salen cuando sienten olor dulce. Probá con una Manzana de Bruma."], Color("9ac89b"))
+	_spawn_npc("mela", "Mela", Vector2(660,220), ["No corras hacia ellos. Quedate cerca y dejá que decidan acercarse."], Color("b1d6ae"))
 
 func _spawn_npc(id_value: String, display_name: String, pos: Vector2, lines: Array[String], color: Color, rules: Array = []) -> void:
 	var npc := Node2D.new()
@@ -246,67 +214,22 @@ func _spawn_npc(id_value: String, display_name: String, pos: Vector2, lines: Arr
 	add_child(npc)
 
 func _spawn_resources() -> void:
-	_spawn_gatherable("manzana_bruma", Vector2(105, 250), Color("b8d98a"))
-	_spawn_gatherable("manzana_bruma", Vector2(305, 285), Color("b8d98a"))
-	_spawn_gatherable("manzana_bruma", Vector2(455, 250), Color("b8d98a"))
-	_spawn_gatherable("hongo_azul_rocio", Vector2(505, 215), Color("75b9e8"))
+	_spawn_gatherable("manzana_bruma", Vector2(105,250), Color("b8d98a"))
+	_spawn_gatherable("manzana_bruma", Vector2(305,285), Color("b8d98a"))
+	_spawn_gatherable("manzana_bruma", Vector2(455,250), Color("b8d98a"))
+	_spawn_gatherable("hongo_azul_rocio", Vector2(505,215), Color("75b9e8"))
 	var station := Node2D.new()
 	station.name = "FogonRefugio"
 	station.set_script(CraftingStationScript)
-	station.position = Vector2(125, 205)
+	station.position = Vector2(125,205)
 	add_child(station)
 
-func _spawn_capturable_creatures() -> void:
-	if GameState.has_familiar("carpinchito_cristal"):
-		return
-	var creature := Node2D.new()
-	creature.name = "CarpinchitoCristal"
-	creature.set_script(CapturableScript)
-	creature.position = Vector2(690, 205)
-	creature.configure("carpinchito_cristal", "Carpinchito de Cristal", "impacto", "fermin", "manzana_bruma", Color("8fd3c1"))
-	add_child(creature)
-
 func _spawn_lore_seeds() -> void:
-	_spawn_lore(
-		"nota_elida_raices",
-		"Nota doblada",
-		"Elida",
-		"Las raíces viejas recuerdan caminos que nadie cavó. Si un día dejan de beber agua y empiezan a beber luz, no las sigan solos.",
-		Vector2(205, 140),
-		Color("ffb56b")
-	)
-	_spawn_lore(
-		"eco_lago",
-		"Piedra resonante",
-		"Lago Encantado",
-		"La piedra está tibia. Al tocarla aparece un segundo latido: no pertenece al Viajero ni a Xethkioz, y desaparece apenas intentás seguirlo.",
-		Vector2(650, 265),
-		Color("6ed4e8")
-	)
-	_spawn_lore(
-		"carta_ivan_cielo",
-		"Hoja de cálculo",
-		"Apuntes de Ivan",
-		"Lectura 17-B: la anomalía no desciende. Una señal gemela asciende por encima de las nubes y mantiene masa aparente donde el radar insiste en marcar vacío.",
-		Vector2(835, 145),
-		Color("74a7d8")
-	)
-	_spawn_lore(
-		"marca_tiempo_primigenio",
-		"Reloj sin agujas",
-		"Objeto desconocido",
-		"No tiene agujas ni óxido. Cada ocho segundos emite un pulso que hace retroceder a Xethkioz. El sonido parece llegar una fracción antes de que el objeto vibre.",
-		Vector2(1050, 170),
-		Color("b18cff")
-	)
-	_spawn_lore(
-		"cartel_descenso",
-		"Cartel de mantenimiento",
-		"Señal oxidada",
-		"ACCESO SELLADO. Riesgo de presión y pérdida de orientación. Las galerías continúan descendiendo más allá del último nivel cartografiado.",
-		Vector2(890, 500),
-		Color("c7a56a")
-	)
+	_spawn_lore("nota_elida_raices", "Nota doblada", "Elida", "Las raíces viejas recuerdan caminos que nadie cavó. Si un día dejan de beber agua y empiezan a beber luz, no las sigan solos.", Vector2(205,140), Color("ffb56b"))
+	_spawn_lore("eco_lago", "Piedra resonante", "Lago Encantado", "La piedra está tibia. Al tocarla aparece un segundo latido: no pertenece al Viajero ni a Xethkioz, y desaparece apenas intentás seguirlo.", Vector2(640,245), Color("6ed4e8"))
+	_spawn_lore("carta_ivan_cielo", "Hoja de cálculo", "Apuntes de Ivan", "Lectura 17-B: la anomalía no desciende. Una señal gemela asciende por encima de las nubes y mantiene masa aparente donde el radar insiste en marcar vacío.", Vector2(835,145), Color("74a7d8"))
+	_spawn_lore("marca_tiempo_primigenio", "Reloj sin agujas", "Objeto desconocido", "No tiene agujas ni óxido. Cada ocho segundos emite un pulso que hace retroceder a Xethkioz. El sonido parece llegar una fracción antes de que el objeto vibre.", Vector2(1050,170), Color("b18cff"))
+	_spawn_lore("cartel_descenso", "Cartel de mantenimiento", "Señal oxidada", "ACCESO SELLADO. Riesgo de presión y pérdida de orientación. Las galerías continúan descendiendo más allá del último nivel cartografiado.", Vector2(890,500), Color("c7a56a"))
 
 func _spawn_lore(id_value: String, title_value: String, speaker_value: String, body_value: String, pos: Vector2, color: Color) -> void:
 	var clue := Node2D.new()
@@ -315,6 +238,15 @@ func _spawn_lore(id_value: String, title_value: String, speaker_value: String, b
 	clue.position = pos
 	clue.configure(id_value, title_value, speaker_value, body_value, color, 5)
 	add_child(clue)
+
+func _spawn_capturable_creatures() -> void:
+	if not GameState.has_familiar("carpinchito_cristal"):
+		var creature := Node2D.new()
+		creature.name = "CarpinchitoCristal"
+		creature.set_script(CapturableScript)
+		creature.position = Vector2(685,255)
+		creature.configure("carpinchito_cristal", "Carpinchito de Cristal", "impacto", "fermin", "manzana_bruma", Color("8fd3c1"))
+		add_child(creature)
 
 func _spawn_gatherable(item_id: String, pos: Vector2, color: Color) -> void:
 	var gatherable := Node2D.new()
@@ -325,7 +257,7 @@ func _spawn_gatherable(item_id: String, pos: Vector2, color: Color) -> void:
 	add_child(gatherable)
 
 func _spawn_enemies() -> void:
-	var positions := [Vector2(420, 390), Vector2(520, 470), Vector2(660, 410), Vector2(870, 300), Vector2(1010, 360)]
+	var positions := [Vector2(420,390), Vector2(520,470), Vector2(660,410), Vector2(870,300), Vector2(1010,360)]
 	for i in positions.size():
 		var enemy := CharacterBody2D.new()
 		enemy.name = "BroteGoblin_%d" % i
@@ -358,9 +290,6 @@ func _spawn_systems() -> void:
 	hud.set_script(HudScript)
 	add_child(hud)
 
-func _on_familiar_captured(species_id: String, display_name: String) -> void:
-	_spawn_familiar_companion(species_id, display_name)
-
 func _on_weather_changed(weather_id: String) -> void:
 	if fog_overlay:
 		fog_overlay.color.a = 0.17 if weather_id == "bruma_prismatica" else 0.0
@@ -369,3 +298,6 @@ func _on_time_changed(hour: float) -> void:
 	if night_overlay:
 		var darkness := 0.28 if hour >= 19.0 or hour < 6.0 else 0.0
 		night_overlay.color.a = darkness
+
+func _on_familiar_captured(species_id: String, display_name: String) -> void:
+	_spawn_familiar_companion(species_id, display_name)
