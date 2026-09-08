@@ -67,6 +67,33 @@ jobs:
             exit 1
           fi
 
+      - name: Capture real 640x360 production previews
+        shell: bash
+        run: |
+          set -euxo pipefail
+          if ! command -v xvfb-run >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y xvfb
+          fi
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          mkdir -p build/previews
+          xvfb-run -a "$GODOT" --path . --rendering-method gl_compatibility --script res://tools/v34_visual_capture.gd 2>&1 | tee /tmp/visual.log
+          for PREVIEW in v34_menu.png v34_creator.png v34_cuenca.png v34_lago.png v34_refugio.png; do
+            test -s "build/previews/$PREVIEW"
+          done
+          if grep -E "SCRIPT ERROR|Parse Error|Compile Error|Invalid call|Invalid access|ERROR:" /tmp/visual.log; then
+            echo "Production visual capture reported runtime errors"
+            exit 1
+          fi
+
+      - name: Upload real production previews
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-of-xethkioz-v34-previews-${{ github.sha }}
+          path: build/previews/*.png
+          retention-days: 30
+          if-no-files-found: error
+
       - name: Cache Godot export templates
         uses: actions/cache@v4
         with:
@@ -120,6 +147,7 @@ jobs:
             /tmp/boot.log
             /tmp/golden.log
             /tmp/refugio.log
+            /tmp/visual.log
             /tmp/export.log
           retention-days: 7
           if-no-files-found: ignore
@@ -132,7 +160,7 @@ jobs:
           SHORT_SHA="${GITHUB_SHA::8}"
           mkdir -p /tmp/xethkioz-snapshot
           tar -czf "/tmp/xethkioz-snapshot/world-of-xethkioz-v34-${SHORT_SHA}.tar.gz" \
-            project.godot export_presets.cfg src scenes data assets docs/v33 docs/v34
+            project.godot export_presets.cfg src scenes data assets tools docs/v33 docs/v34
 
       - name: Upload source snapshot
         if: success()
