@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3]
 
-[ext_resource path="res://src/ui/game_bootstrap.gd" type="Script" id="1_boot"]
+[ext_resource path="res://src/ui/game_bootstrap_production.gd" type="Script" id="1_boot"]
 
 [node name="GameBootstrap" type="Control"]
 layout_mode = 3
