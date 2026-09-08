@@ -34,7 +34,7 @@ func _show_creator() -> void:
 		preview_hair.visible = false
 	if is_instance_valid(preview_body):
 		preview_body.visible = false
-	var parent := preview_head.get_parent() if is_instance_valid(preview_head) else content
+	var parent: Control = preview_head.get_parent() as Control if is_instance_valid(preview_head) else content
 	_creator_sprite = TextureRect.new()
 	_creator_sprite.name = "ViajeroCreatorPreview"
 	_creator_sprite.position = Vector2(51, 45)
@@ -57,7 +57,7 @@ func _update_creator_preview() -> void:
 	if is_instance_valid(preview_body):
 		preview_body.visible = false
 	if is_instance_valid(preview_name):
-		var display_name := name_edit.text.strip_edges() if is_instance_valid(name_edit) else CharacterProfile.player_name
+		var display_name: String = name_edit.text.strip_edges() if is_instance_valid(name_edit) else CharacterProfile.player_name
 		preview_name.text = display_name.to_upper() if not display_name.is_empty() else "VIAJERO"
 	if not is_instance_valid(_creator_sprite):
 		return
@@ -65,8 +65,8 @@ func _update_creator_preview() -> void:
 	atlas.atlas = VIAJERO_SHEET
 	atlas.region = Rect2(32, 0, 32, 32)
 	_creator_sprite.texture = atlas
-	var accent_index := accent_option.selected if is_instance_valid(accent_option) else CharacterProfile.accent_color
-	var accent := CharacterProfile.ACCENT_COLORS[clampi(accent_index, 0, CharacterProfile.ACCENT_COLORS.size() - 1)]
+	var accent_index: int = accent_option.selected if is_instance_valid(accent_option) else CharacterProfile.accent_color
+	var accent: Color = CharacterProfile.ACCENT_COLORS[clampi(accent_index, 0, CharacterProfile.ACCENT_COLORS.size() - 1)]
 	_creator_sprite.modulate = accent.lerp(Color.WHITE, 0.72)
 
 func _enter_world() -> void:
