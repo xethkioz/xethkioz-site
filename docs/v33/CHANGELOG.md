@@ -1,5 +1,17 @@
 # World of Xethkioz — development changelog
 
+## 2026-09-08 — v3.3-dev.8 / Steam Demo Closure Loop
+- Extended the playable Golden Region route from Lago Encantado through a complete demo ending.
+- Added `DemoEncounterDirector` to keep staged encounters/NPC reveals decoupled from the large world controller.
+- Added Santuario de las Raíces miniboss: `custodio_raices_menor`.
+- Added functional Boss 5 `Guardián del Bosque Velado` with three combat phases: direct pressure, terrain/root pulse, and protected/exposed core windows.
+- Added post-Boss 5 return to Elida and reveal of Ashley, Fermín, Isabella and Gael as selectable initial mentor paths.
+- Added persistent mentor selection and Paso Prismático traversal upgrade.
+- Added playable Fermín Rank I Familiar training: break three Impact training cores, return to Fermín, unlock `embate_cristal` for Carpinchito de Cristal.
+- Bumped save schema to v6 for mentor/traversal/training state.
+- Updated issues #238 and #241 to reflect current playable scope and remaining Steam-demo work.
+- Godot 4.7.2 CI passed import/compile, vertical-slice boot and source snapshot on gameplay head `990d98ec86d18ddce6405a48a578b76fdf3c89dd`.
+
 ## 2026-09-08 — v3.3-dev.7 / Izrdralar Presentation Pass
 - Added `src/world/izrdralar_visual_layer.gd` as a presentation-only layer for the Golden Region vertical slice.
 - Added first non-greybox environmental shapes for terrain, Lago Encantado, ruins, vegetation and prism accents while keeping collisions/gameplay separated.
