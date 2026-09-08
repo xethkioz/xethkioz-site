@@ -11,11 +11,15 @@ const STATE_BOSS5_ACTIVE := 7
 const STATE_RETURN_TO_ELIDA := 8
 const STATE_MENTOR_CHOICE := 9
 const STATE_TRAIN_WITH_FERMIN := 10
-const STATE_DEMO_COMPLETE := 11
+const STATE_FERMIN_TRAINING_ACTIVE := 11
+const STATE_RETURN_TO_FERMIN := 12
+const STATE_DEMO_COMPLETE := 13
 const REQUIRED_KILLS := 3
+const REQUIRED_TRAINING_TARGETS := 3
 
 var state := STATE_NOT_STARTED
 var defeated := 0
+var training_defeated := 0
 var talked_rola := false
 var talked_mela := false
 
@@ -111,10 +115,17 @@ func _handle_sibling(npc_id: String) -> void:
 		_update_quest()
 		return
 	if state == STATE_TRAIN_WITH_FERMIN and npc_id == "fermin":
+		training_defeated = 0
+		state = STATE_FERMIN_TRAINING_ACTIVE
+		EventBus.dialog_requested.emit("Fermín", "Impacto no significa pegar a lo bruto. Rompé los tres núcleos cuando estés bien colocado y no persigas el golpe. Quiero ver control antes de entrenar al Carpinchito.")
+		EventBus.demo_stage_changed.emit("fermin_training")
+		_update_quest()
+		return
+	if state == STATE_RETURN_TO_FERMIN and npc_id == "fermin":
 		if GameState.train_familiar("carpinchito_cristal", "fermin"):
 			GameState.add_xp(80)
 			state = STATE_DEMO_COMPLETE
-			EventBus.dialog_requested.emit("Fermín", "No necesitaba pegar más fuerte: necesitaba aprender cuándo romper la guardia. El Carpinchito ya puede usar Embate de Cristal. Esto recién empieza.")
+			EventBus.dialog_requested.emit("Fermín", "Ahora sí. No necesitaba pegar más fuerte: necesitaba aprender cuándo romper la guardia. El Carpinchito ya puede usar Embate de Cristal. Esto recién empieza.")
 			EventBus.quest_changed.emit("Golden Region", "Demo completada · Izrdralar continúa más allá del Bosque Velado", true)
 			EventBus.toast_requested.emit("Familiar Rango I · Embate de Cristal desbloqueado")
 			EventBus.demo_stage_changed.emit("demo_complete")
@@ -136,6 +147,13 @@ func _on_enemy_defeated(enemy_id: String, _xp: int, _pos: Vector2) -> void:
 	if state == STATE_BOSS5_ACTIVE and enemy_id == "boss5_guardian_bosque_velado":
 		state = STATE_RETURN_TO_ELIDA
 		EventBus.demo_stage_changed.emit("refuge_after_boss")
+		_update_quest()
+		return
+	if state == STATE_FERMIN_TRAINING_ACTIVE and enemy_id == "nucleo_entrenamiento_impacto":
+		training_defeated = mini(training_defeated + 1, REQUIRED_TRAINING_TARGETS)
+		if training_defeated >= REQUIRED_TRAINING_TARGETS:
+			state = STATE_RETURN_TO_FERMIN
+			EventBus.toast_requested.emit("Prueba de Impacto completada · volvé con Fermín")
 		_update_quest()
 
 func _on_familiar_captured(species_id: String, _display_name: String) -> void:
@@ -169,4 +187,8 @@ func _update_quest() -> void:
 		STATE_MENTOR_CHOICE:
 			EventBus.quest_changed.emit("Cuatro caminos", "Habla con Ashley, Fermín, Isabella o Gael", false)
 		STATE_TRAIN_WITH_FERMIN:
-			EventBus.quest_changed.emit("Disciplina de Impacto", "Habla con Fermín para entrenar al Carpinchito", false)
+			EventBus.quest_changed.emit("Disciplina de Impacto", "Habla con Fermín para iniciar el entrenamiento", false)
+		STATE_FERMIN_TRAINING_ACTIVE:
+			EventBus.quest_changed.emit("Disciplina de Impacto", "Rompe los núcleos de entrenamiento (%d/%d)" % [training_defeated, REQUIRED_TRAINING_TARGETS], false)
+		STATE_RETURN_TO_FERMIN:
+			EventBus.quest_changed.emit("Disciplina de Impacto", "Vuelve con Fermín", false)
