@@ -2,6 +2,7 @@ extends Node
 
 const EnemyScript := preload("res://src/npc/enemy_controller_production.gd")
 const BossScript := preload("res://src/npc/boss5_guardian_production.gd")
+const NpcScript := preload("res://src/npc/npc_interactable_production.gd")
 
 const CHUNK_PIXELS := 512
 var _world: Node2D
@@ -22,6 +23,9 @@ func _on_stage_changed(stage_id: String) -> void:
 		"boss5":
 			_spawned_stages[stage_id] = true
 			_spawn_boss5()
+		"refuge_after_boss", "mentor_choice":
+			_spawned_stages[stage_id] = true
+			_spawn_refuge_family()
 		"fermin_training":
 			_spawned_stages[stage_id] = true
 			_spawn_training_cores()
@@ -46,6 +50,8 @@ func _spawn_enemy(id_value: String, pos: Vector2, hp: float, speed: float, damag
 	return enemy
 
 func _spawn_boss5() -> void:
+	if _world.get_node_or_null("GuardianBosqueVelado") != null:
+		return
 	var boss := CharacterBody2D.new()
 	boss.name = "GuardianBosqueVelado"
 	boss.collision_layer = 2
@@ -61,11 +67,41 @@ func _spawn_boss5() -> void:
 	_world.add_child(boss)
 	EventBus.toast_requested.emit("Corazón del Bosque Velado · Guardián despertado")
 
+func _spawn_refuge_family() -> void:
+	if _world.get_node_or_null("Elida") != null:
+		return
+	_spawn_npc("elida", "Elida", _world_pos(1,3,300,135), 1, [
+		"Acá siempre vas a tener un lugar donde volver. Un refugio no es esconderse: es saber desde dónde podés salir otra vez.",
+		"Los chicos crecieron de formas distintas dentro del mismo desastre. Escuchalos antes de elegir por dónde empezar."
+	])
+	_spawn_npc("ashley", "Ashley", _world_pos(1,3,230,185), 2, [
+		"La resonancia sirve para escuchar el combate antes de que empiece. Si elegís mi camino, vas a aprender a mover el ritmo de una pelea."
+	])
+	_spawn_npc("fermin", "Fermín", _world_pos(1,3,268,205), 3, [
+		"Impacto no es fuerza sin control. Si querés entrenar al Carpinchito, primero demostrame que sabés cuándo romper una defensa."
+	])
+	_spawn_npc("isabella", "Isabella", _world_pos(1,3,338,205), 4, [
+		"El caos no siempre está fuera de control. A veces solamente usa reglas que todavía no entendiste."
+	])
+	_spawn_npc("gael", "Gael", _world_pos(1,3,375,185), 5, [
+		"Si podés ver el camino antes que el enemigo, no necesitás quedarte quieto para acertar."
+	])
+	EventBus.toast_requested.emit("Refugio de Elida · los cuatro caminos están disponibles")
+
+func _spawn_npc(id_value: String, display_name: String, pos: Vector2, atlas_index: int, lines: Array[String]) -> Node2D:
+	var npc := Node2D.new()
+	npc.name = display_name
+	npc.set_script(NpcScript)
+	npc.position = pos
+	npc.configure_production(id_value, display_name, lines, atlas_index)
+	_world.add_child(npc)
+	return npc
+
 func _spawn_training_cores() -> void:
 	var positions := [
-		_world_pos(1, 3, 390, 170),
-		_world_pos(1, 3, 425, 205),
-		_world_pos(1, 3, 390, 240)
+		_world_pos(1, 3, 410, 150),
+		_world_pos(1, 3, 442, 205),
+		_world_pos(1, 3, 410, 260)
 	]
 	for index in range(positions.size()):
 		var core := _spawn_enemy("nucleo_entrenamiento_impacto", positions[index], 54.0, 0.0, 0.0, 0, 3, 0.0, 0.0)
