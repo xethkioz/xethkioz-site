@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource path="res://src/world/golden_region_controller.gd" type="Script" id="1"]
 [ext_resource path="res://src/ui/interaction_prompt.gd" type="Script" id="2_prompt"]
@@ -8,6 +8,7 @@
 [ext_resource path="res://src/world/world_scene_binder.gd" type="Script" id="6_binder"]
 [ext_resource path="res://src/world/world_atmosphere.gd" type="Script" id="7_atmosphere"]
 [ext_resource path="res://src/world/lake_shore_director.gd" type="Script" id="8_lake"]
+[ext_resource path="res://src/world/regional_set_dressing.gd" type="Script" id="9_dressing"]
 
 [node name="GoldenRegion" type="Node2D"]
 script = ExtResource("1")
@@ -20,6 +21,9 @@ script = ExtResource("6_binder")
 
 [node name="LakeShoreDirector" type="Node" parent="."]
 script = ExtResource("8_lake")
+
+[node name="RegionalSetDressing" type="Node2D" parent="."]
+script = ExtResource("9_dressing")
 
 [node name="WorldAtmosphere" type="Node2D" parent="."]
 script = ExtResource("7_atmosphere")
