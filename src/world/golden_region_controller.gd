@@ -5,7 +5,7 @@ const PlayerScript := preload("res://src/player/player_controller_production.gd"
 const XethkiozScript := preload("res://src/pets/xethkioz_companion_production.gd")
 const FamiliarScript := preload("res://src/pets/familiar_companion_production.gd")
 const CapturableScript := preload("res://src/pets/capturable_creature_production.gd")
-const NpcScript := preload("res://src/npc/npc_interactable_production.gd")
+const StoryNpcScript := preload("res://src/npc/story_npc_v36.gd")
 const EnemyScript := preload("res://src/npc/enemy_controller_production.gd")
 const GatherableScript := preload("res://src/world/gatherable_production.gd")
 const LoreScript := preload("res://src/world/lore_interactable_production.gd")
@@ -13,9 +13,11 @@ const EncounterDirectorScript := preload("res://src/world/production_encounter_d
 const PoiTrackerScript := preload("res://src/world/poi_tracker.gd")
 const HudScript := preload("res://src/ui/hud_controller.gd")
 const MinimapScript := preload("res://src/ui/minimap_overlay.gd")
-const QuestScript := preload("res://src/quest/quest_manager.gd")
+const QuestScript := preload("res://src/quest/quest_manager_v36.gd")
 const ClockScript := preload("res://src/world/world_clock.gd")
 const WeatherScript := preload("res://src/world/weather_controller.gd")
+const BridgeScript := preload("res://src/world/temporal_bridge_v36.gd")
+const ResonanceFocusScript := preload("res://src/world/resonance_focus_v36.gd")
 
 const MANIFEST_PATH := "res://data/regions/golden_region_v34.json"
 const CHUNK_PIXELS := 512
@@ -34,10 +36,12 @@ func _ready() -> void:
 	EventBus.familiar_captured.connect(_on_familiar_captured)
 	_spawn_player()
 	_spawn_xethkioz()
+	_spawn_story_bridge()
 	_spawn_npcs()
-	_spawn_enemies()
+	_spawn_regional_enemies()
 	_spawn_resources()
 	_spawn_capture_target()
+	_spawn_lake_puzzle()
 	_spawn_secrets()
 	_spawn_active_familiar()
 	_spawn_systems()
@@ -118,39 +122,33 @@ func _spawn_xethkioz() -> void:
 	pet.position = player.position + Vector2(-30, 22)
 	add_child(pet)
 
-func _spawn_npcs() -> void:
-	_spawn_npc("alexis", "Alexis", _world_pos(1, 3, 326, 190), 0, [
-		"Despertaste en el borde de la Cuenca. Xethkioz no suele acercarse así a desconocidos.",
-		"Antes de seguir hacia el bosque, necesito saber qué está alterando las raíces del sendero."
-	])
-	_spawn_npc("ivan", "Ivan", _world_pos(2, 3, 236, 204), 6, [
-		"El Prisma-Atlas registra anomalías que el mapa común no puede mostrar.",
-		"No todo lo que aparece en el Atlas pertenece al mismo tiempo que nosotros."
-	])
-	_spawn_npc("val", "Val", _world_pos(1, 1, 164, 248), 7, [
-		"No todas las criaturas quieren pelear. Algunas necesitan que entiendas su hábitat antes de acercarte.",
-		"Si Xethkioz reacciona a una criatura, observá primero. El vínculo no se fuerza."
-	])
-	_spawn_npc("rola", "Rola", _world_pos(1, 1, 112, 286), 8, [
-		"Hay huellas de Carpinchito cerca del agua. Las más frescas van hacia los juncos."
-	])
-	_spawn_npc("mela", "Mela", _world_pos(1, 1, 212, 300), 9, [
-		"Quedate quieto un segundo. A veces se acercan cuando dejás de buscarlos."
-	])
+func _spawn_story_bridge() -> void:
+	var bridge := Node2D.new()
+	bridge.name = "TemporalBridge"
+	bridge.set_script(BridgeScript)
+	bridge.position = _world_pos(1, 3, 448, 224)
+	bridge.configure(_world_pos(1, 3, 406, 224))
+	add_child(bridge)
 
-func _spawn_npc(id_value: String, display_name: String, pos: Vector2, atlas_index: int, lines: Array[String]) -> Node2D:
+func _spawn_npcs() -> void:
+	_spawn_story_npc("gustavo", "?????", _world_pos(1, 3, 410, 182), 0, "Hoy, alguien que llegó temprano.")
+	_spawn_story_npc("alexis", "Alexis", _world_pos(2, 3, 82, 194), 0, "No te estoy mirando a vos. Lo estoy mirando a él.")
+	_spawn_story_npc("ivan", "Ivan", _world_pos(2, 3, 236, 204), 6, "El Prisma-Atlas registra huellas, no explicaciones.")
+	_spawn_story_npc("val", "Val", _world_pos(1, 1, 164, 248), 7, "No toda resonancia significa vínculo.")
+	_spawn_story_npc("rola", "Rola", _world_pos(1, 1, 112, 286), 8, "Las huellas más frescas van hacia los juncos.")
+	_spawn_story_npc("mela", "Mela", _world_pos(1, 1, 212, 300), 9, "La piedra late mal.")
+
+func _spawn_story_npc(id_value: String, display_name: String, pos: Vector2, atlas_index: int, fallback_line: String) -> Node2D:
 	var npc := Node2D.new()
-	npc.name = display_name
-	npc.set_script(NpcScript)
+	npc.name = "StoryNPC_%s" % id_value
+	npc.set_script(StoryNpcScript)
 	npc.position = pos
-	npc.configure_production(id_value, display_name, lines, atlas_index)
+	npc.configure_story(id_value, display_name, atlas_index, fallback_line)
 	add_child(npc)
 	return npc
 
-func _spawn_enemies() -> void:
+func _spawn_regional_enemies() -> void:
 	var definitions := [
-		["brote_goblin", _world_pos(1,3,150,280), 42.0,52.0,8.0,24,0],
-		["brote_goblin", _world_pos(1,3,405,284), 42.0,52.0,8.0,24,0],
 		["brote_goblin", _world_pos(1,2,270,385), 46.0,54.0,9.0,26,0],
 		["explorador_goblin", _world_pos(2,2,170,170), 38.0,68.0,7.0,28,1],
 		["slime_prismatico", _world_pos(2,1,310,250), 58.0,38.0,9.0,30,2],
@@ -167,7 +165,7 @@ func _spawn_enemies() -> void:
 
 func _spawn_enemy(id_value: String, pos: Vector2, hp: float, speed: float, damage: float, xp: int, atlas_index: int) -> CharacterBody2D:
 	var enemy := CharacterBody2D.new()
-	enemy.name = id_value
+	enemy.name = "%s_%d_%d" % [id_value, roundi(pos.x), roundi(pos.y)]
 	enemy.collision_layer = 2
 	enemy.collision_mask = 1 | 4
 	enemy.set_script(EnemyScript)
@@ -185,25 +183,16 @@ func _spawn_enemy(id_value: String, pos: Vector2, hp: float, speed: float, damag
 func _spawn_resources() -> void:
 	var definitions := [
 		["manzana_bruma", _world_pos(1,3,205,154), "botanica", 3, 0],
-		["manzana_bruma", _world_pos(1,3,390,360), "botanica", 3, 0],
 		["manzana_bruma", _world_pos(1,2,210,370), "botanica", 3, 0],
 		["manzana_bruma", _world_pos(1,1,100,210), "botanica", 3, 0],
 		["manzana_bruma", _world_pos(1,1,360,330), "botanica", 3, 0],
-		["manzana_bruma", _world_pos(2,2,370,210), "botanica", 3, 0],
 		["hongo_azul_rocio", _world_pos(0,3,330,180), "botanica", 4, 1],
 		["hongo_azul_rocio", _world_pos(0,2,200,260), "botanica", 4, 1],
-		["hongo_azul_rocio", _world_pos(1,1,170,380), "botanica", 4, 1],
 		["hongo_azul_rocio", _world_pos(2,1,200,150), "botanica", 4, 1],
-		["hongo_azul_rocio", _world_pos(3,2,135,355), "botanica", 4, 1],
-		["hongo_azul_rocio", _world_pos(4,2,345,215), "botanica", 4, 1],
 		["ferrita_pampeana", _world_pos(2,3,365,265), "mineria", 5, 2],
 		["ferrita_pampeana", _world_pos(3,1,110,185), "mineria", 5, 2],
-		["ferrita_pampeana", _world_pos(3,0,395,340), "mineria", 5, 2],
-		["ferrita_pampeana", _world_pos(4,3,195,310), "mineria", 5, 2],
-		["cuarzo_prismatico", _world_pos(2,0,375,150), "mineria", 6, 3],
 		["cuarzo_prismatico", _world_pos(3,2,210,150), "mineria", 6, 3],
-		["cuarzo_prismatico", _world_pos(3,1,350,175), "mineria", 6, 3],
-		["cuarzo_prismatico", _world_pos(4,0,105,385), "mineria", 6, 3]
+		["cuarzo_prismatico", _world_pos(3,1,350,175), "mineria", 6, 3]
 	]
 	for index in range(definitions.size()):
 		var data: Array = definitions[index]
@@ -224,6 +213,22 @@ func _spawn_capture_target() -> void:
 	creature.configure("carpinchito_cristal", "Carpinchito de Cristal", "impacto", "fermin", "manzana_bruma", Color("8fc6a9"))
 	add_child(creature)
 
+func _spawn_lake_puzzle() -> void:
+	if GameState.has_world_flag("route_lake_complete"):
+		return
+	var definitions := [
+		["a", _world_pos(1,1,278,212)],
+		["b", _world_pos(1,1,384,242)],
+		["noise", _world_pos(1,1,304,334)]
+	]
+	for data in definitions:
+		var focus := Node2D.new()
+		focus.name = "LakeFocus_%s" % str(data[0])
+		focus.set_script(ResonanceFocusScript)
+		focus.position = data[1]
+		focus.configure(str(data[0]))
+		add_child(focus)
+
 func _spawn_active_familiar() -> void:
 	if GameState.active_familiar_id.is_empty() or not GameState.has_familiar(GameState.active_familiar_id):
 		return
@@ -242,18 +247,19 @@ func _on_familiar_captured(_species_id: String, _display_name: String) -> void:
 
 func _spawn_secrets() -> void:
 	var definitions := [
-		["nota_elida_raices", "Nota de Elida", "Elida", "Las raíces no crecieron hacia la luz. Crecieron hacia un recuerdo. Si vuelven a hacerlo, no sigan el camino más corto.", _world_pos(1,3,365,125), Color("ff8c42")],
-		["piedra_resonante", "Piedra Resonante", "Prisma-Atlas", "La piedra vibra con dos frecuencias. Una pertenece a Izrdralar. La otra parece venir de un lugar que todavía no puede fijarse en el mapa.", _world_pos(3,1,290,290), Color("8b5cf6")],
-		["calculo_ivan_fisura", "Cálculo incompleto", "Ivan", "La geometría cierra únicamente si acepto que una parte de la Fisura está fuera de nuestra secuencia temporal. No me gusta esa respuesta.", _world_pos(2,3,280,165), Color("6ed4e8")],
-		["reloj_sin_agujas", "Reloj sin agujas", "Registro desconocido", "El mecanismo no mide horas. Reacciona cuando Xethkioz se acerca y marca una pulsación que el Atlas llama Tiempo Primigenio.", _world_pos(3,0,215,150), Color("d8ceff")],
-		["cartel_descenso", "Cartel de descenso", "Señal antigua", "DESCENSO CLAUSURADO. La pintura es reciente, pero el metal lleva siglos bajo la intemperie.", _world_pos(4,3,330,165), Color("b18cff")]
+		["lore_lake_resonant_stone", "Piedra Resonante", "Prisma-Atlas", "La piedra vibra con un segundo latido que no pertenece ni al Viajero ni a Xethkioz. Val advierte que algunas resonancias son residuos, imitaciones o ecos.", _world_pos(1,1,250,188), Color("8b5cf6")],
+		["lore_ivan_calc_17b", "Hoja de cálculo 17-B", "Registro de Ivan", "Lectura 17-B: la anomalía no desciende. Una señal gemela asciende por encima de las nubes y mantiene masa aparente donde el radar insiste en marcar vacío. Etiqueta: A-0.", _world_pos(3,1,286,238), Color("6ed4e8")],
+		["lore_elida_roots_note", "Nota doblada de Elida", "Elida", "Las raíces viejas recuerdan caminos que nadie cavó. Si un día dejan de beber agua y empiezan a beber luz, no las sigan solos.", _world_pos(3,2,180,326), Color("ff8c42")],
+		["lore_maintenance_depths", "Cartel de mantenimiento", "Señal antigua", "DESCENSO CLAUSURADO. Galerías inferiores fuera de servicio. La pintura parece más nueva que el metal que sostiene el cartel.", _world_pos(4,3,330,165), Color("b18cff")]
 	]
 	for data in definitions:
+		if GameState.has_lore(str(data[0])):
+			continue
 		var lore := Node2D.new()
 		lore.name = str(data[1])
 		lore.set_script(LoreScript)
 		lore.position = data[4]
-		lore.configure(str(data[0]), str(data[1]), str(data[2]), str(data[3]), data[5], 5)
+		lore.configure(str(data[0]), str(data[1]), str(data[2]), str(data[3]), data[5], 9)
 		add_child(lore)
 
 func _spawn_systems() -> void:
