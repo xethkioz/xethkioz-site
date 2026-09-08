@@ -16,6 +16,12 @@ func configure(kind_value: String, direction_value: Vector2, color_value: Color,
 	match _kind:
 		"slash":
 			_duration = 0.18
+		"line":
+			_duration = 0.24
+		"ward":
+			_duration = 0.46
+		"burst":
+			_duration = 0.42
 		"death":
 			_duration = 0.52
 		"pickup":
@@ -70,6 +76,12 @@ func _draw() -> void:
 	match _kind:
 		"slash":
 			_draw_slash(progress, alpha)
+		"line":
+			_draw_line_cast(progress, alpha)
+		"ward":
+			_draw_ward(progress, alpha)
+		"burst":
+			_draw_burst(progress, alpha)
 		"death":
 			_draw_death(progress, alpha)
 		"pickup":
@@ -85,6 +97,32 @@ func _draw_slash(progress: float, alpha: float) -> void:
 	var radius: float = 16.0 + progress * 8.0
 	draw_arc(Vector2.ZERO, radius, angle - sweep, angle + sweep, 18, _alpha(_accent.lightened(0.32), alpha), 3.0)
 	draw_arc(Vector2.ZERO, radius - 5.0, angle - sweep * 0.72, angle + sweep * 0.72, 14, _alpha(Color.WHITE, alpha * 0.72), 1.5)
+
+func _draw_line_cast(progress: float, alpha: float) -> void:
+	var start: Vector2 = _direction * (6.0 + progress * 3.0)
+	var end: Vector2 = _direction * (32.0 + progress * 38.0)
+	var side: Vector2 = Vector2(-_direction.y, _direction.x)
+	draw_line(start, end, _alpha(_accent.lightened(0.25), alpha), 3.0)
+	draw_line(start + side * 4.0, end + side * 2.0, _alpha(Color.WHITE, alpha * 0.58), 1.5)
+	draw_line(start - side * 4.0, end - side * 2.0, _alpha(_accent.darkened(0.08), alpha * 0.62), 1.5)
+
+func _draw_ward(progress: float, alpha: float) -> void:
+	var radius: float = 12.0 + sin(progress * PI) * 9.0
+	draw_arc(Vector2.ZERO, radius, 0.0, TAU, 28, _alpha(_accent, alpha * 0.90), 2.5)
+	draw_arc(Vector2.ZERO, radius + 7.0, -PI * 0.70, PI * 0.15, 18, _alpha(Color.WHITE, alpha * 0.55), 1.5)
+	for index in range(4):
+		var angle: float = TAU * float(index) / 4.0 + progress * 0.7
+		var point: Vector2 = Vector2.from_angle(angle) * (radius + 3.0)
+		draw_circle(point, 2.0, _alpha(_accent.lightened(0.25), alpha))
+
+func _draw_burst(progress: float, alpha: float) -> void:
+	var radius: float = 8.0 + progress * 34.0
+	draw_circle(Vector2.ZERO, 7.0 + progress * 3.0, _alpha(_accent.lightened(0.30), alpha * 0.22))
+	draw_arc(Vector2.ZERO, radius, 0.0, TAU, 36, _alpha(_accent, alpha * 0.82), 2.5)
+	for index in range(8):
+		var angle: float = TAU * float(index) / 8.0
+		var ray: Vector2 = Vector2.from_angle(angle)
+		draw_line(ray * (radius * 0.45), ray * radius, _alpha(_accent.lightened(0.15), alpha * 0.72), 1.5)
 
 func _draw_hit(progress: float, alpha: float) -> void:
 	draw_circle(Vector2.ZERO, 4.0 + progress * 5.0, _alpha(_accent.lightened(0.35), alpha * 0.34))
