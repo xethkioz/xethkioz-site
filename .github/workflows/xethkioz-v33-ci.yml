@@ -164,6 +164,10 @@ jobs:
           GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
           mkdir -p build/windows
           "$GODOT" --headless --path . --export-release "Windows Desktop" build/windows/WorldOfXethkiozDemo.exe 2>&1 | tee /tmp/export.log
+          if grep -E "SCRIPT ERROR|Parse Error|Compile Error|Invalid call|Invalid access|ERROR:" /tmp/export.log; then
+            echo "Windows production export reported Godot errors"
+            exit 1
+          fi
           test -s build/windows/WorldOfXethkiozDemo.exe
           sha256sum build/windows/WorldOfXethkiozDemo.exe > build/windows/SHA256SUMS.txt
 
