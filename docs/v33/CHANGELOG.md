@@ -1,5 +1,18 @@
 # World of Xethkioz — development changelog
 
+## 2026-09-08 — v3.3-dev.6 / Lago Encantado + First Familiar
+- Added Rola and Mela to the functional Lago Encantado greybox with complementary capture guidance.
+- Added deterministic peaceful capture for **Carpinchito de Cristal** using one Manzana de Bruma.
+- Added persistent Familiar state: captured species, active Familiar, affinity, recommended mentor, assessment flag and training rank scaffold.
+- Bumped save schema to v5 for Familiar persistence.
+- Added visible active Familiar follower placeholder beside the player after capture/load.
+- Extended the first campaign flow: Alexis roots quest → Val → Rola/Mela → first capture → return to Val → affinity assessment.
+- Val now reveals the Carpinchito's **Impacto** affinity and recommends **Fermín** as its future trainer.
+- Added Familiar status to the HUD before and after assessment.
+- Fixed a Godot 4.7.2 native method collision in the capturable-creature drawing helper.
+- CI now stores diagnostics on every run and publishes a validated source snapshot after successful import/boot.
+- Godot CI run `34201725899` passed import/compile, vertical-slice boot and source snapshot packaging at head `b1824181475870a261c84a57bca37a0dfef5e3f0`.
+
 ## 2026-09-08 — v3.3-dev.5 / Izrdralar Reactive Lore Seeds
 - Added persistent lore discovery state to GameState and save schema v4.
 - Added reusable `lore_interactable.gd` for notes, signs, artifacts and environmental clues.
