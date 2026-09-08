@@ -1,0 +1,64 @@
+name: WORLD OF XETHKIOZ v3.5 UI consistency patch
+
+on:
+  push:
+    branches:
+      - game/xethkioz-v34-production-rebuild
+    paths:
+      - .github/workflows/v35-ui-consistency-patch.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: game/xethkioz-v34-production-rebuild
+          fetch-depth: 0
+
+      - name: Apply v3.5 consistency fixes
+        shell: python
+        run: |
+          from pathlib import Path
+
+          bootstrap = Path('src/ui/game_bootstrap.gd')
+          text = bootstrap.read_text(encoding='utf-8')
+
+          old_vars = '''var preview_head: ColorRect\nvar preview_hair: ColorRect\nvar preview_body: ColorRect\nvar preview_name: Label'''
+          new_vars = '''var preview_sprite: TextureRect\nvar preview_skin_swatch: ColorRect\nvar preview_hair_swatch: ColorRect\nvar preview_accent_swatch: ColorRect\nvar preview_name: Label'''
+          assert old_vars in text, 'creator preview variable block changed unexpectedly'
+          text = text.replace(old_vars, new_vars, 1)
+
+          old_preview = '''\tpreview_hair = ColorRect.new()\n\tpreview_hair.position = Vector2(75,57)\n\tpreview_hair.size = Vector2(48,18)\n\tpreview.add_child(preview_hair)\n\tpreview_head = ColorRect.new()\n\tpreview_head.position = Vector2(80,70)\n\tpreview_head.size = Vector2(38,38)\n\tpreview.add_child(preview_head)\n\tpreview_body = ColorRect.new()\n\tpreview_body.position = Vector2(66,111)\n\tpreview_body.size = Vector2(66,76)\n\tpreview.add_child(preview_body)\n\tvar note := _local_label(Vector2(18,198), Vector2(162,26), "Vista provisional.\\nEl sprite final reemplazará esta guía.", 7, C_MUTED, false, HORIZONTAL_ALIGNMENT_CENTER)\n\tpreview.add_child(note)\n\t_update_creator_preview()'''
+
+          new_preview = '''\tpreview_sprite = TextureRect.new()\n\tpreview_sprite.position = Vector2(49,46)\n\tpreview_sprite.size = Vector2(100,100)\n\tpreview_sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE\n\tpreview_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED\n\tpreview_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST\n\tpreview_sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE\n\tvar frame := AtlasTexture.new()\n\tframe.atlas = load("res://assets/production/characters/viajero_sheet.svg")\n\tframe.region = Rect2(32, 0, 32, 32)\n\tpreview_sprite.texture = frame\n\tpreview.add_child(preview_sprite)\n\n\tvar swatch_label := _local_label(Vector2(18,151), Vector2(162,14), "PERFIL VISUAL", 7, C_MUTED, true, HORIZONTAL_ALIGNMENT_CENTER)\n\tpreview.add_child(swatch_label)\n\tpreview_skin_swatch = ColorRect.new()\n\tpreview_skin_swatch.position = Vector2(48,171)\n\tpreview_skin_swatch.size = Vector2(26,12)\n\tpreview.add_child(preview_skin_swatch)\n\tpreview_hair_swatch = ColorRect.new()\n\tpreview_hair_swatch.position = Vector2(86,171)\n\tpreview_hair_swatch.size = Vector2(26,12)\n\tpreview.add_child(preview_hair_swatch)\n\tpreview_accent_swatch = ColorRect.new()\n\tpreview_accent_swatch.position = Vector2(124,171)\n\tpreview_accent_swatch.size = Vector2(26,12)\n\tpreview.add_child(preview_accent_swatch)\n\tvar note := _local_label(Vector2(18,194), Vector2(162,30), "Sprite real de gameplay.\\nLa personalización se aplica al entrar.", 7, C_MUTED, false, HORIZONTAL_ALIGNMENT_CENTER)\n\tpreview.add_child(note)\n\t_update_creator_preview()'''
+          assert old_preview in text, 'creator preview node block changed unexpectedly'
+          text = text.replace(old_preview, new_preview, 1)
+
+          start = text.index('func _update_creator_preview() -> void:')
+          end = text.index('\nfunc _confirm_character() -> void:', start)
+          new_update = '''func _update_creator_preview() -> void:\n\tif preview_sprite == null:\n\t\treturn\n\tvar skin_index: int = skin_option.selected if skin_option else CharacterProfile.skin_tone\n\tvar hair_index: int = hair_color_option.selected if hair_color_option else CharacterProfile.hair_color\n\tvar accent_index: int = accent_option.selected if accent_option else CharacterProfile.accent_color\n\tvar skin: Color = CharacterProfile.SKIN_COLORS[skin_index]\n\tvar hair: Color = CharacterProfile.HAIR_COLORS[hair_index]\n\tvar accent: Color = CharacterProfile.ACCENT_COLORS[accent_index]\n\tpreview_skin_swatch.color = skin\n\tpreview_hair_swatch.color = hair\n\tpreview_accent_swatch.color = accent\n\tvar body_idx: int = body_option.selected if body_option else CharacterProfile.body_type\n\tvar body_width: float = [88.0, 100.0, 112.0][body_idx]\n\tpreview_sprite.size.x = body_width\n\tpreview_sprite.position.x = 99.0 - body_width * 0.5\n\tvar display_name: String = name_edit.text.strip_edges() if name_edit else CharacterProfile.player_name\n\tpreview_name.text = display_name.to_upper() if not display_name.is_empty() else "VIAJERO"\n'''
+          text = text[:start] + new_update + text[end:]
+          bootstrap.write_text(text, encoding='utf-8')
+
+          base_player = Path('src/player/player_controller.gd')
+          player_text = base_player.read_text(encoding='utf-8')
+          old_gate = '''func _use_brote_vivo() -> void:\n\tif GameState.selected_mentor.is_empty():\n\t\tEventBus.toast_requested.emit("F bloqueada · completa el conjunto Brote Vivo")\n\t\treturn\n\tif not _spend_and_start("F", 20.0, 22.0):'''
+          new_gate = '''func _use_brote_vivo() -> void:\n\tvar pieces: int = GameState.set_piece_count("brote_vivo")\n\tif pieces < 4:\n\t\tEventBus.toast_requested.emit("F bloqueada · Brote Vivo %d/4" % pieces)\n\t\treturn\n\tif not _spend_and_start("F", 20.0, 22.0):'''
+          assert old_gate in player_text, 'legacy Brote Vivo gate changed unexpectedly'
+          player_text = player_text.replace(old_gate, new_gate, 1)
+          base_player.write_text(player_text, encoding='utf-8')
+
+      - name: Commit patch
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name "xethkioz-production-bot"
+          git config user.email "xethkioz@gmail.com"
+          git add src/ui/game_bootstrap.gd src/player/player_controller.gd
+          git commit -m "fix(v3.5): use real Viajero preview and enforce Brote Vivo set gate"
+          git push origin HEAD:game/xethkioz-v34-production-rebuild
