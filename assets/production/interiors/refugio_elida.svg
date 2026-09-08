@@ -1,70 +1,152 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" shape-rendering="crispEdges">
-<rect width="640" height="360" fill="#11131b"/>
-<!-- outer stone walls -->
-<rect x="22" y="20" width="596" height="320" rx="8" fill="#493c35"/>
-<rect x="34" y="32" width="572" height="296" fill="#8a623f"/>
-<!-- wood floor -->
-<rect x="48" y="62" width="544" height="250" fill="#6f4b31"/>
-<g stroke="#815a39" stroke-width="2" opacity=".8">
-<path d="M48 82h544M48 102h544M48 122h544M48 142h544M48 162h544M48 182h544M48 202h544M48 222h544M48 242h544M48 262h544M48 282h544M48 302h544"/>
+<rect width="640" height="360" fill="#0c0d13"/>
+
+<!-- outer masonry / deep wall -->
+<rect x="18" y="16" width="604" height="326" rx="8" fill="#302925"/>
+<rect x="24" y="22" width="592" height="314" rx="5" fill="#514139"/>
+<g fill="#665247" opacity=".7">
+  <rect x="31" y="28" width="41" height="7"/><rect x="78" y="27" width="34" height="8"/><rect x="120" y="30" width="51" height="6"/>
+  <rect x="178" y="27" width="45" height="8"/><rect x="390" y="28" width="53" height="7"/><rect x="450" y="30" width="39" height="6"/>
+  <rect x="496" y="27" width="50" height="8"/><rect x="554" y="29" width="52" height="6"/>
 </g>
-<g stroke="#593b2a" stroke-width="1" opacity=".7">
-<path d="M88 62v250M148 62v250M208 62v250M268 62v250M328 62v250M388 62v250M448 62v250M508 62v250M568 62v250"/>
+<rect x="36" y="36" width="568" height="292" fill="#805b3d"/>
+
+<!-- floor -->
+<rect x="48" y="62" width="544" height="250" fill="#6a472f"/>
+<g stroke="#805838" stroke-width="2" opacity=".95">
+  <path d="M48 82h544M48 102h544M48 122h544M48 142h544M48 162h544M48 182h544M48 202h544M48 222h544M48 242h544M48 262h544M48 282h544M48 302h544"/>
 </g>
-<!-- top timber beam -->
-<rect x="48" y="46" width="544" height="18" fill="#3b2a24"/>
-<rect x="58" y="49" width="524" height="5" fill="#5e4331"/>
-<!-- fireplace -->
-<rect x="264" y="45" width="112" height="82" fill="#62514a"/>
-<rect x="274" y="55" width="92" height="62" fill="#3a3130"/>
-<path d="M289 116V83c0-17 10-27 31-27s31 10 31 27v33z" fill="#18171a"/>
-<path d="M303 111c-9-15 1-26 11-35 2 12 11 15 10 27 5-8 8-11 10-19 9 13 8 24 0 31z" fill="#ff8c42"/>
-<path d="M311 111c-4-8 2-15 8-20 1 7 6 9 5 15 3-4 4-6 5-10 4 8 3 13-1 18z" fill="#ffd071"/>
+<g stroke="#4f3527" stroke-width="1" opacity=".8">
+  <path d="M88 62v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v10"/>
+  <path d="M148 82v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v10"/>
+  <path d="M208 62v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v10"/>
+  <path d="M268 82v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v10"/>
+  <path d="M328 62v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v10"/>
+  <path d="M388 82v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v10"/>
+  <path d="M448 62v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v10"/>
+  <path d="M508 82v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v10"/>
+  <path d="M568 62v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v20m0 20v10"/>
+</g>
+<!-- worn floor patches -->
+<g fill="#563a2b" opacity=".55"><rect x="193" y="288" width="26" height="3"/><rect x="370" y="271" width="37" height="3"/><rect x="234" y="116" width="30" height="2"/><rect x="416" y="153" width="22" height="2"/><rect x="92" y="231" width="34" height="3"/></g>
+
+<!-- beams -->
+<rect x="48" y="44" width="544" height="20" fill="#33231f"/><rect x="56" y="48" width="528" height="5" fill="#59402e"/>
+<rect x="48" y="58" width="544" height="4" fill="#241a18"/>
+<rect x="48" y="62" width="8" height="250" fill="#493025"/><rect x="584" y="62" width="8" height="250" fill="#493025"/>
+<g fill="#4a3026"><rect x="196" y="44" width="8" height="30"/><rect x="436" y="44" width="8" height="30"/></g>
+
+<!-- narrow prism windows -->
+<g>
+  <rect x="204" y="69" width="30" height="45" fill="#241f25"/><rect x="209" y="74" width="20" height="34" fill="#153540"/>
+  <rect x="212" y="77" width="6" height="28" fill="#286172"/><rect x="220" y="77" width="6" height="28" fill="#6b50b9"/>
+  <path d="M219 75v32M210 91h18" stroke="#b3d9d8" stroke-width="1" opacity=".45"/>
+  <rect x="406" y="69" width="30" height="45" fill="#241f25"/><rect x="411" y="74" width="20" height="34" fill="#153540"/>
+  <rect x="414" y="77" width="6" height="28" fill="#6b50b9"/><rect x="422" y="77" width="6" height="28" fill="#286172"/>
+  <path d="M421 75v32M412 91h18" stroke="#b3d9d8" stroke-width="1" opacity=".45"/>
+</g>
+
+<!-- fireplace / refuge heart -->
+<rect x="264" y="43" width="112" height="86" fill="#544944"/><rect x="270" y="49" width="100" height="74" fill="#685950"/>
+<rect x="278" y="57" width="84" height="61" fill="#373033"/>
+<path d="M289 117V83c0-18 10-27 31-27s31 9 31 27v34z" fill="#151519"/>
+<rect x="280" y="117" width="80" height="7" fill="#403634"/>
+<path d="M301 113c-10-16 1-28 12-38 2 13 11 16 10 29 6-9 9-12 11-21 10 14 9 26 0 34z" fill="#f17335"/>
+<path d="M310 113c-5-9 2-16 8-22 1 7 7 10 6 16 3-5 5-7 6-11 5 8 4 15-2 19z" fill="#ffd06c"/>
+<rect x="291" y="120" width="58" height="2" fill="#b45d35" opacity=".6"/>
+<!-- family marks above hearth -->
+<g fill="#9a6fd6"><rect x="294" y="49" width="4" height="4"/><rect x="307" y="48" width="4" height="5"/><rect x="329" y="48" width="4" height="5"/><rect x="342" y="49" width="4" height="4"/></g>
+<rect x="317" y="47" width="6" height="6" fill="#ff8c42"/>
+
 <!-- shelves left -->
-<rect x="62" y="76" width="126" height="82" fill="#493327"/>
-<rect x="68" y="83" width="114" height="68" fill="#261e1b"/>
-<rect x="68" y="104" width="114" height="5" fill="#6e4c32"/><rect x="68" y="129" width="114" height="5" fill="#6e4c32"/>
-<g fill="#8b5cf6"><rect x="75" y="88" width="8" height="14"/><rect x="127" y="113" width="7" height="13"/></g>
-<g fill="#c58a52"><rect x="88" y="91" width="12" height="11"/><rect x="145" y="112" width="13" height="15"/></g>
-<g fill="#6aa47a"><rect x="108" y="87" width="8" height="16"/><rect x="164" y="115" width="7" height="11"/></g>
+<rect x="62" y="76" width="126" height="82" fill="#402c23"/><rect x="68" y="82" width="114" height="69" fill="#211a18"/>
+<rect x="68" y="103" width="114" height="5" fill="#725034"/><rect x="68" y="128" width="114" height="5" fill="#725034"/>
+<g fill="#8b5cf6"><rect x="75" y="87" width="8" height="15"/><rect x="126" y="112" width="8" height="14"/></g>
+<g fill="#c98952"><rect x="88" y="91" width="12" height="11"/><rect x="145" y="112" width="13" height="15"/></g>
+<g fill="#62a276"><rect x="108" y="87" width="8" height="16"/><rect x="164" y="115" width="7" height="11"/></g>
+<g fill="#406d91"><rect x="119" y="91" width="5" height="11"/><rect x="84" y="116" width="9" height="11"/></g>
+<rect x="99" y="135" width="16" height="11" fill="#9b754c"/><path d="M101 137h12m-12 3h10m-10 3h12" stroke="#dac899" stroke-width="1"/>
+<!-- Elida notes pinned -->
+<rect x="160" y="86" width="15" height="13" fill="#d9caa6"/><rect x="163" y="89" width="9" height="1" fill="#66584c"/><rect x="163" y="92" width="7" height="1" fill="#66584c"/>
+
 <!-- shelves right -->
-<rect x="452" y="76" width="126" height="82" fill="#493327"/>
-<rect x="458" y="83" width="114" height="68" fill="#261e1b"/>
-<rect x="458" y="104" width="114" height="5" fill="#6e4c32"/><rect x="458" y="129" width="114" height="5" fill="#6e4c32"/>
-<g fill="#4f9ad4"><rect x="466" y="88" width="9" height="14"/><rect x="531" y="113" width="9" height="13"/></g>
-<g fill="#d7ba72"><rect x="485" y="90" width="13" height="12"/><rect x="549" y="115" width="12" height="11"/></g>
+<rect x="452" y="76" width="126" height="82" fill="#402c23"/><rect x="458" y="82" width="114" height="69" fill="#211a18"/>
+<rect x="458" y="103" width="114" height="5" fill="#725034"/><rect x="458" y="128" width="114" height="5" fill="#725034"/>
+<g fill="#4b98cf"><rect x="466" y="87" width="9" height="15"/><rect x="531" y="112" width="9" height="14"/></g>
+<g fill="#d1b76d"><rect x="485" y="90" width="13" height="12"/><rect x="549" y="114" width="12" height="12"/></g>
 <g fill="#8b5cf6"><rect x="510" y="87" width="8" height="16"/></g>
-<!-- hanging herbs -->
-<g stroke="#75a56b" stroke-width="3" fill="none"><path d="M205 48v25m0-9l-9 8m9-2l10 8M422 48v28m0-12l-10 9m10-3l12 9"/></g>
-<!-- beds -->
-<g><rect x="62" y="177" width="92" height="47" rx="4" fill="#3c2d29"/><rect x="68" y="182" width="80" height="36" fill="#d8d0bd"/><rect x="70" y="184" width="27" height="13" fill="#f0eadc"/><rect x="102" y="184" width="42" height="31" fill="#6f86a2"/></g>
-<g><rect x="486" y="177" width="92" height="47" rx="4" fill="#3c2d29"/><rect x="492" y="182" width="80" height="36" fill="#d8d0bd"/><rect x="543" y="184" width="27" height="13" fill="#f0eadc"/><rect x="496" y="184" width="42" height="31" fill="#8b688f"/></g>
-<!-- center rug -->
-<rect x="200" y="163" width="240" height="104" rx="7" fill="#49364f"/>
-<rect x="207" y="170" width="226" height="90" rx="5" fill="#754f72"/>
-<path d="M217 181h206v68H217z" fill="none" stroke="#c79a63" stroke-width="3"/>
-<path d="M233 196h174v38H233z" fill="none" stroke="#9b6d8f" stroke-width="2"/>
-<!-- central table -->
-<ellipse cx="320" cy="214" rx="48" ry="24" fill="#3c2a22" opacity=".45"/>
-<rect x="277" y="186" width="86" height="43" rx="6" fill="#5f412d"/>
-<rect x="282" y="191" width="76" height="32" rx="4" fill="#81593a"/>
-<circle cx="306" cy="206" r="7" fill="#557e5d"/><circle cx="338" cy="203" r="6" fill="#9e7451"/><rect x="317" y="197" width="7" height="15" fill="#8b5cf6"/>
-<!-- alchemy table -->
-<rect x="73" y="248" width="106" height="42" fill="#4a3225"/><rect x="78" y="252" width="96" height="8" fill="#81593a"/>
-<circle cx="98" cy="244" r="8" fill="#4f9ad4"/><circle cx="124" cy="246" r="7" fill="#8b5cf6"/><rect x="145" y="234" width="12" height="19" fill="#6aa47a"/>
-<!-- crafting hearth right -->
-<rect x="469" y="246" width="102" height="45" fill="#40342e"/>
-<circle cx="520" cy="265" r="24" fill="#252326"/><circle cx="520" cy="265" r="14" fill="#9a4a2d"/><path d="M512 273c-8-11 1-20 8-28 1 10 8 12 7 21 4-5 5-8 7-14 7 10 4 20-4 25z" fill="#ff8c42"/>
+<g fill="#b86d49"><rect x="520" y="91" width="7" height="11"/><rect x="475" y="115" width="8" height="12"/></g>
+<!-- Ivan salvaged device -->
+<rect x="543" y="86" width="21" height="15" fill="#343c3e"/><rect x="546" y="89" width="15" height="8" fill="#194e58"/>
+<rect x="549" y="91" width="5" height="4" fill="#3fc7c9"/><rect x="556" y="91" width="3" height="4" fill="#8b5cf6"/>
+
+<!-- hanging herbs / cords -->
+<g stroke="#6c9c62" stroke-width="3" fill="none"><path d="M205 47v27m0-9l-9 8m9-2l10 8M422 47v29m0-12l-10 9m10-3l12 9"/></g>
+<g stroke="#8a6548" stroke-width="1"><path d="M232 47v18m177-18v18"/></g>
+<g fill="#4e7950"><rect x="227" y="62" width="11" height="4"/><rect x="404" y="62" width="11" height="4"/></g>
+
+<!-- beds and personal details -->
+<g><rect x="62" y="177" width="92" height="47" rx="4" fill="#332823"/><rect x="68" y="182" width="80" height="36" fill="#d2cab6"/><rect x="70" y="184" width="27" height="13" fill="#eee6d6"/><rect x="102" y="184" width="42" height="31" fill="#637e9b"/><rect x="104" y="187" width="38" height="3" fill="#7892aa"/></g>
+<g><rect x="486" y="177" width="92" height="47" rx="4" fill="#332823"/><rect x="492" y="182" width="80" height="36" fill="#d2cab6"/><rect x="543" y="184" width="27" height="13" fill="#eee6d6"/><rect x="496" y="184" width="42" height="31" fill="#846487"/><rect x="498" y="187" width="38" height="3" fill="#9a759d"/></g>
+<!-- boots / satchel -->
+<rect x="72" y="225" width="10" height="6" fill="#30241f"/><rect x="84" y="225" width="10" height="6" fill="#30241f"/>
+<rect x="548" y="224" width="18" height="12" fill="#67452f"/><rect x="552" y="221" width="10" height="5" fill="none" stroke="#9b7049" stroke-width="2"/>
+
+<!-- rug -->
+<rect x="200" y="163" width="240" height="104" rx="7" fill="#403047"/>
+<rect x="207" y="170" width="226" height="90" rx="5" fill="#6c4969"/>
+<path d="M217 181h206v68H217z" fill="none" stroke="#bd8c59" stroke-width="3"/>
+<path d="M233 196h174v38H233z" fill="none" stroke="#926488" stroke-width="2"/>
+<g fill="#8b5cf6" opacity=".65"><rect x="219" y="183" width="3" height="3"/><rect x="418" y="183" width="3" height="3"/><rect x="219" y="244" width="3" height="3"/><rect x="418" y="244" width="3" height="3"/></g>
+
+<!-- central family table -->
+<ellipse cx="320" cy="219" rx="53" ry="26" fill="#2a1e1a" opacity=".5"/>
+<rect x="275" y="184" width="90" height="46" rx="6" fill="#543925"/><rect x="280" y="190" width="80" height="33" rx="4" fill="#80573a"/>
+<circle cx="305" cy="206" r="7" fill="#52775a"/><circle cx="339" cy="202" r="6" fill="#986e4c"/><rect x="317" y="196" width="7" height="16" fill="#7656c7"/>
+<polygon points="320,197 323,202 320,208 317,202" fill="#d8ceff"/>
+<rect x="288" y="214" width="22" height="5" fill="#d0c19b"/><path d="M290 215h17m-17 2h14" stroke="#65564b" stroke-width="1"/>
+<circle cx="350" cy="216" r="4" fill="#c29b58"/>
+
+<!-- alchemy station -->
+<rect x="70" y="246" width="112" height="45" fill="#3d2a20"/><rect x="76" y="251" width="100" height="9" fill="#81583a"/>
+<circle cx="97" cy="244" r="8" fill="#438bc2"/><circle cx="123" cy="246" r="7" fill="#7c59ce"/><rect x="144" y="233" width="13" height="20" fill="#60966f"/>
+<rect x="92" y="237" width="10" height="2" fill="#a8dff0"/><rect x="119" y="240" width="8" height="2" fill="#d8ceff"/>
+<rect x="81" y="263" width="23" height="19" fill="#252224"/><rect x="108" y="263" width="25" height="19" fill="#272326"/><rect x="138" y="263" width="31" height="19" fill="#2a2523"/>
+<g fill="#ab7b4d"><rect x="85" y="267" width="15" height="3"/><rect x="112" y="268" width="17" height="3"/><rect x="142" y="267" width="22" height="3"/></g>
+<!-- mortar --> <ellipse cx="166" cy="244" rx="9" ry="4" fill="#6d7372"/><rect x="164" y="233" width="3" height="12" fill="#969b98" transform="rotate(25 165 239)"/>
+
+<!-- crafting hearth -->
+<rect x="466" y="245" width="108" height="47" fill="#38302c"/><rect x="471" y="249" width="98" height="7" fill="#5a4840"/>
+<circle cx="520" cy="267" r="25" fill="#202024"/><circle cx="520" cy="267" r="15" fill="#8c4129"/>
+<path d="M512 275c-8-11 1-20 8-28 1 10 8 12 7 21 4-5 5-8 7-14 7 10 4 20-4 25z" fill="#f17737"/>
+<path d="M518 274c-3-6 1-11 5-16 0 6 4 7 4 12 2-3 3-4 4-7 4 6 2 11-3 14z" fill="#ffd071"/>
+<rect x="477" y="262" width="14" height="4" fill="#7f8583"/><rect x="548" y="263" width="15" height="4" fill="#7f8583"/>
+<rect x="482" y="270" width="4" height="13" fill="#a46d45"/><rect x="554" y="270" width="4" height="13" fill="#a46d45"/>
+
 <!-- plants -->
-<g><rect x="188" y="279" width="18" height="13" fill="#60452f"/><path d="M197 280c-14-18-18-4-7 2-7-21 9-22 7-2 9-18 19-7 7 4z" fill="#4d8157"/></g>
-<g><rect x="434" y="279" width="18" height="13" fill="#60452f"/><path d="M443 280c-14-18-18-4-7 2-7-21 9-22 7-2 9-18 19-7 7 4z" fill="#4d8157"/></g>
-<!-- prism lamps -->
-<g fill="#8b5cf6"><polygon points="48,90 56,76 64,90 56,104"/><polygon points="576,90 584,76 592,90 584,104"/></g>
-<g fill="#cbbcff" opacity=".35"><circle cx="56" cy="90" r="18"/><circle cx="584" cy="90" r="18"/></g>
-<!-- lower doorway -->
-<rect x="286" y="305" width="68" height="35" fill="#2c2423"/>
-<rect x="296" y="307" width="48" height="33" fill="#15151b"/>
-<path d="M302 316h36" stroke="#8b5cf6" stroke-width="2" opacity=".5"/>
-<!-- small floor highlights -->
-<g fill="#b88b5d" opacity=".22"><rect x="215" y="95" width="28" height="3"/><rect x="397" y="121" width="31" height="3"/><rect x="184" y="240" width="24" height="2"/><rect x="445" y="224" width="20" height="2"/></g>
+<g><rect x="188" y="279" width="18" height="13" fill="#5a402d"/><path d="M197 280c-14-18-18-4-7 2-7-21 9-22 7-2 9-18 19-7 7 4z" fill="#477c52"/><rect x="194" y="272" width="2" height="2" fill="#e45457"/></g>
+<g><rect x="434" y="279" width="18" height="13" fill="#5a402d"/><path d="M443 280c-14-18-18-4-7 2-7-21 9-22 7-2 9-18 19-7 7 4z" fill="#477c52"/><rect x="448" y="273" width="2" height="2" fill="#8b5cf6"/></g>
+
+<!-- prism lamps and local glow -->
+<g fill="#7656c7"><polygon points="48,90 56,76 64,90 56,104"/><polygon points="576,90 584,76 592,90 584,104"/></g>
+<g fill="#ded5ff"><polygon points="54,87 56,80 58,87 56,96"/><polygon points="582,87 584,80 586,87 584,96"/></g>
+<g fill="#bdaaff" opacity=".18"><circle cx="56" cy="90" r="23"/><circle cx="584" cy="90" r="23"/></g>
+
+<!-- improvised cables / future remnants -->
+<path d="M55 115c23 3 24 20 42 19m486-21c-25 6-20 22-43 21" fill="none" stroke="#2c3f41" stroke-width="2"/>
+<g fill="#3fc7c9"><rect x="92" y="131" width="5" height="3"/><rect x="540" y="131" width="5" height="3"/></g>
+<g fill="#8b5cf6"><rect x="88" y="130" width="3" height="3"/><rect x="546" y="130" width="3" height="3"/></g>
+
+<!-- doorway -->
+<rect x="284" y="304" width="72" height="36" fill="#251d1c"/><rect x="294" y="307" width="52" height="33" fill="#101116"/>
+<rect x="298" y="310" width="44" height="4" fill="#352b29"/>
+<path d="M301 316h38" stroke="#7656c7" stroke-width="2" opacity=".75"/>
+<rect x="316" y="311" width="8" height="2" fill="#3fc7c9" opacity=".65"/>
+
+<!-- tiny lived-in details -->
+<g fill="#b48355" opacity=".35"><rect x="215" y="95" width="28" height="3"/><rect x="397" y="121" width="31" height="3"/><rect x="184" y="240" width="24" height="2"/><rect x="445" y="224" width="20" height="2"/></g>
+<rect x="228" y="286" width="17" height="11" fill="#49352a"/><rect x="231" y="283" width="11" height="4" fill="none" stroke="#7c5b40" stroke-width="2"/>
+<rect x="392" y="287" width="15" height="8" fill="#394244"/><rect x="395" y="289" width="9" height="3" fill="#3fc7c9"/>
+<!-- wall scratches / history -->
+<path d="M244 51l5 5m-5 0l5-5M385 50l5 5m-5 0l5-5" stroke="#8a6a55" stroke-width="1" opacity=".8"/>
 </svg>
