@@ -31,7 +31,7 @@ func interact(_actor: Node = null) -> void:
 
 func _contextual_line() -> String:
 	for rule in contextual_rules:
-		if not rule is Dictionary:
+		if not (rule is Dictionary):
 			continue
 		var lore_id := str(rule.get("lore_id", ""))
 		if not lore_id.is_empty() and GameState.has_lore(lore_id):
