@@ -12,6 +12,8 @@ func _ready() -> void:
 	_build_cuenca()
 	_build_lake()
 	_build_route_markers()
+	_build_ruins_and_sanctuary()
+	_build_boss_arena()
 
 func _process(delta: float) -> void:
 	_time += delta
@@ -38,6 +40,23 @@ func _build_route_markers() -> void:
 	_add_accent(4, _world_pos(1, 2, 256, 420), false)
 	_add_accent(4, _world_pos(2, 2, 90, 256), false)
 	_add_accent(4, _world_pos(3, 2, 84, 256), false)
+
+func _build_ruins_and_sanctuary() -> void:
+	_add_accent(5, _world_pos(3, 1, 116, 122), true)
+	_add_accent(5, _world_pos(3, 1, 390, 370), true)
+	_add_accent(0, _world_pos(3, 1, 352, 132), true)
+	_add_accent(4, _world_pos(3, 1, 84, 256), false)
+	_add_accent(1, _world_pos(3, 2, 256, 88), false)
+	_add_accent(0, _world_pos(3, 2, 126, 150), true)
+	_add_accent(0, _world_pos(3, 2, 386, 150), true)
+
+func _build_boss_arena() -> void:
+	_add_accent(1, _world_pos(4, 0, 126, 196), false)
+	_add_accent(1, _world_pos(4, 0, 386, 196), false)
+	_add_accent(0, _world_pos(4, 0, 170, 360), true)
+	_add_accent(0, _world_pos(4, 0, 342, 360), true)
+	_add_accent(5, _world_pos(4, 0, 112, 92), true)
+	_add_accent(5, _world_pos(4, 0, 400, 92), true)
 
 func _add_accent(frame: int, world_pos: Vector2, shimmer := false) -> Sprite2D:
 	var atlas := AtlasTexture.new()
