@@ -105,7 +105,7 @@ jobs:
           if [ "$STATUS" -ne 0 ]; then
             exit "$STATUS"
           fi
-          for PREVIEW in v34_menu.png v34_creator.png v34_cuenca.png v34_lago.png v34_refugio.png; do
+          for PREVIEW in v34_menu.png v34_creator.png v34_cuenca.png v34_lago.png v34_boss5.png v34_refugio.png; do
             test -s "build/previews/$PREVIEW"
           done
           if grep -E "SCRIPT ERROR|Parse Error|Compile Error|Invalid call|Invalid access|ERROR:" /tmp/visual.log; then
