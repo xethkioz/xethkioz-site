@@ -10,6 +10,7 @@ const ClockScript = preload("res://src/world/world_clock.gd")
 const WeatherScript = preload("res://src/world/weather_controller.gd")
 const GatherableScript = preload("res://src/world/gatherable.gd")
 const CraftingStationScript = preload("res://src/world/crafting_station.gd")
+const LoreScript = preload("res://src/world/lore_interactable.gd")
 
 var player: CharacterBody2D
 var fog_overlay: ColorRect
@@ -22,11 +23,12 @@ func _ready() -> void:
 	_spawn_xethkioz()
 	_spawn_npcs()
 	_spawn_resources()
+	_spawn_lore_seeds()
 	_spawn_enemies()
 	_spawn_systems()
 	EventBus.weather_changed.connect(_on_weather_changed)
 	EventBus.time_changed.connect(_on_time_changed)
-	EventBus.toast_requested.emit("Vertical Slice v3.3 — Cuenca del Despertar")
+	EventBus.toast_requested.emit("Izrdralar · Cuenca del Despertar")
 
 func _ensure_inputs() -> void:
 	var actions := {
@@ -157,16 +159,45 @@ func _spawn_xethkioz() -> void:
 	add_child(pet)
 
 func _spawn_npcs() -> void:
-	_spawn_npc("alexis", "Alexis", Vector2(250, 185), ["El bosque está cambiando. Necesito saber qué está alterando sus raíces."], Color("d58d5b"))
-	_spawn_npc("ivan", "Ivan", Vector2(320, 240), ["El Prisma-Atlas todavía es un prototipo. Cada anomalía que registremos lo vuelve más preciso."], Color("74a7d8"))
-	_spawn_npc("val", "Val", Vector2(560, 185), ["El lago calma a las criaturas. Cuando estés listo, te enseñaré a reconocer un vínculo verdadero."], Color("79b99a"))
+	_spawn_npc(
+		"alexis",
+		"Alexis",
+		Vector2(250, 185),
+		["El bosque está cambiando. Necesito saber qué está alterando sus raíces."],
+		Color("d58d5b"),
+		[
+			{"lore_id": "marca_tiempo_primigenio", "line": "Eso no es un reloj. Si vuelve a latir cuando Xethkioz se acerca, no lo fuerces. Hay cosas viejas que aprendí a no despertar."},
+			{"lore_id": "nota_elida_raices", "line": "Elida escribió eso hace años. Pensé que hablaba en sentido figurado. Ahora no estoy tan seguro."}
+		]
+	)
+	_spawn_npc(
+		"ivan",
+		"Ivan",
+		Vector2(320, 240),
+		["El Prisma-Atlas todavía es un prototipo. Cada anomalía que registremos lo vuelve más preciso."],
+		Color("74a7d8"),
+		[
+			{"lore_id": "marca_tiempo_primigenio", "line": "Ese pulso no coincide con ningún reloj local. Guardé la frecuencia. No vuelvas a tocarlo hasta que pueda medir qué está intentando sincronizar."},
+			{"lore_id": "carta_ivan_cielo", "line": "Encontraste mis cálculos viejos. Lo inquietante no es que haya energía arriba: es que la lectura se comporta como si existiera territorio donde nuestros instrumentos ven vacío."}
+		]
+	)
+	_spawn_npc(
+		"val",
+		"Val",
+		Vector2(560, 185),
+		["El lago calma a las criaturas. Cuando estés listo, te enseñaré a reconocer un vínculo verdadero."],
+		Color("79b99a"),
+		[
+			{"lore_id": "eco_lago", "line": "Ese segundo latido no era tuyo ni de Xethkioz. Recordalo: una resonancia puede parecer un vínculo y aun así estar imitando algo vivo."}
+		]
+	)
 
-func _spawn_npc(id_value: String, display_name: String, pos: Vector2, lines: Array[String], color: Color) -> void:
+func _spawn_npc(id_value: String, display_name: String, pos: Vector2, lines: Array[String], color: Color, rules: Array = []) -> void:
 	var npc := Node2D.new()
 	npc.name = display_name
 	npc.set_script(NpcScript)
 	npc.position = pos
-	npc.configure(id_value, display_name, lines, color)
+	npc.configure(id_value, display_name, lines, color, rules)
 	add_child(npc)
 
 func _spawn_resources() -> void:
@@ -179,6 +210,56 @@ func _spawn_resources() -> void:
 	station.set_script(CraftingStationScript)
 	station.position = Vector2(125, 205)
 	add_child(station)
+
+func _spawn_lore_seeds() -> void:
+	_spawn_lore(
+		"nota_elida_raices",
+		"Nota doblada",
+		"Elida",
+		"Las raíces viejas recuerdan caminos que nadie cavó. Si un día dejan de beber agua y empiezan a beber luz, no las sigan solos.",
+		Vector2(205, 140),
+		Color("ffb56b")
+	)
+	_spawn_lore(
+		"eco_lago",
+		"Piedra resonante",
+		"Lago Encantado",
+		"La piedra está tibia. Al tocarla aparece un segundo latido: no pertenece al Viajero ni a Xethkioz, y desaparece apenas intentás seguirlo.",
+		Vector2(640, 245),
+		Color("6ed4e8")
+	)
+	_spawn_lore(
+		"carta_ivan_cielo",
+		"Hoja de cálculo",
+		"Apuntes de Ivan",
+		"Lectura 17-B: la anomalía no desciende. Una señal gemela asciende por encima de las nubes y mantiene masa aparente donde el radar insiste en marcar vacío.",
+		Vector2(835, 145),
+		Color("74a7d8")
+	)
+	_spawn_lore(
+		"marca_tiempo_primigenio",
+		"Reloj sin agujas",
+		"Objeto desconocido",
+		"No tiene agujas ni óxido. Cada ocho segundos emite un pulso que hace retroceder a Xethkioz. El sonido parece llegar una fracción antes de que el objeto vibre.",
+		Vector2(1050, 170),
+		Color("b18cff")
+	)
+	_spawn_lore(
+		"cartel_descenso",
+		"Cartel de mantenimiento",
+		"Señal oxidada",
+		"ACCESO SELLADO. Riesgo de presión y pérdida de orientación. Las galerías continúan descendiendo más allá del último nivel cartografiado.",
+		Vector2(890, 500),
+		Color("c7a56a")
+	)
+
+func _spawn_lore(id_value: String, title_value: String, speaker_value: String, body_value: String, pos: Vector2, color: Color) -> void:
+	var clue := Node2D.new()
+	clue.name = id_value
+	clue.set_script(LoreScript)
+	clue.position = pos
+	clue.configure(id_value, title_value, speaker_value, body_value, color, 5)
+	add_child(clue)
 
 func _spawn_gatherable(item_id: String, pos: Vector2, color: Color) -> void:
 	var gatherable := Node2D.new()
