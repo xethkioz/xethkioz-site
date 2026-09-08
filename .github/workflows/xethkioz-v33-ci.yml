@@ -1,4 +1,4 @@
-name: World of Xethkioz v3.4 Production CI
+name: World of Xethkioz Production CI
 
 on:
   workflow_dispatch:
@@ -9,9 +9,14 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: world-of-xethkioz-production-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   godot-check:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
@@ -77,7 +82,17 @@ jobs:
           fi
           GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
           mkdir -p build/previews
-          xvfb-run -a "$GODOT" --path . --rendering-method gl_compatibility --script res://tools/v34_visual_capture.gd 2>&1 | tee /tmp/visual.log
+          set +e
+          timeout 180s xvfb-run -a "$GODOT" --audio-driver Dummy --path . --rendering-method gl_compatibility --script res://tools/v34_visual_capture.gd 2>&1 | tee /tmp/visual.log
+          STATUS=${PIPESTATUS[0]}
+          set -e
+          if [ "$STATUS" -eq 124 ]; then
+            echo "Production visual capture timed out after 180 seconds"
+            exit 1
+          fi
+          if [ "$STATUS" -ne 0 ]; then
+            exit "$STATUS"
+          fi
           for PREVIEW in v34_menu.png v34_creator.png v34_cuenca.png v34_lago.png v34_refugio.png; do
             test -s "build/previews/$PREVIEW"
           done
@@ -89,7 +104,7 @@ jobs:
       - name: Upload real production previews
         uses: actions/upload-artifact@v4
         with:
-          name: world-of-xethkioz-v34-previews-${{ github.sha }}
+          name: world-of-xethkioz-v35-previews-${{ github.sha }}
           path: build/previews/*.png
           retention-days: 30
           if-no-files-found: error
@@ -132,7 +147,7 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: world-of-xethkioz-v34-production-${{ github.sha }}
+          name: world-of-xethkioz-v35-production-${{ github.sha }}
           path: build/windows/*
           retention-days: 30
           if-no-files-found: error
@@ -141,7 +156,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: xethkioz-v34-ci-diagnostics-${{ github.sha }}
+          name: xethkioz-production-ci-diagnostics-${{ github.sha }}
           path: |
             /tmp/import.log
             /tmp/boot.log
@@ -159,14 +174,14 @@ jobs:
           set -euxo pipefail
           SHORT_SHA="${GITHUB_SHA::8}"
           mkdir -p /tmp/xethkioz-snapshot
-          tar -czf "/tmp/xethkioz-snapshot/world-of-xethkioz-v34-${SHORT_SHA}.tar.gz" \
-            project.godot export_presets.cfg src scenes data assets tools docs/v33 docs/v34
+          tar -czf "/tmp/xethkioz-snapshot/world-of-xethkioz-v35-${SHORT_SHA}.tar.gz" \
+            project.godot export_presets.cfg src scenes data assets tools docs/v33 docs/v34 docs/v35
 
       - name: Upload source snapshot
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: world-of-xethkioz-v34-source-${{ github.sha }}
+          name: world-of-xethkioz-v35-source-${{ github.sha }}
           path: /tmp/xethkioz-snapshot/*.tar.gz
           retention-days: 30
           if-no-files-found: error
