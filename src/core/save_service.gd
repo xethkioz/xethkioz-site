@@ -1,14 +1,17 @@
 extends Node
 
-const SAVE_PATH := "user://world_of_xethkioz_v33.json"
+const SAVE_PATH := "user://world_of_xethkioz_v34.json"
+const LEGACY_SAVE_PATH := "user://world_of_xethkioz_v33.json"
 
 func has_save() -> bool:
-	return FileAccess.file_exists(SAVE_PATH)
+	return FileAccess.file_exists(SAVE_PATH) or FileAccess.file_exists(LEGACY_SAVE_PATH)
 
 func delete_save() -> bool:
-	if not has_save():
-		return true
-	return DirAccess.remove_absolute(ProjectSettings.globalize_path(SAVE_PATH)) == OK
+	var ok := true
+	for path in [SAVE_PATH, LEGACY_SAVE_PATH]:
+		if FileAccess.file_exists(path):
+			ok = DirAccess.remove_absolute(ProjectSettings.globalize_path(path)) == OK and ok
+	return ok
 
 func save_game(extra: Dictionary = {}) -> bool:
 	var payload := GameState.to_dict()
@@ -23,9 +26,10 @@ func save_game(extra: Dictionary = {}) -> bool:
 	return true
 
 func load_game() -> Dictionary:
-	if not has_save():
+	var path := SAVE_PATH if FileAccess.file_exists(SAVE_PATH) else LEGACY_SAVE_PATH
+	if not FileAccess.file_exists(path):
 		return {}
-	var file := FileAccess.open(SAVE_PATH, FileAccess.READ)
+	var file := FileAccess.open(path, FileAccess.READ)
 	if file == null:
 		return {}
 	var parsed = JSON.parse_string(file.get_as_text())
@@ -33,5 +37,7 @@ func load_game() -> Dictionary:
 		GameState.apply_dict(parsed)
 		InventoryService.apply_dict(parsed.get("inventory", {}))
 		CharacterProfile.apply_dict(parsed.get("character_profile", {}))
+		if path == LEGACY_SAVE_PATH:
+			save_game({"migrated_from": "v33"})
 		return parsed
 	return {}
