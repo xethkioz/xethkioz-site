@@ -4,6 +4,7 @@ var hp_label: Label
 var progress_label: Label
 var quest_label: Label
 var world_label: Label
+var familiar_label: Label
 var lore_label: Label
 var inventory_label: Label
 var toast_label: Label
@@ -25,11 +26,15 @@ func _ready() -> void:
 	EventBus.weather_changed.connect(_on_weather)
 	EventBus.time_changed.connect(_on_time)
 	EventBus.lore_discovered.connect(_on_lore_discovered)
+	EventBus.familiar_captured.connect(_on_familiar_captured)
+	EventBus.familiar_assessed.connect(_on_familiar_assessed)
+	EventBus.active_familiar_changed.connect(_on_active_familiar_changed)
 	EventBus.toast_requested.connect(_on_toast)
 	EventBus.dialog_requested.connect(_on_dialog)
 	_on_progress(GameState.player_level, GameState.player_xp, GameState.xp_to_next())
 	_on_currency(GameState.crystals)
 	_on_inventory(InventoryService.stacks)
+	_update_familiar_label()
 	_update_lore_label()
 
 func _process(delta: float) -> void:
@@ -51,6 +56,7 @@ func _build_ui() -> void:
 	progress_label = _make_label(Vector2(16, 34), Vector2(230, 30), "Nivel 1", 10)
 	quest_label = _make_label(Vector2(382, 12), Vector2(248, 54), "Misión", 10)
 	quest_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	familiar_label = _make_label(Vector2(12, 270), Vector2(360, 18), "Familiar · Ninguno", 8)
 	lore_label = _make_label(Vector2(12, 288), Vector2(330, 18), "Atlas · Ecos 0/5", 8)
 	inventory_label = _make_label(Vector2(12, 310), Vector2(330, 18), "Bolsa", 8)
 	world_label = _make_label(Vector2(12, 332), Vector2(300, 20), "", 9)
@@ -105,6 +111,33 @@ func _on_lore_discovered(_lore_id: String, _title: String, _discovered_count: in
 func _update_lore_label() -> void:
 	if lore_label:
 		lore_label.text = "Atlas · Ecos %d/%d" % [GameState.discovered_lore.size(), _lore_total_hint]
+
+func _on_familiar_captured(_species_id: String, _display_name: String) -> void:
+	_update_familiar_label()
+
+func _on_familiar_assessed(_species_id: String, _affinity: String, _mentor_id: String) -> void:
+	_update_familiar_label()
+
+func _on_active_familiar_changed(_species_id: String) -> void:
+	_update_familiar_label()
+
+func _update_familiar_label() -> void:
+	if familiar_label == null:
+		return
+	if GameState.active_familiar_id.is_empty():
+		familiar_label.text = "Familiar · Ninguno"
+		return
+	var data := GameState.active_familiar_data()
+	if data.is_empty():
+		familiar_label.text = "Familiar · Ninguno"
+		return
+	var name := str(data.get("display_name", GameState.active_familiar_id))
+	if not bool(data.get("assessed", false)):
+		familiar_label.text = "Familiar · %s · Afinidad ?" % name
+		return
+	var affinity := str(data.get("affinity", "desconocida")).capitalize()
+	var mentor := str(data.get("mentor_id", "")).capitalize()
+	familiar_label.text = "Familiar · %s · %s · %s" % [name, affinity, mentor]
 
 func _on_quest(title: String, objective: String, completed: bool) -> void:
 	if quest_label:
