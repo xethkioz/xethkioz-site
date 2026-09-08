@@ -4,7 +4,7 @@ const BACKGROUND := preload("res://assets/production/interiors/mentor_trial_room
 const PlayerScript := preload("res://src/player/player_controller_production.gd")
 const XethkiozScript := preload("res://src/pets/xethkioz_companion_production.gd")
 const TrialScript := preload("res://src/world/mentor_trial_controller_v36.gd")
-const QuestScript := preload("res://src/quest/quest_manager_v36.gd")
+const QuestScript := preload("res://src/quest/quest_manager_v36_live.gd")
 const HudScript := preload("res://src/ui/hud_controller_v36.gd")
 const PromptScript := preload("res://src/ui/interaction_prompt.gd")
 const ReturnScript := preload("res://src/world/mentor_trial_return_v36.gd")
@@ -85,7 +85,6 @@ func _build_collisions() -> void:
 	_add_wall(Rect2(600, 24, 16, 312))
 	_add_wall(Rect2(24, 326, 250, 10))
 	_add_wall(Rect2(366, 326, 250, 10))
-	# La puerta superior es el objetivo del puzle, no un pasillo de salida.
 	_add_wall(Rect2(266, 36, 108, 80))
 
 func _add_wall(rect: Rect2) -> void:
