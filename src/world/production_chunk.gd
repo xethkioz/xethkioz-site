@@ -56,12 +56,12 @@ func _build() -> void:
 	_place_chunk_landmarks()
 
 func _fill_base() -> void:
-	var base_tile: Vector2i = Factory.GRASS
+	var base_variants: Array = Factory.GRASS_VARIANTS
 	if biome in ["ruins", "boss"]:
-		base_tile = Factory.DARK_GRASS
+		base_variants = Factory.DARK_GRASS_VARIANTS
 	for y in range(CHUNK_TILES):
 		for x in range(CHUNK_TILES):
-			_ground.set_cell(Vector2i(x, y), 0, base_tile)
+			_ground.set_cell(Vector2i(x, y), 0, _variant(base_variants, x, y, 1))
 
 func _carve_routes() -> void:
 	var c: int = CHUNK_TILES >> 1
@@ -69,7 +69,7 @@ func _carve_routes() -> void:
 	var half: int = width >> 1
 	for y in range(c - half, c + half + 1):
 		for x in range(c - half, c + half + 1):
-			_ground.set_cell(Vector2i(x, y), 0, Factory.PATH)
+			_ground.set_cell(Vector2i(x, y), 0, _variant(Factory.PATH_VARIANTS, x, y, 2))
 	if bool(exits.get("n", false)):
 		for y in range(0, c + 1):
 			_paint_path_band(Vector2i(c, y), width)
@@ -88,7 +88,7 @@ func _paint_path_band(center: Vector2i, width: int, vertical := true) -> void:
 	for offset in range(-half, half + 1):
 		var cell: Vector2i = center + (Vector2i(offset, 0) if vertical else Vector2i(0, offset))
 		if _inside(cell):
-			_ground.set_cell(cell, 0, Factory.PATH)
+			_ground.set_cell(cell, 0, _variant(Factory.PATH_VARIANTS, cell.x, cell.y, 3))
 
 func _apply_biome_features() -> void:
 	match biome:
@@ -108,11 +108,12 @@ func _apply_biome_features() -> void:
 func _paint_river() -> void:
 	for y in range(CHUNK_TILES):
 		for x in range(3, 9):
-			_ground.set_cell(Vector2i(x, y), 0, Factory.WATER if x not in [3, 8] else Factory.WATER_FOAM)
+			var variants: Array = Factory.WATER_VARIANTS if x not in [3, 8] else Factory.WATER_FOAM_VARIANTS
+			_ground.set_cell(Vector2i(x, y), 0, _variant(variants, x, y, 4))
 	var bridge_y: int = CHUNK_TILES >> 1
 	for x in range(3, 9):
-		_ground.set_cell(Vector2i(x, bridge_y), 0, Factory.BRIDGE)
-		_ground.set_cell(Vector2i(x, bridge_y + 1), 0, Factory.BRIDGE)
+		_ground.set_cell(Vector2i(x, bridge_y), 0, _variant(Factory.BRIDGE_VARIANTS, x, bridge_y, 5))
+		_ground.set_cell(Vector2i(x, bridge_y + 1), 0, _variant(Factory.BRIDGE_VARIANTS, x, bridge_y + 1, 5))
 	_add_rect_blocker(Rect2(48, 0, 96, float(bridge_y * TILE_SIZE)))
 	_add_rect_blocker(Rect2(48, float((bridge_y + 2) * TILE_SIZE), 96, float(CHUNK_PIXELS - (bridge_y + 2) * TILE_SIZE)))
 
@@ -122,9 +123,9 @@ func _paint_lake() -> void:
 		for x in range(11, 31):
 			var d: float = Vector2(x, y).distance_to(center)
 			if d < 8.4:
-				_ground.set_cell(Vector2i(x, y), 0, Factory.WATER)
+				_ground.set_cell(Vector2i(x, y), 0, _variant(Factory.WATER_VARIANTS, x, y, 6))
 			elif d < 9.4:
-				_ground.set_cell(Vector2i(x, y), 0, Factory.WATER_FOAM)
+				_ground.set_cell(Vector2i(x, y), 0, _variant(Factory.WATER_FOAM_VARIANTS, x, y, 7))
 	_add_circle_blocker(Vector2(344, 184), 124.0)
 	for cell in [Vector2i(13,19), Vector2i(16,20), Vector2i(23,21), Vector2i(29,18)]:
 		_place_large_prop(cell, 5, false)
@@ -133,9 +134,9 @@ func _paint_ruins() -> void:
 	for y in range(7, 23):
 		for x in range(7, 25):
 			if x in [7, 24] or y in [7, 22]:
-				_detail.set_cell(Vector2i(x, y), 0, Factory.RUIN_WALL)
+				_detail.set_cell(Vector2i(x, y), 0, _variant(Factory.RUIN_WALL_VARIANTS, x, y, 8))
 			elif (x + y) % 3 != 0:
-				_ground.set_cell(Vector2i(x, y), 0, Factory.RUIN_FLOOR)
+				_ground.set_cell(Vector2i(x, y), 0, _variant(Factory.RUIN_FLOOR_VARIANTS, x, y, 9))
 	for opening in [Vector2i(15, 7), Vector2i(16, 7), Vector2i(7, 15), Vector2i(7, 16)]:
 		_detail.erase_cell(opening)
 
@@ -145,9 +146,9 @@ func _paint_sanctuary() -> void:
 		for x in range(6, 27):
 			var d: float = Vector2(x, y).distance_to(Vector2(c.x, c.y))
 			if d < 9.0:
-				_ground.set_cell(Vector2i(x, y), 0, Factory.RUIN_FLOOR)
+				_ground.set_cell(Vector2i(x, y), 0, _variant(Factory.RUIN_FLOOR_VARIANTS, x, y, 10))
 	for p in [Vector2i(10, 10), Vector2i(22, 10), Vector2i(10, 22), Vector2i(22, 22)]:
-		_detail.set_cell(p, 0, Factory.CRYSTAL)
+		_detail.set_cell(p, 0, _variant(Factory.CRYSTAL_VARIANTS, p.x, p.y, 11))
 
 func _paint_boss_arena() -> void:
 	var c := Vector2(16, 16)
@@ -155,22 +156,22 @@ func _paint_boss_arena() -> void:
 		for x in range(CHUNK_TILES):
 			var d: float = Vector2(x, y).distance_to(c)
 			if d < 11.5:
-				_ground.set_cell(Vector2i(x, y), 0, Factory.DIRT)
+				_ground.set_cell(Vector2i(x, y), 0, _variant(Factory.DIRT_VARIANTS, x, y, 12))
 			elif d < 13.0:
-				_detail.set_cell(Vector2i(x, y), 0, Factory.CLIFF)
+				_detail.set_cell(Vector2i(x, y), 0, _variant(Factory.CLIFF_VARIANTS, x, y, 13))
 
 func _paint_refuge_clearance() -> void:
 	for y in range(7, 25):
 		for x in range(5, 27):
 			if x in range(8, 24) and y in range(9, 22):
-				_ground.set_cell(Vector2i(x, y), 0, Factory.PATH)
+				_ground.set_cell(Vector2i(x, y), 0, _variant(Factory.PATH_VARIANTS, x, y, 14))
 
 func _decorate() -> void:
 	for y in range(1, CHUNK_TILES - 1):
 		for x in range(1, CHUNK_TILES - 1):
 			var cell := Vector2i(x, y)
 			var base: Vector2i = _ground.get_cell_atlas_coords(cell)
-			if base in [Factory.PATH, Factory.WATER, Factory.WATER_FOAM, Factory.BRIDGE, Factory.RUIN_FLOOR]:
+			if Factory.is_protected_ground(base):
 				continue
 			var roll: int = _cell_roll(x, y)
 			if roll < 4:
@@ -178,11 +179,11 @@ func _decorate() -> void:
 			elif roll < 6 and biome in ["forest", "refuge", "lake"]:
 				_place_large_prop(cell, 1, true)
 			elif roll < 9:
-				_detail.set_cell(cell, 0, Factory.SHRUB)
+				_detail.set_cell(cell, 0, _variant(Factory.SHRUB_VARIANTS, x, y, 15))
 			elif roll < 11:
 				_place_large_prop(cell, 4, true)
 			elif roll == 11:
-				_detail.set_cell(cell, 0, Factory.FLOWERS)
+				_detail.set_cell(cell, 0, _variant(Factory.FLOWER_VARIANTS, x, y, 16))
 			elif roll == 12 and biome in ["ruins", "sanctuary", "boss"]:
 				_place_large_prop(cell, 2, true)
 			elif roll == 13 and biome in ["ruins", "sanctuary"]:
@@ -271,6 +272,10 @@ func _add_circle_blocker(center: Vector2, radius: float) -> void:
 	collision.shape = shape
 	body.add_child(collision)
 	_blockers.add_child(body)
+
+func _variant(variants: Array, x: int, y: int, salt: int) -> Vector2i:
+	var roll: int = _cell_roll(x + salt * 17, y + salt * 29)
+	return Factory.choose(variants, roll)
 
 func _cell_roll(x: int, y: int) -> int:
 	var n: int = seed_value ^ (x * 374761393) ^ (y * 668265263)
