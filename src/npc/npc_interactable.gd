@@ -3,13 +3,15 @@ extends Node2D
 var npc_id := "npc"
 var display_name := "NPC"
 var dialogue_lines: Array[String] = []
+var contextual_rules: Array = []
 var accent_color := Color("d8d3c5")
 var _line_index := 0
 
-func configure(id_value: String, name_value: String, lines: Array[String], color_value: Color) -> void:
+func configure(id_value: String, name_value: String, lines: Array[String], color_value: Color, rules: Array = []) -> void:
 	npc_id = id_value
 	display_name = name_value
 	dialogue_lines = lines.duplicate()
+	contextual_rules = rules.duplicate(true)
 	accent_color = color_value
 	queue_redraw()
 
@@ -18,12 +20,23 @@ func _ready() -> void:
 	queue_redraw()
 
 func interact(_actor: Node = null) -> void:
-	var line := "..."
-	if not dialogue_lines.is_empty():
-		line = dialogue_lines[_line_index % dialogue_lines.size()]
-		_line_index += 1
+	var line := _contextual_line()
+	if line.is_empty():
+		line = "..."
+		if not dialogue_lines.is_empty():
+			line = dialogue_lines[_line_index % dialogue_lines.size()]
+			_line_index += 1
 	EventBus.dialog_requested.emit(display_name, line)
 	EventBus.npc_interacted.emit(npc_id)
+
+func _contextual_line() -> String:
+	for rule in contextual_rules:
+		if not rule is Dictionary:
+			continue
+		var lore_id := str(rule.get("lore_id", ""))
+		if not lore_id.is_empty() and GameState.has_lore(lore_id):
+			return str(rule.get("line", ""))
+	return ""
 
 func interaction_label() -> String:
 	return display_name
