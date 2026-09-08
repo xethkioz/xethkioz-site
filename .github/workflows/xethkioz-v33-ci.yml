@@ -43,6 +43,18 @@ jobs:
           if [ "${code:-0}" -ne 0 ] && [ "${code:-0}" -ne 124 ]; then exit "${code}"; fi
           if grep -E "SCRIPT ERROR|Parse Error|Compile Error" /tmp/boot.log; then exit 1; fi
 
+      - name: Boot Golden Region runtime
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          timeout 8s "$GODOT" --headless --path . scenes/v34/GoldenRegion.tscn 2>&1 | tee /tmp/golden.log || code=$?
+          if [ "${code:-0}" -ne 0 ] && [ "${code:-0}" -ne 124 ]; then exit "${code}"; fi
+          if grep -E "SCRIPT ERROR|Parse Error|Compile Error|Invalid call|Invalid access|ERROR:" /tmp/golden.log; then
+            echo "Golden Region runtime smoke test failed"
+            exit 1
+          fi
+
       - name: Cache Godot export templates
         uses: actions/cache@v4
         with:
@@ -94,6 +106,7 @@ jobs:
           path: |
             /tmp/import.log
             /tmp/boot.log
+            /tmp/golden.log
             /tmp/export.log
           retention-days: 7
           if-no-files-found: ignore
