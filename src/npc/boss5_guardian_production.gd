@@ -34,7 +34,9 @@ func _physics_process(delta: float) -> void:
 		_spawn_feedback("burst", Vector2.UP, Color("d8ceff") if phase == 3 else Color("9bcf75"), "FASE %d" % phase)
 	if is_instance_valid(_visual):
 		var phase_tint: Color = Color.WHITE
-		if phase == 2:
+		if is_purgable():
+			phase_tint = Color(0.80, 0.86, 0.72, 1.0)
+		elif phase == 2:
 			phase_tint = Color(0.92, 1.0, 0.86)
 		elif phase == 3 and not core_exposed:
 			phase_tint = Color(0.58, 0.52, 0.64)
@@ -42,14 +44,16 @@ func _physics_process(delta: float) -> void:
 			phase_tint = Color(1.0, 0.93, 1.0)
 		if _phase_flash_left > 0.0:
 			phase_tint = phase_tint.lerp(Color("d8ceff"), 0.45)
-		if _hit_flash_left > 0.0:
+		if _hit_flash_left > 0.0 and not is_purgable():
 			phase_tint = Color(1.0, 0.60, 0.46, 1.0)
 		_visual.modulate = phase_tint
-		var breathe: float = 1.0 + sin(_visual_time * 2.4) * (0.015 if phase < 3 else 0.025)
+		var breathe: float = 1.0 + sin(_visual_time * (1.4 if is_purgable() else 2.4)) * (0.008 if is_purgable() else (0.015 if phase < 3 else 0.025))
 		var entrance_t: float = 1.0 - clampf(_entrance_left / 0.85, 0.0, 1.0)
 		var entrance_scale: float = lerpf(0.76, 1.0, ease(entrance_t, 0.55))
 		_visual.scale = Vector2.ONE * breathe * entrance_scale
-		_visual.position.y = -24.0 - sin(_visual_time * 1.7) * (0.8 if phase < 3 else 1.5)
+		_visual.position.y = (-18.0 if is_purgable() else -24.0) - sin(_visual_time * 1.7) * (0.5 if is_purgable() else (0.8 if phase < 3 else 1.5))
+		_visual.rotation = -0.08 if is_purgable() else 0.0
+	queue_redraw()
 
 func take_damage(amount: float) -> void:
 	if amount <= 0.0:
@@ -61,8 +65,14 @@ func take_damage(amount: float) -> void:
 		return
 	_hit_flash_left = 0.14
 	_spawn_feedback("hit", _impact_direction(), Color("ff8c42"), str(roundi(dealt)))
-	if health <= 0.0:
-		_spawn_feedback("death", Vector2.UP, Color("d8ceff"), "PURIFICADO")
+	if is_purgable():
+		_spawn_feedback("burst", Vector2.UP, Color("d8ceff"), "ESTABILIZAR")
+
+func interact(actor: Node = null) -> void:
+	var was_purgable := is_purgable()
+	await super.interact(actor)
+	if was_purgable:
+		_spawn_feedback("burst", Vector2.UP, Color("79b99a"), "ESTABILIZADO")
 
 func _impact_direction() -> Vector2:
 	if is_instance_valid(_player):
@@ -84,13 +94,12 @@ func _draw() -> void:
 	var ratio: float = health / max_health if max_health > 0.0 else 0.0
 	var telegraph: float = pulse_windup_ratio()
 
-	# Arena presence and grounded silhouette.
 	draw_ellipse_shadow(Vector2(0, 18), Vector2(44, 14), Color(0.02, 0.05, 0.04, 0.38))
-	if phase >= 2:
+	if phase >= 2 and not is_purgable():
 		draw_circle(Vector2(0, 2), ROOT_PULSE_RADIUS, Color(0.28, 0.14, 0.36, 0.055))
 		draw_arc(Vector2(0, 2), ROOT_PULSE_RADIUS, 0.0, TAU, 56, Color(0.55, 0.36, 0.96, 0.24), 2.0)
 
-	if telegraph > 0.0:
+	if telegraph > 0.0 and not is_purgable():
 		var danger: Color = Color(0.88, 0.48 + telegraph * 0.25, 1.0, 0.36 + telegraph * 0.52)
 		var fill_alpha: float = 0.045 + telegraph * 0.095
 		draw_circle(Vector2(0, 2), ROOT_PULSE_RADIUS, Color(danger.r, danger.g, danger.b, fill_alpha))
@@ -104,7 +113,7 @@ func _draw() -> void:
 			draw_polyline(PackedVector2Array([inner, bend, outer]), Color(danger.r, danger.g, danger.b, danger.a * 0.72), 2.0)
 			draw_circle(outer, 2.1 + telegraph * 1.2, Color("d8ceff"))
 
-	if phase == 3:
+	if phase == 3 and not is_purgable():
 		var core_color: Color = Color("f3ecff") if core_exposed else Color("48404f")
 		var core_alpha: float = 0.26 + 0.12 * (0.5 + 0.5 * sin(_visual_time * 4.0)) if core_exposed else 0.10
 		draw_circle(Vector2(0, -18), 16.0, Color(core_color.r, core_color.g, core_color.b, core_alpha))
@@ -119,19 +128,24 @@ func _draw() -> void:
 				var start: float = _visual_time * 0.25 + TAU * float(i) / 4.0
 				draw_arc(Vector2(0, -18), 27.0, start, start + 0.72, 8, Color(0.43,0.36,0.50,0.85), 3.0)
 
+	if is_purgable():
+		var calm: float = 0.5 + 0.5 * sin(_visual_time * 2.2)
+		draw_circle(Vector2(0, -10), 31.0, Color(0.40, 0.78, 0.58, 0.05 + calm * 0.04))
+		draw_arc(Vector2(0, -10), 35.0 + calm * 2.0, 0.0, TAU, 42, Color(0.72,0.88,0.72,0.58), 2.4)
+
 	if _phase_flash_left > 0.0:
 		var flash_ratio: float = _phase_flash_left / 0.55
 		draw_arc(Vector2(0, -8), 50.0 + (1.0 - flash_ratio) * 25.0, 0.0, TAU, 40, Color(0.72,0.60,1.0,flash_ratio * 0.55), 3.0)
-	if _mark_time > 0.0:
+	if _mark_time > 0.0 and not is_purgable():
 		draw_arc(Vector2(0, -15), 42.0, 0.0, TAU, 36, Color("c686ff"), 2.0)
-	if _root_time > 0.0:
+	if _root_time > 0.0 and not is_purgable():
 		draw_line(Vector2(-24, 17), Vector2(24, 17), Color("b99a6a"), 4.0)
 
 	var font: Font = ThemeDB.fallback_font
 	draw_string(font, Vector2(-64, -83), "GUARDIÁN DEL BOSQUE VELADO", HORIZONTAL_ALIGNMENT_CENTER, 128, 8, Color("f0f0f5"))
-	draw_string(font, Vector2(-30, -72), "FASE %d" % phase, HORIZONTAL_ALIGNMENT_CENTER, 60, 6, Color("d8ceff"))
+	draw_string(font, Vector2(-34, -72), "ESTABILIZAR" if is_purgable() else "FASE %d" % phase, HORIZONTAL_ALIGNMENT_CENTER, 68, 6, Color("d8ceff"))
 	draw_rect(Rect2(-50, -65, 100, 7), Color("17151b"))
-	draw_rect(Rect2(-50, -65, 100.0 * ratio, 7), Color("ff8c42"))
+	draw_rect(Rect2(-50, -65, 100.0 * ratio, 7), Color("79b99a") if is_purgable() else Color("ff8c42"))
 	draw_rect(Rect2(-50, -65, 100, 7), Color("8b5cf6"), false, 1.0)
 
 func draw_ellipse_shadow(center: Vector2, radii: Vector2, color: Color) -> void:
