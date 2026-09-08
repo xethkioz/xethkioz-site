@@ -2,9 +2,9 @@ extends "res://src/ui/game_bootstrap.gd"
 
 const GOLDEN_REGION_SCENE := "res://scenes/v34/GoldenRegion.tscn"
 const TITLE_BACKDROP := preload("res://assets/production/ui/title_izrdralar.svg")
-const VIAJERO_SHEET := preload("res://assets/production/characters/viajero_sheet.svg")
+const CreatorPreviewScript := preload("res://src/ui/creator_avatar_preview.gd")
 
-var _creator_sprite: TextureRect
+var _creator_avatar: Control
 
 func _build_shell() -> void:
 	var background := TextureRect.new()
@@ -35,18 +35,16 @@ func _show_creator() -> void:
 	if is_instance_valid(preview_body):
 		preview_body.visible = false
 	var parent: Control = preview_head.get_parent() as Control if is_instance_valid(preview_head) else content
-	_creator_sprite = TextureRect.new()
-	_creator_sprite.name = "ViajeroCreatorPreview"
-	_creator_sprite.position = Vector2(51, 45)
-	_creator_sprite.size = Vector2(96, 96)
-	_creator_sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	_creator_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	_creator_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	_creator_sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	parent.add_child(_creator_sprite)
+	_creator_avatar = Control.new()
+	_creator_avatar.name = "ViajeroCreatorPreview"
+	_creator_avatar.position = Vector2(51, 42)
+	_creator_avatar.size = Vector2(96, 148)
+	_creator_avatar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_creator_avatar.set_script(CreatorPreviewScript)
+	parent.add_child(_creator_avatar)
 	for node in parent.get_children():
 		if node is Label and "Vista provisional" in node.text:
-			node.text = "Tu apariencia se conserva\nen partida y guardado."
+			node.text = "Esta apariencia se conserva\nen partida y guardado."
 	_update_creator_preview()
 
 func _update_creator_preview() -> void:
@@ -59,15 +57,14 @@ func _update_creator_preview() -> void:
 	if is_instance_valid(preview_name):
 		var display_name: String = name_edit.text.strip_edges() if is_instance_valid(name_edit) else CharacterProfile.player_name
 		preview_name.text = display_name.to_upper() if not display_name.is_empty() else "VIAJERO"
-	if not is_instance_valid(_creator_sprite):
+	if not is_instance_valid(_creator_avatar):
 		return
-	var atlas := AtlasTexture.new()
-	atlas.atlas = VIAJERO_SHEET
-	atlas.region = Rect2(32, 0, 32, 32)
-	_creator_sprite.texture = atlas
+	var body_index: int = body_option.selected if is_instance_valid(body_option) else CharacterProfile.body_type
+	var skin_index: int = skin_option.selected if is_instance_valid(skin_option) else CharacterProfile.skin_tone
+	var hair_index: int = hair_option.selected if is_instance_valid(hair_option) else CharacterProfile.hair_style
+	var hair_color_index: int = hair_color_option.selected if is_instance_valid(hair_color_option) else CharacterProfile.hair_color
 	var accent_index: int = accent_option.selected if is_instance_valid(accent_option) else CharacterProfile.accent_color
-	var accent: Color = CharacterProfile.ACCENT_COLORS[clampi(accent_index, 0, CharacterProfile.ACCENT_COLORS.size() - 1)]
-	_creator_sprite.modulate = accent.lerp(Color.WHITE, 0.72)
+	_creator_avatar.configure(body_index, skin_index, hair_index, hair_color_index, accent_index)
 
 func _enter_world() -> void:
 	SaveService.save_game({"intro_seen": true})
