@@ -8,6 +8,9 @@ extends CharacterBody2D
 @export var attack_damage := 13.0
 @export var xp_reward := 260
 
+const ROOT_PULSE_RADIUS := 74.0
+const ROOT_PULSE_WINDUP := 0.85
+
 var health := 360.0
 var phase := 1
 var core_exposed := true
@@ -16,6 +19,12 @@ var _attack_cooldown := 0.0
 var _pulse_cooldown := 2.8
 var _core_timer := 0.0
 var _defeated := false
+var _pulse_pending := false
+var _pulse_windup := 0.0
+var _slow_multiplier := 1.0
+var _slow_time := 0.0
+var _root_time := 0.0
+var _mark_time := 0.0
 
 func _ready() -> void:
 	add_to_group("enemies")
@@ -30,6 +39,15 @@ func _physics_process(delta: float) -> void:
 		return
 	_attack_cooldown = maxf(0.0, _attack_cooldown - delta)
 	_pulse_cooldown = maxf(0.0, _pulse_cooldown - delta)
+	_slow_time = maxf(0.0, _slow_time - delta)
+	_root_time = maxf(0.0, _root_time - delta)
+	_mark_time = maxf(0.0, _mark_time - delta)
+	if _slow_time <= 0.0:
+		_slow_multiplier = 1.0
+	if _pulse_pending:
+		_pulse_windup = maxf(0.0, _pulse_windup - delta)
+		if _pulse_windup <= 0.0:
+			_resolve_root_pulse()
 	if not is_instance_valid(_player):
 		_player = get_tree().get_first_node_in_group("player") as Node2D
 		return
@@ -38,9 +56,9 @@ func _physics_process(delta: float) -> void:
 		_update_core_cycle(delta)
 	var to_player := _player.global_position - global_position
 	var distance := to_player.length()
-	if distance <= aggro_range and distance > attack_range:
+	if _root_time <= 0.0 and distance <= aggro_range and distance > attack_range:
 		var speed_bonus := 1.22 if phase >= 2 else 1.0
-		velocity = to_player.normalized() * move_speed * speed_bonus
+		velocity = to_player.normalized() * move_speed * speed_bonus * _slow_multiplier
 		move_and_slide()
 	else:
 		velocity = Vector2.ZERO
@@ -48,9 +66,9 @@ func _physics_process(delta: float) -> void:
 		_attack_cooldown = 1.05 if phase == 1 else 0.82
 		if _player.has_method("take_damage"):
 			_player.take_damage(attack_damage + float(phase - 1) * 2.0)
-	if phase >= 2 and _pulse_cooldown <= 0.0:
+	if phase >= 2 and not _pulse_pending and _pulse_cooldown <= 0.0:
 		_pulse_cooldown = 3.2 if phase == 2 else 2.5
-		_root_pulse(distance)
+		_start_root_pulse()
 	queue_redraw()
 
 func _update_phase() -> void:
@@ -77,10 +95,23 @@ func _update_core_cycle(delta: float) -> void:
 	_core_timer = 2.4 if core_exposed else 1.8
 	EventBus.toast_requested.emit("Núcleo expuesto" if core_exposed else "El Guardián protege su núcleo")
 
-func _root_pulse(distance_to_player: float) -> void:
+func _start_root_pulse() -> void:
+	_pulse_pending = true
+	_pulse_windup = ROOT_PULSE_WINDUP
 	EventBus.toast_requested.emit("Raíces prismáticas · salí del círculo")
-	if distance_to_player <= 74.0 and is_instance_valid(_player) and _player.has_method("take_damage"):
+
+func _resolve_root_pulse() -> void:
+	_pulse_pending = false
+	if not is_instance_valid(_player):
+		return
+	if global_position.distance_to(_player.global_position) <= ROOT_PULSE_RADIUS and _player.has_method("take_damage"):
 		_player.take_damage(9.0 if phase == 2 else 12.0)
+		EventBus.toast_requested.emit("Impacto de raíces · evitá el próximo pulso")
+
+func pulse_windup_ratio() -> float:
+	if not _pulse_pending:
+		return 0.0
+	return 1.0 - clampf(_pulse_windup / ROOT_PULSE_WINDUP, 0.0, 1.0)
 
 func take_damage(amount: float) -> void:
 	if _defeated:
@@ -99,6 +130,24 @@ func take_damage(amount: float) -> void:
 		EventBus.toast_requested.emit("Guardián del Bosque Velado purificado")
 		queue_free()
 
+func apply_slow(multiplier: float, duration: float) -> void:
+	_slow_multiplier = clampf(multiplier, 0.65, 1.0)
+	_slow_time = maxf(_slow_time, duration * 0.65)
+
+func apply_root(duration: float) -> void:
+	_root_time = maxf(_root_time, minf(0.75, duration * 0.45))
+
+func apply_mark(duration: float) -> void:
+	_mark_time = maxf(_mark_time, duration)
+	queue_redraw()
+
+func consume_mark() -> bool:
+	if _mark_time <= 0.0:
+		return false
+	_mark_time = 0.0
+	queue_redraw()
+	return true
+
 func _draw() -> void:
 	var ratio := health / max_health if max_health > 0.0 else 0.0
 	var body_color := Color("375c45") if phase == 1 else Color("48643f")
@@ -108,7 +157,10 @@ func _draw() -> void:
 	draw_arc(Vector2.ZERO, 25.0, 0.0, TAU, 32, Color("8b5cf6"), 2.0)
 	if phase == 3:
 		draw_circle(Vector2.ZERO, 7.0, Color("d8ceff") if core_exposed else Color("2c2632"))
-	if phase >= 2:
-		draw_arc(Vector2.ZERO, 74.0, 0.0, TAU, 40, Color(0.55,0.36,0.96,0.24), 2.0)
+	if _pulse_pending:
+		var pulse_ratio := pulse_windup_ratio()
+		draw_arc(Vector2.ZERO, ROOT_PULSE_RADIUS, 0.0, TAU, 48, Color(0.9, 0.38 + pulse_ratio * 0.25, 1.0, 0.35 + pulse_ratio * 0.45), 3.0)
+	if _mark_time > 0.0:
+		draw_arc(Vector2.ZERO, 30.0, 0.0, TAU, 24, Color("c686ff"), 2.0)
 	draw_rect(Rect2(-28,-34,56,4), Color("1b1820"))
 	draw_rect(Rect2(-28,-34,56 * ratio,4), Color("ff8c42"))
