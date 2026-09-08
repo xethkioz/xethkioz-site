@@ -1,7 +1,6 @@
 extends "res://scripts/player_v8.gd"
 
-# Slightly stronger screen presence for the Golden Slice. The collider and
-# movement remain unchanged; only presentation/camera are tuned.
+# Golden Slice player presentation + apprentice skill bridge.
 func _ready() -> void:
 	super._ready()
 	var cam:=get_node_or_null("Camera2D") as Camera2D
@@ -12,5 +11,30 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
 	if visual_sprite:
-		if dash_timer>0.0: visual_sprite.scale=Vector2(1.95,1.66)
-		else: visual_sprite.scale=Vector2(1.78,1.78)
+		if dash_timer>0.0:
+			visual_sprite.scale=Vector2(1.95,1.66)
+		else:
+			visual_sprite.scale=Vector2(1.78,1.78)
+
+# The older player chain intentionally blocked skills before mentor selection.
+# The Golden Slice requires Q/E/R to work from Map 1 as neutral Prism skills.
+func _try_skill(slot: int) -> void:
+	if hero_class != "Aprendiz Prismático":
+		super._try_skill(slot)
+		return
+	if slot < 0 or slot >= skill_cooldowns.size() or skill_cooldowns[slot] > 0.0 or main_ref == null:
+		return
+	if slot == 3:
+		if main_ref.has_method("skill_locked_feedback"):
+			main_ref.skill_locked_feedback()
+		return
+	var costs: Array[float] = [10.0,16.0,22.0,58.0]
+	var cost: float = costs[slot]
+	if mana < cost:
+		if main_ref.has_method("mana_feedback"):
+			main_ref.mana_feedback(cost,mana)
+		return
+	mana -= cost
+	var cds: Array[float] = [1.9,4.2,5.8,16.0]
+	skill_cooldowns[slot] = cds[slot]
+	main_ref.use_hero_skill(slot,global_position,facing,damage_multiplier,hero_class)
