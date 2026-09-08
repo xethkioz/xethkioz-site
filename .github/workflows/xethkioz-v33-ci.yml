@@ -157,6 +157,25 @@ jobs:
           fi
           test -s "$TEMPLATE_DIR/windows_release_x86_64.exe"
 
+      - name: Export and boot packaged runtime
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          mkdir -p build/package
+          "$GODOT" --headless --path . --export-pack "Windows Desktop" build/package/WorldOfXethkiozDemo.pck 2>&1 | tee /tmp/package_export.log
+          if grep -E "SCRIPT ERROR|Parse Error|Compile Error|Invalid call|Invalid access|ERROR:" /tmp/package_export.log; then
+            echo "Packaged runtime export reported Godot errors"
+            exit 1
+          fi
+          test -s build/package/WorldOfXethkiozDemo.pck
+          timeout 10s "$GODOT" --headless --main-pack build/package/WorldOfXethkiozDemo.pck 2>&1 | tee /tmp/package_boot.log || code=$?
+          if [ "${code:-0}" -ne 0 ] && [ "${code:-0}" -ne 124 ]; then exit "${code}"; fi
+          if grep -E "SCRIPT ERROR|Parse Error|Compile Error|Invalid call|Invalid access|ERROR:|Failed loading resource|Cannot open file" /tmp/package_boot.log; then
+            echo "Packaged runtime boot failed"
+            exit 1
+          fi
+
       - name: Export Windows internal production build
         shell: bash
         run: |
@@ -193,6 +212,8 @@ jobs:
             /tmp/progression.log
             /tmp/visual.log
             /tmp/visual_quality.log
+            /tmp/package_export.log
+            /tmp/package_boot.log
             /tmp/export.log
           retention-days: 7
           if-no-files-found: ignore
