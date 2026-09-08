@@ -24,3 +24,9 @@ signal traversal_unlocked(traversal_id: String)
 signal weather_changed(weather_id: String)
 signal time_changed(hour: float)
 signal pet_bond_changed(bond: int)
+
+# Presentation-only world feedback. Gameplay systems emit intent; the active scene renders it.
+signal damage_feedback_requested(world_position: Vector2, amount: float, accent: Color, heavy: bool)
+signal slash_feedback_requested(world_position: Vector2, direction: Vector2, accent: Color, radius: float)
+signal pickup_feedback_requested(world_position: Vector2, label: String, accent: Color)
+signal burst_feedback_requested(world_position: Vector2, accent: Color, intensity: int)
