@@ -2,13 +2,14 @@ extends Node2D
 
 const PieceScript := preload("res://src/world/mentor_trial_piece_v36.gd")
 const TargetScript := preload("res://src/npc/mentor_trial_target_v36.gd")
-const PROPS := preload("res://assets/production/interiors/mentor_trial_props_v36.svg")
 
 var mentor_id := ""
 var completed := false
 var progress := 0
 var pieces: Array[Node] = []
 var rune_states := [false, false]
+var weight_pushes := 0
+var plate_loaded := false
 var counter_pushes := 0
 var target_order := [1,0,2]
 
@@ -45,9 +46,10 @@ func _build_ashley() -> void:
 	_spawn_piece("pulse",2,Vector2(420,190),"Pulso agudo",0,Color("d8ceff"))
 
 func _build_fermin() -> void:
-	EventBus.dialog_requested.emit("Fermín", "La placa no se rompe. Se carga. Mové el contrapeso hasta que el peso quede donde sirve, no donde molesta.")
+	EventBus.dialog_requested.emit("Fermín", "No empujes la puerta. Primero llevá el bloque a la placa para mantener presión. Con la placa cargada, recién ahí mové el contrapeso.")
+	_spawn_piece("training_weight",0,Vector2(115,196),"Empujar bloque hacia la placa",2,Color("ffb066"))
 	_spawn_piece("plate",0,Vector2(215,196),"Placa de presión",1,Color("ff8c42"))
-	_spawn_piece("counterweight",0,Vector2(435,196),"Empujar contrapeso",2,Color("ff8c42"))
+	_spawn_piece("counterweight",0,Vector2(435,196),"Mover contrapeso",2,Color("ff8c42"))
 
 func _build_isabella() -> void:
 	EventBus.dialog_requested.emit("Isabella", "Dos runas se alimentan entre sí. Invertí las dos. Si sólo cambiás una, el problema cambia de lado y sigue siendo problema.")
@@ -86,10 +88,15 @@ func handle_trial_interaction(role: String, index: int, _actor: Node, node: Node
 	match role:
 		"pulse":
 			_handle_pulse(index)
+		"training_weight":
+			_handle_training_weight(node)
 		"counterweight":
 			_handle_counterweight(node)
 		"plate":
-			EventBus.toast_requested.emit("La placa necesita peso constante")
+			if plate_loaded:
+				EventBus.toast_requested.emit("Placa estable · presión mantenida por el bloque")
+			else:
+				EventBus.toast_requested.emit("La placa se libera cuando te alejás · necesitás dejar peso encima")
 		"rune":
 			_handle_rune(index,node)
 
@@ -110,14 +117,43 @@ func _handle_pulse(index: int) -> void:
 	if progress >= 3:
 		_complete("ashley")
 
+func _handle_training_weight(node: Node) -> void:
+	if plate_loaded:
+		EventBus.toast_requested.emit("El bloque ya sostiene la placa")
+		return
+	weight_pushes += 1
+	var target_x := minf(215.0, 115.0 + float(weight_pushes) * 50.0)
+	var tween := create_tween()
+	tween.tween_property(node,"position:x",target_x,0.22).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	EventBus.toast_requested.emit("Bloque de presión · %d/2" % mini(weight_pushes,2))
+	if weight_pushes >= 2:
+		await tween.finished
+		plate_loaded = true
+		if node.has_method("set_piece_active"):
+			node.call("set_piece_active", false)
+		var plate := _find_piece("plate")
+		if is_instance_valid(plate) and plate.has_method("set_piece_active"):
+			plate.call("set_piece_active", false)
+		EventBus.toast_requested.emit("PLACA CARGADA · ahora mové el contrapeso")
+		queue_redraw()
+
 func _handle_counterweight(node: Node) -> void:
+	if not plate_loaded:
+		EventBus.toast_requested.emit("El contrapeso vuelve a trabarse · mantené la placa bajo presión")
+		return
 	counter_pushes += 1
 	var tween := create_tween()
-	tween.tween_property(node,"position:x",435.0 - float(counter_pushes) * 55.0,0.18).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(node,"position:x",435.0 - float(counter_pushes) * 45.0,0.18).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	EventBus.toast_requested.emit("Contrapeso · %d/4" % mini(counter_pushes,4))
 	if counter_pushes >= 4:
 		await tween.finished
 		_complete("fermin")
+
+func _find_piece(role_value: String) -> Node:
+	for piece in pieces:
+		if is_instance_valid(piece) and str(piece.get("role")) == role_value:
+			return piece
+	return null
 
 func _handle_rune(index: int, node: Node) -> void:
 	if index < 0 or index >= rune_states.size():
@@ -156,21 +192,25 @@ func _complete(solution_id: String) -> void:
 	var quest := get_tree().get_first_node_in_group("quest_manager")
 	if is_instance_valid(quest) and quest.has_method("complete_mentor_trial"):
 		quest.call("complete_mentor_trial", solution_id)
-	EventBus.dialog_requested.emit(solution_id.capitalize(), "La puerta respondió. No era una prueba de fuerza: era una forma de leer el mismo problema.")
+	EventBus.dialog_requested.emit(_mentor_name(solution_id), "La puerta respondió. No era una prueba de fuerza: era una forma de leer el mismo problema.")
 	EventBus.toast_requested.emit("PUERTA DE ENTRENAMIENTO · lectura registrada")
 	SaveService.save_game()
 	queue_redraw()
 
+func _mentor_name(id_value: String) -> String:
+	return {
+		"ashley":"Ashley",
+		"fermin":"Fermín",
+		"isabella":"Isabella",
+		"gael":"Gael"
+	}.get(id_value, id_value.capitalize())
+
 func _draw() -> void:
-	# Door lock / success indicator.
-	var atlas := AtlasTexture.new()
-	atlas.atlas = PROPS
-	atlas.region = Rect2(Vector2(160,0),Vector2(32,32))
-	var lock := Sprite2D.new()
-	# Draw trail only; sprite door lock is part of room art and avoids per-frame nodes.
 	if mentor_id == "gael" and not completed:
 		var route := [Vector2(320,158),Vector2(235,194),Vector2(405,194)]
 		for i in range(route.size()-1):
 			draw_dashed_line(route[i],route[i+1],Color(0.56,0.81,0.47,0.34),2.0,8.0)
+	if mentor_id == "fermin" and plate_loaded and not completed:
+		draw_arc(Vector2(215,196),22.0,0.0,TAU,24,Color(1.0,0.55,0.26,0.55),2.0)
 	if completed:
 		draw_arc(Vector2(320,92),26.0,0.0,TAU,32,Color("8fcf78"),3.0)
