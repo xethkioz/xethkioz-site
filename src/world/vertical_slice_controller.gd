@@ -8,6 +8,8 @@ const HudScript = preload("res://src/ui/hud_controller.gd")
 const QuestScript = preload("res://src/quest/quest_manager.gd")
 const ClockScript = preload("res://src/world/world_clock.gd")
 const WeatherScript = preload("res://src/world/weather_controller.gd")
+const GatherableScript = preload("res://src/world/gatherable.gd")
+const CraftingStationScript = preload("res://src/world/crafting_station.gd")
 
 var player: CharacterBody2D
 var fog_overlay: ColorRect
@@ -19,6 +21,7 @@ func _ready() -> void:
 	_spawn_player()
 	_spawn_xethkioz()
 	_spawn_npcs()
+	_spawn_resources()
 	_spawn_enemies()
 	_spawn_systems()
 	EventBus.weather_changed.connect(_on_weather_changed)
@@ -165,6 +168,25 @@ func _spawn_npc(id_value: String, display_name: String, pos: Vector2, lines: Arr
 	npc.position = pos
 	npc.configure(id_value, display_name, lines, color)
 	add_child(npc)
+
+func _spawn_resources() -> void:
+	_spawn_gatherable("manzana_bruma", Vector2(105, 250), Color("b8d98a"))
+	_spawn_gatherable("manzana_bruma", Vector2(305, 285), Color("b8d98a"))
+	_spawn_gatherable("manzana_bruma", Vector2(455, 250), Color("b8d98a"))
+	_spawn_gatherable("hongo_azul_rocio", Vector2(505, 215), Color("75b9e8"))
+	var station := Node2D.new()
+	station.name = "FogonRefugio"
+	station.set_script(CraftingStationScript)
+	station.position = Vector2(125, 205)
+	add_child(station)
+
+func _spawn_gatherable(item_id: String, pos: Vector2, color: Color) -> void:
+	var gatherable := Node2D.new()
+	gatherable.name = item_id
+	gatherable.set_script(GatherableScript)
+	gatherable.position = pos
+	gatherable.configure(item_id, 1, "botanica", 3, color)
+	add_child(gatherable)
 
 func _spawn_enemies() -> void:
 	var positions := [Vector2(420, 390), Vector2(520, 470), Vector2(660, 410), Vector2(870, 300), Vector2(1010, 360)]

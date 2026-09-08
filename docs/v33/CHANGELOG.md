@@ -1,5 +1,13 @@
 # World of Xethkioz — v3.3 development changelog
 
+## 2026-09-08 — v3.3-dev.4
+- Added persistent InventoryService and integrated it with SaveService.
+- Added first data-driven items: Manzana de Bruma, Hongo Azul de Rocío and Ración del Bosque.
+- Added gatherable world resources using the same interaction contract as NPCs.
+- Added Botánica XP on gathering and Cocina XP on recipe completion.
+- Added first playable recipe at a Fogón: 2 Manzanas de Bruma + 1 Hongo Azul de Rocío → 1 Ración del Bosque.
+- Added compact live inventory readout to the HUD.
+
 ## 2026-09-08 — v3.3-dev.3
 - Added reusable NPC interaction architecture (`interactable` group + generic NPC controller).
 - Added `C` interaction input without consuming future Q/E/R/F combat slots.

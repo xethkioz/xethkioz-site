@@ -6,6 +6,7 @@ config/features=PackedStringArray("4.7")
 [autoload]
 EventBus="*res://src/core/event_bus.gd"
 GameState="*res://src/core/game_state.gd"
+InventoryService="*res://src/items/inventory_service.gd"
 SaveService="*res://src/core/save_service.gd"
 
 [debug]

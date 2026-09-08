@@ -4,6 +4,7 @@ var hp_label: Label
 var progress_label: Label
 var quest_label: Label
 var world_label: Label
+var inventory_label: Label
 var toast_label: Label
 var dialog_panel: ColorRect
 var dialog_label: Label
@@ -17,6 +18,7 @@ func _ready() -> void:
 	EventBus.player_health_changed.connect(_on_health)
 	EventBus.player_progress_changed.connect(_on_progress)
 	EventBus.currency_changed.connect(_on_currency)
+	EventBus.inventory_changed.connect(_on_inventory)
 	EventBus.quest_changed.connect(_on_quest)
 	EventBus.weather_changed.connect(_on_weather)
 	EventBus.time_changed.connect(_on_time)
@@ -24,6 +26,7 @@ func _ready() -> void:
 	EventBus.dialog_requested.connect(_on_dialog)
 	_on_progress(GameState.player_level, GameState.player_xp, GameState.xp_to_next())
 	_on_currency(GameState.crystals)
+	_on_inventory(InventoryService.stacks)
 
 func _process(delta: float) -> void:
 	_toast_timer = maxf(0.0, _toast_timer - delta)
@@ -44,6 +47,7 @@ func _build_ui() -> void:
 	progress_label = _make_label(Vector2(16, 34), Vector2(230, 30), "Nivel 1", 10)
 	quest_label = _make_label(Vector2(382, 12), Vector2(248, 54), "Misión", 10)
 	quest_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	inventory_label = _make_label(Vector2(12, 310), Vector2(330, 18), "Bolsa", 8)
 	world_label = _make_label(Vector2(12, 332), Vector2(300, 20), "", 9)
 	toast_label = _make_label(Vector2(170, 217), Vector2(300, 24), "", 10)
 	toast_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -57,7 +61,7 @@ func _build_ui() -> void:
 	dialog_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	dialog_panel.visible = false
 	dialog_label.visible = false
-	var controls := _make_label(Vector2(336, 333), Vector2(292, 18), "WASD mover · Shift dash · J atacar · C hablar", 8)
+	var controls := _make_label(Vector2(336, 333), Vector2(292, 18), "WASD mover · Shift dash · J atacar · C interactuar", 8)
 	controls.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 
 func _make_label(pos: Vector2, size: Vector2, text: String, font_size: int) -> Label:
@@ -83,6 +87,10 @@ func _on_progress(level: int, xp: int, xp_to_next: int) -> void:
 
 func _on_currency(_crystals: int) -> void:
 	_on_progress(GameState.player_level, GameState.player_xp, 0 if GameState.player_level >= GameState.MAX_LEVEL else GameState.xp_to_next())
+
+func _on_inventory(_stacks: Dictionary) -> void:
+	if inventory_label:
+		inventory_label.text = "Bolsa · Manzana %d · Hongo %d · Ración %d" % [InventoryService.amount_of("manzana_bruma"), InventoryService.amount_of("hongo_azul_rocio"), InventoryService.amount_of("racion_bosque")]
 
 func _on_quest(title: String, objective: String, completed: bool) -> void:
 	if quest_label:
