@@ -1,17 +1,18 @@
 extends Control
 
 const CHUNK_PIXELS := 512
+const REFUGIO_DOOR := Vector2(832, 1696)
 const TARGETS := {
 	"intro": {"name":"Alexis", "pos":Vector2(1 * CHUNK_PIXELS + 326, 3 * CHUNK_PIXELS + 190)},
 	"roots": {"name":"Raíces alteradas", "pos":Vector2(1 * CHUNK_PIXELS + 270, 2 * CHUNK_PIXELS + 385)},
 	"seek_val": {"name":"Val · Lago Encantado", "pos":Vector2(1 * CHUNK_PIXELS + 164, 1 * CHUNK_PIXELS + 248)},
-	"capture": {"name":"Orilla del Lago", "pos":Vector2(1 * CHUNK_PIXELS + 330, 1 * CHUNK_PIXELS + 250)},
+	"capture": {"name":"Carpinchito · costa sur", "pos":Vector2(1 * CHUNK_PIXELS + 272, 1 * CHUNK_PIXELS + 326)},
 	"sanctuary": {"name":"Santuario de las Raíces", "pos":Vector2(3 * CHUNK_PIXELS + 256, 2 * CHUNK_PIXELS + 246)},
 	"boss5": {"name":"Corazón del Bosque Velado", "pos":Vector2(4 * CHUNK_PIXELS + 256, 0 * CHUNK_PIXELS + 256)},
-	"refuge_after_boss": {"name":"Refugio de Elida", "pos":Vector2(1 * CHUNK_PIXELS + 300, 3 * CHUNK_PIXELS + 135)},
-	"mentor_choice": {"name":"Los cuatro caminos", "pos":Vector2(1 * CHUNK_PIXELS + 300, 3 * CHUNK_PIXELS + 190)},
-	"training": {"name":"Fermín", "pos":Vector2(1 * CHUNK_PIXELS + 268, 3 * CHUNK_PIXELS + 205)},
-	"fermin_training": {"name":"Prueba de Impacto", "pos":Vector2(1 * CHUNK_PIXELS + 420, 3 * CHUNK_PIXELS + 205)}
+	"refuge_after_boss": {"name":"Refugio de Elida", "pos":REFUGIO_DOOR},
+	"mentor_choice": {"name":"Entrá al Refugio · cuatro caminos", "pos":REFUGIO_DOOR},
+	"training": {"name":"Entrá al Refugio · Fermín", "pos":REFUGIO_DOOR},
+	"fermin_training": {"name":"Refugio · Prueba de Impacto", "pos":REFUGIO_DOOR}
 }
 
 var _player: Node2D
