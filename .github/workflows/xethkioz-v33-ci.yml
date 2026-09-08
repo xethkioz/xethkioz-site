@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Install Godot 4.7.2
         shell: bash
         run: |
@@ -21,6 +22,7 @@ jobs:
           wget -q https://godot-releases.nbg1.your-objectstorage.com/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -O /tmp/godot.zip
           unzip -q /tmp/godot.zip -d /tmp/godot
           chmod +x /tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+
       - name: Import and compile project
         shell: bash
         run: |
@@ -31,6 +33,7 @@ jobs:
             echo "Godot import/compile validation failed"
             exit 1
           fi
+
       - name: Boot vertical slice
         shell: bash
         run: |
@@ -39,6 +42,50 @@ jobs:
           timeout 8s "$GODOT" --headless --path . 2>&1 | tee /tmp/boot.log || code=$?
           if [ "${code:-0}" -ne 0 ] && [ "${code:-0}" -ne 124 ]; then exit "${code}"; fi
           if grep -E "SCRIPT ERROR|Parse Error|Compile Error" /tmp/boot.log; then exit 1; fi
+
+      - name: Cache Godot export templates
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/godot/export_templates/4.7.2.stable
+          key: godot-4.7.2-stable-export-templates
+
+      - name: Install Windows export template
+        shell: bash
+        run: |
+          set -euxo pipefail
+          TEMPLATE_DIR="$HOME/.local/share/godot/export_templates/4.7.2.stable"
+          if [ ! -f "$TEMPLATE_DIR/windows_release_x86_64.exe" ]; then
+            wget -q https://godot-releases.nbg1.your-objectstorage.com/4.7.2-stable/Godot_v4.7.2-stable_export_templates.tpz -O /tmp/godot-templates.tpz
+            rm -rf /tmp/godot-templates
+            mkdir -p /tmp/godot-templates
+            unzip -q /tmp/godot-templates.tpz -d /tmp/godot-templates
+            WINDOWS_TEMPLATE="$(find /tmp/godot-templates -type f -name windows_release_x86_64.exe -print -quit)"
+            test -n "$WINDOWS_TEMPLATE"
+            TEMPLATE_SOURCE="$(dirname "$WINDOWS_TEMPLATE")"
+            mkdir -p "$TEMPLATE_DIR"
+            cp -a "$TEMPLATE_SOURCE"/. "$TEMPLATE_DIR"/
+          fi
+          test -s "$TEMPLATE_DIR/windows_release_x86_64.exe"
+
+      - name: Export Windows Steam demo
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          mkdir -p build/windows
+          "$GODOT" --headless --path . --export-release "Windows Desktop" build/windows/WorldOfXethkiozDemo.exe 2>&1 | tee /tmp/export.log
+          test -s build/windows/WorldOfXethkiozDemo.exe
+          sha256sum build/windows/WorldOfXethkiozDemo.exe > build/windows/SHA256SUMS.txt
+
+      - name: Upload Windows demo build
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-of-xethkioz-windows-demo-${{ github.sha }}
+          path: build/windows/*
+          retention-days: 30
+          if-no-files-found: error
+
       - name: Upload CI diagnostics
         if: always()
         uses: actions/upload-artifact@v4
@@ -47,8 +94,10 @@ jobs:
           path: |
             /tmp/import.log
             /tmp/boot.log
+            /tmp/export.log
           retention-days: 7
           if-no-files-found: ignore
+
       - name: Build source snapshot
         if: success()
         shell: bash
@@ -57,7 +106,8 @@ jobs:
           SHORT_SHA="${GITHUB_SHA::8}"
           mkdir -p /tmp/xethkioz-snapshot
           tar -czf "/tmp/xethkioz-snapshot/world-of-xethkioz-${SHORT_SHA}.tar.gz" \
-            project.godot src scenes docs/v33 docs/v34
+            project.godot export_presets.cfg src scenes docs/v33 docs/v34
+
       - name: Upload source snapshot
         if: success()
         uses: actions/upload-artifact@v4
