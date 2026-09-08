@@ -21,6 +21,7 @@ var inventory_label: Label
 var toast_label: Label
 var dialog_panel: Panel
 var dialog_label: Label
+var skill_name_labels: Dictionary = {}
 var _toast_timer := 0.0
 var _dialog_timer := 0.0
 var _weather := "despejado"
@@ -30,6 +31,7 @@ var _lore_total_hint := 5
 func _ready() -> void:
 	_build_ui()
 	EventBus.player_health_changed.connect(_on_health)
+	EventBus.player_mana_changed.connect(_on_mana)
 	EventBus.player_progress_changed.connect(_on_progress)
 	EventBus.currency_changed.connect(_on_currency)
 	EventBus.inventory_changed.connect(_on_inventory)
@@ -40,6 +42,7 @@ func _ready() -> void:
 	EventBus.familiar_captured.connect(_on_familiar_captured)
 	EventBus.familiar_assessed.connect(_on_familiar_assessed)
 	EventBus.active_familiar_changed.connect(_on_active_familiar_changed)
+	EventBus.mentor_selected.connect(_on_mentor_selected)
 	EventBus.toast_requested.connect(_on_toast)
 	EventBus.dialog_requested.connect(_on_dialog)
 	_on_progress(GameState.player_level, GameState.player_xp, GameState.xp_to_next())
@@ -48,6 +51,7 @@ func _ready() -> void:
 	_update_familiar_label()
 	_update_lore_label()
 	_update_world_label()
+	_update_combat_loadout()
 
 func _process(delta: float) -> void:
 	_toast_timer = maxf(0.0, _toast_timer - delta)
@@ -59,7 +63,6 @@ func _process(delta: float) -> void:
 		dialog_label.visible = false
 
 func _build_ui() -> void:
-	# Viajero / vitalidad
 	_make_panel(Vector2(8,8), Vector2(190,50), C_BG, C_VIOLET)
 	hp_label = _make_label(Vector2(16,13), Vector2(172,12), "VIAJERO · NIVEL 1", 8, C_TEXT, true)
 	_make_bar_back(Vector2(16,29), Vector2(128,7))
@@ -68,12 +71,12 @@ func _build_ui() -> void:
 	mana_bar = _make_bar_fill(Vector2(16,42), Vector2(96,5), C_VIOLET)
 	progress_label = _make_label(Vector2(116,37), Vector2(72,12), "", 6, C_MUTED, false, HORIZONTAL_ALIGNMENT_RIGHT)
 
-	# Seguimiento de misión
+	_make_label(Vector2(214,8), Vector2(210,10), "J ATAQUE · Q/E/R/F · C INTERACTUAR · B ATLAS", 5, C_MUTED, false, HORIZONTAL_ALIGNMENT_CENTER)
+
 	_make_panel(Vector2(438,8), Vector2(194,58), C_BG_SOFT, C_ORANGE)
 	quest_label = _make_label(Vector2(448,14), Vector2(174,42), "Misión", 7, C_TEXT, true, HORIZONTAL_ALIGNMENT_RIGHT)
 	quest_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 
-	# Xethkioz + Familiar
 	_make_panel(Vector2(8,286), Vector2(168,64), C_BG, C_WATER)
 	_make_badge(Vector2(16,294), 26, Color("244958"), C_VIOLET)
 	_make_label(Vector2(48,294), Vector2(116,10), "XETHKIOZ", 7, Color("d8ceff"), true)
@@ -81,20 +84,17 @@ func _build_ui() -> void:
 	familiar_label = _make_label(Vector2(16,323), Vector2(148,23), "Familiar · Ninguno", 6, C_TEXT, true)
 	familiar_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 
-	# Barra de habilidades
 	_make_panel(Vector2(194,304), Vector2(252,46), C_BG, C_VIOLET)
-	_make_skill(Vector2(204,311), "Q", "CORTE", C_VIOLET)
-	_make_skill(Vector2(262,311), "E", "GUARDIA", C_VIOLET)
-	_make_skill(Vector2(320,311), "R", "DESTELLO", C_VIOLET)
-	_make_skill(Vector2(378,311), "F", "SET", C_ORANGE)
+	skill_name_labels["Q"] = _make_skill(Vector2(204,311), "Q", "CORTE", C_VIOLET)
+	skill_name_labels["E"] = _make_skill(Vector2(262,311), "E", "GUARDIA", C_VIOLET)
+	skill_name_labels["R"] = _make_skill(Vector2(320,311), "R", "DESTELLO", C_VIOLET)
+	skill_name_labels["F"] = _make_skill(Vector2(378,311), "F", "BLOQ.", C_ORANGE)
 
-	# Mundo / Atlas
 	_make_panel(Vector2(458,292), Vector2(174,58), C_BG_SOFT, Color("244958"))
 	world_label = _make_label(Vector2(468,298), Vector2(154,19), "", 7, C_TEXT, true, HORIZONTAL_ALIGNMENT_RIGHT)
 	lore_label = _make_label(Vector2(468,321), Vector2(154,9), "Atlas · Ecos 0/5", 6, C_VIOLET, false, HORIZONTAL_ALIGNMENT_RIGHT)
 	inventory_label = _make_label(Vector2(468,334), Vector2(154,9), "", 6, C_ORANGE, false, HORIZONTAL_ALIGNMENT_RIGHT)
 
-	# Mensajes contextuales
 	toast_label = _make_label(Vector2(190,270), Vector2(260,20), "", 8, C_TEXT, true, HORIZONTAL_ALIGNMENT_CENTER)
 	toast_label.visible = false
 
@@ -164,17 +164,22 @@ func _make_badge(pos: Vector2, diameter: float, fill: Color, border: Color) -> v
 	badge.add_theme_stylebox_override("panel", box)
 	add_child(badge)
 
-func _make_skill(pos: Vector2, key: String, name: String, accent: Color) -> void:
+func _make_skill(pos: Vector2, key: String, name: String, accent: Color) -> Label:
 	var panel := _make_panel(pos, Vector2(48,30), Color(0.09,0.075,0.12,0.96), accent)
 	panel.z_index = 1
 	var key_label := _make_label(pos + Vector2(4,3), Vector2(15,10), key, 8, C_TEXT, true)
 	key_label.z_index = 2
 	var skill_label := _make_label(pos + Vector2(4,17), Vector2(40,8), name, 5, accent, true, HORIZONTAL_ALIGNMENT_RIGHT)
 	skill_label.z_index = 2
+	return skill_label
 
 func _on_health(current: float, maximum: float) -> void:
 	if hp_bar:
 		hp_bar.size.x = 128.0 * clampf(current / maxf(1.0, maximum), 0.0, 1.0)
+
+func _on_mana(current: float, maximum: float) -> void:
+	if mana_bar:
+		mana_bar.size.x = 96.0 * clampf(current / maxf(1.0, maximum), 0.0, 1.0)
 
 func _on_progress(level: int, xp: int, xp_to_next: int) -> void:
 	if hp_label:
@@ -228,6 +233,27 @@ func _update_familiar_label() -> void:
 	var mentor := str(data.get("mentor_id", "")).capitalize()
 	var rank := int(data.get("training_rank", 0))
 	familiar_label.text = "%s\n%s · %s · R%d" % [name, affinity, mentor, rank]
+
+func _on_mentor_selected(_mentor_id: String) -> void:
+	_update_combat_loadout()
+
+func _update_combat_loadout() -> void:
+	if skill_name_labels.is_empty():
+		return
+	var names := {"Q":"CORTE", "E":"GUARDIA", "R":"DESTELLO", "F":"BLOQ."}
+	match GameState.selected_mentor:
+		"ashley":
+			names = {"Q":"ONDA", "E":"MELODÍA", "R":"RESON.", "F":"BROTE"}
+		"fermin":
+			names = {"Q":"BARRIDO", "E":"GUARDIA", "R":"EMBEST.", "F":"BROTE"}
+		"isabella":
+			names = {"Q":"MARCA", "E":"RUNA", "R":"DETON.", "F":"BROTE"}
+		"gael":
+			names = {"Q":"DISPARO", "E":"TRAMPA", "R":"CARGADO", "F":"BROTE"}
+	for slot in names.keys():
+		var label: Label = skill_name_labels.get(slot)
+		if label:
+			label.text = str(names[slot])
 
 func _on_quest(title: String, objective: String, completed: bool) -> void:
 	if quest_label:
