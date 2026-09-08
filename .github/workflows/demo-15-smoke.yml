@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - game/xethkioz-environment-blocks
+      - game/xethkioz-golden-slice-production
 
 jobs:
   demo-15-smoke:
