@@ -39,3 +39,20 @@ jobs:
           timeout 8s "$GODOT" --headless --path . 2>&1 | tee /tmp/boot.log || code=$?
           if [ "${code:-0}" -ne 0 ] && [ "${code:-0}" -ne 124 ]; then exit "${code}"; fi
           if grep -E "SCRIPT ERROR|Parse Error|Compile Error" /tmp/boot.log; then exit 1; fi
+      - name: Build source snapshot
+        if: success()
+        shell: bash
+        run: |
+          set -euxo pipefail
+          SHORT_SHA="${GITHUB_SHA::8}"
+          mkdir -p /tmp/xethkioz-snapshot
+          tar -czf "/tmp/xethkioz-snapshot/world-of-xethkioz-${SHORT_SHA}.tar.gz" \
+            project.godot src scenes docs/v33 docs/v34
+      - name: Upload source snapshot
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-of-xethkioz-source-${{ github.sha }}
+          path: /tmp/xethkioz-snapshot/*.tar.gz
+          retention-days: 30
+          if-no-files-found: error
