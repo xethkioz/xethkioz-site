@@ -1,0 +1,76 @@
+name: World of Xethkioz v3.6 Mentor Trial CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - game/xethkioz-v36-real-demo
+
+permissions:
+  contents: read
+
+concurrency:
+  group: world-of-xethkioz-v36-mentor-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  mentor-trial:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Godot 4.7.2
+        shell: bash
+        run: |
+          set -euxo pipefail
+          wget -q https://godot-releases.nbg1.your-objectstorage.com/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -O /tmp/godot.zip
+          unzip -q /tmp/godot.zip -d /tmp/godot
+          chmod +x /tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+
+      - name: Import and compile
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --editor --quit 2>&1 | tee /tmp/mentor_import.log || true
+          if grep -E "SCRIPT ERROR|Parse Error|Compile Error" /tmp/mentor_import.log; then exit 1; fi
+
+      - name: Boot all four mentor room variants
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          for MENTOR in ashley fermin isabella gael; do
+            code=0
+            XETHKIOZ_TEST_MENTOR="$MENTOR" timeout 8s "$GODOT" --headless --path . scenes/v34/MentorTrialRoom.tscn 2>&1 | tee "/tmp/mentor_${MENTOR}.log" || code=$?
+            if [ "$code" -ne 0 ] && [ "$code" -ne 124 ]; then exit "$code"; fi
+            if grep -E "SCRIPT ERROR|Parse Error|Compile Error|Invalid call|Invalid access|ERROR:" "/tmp/mentor_${MENTOR}.log"; then
+              echo "Mentor room failed for $MENTOR"
+              exit 1
+            fi
+          done
+
+      - name: Resolve all four canonical mentor solutions
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --script res://tools/v36_mentor_trial_smoke.gd 2>&1 | tee /tmp/mentor_logic.log
+          if grep -E "SCRIPT ERROR|Parse Error|Compile Error|Invalid call|Invalid access|V3.6 MENTOR TRIAL:" /tmp/mentor_logic.log; then exit 1; fi
+          grep -q "V3.6 mentor trial smoke PASSED" /tmp/mentor_logic.log
+
+      - name: Upload mentor diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xethkioz-v36-mentor-diagnostics-${{ github.sha }}
+          path: |
+            /tmp/mentor_import.log
+            /tmp/mentor_ashley.log
+            /tmp/mentor_fermin.log
+            /tmp/mentor_isabella.log
+            /tmp/mentor_gael.log
+            /tmp/mentor_logic.log
+          retention-days: 7
+          if-no-files-found: ignore
