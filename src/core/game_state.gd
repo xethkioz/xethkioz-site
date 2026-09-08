@@ -1,6 +1,7 @@
 extends Node
 
 const MAX_LEVEL := 60
+const LEGENDARY_SPECIES := ["xethkioz", "itzuke", "mozaruk", "killaruna", "heller", "kahezer", "okuninust", "dvalin"]
 
 var player_level: int = 1
 var player_xp: int = 0
@@ -59,11 +60,14 @@ func discover_lore(lore_id: String, title: String, total_hint: int = 0) -> bool:
 	add_xp(8)
 	return true
 
+func is_legendary_species(species_id: String) -> bool:
+	return LEGENDARY_SPECIES.has(species_id.to_lower())
+
 func has_familiar(species_id: String) -> bool:
 	return captured_familiars.has(species_id)
 
 func capture_familiar(species_id: String, display_name: String, affinity: String, mentor_id: String) -> bool:
-	if species_id.is_empty() or captured_familiars.has(species_id):
+	if species_id.is_empty() or captured_familiars.has(species_id) or is_legendary_species(species_id):
 		return false
 	captured_familiars[species_id] = {
 		"display_name": display_name,
@@ -82,7 +86,7 @@ func capture_familiar(species_id: String, display_name: String, affinity: String
 	return true
 
 func assess_familiar(species_id: String) -> bool:
-	if not captured_familiars.has(species_id):
+	if is_legendary_species(species_id) or not captured_familiars.has(species_id):
 		return false
 	var data: Dictionary = captured_familiars[species_id]
 	if bool(data.get("assessed", false)):
@@ -93,7 +97,7 @@ func assess_familiar(species_id: String) -> bool:
 	return true
 
 func train_familiar(species_id: String, mentor_id: String) -> bool:
-	if not captured_familiars.has(species_id):
+	if is_legendary_species(species_id) or not captured_familiars.has(species_id):
 		return false
 	var data: Dictionary = captured_familiars[species_id]
 	if not bool(data.get("assessed", false)):
@@ -109,6 +113,7 @@ func train_familiar(species_id: String, mentor_id: String) -> bool:
 		data["unlocked_ability"] = "embate_cristal"
 	captured_familiars[species_id] = data
 	EventBus.familiar_trained.emit(species_id, 1, mentor_id)
+	EventBus.active_familiar_changed.emit(species_id)
 	return true
 
 func choose_mentor(mentor_id: String) -> bool:
