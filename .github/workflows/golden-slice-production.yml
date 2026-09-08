@@ -24,6 +24,9 @@ jobs:
           python tools/generate_v09_demo_assets.py
           python tools/generate_v09_boss_assets.py
           python tools/generate_v095_golden_assets.py
+          python tools/generate_elida_production.py
+          test -f assets/production/generated/elida_apothecary.png
+          test -f assets/production/generated/elida_apothecary_portrait.png
 
       - name: Install Godot 4.7.2 and Windows templates
         shell: bash
@@ -52,6 +55,7 @@ jobs:
           "$GODOT" --headless --path . --check-only --script res://scripts/save_system.gd
           "$GODOT" --headless --path . --check-only --script res://scripts/player_v10.gd
           "$GODOT" --headless --path . --check-only --script res://scripts/main_v20.gd
+          "$GODOT" --headless --path . --check-only --script res://scripts/main_v21.gd
           "$GODOT" --headless --path . --check-only --script res://tools/golden_slice_production_smoke.gd
 
       - name: Golden Slice functional smoke
@@ -108,7 +112,7 @@ jobs:
       - name: Upload real Golden Slice previews
         uses: actions/upload-artifact@v4
         with:
-          name: World-of-Xethkioz-Golden-Slice-v0.10.0-Real-Previews
+          name: World-of-Xethkioz-Golden-Slice-v0.10.1-Real-Previews
           path: |
             build/golden_menu.png
             build/golden_creator.png
@@ -125,11 +129,11 @@ jobs:
           mkdir -p build
           "$GODOT" --headless --path . --export-release "Windows Desktop" build/Mundo_de_Xethkioz.exe
           cd build
-          zip -9 World_of_Xethkioz_Golden_Slice_v0.10.0_Windows.zip Mundo_de_Xethkioz.exe
+          zip -9 World_of_Xethkioz_Golden_Slice_v0.10.1_Windows.zip Mundo_de_Xethkioz.exe
 
       - name: Upload Windows production test
         uses: actions/upload-artifact@v4
         with:
-          name: World-of-Xethkioz-Golden-Slice-v0.10.0-Windows
-          path: build/World_of_Xethkioz_Golden_Slice_v0.10.0_Windows.zip
+          name: World-of-Xethkioz-Golden-Slice-v0.10.1-Windows
+          path: build/World_of_Xethkioz_Golden_Slice_v0.10.1_Windows.zip
           if-no-files-found: error
