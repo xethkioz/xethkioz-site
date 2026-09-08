@@ -1,0 +1,1 @@
+NPC production sprites prepared for v0.9.5: Alexis, Ashley, Fermín, Isabella, Gael, Elida. Binary sprite upload follows after composition code is validated. This marker prevents the code pass from claiming those assets are already live before import/runtime validation.
