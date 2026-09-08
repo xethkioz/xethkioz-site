@@ -14,8 +14,11 @@
 - [x] CI parse/smoke validation on v3.3 branch
 - [ ] Replace greybox with first production tileset chunk
 - [x] First NPC interaction: Ivan or Alexis
-- [ ] Lago Encantado path + Val/Rola/Mela
-- [ ] Deterministic first pet capture
+- [x] Lago Encantado path + Val/Rola/Mela functional greybox
+- [x] Deterministic first pet capture
+- [x] Val affinity assessment prototype
+- [x] Persistent active Familiar + HUD readout
+- [ ] First Rank I Familiar training with sibling mentor
 - [x] One gathering profession + one recipe
 - [ ] Inventory/equipment minimum viable UI
 - [ ] Miniboss
@@ -30,6 +33,7 @@
 ## P1 — presentation
 - [ ] Approved Viajero spritesheet
 - [ ] Approved Xethkioz spritesheet
+- [ ] Approved Carpinchito de Cristal gameplay sprite
 - [ ] 6 Golden Region creature bases
 - [ ] VFX telegraphs
 - [x] Dialogue UI
