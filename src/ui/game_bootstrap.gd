@@ -63,7 +63,6 @@ func _build_shell() -> void:
 	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(background)
 
-	# Prism/nature silhouettes: temporary presentation layer until production art replaces it.
 	for data in [
 		[Vector2(36,42), Vector2(110,300), Color(0.08,0.18,0.16,0.70)],
 		[Vector2(510,22), Vector2(92,326), Color(0.06,0.16,0.20,0.75)],
@@ -120,7 +119,7 @@ func _show_main_menu() -> void:
 	menu.add_child(exit_button)
 
 	var lore_panel := _panel(Vector2(334,145), Vector2(266,176), Color(0.025,0.055,0.065,0.90), C_WATER)
-	var prism := _label(Vector2(0,24), Vector2(266,55), "◇", 48, C_VIOLET, true, HORIZONTAL_ALIGNMENT_CENTER)
+	var prism := _local_label(Vector2(0,24), Vector2(266,55), "◇", 48, C_VIOLET, true, HORIZONTAL_ALIGNMENT_CENTER)
 	lore_panel.add_child(prism)
 	var region := _local_label(Vector2(20,86), Vector2(226,20), "IZRDRALAR", 15, C_TEXT, true, HORIZONTAL_ALIGNMENT_CENTER)
 	lore_panel.add_child(region)
@@ -183,7 +182,7 @@ func _creator_option(parent: Control, y: float, label_text: String, values: Arra
 	option.size = Vector2(184,25)
 	for value in values:
 		option.add_item(str(value))
-	option.select(clampi(selected, 0, max(0, values.size()-1)))
+	option.select(clampi(selected, 0, maxi(0, values.size()-1)))
 	option.item_selected.connect(func(_index): _update_creator_preview())
 	parent.add_child(option)
 	return option
@@ -191,16 +190,19 @@ func _creator_option(parent: Control, y: float, label_text: String, values: Arra
 func _update_creator_preview() -> void:
 	if preview_head == null:
 		return
-	var skin := CharacterProfile.SKIN_COLORS[skin_option.selected if skin_option else CharacterProfile.skin_tone]
-	var hair := CharacterProfile.HAIR_COLORS[hair_color_option.selected if hair_color_option else CharacterProfile.hair_color]
-	var accent := CharacterProfile.ACCENT_COLORS[accent_option.selected if accent_option else CharacterProfile.accent_color]
+	var skin_index: int = skin_option.selected if skin_option else CharacterProfile.skin_tone
+	var hair_index: int = hair_color_option.selected if hair_color_option else CharacterProfile.hair_color
+	var accent_index: int = accent_option.selected if accent_option else CharacterProfile.accent_color
+	var skin: Color = CharacterProfile.SKIN_COLORS[skin_index]
+	var hair: Color = CharacterProfile.HAIR_COLORS[hair_index]
+	var accent: Color = CharacterProfile.ACCENT_COLORS[accent_index]
 	preview_head.color = skin
 	preview_hair.color = hair
 	preview_body.color = accent
-	var body_idx := body_option.selected if body_option else CharacterProfile.body_type
+	var body_idx: int = body_option.selected if body_option else CharacterProfile.body_type
 	preview_body.size.x = [54.0,66.0,78.0][body_idx]
 	preview_body.position.x = 99.0 - preview_body.size.x * 0.5
-	var display_name := name_edit.text.strip_edges() if name_edit else CharacterProfile.player_name
+	var display_name: String = name_edit.text.strip_edges() if name_edit else CharacterProfile.player_name
 	preview_name.text = display_name.to_upper() if not display_name.is_empty() else "VIAJERO"
 
 func _confirm_character() -> void:
