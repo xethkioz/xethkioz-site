@@ -6,11 +6,12 @@ const XethkiozScript := preload("res://src/pets/xethkioz_companion_production.gd
 const FamiliarScript := preload("res://src/pets/familiar_companion_production.gd")
 const StoryNpcScript := preload("res://src/npc/story_npc_v36.gd")
 const QuestScript := preload("res://src/quest/quest_manager_v36.gd")
-const HudScript := preload("res://src/ui/hud_controller.gd")
+const HudScript := preload("res://src/ui/hud_controller_v36.gd")
 const PromptScript := preload("res://src/ui/interaction_prompt.gd")
 const PortalScript := preload("res://src/world/scene_portal.gd")
 const HotspotScript := preload("res://src/world/interior_hotspot.gd")
 const CraftingScript := preload("res://src/world/interior_crafting_spot.gd")
+const MentorDoorScript := preload("res://src/world/mentor_trial_door_v36.gd")
 
 const EXTERIOR_RETURN := Vector2(832, 1744)
 
@@ -26,6 +27,7 @@ func _ready() -> void:
 	_spawn_active_familiar()
 	_spawn_family()
 	_spawn_hotspots()
+	_spawn_mentor_door()
 	_spawn_exit()
 	_spawn_ui_and_quest()
 	_restore_player()
@@ -165,6 +167,14 @@ func _spawn_hotspots() -> void:
 	hearth.set_script(CraftingScript)
 	hearth.position = Vector2(520, 268)
 	add_child(hearth)
+
+func _spawn_mentor_door() -> void:
+	var door := Node2D.new()
+	door.name = "PuertaEntrenamiento"
+	door.set_script(MentorDoorScript)
+	# Hotspot sobre el borde derecho de la puerta dibujada en el fondo, evitando competir con Elida.
+	door.position = Vector2(360, 126)
+	add_child(door)
 
 func _spawn_exit() -> void:
 	var portal := Node2D.new()
