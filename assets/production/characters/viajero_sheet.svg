@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="128" viewBox="0 0 96 128" shape-rendering="crispEdges">
+<defs>
+  <g id="shadow"><ellipse cx="16" cy="27" rx="9" ry="3" fill="#071019" opacity=".45"/></g>
+  <g id="down">
+    <use href="#shadow"/><path d="M7 12h18v14H7z" fill="#20232c"/><path d="M10 8h12v8H10z" fill="#272b34"/><path d="M12 9h8v6h-8z" fill="#d7a77f"/><rect x="13" y="11" width="2" height="2" fill="#27313b"/><rect x="18" y="11" width="2" height="2" fill="#27313b"/><path d="M6 15h5v8H6zM21 15h5v8h-5z" fill="#151821"/><path d="M9 24h5v5H9zM18 24h5v5h-5z" fill="#11151c"/><path d="M8 17h16v3H8z" fill="#8b5cf6"/><rect x="15" y="17" width="3" height="3" fill="#d9c8ff"/></g>
+  <g id="left">
+    <use href="#shadow"/><path d="M8 12h17v14H8z" fill="#20232c"/><path d="M10 8h12v8H10z" fill="#272b34"/><path d="M10 9h8v6h-8z" fill="#d7a77f"/><rect x="11" y="11" width="2" height="2" fill="#27313b"/><path d="M5 15h5v8H5zM21 15h5v8h-5z" fill="#151821"/><path d="M9 24h5v5H9zM18 24h5v5h-5z" fill="#11151c"/><path d="M8 17h16v3H8z" fill="#8b5cf6"/><rect x="9" y="17" width="3" height="3" fill="#d9c8ff"/></g>
+  <g id="right">
+    <use href="#shadow"/><path d="M7 12h17v14H7z" fill="#20232c"/><path d="M10 8h12v8H10z" fill="#272b34"/><path d="M14 9h8v6h-8z" fill="#d7a77f"/><rect x="19" y="11" width="2" height="2" fill="#27313b"/><path d="M6 15h5v8H6zM22 15h5v8h-5z" fill="#151821"/><path d="M9 24h5v5H9zM18 24h5v5h-5z" fill="#11151c"/><path d="M8 17h16v3H8z" fill="#8b5cf6"/><rect x="20" y="17" width="3" height="3" fill="#d9c8ff"/></g>
+  <g id="up">
+    <use href="#shadow"/><path d="M7 12h18v14H7z" fill="#20232c"/><path d="M10 8h12v8H10z" fill="#272b34"/><path d="M11 9h10v6H11z" fill="#151821"/><path d="M6 15h5v8H6zM21 15h5v8h-5z" fill="#151821"/><path d="M9 24h5v5H9zM18 24h5v5h-5z" fill="#11151c"/><path d="M8 17h16v3H8z" fill="#8b5cf6"/><rect x="15" y="17" width="3" height="3" fill="#d9c8ff"/></g>
+</defs>
+<!-- down -->
+<g transform="translate(0 0)"><use href="#down"/><rect x="8" y="26" width="6" height="3" fill="#0d1016"/></g><g transform="translate(32 0)"><use href="#down"/></g><g transform="translate(64 0)"><use href="#down"/><rect x="18" y="26" width="6" height="3" fill="#0d1016"/></g>
+<!-- left -->
+<g transform="translate(0 32)"><use href="#left"/><rect x="8" y="26" width="6" height="3" fill="#0d1016"/></g><g transform="translate(32 32)"><use href="#left"/></g><g transform="translate(64 32)"><use href="#left"/><rect x="18" y="26" width="6" height="3" fill="#0d1016"/></g>
+<!-- right -->
+<g transform="translate(0 64)"><use href="#right"/><rect x="8" y="26" width="6" height="3" fill="#0d1016"/></g><g transform="translate(32 64)"><use href="#right"/></g><g transform="translate(64 64)"><use href="#right"/><rect x="18" y="26" width="6" height="3" fill="#0d1016"/></g>
+<!-- up -->
+<g transform="translate(0 96)"><use href="#up"/><rect x="8" y="26" width="6" height="3" fill="#0d1016"/></g><g transform="translate(32 96)"><use href="#up"/></g><g transform="translate(64 96)"><use href="#up"/><rect x="18" y="26" width="6" height="3" fill="#0d1016"/></g>
+</svg>
