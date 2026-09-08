@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" shape-rendering="crispEdges">
+<rect width="640" height="360" fill="#10151a"/>
+<!-- stone/wood floor -->
+<rect x="24" y="24" width="592" height="312" fill="#27312f"/>
+<rect x="34" y="34" width="572" height="292" fill="#33413b"/>
+<g opacity=".35" stroke="#44534c" stroke-width="2">
+<path d="M34 82h572M34 130h572M34 178h572M34 226h572M34 274h572"/>
+<path d="M106 34v292M178 34v292M250 34v292M322 34v292M394 34v292M466 34v292M538 34v292"/>
+</g>
+<!-- wall -->
+<rect x="34" y="34" width="572" height="46" fill="#1a2224"/>
+<rect x="34" y="72" width="572" height="8" fill="#111719"/>
+<!-- blocked training door -->
+<rect x="266" y="36" width="108" height="78" fill="#161a20"/>
+<rect x="276" y="44" width="88" height="70" fill="#2b3036"/>
+<rect x="286" y="54" width="68" height="60" fill="#151a20"/>
+<path d="M286 56h68M286 76h68M286 96h68" stroke="#4b5156" stroke-width="3"/>
+<polygon points="320,48 332,62 328,78 312,78 308,62" fill="#6c4aba"/>
+<polygon points="320,51 326,62 320,73 314,62" fill="#ddd3ff"/>
+<!-- training lanes -->
+<rect x="78" y="132" width="484" height="120" fill="#222c2a"/>
+<rect x="88" y="142" width="464" height="100" fill="#293732"/>
+<path d="M88 192h464" stroke="#53655c" stroke-width="2" stroke-dasharray="8 8"/>
+<!-- corner tech pylons -->
+<g>
+<g transform="translate(66 86)"><rect x="0" y="0" width="30" height="52" fill="#273039"/><rect x="5" y="5" width="20" height="42" fill="#1b232a"/><rect x="10" y="11" width="10" height="24" fill="#3c2f59"/><rect x="13" y="14" width="4" height="18" fill="#8b5cf6"/></g>
+<g transform="translate(544 86)"><rect x="0" y="0" width="30" height="52" fill="#273039"/><rect x="5" y="5" width="20" height="42" fill="#1b232a"/><rect x="10" y="11" width="10" height="24" fill="#23474d"/><rect x="13" y="14" width="4" height="18" fill="#3fc7c9"/></g>
+</g>
+<!-- roots growing through old facility -->
+<path d="M35 286c56-30 85-14 125-50s50-62 86-72M605 286c-54-34-84-15-120-48s-48-58-84-74" fill="none" stroke="#496f45" stroke-width="8"/>
+<path d="M35 288c56-30 85-14 125-50s50-62 86-72M605 288c-54-34-84-15-120-48s-48-58-84-74" fill="none" stroke="#65945a" stroke-width="3"/>
+<!-- bottom exit path -->
+<rect x="278" y="274" width="84" height="62" fill="#3c4a42"/>
+<path d="M284 278h72v58h-72z" fill="none" stroke="#52665a" stroke-width="2"/>
+<!-- amber/prism guidance lights -->
+<g fill="#ff8c42"><rect x="98" y="110" width="6" height="12"/><rect x="536" y="110" width="6" height="12"/></g>
+<g fill="#8b5cf6"><rect x="184" y="118" width="4" height="8"/><rect x="452" y="118" width="4" height="8"/></g>
+<text x="320" y="122" text-anchor="middle" font-family="monospace" font-size="11" fill="#b9b9c6">SALA DE LECTURA · SISTEMA DE ENTRENAMIENTO 2150</text>
+</svg>
