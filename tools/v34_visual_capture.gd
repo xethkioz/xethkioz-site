@@ -8,6 +8,7 @@ const REFUGIO := "res://scenes/v34/RefugioInterior.tscn"
 
 var _game_state: Node
 var _character_profile: Node
+var _event_bus: Node
 var _fatal_error := false
 
 func _initialize() -> void:
@@ -18,8 +19,9 @@ func _run() -> void:
 	root.content_scale_size = VIEWPORT_SIZE
 	_game_state = root.get_node_or_null("GameState")
 	_character_profile = root.get_node_or_null("CharacterProfile")
-	if not is_instance_valid(_game_state) or not is_instance_valid(_character_profile):
-		_fail("Visual capture requires GameState and CharacterProfile autoloads")
+	_event_bus = root.get_node_or_null("EventBus")
+	if not is_instance_valid(_game_state) or not is_instance_valid(_character_profile) or not is_instance_valid(_event_bus):
+		_fail("Visual capture requires GameState, CharacterProfile and EventBus autoloads")
 		return
 	if not _character_profile.has_method("reset_default"):
 		_fail("CharacterProfile.reset_default() is required by visual capture")
@@ -45,7 +47,7 @@ func _run() -> void:
 	await _capture_refugio()
 	if _fatal_error:
 		return
-	print("V3.5 visual capture complete: menu, creator, Cuenca, Lago, Refugio")
+	print("V3.5 visual capture complete: menu, creator, Cuenca, Lago, Boss 5, Refugio")
 	quit(0)
 
 func _capture_bootstrap() -> void:
@@ -76,6 +78,7 @@ func _capture_golden_region() -> void:
 	if not is_instance_valid(player):
 		_fail("GoldenRegion visual capture could not find Player")
 		return
+
 	player.global_position = Vector2(768, 1760)
 	_reset_player_camera(player)
 	await _wait_frames(18)
@@ -87,6 +90,28 @@ func _capture_golden_region() -> void:
 	_reset_player_camera(player)
 	await _wait_frames(24)
 	await _save_frame("v34_lago.png")
+	if _fatal_error:
+		return
+
+	await _capture_boss5(scene, player)
+
+func _capture_boss5(scene: Node, player: CharacterBody2D) -> void:
+	player.global_position = Vector2(2368, 286)
+	_reset_player_camera(player)
+	_event_bus.emit_signal("demo_stage_changed", "boss5")
+	await _wait_frames(18)
+	var boss: CharacterBody2D = scene.get_node_or_null("GuardianBosqueVelado") as CharacterBody2D
+	if not is_instance_valid(boss):
+		_fail("Boss 5 visual capture could not spawn GuardianBosqueVelado")
+		return
+	boss.set("health", float(boss.get("max_health")) * 0.55)
+	boss.set("_pulse_cooldown", 0.0)
+	await _wait_frames(12)
+	# Keep the shot inside the telegraph window instead of after pulse resolution.
+	if not bool(boss.get("_pulse_pending")):
+		boss.set("_pulse_cooldown", 0.0)
+		await _wait_frames(4)
+	await _save_frame("v34_boss5.png")
 
 func _capture_refugio() -> void:
 	var scene: Node = await _mount_scene(REFUGIO)
