@@ -35,3 +35,8 @@ jobs:
           GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
           "$GODOT" --headless --path . --script res://tools/demo_15_level_smoke.gd 2>&1 | tee /tmp/demo15.log
           grep -q "Steam demo level smoke: 15/15 maps loaded; bosses 5/10/15 present" /tmp/demo15.log
+      - name: Validate Golden Slice 1-5 functionality
+        run: |
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --script res://tools/golden_slice_functional_smoke.gd 2>&1 | tee /tmp/golden-functional.log
+          grep -q "Golden Slice functional smoke: map1 NPCs/background/skills valid; map5 boss valid" /tmp/golden-functional.log
