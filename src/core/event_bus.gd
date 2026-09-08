@@ -3,6 +3,7 @@ extends Node
 signal toast_requested(message: String)
 signal dialog_requested(speaker: String, text: String)
 signal npc_interacted(npc_id: String)
+signal lore_discovered(lore_id: String, title: String, discovered_count: int, total_hint: int)
 signal player_health_changed(current: float, maximum: float)
 signal player_progress_changed(level: int, xp: int, xp_to_next: int)
 signal currency_changed(crystals: int)
