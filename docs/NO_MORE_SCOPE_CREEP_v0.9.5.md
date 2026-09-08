@@ -1,0 +1,1 @@
+Until Golden Slice 1–5 passes visual and functional QA, no new large gameplay systems or expansion content should be added.
