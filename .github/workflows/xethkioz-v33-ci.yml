@@ -21,24 +21,21 @@ jobs:
           wget -q https://godot-releases.nbg1.your-objectstorage.com/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -O /tmp/godot.zip
           unzip -q /tmp/godot.zip -d /tmp/godot
           chmod +x /tmp/godot/Godot_v4.7.2-stable_linux.x86_64
-      - name: Import project
-        shell: bash
-        run: |
-          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
-          "$GODOT" --headless --path . --editor --quit 2>&1 | tee /tmp/import.log || true
-          if grep -E "SCRIPT ERROR|Parse Error" /tmp/import.log; then exit 1; fi
-      - name: Check v3.3 scripts
+      - name: Import and compile project
         shell: bash
         run: |
           set -euxo pipefail
           GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
-          for script in $(find src -name '*.gd' | sort); do
-            "$GODOT" --headless --path . --check-only --script "res://$script"
-          done
+          "$GODOT" --headless --path . --editor --quit 2>&1 | tee /tmp/import.log || true
+          if grep -E "SCRIPT ERROR|Parse Error|Compile Error" /tmp/import.log; then
+            echo "Godot import/compile validation failed"
+            exit 1
+          fi
       - name: Boot vertical slice
         shell: bash
         run: |
           set -euxo pipefail
           GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
-          timeout 8s "$GODOT" --headless --path . || code=$?
+          timeout 8s "$GODOT" --headless --path . 2>&1 | tee /tmp/boot.log || code=$?
           if [ "${code:-0}" -ne 0 ] && [ "${code:-0}" -ne 124 ]; then exit "${code}"; fi
+          if grep -E "SCRIPT ERROR|Parse Error|Compile Error" /tmp/boot.log; then exit 1; fi
