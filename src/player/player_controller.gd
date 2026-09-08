@@ -28,9 +28,11 @@ func _physics_process(delta: float) -> void:
 	if input_vector.length_squared() > 0.01:
 		facing = input_vector.normalized()
 	if Input.is_action_just_pressed("dash") and _dash_cooldown_left <= 0.0:
-		_dash_time_left = dash_duration
+		var duration_bonus := 1.18 if GameState.prism_step_unlocked else 1.0
+		_dash_time_left = dash_duration * duration_bonus
 		_dash_cooldown_left = dash_cooldown
-	velocity = facing * dash_speed if _dash_time_left > 0.0 else input_vector * move_speed
+	var current_dash_speed := dash_speed * (1.28 if GameState.prism_step_unlocked else 1.0)
+	velocity = facing * current_dash_speed if _dash_time_left > 0.0 else input_vector * move_speed
 	move_and_slide()
 	if Input.is_action_just_pressed("attack") and _attack_cooldown_left <= 0.0:
 		_attack_cooldown_left = 0.30
@@ -85,4 +87,7 @@ func _draw() -> void:
 	draw_circle(Vector2(0, -8), 5.0, Color("f1c7a5"))
 	draw_line(Vector2.ZERO, facing * 16.0, Color("ff8c42"), 2.0)
 	if _dash_time_left > 0.0:
-		draw_arc(Vector2.ZERO, 15.0, 0.0, TAU, 24, Color("9d7bff"), 2.0)
+		var dash_color := Color("d8ceff") if GameState.prism_step_unlocked else Color("9d7bff")
+		draw_arc(Vector2.ZERO, 15.0, 0.0, TAU, 24, dash_color, 2.0)
+		if GameState.prism_step_unlocked:
+			draw_line(-facing * 8.0, -facing * 24.0, Color(0.55,0.36,0.96,0.65), 3.0)
