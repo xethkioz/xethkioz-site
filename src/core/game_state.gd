@@ -7,6 +7,7 @@ var player_xp: int = 0
 var crystals: int = 0
 var campaign_hito: int = 1
 var selected_mentor: String = ""
+var prism_step_unlocked := false
 var xethkioz_bond: int = 0
 var profession_xp: Dictionary = {"botanica": 0, "cocina": 0}
 var discovered_lore: Array[String] = []
@@ -71,7 +72,9 @@ func capture_familiar(species_id: String, display_name: String, affinity: String
 		"affinity": affinity,
 		"mentor_id": mentor_id,
 		"assessed": false,
-		"training_rank": 0
+		"training_rank": 0,
+		"trained_with": "",
+		"unlocked_ability": ""
 	}
 	active_familiar_id = species_id
 	EventBus.familiar_captured.emit(species_id, display_name)
@@ -89,6 +92,39 @@ func assess_familiar(species_id: String) -> bool:
 	EventBus.familiar_assessed.emit(species_id, str(data.get("affinity", "")), str(data.get("mentor_id", "")))
 	return true
 
+func train_familiar(species_id: String, mentor_id: String) -> bool:
+	if not captured_familiars.has(species_id):
+		return false
+	var data: Dictionary = captured_familiars[species_id]
+	if not bool(data.get("assessed", false)):
+		return false
+	if str(data.get("mentor_id", "")) != mentor_id:
+		return false
+	if int(data.get("training_rank", 0)) >= 1:
+		return false
+	data["training_rank"] = 1
+	data["trained_with"] = mentor_id
+	data["bond"] = clampi(int(data.get("bond", 0)) + 10, 0, 100)
+	if species_id == "carpinchito_cristal":
+		data["unlocked_ability"] = "embate_cristal"
+	captured_familiars[species_id] = data
+	EventBus.familiar_trained.emit(species_id, 1, mentor_id)
+	return true
+
+func choose_mentor(mentor_id: String) -> bool:
+	if mentor_id.is_empty():
+		return false
+	selected_mentor = mentor_id
+	EventBus.mentor_selected.emit(mentor_id)
+	return true
+
+func unlock_prism_step() -> bool:
+	if prism_step_unlocked:
+		return false
+	prism_step_unlocked = true
+	EventBus.traversal_unlocked.emit("paso_prismatico")
+	return true
+
 func familiar_data(species_id: String) -> Dictionary:
 	if not captured_familiars.has(species_id):
 		return {}
@@ -103,6 +139,7 @@ func reset_new_game() -> void:
 	crystals = 0
 	campaign_hito = 1
 	selected_mentor = ""
+	prism_step_unlocked = false
 	xethkioz_bond = 0
 	profession_xp = {"botanica": 0, "cocina": 0}
 	discovered_lore.clear()
@@ -115,12 +152,13 @@ func reset_new_game() -> void:
 
 func to_dict() -> Dictionary:
 	return {
-		"save_version": 5,
+		"save_version": 6,
 		"player_level": player_level,
 		"player_xp": player_xp,
 		"crystals": crystals,
 		"campaign_hito": campaign_hito,
 		"selected_mentor": selected_mentor,
+		"prism_step_unlocked": prism_step_unlocked,
 		"xethkioz_bond": xethkioz_bond,
 		"profession_xp": profession_xp.duplicate(true),
 		"discovered_lore": discovered_lore.duplicate(),
@@ -134,6 +172,7 @@ func apply_dict(data: Dictionary) -> void:
 	crystals = maxi(0, int(data.get("crystals", 0)))
 	campaign_hito = maxi(1, int(data.get("campaign_hito", 1)))
 	selected_mentor = str(data.get("selected_mentor", ""))
+	prism_step_unlocked = bool(data.get("prism_step_unlocked", false))
 	xethkioz_bond = clampi(int(data.get("xethkioz_bond", 0)), 0, 100)
 	profession_xp = data.get("profession_xp", {"botanica": 0, "cocina": 0}).duplicate(true)
 	discovered_lore.clear()
