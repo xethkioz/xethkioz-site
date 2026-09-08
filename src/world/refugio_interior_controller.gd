@@ -33,7 +33,6 @@ func _ready() -> void:
 	_spawn_exit()
 	_spawn_ui_and_quest()
 	_restore_player()
-	_restore_training_if_needed()
 	EventBus.toast_requested.emit("Refugio de Elida · Zona segura")
 
 func _ensure_inputs() -> void:
@@ -225,16 +224,14 @@ func _restore_player() -> void:
 	EventBus.player_health_changed.emit(player.health, player.max_health)
 	EventBus.player_mana_changed.emit(player.mana, player.max_mana)
 
-func _restore_training_if_needed() -> void:
-	var snapshot := GameState.get_quest_snapshot()
-	if int(snapshot.get("state", -1)) != TRAINING_STATE:
-		return
-	var already_defeated := clampi(int(snapshot.get("training_defeated", 0)), 0, 3)
-	_spawn_training_cores(3 - already_defeated)
-
 func _on_stage_changed(stage_id: String) -> void:
-	if stage_id == "fermin_training":
-		_spawn_training_cores(3)
+	if stage_id != "fermin_training":
+		return
+	var snapshot := GameState.get_quest_snapshot()
+	var already_defeated := 0
+	if int(snapshot.get("state", -1)) == TRAINING_STATE:
+		already_defeated = clampi(int(snapshot.get("training_defeated", 0)), 0, 3)
+	_spawn_training_cores(3 - already_defeated)
 
 func _spawn_training_cores(count: int) -> void:
 	if _training_spawned or count <= 0:
