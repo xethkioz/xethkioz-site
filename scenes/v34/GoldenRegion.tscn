@@ -25,6 +25,8 @@ position = Vector2(832, 1696)
 script = ExtResource("5_portal")
 target_scene = "res://scenes/v34/RefugioInterior.tscn"
 label_text = "Entrar al Refugio de Elida"
+min_quest_state = 8
+locked_message = "La entrada está sellada por raíces prismáticas. El bosque todavía no te reconoce como aliado."
 return_world_position = Vector2(832, 1744)
 accent_color = Color(1, 0.549, 0.259, 1)
 
