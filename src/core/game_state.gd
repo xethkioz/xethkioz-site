@@ -10,9 +10,10 @@ var campaign_hito: int = 1
 var selected_mentor: String = ""
 var prism_step_unlocked := false
 var xethkioz_bond: int = 0
-var profession_xp: Dictionary = {"botanica": 0, "cocina": 0}
+var profession_xp: Dictionary = {"botanica": 0, "cocina": 0, "mineria": 0}
 var set_piece_counts: Dictionary = {"brote_vivo": 0}
 var discovered_lore: Array[String] = []
+var discovered_pois: Array[String] = []
 var captured_familiars: Dictionary = {}
 var active_familiar_id: String = ""
 
@@ -74,6 +75,19 @@ func discover_lore(lore_id: String, title: String, total_hint: int = 0) -> bool:
 	EventBus.lore_discovered.emit(lore_id, title, discovered_lore.size(), total_hint)
 	add_xp(8)
 	return true
+
+func has_poi(poi_id: String) -> bool:
+	return discovered_pois.has(poi_id)
+
+func discover_poi(poi_id: String, display_name: String) -> int:
+	if poi_id.is_empty() or discovered_pois.has(poi_id):
+		return 0
+	discovered_pois.append(poi_id)
+	var reward := maxi(8, roundi(float(xp_to_next()) * 0.08)) if player_level < MAX_LEVEL else 0
+	if reward > 0:
+		add_xp(reward)
+	EventBus.poi_discovered.emit(poi_id, display_name, discovered_pois.size(), reward)
+	return reward
 
 func is_legendary_species(species_id: String) -> bool:
 	return LEGENDARY_SPECIES.has(species_id.to_lower())
@@ -161,9 +175,10 @@ func reset_new_game() -> void:
 	selected_mentor = ""
 	prism_step_unlocked = false
 	xethkioz_bond = 0
-	profession_xp = {"botanica": 0, "cocina": 0}
+	profession_xp = {"botanica": 0, "cocina": 0, "mineria": 0}
 	set_piece_counts = {"brote_vivo": 0}
 	discovered_lore.clear()
+	discovered_pois.clear()
 	captured_familiars.clear()
 	active_familiar_id = ""
 	EventBus.player_progress_changed.emit(player_level, player_xp, xp_to_next())
@@ -174,7 +189,7 @@ func reset_new_game() -> void:
 
 func to_dict() -> Dictionary:
 	return {
-		"save_version": 7,
+		"save_version": 8,
 		"player_level": player_level,
 		"player_xp": player_xp,
 		"crystals": crystals,
@@ -185,6 +200,7 @@ func to_dict() -> Dictionary:
 		"profession_xp": profession_xp.duplicate(true),
 		"set_piece_counts": set_piece_counts.duplicate(true),
 		"discovered_lore": discovered_lore.duplicate(),
+		"discovered_pois": discovered_pois.duplicate(),
 		"captured_familiars": captured_familiars.duplicate(true),
 		"active_familiar_id": active_familiar_id
 	}
@@ -197,11 +213,14 @@ func apply_dict(data: Dictionary) -> void:
 	selected_mentor = str(data.get("selected_mentor", ""))
 	prism_step_unlocked = bool(data.get("prism_step_unlocked", false))
 	xethkioz_bond = clampi(int(data.get("xethkioz_bond", 0)), 0, 100)
-	profession_xp = data.get("profession_xp", {"botanica": 0, "cocina": 0}).duplicate(true)
+	profession_xp = data.get("profession_xp", {"botanica": 0, "cocina": 0, "mineria": 0}).duplicate(true)
 	set_piece_counts = data.get("set_piece_counts", {"brote_vivo": 0}).duplicate(true)
 	discovered_lore.clear()
 	for raw_id in data.get("discovered_lore", []):
 		discovered_lore.append(str(raw_id))
+	discovered_pois.clear()
+	for raw_poi in data.get("discovered_pois", []):
+		discovered_pois.append(str(raw_poi))
 	captured_familiars = data.get("captured_familiars", {}).duplicate(true)
 	active_familiar_id = str(data.get("active_familiar_id", ""))
 	if not active_familiar_id.is_empty() and not captured_familiars.has(active_familiar_id):
