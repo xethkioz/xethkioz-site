@@ -3,6 +3,7 @@ extends Control
 var _player: Node2D
 var _text := ""
 var _dialog_suppression := 0.0
+var _search_cooldown := 0.0
 
 func configure(player_ref: Node2D) -> void:
 	_player = player_ref
@@ -14,6 +15,10 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_dialog_suppression = maxf(0.0, _dialog_suppression - delta)
+	_search_cooldown = maxf(0.0, _search_cooldown - delta)
+	if not is_instance_valid(_player) and _search_cooldown <= 0.0:
+		_search_cooldown = 0.25
+		_player = get_tree().get_first_node_in_group("player") as Node2D
 	if _dialog_suppression > 0.0 or not is_instance_valid(_player):
 		visible = false
 		return
