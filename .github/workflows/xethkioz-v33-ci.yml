@@ -1,16 +1,16 @@
-name: World of Xethkioz Production CI
+name: World of Xethkioz v3.6 Real Demo CI
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - game/xethkioz-v34-production-rebuild
+      - game/xethkioz-v36-real-demo
 
 permissions:
   contents: read
 
 concurrency:
-  group: world-of-xethkioz-production-${{ github.ref }}
+  group: world-of-xethkioz-v36-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -46,7 +46,7 @@ jobs:
           GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
           timeout 8s "$GODOT" --headless --path . 2>&1 | tee /tmp/boot.log || code=$?
           if [ "${code:-0}" -ne 0 ] && [ "${code:-0}" -ne 124 ]; then exit "${code}"; fi
-          if grep -E "SCRIPT ERROR|Parse Error|Compile Error" /tmp/boot.log; then exit 1; fi
+          if grep -E "SCRIPT ERROR|Parse Error|Compile Error|Invalid call|Invalid access|ERROR:" /tmp/boot.log; then exit 1; fi
 
       - name: Boot Golden Region runtime
         shell: bash
@@ -72,17 +72,17 @@ jobs:
             exit 1
           fi
 
-      - name: Validate Golden progression and save round-trip
+      - name: Validate v3.6 canonical progression and save round-trip
         shell: bash
         run: |
           set -euxo pipefail
           GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
-          "$GODOT" --headless --path . --script res://tools/v35_progression_smoke.gd 2>&1 | tee /tmp/progression.log
+          "$GODOT" --headless --path . --script res://tools/v36_progression_smoke.gd 2>&1 | tee /tmp/progression.log
           if grep -E "SCRIPT ERROR|Parse Error|Compile Error|Invalid call|Invalid access|ERROR:" /tmp/progression.log; then
-            echo "Golden progression/save smoke reported errors"
+            echo "v3.6 progression/save smoke reported errors"
             exit 1
           fi
-          grep -q "V3.5 progression/save smoke PASSED" /tmp/progression.log
+          grep -q "V3.6 progression/save smoke PASSED" /tmp/progression.log
 
       - name: Capture real 640x360 production previews
         shell: bash
@@ -113,14 +113,14 @@ jobs:
             exit 1
           fi
 
-      - name: Enforce visual richness quality gate
+      - name: Enforce visual regression floor
         shell: bash
         run: |
           set -euxo pipefail
           GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
           "$GODOT" --headless --path . --script res://tools/v35_visual_quality_gate.gd 2>&1 | tee /tmp/visual_quality.log
           if grep -E "SCRIPT ERROR|Parse Error|Compile Error|Invalid call|Invalid access|VISUAL QUALITY:|V3.5 visual quality gate FAILED" /tmp/visual_quality.log; then
-            echo "Production visual richness gate failed"
+            echo "Visual regression floor failed"
             exit 1
           fi
           grep -q "V3.5 visual quality gate PASSED" /tmp/visual_quality.log
@@ -128,7 +128,7 @@ jobs:
       - name: Upload real production previews
         uses: actions/upload-artifact@v4
         with:
-          name: world-of-xethkioz-v35-previews-${{ github.sha }}
+          name: world-of-xethkioz-v36-previews-${{ github.sha }}
           path: build/previews/*.png
           retention-days: 30
           if-no-files-found: error
@@ -176,7 +176,7 @@ jobs:
             exit 1
           fi
 
-      - name: Export Windows internal production build
+      - name: Export Windows internal build
         shell: bash
         run: |
           set -euxo pipefail
@@ -194,7 +194,7 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: world-of-xethkioz-v35-production-${{ github.sha }}
+          name: world-of-xethkioz-v36-internal-${{ github.sha }}
           path: build/windows/*
           retention-days: 30
           if-no-files-found: error
@@ -203,7 +203,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: xethkioz-production-ci-diagnostics-${{ github.sha }}
+          name: xethkioz-v36-ci-diagnostics-${{ github.sha }}
           path: |
             /tmp/import.log
             /tmp/boot.log
@@ -225,14 +225,14 @@ jobs:
           set -euxo pipefail
           SHORT_SHA="${GITHUB_SHA::8}"
           mkdir -p /tmp/xethkioz-snapshot
-          tar -czf "/tmp/xethkioz-snapshot/world-of-xethkioz-v35-${SHORT_SHA}.tar.gz" \
-            project.godot export_presets.cfg src scenes data assets tools docs/v33 docs/v34 docs/v35
+          tar -czf "/tmp/xethkioz-snapshot/world-of-xethkioz-v36-${SHORT_SHA}.tar.gz" \
+            project.godot export_presets.cfg src scenes data assets tools docs/v33 docs/v34 docs/v35 docs/v36
 
       - name: Upload source snapshot
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: world-of-xethkioz-v35-source-${{ github.sha }}
+          name: world-of-xethkioz-v36-source-${{ github.sha }}
           path: /tmp/xethkioz-snapshot/*.tar.gz
           retention-days: 30
           if-no-files-found: error
