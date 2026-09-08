@@ -28,7 +28,10 @@ func _on_npc_interacted(npc_id: String) -> void:
 			GameState.add_pet_bond(5)
 			GameState.add_crystals(10)
 			EventBus.quest_changed.emit("Raíces alteradas", "Completada", true)
-			EventBus.dialog_requested.emit("Alexis", "Bien. Esto no es una migración normal. Las raíces están respondiendo a algo más profundo. Seguimos desde acá.")
+			var conclusion := "Bien. Esto no es una migración normal. Las raíces están respondiendo a algo más profundo. Seguimos desde acá."
+			if GameState.has_lore("nota_elida_raices"):
+				conclusion = "Bien. Y con la nota de Elida ya no puedo descartarlo: estas raíces están siguiendo un camino viejo, uno que nosotros todavía no vemos."
+			EventBus.dialog_requested.emit("Alexis", conclusion)
 			EventBus.toast_requested.emit("Misión completada · +120 XP · +10 cristales")
 
 func _on_enemy_defeated(_enemy_id: String, _xp: int, _pos: Vector2) -> void:
