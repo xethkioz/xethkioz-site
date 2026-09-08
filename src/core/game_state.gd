@@ -2,6 +2,7 @@ extends Node
 
 const MAX_LEVEL := 60
 const LEGENDARY_SPECIES := ["xethkioz", "itzuke", "mozaruk", "killaruna", "heller", "kahezer", "okuninust", "dvalin"]
+const XETHKIOZ_TAIL_STAGES := [3, 5, 7, 9]
 
 var player_level: int = 1
 var player_xp: int = 0
@@ -10,6 +11,7 @@ var campaign_hito: int = 1
 var selected_mentor: String = ""
 var prism_step_unlocked := false
 var xethkioz_bond: int = 0
+var xethkioz_tail_stage: int = 3
 var profession_xp: Dictionary = {"botanica": 0, "cocina": 0, "mineria": 0}
 var set_piece_counts: Dictionary = {"brote_vivo": 0}
 var discovered_lore: Array[String] = []
@@ -50,6 +52,13 @@ func add_crystals(amount: int) -> void:
 func add_pet_bond(amount: int) -> void:
 	xethkioz_bond = clampi(xethkioz_bond + amount, 0, 100)
 	EventBus.pet_bond_changed.emit(xethkioz_bond)
+
+func set_xethkioz_tail_stage(tails: int) -> bool:
+	if not XETHKIOZ_TAIL_STAGES.has(tails) or tails == xethkioz_tail_stage:
+		return false
+	xethkioz_tail_stage = tails
+	EventBus.xethkioz_tail_stage_changed.emit(xethkioz_tail_stage)
+	return true
 
 func add_profession_xp(profession_id: String, amount: int) -> void:
 	profession_xp[profession_id] = int(profession_xp.get(profession_id, 0)) + maxi(amount, 0)
@@ -104,10 +113,13 @@ func set_last_world_position(position_value: Vector2) -> void:
 func set_world_flag(flag_id: String, value: bool = true) -> void:
 	if flag_id.is_empty():
 		return
+	var previous := has_world_flag(flag_id)
 	if value:
 		world_flags[flag_id] = true
 	else:
 		world_flags.erase(flag_id)
+	if previous != value:
+		EventBus.world_flag_changed.emit(flag_id, value)
 
 func has_world_flag(flag_id: String) -> bool:
 	return bool(world_flags.get(flag_id, false))
@@ -179,6 +191,7 @@ func unlock_prism_step() -> bool:
 	if prism_step_unlocked:
 		return false
 	prism_step_unlocked = true
+	set_world_flag("prism_step_unlocked", true)
 	EventBus.traversal_unlocked.emit("paso_prismatico")
 	return true
 
@@ -198,6 +211,7 @@ func reset_new_game() -> void:
 	selected_mentor = ""
 	prism_step_unlocked = false
 	xethkioz_bond = 0
+	xethkioz_tail_stage = 3
 	profession_xp = {"botanica": 0, "cocina": 0, "mineria": 0}
 	set_piece_counts = {"brote_vivo": 0}
 	discovered_lore.clear()
@@ -210,12 +224,13 @@ func reset_new_game() -> void:
 	EventBus.player_progress_changed.emit(player_level, player_xp, xp_to_next())
 	EventBus.currency_changed.emit(crystals)
 	EventBus.pet_bond_changed.emit(xethkioz_bond)
+	EventBus.xethkioz_tail_stage_changed.emit(xethkioz_tail_stage)
 	EventBus.set_progress_changed.emit("brote_vivo", 0)
 	EventBus.active_familiar_changed.emit(active_familiar_id)
 
 func to_dict() -> Dictionary:
 	return {
-		"save_version": 9,
+		"save_version": 10,
 		"player_level": player_level,
 		"player_xp": player_xp,
 		"crystals": crystals,
@@ -223,6 +238,7 @@ func to_dict() -> Dictionary:
 		"selected_mentor": selected_mentor,
 		"prism_step_unlocked": prism_step_unlocked,
 		"xethkioz_bond": xethkioz_bond,
+		"xethkioz_tail_stage": xethkioz_tail_stage,
 		"profession_xp": profession_xp.duplicate(true),
 		"set_piece_counts": set_piece_counts.duplicate(true),
 		"discovered_lore": discovered_lore.duplicate(),
@@ -242,6 +258,8 @@ func apply_dict(data: Dictionary) -> void:
 	selected_mentor = str(data.get("selected_mentor", ""))
 	prism_step_unlocked = bool(data.get("prism_step_unlocked", false))
 	xethkioz_bond = clampi(int(data.get("xethkioz_bond", 0)), 0, 100)
+	var raw_tail_stage := int(data.get("xethkioz_tail_stage", 3))
+	xethkioz_tail_stage = raw_tail_stage if XETHKIOZ_TAIL_STAGES.has(raw_tail_stage) else 3
 	profession_xp = data.get("profession_xp", {"botanica": 0, "cocina": 0, "mineria": 0}).duplicate(true)
 	set_piece_counts = data.get("set_piece_counts", {"brote_vivo": 0}).duplicate(true)
 	discovered_lore.clear()
@@ -260,9 +278,12 @@ func apply_dict(data: Dictionary) -> void:
 	if raw_position is Array and raw_position.size() >= 2:
 		last_world_position = Vector2(float(raw_position[0]), float(raw_position[1]))
 	world_flags = data.get("world_flags", {}).duplicate(true)
+	if prism_step_unlocked:
+		world_flags["prism_step_unlocked"] = true
 	EventBus.player_progress_changed.emit(player_level, player_xp, 0 if player_level >= MAX_LEVEL else xp_to_next())
 	EventBus.currency_changed.emit(crystals)
 	EventBus.pet_bond_changed.emit(xethkioz_bond)
+	EventBus.xethkioz_tail_stage_changed.emit(xethkioz_tail_stage)
 	EventBus.set_progress_changed.emit("brote_vivo", set_piece_count("brote_vivo"))
 	EventBus.active_familiar_changed.emit(active_familiar_id)
 
