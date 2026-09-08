@@ -1,9 +1,11 @@
 extends "res://src/player/player_controller.gd"
 
 const SHEET := preload("res://assets/production/characters/viajero_sheet.svg")
+const ProfileOverlayScript := preload("res://src/player/player_profile_overlay.gd")
 const FRAME_SIZE := Vector2(32, 32)
 
 var _visual: Sprite2D
+var _profile_overlay: Node2D
 var _anim_clock := 0.0
 var _anim_frame := 1
 
@@ -17,7 +19,16 @@ func _ready() -> void:
 	_visual.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_visual.position = Vector2(0, -7)
 	_visual.z_index = 2
+	var body_scale := [0.95, 1.0, 1.05][clampi(CharacterProfile.body_type, 0, 2)]
+	_visual.scale = Vector2(body_scale, 1.0)
 	add_child(_visual)
+
+	_profile_overlay = Node2D.new()
+	_profile_overlay.name = "ProfileOverlay"
+	_profile_overlay.set_script(ProfileOverlayScript)
+	_profile_overlay.position = Vector2(0, -7)
+	_profile_overlay.configure(self)
+	add_child(_profile_overlay)
 	_update_visual(0.0)
 
 func _physics_process(delta: float) -> void:
@@ -42,8 +53,7 @@ func _update_visual(delta: float) -> void:
 	elif facing.y < 0.0:
 		row = 3
 	_visual.region_rect = Rect2(Vector2(_anim_frame * 32, row * 32), FRAME_SIZE)
-	var accent: Color = CharacterProfile.ACCENT_COLORS[clampi(CharacterProfile.accent_color, 0, CharacterProfile.ACCENT_COLORS.size() - 1)]
-	_visual.modulate = accent.lerp(Color.WHITE, 0.72)
+	_visual.modulate = Color.WHITE
 
 func _use_brote_vivo() -> void:
 	var pieces: int = GameState.set_piece_count("brote_vivo")
