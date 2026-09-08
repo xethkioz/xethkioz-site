@@ -63,6 +63,48 @@ func _perform_melee_attack() -> void:
 	var accent: Color = CharacterProfile.accent_color_value()
 	_spawn_feedback("slash", global_position + facing * 17.0 + Vector2(0, -7), facing, accent, "")
 
+func _use_ability(slot: String) -> void:
+	var previous_mana: float = mana
+	var previous_cooldown: float = float(_ability_cooldowns.get(slot, 0.0))
+	super._use_ability(slot)
+	var current_cooldown: float = float(_ability_cooldowns.get(slot, 0.0))
+	var activated: bool = current_cooldown > previous_cooldown + 0.01 or mana < previous_mana - 0.01
+	if activated:
+		_spawn_ability_feedback(slot)
+
+func _spawn_ability_feedback(slot: String) -> void:
+	var mentor_id: String = GameState.selected_mentor
+	var color_value: Color = _mentor_feedback_color(mentor_id)
+	var kind_value: String = "burst"
+	var world_position: Vector2 = global_position + Vector2(0, -7)
+	match slot:
+		"Q":
+			kind_value = "line"
+			world_position += facing * 12.0
+		"E":
+			kind_value = "ward"
+		"R":
+			kind_value = "line" if mentor_id == "gael" or mentor_id == "fermin" else "burst"
+			if kind_value == "line":
+				world_position += facing * 10.0
+		"F":
+			kind_value = "ward"
+			color_value = Color("8fcf78")
+	_spawn_feedback(kind_value, world_position, facing, color_value, "")
+
+func _mentor_feedback_color(mentor_id: String) -> Color:
+	match mentor_id:
+		"ashley":
+			return Color("6ed4e8")
+		"fermin":
+			return Color("ff8c42")
+		"isabella":
+			return Color("c686ff")
+		"gael":
+			return Color("8fcf78")
+		_:
+			return Color("9d7bff")
+
 func take_damage(amount: float) -> void:
 	if amount <= 0.0:
 		return
