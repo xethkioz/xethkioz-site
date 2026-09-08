@@ -1,0 +1,51 @@
+{
+  "region_id": "izrdralar_golden_region",
+  "display_name": "Izrdralar · Las Raíces Vivas",
+  "world_seed": 21500809,
+  "chunk_size_px": 512,
+  "tile_size_px": 16,
+  "start_chunk": [1, 3],
+  "start_local_px": [256, 224],
+  "chunks": {
+    "0,0": {"biome":"forest","exits":{"e":true,"s":true}},
+    "1,0": {"biome":"river","exits":{"w":true,"e":true,"s":true}},
+    "2,0": {"biome":"forest","exits":{"w":true,"e":true,"s":true}},
+    "3,0": {"biome":"ruins","exits":{"w":true,"e":true,"s":true}},
+    "4,0": {"biome":"boss","exits":{"w":true,"s":true}},
+
+    "0,1": {"biome":"forest","exits":{"n":true,"e":true,"s":true}},
+    "1,1": {"biome":"lake","exits":{"n":true,"w":true,"e":true,"s":true}},
+    "2,1": {"biome":"forest","exits":{"n":true,"w":true,"e":true,"s":true}},
+    "3,1": {"biome":"ruins","exits":{"n":true,"w":true,"e":true,"s":true}},
+    "4,1": {"biome":"forest","exits":{"n":true,"w":true,"s":true}},
+
+    "0,2": {"biome":"forest","exits":{"n":true,"e":true,"s":true}},
+    "1,2": {"biome":"river","exits":{"n":true,"w":true,"e":true,"s":true}},
+    "2,2": {"biome":"forest","exits":{"n":true,"w":true,"e":true,"s":true}},
+    "3,2": {"biome":"sanctuary","exits":{"n":true,"w":true,"e":true,"s":true}},
+    "4,2": {"biome":"forest","exits":{"n":true,"w":true,"s":true}},
+
+    "0,3": {"biome":"forest","exits":{"n":true,"e":true}},
+    "1,3": {"biome":"refuge","exits":{"n":true,"w":true,"e":true}},
+    "2,3": {"biome":"forest","exits":{"n":true,"w":true,"e":true}},
+    "3,3": {"biome":"forest","exits":{"n":true,"w":true,"e":true}},
+    "4,3": {"biome":"ruins","exits":{"n":true,"w":true}}
+  },
+  "poi": [
+    {"id":"awakening","name":"Cuenca del Despertar","chunk":[1,3],"local":[256,224],"kind":"story"},
+    {"id":"elida_refuge","name":"Refugio de Elida","chunk":[1,3],"local":[320,160],"kind":"hub"},
+    {"id":"initial_village","name":"Aldea del Alba","chunk":[2,3],"local":[220,230],"kind":"town"},
+    {"id":"enchanted_lake","name":"Lago Encantado","chunk":[1,1],"local":[255,220],"kind":"creatures"},
+    {"id":"living_ruins","name":"Ruinas Vivas","chunk":[3,1],"local":[250,240],"kind":"ruins"},
+    {"id":"roots_sanctuary","name":"Santuario de las Raíces","chunk":[3,2],"local":[255,255],"kind":"dungeon"},
+    {"id":"silent_wing_cave","name":"Cueva del Ala Silente","chunk":[4,3],"local":[360,145],"kind":"secret_locked"},
+    {"id":"veiled_forest_heart","name":"Corazón del Bosque Velado","chunk":[4,0],"local":[255,255],"kind":"boss"}
+  ],
+  "production_targets": {
+    "encounters": [10, 14],
+    "resource_clusters": [18, 24],
+    "minimum_secrets": 4,
+    "recognizable_poi": 8,
+    "relevant_npc_interactions": [5, 7]
+  }
+}
