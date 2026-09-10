@@ -1,0 +1,117 @@
+name: Izrdralar Map Chain 01-32 Windows
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - game/izrdralar-map-chain-01-32-20260910
+
+jobs:
+  izrdralar-map-chain:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Godot 4.7.2 and Windows templates
+        shell: bash
+        run: |
+          set -euxo pipefail
+          wget -q https://godot-releases.nbg1.your-objectstorage.com/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -O /tmp/godot.zip
+          unzip -q /tmp/godot.zip -d /tmp/godot
+          chmod +x /tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          wget -q https://godot-releases.nbg1.your-objectstorage.com/4.7.2-stable/Godot_v4.7.2-stable_export_templates.tpz -O /tmp/templates.tpz
+          mkdir -p "$HOME/.local/share/godot/export_templates/4.7.2.stable"
+          unzip -q /tmp/templates.tpz -d /tmp/templates
+          cp -r /tmp/templates/templates/* "$HOME/.local/share/godot/export_templates/4.7.2.stable/"
+
+      - name: Validate traceability manifest
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          p="data/regions/izrdralar_map_chain_01_32.json"
+          d=json.load(open(p,encoding="utf-8"))
+          maps=d["maps"]
+          assert len(maps)==32
+          assert [m["id"] for m in maps]==list(range(1,33))
+          assert [m["id"] for m in maps if m["t"]=="boss"]==[5,10,15,20,25,30]
+          assert maps[7]["t"]=="refuge" and maps[21]["t"]=="refuge"
+          assert maps[11]["t"]=="story"
+          assert maps[17]["t"]=="secret" and maps[26]["t"]=="secret"
+          assert maps[6]["t"]=="alexis" and maps[27]["t"]=="alexis"
+          assert maps[31]["t"]=="legendary"
+          assert sum(1 for m in maps if m["s"][0]*m["s"][1]>=8 and m["s"]!=[3,3]) >= 10
+          for m in maps:
+              assert len(m["z"])>=3
+              assert len(m["bi"])>=1
+          print("TRACEABILITY 01-32: PASS")
+          PY
+
+      - name: Import project
+        shell: bash
+        run: |
+          set -o pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --editor --quit 2>&1 | tee /tmp/import.log
+          if grep -E "SCRIPT ERROR|Parse Error" /tmp/import.log; then
+            exit 1
+          fi
+
+      - name: Verify PLAYER-only map runtime
+        shell: bash
+        run: |
+          set -euxo pipefail
+          grep -Fq 'run/main_scene="res://scenes/test/IzrdralarMapChainTest.tscn"' project.godot
+          test -f src/world/izrdralar_map_chain_test.gd
+          test -f src/world/izrdralar_generic_chunk.gd
+          test -f docs/IZRDRALAR_MAP_TRACEABILITY_01_32.md
+          TEST=src/world/izrdralar_map_chain_test.gd
+          ! grep -E "xethkioz_companion|familiar_companion|npc_interactable|enemy_controller|capturable_creature|_spawn_npc|_spawn_enemy|_spawn_xethkioz|_spawn_active_familiar" "$TEST"
+          grep -Fq 'player_controller_production.gd' "$TEST"
+
+      - name: Runtime all 32 maps in Godot
+        shell: bash
+        run: |
+          set -o pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          for ID in $(seq 1 32); do
+            echo "=== IZR-M$(printf '%02d' "$ID") ==="
+            set +e
+            XETHKIOZ_MAP_ID="$ID" timeout 15s "$GODOT" --headless --path . --quit-after 5 2>&1 | tee "/tmp/map_${ID}.log"
+            STATUS=${PIPESTATUS[0]}
+            set -e
+            if grep -E "SCRIPT ERROR|Parse Error|Invalid call|Invalid access|ERROR:" "/tmp/map_${ID}.log"; then
+              exit 1
+            fi
+            if [ "$STATUS" -ne 0 ] && [ "$STATUS" -ne 124 ]; then
+              exit "$STATUS"
+            fi
+          done
+
+      - name: Export Windows x86_64 and source
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          mkdir -p build
+          "$GODOT" --headless --path . --export-release "Windows Desktop" build/World_of_Xethkioz_IZRDRALAR_01_32_PLAYER_ONLY_TEST.exe
+          (
+            cd build
+            zip -9 World_of_Xethkioz_IZRDRALAR_MAPS_01_32_PLAYER_ONLY_Windows.zip World_of_Xethkioz_IZRDRALAR_01_32_PLAYER_ONLY_TEST.exe
+          )
+          zip -rq build/World_of_Xethkioz_IZRDRALAR_MAPS_01_32_PLAYER_ONLY_Source.zip . -x '.git/*' '.godot/*' 'build/*'
+          sha256sum build/World_of_Xethkioz_IZRDRALAR_MAPS_01_32_PLAYER_ONLY_Windows.zip build/World_of_Xethkioz_IZRDRALAR_MAPS_01_32_PLAYER_ONLY_Source.zip > build/SHA256.txt
+
+      - name: Upload test builds
+        uses: actions/upload-artifact@v4
+        with:
+          name: World-of-Xethkioz-IZRDRALAR-MAPS-01-32-PLAYER-ONLY
+          path: |
+            build/World_of_Xethkioz_IZRDRALAR_MAPS_01_32_PLAYER_ONLY_Windows.zip
+            build/World_of_Xethkioz_IZRDRALAR_MAPS_01_32_PLAYER_ONLY_Source.zip
+            build/SHA256.txt
+          if-no-files-found: error
