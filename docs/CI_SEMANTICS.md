@@ -1,0 +1,1 @@
+Map-chain CI success currently means manifest validation + clean import + headless boot/runtime smoke for every map + Windows/source export. It does not yet prove traversal, gameplay, collision coverage, save/load, combat or campaign completion.
