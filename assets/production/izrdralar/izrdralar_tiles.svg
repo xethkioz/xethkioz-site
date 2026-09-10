@@ -1,43 +1,209 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="128" height="64" viewBox="0 0 128 64" shape-rendering="crispEdges">
-  <rect width="128" height="64" fill="#1c322d"/>
+<rect width="128" height="64" fill="#1c322d"/>
 
-  <!-- row 0: grass, flowers, dirt, path, water, foam water, rock, cliff -->
-  <g transform="translate(0 0)"><rect width="16" height="16" fill="#356642"/><rect x="2" y="3" width="2" height="1" fill="#4b7b51"/><rect x="11" y="7" width="2" height="1" fill="#274f36"/><rect x="6" y="12" width="1" height="2" fill="#4f8057"/></g>
-  <g transform="translate(16 0)"><rect width="16" height="16" fill="#356642"/><rect x="3" y="4" width="2" height="2" fill="#f0e7a3"/><rect x="4" y="3" width="1" height="4" fill="#f4a7cf"/><rect x="10" y="11" width="2" height="2" fill="#d5c7ff"/><rect x="11" y="10" width="1" height="4" fill="#8b5cf6"/></g>
-  <g transform="translate(32 0)"><rect width="16" height="16" fill="#96704d"/><rect x="1" y="3" width="4" height="2" fill="#aa8358"/><rect x="10" y="2" width="3" height="2" fill="#79593f"/><rect x="6" y="10" width="5" height="2" fill="#b48d60"/><rect x="2" y="13" width="2" height="1" fill="#73533b"/></g>
-  <g transform="translate(48 0)"><rect width="16" height="16" fill="#b39161"/><rect y="0" width="16" height="2" fill="#c4a46f"/><rect y="14" width="16" height="2" fill="#806547"/><rect x="3" y="5" width="3" height="1" fill="#d2b37e"/><rect x="11" y="9" width="2" height="1" fill="#8c714f"/></g>
-  <g transform="translate(64 0)"><rect width="16" height="16" fill="#24566b"/><rect x="0" y="3" width="8" height="2" fill="#2f7189"/><rect x="8" y="9" width="8" height="2" fill="#377f98"/><rect x="3" y="13" width="6" height="1" fill="#78c7d9"/></g>
-  <g transform="translate(80 0)"><rect width="16" height="16" fill="#2b6b82"/><rect x="0" y="2" width="10" height="2" fill="#76cce0"/><rect x="8" y="8" width="8" height="2" fill="#9ce0eb"/><rect x="1" y="13" width="7" height="1" fill="#d4f7ff"/></g>
-  <g transform="translate(96 0)"><rect width="16" height="16" fill="#356642"/><rect x="3" y="8" width="10" height="5" fill="#5e6265"/><rect x="5" y="5" width="7" height="5" fill="#777b80"/><rect x="7" y="4" width="4" height="2" fill="#969ca0"/><rect x="4" y="12" width="8" height="2" fill="#474b4d"/></g>
-  <g transform="translate(112 0)"><rect width="16" height="16" fill="#5b4636"/><rect width="16" height="4" fill="#6e5844"/><rect y="5" width="16" height="2" fill="#3f332b"/><rect x="1" y="8" width="6" height="6" fill="#745842"/><rect x="9" y="8" width="6" height="6" fill="#67503d"/><rect x="3" y="10" width="2" height="1" fill="#a0805e"/></g>
+<!-- row 0 · primary ground language -->
+<g transform="translate(0 0)">
+ <rect width="16" height="16" fill="#315d3d"/>
+ <path d="M2 12v-2h1v2M6 5V3h1v2M11 14v-2h1v2M14 8V6h1v2" stroke="#43734a" stroke-width="1"/>
+ <rect x="4" y="9" width="2" height="1" fill="#284d34"/><rect x="9" y="2" width="2" height="1" fill="#3a6842"/>
+</g>
+<g transform="translate(16 0)">
+ <rect width="16" height="16" fill="#315d3d"/>
+ <path d="M3 13v-3m8 1V8m3 5v-2" stroke="#47784d" stroke-width="1"/>
+ <g fill="#e8e1c7"><rect x="2" y="8" width="2" height="2"/><rect x="10" y="6" width="2" height="2"/></g>
+ <rect x="3" y="7" width="1" height="1" fill="#e79aaa"/><rect x="11" y="5" width="1" height="1" fill="#d6c6f4"/>
+ <rect x="13" y="11" width="2" height="2" fill="#d6b76f"/>
+</g>
+<g transform="translate(32 0)">
+ <rect width="16" height="16" fill="#806248"/>
+ <rect x="0" y="0" width="16" height="2" fill="#886a4e" opacity=".55"/>
+ <path d="M2 5h3M9 3h2M6 11h4M12 14h2" stroke="#9a7755" stroke-width="1"/>
+ <path d="M1 13h2M11 8h3M5 2h2" stroke="#624b38" stroke-width="1"/>
+ <rect x="5" y="7" width="1" height="1" fill="#b18b62"/>
+</g>
+<g transform="translate(48 0)">
+ <rect width="16" height="16" fill="#9d7d55"/>
+ <rect y="0" width="16" height="2" fill="#ad8b60"/><rect y="14" width="16" height="2" fill="#725a40"/>
+ <path d="M2 5h4M10 4h3M5 10h5M12 12h2" stroke="#c09a6b" stroke-width="1"/>
+ <path d="M1 8h2M8 7h2" stroke="#7d6246" stroke-width="1"/>
+</g>
+<g transform="translate(64 0)">
+ <rect width="16" height="16" fill="#205064"/>
+ <path d="M0 4h6M8 3h6M3 9h8M10 13h6" stroke="#2c677b" stroke-width="1"/>
+ <path d="M1 6h4M7 11h5" stroke="#3d8092" stroke-width="1"/>
+ <rect x="13" y="6" width="2" height="1" fill="#72b5c4"/>
+</g>
+<g transform="translate(80 0)">
+ <rect width="16" height="16" fill="#255a6d"/>
+ <path d="M0 3h7M9 2h7M2 8h10M8 12h8" stroke="#4b8fa0" stroke-width="1"/>
+ <path d="M0 5h4M5 10h8M11 14h5" stroke="#a2d8df" stroke-width="1"/>
+ <rect x="2" y="13" width="4" height="1" fill="#d6eef1"/>
+</g>
+<g transform="translate(96 0)">
+ <rect width="16" height="16" fill="#315d3d"/>
+ <ellipse cx="8" cy="11" rx="6" ry="3" fill="#394240"/>
+ <path d="M4 10l2-4h6l2 4-2 3H5z" fill="#59615f"/>
+ <path d="M7 6h5l-1-2H8z" fill="#777f7c"/>
+ <rect x="6" y="8" width="4" height="1" fill="#858d89"/>
+</g>
+<g transform="translate(112 0)">
+ <rect width="16" height="16" fill="#494038"/>
+ <rect y="0" width="16" height="3" fill="#5e5144"/>
+ <rect y="4" width="16" height="2" fill="#302d29"/>
+ <path d="M1 7h6v7H1zM9 7h6v7H9z" fill="#5b4a3d"/>
+ <path d="M3 9h2M11 11h3M4 14h4" stroke="#786350" stroke-width="1"/>
+</g>
 
-  <!-- row 1: dark grass, shrub, tree, crystal, ruin floor, ruin wall, bridge, mud -->
-  <g transform="translate(0 16)"><rect width="16" height="16" fill="#274e37"/><rect x="2" y="3" width="2" height="2" fill="#315e41"/><rect x="9" y="8" width="2" height="2" fill="#1e3e2c"/><rect x="13" y="12" width="1" height="3" fill="#49734d"/></g>
-  <g transform="translate(16 16)"><rect width="16" height="16" fill="#356642"/><rect x="2" y="8" width="12" height="6" fill="#285337"/><rect x="4" y="5" width="8" height="7" fill="#3d7647"/><rect x="6" y="3" width="5" height="5" fill="#4a8750"/></g>
-  <g transform="translate(32 16)"><rect width="16" height="16" fill="#356642"/><rect x="6" y="9" width="4" height="7" fill="#6b4a31"/><rect x="2" y="4" width="12" height="8" fill="#28583a"/><rect x="4" y="1" width="8" height="8" fill="#337047"/><rect x="7" y="0" width="3" height="3" fill="#4c8655"/></g>
-  <g transform="translate(48 16)"><rect width="16" height="16" fill="#2f573c"/><polygon points="8,1 12,6 10,13 6,15 4,8" fill="#8b5cf6"/><polygon points="8,2 9,7 7,12 6,8" fill="#d7c7ff"/><rect x="2" y="14" width="12" height="2" fill="#493d58"/></g>
-  <g transform="translate(64 16)"><rect width="16" height="16" fill="#707476"/><rect x="0" y="0" width="7" height="7" fill="#83888a"/><rect x="8" y="0" width="8" height="7" fill="#626668"/><rect x="0" y="8" width="9" height="8" fill="#5b6062"/><rect x="10" y="8" width="6" height="8" fill="#777c7e"/><rect x="7" width="1" height="16" fill="#464a4c"/><rect y="7" width="16" height="1" fill="#464a4c"/></g>
-  <g transform="translate(80 16)"><rect width="16" height="16" fill="#3e4143"/><rect x="1" y="2" width="14" height="12" fill="#666b6e"/><rect x="3" y="0" width="3" height="5" fill="#8b5cf6"/><rect x="10" y="0" width="3" height="5" fill="#3fc7c9"/><rect x="2" y="8" width="12" height="2" fill="#303436"/></g>
-  <g transform="translate(96 16)"><rect width="16" height="16" fill="#24566b"/><rect x="0" y="4" width="16" height="8" fill="#835c39"/><rect y="5" width="16" height="2" fill="#a87b4d"/><rect y="10" width="16" height="2" fill="#5f422c"/><rect x="4" y="4" width="2" height="8" fill="#4d3424"/><rect x="11" y="4" width="2" height="8" fill="#4d3424"/></g>
-  <g transform="translate(112 16)"><rect width="16" height="16" fill="#695746"/><rect x="1" y="2" width="4" height="2" fill="#806a54"/><rect x="9" y="3" width="5" height="2" fill="#4e4338"/><rect x="5" y="10" width="6" height="3" fill="#7c6650"/><rect x="2" y="14" width="4" height="1" fill="#463a31"/></g>
+<!-- row 1 · structures / dark vegetation -->
+<g transform="translate(0 16)">
+ <rect width="16" height="16" fill="#254a32"/>
+ <path d="M2 12V9m3-4V3m4 10v-2m4-4V4" stroke="#315c3b" stroke-width="1"/>
+ <rect x="6" y="8" width="3" height="1" fill="#1c3d2a"/><rect x="11" y="13" width="2" height="1" fill="#396742"/>
+</g>
+<g transform="translate(16 16)">
+ <rect width="16" height="16" fill="#315d3d"/>
+ <ellipse cx="8" cy="11" rx="6" ry="4" fill="#21472f"/>
+ <path d="M3 11l3-5 2 3 3-5 2 5 2 2-2 3H4z" fill="#376b42"/>
+ <path d="M5 9l2-3m3 4l2-4" stroke="#4b7d4d" stroke-width="1"/>
+</g>
+<g transform="translate(32 16)">
+ <rect width="16" height="16" fill="#315d3d"/>
+ <rect x="7" y="9" width="3" height="7" fill="#5d442f"/>
+ <ellipse cx="8" cy="7" rx="6" ry="5" fill="#214b31"/>
+ <ellipse cx="8" cy="5" rx="4" ry="4" fill="#2f653d"/>
+ <rect x="5" y="3" width="5" height="2" fill="#447b49"/>
+</g>
+<g transform="translate(48 16)">
+ <rect width="16" height="16" fill="#294f37"/>
+ <polygon points="8,1 12,6 10,13 7,15 4,10 5,5" fill="#7657c9"/>
+ <polygon points="8,2 9,6 7,11 6,8" fill="#ddd3f8"/>
+ <rect x="12" y="9" width="2" height="2" fill="#3fb4b8"/>
+ <rect x="2" y="14" width="12" height="2" fill="#41394b"/>
+</g>
+<g transform="translate(64 16)">
+ <rect width="16" height="16" fill="#596163"/>
+ <path d="M0 0h7v7H0zM8 0h8v7H8zM0 8h9v8H0zM10 8h6v8h-6z" fill="#676f70"/>
+ <path d="M7 0v16M0 7h16" stroke="#3e4546" stroke-width="1"/>
+ <path d="M2 3h3M11 11h3" stroke="#8a6c4a" stroke-width="1"/>
+</g>
+<g transform="translate(80 16)">
+ <rect width="16" height="16" fill="#3d4446"/>
+ <rect x="1" y="2" width="14" height="12" fill="#596165"/>
+ <path d="M3 4h10M3 9h10" stroke="#343b3e" stroke-width="1"/>
+ <rect x="4" y="1" width="2" height="5" fill="#7d5bd0"/><rect x="10" y="1" width="2" height="5" fill="#3bb6b8"/>
+ <rect x="5" y="5" width="1" height="1" fill="#d8ceff"/><rect x="11" y="5" width="1" height="1" fill="#c8f1ef"/>
+</g>
+<g transform="translate(96 16)">
+ <rect width="16" height="16" fill="#205064"/>
+ <rect y="4" width="16" height="8" fill="#694b35"/>
+ <rect y="5" width="16" height="2" fill="#8b6645"/><rect y="10" width="16" height="2" fill="#493525"/>
+ <rect x="3" y="4" width="2" height="8" fill="#3b2d22"/><rect x="11" y="4" width="2" height="8" fill="#3b2d22"/>
+ <rect x="6" y="6" width="4" height="1" fill="#b18556"/>
+</g>
+<g transform="translate(112 16)">
+ <rect width="16" height="16" fill="#5b4c40"/>
+ <path d="M1 4h4M9 3h5M5 10h6M2 14h4" stroke="#6d5b4a" stroke-width="1"/>
+ <path d="M3 7h3M11 12h3" stroke="#443a32" stroke-width="1"/>
+ <rect x="7" y="5" width="2" height="1" fill="#806a53"/>
+</g>
 
-  <!-- row 2: natural alternates -->
-  <g transform="translate(0 32)"><rect width="16" height="16" fill="#315f3f"/><rect x="1" y="2" width="1" height="3" fill="#4d8256"/><rect x="4" y="10" width="2" height="1" fill="#244c34"/><rect x="9" y="4" width="1" height="3" fill="#47764d"/><rect x="13" y="12" width="2" height="1" fill="#56845a"/><rect x="7" y="14" width="1" height="1" fill="#203f2d"/></g>
-  <g transform="translate(16 32)"><rect width="16" height="16" fill="#315f3f"/><rect x="2" y="12" width="2" height="2" fill="#ffcf72"/><rect x="3" y="10" width="1" height="4" fill="#d76f8a"/><rect x="8" y="5" width="2" height="2" fill="#f0f0f5"/><rect x="9" y="4" width="1" height="4" fill="#a855f7"/><rect x="13" y="9" width="1" height="2" fill="#79a957"/></g>
-  <g transform="translate(32 32)"><rect width="16" height="16" fill="#8d694b"/><rect x="0" y="6" width="5" height="2" fill="#a7815b"/><rect x="7" y="1" width="4" height="2" fill="#71543d"/><rect x="11" y="11" width="5" height="2" fill="#b18a62"/><rect x="3" y="14" width="4" height="1" fill="#604935"/><rect x="8" y="7" width="2" height="1" fill="#c09b6e"/></g>
-  <g transform="translate(48 32)"><rect width="16" height="16" fill="#aa8759"/><rect y="1" width="16" height="1" fill="#ccb079"/><rect y="13" width="16" height="2" fill="#745b40"/><rect x="1" y="8" width="4" height="1" fill="#d8be89"/><rect x="7" y="4" width="4" height="1" fill="#8e704d"/><rect x="12" y="10" width="3" height="1" fill="#d0ac74"/></g>
-  <g transform="translate(64 32)"><rect width="16" height="16" fill="#234f63"/><rect x="0" y="1" width="6" height="1" fill="#397b91"/><rect x="5" y="5" width="8" height="2" fill="#2d6d84"/><rect x="1" y="11" width="9" height="1" fill="#4c91a5"/><rect x="11" y="14" width="5" height="1" fill="#8bd8e7"/></g>
-  <g transform="translate(80 32)"><rect width="16" height="16" fill="#2a6378"/><rect x="0" y="1" width="7" height="2" fill="#a3e7f0"/><rect x="7" y="6" width="9" height="2" fill="#6bc1d5"/><rect x="2" y="12" width="11" height="1" fill="#d5f8ff"/><rect x="12" y="3" width="4" height="1" fill="#4b96aa"/></g>
-  <g transform="translate(96 32)"><rect width="16" height="16" fill="#315f3f"/><rect x="2" y="9" width="11" height="4" fill="#565b5f"/><rect x="4" y="6" width="8" height="5" fill="#71787b"/><rect x="7" y="4" width="5" height="3" fill="#92999c"/><rect x="3" y="13" width="9" height="2" fill="#3f4446"/><rect x="10" y="7" width="2" height="1" fill="#b2b8ba"/></g>
-  <g transform="translate(112 32)"><rect width="16" height="16" fill="#554232"/><rect width="16" height="3" fill="#735943"/><rect y="4" width="16" height="2" fill="#332a24"/><rect x="0" y="7" width="8" height="7" fill="#6e533d"/><rect x="9" y="7" width="7" height="7" fill="#5f4938"/><rect x="2" y="9" width="4" height="1" fill="#9c7959"/><rect x="11" y="12" width="3" height="1" fill="#3e3129"/></g>
+<!-- row 2 · restrained natural alternates -->
+<g transform="translate(0 32)">
+ <rect width="16" height="16" fill="#2e583a"/>
+ <path d="M1 5v-2m3 10v-2m5-5V4m4 9v-3" stroke="#3d6c46" stroke-width="1"/>
+ <path d="M6 14h2M11 2h2" stroke="#244a31" stroke-width="1"/>
+</g>
+<g transform="translate(16 32)">
+ <rect width="16" height="16" fill="#2e583a"/>
+ <path d="M3 12V9m5 4v-2m4-5V4" stroke="#406f47" stroke-width="1"/>
+ <g fill="#ede6cf"><rect x="2" y="8" width="2" height="2"/><rect x="11" y="3" width="2" height="2"/></g>
+ <rect x="3" y="7" width="1" height="1" fill="#d78595"/><rect x="12" y="2" width="1" height="1" fill="#b99be8"/>
+</g>
+<g transform="translate(32 32)">
+ <rect width="16" height="16" fill="#785b43"/>
+ <path d="M0 6h4M7 2h4M10 12h6M3 14h4" stroke="#8e6c4e" stroke-width="1"/>
+ <path d="M2 3h2M12 7h3M6 9h2" stroke="#594535" stroke-width="1"/>
+ <rect x="8" y="5" width="1" height="1" fill="#a7815d"/>
+</g>
+<g transform="translate(48 32)">
+ <rect width="16" height="16" fill="#96754f"/>
+ <rect y="1" width="16" height="1" fill="#a9875d"/><rect y="13" width="16" height="2" fill="#6b543c"/>
+ <path d="M1 6h5M8 4h4M5 10h5M12 11h3" stroke="#b99768" stroke-width="1"/>
+</g>
+<g transform="translate(64 32)">
+ <rect width="16" height="16" fill="#1d4b5e"/>
+ <path d="M0 2h5M6 6h7M1 11h9M12 14h4" stroke="#2b6679" stroke-width="1"/>
+ <path d="M3 4h4M9 9h5" stroke="#397c8d" stroke-width="1"/>
+</g>
+<g transform="translate(80 32)">
+ <rect width="16" height="16" fill="#24576a"/>
+ <path d="M0 2h6M8 5h8M2 10h11M9 14h7" stroke="#5d9eac" stroke-width="1"/>
+ <path d="M1 4h4M6 12h6" stroke="#b8e1e5" stroke-width="1"/>
+</g>
+<g transform="translate(96 32)">
+ <rect width="16" height="16" fill="#2e583a"/>
+ <ellipse cx="8" cy="11" rx="6" ry="3" fill="#3a4241"/>
+ <path d="M4 10l3-4h5l2 4-3 3H5z" fill="#545d5a"/>
+ <rect x="7" y="6" width="5" height="1" fill="#737b78"/>
+ <rect x="10" y="8" width="2" height="1" fill="#858e8a"/>
+</g>
+<g transform="translate(112 32)">
+ <rect width="16" height="16" fill="#433b34"/>
+ <rect y="0" width="16" height="3" fill="#584b40"/><rect y="4" width="16" height="2" fill="#2d2926"/>
+ <rect x="1" y="7" width="7" height="7" fill="#55463a"/><rect x="9" y="7" width="6" height="7" fill="#4c4036"/>
+ <path d="M2 10h4M10 8h3" stroke="#6d5a49" stroke-width="1"/>
+</g>
 
-  <!-- row 3: dark/structure alternates -->
-  <g transform="translate(0 48)"><rect width="16" height="16" fill="#234731"/><rect x="1" y="5" width="3" height="1" fill="#355c40"/><rect x="6" y="12" width="1" height="3" fill="#426c48"/><rect x="10" y="2" width="2" height="2" fill="#183626"/><rect x="14" y="8" width="1" height="3" fill="#31583b"/></g>
-  <g transform="translate(16 48)"><rect width="16" height="16" fill="#315f3f"/><rect x="1" y="9" width="14" height="5" fill="#234a32"/><rect x="3" y="6" width="10" height="6" fill="#376b42"/><rect x="5" y="4" width="5" height="4" fill="#4b8350"/><rect x="11" y="7" width="3" height="3" fill="#2b5939"/></g>
-  <g transform="translate(32 48)"><rect width="16" height="16" fill="#315f3f"/><rect x="7" y="8" width="3" height="8" fill="#69462f"/><rect x="2" y="5" width="12" height="7" fill="#244f35"/><rect x="3" y="2" width="10" height="7" fill="#2e6841"/><rect x="6" y="0" width="5" height="4" fill="#477f50"/><rect x="1" y="8" width="5" height="3" fill="#366f45"/></g>
-  <g transform="translate(48 48)"><rect width="16" height="16" fill="#294e38"/><polygon points="7,1 12,5 11,11 8,15 4,11 5,5" fill="#a855f7"/><polygon points="7,2 9,6 8,11 6,8" fill="#eee8ff"/><rect x="1" y="14" width="14" height="2" fill="#443853"/><rect x="12" y="8" width="2" height="2" fill="#3fc7c9"/></g>
-  <g transform="translate(64 48)"><rect width="16" height="16" fill="#666b6d"/><rect x="0" y="0" width="8" height="6" fill="#7b8082"/><rect x="9" y="0" width="7" height="6" fill="#565a5c"/><rect x="0" y="7" width="6" height="9" fill="#54595b"/><rect x="7" y="7" width="9" height="9" fill="#73787a"/><rect x="6" width="1" height="16" fill="#3c4143"/><rect y="6" width="16" height="1" fill="#3c4143"/><rect x="11" y="10" width="2" height="2" fill="#8b5cf6"/></g>
-  <g transform="translate(80 48)"><rect width="16" height="16" fill="#373a3c"/><rect x="0" y="3" width="16" height="11" fill="#5b6063"/><rect x="2" y="1" width="4" height="4" fill="#a855f7"/><rect x="10" y="1" width="4" height="4" fill="#3fc7c9"/><rect x="1" y="8" width="14" height="2" fill="#282c2e"/><rect x="6" y="12" width="4" height="2" fill="#777d80"/></g>
-  <g transform="translate(96 48)"><rect width="16" height="16" fill="#234f63"/><rect x="0" y="4" width="16" height="8" fill="#765033"/><rect y="4" width="16" height="2" fill="#b38655"/><rect y="10" width="16" height="2" fill="#543923"/><rect x="2" y="4" width="2" height="8" fill="#3f2b1d"/><rect x="8" y="4" width="2" height="8" fill="#3f2b1d"/><rect x="14" y="4" width="2" height="8" fill="#3f2b1d"/></g>
-  <g transform="translate(112 48)"><rect width="16" height="16" fill="#604f40"/><rect x="0" y="3" width="5" height="2" fill="#77614e"/><rect x="7" y="1" width="6" height="2" fill="#443a31"/><rect x="4" y="9" width="9" height="4" fill="#725d49"/><rect x="1" y="13" width="5" height="2" fill="#40352d"/><rect x="12" y="7" width="3" height="1" fill="#8a7258"/></g>
+<!-- row 3 · dark / damaged alternates -->
+<g transform="translate(0 48)">
+ <rect width="16" height="16" fill="#21442e"/>
+ <path d="M2 10V7m4 7v-2m4-6V3m4 10v-2" stroke="#2d5738" stroke-width="1"/>
+ <rect x="4" y="4" width="2" height="1" fill="#173724"/><rect x="11" y="9" width="2" height="1" fill="#37623f"/>
+</g>
+<g transform="translate(16 48)">
+ <rect width="16" height="16" fill="#2b5538"/>
+ <ellipse cx="8" cy="11" rx="7" ry="4" fill="#1d412b"/>
+ <path d="M2 12l3-6 2 3 3-5 2 5 3 3-2 2H3z" fill="#32633e"/>
+ <rect x="7" y="6" width="2" height="1" fill="#4b7b4d"/>
+</g>
+<g transform="translate(32 48)">
+ <rect width="16" height="16" fill="#2b5538"/>
+ <rect x="7" y="8" width="3" height="8" fill="#59402d"/>
+ <ellipse cx="8" cy="7" rx="7" ry="5" fill="#20482f"/>
+ <ellipse cx="9" cy="5" rx="4" ry="4" fill="#2c603a"/>
+ <rect x="3" y="6" width="4" height="2" fill="#397143"/>
+</g>
+<g transform="translate(48 48)">
+ <rect width="16" height="16" fill="#264a34"/>
+ <polygon points="7,1 12,5 11,11 8,15 4,11 5,5" fill="#8c62d4"/>
+ <polygon points="7,2 9,6 8,11 6,8" fill="#eee8ff"/>
+ <rect x="12" y="8" width="2" height="2" fill="#38aeb2"/>
+ <rect x="1" y="14" width="14" height="2" fill="#3b3445"/>
+</g>
+<g transform="translate(64 48)">
+ <rect width="16" height="16" fill="#51595b"/>
+ <path d="M0 0h7v6H0zM8 0h8v6H8zM0 7h9v9H0zM10 7h6v9h-6z" fill="#626a6b"/>
+ <path d="M7 0v16M0 6h16" stroke="#373e40" stroke-width="1"/>
+ <path d="M2 12l3-3m7 4l2-2" stroke="#7d6044" stroke-width="1"/>
+</g>
+<g transform="translate(80 48)">
+ <rect width="16" height="16" fill="#363d40"/>
+ <rect x="1" y="2" width="14" height="12" fill="#515a5d"/>
+ <path d="M2 5h12M4 10h10" stroke="#2f3538" stroke-width="1"/>
+ <rect x="4" y="0" width="2" height="6" fill="#7254c0"/><rect x="10" y="0" width="2" height="6" fill="#349ea2"/>
+ <rect x="5" y="4" width="1" height="1" fill="#d6cdf1"/>
+</g>
+<g transform="translate(96 48)">
+ <rect width="16" height="16" fill="#1d4b5e"/>
+ <rect y="4" width="16" height="8" fill="#624631"/>
+ <rect y="5" width="16" height="2" fill="#7c5a3f"/><rect y="10" width="16" height="2" fill="#3f3024"/>
+ <rect x="3" y="4" width="2" height="8" fill="#33271f"/><rect x="11" y="4" width="2" height="8" fill="#33271f"/>
+ <rect x="8" y="7" width="1" height="2" fill="#9c754d"/>
+</g>
+<g transform="translate(112 48)">
+ <rect width="16" height="16" fill="#51443a"/>
+ <path d="M1 3h5M10 2h4M4 9h7M2 13h3M11 14h3" stroke="#625247" stroke-width="1"/>
+ <path d="M7 5h2M12 8h3M4 12h2" stroke="#392f2a" stroke-width="1"/>
+ <rect x="9" y="10" width="2" height="1" fill="#776354"/>
+</g>
 </svg>
