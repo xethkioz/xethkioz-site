@@ -1,0 +1,1 @@
+IZRDRALAR 01–32 status: structural scaffold, PLAYER-only smoke/runtime validated; not equivalent to completed maps or campaign gameplay.
