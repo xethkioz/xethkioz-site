@@ -1,0 +1,1 @@
+Do not advance Desfralar, Xiomalar or Zodnight implementation as active production while Izrdralar M01–M05 production pass is open. Narrative design may remain documented without consuming the active implementation baseline.
