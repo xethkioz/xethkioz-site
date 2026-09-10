@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="48" viewBox="0 0 192 48" shape-rendering="crispEdges">
+<rect width="192" height="48" fill="none"/>
+
+<!-- frame 0 · intact bridge -->
+<g transform="translate(0 0)">
+ <ellipse cx="48" cy="39" rx="43" ry="5" fill="#071016" opacity=".40"/>
+ <rect x="7" y="16" width="82" height="18" fill="#3a2b22"/>
+ <rect x="9" y="18" width="78" height="14" fill="#775238"/>
+ <g fill="#986b45">
+  <rect x="10" y="19" width="12" height="12"/><rect x="24" y="19" width="12" height="12"/>
+  <rect x="38" y="19" width="12" height="12"/><rect x="52" y="19" width="12" height="12"/>
+  <rect x="66" y="19" width="12" height="12"/><rect x="80" y="19" width="6" height="12"/>
+ </g>
+ <g fill="#5e402e"><rect x="22" y="18" width="2" height="14"/><rect x="36" y="18" width="2" height="14"/><rect x="50" y="18" width="2" height="14"/><rect x="64" y="18" width="2" height="14"/><rect x="78" y="18" width="2" height="14"/></g>
+ <path d="M8 14h80M8 35h80" stroke="#2f2420" stroke-width="3"/>
+ <g fill="#8b6242"><rect x="8" y="8" width="4" height="28"/><rect x="84" y="8" width="4" height="28"/></g>
+ <g fill="#b77849"><rect x="9" y="8" width="2" height="28"/><rect x="85" y="8" width="2" height="28"/></g>
+ <path d="M11 10h74M11 34h74" stroke="#6f4b34" stroke-width="2"/>
+ <!-- salvaged 2150 reinforcement -->
+ <rect x="35" y="15" width="26" height="3" fill="#475156"/><rect x="36" y="16" width="24" height="1" fill="#778387"/>
+ <rect x="44" y="14" width="8" height="2" fill="#b16e42"/>
+ <!-- temporal warning marks -->
+ <polygon points="47,20 52,25 47,30 42,25" fill="#7455c4"/><polygon points="47,22 49,25 47,28 45,25" fill="#e2d8ff"/>
+ <rect x="17" y="23" width="2" height="4" fill="#3fc7c9"/><rect x="76" y="23" width="2" height="4" fill="#3fc7c9"/>
+ <g fill="#d8ffff"><rect x="17" y="22" width="2" height="1"/><rect x="76" y="22" width="2" height="1"/></g>
+</g>
+
+<!-- frame 1 · broken after the storm -->
+<g transform="translate(96 0)">
+ <ellipse cx="48" cy="39" rx="43" ry="5" fill="#071016" opacity=".40"/>
+ <!-- west half -->
+ <path d="M7 16h33l8 8-9 10H7z" fill="#3a2b22"/>
+ <path d="M9 18h29l6 6-7 8H9z" fill="#82583a"/>
+ <g fill="#a16e45"><rect x="10" y="19" width="12" height="12"/><rect x="24" y="19" width="12" height="12"/></g>
+ <path d="M8 14h31l8 7M8 35h30l8-8" stroke="#2f2420" stroke-width="3"/>
+ <rect x="8" y="8" width="4" height="28" fill="#8b6242"/><rect x="9" y="8" width="2" height="28" fill="#b77849"/>
+ <!-- east half -->
+ <path d="M89 16H58l-8 8 9 10h30z" fill="#3a2b22"/>
+ <path d="M87 18H60l-6 6 7 8h26z" fill="#765038"/>
+ <g fill="#956641"><rect x="62" y="19" width="12" height="12"/><rect x="76" y="19" width="10" height="12"/></g>
+ <path d="M88 14H59l-9 7M88 35H60l-9-8" stroke="#2f2420" stroke-width="3"/>
+ <rect x="84" y="8" width="4" height="28" fill="#8b6242"/><rect x="85" y="8" width="2" height="28" fill="#b77849"/>
+ <!-- snapped metal and prism residue -->
+ <path d="M38 18l8 5-4 5 8 5M59 18l-8 5 4 5-8 5" fill="none" stroke="#576166" stroke-width="2"/>
+ <polygon points="48,14 53,22 50,31 45,31 42,22" fill="#7757c7" opacity=".82"/>
+ <polygon points="48,17 50,22 48,28 45,22" fill="#ded4ff" opacity=".92"/>
+ <g fill="#3fc7c9"><rect x="39" y="12" width="2" height="2"/><rect x="57" y="31" width="2" height="2"/><rect x="48" y="8" width="1" height="3"/></g>
+</g>
+</svg>
