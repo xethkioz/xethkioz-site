@@ -1,1 +1,0 @@
-Character Core P01–P14 RC1 remains the active validated character baseline. Integration into the new Izrdralar map runtime is pending and must preserve namespaced paths.

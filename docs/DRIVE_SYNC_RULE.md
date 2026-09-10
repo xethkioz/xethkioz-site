@@ -1,1 +1,0 @@
-Drive must mirror milestones and evidence, not become a second technical source. Active code state is determined from GitHub plus passing CI.

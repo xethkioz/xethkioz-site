@@ -1,1 +1,0 @@
-P15 La Sombra de Xethkioz is excluded from the active character baseline until an explicit canon decision reclassifies, transforms or retires it.

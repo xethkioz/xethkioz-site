@@ -1,1 +1,0 @@
-Current production priority: Izrdralar M01–M05. See CURRENT_STATE_WORLD_OF_XETHKIOZ.md.

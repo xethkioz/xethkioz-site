@@ -1,1 +1,0 @@
-Visual gate remains OPEN. Approved concepts and technical previews do not equal release-quality in-game captures. Required validation is real Godot 640×360 capture plus visual QA.
