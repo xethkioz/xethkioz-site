@@ -1,0 +1,1 @@
+The dedicated integration branch must be cut from the current `game/xethkioz-v36-real-demo` head after the production-scope documentation updates, then receive the 01–32 scaffold as a controlled port.
