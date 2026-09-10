@@ -1,13 +1,13 @@
-name: Izrdralar Map Chain 01-32 Windows
+name: Izrdralar Functional V2 Emerald Windows
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - game/izrdralar-map-chain-01-32-20260910
+      - game/izrdralar-functional-v2-emerald-20260910
 
 jobs:
-  izrdralar-map-chain:
+  izrdralar-functional-v2:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -28,7 +28,7 @@ jobs:
           unzip -q /tmp/templates.tpz -d /tmp/templates
           cp -r /tmp/templates/templates/* "$HOME/.local/share/godot/export_templates/4.7.2.stable/"
 
-      - name: Validate traceability manifest
+      - name: Validate Izrdralar V2 traceability
         shell: bash
         run: |
           python3 - <<'PY'
@@ -36,19 +36,26 @@ jobs:
           p="data/regions/izrdralar_map_chain_01_32.json"
           d=json.load(open(p,encoding="utf-8"))
           maps=d["maps"]
+          assert d["schema"]==2
+          assert d["transition_mode"]=="edge_auto_fade"
           assert len(maps)==32
           assert [m["id"] for m in maps]==list(range(1,33))
           assert [m["id"] for m in maps if m["t"]=="boss"]==[5,10,15,20,25,30]
+          expected={1:[2,2],2:[3,2],3:[3,2],4:[4,2],5:[2,2],6:[4,2],7:[2,2],8:[2,2],9:[3,2],10:[2,2],11:[3,2],12:[4,2],13:[3,2],14:[4,2],15:[2,2],16:[4,2],17:[2,4],18:[2,2],19:[2,3],20:[2,2],21:[4,2],22:[2,2],23:[3,2],24:[2,4],25:[3,2],26:[4,2],27:[3,2],28:[2,2],29:[2,4],30:[3,3],31:[3,2],32:[2,2]}
+          for m in maps:
+              assert m["s"]==expected[m["id"]], (m["id"],m["s"])
+              assert len(m["z"])>=3
+              assert len(m["bi"])>=1
+              assert m["lp"]
+              assert 0.40 <= float(m["nav"]) <= 0.70
+              assert m["auto"] == (m["id"] < 32)
           assert maps[7]["t"]=="refuge" and maps[21]["t"]=="refuge"
           assert maps[11]["t"]=="story"
           assert maps[17]["t"]=="secret" and maps[26]["t"]=="secret"
           assert maps[6]["t"]=="alexis" and maps[27]["t"]=="alexis"
           assert maps[31]["t"]=="legendary"
-          assert sum(1 for m in maps if m["s"][0]*m["s"][1]>=8 and m["s"]!=[3,3]) >= 10
-          for m in maps:
-              assert len(m["z"])>=3
-              assert len(m["bi"])>=1
-          print("TRACEABILITY 01-32: PASS")
+          assert len(set(m["lp"] for m in maps)) >= 24
+          print("IZRDRALAR V2 TRACEABILITY: PASS")
           PY
 
       - name: Import project
@@ -61,17 +68,22 @@ jobs:
             exit 1
           fi
 
-      - name: Verify PLAYER-only map runtime
+      - name: Verify PLAYER-only V2 runtime
         shell: bash
         run: |
           set -euxo pipefail
-          grep -Fq 'run/main_scene="res://scenes/test/IzrdralarMapChainTest.tscn"' project.godot
-          test -f src/world/izrdralar_map_chain_test.gd
+          grep -Fq 'run/main_scene="res://scenes/test/IzrdralarContinentV2.tscn"' project.godot
+          test -f scenes/test/IzrdralarContinentV2.tscn
+          test -f src/world/izrdralar_continent_runtime.gd
           test -f src/world/izrdralar_generic_chunk.gd
-          test -f docs/IZRDRALAR_MAP_TRACEABILITY_01_32.md
-          TEST=src/world/izrdralar_map_chain_test.gd
+          TEST=src/world/izrdralar_continent_runtime.gd
           ! grep -E "xethkioz_companion|familiar_companion|npc_interactable|enemy_controller|capturable_creature|_spawn_npc|_spawn_enemy|_spawn_xethkioz|_spawn_active_familiar" "$TEST"
           grep -Fq 'player_controller_production.gd' "$TEST"
+          grep -Fq 'edge_auto_fade' data/regions/izrdralar_map_chain_01_32.json
+          grep -Fq 'player.velocity.dot' "$TEST"
+          grep -Fq 'TRANSITION_FADE' "$TEST"
+          grep -Fq 'PROGRESS_PATH' "$TEST"
+          ! grep -Fq 'C usar portal' "$TEST"
 
       - name: Runtime all 32 maps in Godot
         shell: bash
@@ -79,9 +91,9 @@ jobs:
           set -o pipefail
           GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
           for ID in $(seq 1 32); do
-            echo "=== IZR-M$(printf '%02d' "$ID") ==="
+            echo "=== IZR-V2-M$(printf '%02d' "$ID") ==="
             set +e
-            XETHKIOZ_MAP_ID="$ID" timeout 15s "$GODOT" --headless --path . --quit-after 5 2>&1 | tee "/tmp/map_${ID}.log"
+            XETHKIOZ_MAP_ID="$ID" timeout 15s "$GODOT" --headless --path . --quit-after 6 2>&1 | tee "/tmp/map_${ID}.log"
             STATUS=${PIPESTATUS[0]}
             set -e
             if grep -E "SCRIPT ERROR|Parse Error|Invalid call|Invalid access|ERROR:" "/tmp/map_${ID}.log"; then
@@ -98,20 +110,20 @@ jobs:
           set -euxo pipefail
           GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
           mkdir -p build
-          "$GODOT" --headless --path . --export-release "Windows Desktop" build/World_of_Xethkioz_IZRDRALAR_01_32_PLAYER_ONLY_TEST.exe
+          "$GODOT" --headless --path . --export-release "Windows Desktop" build/World_of_Xethkioz_IZRDRALAR_FUNCTIONAL_V2.exe
           (
             cd build
-            zip -9 World_of_Xethkioz_IZRDRALAR_MAPS_01_32_PLAYER_ONLY_Windows.zip World_of_Xethkioz_IZRDRALAR_01_32_PLAYER_ONLY_TEST.exe
+            zip -9 World_of_Xethkioz_IZRDRALAR_FUNCTIONAL_V2_Windows.zip World_of_Xethkioz_IZRDRALAR_FUNCTIONAL_V2.exe
           )
-          zip -rq build/World_of_Xethkioz_IZRDRALAR_MAPS_01_32_PLAYER_ONLY_Source.zip . -x '.git/*' '.godot/*' 'build/*'
-          sha256sum build/World_of_Xethkioz_IZRDRALAR_MAPS_01_32_PLAYER_ONLY_Windows.zip build/World_of_Xethkioz_IZRDRALAR_MAPS_01_32_PLAYER_ONLY_Source.zip > build/SHA256.txt
+          zip -rq build/World_of_Xethkioz_IZRDRALAR_FUNCTIONAL_V2_Source.zip . -x '.git/*' '.godot/*' 'build/*'
+          sha256sum build/World_of_Xethkioz_IZRDRALAR_FUNCTIONAL_V2_Windows.zip build/World_of_Xethkioz_IZRDRALAR_FUNCTIONAL_V2_Source.zip > build/SHA256.txt
 
-      - name: Upload test builds
+      - name: Upload V2 builds
         uses: actions/upload-artifact@v4
         with:
-          name: World-of-Xethkioz-IZRDRALAR-MAPS-01-32-PLAYER-ONLY
+          name: World-of-Xethkioz-IZRDRALAR-FUNCTIONAL-V2
           path: |
-            build/World_of_Xethkioz_IZRDRALAR_MAPS_01_32_PLAYER_ONLY_Windows.zip
-            build/World_of_Xethkioz_IZRDRALAR_MAPS_01_32_PLAYER_ONLY_Source.zip
+            build/World_of_Xethkioz_IZRDRALAR_FUNCTIONAL_V2_Windows.zip
+            build/World_of_Xethkioz_IZRDRALAR_FUNCTIONAL_V2_Source.zip
             build/SHA256.txt
           if-no-files-found: error
