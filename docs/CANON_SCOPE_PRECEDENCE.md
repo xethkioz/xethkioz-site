@@ -1,0 +1,1 @@
+When scope conflicts: Biblia Maestra v3.5 controls product/production scope; Historia Final v3.6 controls narrative continuity; CURRENT_STATE records the active implementation cut. Changes require an explicit delta rather than silent reinterpretation.
