@@ -1,7 +1,8 @@
 extends "res://src/ui/hud_controller.gd"
 
+const XETHKIOZ_SHEET := preload("res://assets/production/characters/xethkioz_sheet.svg")
+
 func _build_ui() -> void:
-	# v3.6: HUD compacto. La escena debe ocupar la mayor parte del canvas 640x360.
 	_make_panel(Vector2(8,8), Vector2(180,44), C_BG, C_VIOLET)
 	hp_label = _make_label(Vector2(16,12), Vector2(164,11), "VIAJERO · NIVEL 1", 8, C_TEXT, true)
 	_make_bar_back(Vector2(16,27), Vector2(122,6))
@@ -14,21 +15,18 @@ func _build_ui() -> void:
 	quest_label = _make_label(Vector2(414,13), Vector2(208,36), "Misión", 7, C_TEXT, true, HORIZONTAL_ALIGNMENT_RIGHT)
 	quest_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 
-	# Xethkioz y familiar: una sola lectura, sin panel vertical grande.
-	_make_panel(Vector2(8,320), Vector2(150,32), C_BG, C_WATER)
-	_make_badge(Vector2(14,325), 20, Color("244958"), C_VIOLET)
-	_make_label(Vector2(40,324), Vector2(108,9), "XETHKIOZ", 6, Color("d8ceff"), true)
-	familiar_label = _make_label(Vector2(40,335), Vector2(108,13), "Familiar · Ninguno", 5, C_TEXT, true)
+	_make_panel(Vector2(8,318), Vector2(154,34), C_BG, C_WATER)
+	_make_xethkioz_icon(Vector2(10,319))
+	_make_label(Vector2(43,322), Vector2(109,9), "XETHKIOZ", 6, Color("d8ceff"), true)
+	familiar_label = _make_label(Vector2(43,334), Vector2(109,13), "Familiar · Ninguno", 5, C_TEXT, true)
 	familiar_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 
-	# Barra de habilidades estilo ARPG: legible pero baja.
 	_make_panel(Vector2(184,316), Vector2(272,36), C_BG, C_VIOLET)
 	skill_name_labels["Q"] = _make_compact_skill(Vector2(192,321), "Q", "CORTE", C_VIOLET)
 	skill_name_labels["E"] = _make_compact_skill(Vector2(257,321), "E", "GUARDIA", C_VIOLET)
 	skill_name_labels["R"] = _make_compact_skill(Vector2(322,321), "R", "DESTELLO", C_VIOLET)
 	skill_name_labels["F"] = _make_compact_skill(Vector2(387,321), "F", "BLOQ.", C_ORANGE)
 
-	# Información secundaria comprimida; no bloquea exploración.
 	_make_panel(Vector2(474,320), Vector2(158,32), C_BG_SOFT, Color("244958"))
 	world_label = _make_label(Vector2(482,324), Vector2(142,9), "", 6, C_TEXT, true, HORIZONTAL_ALIGNMENT_RIGHT)
 	lore_label = _make_label(Vector2(482,335), Vector2(142,8), "Atlas · Ecos 0/5", 5, C_VIOLET, false, HORIZONTAL_ALIGNMENT_RIGHT)
@@ -37,7 +35,6 @@ func _build_ui() -> void:
 	toast_label = _make_label(Vector2(176,285), Vector2(288,18), "", 7, C_TEXT, true, HORIZONTAL_ALIGNMENT_CENTER)
 	toast_label.visible = false
 
-	# Dialogo con prioridad visual; termina antes de la action bar.
 	dialog_panel = _make_panel(Vector2(44,246), Vector2(552,66), Color(0.025,0.028,0.045,0.96), C_VIOLET)
 	dialog_panel.visible = false
 	dialog_portrait = TextureRect.new()
@@ -53,6 +50,22 @@ func _build_ui() -> void:
 	dialog_label = _make_label(Vector2(112,252), Vector2(470,54), "", 7, C_TEXT)
 	dialog_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	dialog_label.visible = false
+
+func _make_xethkioz_icon(pos: Vector2) -> TextureRect:
+	var atlas := AtlasTexture.new()
+	atlas.atlas = XETHKIOZ_SHEET
+	atlas.region = Rect2(32, 0, 32, 32)
+	var icon := TextureRect.new()
+	icon.position = pos
+	icon.size = Vector2(32,32)
+	icon.texture = atlas
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.z_index = 3
+	add_child(icon)
+	return icon
 
 func _make_compact_skill(pos: Vector2, key: String, name: String, accent: Color) -> Label:
 	var panel := _make_panel(pos, Vector2(57,26), Color(0.09,0.075,0.12,0.96), accent)
