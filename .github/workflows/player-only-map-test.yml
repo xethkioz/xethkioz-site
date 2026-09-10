@@ -50,12 +50,12 @@ jobs:
           test -f src/world/production_chunk.gd
           test -f data/regions/golden_region_v34.json
           test -f assets/production/characters/viajero_sheet.svg
-          grep -q 'run/main_scene="res://scenes/test/PlayerOnlyMapTest.tscn"' project.godot
-          grep -q 'EventBus="*res://src/core/event_bus.gd"' project.godot
-          grep -q 'GameState="*res://src/core/game_state.gd"' project.godot
-          grep -q 'CharacterProfile="*res://src/core/character_profile.gd"' project.godot
-          grep -q 'player_controller_production.gd' src/world/player_only_map_test.gd
-          grep -q 'production_chunk.gd' src/world/player_only_map_test.gd
+          grep -Fq 'run/main_scene="res://scenes/test/PlayerOnlyMapTest.tscn"' project.godot
+          grep -Fq 'EventBus="*res://src/core/event_bus.gd"' project.godot
+          grep -Fq 'GameState="*res://src/core/game_state.gd"' project.godot
+          grep -Fq 'CharacterProfile="*res://src/core/character_profile.gd"' project.godot
+          grep -Fq 'player_controller_production.gd' src/world/player_only_map_test.gd
+          grep -Fq 'production_chunk.gd' src/world/player_only_map_test.gd
 
       - name: Verify no character instantiation in test controller
         shell: bash
