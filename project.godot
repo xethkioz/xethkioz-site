@@ -1,6 +1,6 @@
 [application]
-config/name="World of Xethkioz · PLAYER ONLY TEST"
-run/main_scene="res://scenes/test/PlayerOnlyMapTest.tscn"
+config/name="World of Xethkioz · IZRDRALAR 01-32 · PLAYER ONLY"
+run/main_scene="res://scenes/test/IzrdralarMapChainTest.tscn"
 config/features=PackedStringArray("4.7")
 
 [autoload]
