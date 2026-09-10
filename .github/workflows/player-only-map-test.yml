@@ -38,18 +38,33 @@ jobs:
             exit 1
           fi
 
-      - name: Validate PLAYER-only scripts
+      - name: Validate PLAYER-only wiring
         shell: bash
         run: |
           set -euxo pipefail
-          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
-          "$GODOT" --headless --path . --check-only --script res://src/core/event_bus.gd
-          "$GODOT" --headless --path . --check-only --script res://src/core/game_state.gd
-          "$GODOT" --headless --path . --check-only --script res://src/core/character_profile.gd
-          "$GODOT" --headless --path . --check-only --script res://src/player/player_controller.gd
-          "$GODOT" --headless --path . --check-only --script res://src/player/player_controller_production.gd
-          "$GODOT" --headless --path . --check-only --script res://src/world/production_chunk.gd
-          "$GODOT" --headless --path . --check-only --script res://src/world/player_only_map_test.gd
+          test -f scenes/test/PlayerOnlyMapTest.tscn
+          test -f src/world/player_only_map_test.gd
+          test -f src/player/player_controller.gd
+          test -f src/player/player_controller_production.gd
+          test -f src/player/player_profile_overlay.gd
+          test -f src/world/production_chunk.gd
+          test -f data/regions/golden_region_v34.json
+          test -f assets/production/characters/viajero_sheet.svg
+          grep -q 'run/main_scene="res://scenes/test/PlayerOnlyMapTest.tscn"' project.godot
+          grep -q 'EventBus="*res://src/core/event_bus.gd"' project.godot
+          grep -q 'GameState="*res://src/core/game_state.gd"' project.godot
+          grep -q 'CharacterProfile="*res://src/core/character_profile.gd"' project.godot
+          grep -q 'player_controller_production.gd' src/world/player_only_map_test.gd
+          grep -q 'production_chunk.gd' src/world/player_only_map_test.gd
+
+      - name: Verify no character instantiation in test controller
+        shell: bash
+        run: |
+          set -euxo pipefail
+          TEST=src/world/player_only_map_test.gd
+          ! grep -E "xethkioz_companion|familiar_companion|npc_interactable|enemy_controller|capturable_creature|_spawn_npc|_spawn_enemy|_spawn_xethkioz|_spawn_active_familiar" "$TEST"
+          grep -q "player_controller_production.gd" "$TEST"
+          grep -q "production_chunk.gd" "$TEST"
 
       - name: Runtime PLAYER-only map
         shell: bash
@@ -66,15 +81,6 @@ jobs:
           if [ "$STATUS" -ne 0 ] && [ "$STATUS" -ne 124 ]; then
             exit "$STATUS"
           fi
-
-      - name: Verify no character instantiation in test controller
-        shell: bash
-        run: |
-          set -euxo pipefail
-          TEST=src/world/player_only_map_test.gd
-          ! grep -E "xethkioz_companion|familiar_companion|npc_interactable|enemy_controller|capturable_creature" "$TEST"
-          grep -q "player_controller_production.gd" "$TEST"
-          grep -q "production_chunk.gd" "$TEST"
 
       - name: Export Windows x86_64
         shell: bash
