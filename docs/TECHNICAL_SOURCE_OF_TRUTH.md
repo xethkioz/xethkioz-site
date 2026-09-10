@@ -1,0 +1,1 @@
+Technical implementation authority: GitHub branch + CI evidence. Drive snapshots are backup/evidence and must never silently outrank the tested repository state.
