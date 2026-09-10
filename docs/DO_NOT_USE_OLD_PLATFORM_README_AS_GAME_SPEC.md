@@ -1,0 +1,1 @@
+The repository root README may still describe the old Wildbound/platform prototype on historical branches. It must not be used as the current World of Xethkioz movement, combat, map or product specification. Current specification is top-down Action-RPG in Godot 4.7.2 under the v3.5/v3.6 production documents.
