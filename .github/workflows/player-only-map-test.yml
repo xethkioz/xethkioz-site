@@ -1,0 +1,97 @@
+name: Player Only Map Test Windows
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - game/player-only-map-test-20260910
+
+jobs:
+  player-only-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Godot 4.7.2 and Windows templates
+        shell: bash
+        run: |
+          set -euxo pipefail
+          wget -q https://godot-releases.nbg1.your-objectstorage.com/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -O /tmp/godot.zip
+          unzip -q /tmp/godot.zip -d /tmp/godot
+          chmod +x /tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          wget -q https://godot-releases.nbg1.your-objectstorage.com/4.7.2-stable/Godot_v4.7.2-stable_export_templates.tpz -O /tmp/templates.tpz
+          mkdir -p "$HOME/.local/share/godot/export_templates/4.7.2.stable"
+          unzip -q /tmp/templates.tpz -d /tmp/templates
+          cp -r /tmp/templates/templates/* "$HOME/.local/share/godot/export_templates/4.7.2.stable/"
+
+      - name: Import project
+        shell: bash
+        run: |
+          set -o pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --editor --quit 2>&1 | tee /tmp/import.log
+          if grep -E "SCRIPT ERROR|Parse Error" /tmp/import.log; then
+            exit 1
+          fi
+
+      - name: Validate PLAYER-only scripts
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --check-only --script res://src/core/event_bus.gd
+          "$GODOT" --headless --path . --check-only --script res://src/core/game_state.gd
+          "$GODOT" --headless --path . --check-only --script res://src/core/character_profile.gd
+          "$GODOT" --headless --path . --check-only --script res://src/player/player_controller.gd
+          "$GODOT" --headless --path . --check-only --script res://src/player/player_controller_production.gd
+          "$GODOT" --headless --path . --check-only --script res://src/world/production_chunk.gd
+          "$GODOT" --headless --path . --check-only --script res://src/world/player_only_map_test.gd
+
+      - name: Runtime PLAYER-only map
+        shell: bash
+        run: |
+          set -o pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          set +e
+          timeout 20s "$GODOT" --headless --path . --quit-after 240 2>&1 | tee /tmp/runtime.log
+          STATUS=${PIPESTATUS[0]}
+          set -e
+          if grep -E "SCRIPT ERROR|Parse Error|Invalid call|Invalid access|ERROR:" /tmp/runtime.log; then
+            exit 1
+          fi
+          if [ "$STATUS" -ne 0 ] && [ "$STATUS" -ne 124 ]; then
+            exit "$STATUS"
+          fi
+
+      - name: Verify no character instantiation in test controller
+        shell: bash
+        run: |
+          set -euxo pipefail
+          TEST=src/world/player_only_map_test.gd
+          ! grep -E "xethkioz_companion|familiar_companion|npc_interactable|enemy_controller|capturable_creature" "$TEST"
+          grep -q "player_controller_production.gd" "$TEST"
+          grep -q "production_chunk.gd" "$TEST"
+
+      - name: Export Windows x86_64
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          mkdir -p build
+          "$GODOT" --headless --path . --export-release "Windows Desktop" build/World_of_Xethkioz_PLAYER_ONLY_TEST.exe
+          cd build
+          zip -9 World_of_Xethkioz_PLAYER_ONLY_MAP_TEST_20260910_Windows.zip World_of_Xethkioz_PLAYER_ONLY_TEST.exe
+          sha256sum World_of_Xethkioz_PLAYER_ONLY_MAP_TEST_20260910_Windows.zip > SHA256.txt
+
+      - name: Upload PLAYER-only Windows test
+        uses: actions/upload-artifact@v4
+        with:
+          name: World-of-Xethkioz-PLAYER-ONLY-MAP-TEST-Windows
+          path: |
+            build/World_of_Xethkioz_PLAYER_ONLY_MAP_TEST_20260910_Windows.zip
+            build/SHA256.txt
+          if-no-files-found: error
