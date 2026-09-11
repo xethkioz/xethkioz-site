@@ -58,6 +58,8 @@ func _validate_contract(contract: Dictionary, failures: Array[String]) -> void:
 	var authority: Dictionary = contract.get("authority", {})
 	if str(authority.get("navigation", "")) != NAVIGATION_PATH:
 		failures.append("visual contract is not linked to canonical navigation graph")
+	if str(authority.get("runtime_scene", "")) != RUNTIME_SCENE_PATH:
+		failures.append("visual contract runtime authority does not match authored runtime")
 	if not FileAccess.file_exists(NAVIGATION_PATH):
 		failures.append("canonical navigation graph is missing")
 	var render: Dictionary = contract.get("render", {})
