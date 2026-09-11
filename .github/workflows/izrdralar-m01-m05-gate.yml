@@ -1,0 +1,105 @@
+name: Izrdralar M01-M05 Gate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'data/regions/izrdralar_m01_m05_navigation.json'
+      - 'data/visual/izrdralar_m01_m05_visual_contract.json'
+      - 'src/core/**'
+      - 'src/fx/**'
+      - 'src/player/**'
+      - 'src/npc/**'
+      - 'src/world/izrdralar_navigation_graph.gd'
+      - 'tools/izrdralar_*'
+      - '.github/workflows/izrdralar-m01-m05-gate.yml'
+  push:
+    branches:
+      - feat/izrdralar-m01-m05-save-visual-contract
+
+jobs:
+  godot-4-7-2-gate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Godot 4.7.2
+        shell: bash
+        run: |
+          set -euxo pipefail
+          wget -q https://godot-releases.nbg1.your-objectstorage.com/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -O /tmp/godot.zip
+          unzip -q /tmp/godot.zip -d /tmp/godot
+          chmod +x /tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          /tmp/godot/Godot_v4.7.2-stable_linux.x86_64 --version
+
+      - name: Import project and reject parse errors
+        shell: bash
+        run: |
+          set -o pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --editor --quit 2>&1 | tee /tmp/izrdralar-import.log
+          if grep -E "SCRIPT ERROR|Parse Error" /tmp/izrdralar-import.log; then
+            exit 1
+          fi
+
+      - name: Check production scripts
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --check-only --script res://src/core/game_state.gd
+          "$GODOT" --headless --path . --check-only --script res://src/core/save_service.gd
+          "$GODOT" --headless --path . --check-only --script res://src/fx/izrdralar_fx_factory.gd
+          "$GODOT" --headless --path . --check-only --script res://src/fx/world_feedback_fx.gd
+          "$GODOT" --headless --path . --check-only --script res://src/player/player_controller_production.gd
+          "$GODOT" --headless --path . --check-only --script res://src/npc/enemy_controller_production.gd
+          "$GODOT" --headless --path . --check-only --script res://src/world/izrdralar_navigation_graph.gd
+
+      - name: Visual contract smoke
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --script res://tools/izrdralar_visual_contract_smoke.gd 2>&1 | tee /tmp/izrdralar-visual.log
+          grep -q "IZRDRALAR_VISUAL_CONTRACT_PASS" /tmp/izrdralar-visual.log
+
+      - name: Navigation graph smoke
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --script res://tools/izrdralar_navigation_smoke.gd 2>&1 | tee /tmp/izrdralar-navigation.log
+          grep -q "IZRDRALAR_M01_M05_NAVIGATION_PASS" /tmp/izrdralar-navigation.log
+
+      - name: Save v10 and backup recovery smoke
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --script res://tools/izrdralar_save_v10_smoke.gd 2>&1 | tee /tmp/izrdralar-save.log
+          grep -q "IZRDRALAR_SAVE_V10_PASS" /tmp/izrdralar-save.log
+
+      - name: Runtime startup without timeout-as-pass
+        shell: bash
+        run: |
+          set -o pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --quit-after 120 2>&1 | tee /tmp/izrdralar-runtime.log
+          if grep -E "SCRIPT ERROR|Parse Error" /tmp/izrdralar-runtime.log; then
+            exit 1
+          fi
+
+      - name: Upload gate logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: izrdralar-m01-m05-gate-logs
+          path: |
+            /tmp/izrdralar-import.log
+            /tmp/izrdralar-visual.log
+            /tmp/izrdralar-navigation.log
+            /tmp/izrdralar-save.log
+            /tmp/izrdralar-runtime.log
+          if-no-files-found: warn
