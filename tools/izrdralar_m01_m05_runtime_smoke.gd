@@ -65,8 +65,63 @@ func _validate_map(test_case: Dictionary) -> void:
 	if GameState.current_entry_id != str(test_case["entry"]):
 		_fail("%s changed entry during boot" % map_id)
 
+	await _assert_depth_contract(runtime, player, xethkioz, map_id)
+
 	runtime.queue_free()
 	await get_tree().process_frame
+
+func _assert_depth_contract(runtime: Node, player: Node, xethkioz: Node, map_id: String) -> void:
+	_assert_depth_bound(player, "%s Player" % map_id)
+	_assert_depth_bound(xethkioz, "%s Xethkioz" % map_id)
+
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if runtime.is_ancestor_of(enemy):
+			_assert_depth_bound(enemy, "%s enemy %s" % [map_id, enemy.name])
+	for landmark in get_tree().get_nodes_in_group("izrdralar_authored_landmark"):
+		if runtime.is_ancestor_of(landmark):
+			_assert_depth_bound(landmark, "%s landmark %s" % [map_id, landmark.name])
+
+	var static_prop_count := 0
+	for child in runtime.get_children():
+		if not child.name.begins_with("Chunk_"):
+			continue
+		var props := child.get_node_or_null("LargeProps") as Node2D
+		if props == null:
+			_fail("%s %s missing LargeProps depth layer" % [map_id, child.name])
+			continue
+		if props.z_index != 0:
+			_fail("%s %s LargeProps must not use a fixed background z" % [map_id, child.name])
+		for prop in props.get_children():
+			if prop is Sprite2D:
+				static_prop_count += 1
+				if abs((prop as Sprite2D).z_index) < 8:
+					_fail("%s prop %s is not world-depth sorted" % [map_id, prop.name])
+	if static_prop_count <= 0:
+		_fail("%s expected at least one depth-sorted large prop" % map_id)
+
+	if player is Node2D and player.get_node_or_null("DepthBinder") != null:
+		var player_2d := player as Node2D
+		var previous_z := player_2d.z_index
+		player_2d.global_position.y += 32.0
+		await get_tree().process_frame
+		if player_2d.z_index <= previous_z:
+			_fail("%s Player depth must update when moving along world Y" % map_id)
+
+func _assert_depth_bound(node: Node, label: String) -> void:
+	if node == null:
+		return
+	var binder := node.get_node_or_null("DepthBinder")
+	if binder == null:
+		_fail("%s missing DepthBinder" % label)
+		return
+	if not node.has_meta("izrdralar_depth_offset"):
+		_fail("%s missing depth foot offset metadata" % label)
+		return
+	if node is Node2D:
+		var node_2d := node as Node2D
+		var expected := clampi(roundi(node_2d.global_position.y + float(node.get_meta("izrdralar_depth_offset", 0.0))), -3900, 3900)
+		if node_2d.z_index != expected:
+			_fail("%s depth mismatch expected=%d actual=%d" % [label, expected, node_2d.z_index])
 
 func _assert_prefix_count(parent: Node, prefix: String, expected: int, label: String) -> void:
 	var count := 0
