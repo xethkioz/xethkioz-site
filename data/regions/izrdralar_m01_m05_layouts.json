@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "layout_id": "izrdralar_m01_m05_layouts",
+  "chunk_size_px": 512,
+  "tile_size_px": 16,
+  "runtime_scene": "res://scenes/izrdralar/IzrdralarM01M05Runtime.tscn",
+  "maps": {
+    "M01": {
+      "name": "Cuenca del Despertar",
+      "world_seed": 21500809,
+      "world_size": [1024, 1024],
+      "chunks": {
+        "0,0": {"biome":"river","exits":{"e":true,"s":true}},
+        "1,0": {"biome":"forest","exits":{"w":true,"s":true}},
+        "0,1": {"biome":"forest","exits":{"n":true,"e":true}},
+        "1,1": {"biome":"forest","exits":{"n":true,"w":true,"e":true}}
+      },
+      "entries": {
+        "start": [192, 792],
+        "from_m02": [884, 520]
+      },
+      "transitions": [
+        {"to":"M02","position":[980,520],"size":[48,150]}
+      ],
+      "objectives": [
+        {
+          "id":"m01_opening_resonance",
+          "name":"Eco del Despertar",
+          "position":[690,520],
+          "world_flag":"opening_flow_complete",
+          "completed_message":"La Cuenca responde. El camino hacia la Aldea del Alba se abre.",
+          "accent":"#8B5CF6"
+        }
+      ],
+      "enemies": [
+        {"id":"brote_goblin","position":[430,690],"hp":42,"speed":52,"damage":8,"xp":24,"atlas":0},
+        {"id":"explorador_goblin","position":[620,360],"hp":38,"speed":68,"damage":7,"xp":28,"atlas":1},
+        {"id":"slime_prismatico","position":[760,720],"hp":58,"speed":38,"damage":9,"xp":30,"atlas":2}
+      ]
+    },
+    "M02": {
+      "name": "Aldea del Alba",
+      "world_seed": 21500829,
+      "world_size": [1024, 1024],
+      "chunks": {
+        "0,0": {"biome":"forest","exits":{"e":true,"s":true}},
+        "1,0": {"biome":"refuge","exits":{"w":true,"s":true}},
+        "0,1": {"biome":"refuge","exits":{"n":true,"e":true,"w":true}},
+        "1,1": {"biome":"forest","exits":{"n":true,"w":true,"e":true}}
+      },
+      "entries": {
+        "from_m01": [112, 560],
+        "from_m03": [520, 112],
+        "from_m04": [900, 560]
+      },
+      "transitions": [
+        {"to":"M01","position":[44,560],"size":[48,150]},
+        {"to":"M03","position":[520,44],"size":[150,48]},
+        {"to":"M04","position":[980,560],"size":[48,150]}
+      ],
+      "objectives": [
+        {
+          "id":"m02_prisma_atlas",
+          "name":"Prisma-Atlas de Iván",
+          "position":[530,500],
+          "world_flag":"prisma_atlas_unlocked",
+          "requires_flag":"opening_flow_complete",
+          "completed_message":"Prisma-Atlas sincronizado. Lago y Ruinas aparecen como rutas posibles.",
+          "accent":"#6ED4E8"
+        }
+      ],
+      "npcs": [
+        {
+          "id":"ivan",
+          "name":"Iván",
+          "position":[500,450],
+          "atlas":6,
+          "lines":[
+            "El Prisma-Atlas no te va a decir qué camino elegir. Sólo puede mostrarte dónde la Resonancia está rota.",
+            "Lago y Ruinas responden distinto. Vas a necesitar comprender los dos antes de acercarte al Corazón del Bosque."
+          ]
+        }
+      ]
+    },
+    "M03": {
+      "name": "Lago Encantado",
+      "world_seed": 21500849,
+      "world_size": [1024, 1024],
+      "chunks": {
+        "0,0": {"biome":"forest","exits":{"e":true,"s":true}},
+        "1,0": {"biome":"lake","exits":{"w":true,"s":true}},
+        "0,1": {"biome":"lake","exits":{"n":true,"e":true,"s":true}},
+        "1,1": {"biome":"forest","exits":{"n":true,"w":true}}
+      },
+      "entries": {
+        "from_m02": [520, 900],
+        "from_m05": [900, 520]
+      },
+      "transitions": [
+        {"to":"M02","position":[520,980],"size":[150,48]},
+        {"to":"M05","position":[980,520],"size":[48,150]}
+      ],
+      "objectives": [
+        {
+          "id":"m03_lake_resonance",
+          "name":"Piedra Resonante del Lago",
+          "position":[690,370],
+          "world_flag":"lake_resolved",
+          "completed_message":"La frecuencia del Lago quedó fijada en el Prisma-Atlas.",
+          "accent":"#3FC7C9"
+        }
+      ],
+      "enemies": [
+        {"id":"slime_prismatico","position":[320,610],"hp":62,"speed":40,"damage":10,"xp":32,"atlas":2},
+        {"id":"espiritu_bruma","position":[730,250],"hp":46,"speed":58,"damage":9,"xp":32,"atlas":4},
+        {"id":"escarabajo_corteza","position":[800,710],"hp":74,"speed":42,"damage":11,"xp":34,"atlas":3}
+      ]
+    },
+    "M04": {
+      "name": "Ruinas Vivas / Santuario de las Raíces",
+      "world_seed": 21500869,
+      "world_size": [1024, 1024],
+      "chunks": {
+        "0,0": {"biome":"ruins","exits":{"e":true,"s":true}},
+        "1,0": {"biome":"ruins","exits":{"w":true,"s":true}},
+        "0,1": {"biome":"forest","exits":{"n":true,"e":true}},
+        "1,1": {"biome":"sanctuary","exits":{"n":true,"w":true,"e":true}}
+      },
+      "entries": {
+        "from_m02": [112, 560],
+        "from_m05": [900, 780]
+      },
+      "transitions": [
+        {"to":"M02","position":[44,560],"size":[48,150]},
+        {"to":"M05","position":[980,780],"size":[48,150]}
+      ],
+      "objectives": [
+        {
+          "id":"m04_sanctuary_resonance",
+          "name":"Núcleo del Santuario",
+          "position":[760,760],
+          "world_flag":"ruins_sanctuary_resolved",
+          "completed_message":"Ruinas y Santuario quedan enlazados. El segundo sello del Corazón cede.",
+          "accent":"#A855F7"
+        }
+      ],
+      "enemies": [
+        {"id":"explorador_goblin","position":[310,330],"hp":42,"speed":70,"damage":8,"xp":30,"atlas":1},
+        {"id":"escarabajo_corteza","position":[660,300],"hp":80,"speed":44,"damage":12,"xp":38,"atlas":3},
+        {"id":"espiritu_bruma","position":[470,720],"hp":52,"speed":62,"damage":11,"xp":38,"atlas":4}
+      ]
+    },
+    "M05": {
+      "name": "Corazón del Bosque Velado",
+      "world_seed": 21500889,
+      "world_size": [512, 512],
+      "chunks": {
+        "0,0": {"biome":"boss","exits":{"w":true,"e":true}}
+      },
+      "entries": {
+        "from_m03": [100, 256],
+        "from_m04": [412, 256]
+      },
+      "transitions": [
+        {"to":"M03","position":[36,256],"size":[40,120]},
+        {"to":"M04","position":[476,256],"size":[40,120]}
+      ],
+      "boss": {
+        "id":"boss5_guardian_bosque_velado",
+        "position":[256,220]
+      },
+      "objectives": [
+        {
+          "id":"m05_stabilization",
+          "name":"Corazón Estabilizado",
+          "position":[256,300],
+          "world_flag":"boss5_stabilized",
+          "requires_flag":"boss5_defeated",
+          "unlock_prism_step":true,
+          "completed_message":"ESTABILIZAR · Paso Prismático desbloqueado. El Corazón vuelve a latir con Izrdralar.",
+          "blocked_message":"Primero tenés que purificar al Guardián del Bosque Velado.",
+          "accent":"#FF8C42"
+        }
+      ]
+    }
+  }
+}
