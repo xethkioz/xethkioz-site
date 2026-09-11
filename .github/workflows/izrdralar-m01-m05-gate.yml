@@ -107,6 +107,14 @@ jobs:
           "$GODOT" --headless --path . res://tools/scenes/IzrdralarM01M05RuntimeSmoke.tscn 2>&1 | tee /tmp/izrdralar-authored-runtime.log
           grep -q "IZRDRALAR_M01_M05_RUNTIME_PASS" /tmp/izrdralar-authored-runtime.log
 
+      - name: Biome ground texture smoke
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . res://tools/scenes/IzrdralarGroundTextureSmoke.tscn 2>&1 | tee /tmp/izrdralar-ground-texture.log
+          grep -q "IZRDRALAR_GROUND_TEXTURE_PASS" /tmp/izrdralar-ground-texture.log
+
       - name: M01-M05 progression and Boss 5 flow smoke
         shell: bash
         run: |
@@ -193,6 +201,7 @@ jobs:
             /tmp/izrdralar-navigation.log
             /tmp/izrdralar-save.log
             /tmp/izrdralar-authored-runtime.log
+            /tmp/izrdralar-ground-texture.log
             /tmp/izrdralar-flow.log
             /tmp/izrdralar-story.log
             /tmp/izrdralar-autosave.log
