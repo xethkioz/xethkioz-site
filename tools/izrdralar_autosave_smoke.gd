@@ -24,16 +24,22 @@ func _run() -> void:
 	if player == null or tracker == null:
 		_fail("M04 runtime missing player or checkpoint tracker")
 	else:
-		tracker.set("autosave_interval", 0.01)
+		# First allow CharacterBody2D collision recovery to settle without autosaving mid-correction.
+		tracker.set("autosave_interval", 999.0)
 		tracker.set("autosave_distance", 1.0)
 		player.global_position = TEST_POSITION
-		for _index in range(5):
+		for _index in range(12):
 			await get_tree().physics_frame
 		saved_position = player.global_position
 		if saved_position == Vector2.ZERO:
 			_fail("physics-valid autosave position was zero")
-		if not SaveService.has_save():
-			_fail("position autosave did not create a recoverable save")
+		else:
+			# Trigger the same throttled autosave path once the position is stable.
+			tracker.set("autosave_interval", 0.01)
+			tracker.set("_autosave_elapsed", 0.02)
+			tracker.call("_try_autosave")
+			if not SaveService.has_save():
+				_fail("position autosave did not create a recoverable save")
 
 	if is_instance_valid(runtime):
 		runtime.queue_free()
