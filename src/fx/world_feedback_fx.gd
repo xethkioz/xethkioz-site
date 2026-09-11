@@ -28,6 +28,14 @@ func configure(kind_value: String, direction_value: Vector2, color_value: Color,
 			_duration = 0.68
 		"hurt":
 			_duration = 0.30
+		"telegraph":
+			_duration = 0.72
+		"aura":
+			_duration = 0.78
+		"smoke":
+			_duration = 0.90
+		"rune":
+			_duration = 0.66
 		_:
 			_duration = 0.34
 	if not _text.is_empty():
@@ -88,6 +96,14 @@ func _draw() -> void:
 			_draw_pickup(progress, alpha)
 		"hurt":
 			_draw_hurt(progress, alpha)
+		"telegraph":
+			_draw_telegraph(progress, alpha)
+		"aura":
+			_draw_aura(progress, alpha)
+		"smoke":
+			_draw_smoke(progress, alpha)
+		"rune":
+			_draw_rune(progress, alpha)
 		_:
 			_draw_hit(progress, alpha)
 
@@ -156,6 +172,42 @@ func _draw_hurt(progress: float, alpha: float) -> void:
 	var radius: float = 12.0 + progress * 10.0
 	draw_arc(Vector2.ZERO, radius, -2.6, -0.55, 18, _alpha(_accent, alpha), 2.5)
 	draw_arc(Vector2.ZERO, radius + 4.0, 0.55, 2.6, 18, _alpha(_accent.lightened(0.20), alpha * 0.75), 1.5)
+
+
+func _draw_telegraph(progress: float, alpha: float) -> void:
+	var radius: float = 15.0 + sin(progress * PI) * 10.0
+	draw_arc(Vector2.ZERO, radius, 0.0, TAU, 32, _alpha(_accent, alpha * 0.92), 2.0)
+	for index in range(8):
+		var angle: float = TAU * float(index) / 8.0
+		var ray: Vector2 = Vector2.from_angle(angle)
+		draw_line(ray * (radius + 3.0), ray * (radius + 9.0), _alpha(Color.WHITE, alpha * 0.70), 1.0)
+
+func _draw_aura(progress: float, alpha: float) -> void:
+	var radius: float = 10.0 + sin(progress * PI) * 5.0
+	draw_circle(Vector2.ZERO, radius, _alpha(_accent, alpha * 0.10))
+	draw_arc(Vector2.ZERO, radius, 0.0, TAU, 28, _alpha(_accent.lightened(0.24), alpha * 0.80), 2.0)
+	for index in range(4):
+		var angle: float = TAU * float(index) / 4.0 + progress * 0.9
+		var point: Vector2 = Vector2.from_angle(angle) * (radius + 4.0)
+		draw_circle(point, 1.8, _alpha(Color.WHITE, alpha * 0.80))
+
+func _draw_smoke(progress: float, alpha: float) -> void:
+	for index in range(5):
+		var drift: float = (float(index) - 2.0) * 4.0 + sin(progress * PI * 2.0 + index) * 3.0
+		var rise: float = progress * (14.0 + float(index) * 4.0)
+		var size: float = 2.0 + float(index % 2)
+		draw_circle(Vector2(drift, -rise), size, _alpha(_accent.darkened(0.16), alpha * (0.42 - float(index) * 0.045)))
+
+func _draw_rune(progress: float, alpha: float) -> void:
+	var radius: float = 8.0 + progress * 5.0
+	var points: PackedVector2Array = PackedVector2Array()
+	for index in range(6):
+		var angle: float = TAU * float(index) / 6.0 - PI / 2.0
+		points.append(Vector2.from_angle(angle) * radius)
+		points.append(Vector2.from_angle(angle + PI / 6.0) * (radius * 0.45))
+	for index in range(points.size()):
+		var next_index: int = (index + 1) % points.size()
+		draw_line(points[index], points[next_index], _alpha(_accent.lightened(0.18), alpha * 0.85), 1.5)
 
 func _alpha(color_value: Color, alpha_value: float) -> Color:
 	return Color(color_value.r, color_value.g, color_value.b, clampf(alpha_value, 0.0, 1.0))
