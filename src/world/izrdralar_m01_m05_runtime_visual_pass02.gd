@@ -6,9 +6,11 @@ const IntegratedLandmarkScript := preload("res://src/world/izrdralar_authored_la
 const ImpactPlayerScript := preload("res://src/player/player_controller_production_pass02.gd")
 const AmbientLayerScript := preload("res://src/fx/izrdralar_ambient_layer_pass02.gd")
 const ReadableNpcScript := preload("res://src/npc/npc_interactable_production_pass02.gd")
+const DepthBinderScript := preload("res://src/world/izrdralar_depth_binder.gd")
 
 func _ready() -> void:
 	super._ready()
+	_install_depth_contract()
 	_spawn_ambient_layer()
 
 func _build_chunks() -> void:
@@ -79,6 +81,60 @@ func _spawn_npcs() -> void:
 			lines.append(str(line))
 		npc.call("configure_production", str(data.get("id", "npc")), str(data.get("name", "NPC")), lines, int(data.get("atlas", 0)))
 		add_child(npc)
+
+func _install_depth_contract() -> void:
+	# 2.5D top-down rule: the visual foot line owns draw order. This keeps the
+	# authored scene tree intact while allowing actors to move naturally in front
+	# of and behind vegetation, ruins and buildings.
+	_apply_static_prop_depth()
+	for child in get_children():
+		if not (child is Node2D):
+			continue
+		var node := child as Node2D
+		if node == player:
+			_bind_depth(node, 6.0)
+		elif node.name == "Xethkioz":
+			_bind_depth(node, 6.0)
+		elif node.is_in_group("bosses"):
+			_bind_depth(node, 18.0)
+		elif node.is_in_group("enemies"):
+			_bind_depth(node, 5.0)
+		elif node.is_in_group("izrdralar_authored_landmark"):
+			var landmark_offset := 14.0
+			var collision_offset: Variant = node.get("collision_offset")
+			if collision_offset is Vector2:
+				landmark_offset = maxf(8.0, (collision_offset as Vector2).y)
+			_bind_depth(node, landmark_offset)
+		elif node.get_script() == ReadableNpcScript:
+			_bind_depth(node, 6.0)
+
+func _bind_depth(target: Node2D, foot_offset: float) -> void:
+	if target.get_node_or_null("DepthBinder") != null:
+		return
+	var binder := Node.new()
+	binder.name = "DepthBinder"
+	binder.set_script(DepthBinderScript)
+	target.add_child(binder)
+	binder.call("configure", target, foot_offset)
+
+func _apply_static_prop_depth() -> void:
+	for child in get_children():
+		if not child.name.begins_with("Chunk_"):
+			continue
+		var props := child.get_node_or_null("LargeProps") as Node2D
+		if props == null:
+			continue
+		# The former fixed -5 layer made every tree/structure remain behind actors.
+		# Individual sprites now sort from their world-space foot line instead.
+		props.z_index = 0
+		for prop_child in props.get_children():
+			if not (prop_child is Sprite2D):
+				continue
+			var sprite := prop_child as Sprite2D
+			var visual_half_height := 16.0
+			if sprite.texture != null:
+				visual_half_height = maxf(8.0, sprite.texture.get_height() * absf(sprite.scale.y) * 0.42)
+			sprite.z_index = clampi(roundi(sprite.global_position.y + visual_half_height), -3900, 3900)
 
 func _spawn_ambient_layer() -> void:
 	if map_data.is_empty():
