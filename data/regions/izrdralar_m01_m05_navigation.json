@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "graph_id": "izrdralar_m01_m05_navigation",
+  "continent": "Izrdralar",
+  "scope": "production_pass_01",
+  "authority": "WORLD_OF_XETHKIOZ_BIBLIA_FINAL_CONSOLIDADA_SAGA_I_v1.0_2026-09-10",
+  "rules": {
+    "route_choice": "M03 and M04 may be completed in either order",
+    "boss5_gate": "M05 remains blocked until both M03 and M04 are resolved",
+    "backtracking": true,
+    "m06_scope_exit_enabled": false
+  },
+  "legacy_flag_aliases": {
+    "initial_lake_link_resolved": "lake_resolved",
+    "custodian_superated": "ruins_sanctuary_resolved",
+    "custodian_stabilized": "ruins_sanctuary_resolved"
+  },
+  "maps": {
+    "M01": {
+      "name": "Cuenca del Despertar",
+      "prototype_alias": "Despertar del Claro",
+      "entries": ["start", "from_m02"],
+      "edges": [
+        {
+          "id": "m01_to_m02",
+          "to": "M02",
+          "entry_id": "from_m01",
+          "kind": "main",
+          "requires_all": ["opening_flow_complete"]
+        }
+      ]
+    },
+    "M02": {
+      "name": "Aldea del Alba",
+      "prototype_alias": "Sendero de Raíces",
+      "entries": ["from_m01", "from_m03", "from_m04"],
+      "edges": [
+        {
+          "id": "m02_to_m01",
+          "to": "M01",
+          "entry_id": "from_m02",
+          "kind": "return",
+          "requires_all": []
+        },
+        {
+          "id": "m02_to_m03",
+          "to": "M03",
+          "entry_id": "from_m02",
+          "kind": "choice",
+          "requires_all": ["prisma_atlas_unlocked"]
+        },
+        {
+          "id": "m02_to_m04",
+          "to": "M04",
+          "entry_id": "from_m02",
+          "kind": "choice",
+          "requires_all": ["prisma_atlas_unlocked"]
+        }
+      ]
+    },
+    "M03": {
+      "name": "Lago Encantado",
+      "prototype_alias": "Círculo de Runas",
+      "entries": ["from_m02", "from_m05"],
+      "edges": [
+        {
+          "id": "m03_to_m02",
+          "to": "M02",
+          "entry_id": "from_m03",
+          "kind": "return",
+          "requires_all": []
+        },
+        {
+          "id": "m03_to_m05",
+          "to": "M05",
+          "entry_id": "from_m03",
+          "kind": "boss_gate",
+          "requires_all": ["lake_resolved", "ruins_sanctuary_resolved"]
+        }
+      ]
+    },
+    "M04": {
+      "name": "Ruinas Vivas / Santuario de las Raíces",
+      "prototype_alias": "Garganta Verde",
+      "entries": ["from_m02", "from_m05"],
+      "edges": [
+        {
+          "id": "m04_to_m02",
+          "to": "M02",
+          "entry_id": "from_m04",
+          "kind": "return",
+          "requires_all": []
+        },
+        {
+          "id": "m04_to_m05",
+          "to": "M05",
+          "entry_id": "from_m04",
+          "kind": "boss_gate",
+          "requires_all": ["lake_resolved", "ruins_sanctuary_resolved"]
+        }
+      ]
+    },
+    "M05": {
+      "name": "Corazón del Bosque Velado",
+      "prototype_alias": "Brote Vivo",
+      "entries": ["from_m03", "from_m04"],
+      "edges": [
+        {
+          "id": "m05_to_m03",
+          "to": "M03",
+          "entry_id": "from_m05",
+          "kind": "return",
+          "requires_all": ["boss5_stabilized"]
+        },
+        {
+          "id": "m05_to_m04",
+          "to": "M04",
+          "entry_id": "from_m05",
+          "kind": "return",
+          "requires_all": ["boss5_stabilized"]
+        },
+        {
+          "id": "m05_to_m06",
+          "to": "M06",
+          "entry_id": "from_m05",
+          "kind": "scope_exit",
+          "scope_exit": true,
+          "requires_all": ["boss5_stabilized", "prism_step_unlocked"]
+        }
+      ]
+    }
+  }
+}
