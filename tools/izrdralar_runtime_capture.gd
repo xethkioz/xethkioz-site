@@ -10,9 +10,7 @@ func _ready() -> void:
 	call_deferred("_run")
 
 func _run() -> void:
-	DisplayServer.window_set_size(CAPTURE_SIZE)
 	DirAccess.make_dir_recursive_absolute(OUTPUT_DIR)
-	await get_tree().process_frame
 	var cases := [
 		{"name":"M01_cuenca_despertar","map":"M01","entry":"start","position":Vector2(690,520),"flags":[]},
 		{"name":"M02_aldea_alba","map":"M02","entry":"from_m01","position":Vector2(520,500),"flags":["opening_flow_complete"]},
@@ -68,14 +66,18 @@ func _capture_case(capture_case: Dictionary) -> void:
 	if image == null or image.is_empty():
 		failures.append("%s produced an empty viewport image" % capture_case["name"])
 	else:
-		if image.get_width() != CAPTURE_SIZE.x or image.get_height() != CAPTURE_SIZE.y:
-			failures.append("%s capture size was %dx%d instead of 640x360" % [capture_case["name"], image.get_width(), image.get_height()])
-		var output_path := "%s/%s.png" % [OUTPUT_DIR, capture_case["name"]]
-		var save_error := image.save_png(output_path)
-		if save_error != OK:
-			failures.append("%s could not save PNG: %s" % [capture_case["name"], save_error])
-		else:
-			print("IZRDRALAR_CAPTURE %s" % output_path)
+		var source_size := Vector2i(image.get_width(), image.get_height())
+		if source_size == CAPTURE_SIZE * 2:
+			image.resize(CAPTURE_SIZE.x, CAPTURE_SIZE.y, Image.INTERPOLATE_NEAREST)
+		elif source_size != CAPTURE_SIZE:
+			failures.append("%s unexpected framebuffer size %dx%d" % [capture_case["name"], source_size.x, source_size.y])
+		if image.get_width() == CAPTURE_SIZE.x and image.get_height() == CAPTURE_SIZE.y:
+			var output_path := "%s/%s.png" % [OUTPUT_DIR, capture_case["name"]]
+			var save_error := image.save_png(output_path)
+			if save_error != OK:
+				failures.append("%s could not save PNG: %s" % [capture_case["name"], save_error])
+			else:
+				print("IZRDRALAR_CAPTURE %s source=%dx%d logical=640x360" % [output_path, source_size.x, source_size.y])
 
 	runtime.queue_free()
 	await get_tree().process_frame
