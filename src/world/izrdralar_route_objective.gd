@@ -49,7 +49,7 @@ func interact(_actor: Node) -> void:
 	if not world_flag.is_empty():
 		GameState.set_world_flag(world_flag)
 	if unlock_prism_step:
-		GameState.prism_step_unlocked = true
+		GameState.unlock_prism_step()
 	if SaveService.save_game({"objective_id": objective_id}):
 		EventBus.toast_requested.emit(completed_message)
 	else:
