@@ -104,12 +104,27 @@ func _update_animation(delta: float) -> void:
 	_visual.scale = Vector2.ONE * (1.0 + sin(_hover_clock * 2.4) * 0.018 + speed_ratio * 0.025)
 
 func _direction_row(direction_value: Vector2) -> int:
-	if absf(direction_value.x) > absf(direction_value.y):
-		# The source sheet's first side row faces right; the second is mirrored left.
-		return 2 if direction_value.x < 0.0 else 1
-	if direction_value.y < 0.0:
-		return 3
-	return 0
+	var direction: Vector2 = direction_value
+	if direction.length_squared() <= 0.0001:
+		return 0
+	direction = direction.normalized()
+	var horizontal: float = direction.x
+	var vertical: float = direction.y
+	const DIAGONAL_THRESHOLD := 0.38268343
+
+	if vertical >= DIAGONAL_THRESHOLD:
+		if horizontal <= -DIAGONAL_THRESHOLD:
+			return 1 # down-left
+		if horizontal >= DIAGONAL_THRESHOLD:
+			return 7 # down-right
+		return 0 # down
+	if vertical <= -DIAGONAL_THRESHOLD:
+		if horizontal <= -DIAGONAL_THRESHOLD:
+			return 3 # up-left
+		if horizontal >= DIAGONAL_THRESHOLD:
+			return 5 # up-right
+		return 4 # up
+	return 2 if horizontal < 0.0 else 6 # left / right
 
 func _update_region() -> void:
 	if not is_instance_valid(_visual):
