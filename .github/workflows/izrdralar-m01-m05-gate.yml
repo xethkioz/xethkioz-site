@@ -10,12 +10,16 @@ on:
       - 'src/fx/**'
       - 'src/player/**'
       - 'src/npc/**'
-      - 'src/world/izrdralar_navigation_graph.gd'
+      - 'src/world/izrdralar_*'
       - 'tools/izrdralar_*'
       - '.github/workflows/izrdralar-m01-m05-gate.yml'
   push:
     branches:
       - feat/izrdralar-m01-m05-save-visual-contract
+
+concurrency:
+  group: izrdralar-m01-m05-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   godot-4-7-2-gate:
@@ -56,6 +60,9 @@ jobs:
           "$GODOT" --headless --path . --check-only --script res://src/player/player_controller_production.gd
           "$GODOT" --headless --path . --check-only --script res://src/npc/enemy_controller_production.gd
           "$GODOT" --headless --path . --check-only --script res://src/world/izrdralar_navigation_graph.gd
+          "$GODOT" --headless --path . --check-only --script res://src/world/izrdralar_map_transition.gd
+          "$GODOT" --headless --path . --check-only --script res://src/world/izrdralar_entry_point.gd
+          "$GODOT" --headless --path . --check-only --script res://src/world/izrdralar_checkpoint_tracker.gd
 
       - name: Visual contract smoke
         shell: bash
