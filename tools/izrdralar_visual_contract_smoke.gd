@@ -2,24 +2,32 @@ extends SceneTree
 
 const CONTRACT_PATH := "res://data/visual/izrdralar_m01_m05_visual_contract.json"
 const NAVIGATION_PATH := "res://data/regions/izrdralar_m01_m05_navigation.json"
+const LAYOUT_PATH := "res://data/regions/izrdralar_m01_m05_layouts.json"
+const RUNTIME_SCENE_PATH := "res://scenes/izrdralar/IzrdralarM01M05Runtime.tscn"
 const REQUIRED_MAP_IDS := ["M01", "M02", "M03", "M04", "M05"]
 const REQUIRED_PALETTE_KEYS := ["forest", "wetland", "water", "prism_violet", "refuge_amber", "ui_primary", "ui_shadow"]
-const REQUIRED_SCRIPT_PATHS := [
+const REQUIRED_RESOURCE_PATHS := [
 	"res://src/core/game_state.gd",
 	"res://src/core/save_service.gd",
 	"res://src/fx/world_feedback_fx.gd",
 	"res://src/fx/izrdralar_fx_factory.gd",
 	"res://src/player/player_controller_production.gd",
 	"res://src/npc/enemy_controller_production.gd",
+	"res://src/npc/boss5_guardian_production.gd",
+	"res://src/pets/xethkioz_companion_production.gd",
 	"res://src/world/izrdralar_navigation_graph.gd",
 	"res://src/world/izrdralar_map_transition.gd",
 	"res://src/world/izrdralar_entry_point.gd",
-	"res://src/world/izrdralar_checkpoint_tracker.gd"
+	"res://src/world/izrdralar_checkpoint_tracker.gd",
+	"res://src/world/izrdralar_route_objective.gd",
+	"res://src/world/izrdralar_generic_chunk.gd",
+	"res://src/world/izrdralar_m01_m05_runtime.gd",
+	RUNTIME_SCENE_PATH
 ]
 
 func _init() -> void:
 	var failures: Array[String] = []
-	_validate_required_scripts(failures)
+	_validate_required_resources(failures)
 	if not FileAccess.file_exists(CONTRACT_PATH):
 		failures.append("missing contract: %s" % CONTRACT_PATH)
 	else:
@@ -38,14 +46,16 @@ func _init() -> void:
 		print("IZRDRALAR_VISUAL_CONTRACT_FAIL")
 		quit(1)
 
-func _validate_required_scripts(failures: Array[String]) -> void:
-	for path in REQUIRED_SCRIPT_PATHS:
+func _validate_required_resources(failures: Array[String]) -> void:
+	for path in REQUIRED_RESOURCE_PATHS:
 		if not ResourceLoader.exists(path):
-			failures.append("missing required script: %s" % path)
+			failures.append("missing required resource: %s" % path)
 			continue
 		var resource := ResourceLoader.load(path)
 		if resource == null:
-			failures.append("failed to parse/load required script: %s" % path)
+			failures.append("failed to parse/load required resource: %s" % path)
+	if not FileAccess.file_exists(LAYOUT_PATH):
+		failures.append("authored layout data is missing")
 
 func _validate_contract(contract: Dictionary, failures: Array[String]) -> void:
 	if str(contract.get("contract_id", "")) != "izrdralar_m01_m05_visual_contract":
