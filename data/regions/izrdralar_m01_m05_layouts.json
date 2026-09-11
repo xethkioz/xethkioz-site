@@ -15,6 +15,9 @@
         "0,1": {"biome":"forest","exits":{"n":true,"e":true}},
         "1,1": {"biome":"forest","exits":{"n":true,"w":true,"e":true}}
       },
+      "landmarks": [
+        {"id":"awakening_ruin","frame":3,"position":[760,430],"scale":1.1,"collision_size":[48,46],"collision_offset":[0,12]}
+      ],
       "entries": {
         "start": [192, 792],
         "from_m02": [884, 520]
@@ -48,6 +51,10 @@
         "0,1": {"biome":"refuge","exits":{"n":true,"e":true,"w":true}},
         "1,1": {"biome":"forest","exits":{"n":true,"w":true,"e":true}}
       },
+      "landmarks": [
+        {"id":"alba_house_west","frame":1,"position":[330,430],"scale":1.2,"collision_size":[88,50],"collision_offset":[0,14]},
+        {"id":"alba_house_east","frame":1,"position":[705,620],"scale":1.15,"collision_size":[84,48],"collision_offset":[0,14]}
+      ],
       "entries": {
         "from_m01": [112, 560],
         "from_m03": [520, 112],
@@ -126,6 +133,10 @@
         "0,1": {"biome":"forest","exits":{"n":true,"e":true}},
         "1,1": {"biome":"sanctuary","exits":{"n":true,"w":true,"e":true}}
       },
+      "landmarks": [
+        {"id":"living_ruin_tower","frame":3,"position":[350,250],"scale":1.25,"collision_size":[52,54],"collision_offset":[0,12]},
+        {"id":"roots_sanctuary_gate","frame":2,"position":[760,640],"scale":1.35,"collision_size":[100,52],"collision_offset":[0,16]}
+      ],
       "entries": {
         "from_m02": [112, 560],
         "from_m05": [900, 780]
