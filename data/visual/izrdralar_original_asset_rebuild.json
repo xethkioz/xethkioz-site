@@ -1,0 +1,51 @@
+{
+  "contract_id": "izrdralar_original_asset_rebuild",
+  "version": "1.0.0",
+  "status": "active_production_base",
+  "source_policy": {
+    "external_pack_role": "reference_only",
+    "allowed": [
+      "category_mapping",
+      "animation_timing_inspiration",
+      "readability_analysis",
+      "functional_requirements"
+    ],
+    "forbidden": [
+      "copying_or_recoloring_source_pixels",
+      "committing_xnb_xwb_xgs_xsb_or_enc_files",
+      "reusing_external_characters_locations_names_or_ui_text",
+      "presenting_reference_material_as_runtime_art"
+    ],
+    "rebuild_rule": "Every runtime asset is newly drawn or procedurally generated for World of Xethkioz."
+  },
+  "target": {
+    "engine": "Godot 4.7.2",
+    "logical_viewport": [640, 360],
+    "preview_scale": 2,
+    "tile_size_px": 16,
+    "texture_filter": "nearest",
+    "pixel_snap": true
+  },
+  "palette": {
+    "forest": "#1C322D",
+    "wetland": "#29493D",
+    "water": "#244958",
+    "prism_violet": "#8B5CF6",
+    "prism_highlight": "#C4B5FD",
+    "refuge_amber": "#FF8C42",
+    "ui_primary": "#F0F0F5",
+    "ui_shadow": "#0A0A0F"
+  },
+  "groups": [
+    {"id": "lighting", "rebuild": "procedural_2d_masks_and_canvas_lighting", "runtime_targets": ["M01", "M02", "M03", "M04", "M05"]},
+    {"id": "effects", "rebuild": "procedural_pixel_feedback", "runtime_targets": ["attack", "hurt", "telegraph", "ward", "resonance", "smoke", "rune"]},
+    {"id": "sprites", "rebuild": "new_original_silhouettes_and_animation_sheets", "runtime_targets": ["traveler", "xethkioz", "first_creatures", "guardian"]},
+    {"id": "gui", "rebuild": "new_original_panels_icons_and_readable_hud", "runtime_targets": ["dialogue", "inventory", "save_feedback", "map_atlas"]},
+    {"id": "items", "rebuild": "new_original_16px_glyphs", "runtime_targets": ["prism_fragments", "healing", "tools", "quest_items"]}
+  ],
+  "initial_runtime_fx": ["hit", "slash", "line", "ward", "burst", "death", "pickup", "hurt", "telegraph", "aura", "smoke", "rune"],
+  "qa": {
+    "required": ["nearest_filter", "readable_at_640x360", "no_external_binary_asset_in_repository", "M01_to_M05_palette_coherence", "attack_feedback_visible", "boss_telegraph_visible_before_damage", "save_feedback_does_not_block_input"],
+    "completion_rule": "Do not mark the visual base complete until a real Godot runtime capture passes."
+  }
+}
