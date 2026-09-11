@@ -1,6 +1,7 @@
 extends Node
 
 const RUNTIME_SCENE := preload("res://scenes/izrdralar/IzrdralarM01M05Runtime.tscn")
+const GROUND_TEXTURE_PASS04 := preload("res://src/world/izrdralar_ground_texture_pass04.gd")
 const LARGE_PROPS := preload("res://assets/production/izrdralar/large_props.svg")
 const LANDMARKS := preload("res://assets/production/izrdralar/landmarks.svg")
 
@@ -26,10 +27,12 @@ func _run() -> void:
 			if not child.name.begins_with("Chunk_"):
 				continue
 			chunk_count += 1
-			var texture_pass := child.get_node_or_null("GroundTexturePass03")
+			var texture_pass := child.get_node_or_null("GroundTexturePass04")
 			if texture_pass == null:
-				failures.append("%s %s missing GroundTexturePass03" % [map_id, child.name])
+				failures.append("%s %s missing GroundTexturePass04" % [map_id, child.name])
 			else:
+				if texture_pass.get_script() != GROUND_TEXTURE_PASS04:
+					failures.append("%s %s ground texture is not authored Pass04" % [map_id, child.name])
 				var marks: Variant = texture_pass.get("_marks")
 				if not (marks is Array) or (marks as Array).is_empty():
 					failures.append("%s %s ground texture contains no biome marks" % [map_id, child.name])
