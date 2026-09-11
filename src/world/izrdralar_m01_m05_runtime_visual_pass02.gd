@@ -2,6 +2,7 @@ extends "res://src/world/izrdralar_m01_m05_runtime.gd"
 
 const VisualChunkScript := preload("res://src/world/izrdralar_visual_chunk_pass02.gd")
 const CompactHudScript := preload("res://src/ui/hud_controller_production_compact.gd")
+const IntegratedLandmarkScript := preload("res://src/world/izrdralar_authored_landmark_pass02.gd")
 
 func _build_chunks() -> void:
 	var chunks: Dictionary = map_data.get("chunks", {})
@@ -18,6 +19,18 @@ func _build_chunks() -> void:
 		add_child(chunk)
 		move_child(chunk, 0)
 		chunk.call("configure", coord, chunks[key_value], world_seed)
+
+func _build_landmarks() -> void:
+	for landmark_value in map_data.get("landmarks", []):
+		if not (landmark_value is Dictionary):
+			continue
+		var data: Dictionary = landmark_value
+		var landmark := Node2D.new()
+		landmark.name = "Landmark_%s" % str(data.get("id", "authored"))
+		landmark.set_script(IntegratedLandmarkScript)
+		landmark.position = _vector_from_array(data.get("position", [0, 0]))
+		landmark.call("configure", data)
+		add_child(landmark)
 
 func _spawn_hud() -> void:
 	var hud := CanvasLayer.new()
