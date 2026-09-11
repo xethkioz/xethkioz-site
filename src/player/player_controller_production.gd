@@ -51,20 +51,40 @@ func _update_visual(delta: float) -> void:
 	var moving: bool = velocity.length_squared() > 4.0
 	if moving and _attack_pose_left <= 0.0 and _cast_pose_left <= 0.0:
 		_anim_clock += delta
-		if _anim_clock >= 0.12:
+		var frame_time: float = 0.095 if _dash_time_left > 0.0 else 0.12
+		if _anim_clock >= frame_time:
 			_anim_clock = 0.0
 			_anim_frame = (_anim_frame + 1) % 3
 	else:
 		_anim_clock = 0.0
 		_anim_frame = 1
-	var row: int = 0
-	if absf(facing.x) > absf(facing.y):
-		row = 1 if facing.x < 0.0 else 2
-	elif facing.y < 0.0:
-		row = 3
+	var row: int = _direction_row(facing)
 	_visual.region_rect = Rect2(Vector2(_anim_frame * 32, row * 32), FRAME_SIZE)
 	_visual.modulate = Color(1.0, 0.62, 0.58, 1.0) if _hit_flash_left > 0.0 else Color.WHITE
 	_apply_action_pose()
+
+func _direction_row(direction_value: Vector2) -> int:
+	var direction: Vector2 = direction_value
+	if direction.length_squared() <= 0.0001:
+		return 0
+	direction = direction.normalized()
+	var horizontal: float = direction.x
+	var vertical: float = direction.y
+	const DIAGONAL_THRESHOLD := 0.38268343
+
+	if vertical >= DIAGONAL_THRESHOLD:
+		if horizontal <= -DIAGONAL_THRESHOLD:
+			return 1 # down-left
+		if horizontal >= DIAGONAL_THRESHOLD:
+			return 7 # down-right
+		return 0 # down
+	if vertical <= -DIAGONAL_THRESHOLD:
+		if horizontal <= -DIAGONAL_THRESHOLD:
+			return 3 # up-left
+		if horizontal >= DIAGONAL_THRESHOLD:
+			return 5 # up-right
+		return 4 # up
+	return 2 if horizontal < 0.0 else 6 # left / right
 
 func _apply_action_pose() -> void:
 	if not is_instance_valid(_visual):
