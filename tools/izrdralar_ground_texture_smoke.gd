@@ -2,6 +2,7 @@ extends Node
 
 const RUNTIME_SCENE := preload("res://scenes/izrdralar/IzrdralarM01M05Runtime.tscn")
 const GROUND_TEXTURE_PASS04 := preload("res://src/world/izrdralar_ground_texture_pass04.gd")
+const TERRAIN_EDGE_PASS04 := preload("res://src/world/izrdralar_terrain_edge_pass04.gd")
 const LARGE_PROPS := preload("res://assets/production/izrdralar/large_props.svg")
 const LANDMARKS := preload("res://assets/production/izrdralar/landmarks.svg")
 
@@ -36,9 +37,11 @@ func _run() -> void:
 				var marks: Variant = texture_pass.get("_marks")
 				if not (marks is Array) or (marks as Array).is_empty():
 					failures.append("%s %s ground texture contains no biome marks" % [map_id, child.name])
-			var edge_pass := child.get_node_or_null("TerrainEdgePass03")
+			var edge_pass := child.get_node_or_null("TerrainEdgePass04")
 			if edge_pass == null:
-				failures.append("%s %s missing TerrainEdgePass03" % [map_id, child.name])
+				failures.append("%s %s missing TerrainEdgePass04" % [map_id, child.name])
+			elif edge_pass.get_script() != TERRAIN_EDGE_PASS04:
+				failures.append("%s %s terrain edge is not authored Pass04" % [map_id, child.name])
 			var boss_forest := child.get_node_or_null("BossForestPass03")
 			if boss_forest != null:
 				boss_forest_found = true
