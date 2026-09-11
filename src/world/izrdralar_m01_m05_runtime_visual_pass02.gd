@@ -7,6 +7,7 @@ const ImpactPlayerScript := preload("res://src/player/player_controller_producti
 const AmbientLayerScript := preload("res://src/fx/izrdralar_ambient_layer_pass02.gd")
 const ReadableNpcScript := preload("res://src/npc/npc_interactable_production_pass02.gd")
 const DepthBinderScript := preload("res://src/world/izrdralar_depth_binder.gd")
+const ContactShadowScript := preload("res://src/fx/izrdralar_contact_shadow.gd")
 
 func _ready() -> void:
 	super._ready()
@@ -93,12 +94,16 @@ func _install_depth_contract() -> void:
 		var node := child as Node2D
 		if node == player:
 			_bind_depth(node, 6.0)
+			_install_contact_shadow(node, Vector2(8.5, 3.0), 0.30, Vector2(0, 7))
 		elif node.name == "Xethkioz":
 			_bind_depth(node, 6.0)
+			_install_contact_shadow(node, Vector2(9.0, 2.6), 0.18, Vector2(0, 10))
 		elif node.is_in_group("bosses"):
+			# Boss 5 owns a larger custom arena shadow in its production controller.
 			_bind_depth(node, 18.0)
 		elif node.is_in_group("enemies"):
 			_bind_depth(node, 5.0)
+			_install_contact_shadow(node, Vector2(9.5, 3.0), 0.28, Vector2(0, 7))
 		elif node.is_in_group("izrdralar_authored_landmark"):
 			var landmark_offset := 14.0
 			var collision_offset: Variant = node.get("collision_offset")
@@ -107,6 +112,7 @@ func _install_depth_contract() -> void:
 			_bind_depth(node, landmark_offset)
 		elif node.get_script() == ReadableNpcScript:
 			_bind_depth(node, 6.0)
+			_install_contact_shadow(node, Vector2(8.5, 2.8), 0.26, Vector2(0, 7))
 
 func _bind_depth(target: Node2D, foot_offset: float) -> void:
 	if target.get_node_or_null("DepthBinder") != null:
@@ -116,6 +122,15 @@ func _bind_depth(target: Node2D, foot_offset: float) -> void:
 	binder.set_script(DepthBinderScript)
 	target.add_child(binder)
 	binder.call("configure", target, foot_offset)
+
+func _install_contact_shadow(target: Node2D, radii: Vector2, alpha: float, offset_value: Vector2) -> void:
+	if target.get_node_or_null("ContactShadow") != null:
+		return
+	var shadow := Node2D.new()
+	shadow.name = "ContactShadow"
+	shadow.set_script(ContactShadowScript)
+	target.add_child(shadow)
+	shadow.call("configure", radii, alpha, offset_value)
 
 func _apply_static_prop_depth() -> void:
 	for child in get_children():
