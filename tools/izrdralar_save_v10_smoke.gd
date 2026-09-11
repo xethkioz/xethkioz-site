@@ -1,8 +1,11 @@
-extends SceneTree
+extends Node
 
 var failures: Array[String] = []
 
-func _init() -> void:
+func _ready() -> void:
+	call_deferred("_run")
+
+func _run() -> void:
 	SaveService.delete_save()
 	GameState.reset_new_game()
 
@@ -63,9 +66,9 @@ func _fail(message: String) -> void:
 func _finish() -> void:
 	if failures.is_empty():
 		print("IZRDRALAR_SAVE_V10_PASS")
-		quit(0)
+		get_tree().quit(0)
 		return
 	for failure in failures:
 		push_error(failure)
 	print("IZRDRALAR_SAVE_V10_FAIL")
-	quit(1)
+	get_tree().quit(1)
