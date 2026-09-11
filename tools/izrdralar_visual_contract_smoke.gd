@@ -1,4 +1,4 @@
-extends SceneTree
+extends Node
 
 const CONTRACT_PATH := "res://data/visual/izrdralar_m01_m05_visual_contract.json"
 const NAVIGATION_PATH := "res://data/regions/izrdralar_m01_m05_navigation.json"
@@ -25,7 +25,7 @@ const REQUIRED_RESOURCE_PATHS := [
 	RUNTIME_SCENE_PATH
 ]
 
-func _init() -> void:
+func _ready() -> void:
 	var failures: Array[String] = []
 	_validate_required_resources(failures)
 	if not FileAccess.file_exists(CONTRACT_PATH):
@@ -37,14 +37,7 @@ func _init() -> void:
 			failures.append("contract is not a JSON object")
 		else:
 			_validate_contract(parsed, failures)
-	if failures.is_empty():
-		print("IZRDRALAR_VISUAL_CONTRACT_PASS")
-		quit(0)
-	else:
-		for failure in failures:
-			push_error(failure)
-		print("IZRDRALAR_VISUAL_CONTRACT_FAIL")
-		quit(1)
+	_finish(failures)
 
 func _validate_required_resources(failures: Array[String]) -> void:
 	for path in REQUIRED_RESOURCE_PATHS:
@@ -68,7 +61,8 @@ func _validate_contract(contract: Dictionary, failures: Array[String]) -> void:
 	if not FileAccess.file_exists(NAVIGATION_PATH):
 		failures.append("canonical navigation graph is missing")
 	var render: Dictionary = contract.get("render", {})
-	if render.get("logical_viewport", []) != [640, 360]:
+	var viewport: Array = render.get("logical_viewport", [])
+	if viewport.size() != 2 or int(viewport[0]) != 640 or int(viewport[1]) != 360:
 		failures.append("logical viewport must be 640x360")
 	if int(render.get("tile_size_px", 0)) != 16:
 		failures.append("tile size must be 16")
@@ -114,3 +108,13 @@ func _map_by_id(maps: Array, map_id: String) -> Dictionary:
 		if value is Dictionary and str((value as Dictionary).get("id", "")) == map_id:
 			return value as Dictionary
 	return {}
+
+func _finish(failures: Array[String]) -> void:
+	if failures.is_empty():
+		print("IZRDRALAR_VISUAL_CONTRACT_PASS")
+		get_tree().quit(0)
+		return
+	for failure in failures:
+		push_error(failure)
+	print("IZRDRALAR_VISUAL_CONTRACT_FAIL")
+	get_tree().quit(1)
