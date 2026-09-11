@@ -84,8 +84,11 @@ func _assert_depth_contract(runtime: Node, player: Node, xethkioz: Node, map_id:
 	for landmark in get_tree().get_nodes_in_group("izrdralar_authored_landmark"):
 		if runtime.is_ancestor_of(landmark):
 			_assert_depth_bound(landmark, "%s landmark %s" % [map_id, landmark.name])
+			if landmark.get_node_or_null("LandmarkShadow") == null:
+				_fail("%s landmark %s missing grounded shadow" % [map_id, landmark.name])
 
 	var static_prop_count := 0
+	var static_shadow_count := 0
 	for child in runtime.get_children():
 		if not child.name.begins_with("Chunk_"):
 			continue
@@ -100,8 +103,12 @@ func _assert_depth_contract(runtime: Node, player: Node, xethkioz: Node, map_id:
 				static_prop_count += 1
 				if abs((prop as Sprite2D).z_index) < 8:
 					_fail("%s prop %s is not world-depth sorted" % [map_id, prop.name])
+			elif prop is Polygon2D and prop.name.begins_with("PropShadow_"):
+				static_shadow_count += 1
 	if static_prop_count <= 0:
 		_fail("%s expected at least one depth-sorted large prop" % map_id)
+	if static_shadow_count != static_prop_count:
+		_fail("%s expected one grounded shadow per prop props=%d shadows=%d" % [map_id, static_prop_count, static_shadow_count])
 
 	if player is Node2D and player.get_node_or_null("DepthBinder") != null:
 		var player_2d := player as Node2D
