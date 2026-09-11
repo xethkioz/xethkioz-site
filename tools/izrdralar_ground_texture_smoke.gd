@@ -25,10 +25,13 @@ func _run() -> void:
 			var texture_pass := child.get_node_or_null("GroundTexturePass03")
 			if texture_pass == null:
 				failures.append("%s %s missing GroundTexturePass03" % [map_id, child.name])
-				continue
-			var marks: Variant = texture_pass.get("_marks")
-			if not (marks is Array) or (marks as Array).is_empty():
-				failures.append("%s %s ground texture contains no biome marks" % [map_id, child.name])
+			else:
+				var marks: Variant = texture_pass.get("_marks")
+				if not (marks is Array) or (marks as Array).is_empty():
+					failures.append("%s %s ground texture contains no biome marks" % [map_id, child.name])
+			var edge_pass := child.get_node_or_null("TerrainEdgePass03")
+			if edge_pass == null:
+				failures.append("%s %s missing TerrainEdgePass03" % [map_id, child.name])
 		if chunk_count <= 0:
 			failures.append("%s spawned no authored chunks" % map_id)
 		runtime.queue_free()
