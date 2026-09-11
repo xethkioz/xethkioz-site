@@ -1,8 +1,23 @@
 extends "res://src/world/izrdralar_generic_chunk.gd"
 
-# Visual Production Pass 02
+const GroundTexturePass03 := preload("res://src/world/izrdralar_ground_texture_pass03.gd")
+
+# Visual Production Pass 02 + terrain depth pass 03.
 # Keeps authored navigation/collision intact while reducing the prototype-like
-# grid of oversized paths and clearings visible at the 640x360 target.
+# grid of oversized paths, repeated ground and flat clearings at 640x360.
+
+func _build() -> void:
+	super._build()
+	_install_ground_texture_pass()
+
+func _install_ground_texture_pass() -> void:
+	if not is_instance_valid(_ground) or get_node_or_null("GroundTexturePass03") != null:
+		return
+	var texture_pass := Node2D.new()
+	texture_pass.name = "GroundTexturePass03"
+	texture_pass.set_script(GroundTexturePass03)
+	add_child(texture_pass)
+	texture_pass.call("configure", _ground, biome, seed_value)
 
 func _fill_base() -> void:
 	super._fill_base()
