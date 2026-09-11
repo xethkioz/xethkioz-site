@@ -159,8 +159,30 @@ func take_damage(amount: float) -> void:
 	var impact_position: Vector2 = global_position + Vector2(0, -8)
 	var applied: float = amount * (0.4 if _guard_time_left > 0.0 else 1.0)
 	_hit_flash_left = 0.13
-	super.take_damage(amount)
+	health = maxf(0.0, health - applied)
+	EventBus.player_health_changed.emit(health, max_health)
 	_spawn_feedback("hurt", impact_position, -facing, Color("ff6b6b"), "-%d" % roundi(applied))
+	if health > 0.0:
+		return
+
+	health = max_health
+	mana = max_mana
+	velocity = Vector2.ZERO
+	var respawn_position := _safe_respawn_position()
+	global_position = respawn_position
+	GameState.set_world_checkpoint(GameState.current_map_id, GameState.current_entry_id, respawn_position)
+	SaveService.save_game({"respawned": true, "respawn_map": GameState.current_map_id, "respawn_entry": GameState.current_entry_id})
+	EventBus.player_health_changed.emit(health, max_health)
+	EventBus.player_mana_changed.emit(mana, max_mana)
+	EventBus.toast_requested.emit("El Prisma te devuelve a la última entrada segura")
+
+func _safe_respawn_position() -> Vector2:
+	for node in get_tree().get_nodes_in_group("izrdralar_entry_point"):
+		if node is Node2D and str(node.get_meta("entry_id", "")) == GameState.current_entry_id:
+			return (node as Node2D).global_position
+	if GameState.last_world_position != Vector2.ZERO:
+		return GameState.last_world_position
+	return global_position
 
 func _use_brote_vivo() -> void:
 	var pieces: int = GameState.set_piece_count("brote_vivo")
