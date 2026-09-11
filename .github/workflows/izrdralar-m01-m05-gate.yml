@@ -120,7 +120,11 @@ jobs:
           set -euxo pipefail
           GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
           rm -rf /tmp/izrdralar-captures
-          "$GODOT" --headless --path . res://tools/scenes/IzrdralarRuntimeCapture.tscn 2>&1 | tee /tmp/izrdralar-capture.log
+          if ! command -v xvfb-run >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq xvfb
+          fi
+          timeout 60s xvfb-run -a "$GODOT" --path . --rendering-method gl_compatibility res://tools/scenes/IzrdralarRuntimeCapture.tscn 2>&1 | tee /tmp/izrdralar-capture.log
           grep -q "IZRDRALAR_RUNTIME_CAPTURE_PASS" /tmp/izrdralar-capture.log
           test "$(find /tmp/izrdralar-captures -maxdepth 1 -name '*.png' | wc -l)" -eq 6
 
