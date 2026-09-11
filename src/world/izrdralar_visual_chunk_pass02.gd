@@ -79,3 +79,73 @@ func _paint_boss_arena() -> void:
 				if roll % 3 != 0:
 					_ground.set_cell(Vector2i(x, y), 0, _variant(Factory.DARK_GRASS_VARIANTS, x, y, 122))
 				_detail.set_cell(Vector2i(x, y), 0, _variant(Factory.CLIFF_VARIANTS, x, y, 123))
+
+func _decorate_m04() -> void:
+	# M04 needs visual silence around its story beats. Large prisms remain as
+	# authored wayfinding accents instead of repeating as general-purpose clutter.
+	var clearings: Array = [
+		{"cell": Vector2(22, 16), "radius": 6.0},
+		{"cell": Vector2(35, 31), "radius": 5.5},
+		{"cell": Vector2(48, 40), "radius": 7.0},
+		{"cell": Vector2(48, 46), "radius": 9.5},
+		{"cell": Vector2(55, 53), "radius": 7.0}
+	]
+	for y in range(1, CHUNK_TILES - 1):
+		for x in range(1, CHUNK_TILES - 1):
+			var cell := Vector2i(x, y)
+			var base: Vector2i = _ground.get_cell_atlas_coords(cell)
+			if Factory.is_protected_ground(base):
+				continue
+			var world_cell := _world_cell(cell)
+			var roll: int = _cell_roll(x, y)
+			if _inside_any_clearing(world_cell, clearings):
+				if roll == 0:
+					_detail.set_cell(cell, 0, _variant(Factory.FLOWER_VARIANTS, x, y, 181))
+				elif roll == 1 and _sparse_visual_gate(x, y, 5):
+					_detail.set_cell(cell, 0, _variant(Factory.CRYSTAL_VARIANTS, x, y, 182))
+				continue
+
+			if biome == "ruins":
+				if roll < 2:
+					_place_large_prop(cell, 3, true)
+				elif roll < 4:
+					_place_large_prop(cell, 4, true)
+				elif roll == 4:
+					_place_large_prop(cell, 0, true)
+				elif roll < 9:
+					_detail.set_cell(cell, 0, _variant(Factory.SHRUB_VARIANTS, x, y, 183))
+				elif roll == 9:
+					_detail.set_cell(cell, 0, _variant(Factory.ROCK_VARIANTS, x, y, 184))
+				elif roll == 10 and _sparse_visual_gate(x, y, 4):
+					_place_large_prop(cell, 2, false)
+			elif biome == "sanctuary":
+				if roll == 0 and _sparse_visual_gate(x, y, 3):
+					_place_large_prop(cell, 2, false)
+				elif roll == 1:
+					_place_large_prop(cell, 3, true)
+				elif roll < 4:
+					_place_large_prop(cell, 4, true)
+				elif roll < 9:
+					_detail.set_cell(cell, 0, _variant(Factory.SHRUB_VARIANTS, x, y, 185))
+				elif roll == 9:
+					_detail.set_cell(cell, 0, _variant(Factory.FLOWER_VARIANTS, x, y, 186))
+				elif roll == 10:
+					_detail.set_cell(cell, 0, _variant(Factory.ROCK_VARIANTS, x, y, 187))
+			else:
+				if roll < 2:
+					_place_large_prop(cell, 0, true)
+				elif roll == 2:
+					_place_large_prop(cell, 1, true)
+				elif roll < 6:
+					_detail.set_cell(cell, 0, _variant(Factory.SHRUB_VARIANTS, x, y, 188))
+				elif roll == 6:
+					_place_large_prop(cell, 4, true)
+
+	# Four major prisms remain across the authored sanctuary area: two here and
+	# two in _place_chunk_landmarks(). They now read as deliberate landmarks.
+	if chunk_coord == Vector2i(1, 1):
+		_place_safe_prop(Vector2i(12, 9), 2, false)
+		_place_safe_prop(Vector2i(27, 24), 2, false)
+
+func _sparse_visual_gate(x: int, y: int, modulus: int) -> bool:
+	return posmod(x * 7 + y * 11 + chunk_coord.x * 13 + chunk_coord.y * 17, modulus) == 0
