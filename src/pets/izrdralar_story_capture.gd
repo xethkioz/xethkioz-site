@@ -22,4 +22,4 @@ func interact(actor: Node = null) -> void:
 		EventBus.dialog_requested.emit(display_name, required_world_message)
 		EventBus.toast_requested.emit("Primero estabilizá el hábitat.")
 		return
-	super.interact(actor)
+	await super.interact(actor)
