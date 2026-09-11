@@ -11,11 +11,11 @@ func _run() -> void:
 	SaveService.delete_save()
 	GameState.reset_new_game()
 	var cases := [
-		{"id":"M01","entry":"start","chunks":4,"transitions":1,"objectives":1,"enemies":3,"npcs":0,"boss":false},
-		{"id":"M02","entry":"from_m01","chunks":4,"transitions":3,"objectives":1,"enemies":0,"npcs":1,"boss":false},
-		{"id":"M03","entry":"from_m02","chunks":4,"transitions":2,"objectives":1,"enemies":3,"npcs":0,"boss":false},
-		{"id":"M04","entry":"from_m02","chunks":4,"transitions":2,"objectives":1,"enemies":3,"npcs":0,"boss":false},
-		{"id":"M05","entry":"from_m03","chunks":1,"transitions":2,"objectives":1,"enemies":0,"npcs":0,"boss":true}
+		{"id":"M01","entry":"start","chunks":4,"landmarks":1,"transitions":1,"objectives":1,"enemies":3,"npcs":0,"boss":false},
+		{"id":"M02","entry":"from_m01","chunks":4,"landmarks":2,"transitions":3,"objectives":1,"enemies":0,"npcs":1,"boss":false},
+		{"id":"M03","entry":"from_m02","chunks":4,"landmarks":0,"transitions":2,"objectives":1,"enemies":3,"npcs":0,"boss":false},
+		{"id":"M04","entry":"from_m02","chunks":4,"landmarks":2,"transitions":2,"objectives":1,"enemies":3,"npcs":0,"boss":false},
+		{"id":"M05","entry":"from_m03","chunks":1,"landmarks":0,"transitions":2,"objectives":1,"enemies":0,"npcs":0,"boss":true}
 	]
 	for test_case in cases:
 		await _validate_map(test_case)
@@ -43,6 +43,7 @@ func _validate_map(test_case: Dictionary) -> void:
 		_fail("%s missing checkpoint tracker" % map_id)
 
 	_assert_prefix_count(runtime, "Chunk_", int(test_case["chunks"]), "%s chunks" % map_id)
+	_assert_prefix_count(runtime, "Landmark_", int(test_case["landmarks"]), "%s authored landmarks" % map_id)
 	_assert_prefix_count(runtime, "Transition_", int(test_case["transitions"]), "%s transitions" % map_id)
 	_assert_prefix_count(runtime, "Objective_", int(test_case["objectives"]), "%s objectives" % map_id)
 	_assert_group_count(runtime, "enemies", int(test_case["enemies"]) + (1 if bool(test_case["boss"]) else 0), "%s enemies" % map_id)
