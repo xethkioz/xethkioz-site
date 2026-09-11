@@ -12,8 +12,8 @@ func _build_ui() -> void:
 	mana_bar = _make_bar_fill(Vector2(15, 39), Vector2(84, 4), C_VIOLET)
 	progress_label = _make_label(Vector2(101, 35), Vector2(62, 10), "", 5, C_MUTED, false, HORIZONTAL_ALIGNMENT_RIGHT)
 
-	_make_label(Vector2(184, 9), Vector2(252, 9), "J ATAQUE · Q/E/R/F · C INTERACTUAR · B ATLAS", 5, C_MUTED, false, HORIZONTAL_ALIGNMENT_CENTER)
-
+	# Controls are intentionally not pinned to the center of the screen. Tutorial
+	# prompts and context toasts own that information; the world stays readable.
 	_make_panel(Vector2(452, 8), Vector2(180, 48), C_BG_SOFT, C_ORANGE)
 	quest_label = _make_label(Vector2(461, 13), Vector2(162, 35), "Misión", 6, C_TEXT, true, HORIZONTAL_ALIGNMENT_RIGHT)
 	quest_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
