@@ -4,12 +4,14 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
-      - 'data/regions/izrdralar_m01_m05_navigation.json'
+      - 'data/regions/izrdralar_m01_m05_*.json'
       - 'data/visual/izrdralar_m01_m05_visual_contract.json'
+      - 'scenes/izrdralar/**'
       - 'src/core/**'
       - 'src/fx/**'
       - 'src/player/**'
       - 'src/npc/**'
+      - 'src/pets/**'
       - 'src/world/izrdralar_*'
       - 'tools/izrdralar_*'
       - '.github/workflows/izrdralar-m01-m05-gate.yml'
@@ -61,10 +63,15 @@ jobs:
             res://src/fx/world_feedback_fx.gd
             res://src/player/player_controller_production.gd
             res://src/npc/enemy_controller_production.gd
+            res://src/npc/boss5_guardian_production.gd
+            res://src/pets/xethkioz_companion_production.gd
             res://src/world/izrdralar_navigation_graph.gd
             res://src/world/izrdralar_map_transition.gd
             res://src/world/izrdralar_entry_point.gd
             res://src/world/izrdralar_checkpoint_tracker.gd
+            res://src/world/izrdralar_route_objective.gd
+            res://src/world/izrdralar_generic_chunk.gd
+            res://src/world/izrdralar_m01_m05_runtime.gd
           )
           FAILED=0
           for SCRIPT in "${SCRIPTS[@]}"; do
@@ -106,7 +113,15 @@ jobs:
           "$GODOT" --headless --path . --script res://tools/izrdralar_save_v10_smoke.gd 2>&1 | tee /tmp/izrdralar-save.log
           grep -q "IZRDRALAR_SAVE_V10_PASS" /tmp/izrdralar-save.log
 
-      - name: Runtime startup without timeout-as-pass
+      - name: Authored M01-M05 runtime smoke
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --script res://tools/izrdralar_m01_m05_runtime_smoke.gd 2>&1 | tee /tmp/izrdralar-authored-runtime.log
+          grep -q "IZRDRALAR_M01_M05_RUNTIME_PASS" /tmp/izrdralar-authored-runtime.log
+
+      - name: Current main runtime startup without timeout-as-pass
         shell: bash
         run: |
           set -o pipefail
@@ -127,5 +142,6 @@ jobs:
             /tmp/izrdralar-visual.log
             /tmp/izrdralar-navigation.log
             /tmp/izrdralar-save.log
+            /tmp/izrdralar-authored-runtime.log
             /tmp/izrdralar-runtime.log
           if-no-files-found: warn
