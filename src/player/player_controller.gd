@@ -1,6 +1,9 @@
 extends CharacterBody2D
 
 @export var move_speed := 118.0
+@export var acceleration := 920.0
+@export var deceleration := 1280.0
+@export var turn_acceleration := 1560.0
 @export var dash_speed := 290.0
 @export var dash_duration := 0.14
 @export var dash_cooldown := 0.60
@@ -55,7 +58,10 @@ func _physics_process(delta: float) -> void:
 		_dash_time_left = dash_duration * duration_bonus
 		_dash_cooldown_left = dash_cooldown
 	var current_dash_speed := dash_speed * (1.28 if GameState.prism_step_unlocked else 1.0)
-	velocity = facing * current_dash_speed if _dash_time_left > 0.0 else input_vector * move_speed
+	if _dash_time_left > 0.0:
+		velocity = facing * current_dash_speed
+	else:
+		_apply_ground_movement(input_vector, delta)
 	move_and_slide()
 
 	if Input.is_action_just_pressed("attack") and _attack_cooldown_left <= 0.0:
@@ -72,6 +78,19 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("interact"):
 		_interact_with_nearest()
 	queue_redraw()
+
+func _apply_ground_movement(input_vector: Vector2, delta: float) -> void:
+	if input_vector.length_squared() <= 0.0001:
+		velocity = velocity.move_toward(Vector2.ZERO, deceleration * delta)
+		return
+	var target_velocity: Vector2 = input_vector * move_speed
+	var response: float = acceleration
+	if velocity.length_squared() > 1.0:
+		var current_direction: Vector2 = velocity.normalized()
+		var target_direction: Vector2 = input_vector.normalized()
+		if current_direction.dot(target_direction) < 0.70:
+			response = turn_acceleration
+	velocity = velocity.move_toward(target_velocity, response * delta)
 
 func _regenerate_mana(delta: float) -> void:
 	if mana >= max_mana:
