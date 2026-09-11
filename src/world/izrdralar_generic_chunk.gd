@@ -1,6 +1,16 @@
 class_name IzrdralarGenericChunk
 extends "res://src/world/production_chunk.gd"
 
+const M01_WORLD_SEED := 21500809
+const M02_WORLD_SEED := 21500829
+const M03_WORLD_SEED := 21500849
+
+var authored_world_seed: int = 0
+
+func configure(coord: Vector2i, data: Dictionary, world_seed: int) -> void:
+	authored_world_seed = world_seed
+	super.configure(coord, data, world_seed)
+
 func _carve_routes() -> void:
 	# Settlement and boss spaces intentionally keep strong architectural axes.
 	if biome in ["refuge", "boss"]:
@@ -46,7 +56,147 @@ func _organic_route_offset(value: int, start: int, finish: int) -> int:
 	var amplitude := 2.1 if biome in ["forest", "river", "lake"] else 1.35
 	return roundi(sin(float(value) * 0.48 + phase) * amplitude * taper)
 
+func _decorate() -> void:
+	match authored_world_seed:
+		M01_WORLD_SEED:
+			_decorate_m01()
+		M02_WORLD_SEED:
+			_decorate_m02()
+		M03_WORLD_SEED:
+			_decorate_m03()
+		_:
+			super._decorate()
+
+func _decorate_m01() -> void:
+	# Cuenca del Despertar: vegetation frames the encounter instead of filling it.
+	# The opening combat, Xethkioz and the resonance objective remain readable at 640x360.
+	var clearings: Array = [
+		{"cell": Vector2(32, 38), "radius": 8.5},
+		{"cell": Vector2(43, 32), "radius": 7.5},
+		{"cell": Vector2(18, 38), "radius": 5.5},
+		{"cell": Vector2(52, 36), "radius": 5.0}
+	]
+	for y in range(1, CHUNK_TILES - 1):
+		for x in range(1, CHUNK_TILES - 1):
+			var cell := Vector2i(x, y)
+			var base: Vector2i = _ground.get_cell_atlas_coords(cell)
+			if Factory.is_protected_ground(base):
+				continue
+			var world_cell := _world_cell(cell)
+			var roll: int = _cell_roll(x, y)
+			if _inside_any_clearing(world_cell, clearings):
+				if roll < 2:
+					_detail.set_cell(cell, 0, _variant(Factory.SHRUB_VARIANTS, x, y, 51))
+				elif roll == 2:
+					_detail.set_cell(cell, 0, _variant(Factory.FLOWER_VARIANTS, x, y, 52))
+				continue
+			if roll < 4:
+				_place_large_prop(cell, 0, true)
+			elif roll < 6:
+				_place_large_prop(cell, 1, true)
+			elif roll < 9:
+				_detail.set_cell(cell, 0, _variant(Factory.SHRUB_VARIANTS, x, y, 53))
+			elif roll < 11:
+				_place_large_prop(cell, 4, true)
+			elif roll == 11:
+				_detail.set_cell(cell, 0, _variant(Factory.FLOWER_VARIANTS, x, y, 54))
+
+	# Resonance accents around the authored opening objective. They are visual-only
+	# so the combat route cannot be accidentally blocked.
+	if chunk_coord == Vector2i(1, 1):
+		_place_safe_prop(Vector2i(8, 4), 2, false)
+		_place_safe_prop(Vector2i(14, 5), 2, false)
+
+func _decorate_m02() -> void:
+	# Aldea del Alba: keep a broad civic/plaza read around Ivan and Prisma-Atlas.
+	var plaza_center := Vector2(32, 31)
+	for y in range(1, CHUNK_TILES - 1):
+		for x in range(1, CHUNK_TILES - 1):
+			var cell := Vector2i(x, y)
+			var base: Vector2i = _ground.get_cell_atlas_coords(cell)
+			if Factory.is_protected_ground(base):
+				continue
+			var world_cell := Vector2(_world_cell(cell))
+			var roll: int = _cell_roll(x, y)
+			if world_cell.distance_to(plaza_center) <= 13.5:
+				if roll < 2:
+					_detail.set_cell(cell, 0, _variant(Factory.FLOWER_VARIANTS, x, y, 61))
+				continue
+			if roll < 3:
+				_place_large_prop(cell, 0, true)
+			elif roll == 3:
+				_place_large_prop(cell, 1, true)
+			elif roll < 7:
+				_detail.set_cell(cell, 0, _variant(Factory.SHRUB_VARIANTS, x, y, 62))
+			elif roll == 7:
+				_place_large_prop(cell, 4, true)
+			elif roll == 8:
+				_detail.set_cell(cell, 0, _variant(Factory.FLOWER_VARIANTS, x, y, 63))
+
+	# One prism beacon anchors the village center without competing with Ivan.
+	if chunk_coord == Vector2i(1, 0):
+		_place_safe_prop(Vector2i(4, 25), 2, false)
+
+func _decorate_m03() -> void:
+	# Lago Encantado: preserve the Val/Rola/Mela/Carpinchito hub as a readable
+	# social space and concentrate wetland texture toward the lake chunks.
+	var care_hub_center := Vector2(45, 44)
+	for y in range(1, CHUNK_TILES - 1):
+		for x in range(1, CHUNK_TILES - 1):
+			var cell := Vector2i(x, y)
+			var base: Vector2i = _ground.get_cell_atlas_coords(cell)
+			if Factory.is_protected_ground(base):
+				continue
+			var world_cell := Vector2(_world_cell(cell))
+			var roll: int = _cell_roll(x, y)
+			if world_cell.distance_to(care_hub_center) <= 10.5:
+				if roll < 2:
+					_detail.set_cell(cell, 0, _variant(Factory.FLOWER_VARIANTS, x, y, 71))
+				continue
+			if biome == "lake":
+				if roll < 3:
+					_place_large_prop(cell, 5, false)
+				elif roll < 5:
+					_detail.set_cell(cell, 0, _variant(Factory.SHRUB_VARIANTS, x, y, 72))
+				elif roll == 5:
+					_place_large_prop(cell, 4, true)
+				elif roll == 6:
+					_detail.set_cell(cell, 0, _variant(Factory.FLOWER_VARIANTS, x, y, 73))
+			else:
+				if roll < 3:
+					_place_large_prop(cell, 0, true)
+				elif roll == 3:
+					_place_large_prop(cell, 1, true)
+				elif roll < 7:
+					_detail.set_cell(cell, 0, _variant(Factory.SHRUB_VARIANTS, x, y, 74))
+				elif roll == 7:
+					_place_large_prop(cell, 4, true)
+
+func _world_cell(local_cell: Vector2i) -> Vector2i:
+	return Vector2i(
+		chunk_coord.x * CHUNK_TILES + local_cell.x,
+		chunk_coord.y * CHUNK_TILES + local_cell.y
+	)
+
+func _inside_any_clearing(world_cell: Vector2i, clearings: Array) -> bool:
+	var point := Vector2(world_cell)
+	for clearing_value in clearings:
+		var clearing: Dictionary = clearing_value
+		var center: Vector2 = clearing.get("cell", Vector2.ZERO)
+		var radius: float = float(clearing.get("radius", 0.0))
+		if point.distance_to(center) <= radius:
+			return true
+	return false
+
+func _place_safe_prop(cell: Vector2i, frame: int, collidable: bool) -> void:
+	if not _inside(cell):
+		return
+	var base: Vector2i = _ground.get_cell_atlas_coords(cell)
+	if Factory.is_protected_ground(base):
+		return
+	_place_large_prop(cell, frame, collidable)
+
 func _place_chunk_landmarks() -> void:
-	# M01-M05 authored maps place landmarks explicitly from their layout data.
-	# This intentionally disables GoldenRegion's hard-coded chunk-coordinate landmarks.
+	# Layout data remains authoritative for landmarks. M01-M03 composition accents
+	# above only adjust vegetation density and small environmental props.
 	pass
