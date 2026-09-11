@@ -3,9 +3,18 @@ extends SceneTree
 const CONTRACT_PATH := "res://data/visual/izrdralar_m01_m05_visual_contract.json"
 const REQUIRED_MAP_IDS := ["M01", "M02", "M03", "M04", "M05"]
 const REQUIRED_PALETTE_KEYS := ["forest", "wetland", "water", "prism_violet", "refuge_amber", "ui_primary", "ui_shadow"]
+const REQUIRED_SCRIPT_PATHS := [
+	"res://src/core/game_state.gd",
+	"res://src/core/save_service.gd",
+	"res://src/fx/world_feedback_fx.gd",
+	"res://src/fx/izrdralar_fx_factory.gd",
+	"res://src/player/player_controller_production.gd",
+	"res://src/npc/enemy_controller_production.gd"
+]
 
 func _init() -> void:
 	var failures: Array[String] = []
+	_validate_required_scripts(failures)
 	if not FileAccess.file_exists(CONTRACT_PATH):
 		failures.append("missing contract: %s" % CONTRACT_PATH)
 	else:
@@ -23,6 +32,15 @@ func _init() -> void:
 			push_error(failure)
 		print("IZRDRALAR_VISUAL_CONTRACT_FAIL")
 		quit(1)
+
+func _validate_required_scripts(failures: Array[String]) -> void:
+	for path in REQUIRED_SCRIPT_PATHS:
+		if not ResourceLoader.exists(path):
+			failures.append("missing required script: %s" % path)
+			continue
+		var resource := ResourceLoader.load(path)
+		if resource == null:
+			failures.append("failed to parse/load required script: %s" % path)
 
 func _validate_contract(contract: Dictionary, failures: Array[String]) -> void:
 	if str(contract.get("contract_id", "")) != "izrdralar_m01_m05_visual_contract":
