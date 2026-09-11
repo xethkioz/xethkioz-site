@@ -5,8 +5,8 @@
     "canon": "WORLD_OF_XETHKIOZ_BIBLIA_FINAL_CONSOLIDADA_SAGA_I_v1.0_2026-09-10.md",
     "atlas": "WORLD_OF_XETHKIOZ_CONEXIONES_Y_NATURALEZA_v1.0_2026-09-10.md",
     "navigation": "res://data/regions/izrdralar_m01_m05_navigation.json",
-    "runtime_scene": "res://scenes/v34/GoldenRegion.tscn",
-    "status": "production_contract_not_a_claim_of_completed_authored_maps"
+    "runtime_scene": "res://scenes/izrdralar/IzrdralarM01M05Runtime.tscn",
+    "status": "authored_runtime_active_under_visual_qa"
   },
   "render": {
     "logical_viewport": [640, 360],
