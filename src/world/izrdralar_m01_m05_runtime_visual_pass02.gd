@@ -4,6 +4,11 @@ const VisualChunkScript := preload("res://src/world/izrdralar_visual_chunk_pass0
 const CompactHudScript := preload("res://src/ui/hud_controller_production_compact.gd")
 const IntegratedLandmarkScript := preload("res://src/world/izrdralar_authored_landmark_pass02.gd")
 const ImpactPlayerScript := preload("res://src/player/player_controller_production_pass02.gd")
+const AmbientLayerScript := preload("res://src/fx/izrdralar_ambient_layer_pass02.gd")
+
+func _ready() -> void:
+	super._ready()
+	_spawn_ambient_layer()
 
 func _build_chunks() -> void:
 	var chunks: Dictionary = map_data.get("chunks", {})
@@ -58,6 +63,15 @@ func _spawn_player() -> void:
 	camera.zoom = Vector2.ONE
 	player.add_child(camera)
 	add_child(player)
+
+func _spawn_ambient_layer() -> void:
+	if map_data.is_empty():
+		return
+	var ambient := Node2D.new()
+	ambient.name = "AmbientPass02"
+	ambient.set_script(AmbientLayerScript)
+	ambient.call("configure", map_id, _world_size, int(map_data.get("world_seed", 21500809)))
+	add_child(ambient)
 
 func _spawn_hud() -> void:
 	var hud := CanvasLayer.new()
