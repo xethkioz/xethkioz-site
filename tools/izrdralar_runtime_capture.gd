@@ -12,10 +12,10 @@ func _ready() -> void:
 func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(OUTPUT_DIR)
 	var cases := [
-		{"name":"M01_cuenca_despertar","map":"M01","entry":"start","position":Vector2(690,520),"flags":[]},
+		{"name":"M01_cuenca_despertar","map":"M01","entry":"start","position":Vector2(520,610),"flags":[]},
 		{"name":"M02_aldea_alba","map":"M02","entry":"from_m01","position":Vector2(520,500),"flags":["opening_flow_complete"]},
-		{"name":"M03_lago_encantado","map":"M03","entry":"from_m02","position":Vector2(690,370),"flags":["opening_flow_complete","prisma_atlas_unlocked"]},
-		{"name":"M04A_ruinas_vivas","map":"M04","entry":"from_m02","position":Vector2(310,330),"flags":["opening_flow_complete","prisma_atlas_unlocked"]},
+		{"name":"M03_lago_encantado","map":"M03","entry":"from_m02","position":Vector2(760,700),"flags":["opening_flow_complete","prisma_atlas_unlocked"]},
+		{"name":"M04A_ruinas_vivas","map":"M04","entry":"from_m02","position":Vector2(420,300),"flags":["opening_flow_complete","prisma_atlas_unlocked"]},
 		{"name":"M04B_santuario_raices","map":"M04","entry":"from_m02","position":Vector2(760,760),"flags":["opening_flow_complete","prisma_atlas_unlocked"]},
 		{"name":"M05_corazon_bosque_velado","map":"M05","entry":"from_m03","position":Vector2(256,300),"flags":["opening_flow_complete","prisma_atlas_unlocked","lake_resolved","ruins_sanctuary_resolved"]}
 	]
