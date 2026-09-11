@@ -14,6 +14,7 @@ on:
       - 'src/pets/**'
       - 'src/world/izrdralar_*'
       - 'tools/izrdralar_*'
+      - 'tools/scenes/**'
       - '.github/workflows/izrdralar-m01-m05-gate.yml'
   push:
     branches:
@@ -55,7 +56,7 @@ jobs:
         run: |
           set -euxo pipefail
           GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
-          "$GODOT" --headless --path . --script res://tools/izrdralar_visual_contract_smoke.gd 2>&1 | tee /tmp/izrdralar-visual.log
+          "$GODOT" --headless --path . res://tools/scenes/IzrdralarVisualContractSmoke.tscn 2>&1 | tee /tmp/izrdralar-visual.log
           grep -q "IZRDRALAR_VISUAL_CONTRACT_PASS" /tmp/izrdralar-visual.log
 
       - name: Navigation graph smoke
@@ -63,7 +64,7 @@ jobs:
         run: |
           set -euxo pipefail
           GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
-          "$GODOT" --headless --path . --script res://tools/izrdralar_navigation_smoke.gd 2>&1 | tee /tmp/izrdralar-navigation.log
+          "$GODOT" --headless --path . res://tools/scenes/IzrdralarNavigationSmoke.tscn 2>&1 | tee /tmp/izrdralar-navigation.log
           grep -q "IZRDRALAR_M01_M05_NAVIGATION_PASS" /tmp/izrdralar-navigation.log
 
       - name: Save v10 and backup recovery smoke
@@ -71,7 +72,7 @@ jobs:
         run: |
           set -euxo pipefail
           GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
-          "$GODOT" --headless --path . --script res://tools/izrdralar_save_v10_smoke.gd 2>&1 | tee /tmp/izrdralar-save.log
+          "$GODOT" --headless --path . res://tools/scenes/IzrdralarSaveV10Smoke.tscn 2>&1 | tee /tmp/izrdralar-save.log
           grep -q "IZRDRALAR_SAVE_V10_PASS" /tmp/izrdralar-save.log
 
       - name: Authored M01-M05 runtime smoke
@@ -79,7 +80,7 @@ jobs:
         run: |
           set -euxo pipefail
           GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
-          "$GODOT" --headless --path . --script res://tools/izrdralar_m01_m05_runtime_smoke.gd 2>&1 | tee /tmp/izrdralar-authored-runtime.log
+          "$GODOT" --headless --path . res://tools/scenes/IzrdralarM01M05RuntimeSmoke.tscn 2>&1 | tee /tmp/izrdralar-authored-runtime.log
           grep -q "IZRDRALAR_M01_M05_RUNTIME_PASS" /tmp/izrdralar-authored-runtime.log
 
       - name: Current main runtime startup without timeout-as-pass
