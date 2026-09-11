@@ -9,6 +9,8 @@ func _ready() -> void:
 	call_deferred("_run")
 
 func _run() -> void:
+	SaveService.delete_save()
+	GameState.reset_new_game()
 	if not ResourceLoader.exists(EXPECTED_RUNTIME):
 		_fail("authored M01-M05 runtime scene is missing")
 
@@ -26,9 +28,28 @@ func _run() -> void:
 	if not bootstrap.has_method("_continue_game"):
 		_fail("production bootstrap is missing continue flow")
 
+	if not SaveService.save_game({"intro_seen": false, "bootstrap_smoke": true}):
+		_fail("could not prepare pending-intro save")
+	else:
+		bootstrap.call("_continue_game")
+		await get_tree().process_frame
+		if int(bootstrap.get("intro_index")) != 0:
+			_fail("Continue did not restart pending intro from chapter zero")
+		if not _contains_label_text(bootstrap, "CAPÍTULO CERO"):
+			_fail("Continue skipped pending intro instead of rendering it")
+
 	bootstrap.queue_free()
 	await get_tree().process_frame
+	SaveService.delete_save()
 	_finish()
+
+func _contains_label_text(node: Node, fragment: String) -> bool:
+	if node is Label and fragment in (node as Label).text:
+		return true
+	for child in node.get_children():
+		if _contains_label_text(child, fragment):
+			return true
+	return false
 
 func _fail(message: String) -> void:
 	failures.append(message)
