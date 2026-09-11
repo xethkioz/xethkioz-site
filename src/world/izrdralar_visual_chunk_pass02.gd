@@ -6,8 +6,8 @@ extends "res://src/world/izrdralar_generic_chunk.gd"
 
 func _fill_base() -> void:
 	super._fill_base()
-	# Coarse seeded mosaics break the flat green carpet without changing any
-	# navigation contract. Later route/water/ruin passes remain authoritative.
+	# Continuous world-space fields break the flat green carpet without creating
+	# square chunk-local patches. Later route/water/ruin passes remain authoritative.
 	match authored_world_seed:
 		M01_WORLD_SEED:
 			_apply_ground_mosaic(Factory.DARK_GRASS_VARIANTS, 18, 211)
@@ -25,13 +25,17 @@ func _fill_base() -> void:
 			pass
 
 func _apply_ground_mosaic(variants: Array, patch_threshold: int, salt: int) -> void:
+	var phase := float(posmod(salt, 37)) * 0.17
+	var field_threshold := 1.65 - float(patch_threshold) * 0.03
 	for y in range(CHUNK_TILES):
 		for x in range(CHUNK_TILES):
-			var coarse_x := floori(float(x) / 4.0)
-			var coarse_y := floori(float(y) / 4.0)
-			var patch_roll := _cell_roll(coarse_x + salt, coarse_y + salt * 2)
+			var world_x := float(chunk_coord.x * CHUNK_TILES + x)
+			var world_y := float(chunk_coord.y * CHUNK_TILES + y)
+			var field := sin(world_x * 0.31 + phase)
+			field += cos(world_y * 0.27 - phase * 0.37)
+			field += sin((world_x + world_y) * 0.14 + phase * 0.53)
 			var edge_roll := _cell_roll(x + salt * 3, y + salt * 5)
-			if patch_roll < patch_threshold and edge_roll < 76:
+			if field > field_threshold and edge_roll < 82:
 				_ground.set_cell(Vector2i(x, y), 0, _variant(variants, x, y, salt))
 
 func _carve_routes() -> void:
