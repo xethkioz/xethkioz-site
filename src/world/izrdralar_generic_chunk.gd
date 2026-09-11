@@ -197,6 +197,32 @@ func _place_safe_prop(cell: Vector2i, frame: int, collidable: bool) -> void:
 	_place_large_prop(cell, frame, collidable)
 
 func _place_chunk_landmarks() -> void:
-	# Layout data remains authoritative for landmarks. M01-M03 composition accents
-	# above only adjust vegetation density and small environmental props.
-	pass
+	# Deterministic authored accents replace random prop noise without changing the
+	# canonical layout graph. Layout data still owns story-critical landmarks.
+	match authored_world_seed:
+		M01_WORLD_SEED:
+			if chunk_coord == Vector2i(0, 0):
+				_place_safe_prop(Vector2i(15, 29), 0, true)
+				_place_safe_prop(Vector2i(20, 28), 1, true)
+			elif chunk_coord == Vector2i(0, 1):
+				_place_safe_prop(Vector2i(14, 5), 0, true)
+				_place_safe_prop(Vector2i(19, 7), 4, true)
+			elif chunk_coord == Vector2i(1, 1):
+				_place_safe_prop(Vector2i(15, 12), 0, true)
+				_place_safe_prop(Vector2i(18, 13), 1, true)
+				_place_safe_prop(Vector2i(3, 14), 4, true)
+		M02_WORLD_SEED:
+			if chunk_coord == Vector2i(1, 0):
+				# Third home closes the plaza composition visible from Ivan.
+				_place_landmark(1, Vector2(200, 400))
+				_add_rect_blocker(Rect2(158, 405, 84, 46))
+			elif chunk_coord == Vector2i(0, 1):
+				_place_safe_prop(Vector2i(8, 8), 1, true)
+				_place_safe_prop(Vector2i(11, 9), 0, true)
+		M03_WORLD_SEED:
+			if chunk_coord == Vector2i(1, 1):
+				# Small care station gives Val/Rola/Mela a physical place in the lake hub.
+				_place_landmark(1, Vector2(56, 120))
+				_add_rect_blocker(Rect2(14, 126, 84, 42))
+				_place_safe_prop(Vector2i(10, 12), 5, false)
+				_place_safe_prop(Vector2i(13, 14), 5, false)
