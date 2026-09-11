@@ -5,6 +5,7 @@ on:
   pull_request:
     paths:
       - 'assets/production/characters/**'
+      - 'assets/production/izrdralar/**'
       - 'data/regions/izrdralar_m01_m05_*.json'
       - 'data/visual/izrdralar_m01_m05_visual_contract.json'
       - 'scenes/izrdralar/**'
