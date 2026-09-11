@@ -17,6 +17,8 @@ var discovered_pois: Array[String] = []
 var captured_familiars: Dictionary = {}
 var active_familiar_id: String = ""
 var quest_snapshot: Dictionary = {}
+var current_map_id: String = "M01"
+var current_entry_id: String = "start"
 var last_world_position := Vector2.ZERO
 var world_flags: Dictionary = {}
 
@@ -97,6 +99,13 @@ func set_quest_snapshot(snapshot: Dictionary) -> void:
 
 func get_quest_snapshot() -> Dictionary:
 	return quest_snapshot.duplicate(true)
+
+func set_world_checkpoint(map_id: String, entry_id: String, position_value: Vector2 = Vector2.ZERO) -> void:
+	if not map_id.is_empty():
+		current_map_id = map_id
+	if not entry_id.is_empty():
+		current_entry_id = entry_id
+	last_world_position = position_value
 
 func set_last_world_position(position_value: Vector2) -> void:
 	last_world_position = position_value
@@ -205,6 +214,8 @@ func reset_new_game() -> void:
 	captured_familiars.clear()
 	active_familiar_id = ""
 	quest_snapshot.clear()
+	current_map_id = "M01"
+	current_entry_id = "start"
 	last_world_position = Vector2.ZERO
 	world_flags.clear()
 	EventBus.player_progress_changed.emit(player_level, player_xp, xp_to_next())
@@ -215,7 +226,7 @@ func reset_new_game() -> void:
 
 func to_dict() -> Dictionary:
 	return {
-		"save_version": 9,
+		"save_version": 10,
 		"player_level": player_level,
 		"player_xp": player_xp,
 		"crystals": crystals,
@@ -230,6 +241,8 @@ func to_dict() -> Dictionary:
 		"captured_familiars": captured_familiars.duplicate(true),
 		"active_familiar_id": active_familiar_id,
 		"quest_snapshot": quest_snapshot.duplicate(true),
+		"map_id": current_map_id,
+		"entry_id": current_entry_id,
 		"last_world_position": [last_world_position.x, last_world_position.y],
 		"world_flags": world_flags.duplicate(true)
 	}
@@ -255,6 +268,8 @@ func apply_dict(data: Dictionary) -> void:
 	if not active_familiar_id.is_empty() and not captured_familiars.has(active_familiar_id):
 		active_familiar_id = ""
 	quest_snapshot = data.get("quest_snapshot", {}).duplicate(true)
+	current_map_id = str(data.get("map_id", data.get("current_map_id", "M01")))
+	current_entry_id = str(data.get("entry_id", data.get("current_entry_id", "start")))
 	last_world_position = Vector2.ZERO
 	var raw_position = data.get("last_world_position", [])
 	if raw_position is Array and raw_position.size() >= 2:
