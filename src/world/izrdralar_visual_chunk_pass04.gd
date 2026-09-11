@@ -1,8 +1,23 @@
 class_name IzrdralarVisualChunkPass04
 extends "res://src/world/izrdralar_visual_chunk_pass02.gd"
 
+const GroundTexturePass04 := preload("res://src/world/izrdralar_ground_texture_pass04.gd")
+
 # Visual Pass 04 only changes presentation. Navigation, collisions, exits and
 # authored encounter positions remain exactly as defined by the production data.
+
+func _install_ground_texture_pass() -> void:
+	if not is_instance_valid(_ground) or get_node_or_null("GroundTexturePass04") != null:
+		return
+	var old := get_node_or_null("GroundTexturePass03")
+	if old != null:
+		remove_child(old)
+		old.queue_free()
+	var texture_pass := Node2D.new()
+	texture_pass.name = "GroundTexturePass04"
+	texture_pass.set_script(GroundTexturePass04)
+	add_child(texture_pass)
+	texture_pass.call("configure", _ground, biome, seed_value)
 
 func _paint_boss_arena() -> void:
 	# The old arena used a near-perfect circular threshold. At runtime that still
