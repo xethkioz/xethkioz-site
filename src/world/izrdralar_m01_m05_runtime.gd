@@ -16,6 +16,7 @@ const EntryScript := preload("res://src/world/izrdralar_entry_point.gd")
 const TransitionScript := preload("res://src/world/izrdralar_map_transition.gd")
 const CheckpointScript := preload("res://src/world/izrdralar_checkpoint_tracker.gd")
 const ObjectiveScript := preload("res://src/world/izrdralar_route_objective.gd")
+const LandmarkScript := preload("res://src/world/izrdralar_authored_landmark.gd")
 
 var layout_root: Dictionary = {}
 var map_data: Dictionary = {}
@@ -34,6 +35,7 @@ func _ready() -> void:
 	map_data = layout_root.get("maps", {}).get(map_id, {})
 	_world_size = _vector_from_array(map_data.get("world_size", [1024, 1024]))
 	_build_chunks()
+	_build_landmarks()
 	_build_entries()
 	_spawn_player()
 	_spawn_xethkioz()
@@ -79,6 +81,18 @@ func _build_chunks() -> void:
 		add_child(chunk)
 		move_child(chunk, 0)
 		chunk.call("configure", coord, chunks[key_value], world_seed)
+
+func _build_landmarks() -> void:
+	for landmark_value in map_data.get("landmarks", []):
+		if not (landmark_value is Dictionary):
+			continue
+		var data: Dictionary = landmark_value
+		var landmark := Node2D.new()
+		landmark.name = "Landmark_%s" % str(data.get("id", "authored"))
+		landmark.set_script(LandmarkScript)
+		landmark.position = _vector_from_array(data.get("position", [0, 0]))
+		landmark.call("configure", data)
+		add_child(landmark)
 
 func _build_entries() -> void:
 	var entries: Dictionary = map_data.get("entries", {})
