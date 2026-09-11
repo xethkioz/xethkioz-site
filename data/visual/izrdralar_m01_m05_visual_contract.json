@@ -1,9 +1,10 @@
 {
   "contract_id": "izrdralar_m01_m05_visual_contract",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "authority": {
     "canon": "WORLD_OF_XETHKIOZ_BIBLIA_FINAL_CONSOLIDADA_SAGA_I_v1.0_2026-09-10.md",
     "atlas": "WORLD_OF_XETHKIOZ_CONEXIONES_Y_NATURALEZA_v1.0_2026-09-10.md",
+    "navigation": "res://data/regions/izrdralar_m01_m05_navigation.json",
     "runtime_scene": "res://scenes/v34/GoldenRegion.tscn",
     "status": "production_contract_not_a_claim_of_completed_authored_maps"
   },
@@ -47,7 +48,7 @@
       "safe_zone": false,
       "visual_focus": ["opening basin", "shallow water", "broken bridge", "first readable path"],
       "required_asset_groups": ["golden_ground", "water_edge", "traveler", "xethkioz", "first_creatures", "bridge_broken"],
-      "connections": [{"to": "M02", "kind": "main", "requirement": "opening_flow"}]
+      "connections": [{"to": "M02", "kind": "main", "requires_all": ["opening_flow_complete"]}]
     },
     {
       "id": "M02",
@@ -59,8 +60,9 @@
       "visual_focus": ["small settlement", "warm lamps", "readable NPC silhouettes", "Iván access"],
       "required_asset_groups": ["settlement_ground", "wood_structures", "warm_lamps", "npc_support", "signage"],
       "connections": [
-        {"to": "M03", "kind": "choice", "requirement": "village_flow"},
-        {"to": "M04", "kind": "choice", "requirement": "village_flow"}
+        {"to": "M01", "kind": "return", "requires_all": []},
+        {"to": "M03", "kind": "choice", "requires_all": ["prisma_atlas_unlocked"]},
+        {"to": "M04", "kind": "choice", "requires_all": ["prisma_atlas_unlocked"]}
       ]
     },
     {
@@ -73,8 +75,8 @@
       "visual_focus": ["water readability", "resonant stone", "shoreline routes", "creature habitat"],
       "required_asset_groups": ["lake_water", "shoreline", "resonant_stone", "creature_habitat", "lore_interactable"],
       "connections": [
-        {"to": "M02", "kind": "return", "requirement": "always"},
-        {"to": "M05", "kind": "prepared", "requirement": "initial_lake_link_resolved"}
+        {"to": "M02", "kind": "return", "requires_all": []},
+        {"to": "M05", "kind": "boss_gate", "requires_all": ["lake_resolved", "ruins_sanctuary_resolved"]}
       ]
     },
     {
@@ -88,8 +90,8 @@
       "visual_focus": ["organic ruins", "root corridors", "sanctuary arena", "lore-first exploration"],
       "required_asset_groups": ["living_ruins", "roots", "sanctuary", "rune_light", "guardian_telegraphs"],
       "connections": [
-        {"to": "M02", "kind": "return", "requirement": "always"},
-        {"to": "M05", "kind": "prepared", "requirement": "custodian_superated"}
+        {"to": "M02", "kind": "return", "requires_all": []},
+        {"to": "M05", "kind": "boss_gate", "requires_all": ["lake_resolved", "ruins_sanctuary_resolved"]}
       ]
     },
     {
@@ -102,9 +104,9 @@
       "visual_focus": ["boss arena", "living forest pressure", "clear telegraphs", "stabilization aftermath"],
       "required_asset_groups": ["veiled_forest", "boss5", "boss_telegraphs", "stabilization_vfx", "return_gate"],
       "connections": [
-        {"to": "M03", "kind": "return", "requirement": "boss_resolution"},
-        {"to": "M04", "kind": "return", "requirement": "boss_resolution"},
-        {"to": "M06", "kind": "main", "requirement": "guardian_stabilized_and_prism_step"}
+        {"to": "M03", "kind": "return", "requires_all": ["boss5_stabilized"]},
+        {"to": "M04", "kind": "return", "requires_all": ["boss5_stabilized"]},
+        {"to": "M06", "kind": "scope_exit", "requires_all": ["boss5_stabilized", "prism_step_unlocked"], "enabled_in_production_pass_01": false}
       ]
     }
   ],
@@ -136,7 +138,8 @@
       "attack feedback and hit reaction",
       "player and Xethkioz collision",
       "M02 choice to M03 and M04",
-      "M03/M04 preparation into M05",
+      "both M03/M04 orders and return path",
+      "M05 stays blocked until lake_resolved and ruins_sanctuary_resolved",
       "M05 boss telegraphs and stabilization",
       "save and reopen preserves map_id entry_id position flags",
       "no placeholder asset in the approved capture"
