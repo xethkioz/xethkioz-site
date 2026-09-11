@@ -2,7 +2,7 @@ extends "res://src/player/player_controller.gd"
 
 const SHEET := preload("res://assets/production/characters/viajero_sheet.svg")
 const ProfileOverlayScript := preload("res://src/player/player_profile_overlay.gd")
-const FeedbackFxScript := preload("res://src/fx/world_feedback_fx.gd")
+const IzrdralarFxFactory := preload("res://src/fx/izrdralar_fx_factory.gd")
 const FRAME_SIZE := Vector2(32, 32)
 const ATTACK_POSE_DURATION := 0.18
 const CAST_POSE_DURATION := 0.24
