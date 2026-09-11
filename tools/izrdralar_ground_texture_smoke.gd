@@ -2,6 +2,7 @@ extends Node
 
 const RUNTIME_SCENE := preload("res://scenes/izrdralar/IzrdralarM01M05Runtime.tscn")
 const LARGE_PROPS := preload("res://assets/production/izrdralar/large_props.svg")
+const LANDMARKS := preload("res://assets/production/izrdralar/landmarks.svg")
 
 var failures: Array[String] = []
 
@@ -9,7 +10,7 @@ func _ready() -> void:
 	call_deferred("_run")
 
 func _run() -> void:
-	_validate_large_prop_atlas()
+	_validate_environment_atlases()
 	SaveService.delete_save()
 	GameState.reset_new_game()
 	for map_id in ["M01", "M02", "M03", "M04", "M05"]:
@@ -52,12 +53,15 @@ func _run() -> void:
 	SaveService.delete_save()
 	_finish()
 
-func _validate_large_prop_atlas() -> void:
+func _validate_environment_atlases() -> void:
 	if LARGE_PROPS == null:
 		failures.append("large prop atlas did not load")
-		return
-	if LARGE_PROPS.get_width() != 288 or LARGE_PROPS.get_height() != 48:
+	elif LARGE_PROPS.get_width() != 288 or LARGE_PROPS.get_height() != 48:
 		failures.append("large prop atlas must remain 288x48 / six 48px frames")
+	if LANDMARKS == null:
+		failures.append("landmark atlas did not load")
+	elif LANDMARKS.get_width() != 384 or LANDMARKS.get_height() != 80:
+		failures.append("landmark atlas must remain 384x80 / four 96x80 frames")
 
 func _entry_for(map_id: String) -> String:
 	match map_id:
