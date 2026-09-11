@@ -4,6 +4,36 @@ extends "res://src/world/izrdralar_generic_chunk.gd"
 # Keeps authored navigation/collision intact while reducing the prototype-like
 # grid of oversized paths and clearings visible at the 640x360 target.
 
+func _fill_base() -> void:
+	super._fill_base()
+	# Coarse seeded mosaics break the flat green carpet without changing any
+	# navigation contract. Later route/water/ruin passes remain authoritative.
+	match authored_world_seed:
+		M01_WORLD_SEED:
+			_apply_ground_mosaic(Factory.DARK_GRASS_VARIANTS, 18, 211)
+		M02_WORLD_SEED:
+			_apply_ground_mosaic(Factory.DARK_GRASS_VARIANTS, 9, 223)
+		M03_WORLD_SEED:
+			if biome == "lake":
+				_apply_ground_mosaic(Factory.MUD_VARIANTS, 20, 227)
+			else:
+				_apply_ground_mosaic(Factory.DARK_GRASS_VARIANTS, 11, 229)
+		M04_WORLD_SEED:
+			if biome == "forest":
+				_apply_ground_mosaic(Factory.DARK_GRASS_VARIANTS, 12, 233)
+		_:
+			pass
+
+func _apply_ground_mosaic(variants: Array, patch_threshold: int, salt: int) -> void:
+	for y in range(CHUNK_TILES):
+		for x in range(CHUNK_TILES):
+			var coarse_x := floori(float(x) / 4.0)
+			var coarse_y := floori(float(y) / 4.0)
+			var patch_roll := _cell_roll(coarse_x + salt, coarse_y + salt * 2)
+			var edge_roll := _cell_roll(x + salt * 3, y + salt * 5)
+			if patch_roll < patch_threshold and edge_roll < 76:
+				_ground.set_cell(Vector2i(x, y), 0, _variant(variants, x, y, salt))
+
 func _carve_routes() -> void:
 	var center: int = CHUNK_TILES >> 1
 	# Three tiles = 48 px. This preserves traversal readability without turning
@@ -146,6 +176,15 @@ func _decorate_m04() -> void:
 	if chunk_coord == Vector2i(1, 1):
 		_place_safe_prop(Vector2i(12, 9), 2, false)
 		_place_safe_prop(Vector2i(27, 24), 2, false)
+
+func _place_large_prop(cell: Vector2i, frame: int, collidable: bool) -> void:
+	super._place_large_prop(cell, frame, collidable)
+	# Mirroring only changes silhouette. Position and collision remain untouched.
+	if not is_instance_valid(_props) or _props.get_child_count() == 0:
+		return
+	var visual := _props.get_child(_props.get_child_count() - 1)
+	if visual is Sprite2D:
+		(visual as Sprite2D).flip_h = (_cell_roll(cell.x + frame * 31, cell.y + 907) % 2) == 0
 
 func _sparse_visual_gate(x: int, y: int, modulus: int) -> bool:
 	return posmod(x * 7 + y * 11 + chunk_coord.x * 13 + chunk_coord.y * 17, modulus) == 0
