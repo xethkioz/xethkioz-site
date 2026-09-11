@@ -302,10 +302,8 @@ func _spawn_feedback(kind_value: String, direction_value: Vector2, color_value: 
 	var scene: Node = get_tree().current_scene
 	if scene == null:
 		return
-	var fx: Node2D = FeedbackFxScript.new() as Node2D
-	fx.global_position = global_position + Vector2(0, -9)
-	scene.add_child(fx)
-	fx.call("configure", kind_value, direction_value, color_value, text_value)
+	var effect_id: String = "enemy_%s" % kind_value
+	IzrdralarFxFactory.spawn(scene, effect_id, global_position + Vector2(0, -9), direction_value, color_value, text_value)
 
 func _draw() -> void:
 	var health_ratio: float = health / max_health if max_health > 0.0 else 0.0
