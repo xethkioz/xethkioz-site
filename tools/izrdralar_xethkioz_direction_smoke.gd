@@ -15,16 +15,20 @@ func _validate_sheet(failures: Array[String]) -> void:
 		return
 	if XETHKIOZ_SHEET.get_width() != 96:
 		failures.append("Xethkioz sheet width must be 96 px / 3 frames")
-	if XETHKIOZ_SHEET.get_height() != 128:
-		failures.append("Xethkioz sheet height must be 128 px / 4 directions")
+	if XETHKIOZ_SHEET.get_height() != 256:
+		failures.append("Xethkioz sheet height must be 256 px / 8 directions")
 
 func _validate_direction_rows(failures: Array[String]) -> void:
 	var companion: Node = XETHKIOZ_SCRIPT.new()
 	var cases: Array = [
 		{"name":"down", "direction":Vector2.DOWN, "row":0},
-		{"name":"right", "direction":Vector2.RIGHT, "row":1},
+		{"name":"down-left", "direction":Vector2(-1.0, 1.0), "row":1},
 		{"name":"left", "direction":Vector2.LEFT, "row":2},
-		{"name":"up", "direction":Vector2.UP, "row":3}
+		{"name":"up-left", "direction":Vector2(-1.0, -1.0), "row":3},
+		{"name":"up", "direction":Vector2.UP, "row":4},
+		{"name":"up-right", "direction":Vector2(1.0, -1.0), "row":5},
+		{"name":"right", "direction":Vector2.RIGHT, "row":6},
+		{"name":"down-right", "direction":Vector2(1.0, 1.0), "row":7}
 	]
 	for case_value in cases:
 		var case_data: Dictionary = case_value
