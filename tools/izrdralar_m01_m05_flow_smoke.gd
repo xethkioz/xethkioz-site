@@ -31,12 +31,18 @@ func _validate_opening_and_choice() -> void:
 	var opening := _objective({
 		"id":"m01_opening_resonance",
 		"name":"Eco del Despertar",
-		"world_flag":"opening_flow_complete"
+		"world_flag":"opening_flow_complete",
+		"requires_flag":"m01_survived_opening"
 	})
 	opening.interact(null)
 	await get_tree().process_frame
+	if GameState.has_world_flag("opening_flow_complete"):
+		_fail("M01 opening bypassed first-combat story gate")
+	GameState.set_world_flag("m01_survived_opening")
+	opening.interact(null)
+	await get_tree().process_frame
 	if not GameState.has_world_flag("opening_flow_complete"):
-		_fail("M01 objective did not set opening_flow_complete")
+		_fail("M01 objective did not set opening_flow_complete after survival gate")
 	if not navigation.can_traverse("M01", "M02", GameState.world_flags):
 		_fail("M01 -> M02 did not unlock after opening objective")
 	opening.queue_free()
@@ -63,12 +69,18 @@ func _validate_branch_gate() -> void:
 	var lake := _objective({
 		"id":"m03_lake_resonance",
 		"name":"Piedra Resonante del Lago",
-		"world_flag":"lake_resolved"
+		"world_flag":"lake_resolved",
+		"requires_flag":"m03_lake_ready"
 	})
 	lake.interact(null)
 	await get_tree().process_frame
+	if GameState.has_world_flag("lake_resolved"):
+		_fail("M03 resonance bypassed habitat/familiar story gate")
+	GameState.set_world_flag("m03_lake_ready")
+	lake.interact(null)
+	await get_tree().process_frame
 	if not GameState.has_world_flag("lake_resolved"):
-		_fail("M03 objective did not set lake_resolved")
+		_fail("M03 objective did not set lake_resolved after story gate")
 	if navigation.can_traverse("M03", "M05", GameState.world_flags):
 		_fail("M05 opened after only Lago was resolved")
 	lake.queue_free()
@@ -77,12 +89,18 @@ func _validate_branch_gate() -> void:
 	var ruins := _objective({
 		"id":"m04_sanctuary_resonance",
 		"name":"Núcleo del Santuario",
-		"world_flag":"ruins_sanctuary_resolved"
+		"world_flag":"ruins_sanctuary_resolved",
+		"requires_flag":"m04_sanctuary_ready"
 	})
 	ruins.interact(null)
 	await get_tree().process_frame
+	if GameState.has_world_flag("ruins_sanctuary_resolved"):
+		_fail("M04 resonance bypassed puzzle/Custodio story gate")
+	GameState.set_world_flag("m04_sanctuary_ready")
+	ruins.interact(null)
+	await get_tree().process_frame
 	if not GameState.has_world_flag("ruins_sanctuary_resolved"):
-		_fail("M04 objective did not set ruins_sanctuary_resolved")
+		_fail("M04 objective did not set ruins_sanctuary_resolved after story gate")
 	if not navigation.can_traverse("M03", "M05", GameState.world_flags):
 		_fail("M03 -> M05 remained locked after both branches")
 	if not navigation.can_traverse("M04", "M05", GameState.world_flags):
@@ -93,6 +111,7 @@ func _validate_boss_and_stabilization() -> void:
 	GameState.set_world_checkpoint("M05", "from_m03", Vector2.ZERO)
 	var runtime := RuntimeScene.instantiate()
 	get_tree().root.add_child(runtime)
+	await get_tree().process_frame
 	await get_tree().process_frame
 	await get_tree().process_frame
 
