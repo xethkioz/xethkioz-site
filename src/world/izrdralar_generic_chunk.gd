@@ -4,6 +4,8 @@ extends "res://src/world/production_chunk.gd"
 const M01_WORLD_SEED := 21500809
 const M02_WORLD_SEED := 21500829
 const M03_WORLD_SEED := 21500849
+const M04_WORLD_SEED := 21500869
+const M05_WORLD_SEED := 21500889
 
 var authored_world_seed: int = 0
 
@@ -64,6 +66,10 @@ func _decorate() -> void:
 			_decorate_m02()
 		M03_WORLD_SEED:
 			_decorate_m03()
+		M04_WORLD_SEED:
+			_decorate_m04()
+		M05_WORLD_SEED:
+			_decorate_m05()
 		_:
 			super._decorate()
 
@@ -172,6 +178,104 @@ func _decorate_m03() -> void:
 				elif roll == 7:
 					_place_large_prop(cell, 4, true)
 
+func _decorate_m04() -> void:
+	# Ruinas Vivas / Santuario de las Raices: the western ruins feel denser and
+	# broken, while the sanctuary opens around the three-crystal puzzle and core.
+	# Story-critical areas remain clear even after future prop atlas upgrades.
+	var clearings: Array = [
+		{"cell": Vector2(22, 16), "radius": 6.0}, # living ruin tower / Hoja 17-B
+		{"cell": Vector2(35, 31), "radius": 5.5}, # Gustavo / central crossing
+		{"cell": Vector2(48, 40), "radius": 7.0}, # sanctuary gate
+		{"cell": Vector2(48, 46), "radius": 9.5}, # three crystal puzzle
+		{"cell": Vector2(55, 53), "radius": 7.0}  # core / minor guardian
+	]
+	for y in range(1, CHUNK_TILES - 1):
+		for x in range(1, CHUNK_TILES - 1):
+			var cell := Vector2i(x, y)
+			var base: Vector2i = _ground.get_cell_atlas_coords(cell)
+			if Factory.is_protected_ground(base):
+				continue
+			var world_cell := _world_cell(cell)
+			var roll: int = _cell_roll(x, y)
+			if _inside_any_clearing(world_cell, clearings):
+				if roll == 0:
+					_detail.set_cell(cell, 0, _variant(Factory.FLOWER_VARIANTS, x, y, 81))
+				elif roll == 1 and biome in ["ruins", "sanctuary"]:
+					_detail.set_cell(cell, 0, _variant(Factory.CRYSTAL_VARIANTS, x, y, 82))
+				continue
+			if biome == "ruins":
+				if roll < 3:
+					_place_large_prop(cell, 3, true)
+				elif roll < 6:
+					_place_large_prop(cell, 4, true)
+				elif roll < 8:
+					_place_large_prop(cell, 0, true)
+				elif roll < 10:
+					_detail.set_cell(cell, 0, _variant(Factory.SHRUB_VARIANTS, x, y, 83))
+				elif roll == 10:
+					_place_large_prop(cell, 2, false)
+			elif biome == "sanctuary":
+				if roll < 2:
+					_place_large_prop(cell, 2, false)
+				elif roll < 4:
+					_place_large_prop(cell, 3, true)
+				elif roll < 7:
+					_place_large_prop(cell, 4, true)
+				elif roll < 10:
+					_detail.set_cell(cell, 0, _variant(Factory.SHRUB_VARIANTS, x, y, 84))
+				elif roll == 10:
+					_detail.set_cell(cell, 0, _variant(Factory.FLOWER_VARIANTS, x, y, 85))
+			else:
+				if roll < 3:
+					_place_large_prop(cell, 0, true)
+				elif roll == 3:
+					_place_large_prop(cell, 1, true)
+				elif roll < 7:
+					_detail.set_cell(cell, 0, _variant(Factory.SHRUB_VARIANTS, x, y, 86))
+				elif roll == 7:
+					_place_large_prop(cell, 4, true)
+
+	# Visual-only crystal rhythm points the eye toward the sanctuary puzzle.
+	if chunk_coord == Vector2i(1, 1):
+		_place_safe_prop(Vector2i(5, 11), 2, false)
+		_place_safe_prop(Vector2i(12, 9), 2, false)
+		_place_safe_prop(Vector2i(26, 10), 2, false)
+		_place_safe_prop(Vector2i(27, 24), 2, false)
+
+func _decorate_m05() -> void:
+	# Corazon del Bosque Velado: combat readability wins over density. The boss,
+	# stabilization point and both return lanes stay clear; ritual accents sit on
+	# the perimeter and never add collision.
+	var arena_center := Vector2(16, 15)
+	for y in range(1, CHUNK_TILES - 1):
+		for x in range(1, CHUNK_TILES - 1):
+			var cell := Vector2i(x, y)
+			var base: Vector2i = _ground.get_cell_atlas_coords(cell)
+			if Factory.is_protected_ground(base):
+				continue
+			var distance_to_arena: float = Vector2(x, y).distance_to(arena_center)
+			var roll: int = _cell_roll(x, y)
+			if distance_to_arena <= 11.0:
+				if roll == 0:
+					_detail.set_cell(cell, 0, _variant(Factory.CRYSTAL_VARIANTS, x, y, 91))
+				continue
+			if roll < 3:
+				_place_large_prop(cell, 0, false)
+			elif roll < 5:
+				_place_large_prop(cell, 3, false)
+			elif roll < 8:
+				_place_large_prop(cell, 4, false)
+			elif roll < 11:
+				_detail.set_cell(cell, 0, _variant(Factory.SHRUB_VARIANTS, x, y, 92))
+			elif roll == 11:
+				_detail.set_cell(cell, 0, _variant(Factory.FLOWER_VARIANTS, x, y, 93))
+
+	# Four non-colliding prism anchors frame the fight and strengthen the identity
+	# of the Corazon without affecting pathfinding, melee or telegraphs.
+	if chunk_coord == Vector2i.ZERO:
+		for anchor in [Vector2i(6, 6), Vector2i(25, 6), Vector2i(6, 25), Vector2i(25, 25)]:
+			_place_safe_prop(anchor, 2, false)
+
 func _world_cell(local_cell: Vector2i) -> Vector2i:
 	return Vector2i(
 		chunk_coord.x * CHUNK_TILES + local_cell.x,
@@ -226,3 +330,16 @@ func _place_chunk_landmarks() -> void:
 				_add_rect_blocker(Rect2(14, 126, 84, 42))
 				_place_safe_prop(Vector2i(10, 12), 5, false)
 				_place_safe_prop(Vector2i(13, 14), 5, false)
+		M04_WORLD_SEED:
+			if chunk_coord == Vector2i(0, 0):
+				# Broken vegetation and stone frame the living tower without covering it.
+				_place_safe_prop(Vector2i(6, 6), 3, true)
+				_place_safe_prop(Vector2i(27, 8), 4, true)
+			elif chunk_coord == Vector2i(1, 1):
+				# Sanctuary accents are non-colliding because puzzle readability is authoritative.
+				_place_safe_prop(Vector2i(6, 25), 2, false)
+				_place_safe_prop(Vector2i(26, 25), 2, false)
+		M05_WORLD_SEED:
+			# No collidable landmarks in the Boss 5 arena. The four prism anchors are
+			# produced by _decorate_m05 so telegraphs and dodges stay unobstructed.
+			pass
