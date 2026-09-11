@@ -93,6 +93,14 @@ jobs:
           "$GODOT" --headless --path . res://tools/scenes/IzrdralarM01M05FlowSmoke.tscn 2>&1 | tee /tmp/izrdralar-flow.log
           grep -q "IZRDRALAR_M01_M05_FLOW_PASS" /tmp/izrdralar-flow.log
 
+      - name: Exact-position autosave smoke
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . res://tools/scenes/IzrdralarAutosaveSmoke.tscn 2>&1 | tee /tmp/izrdralar-autosave.log
+          grep -q "IZRDRALAR_AUTOSAVE_PASS" /tmp/izrdralar-autosave.log
+
       - name: Authored checkpoint respawn smoke
         shell: bash
         run: |
@@ -131,6 +139,7 @@ jobs:
             /tmp/izrdralar-save.log
             /tmp/izrdralar-authored-runtime.log
             /tmp/izrdralar-flow.log
+            /tmp/izrdralar-autosave.log
             /tmp/izrdralar-respawn.log
             /tmp/izrdralar-bootstrap.log
             /tmp/izrdralar-runtime.log
