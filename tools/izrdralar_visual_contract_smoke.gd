@@ -1,6 +1,7 @@
 extends SceneTree
 
 const CONTRACT_PATH := "res://data/visual/izrdralar_m01_m05_visual_contract.json"
+const NAVIGATION_PATH := "res://data/regions/izrdralar_m01_m05_navigation.json"
 const REQUIRED_MAP_IDS := ["M01", "M02", "M03", "M04", "M05"]
 const REQUIRED_PALETTE_KEYS := ["forest", "wetland", "water", "prism_violet", "refuge_amber", "ui_primary", "ui_shadow"]
 const REQUIRED_SCRIPT_PATHS := [
@@ -9,7 +10,11 @@ const REQUIRED_SCRIPT_PATHS := [
 	"res://src/fx/world_feedback_fx.gd",
 	"res://src/fx/izrdralar_fx_factory.gd",
 	"res://src/player/player_controller_production.gd",
-	"res://src/npc/enemy_controller_production.gd"
+	"res://src/npc/enemy_controller_production.gd",
+	"res://src/world/izrdralar_navigation_graph.gd",
+	"res://src/world/izrdralar_map_transition.gd",
+	"res://src/world/izrdralar_entry_point.gd",
+	"res://src/world/izrdralar_checkpoint_tracker.gd"
 ]
 
 func _init() -> void:
@@ -45,8 +50,13 @@ func _validate_required_scripts(failures: Array[String]) -> void:
 func _validate_contract(contract: Dictionary, failures: Array[String]) -> void:
 	if str(contract.get("contract_id", "")) != "izrdralar_m01_m05_visual_contract":
 		failures.append("unexpected contract_id")
-	if str(contract.get("version", "")) != "1.0.0":
+	if str(contract.get("version", "")) != "1.1.0":
 		failures.append("unexpected contract version")
+	var authority: Dictionary = contract.get("authority", {})
+	if str(authority.get("navigation", "")) != NAVIGATION_PATH:
+		failures.append("visual contract is not linked to canonical navigation graph")
+	if not FileAccess.file_exists(NAVIGATION_PATH):
+		failures.append("canonical navigation graph is missing")
 	var render: Dictionary = contract.get("render", {})
 	if render.get("logical_viewport", []) != [640, 360]:
 		failures.append("logical viewport must be 640x360")
@@ -66,7 +76,31 @@ func _validate_contract(contract: Dictionary, failures: Array[String]) -> void:
 			failures.append("map order/id mismatch at index %d" % index)
 		if str(map_data.get("name", "")).is_empty():
 			failures.append("map %s has no canonical name" % REQUIRED_MAP_IDS[index])
+	_validate_boss_gate(maps, failures)
 	var qa: Dictionary = contract.get("qa", {})
 	var checks: Array = qa.get("required_runtime_checks", [])
-	if checks.size() < 8:
+	if checks.size() < 9:
 		failures.append("runtime QA checklist is incomplete")
+
+func _validate_boss_gate(maps: Array, failures: Array[String]) -> void:
+	for map_id in ["M03", "M04"]:
+		var map_data := _map_by_id(maps, map_id)
+		var found_gate := false
+		for connection_value in map_data.get("connections", []):
+			if not (connection_value is Dictionary):
+				continue
+			var connection: Dictionary = connection_value
+			if str(connection.get("to", "")) != "M05":
+				continue
+			found_gate = true
+			var required: Array = connection.get("requires_all", [])
+			if not required.has("lake_resolved") or not required.has("ruins_sanctuary_resolved"):
+				failures.append("%s -> M05 must require both branch resolution flags" % map_id)
+		if not found_gate:
+			failures.append("%s has no Boss 5 gate" % map_id)
+
+func _map_by_id(maps: Array, map_id: String) -> Dictionary:
+	for value in maps:
+		if value is Dictionary and str((value as Dictionary).get("id", "")) == map_id:
+			return value as Dictionary
+	return {}
