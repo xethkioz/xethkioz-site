@@ -7,11 +7,13 @@ on:
       - 'data/regions/izrdralar_m01_m05_*.json'
       - 'data/visual/izrdralar_m01_m05_visual_contract.json'
       - 'scenes/izrdralar/**'
+      - 'scenes/v34/GameBootstrap.tscn'
       - 'src/core/**'
       - 'src/fx/**'
       - 'src/player/**'
       - 'src/npc/**'
       - 'src/pets/**'
+      - 'src/ui/game_bootstrap*.gd'
       - 'src/world/izrdralar_*'
       - 'tools/izrdralar_*'
       - 'tools/scenes/**'
@@ -91,6 +93,14 @@ jobs:
           "$GODOT" --headless --path . res://tools/scenes/IzrdralarM01M05FlowSmoke.tscn 2>&1 | tee /tmp/izrdralar-flow.log
           grep -q "IZRDRALAR_M01_M05_FLOW_PASS" /tmp/izrdralar-flow.log
 
+      - name: Production bootstrap integration smoke
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . res://tools/scenes/IzrdralarBootstrapIntegrationSmoke.tscn 2>&1 | tee /tmp/izrdralar-bootstrap.log
+          grep -q "IZRDRALAR_BOOTSTRAP_INTEGRATION_PASS" /tmp/izrdralar-bootstrap.log
+
       - name: Current main runtime startup without timeout-as-pass
         shell: bash
         run: |
@@ -113,5 +123,6 @@ jobs:
             /tmp/izrdralar-save.log
             /tmp/izrdralar-authored-runtime.log
             /tmp/izrdralar-flow.log
+            /tmp/izrdralar-bootstrap.log
             /tmp/izrdralar-runtime.log
           if-no-files-found: warn
