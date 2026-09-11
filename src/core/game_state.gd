@@ -118,8 +118,12 @@ func set_world_flag(flag_id: String, value: bool = true) -> void:
 		world_flags[flag_id] = true
 	else:
 		world_flags.erase(flag_id)
+	if flag_id == PRISM_STEP_FLAG:
+		prism_step_unlocked = value
 
 func has_world_flag(flag_id: String) -> bool:
+	if flag_id == PRISM_STEP_FLAG:
+		return prism_step_unlocked or bool(world_flags.get(flag_id, false))
 	return bool(world_flags.get(flag_id, false))
 
 func is_legendary_species(species_id: String) -> bool:
@@ -186,9 +190,8 @@ func choose_mentor(mentor_id: String) -> bool:
 	return true
 
 func unlock_prism_step() -> bool:
-	var newly_unlocked := not prism_step_unlocked
-	prism_step_unlocked = true
-	set_world_flag(PRISM_STEP_FLAG)
+	var newly_unlocked := not has_world_flag(PRISM_STEP_FLAG)
+	set_world_flag(PRISM_STEP_FLAG, true)
 	if newly_unlocked:
 		EventBus.traversal_unlocked.emit("paso_prismatico")
 	return newly_unlocked
@@ -226,7 +229,16 @@ func reset_new_game() -> void:
 	EventBus.set_progress_changed.emit("brote_vivo", 0)
 	EventBus.active_familiar_changed.emit(active_familiar_id)
 
+func _sync_prism_step_state() -> void:
+	if prism_step_unlocked or bool(world_flags.get(PRISM_STEP_FLAG, false)):
+		prism_step_unlocked = true
+		world_flags[PRISM_STEP_FLAG] = true
+	else:
+		prism_step_unlocked = false
+		world_flags.erase(PRISM_STEP_FLAG)
+
 func to_dict() -> Dictionary:
+	_sync_prism_step_state()
 	return {
 		"save_version": 10,
 		"player_level": player_level,
@@ -277,9 +289,7 @@ func apply_dict(data: Dictionary) -> void:
 	if raw_position is Array and raw_position.size() >= 2:
 		last_world_position = Vector2(float(raw_position[0]), float(raw_position[1]))
 	world_flags = data.get("world_flags", {}).duplicate(true)
-	if prism_step_unlocked or has_world_flag(PRISM_STEP_FLAG):
-		prism_step_unlocked = true
-		set_world_flag(PRISM_STEP_FLAG)
+	_sync_prism_step_state()
 	EventBus.player_progress_changed.emit(player_level, player_xp, 0 if player_level >= MAX_LEVEL else xp_to_next())
 	EventBus.currency_changed.emit(crystals)
 	EventBus.pet_bond_changed.emit(xethkioz_bond)
