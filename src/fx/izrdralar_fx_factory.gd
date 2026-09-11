@@ -6,6 +6,7 @@ const WorldFeedbackFx := preload("res://src/fx/world_feedback_fx.gd")
 const PALETTE := {
 	"amber": Color("ff8c42"),
 	"violet": Color("8b5cf6"),
+	"violet_hi": Color("d8ceff"),
 	"cyan": Color("6ed4e8"),
 	"wetland": Color("3fc7c9"),
 	"hurt": Color("ff6b6b"),
@@ -48,5 +49,13 @@ static func _spec(effect_id: String) -> Dictionary:
 			return {"kind": "hit", "color": PALETTE["amber"]}
 		"enemy_death":
 			return {"kind": "death", "color": PALETTE["violet"]}
+		"boss_phase":
+			return {"kind": "burst", "color": PALETTE["violet_hi"]}
+		"boss_hit":
+			return {"kind": "hit", "color": PALETTE["amber"]}
+		"boss_death":
+			return {"kind": "death", "color": PALETTE["violet_hi"]}
+		"boss_telegraph":
+			return {"kind": "telegraph", "color": PALETTE["violet"]}
 		_:
 			return {"kind": "hit", "color": PALETTE["violet"]}
