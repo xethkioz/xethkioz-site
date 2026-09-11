@@ -39,6 +39,10 @@ static func _spec(effect_id: String) -> Dictionary:
 			return {"kind": "hurt", "color": PALETTE["hurt"]}
 		"player_pickup":
 			return {"kind": "pickup", "color": PALETTE["heal"]}
+		"xethkioz_snap":
+			return {"kind": "burst", "color": PALETTE["violet_hi"]}
+		"xethkioz_resonance":
+			return {"kind": "aura", "color": PALETTE["violet"]}
 		"enemy_ward":
 			return {"kind": "telegraph", "color": PALETTE["amber"]}
 		"enemy_line":
