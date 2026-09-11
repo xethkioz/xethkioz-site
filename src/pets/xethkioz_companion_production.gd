@@ -103,15 +103,18 @@ func _update_animation(delta: float) -> void:
 	_visual.rotation = clampf(_follow_velocity.x / maxf(1.0, follow_speed), -1.0, 1.0) * 0.045
 	_visual.scale = Vector2.ONE * (1.0 + sin(_hover_clock * 2.4) * 0.018 + speed_ratio * 0.025)
 
+func _direction_row(direction_value: Vector2) -> int:
+	if absf(direction_value.x) > absf(direction_value.y):
+		# The source sheet's first side row faces right; the second is mirrored left.
+		return 2 if direction_value.x < 0.0 else 1
+	if direction_value.y < 0.0:
+		return 3
+	return 0
+
 func _update_region() -> void:
 	if not is_instance_valid(_visual):
 		return
-	var row: int = 0
-	if absf(_visual_facing.x) > absf(_visual_facing.y):
-		# The source sheet's first side row faces right; the second is mirrored left.
-		row = 2 if _visual_facing.x < 0.0 else 1
-	elif _visual_facing.y < 0.0:
-		row = 3
+	var row: int = _direction_row(_visual_facing)
 	_visual.region_rect = Rect2(Vector2(_anim_frame * 32, row * 32), FRAME_SIZE)
 
 func _spawn_snap_feedback() -> void:
