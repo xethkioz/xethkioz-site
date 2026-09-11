@@ -1,7 +1,7 @@
 extends "res://src/npc/boss5_guardian.gd"
 
 const SPRITE := preload("res://assets/production/characters/boss5_guardian_v2.svg")
-const FeedbackFxScript := preload("res://src/fx/world_feedback_fx.gd")
+const IzrdralarFxFactory := preload("res://src/fx/izrdralar_fx_factory.gd")
 
 var _visual: Sprite2D
 var _visual_time: float = 0.0
@@ -20,7 +20,7 @@ func _ready() -> void:
 	_visual.z_index = 3
 	_visual.scale = Vector2.ONE * 0.76
 	add_child(_visual)
-	_spawn_feedback("burst", Vector2.UP, Color("8b5cf6"), "")
+	_spawn_feedback("boss_phase", Vector2.UP, Color("8b5cf6"), "")
 
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
@@ -31,7 +31,7 @@ func _physics_process(delta: float) -> void:
 	if phase != _last_phase:
 		_last_phase = phase
 		_phase_flash_left = 0.55
-		_spawn_feedback("burst", Vector2.UP, Color("d8ceff") if phase == 3 else Color("9bcf75"), "FASE %d" % phase)
+		_spawn_feedback("boss_phase", Vector2.UP, Color("d8ceff") if phase == 3 else Color("9bcf75"), "FASE %d" % phase)
 	if is_instance_valid(_visual):
 		var phase_tint: Color = Color.WHITE
 		if phase == 2:
@@ -51,6 +51,10 @@ func _physics_process(delta: float) -> void:
 		_visual.scale = Vector2.ONE * breathe * entrance_scale
 		_visual.position.y = -24.0 - sin(_visual_time * 1.7) * (0.8 if phase < 3 else 1.5)
 
+func _start_root_pulse() -> void:
+	super._start_root_pulse()
+	_spawn_feedback("boss_telegraph", Vector2.UP, Color("8b5cf6"), "SALÍ DEL CÍRCULO")
+
 func take_damage(amount: float) -> void:
 	if amount <= 0.0:
 		return
@@ -60,9 +64,9 @@ func take_damage(amount: float) -> void:
 	if dealt <= 0.0:
 		return
 	_hit_flash_left = 0.14
-	_spawn_feedback("hit", _impact_direction(), Color("ff8c42"), str(roundi(dealt)))
+	_spawn_feedback("boss_hit", _impact_direction(), Color("ff8c42"), str(roundi(dealt)))
 	if health <= 0.0:
-		_spawn_feedback("death", Vector2.UP, Color("d8ceff"), "PURIFICADO")
+		_spawn_feedback("boss_death", Vector2.UP, Color("d8ceff"), "PURIFICADO")
 
 func _impact_direction() -> Vector2:
 	if is_instance_valid(_player):
@@ -71,14 +75,12 @@ func _impact_direction() -> Vector2:
 			return direction.normalized()
 	return Vector2.UP
 
-func _spawn_feedback(kind_value: String, direction_value: Vector2, color_value: Color, text_value: String) -> void:
+func _spawn_feedback(effect_id: String, direction_value: Vector2, color_value: Color, text_value: String) -> void:
 	var scene: Node = get_tree().current_scene
 	if scene == null:
 		return
-	var fx: Node2D = FeedbackFxScript.new() as Node2D
-	fx.global_position = global_position + Vector2(0, -20)
-	scene.add_child(fx)
-	fx.call("configure", kind_value, direction_value, color_value, text_value)
+	var effect_position: Vector2 = global_position + (Vector2(0, 2) if effect_id == "boss_telegraph" else Vector2(0, -20))
+	IzrdralarFxFactory.spawn(scene, effect_id, effect_position, direction_value, color_value, text_value)
 
 func _draw() -> void:
 	var ratio: float = health / max_health if max_health > 0.0 else 0.0
