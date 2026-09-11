@@ -5,6 +5,7 @@ const CompactHudScript := preload("res://src/ui/hud_controller_production_compac
 const IntegratedLandmarkScript := preload("res://src/world/izrdralar_authored_landmark_pass02.gd")
 const ImpactPlayerScript := preload("res://src/player/player_controller_production_pass02.gd")
 const AmbientLayerScript := preload("res://src/fx/izrdralar_ambient_layer_pass02.gd")
+const ReadableNpcScript := preload("res://src/npc/npc_interactable_production_pass02.gd")
 
 func _ready() -> void:
 	super._ready()
@@ -63,6 +64,21 @@ func _spawn_player() -> void:
 	camera.zoom = Vector2.ONE
 	player.add_child(camera)
 	add_child(player)
+
+func _spawn_npcs() -> void:
+	for npc_value in map_data.get("npcs", []):
+		if not (npc_value is Dictionary):
+			continue
+		var data: Dictionary = npc_value
+		var npc := Node2D.new()
+		npc.name = str(data.get("name", "NPC"))
+		npc.set_script(ReadableNpcScript)
+		npc.position = _vector_from_array(data.get("position", [0, 0]))
+		var lines: Array[String] = []
+		for line in data.get("lines", []):
+			lines.append(str(line))
+		npc.call("configure_production", str(data.get("id", "npc")), str(data.get("name", "NPC")), lines, int(data.get("atlas", 0)))
+		add_child(npc)
 
 func _spawn_ambient_layer() -> void:
 	if map_data.is_empty():
