@@ -18,12 +18,9 @@ on:
       - 'tools/izrdralar_*'
       - 'tools/scenes/**'
       - '.github/workflows/izrdralar-m01-m05-gate.yml'
-  push:
-    branches:
-      - feat/izrdralar-m01-m05-save-visual-contract
 
 concurrency:
-  group: izrdralar-m01-m05-${{ github.ref }}
+  group: izrdralar-m01-m05-pr-${{ github.event.pull_request.number || github.ref_name }}
   cancel-in-progress: true
 
 jobs:
@@ -117,6 +114,16 @@ jobs:
           "$GODOT" --headless --path . res://tools/scenes/IzrdralarBootstrapIntegrationSmoke.tscn 2>&1 | tee /tmp/izrdralar-bootstrap.log
           grep -q "IZRDRALAR_BOOTSTRAP_INTEGRATION_PASS" /tmp/izrdralar-bootstrap.log
 
+      - name: Capture authored runtime 640x360
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          rm -rf /tmp/izrdralar-captures
+          "$GODOT" --headless --path . res://tools/scenes/IzrdralarRuntimeCapture.tscn 2>&1 | tee /tmp/izrdralar-capture.log
+          grep -q "IZRDRALAR_RUNTIME_CAPTURE_PASS" /tmp/izrdralar-capture.log
+          test "$(find /tmp/izrdralar-captures -maxdepth 1 -name '*.png' | wc -l)" -eq 6
+
       - name: Current main runtime startup without timeout-as-pass
         shell: bash
         run: |
@@ -126,6 +133,14 @@ jobs:
           if grep -E "SCRIPT ERROR|Parse Error" /tmp/izrdralar-runtime.log; then
             exit 1
           fi
+
+      - name: Upload runtime captures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: izrdralar-m01-m05-runtime-captures
+          path: /tmp/izrdralar-captures/*.png
+          if-no-files-found: warn
 
       - name: Upload gate logs
         if: always()
@@ -142,5 +157,6 @@ jobs:
             /tmp/izrdralar-autosave.log
             /tmp/izrdralar-respawn.log
             /tmp/izrdralar-bootstrap.log
+            /tmp/izrdralar-capture.log
             /tmp/izrdralar-runtime.log
           if-no-files-found: warn
