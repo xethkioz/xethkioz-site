@@ -73,10 +73,14 @@ func _validate_map(test_case: Dictionary) -> void:
 func _assert_depth_contract(runtime: Node, player: Node, xethkioz: Node, map_id: String) -> void:
 	_assert_depth_bound(player, "%s Player" % map_id)
 	_assert_depth_bound(xethkioz, "%s Xethkioz" % map_id)
+	_assert_contact_shadow(player, "%s Player" % map_id)
+	_assert_contact_shadow(xethkioz, "%s Xethkioz" % map_id)
 
 	for enemy in get_tree().get_nodes_in_group("enemies"):
 		if runtime.is_ancestor_of(enemy):
 			_assert_depth_bound(enemy, "%s enemy %s" % [map_id, enemy.name])
+			if not enemy.is_in_group("bosses"):
+				_assert_contact_shadow(enemy, "%s enemy %s" % [map_id, enemy.name])
 	for landmark in get_tree().get_nodes_in_group("izrdralar_authored_landmark"):
 		if runtime.is_ancestor_of(landmark):
 			_assert_depth_bound(landmark, "%s landmark %s" % [map_id, landmark.name])
@@ -122,6 +126,15 @@ func _assert_depth_bound(node: Node, label: String) -> void:
 		var expected := clampi(roundi(node_2d.global_position.y + float(node.get_meta("izrdralar_depth_offset", 0.0))), -3900, 3900)
 		if node_2d.z_index != expected:
 			_fail("%s depth mismatch expected=%d actual=%d" % [label, expected, node_2d.z_index])
+
+func _assert_contact_shadow(node: Node, label: String) -> void:
+	if node == null:
+		return
+	var shadow := node.get_node_or_null("ContactShadow")
+	if shadow == null:
+		_fail("%s missing 2.5D contact shadow" % label)
+	elif shadow is Node2D and (shadow as Node2D).z_index >= 0:
+		_fail("%s contact shadow must render behind the actor" % label)
 
 func _assert_prefix_count(parent: Node, prefix: String, expected: int, label: String) -> void:
 	var count := 0
