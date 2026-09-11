@@ -7,6 +7,7 @@ func _ready() -> void:
 	var failures: Array[String] = []
 	_validate_sheet(failures)
 	_validate_direction_rows(failures)
+	_validate_movement_response(failures)
 	_finish(failures)
 
 func _validate_sheet(failures: Array[String]) -> void:
@@ -40,6 +41,40 @@ func _validate_direction_rows(failures: Array[String]) -> void:
 		rows_seen[actual_row] = true
 	if rows_seen.size() != 8:
 		failures.append("direction mapping must expose eight distinct visual rows")
+	player.free()
+
+func _validate_movement_response(failures: Array[String]) -> void:
+	var player = PLAYER_SCRIPT.new()
+	var speed: float = float(player.get("move_speed"))
+
+	player.velocity = Vector2.ZERO
+	player.call("_apply_ground_movement", Vector2.RIGHT, 0.05)
+	if player.velocity.x <= 0.0 or player.velocity.x >= speed:
+		failures.append("ground movement must accelerate progressively instead of snapping to full speed")
+
+	for _step in range(5):
+		player.call("_apply_ground_movement", Vector2.RIGHT, 0.05)
+	if absf(player.velocity.length() - speed) > 0.1:
+		failures.append("ground movement must converge to configured move_speed")
+
+	player.velocity = Vector2.RIGHT * speed
+	player.call("_apply_ground_movement", Vector2.ZERO, 0.05)
+	if player.velocity.x <= 0.0 or player.velocity.x >= speed:
+		failures.append("release must brake progressively without an instant stop")
+
+	player.velocity = Vector2.RIGHT * speed
+	player.call("_apply_ground_movement", Vector2.LEFT, 0.05)
+	player.call("_apply_ground_movement", Vector2.LEFT, 0.05)
+	if player.velocity.x >= 0.0:
+		failures.append("opposite-direction input must use fast turn response")
+
+	player.velocity = Vector2.ZERO
+	var diagonal := Vector2(1.0, 1.0).normalized()
+	for _step in range(5):
+		player.call("_apply_ground_movement", diagonal, 0.05)
+	if absf(player.velocity.length() - speed) > 0.1:
+		failures.append("diagonal movement must preserve the same top speed as cardinal movement")
+
 	player.free()
 
 func _finish(failures: Array[String]) -> void:
