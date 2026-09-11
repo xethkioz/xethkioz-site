@@ -1,6 +1,7 @@
 extends "res://src/world/izrdralar_generic_chunk.gd"
 
 const GroundTexturePass03 := preload("res://src/world/izrdralar_ground_texture_pass03.gd")
+const TerrainEdgePass03 := preload("res://src/world/izrdralar_terrain_edge_pass03.gd")
 
 # Visual Production Pass 02 + terrain depth pass 03.
 # Keeps authored navigation/collision intact while reducing the prototype-like
@@ -9,6 +10,7 @@ const GroundTexturePass03 := preload("res://src/world/izrdralar_ground_texture_p
 func _build() -> void:
 	super._build()
 	_install_ground_texture_pass()
+	_install_terrain_edge_pass()
 
 func _install_ground_texture_pass() -> void:
 	if not is_instance_valid(_ground) or get_node_or_null("GroundTexturePass03") != null:
@@ -18,6 +20,15 @@ func _install_ground_texture_pass() -> void:
 	texture_pass.set_script(GroundTexturePass03)
 	add_child(texture_pass)
 	texture_pass.call("configure", _ground, biome, seed_value)
+
+func _install_terrain_edge_pass() -> void:
+	if not is_instance_valid(_ground) or get_node_or_null("TerrainEdgePass03") != null:
+		return
+	var edge_pass := Node2D.new()
+	edge_pass.name = "TerrainEdgePass03"
+	edge_pass.set_script(TerrainEdgePass03)
+	add_child(edge_pass)
+	edge_pass.call("configure", _ground, biome, seed_value)
 
 func _fill_base() -> void:
 	super._fill_base()
