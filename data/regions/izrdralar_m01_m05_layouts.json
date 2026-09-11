@@ -242,7 +242,7 @@
       "enemies": [
         {"id":"slime_prismatico","position":[320,610],"hp":62,"speed":40,"damage":10,"xp":32,"atlas":2},
         {"id":"espiritu_bruma","position":[730,250],"hp":46,"speed":58,"damage":9,"xp":32,"atlas":4},
-        {"id":"escarabajo_corteza","position":[800,710],"hp":74,"speed":42,"damage":11,"xp":34,"atlas":3}
+        {"id":"escarabajo_corteza","position":[420,390],"hp":74,"speed":42,"damage":11,"xp":34,"atlas":3}
       ]
     },
     "M04": {
