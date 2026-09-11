@@ -1,7 +1,7 @@
 extends "res://src/npc/enemy_controller.gd"
 
 const ATLAS := preload("res://assets/production/characters/enemy_atlas.svg")
-const FeedbackFxScript := preload("res://src/fx/world_feedback_fx.gd")
+const IzrdralarFxFactory := preload("res://src/fx/izrdralar_fx_factory.gd")
 const FRAME_SIZE := Vector2(32, 32)
 
 const STATE_IDLE := "idle"
