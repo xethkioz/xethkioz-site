@@ -1,7 +1,7 @@
 extends "res://src/pets/xethkioz_companion.gd"
 
 const SHEET := preload("res://assets/production/characters/xethkioz_sheet.svg")
-const FeedbackFxScript := preload("res://src/fx/world_feedback_fx.gd")
+const IzrdralarFxFactory := preload("res://src/fx/izrdralar_fx_factory.gd")
 const FRAME_SIZE := Vector2(32, 32)
 const TRAIL_SAMPLE_INTERVAL := 0.055
 const TRAIL_LENGTH := 14
@@ -108,7 +108,8 @@ func _update_region() -> void:
 		return
 	var row: int = 0
 	if absf(_visual_facing.x) > absf(_visual_facing.y):
-		row = 1 if _visual_facing.x < 0.0 else 2
+		# The source sheet's first side row faces right; the second is mirrored left.
+		row = 2 if _visual_facing.x < 0.0 else 1
 	elif _visual_facing.y < 0.0:
 		row = 3
 	_visual.region_rect = Rect2(Vector2(_anim_frame * 32, row * 32), FRAME_SIZE)
@@ -117,10 +118,7 @@ func _spawn_snap_feedback() -> void:
 	var scene: Node = get_tree().current_scene
 	if scene == null:
 		return
-	var fx: Node2D = FeedbackFxScript.new() as Node2D
-	fx.global_position = global_position + Vector2(0, -8)
-	scene.add_child(fx)
-	fx.call("configure", "burst", Vector2.UP, Color("9d7bff"), "")
+	IzrdralarFxFactory.spawn(scene, "xethkioz_snap", global_position + Vector2(0, -8), Vector2.UP)
 
 func _draw() -> void:
 	var glow: float = 0.20 + sin(_pulse * 4.0) * 0.06
