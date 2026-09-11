@@ -1,16 +1,15 @@
-extends SceneTree
+extends Node
 
 const NavigationGraph := preload("res://src/world/izrdralar_navigation_graph.gd")
 
 var failures: Array[String] = []
 
-func _init() -> void:
+func _ready() -> void:
 	var navigation = NavigationGraph.new()
 	if not navigation.load_graph():
 		_fail("navigation graph failed to load")
 		_finish()
 		return
-
 	_validate_names(navigation)
 	_validate_choice_gate(navigation)
 	_validate_both_orders(navigation)
@@ -82,10 +81,7 @@ func _validate_checkpoint_entries(navigation) -> void:
 		_fail("invalid M05/start checkpoint accepted")
 
 func _validate_legacy_aliases(navigation) -> void:
-	var legacy_flags := {
-		"initial_lake_link_resolved": true,
-		"custodian_superated": true
-	}
+	var legacy_flags := {"initial_lake_link_resolved": true, "custodian_superated": true}
 	var normalized: Dictionary = navigation.normalize_flags(legacy_flags)
 	if not bool(normalized.get("lake_resolved", false)):
 		_fail("legacy lake flag did not migrate in navigation resolver")
@@ -95,10 +91,7 @@ func _validate_legacy_aliases(navigation) -> void:
 		_fail("legacy route flags should still unlock Boss 5")
 
 func _validate_scope_exit(navigation) -> void:
-	var flags := {
-		"boss5_stabilized": true,
-		"prism_step_unlocked": true
-	}
+	var flags := {"boss5_stabilized": true, "prism_step_unlocked": true}
 	if navigation.can_traverse("M05", "M06", flags):
 		_fail("M06 scope exit must remain disabled during Production Pass 01")
 	if not navigation.can_traverse("M05", "M06", flags, true):
@@ -110,9 +103,9 @@ func _fail(message: String) -> void:
 func _finish() -> void:
 	if failures.is_empty():
 		print("IZRDRALAR_M01_M05_NAVIGATION_PASS")
-		quit(0)
+		get_tree().quit(0)
 		return
 	for failure in failures:
 		push_error(failure)
 	print("IZRDRALAR_M01_M05_NAVIGATION_FAIL")
-	quit(1)
+	get_tree().quit(1)
