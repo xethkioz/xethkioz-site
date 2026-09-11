@@ -110,6 +110,7 @@ func _install_depth_contract() -> void:
 			if collision_offset is Vector2:
 				landmark_offset = maxf(8.0, (collision_offset as Vector2).y)
 			_bind_depth(node, landmark_offset)
+			_install_landmark_shadow(node)
 		elif node.get_script() == ReadableNpcScript:
 			_bind_depth(node, 6.0)
 			_install_contact_shadow(node, Vector2(8.5, 2.8), 0.26, Vector2(0, 7))
@@ -132,6 +133,19 @@ func _install_contact_shadow(target: Node2D, radii: Vector2, alpha: float, offse
 	target.add_child(shadow)
 	shadow.call("configure", radii, alpha, offset_value)
 
+func _install_landmark_shadow(target: Node2D) -> void:
+	if target.get_node_or_null("LandmarkShadow") != null:
+		return
+	var shadow := Polygon2D.new()
+	shadow.name = "LandmarkShadow"
+	shadow.polygon = PackedVector2Array([
+		Vector2(-34, 18), Vector2(-25, 14), Vector2(25, 14), Vector2(34, 18),
+		Vector2(25, 23), Vector2(-25, 23)
+	])
+	shadow.color = Color(0.02, 0.05, 0.04, 0.30)
+	shadow.z_index = -8
+	target.add_child(shadow)
+
 func _apply_static_prop_depth() -> void:
 	for child in get_children():
 		if not child.name.begins_with("Chunk_"):
@@ -142,14 +156,38 @@ func _apply_static_prop_depth() -> void:
 		# The former fixed -5 layer made every tree/structure remain behind actors.
 		# Individual sprites now sort from their world-space foot line instead.
 		props.z_index = 0
+		var source_sprites: Array[Sprite2D] = []
 		for prop_child in props.get_children():
-			if not (prop_child is Sprite2D):
-				continue
-			var sprite := prop_child as Sprite2D
+			if prop_child is Sprite2D:
+				source_sprites.append(prop_child as Sprite2D)
+		for index in range(source_sprites.size()):
+			var sprite := source_sprites[index]
 			var visual_half_height := 16.0
+			var visual_width := 32.0
 			if sprite.texture != null:
 				visual_half_height = maxf(8.0, sprite.texture.get_height() * absf(sprite.scale.y) * 0.42)
+				visual_width = sprite.texture.get_width() * absf(sprite.scale.x)
 			sprite.z_index = clampi(roundi(sprite.global_position.y + visual_half_height), -3900, 3900)
+			_install_static_prop_shadow(props, sprite, index, visual_width, visual_half_height)
+
+func _install_static_prop_shadow(props: Node2D, sprite: Sprite2D, index: int, visual_width: float, visual_half_height: float) -> void:
+	var shadow := Polygon2D.new()
+	shadow.name = "PropShadow_%d" % index
+	var radius_x := clampf(visual_width * 0.30, 6.0, 28.0)
+	var radius_y := clampf(visual_half_height * 0.16, 2.0, 5.0)
+	shadow.polygon = PackedVector2Array([
+		Vector2(-radius_x, 0),
+		Vector2(-radius_x * 0.62, -radius_y),
+		Vector2(radius_x * 0.62, -radius_y),
+		Vector2(radius_x, 0),
+		Vector2(radius_x * 0.62, radius_y),
+		Vector2(-radius_x * 0.62, radius_y)
+	])
+	shadow.position = sprite.position + Vector2(0, visual_half_height * 0.36)
+	shadow.color = Color(0.02, 0.05, 0.04, 0.24)
+	shadow.z_index = max(-3900, sprite.z_index - 5)
+	props.add_child(shadow)
+	props.move_child(shadow, max(0, sprite.get_index()))
 
 func _spawn_ambient_layer() -> void:
 	if map_data.is_empty():
