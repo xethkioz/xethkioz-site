@@ -42,7 +42,7 @@ func _validate_contract(contract: Dictionary, failures: Array[String]) -> void:
 	if maps.size() != REQUIRED_MAP_IDS.size():
 		failures.append("expected exactly five production maps")
 		return
-	for index in REQUIRED_MAP_IDS.size():
+	for index in range(REQUIRED_MAP_IDS.size()):
 		var map_data: Dictionary = maps[index]
 		if str(map_data.get("id", "")) != REQUIRED_MAP_IDS[index]:
 			failures.append("map order/id mismatch at index %d" % index)
