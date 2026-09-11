@@ -1,15 +1,22 @@
 class_name IzrdralarAuthoredLandmarkPass04
 extends "res://src/world/izrdralar_authored_landmark_pass02.gd"
 
-# Pass 04 preserves the original landmark atlas and collision contract while
-# giving the repeated Aldea del Alba houses small authored identities.
+const ALBA_HOUSE_VARIANT_B := preload("res://assets/production/izrdralar/alba_house_variant_b.svg")
+
+# Pass 04 preserves the collision contract while giving Aldea del Alba actual
+# building-family variety. The east residence is now a separately authored
+# original asset, not a mirrored copy of the production landmark atlas.
 
 func _build_visual() -> void:
 	super._build_visual()
 	if not landmark_id.begins_with("alba_house"):
 		return
 	if is_instance_valid(_sprite):
-		_sprite.flip_h = landmark_id == "alba_house_east"
+		if landmark_id == "alba_house_east":
+			_sprite.texture = ALBA_HOUSE_VARIANT_B
+			_sprite.flip_h = false
+		else:
+			_sprite.flip_h = false
 	_build_house_identity_details()
 
 func _build_house_identity_details() -> void:
@@ -32,12 +39,11 @@ func _build_house_identity_details() -> void:
 			Vector2(34, 24), Vector2(50, 24), Vector2(48, 28), Vector2(35, 28)
 		], s), Color("765030"), -1)
 	else:
-		# East house gets a cool prism marker and a compact bench/landing.
+		# Variant B already carries its own side prism/workshop identity. The extra
+		# landing keeps it grounded in the authored village clearing.
 		_add_polygon(root, _scaled([
 			Vector2(-48, 25), Vector2(-24, 25), Vector2(-22, 30), Vector2(-50, 30)
 		], s), Color("5a4838"), -1)
-		_add_pixel(root, Vector2(43, 20) * s, Color("8b5cf6"), 0, 4.0 * s)
-		_add_pixel(root, Vector2(43, 16) * s, Color("d7c7ff"), 1, 2.0 * s)
 		_add_polygon(root, _scaled([
 			Vector2(27, 27), Vector2(51, 27), Vector2(48, 31), Vector2(29, 31)
 		], s), Color("2f5f63"), -1)
