@@ -179,10 +179,8 @@ func _spawn_feedback(kind_value: String, world_position: Vector2, direction_valu
 	var scene: Node = get_tree().current_scene
 	if scene == null:
 		return
-	var fx: Node2D = FeedbackFxScript.new() as Node2D
-	fx.global_position = world_position
-	scene.add_child(fx)
-	fx.call("configure", kind_value, direction_value, color_value, text_value)
+	var effect_id: String = "player_%s" % kind_value
+	IzrdralarFxFactory.spawn(scene, effect_id, world_position, direction_value, color_value, text_value)
 
 func _draw() -> void:
 	if _guard_time_left > 0.0:
