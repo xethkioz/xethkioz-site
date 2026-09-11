@@ -6,9 +6,13 @@ const NavigationGraph := preload("res://src/world/izrdralar_navigation_graph.gd"
 @export var map_id: String = "M01"
 @export var default_entry_id: String = ""
 @export var update_interval := 0.20
+@export var autosave_interval := 8.0
+@export var autosave_distance := 16.0
 
 var _player: Node2D
 var _elapsed := 0.0
+var _autosave_elapsed := 0.0
+var _last_saved_position := Vector2.ZERO
 var _navigation = NavigationGraph.new()
 
 func _ready() -> void:
@@ -21,10 +25,23 @@ func _physics_process(delta: float) -> void:
 		if not is_instance_valid(_player):
 			return
 	_elapsed += delta
-	if _elapsed < update_interval:
+	_autosave_elapsed += delta
+	if _elapsed >= update_interval:
+		_elapsed = 0.0
+		GameState.set_world_checkpoint(map_id, GameState.current_entry_id, _player.global_position)
+	_try_autosave()
+
+func _try_autosave() -> void:
+	if _autosave_elapsed < autosave_interval or not is_instance_valid(_player):
 		return
-	_elapsed = 0.0
+	_autosave_elapsed = 0.0
+	if _last_saved_position != Vector2.ZERO and _last_saved_position.distance_to(_player.global_position) < autosave_distance:
+		return
+	if GameState.current_map_id != map_id:
+		return
 	GameState.set_world_checkpoint(map_id, GameState.current_entry_id, _player.global_position)
+	if SaveService.save_game({"autosave": "world_position", "autosave_map": map_id}):
+		_last_saved_position = _player.global_position
 
 func _restore_player_checkpoint() -> void:
 	await get_tree().process_frame
@@ -39,6 +56,7 @@ func _restore_player_checkpoint() -> void:
 
 	if GameState.last_world_position != Vector2.ZERO:
 		_player.global_position = GameState.last_world_position
+		_last_saved_position = GameState.last_world_position
 		return
 
 	var entry := _find_entry_point(GameState.current_entry_id)
@@ -47,6 +65,7 @@ func _restore_player_checkpoint() -> void:
 	if entry != null:
 		_player.global_position = entry.global_position
 		GameState.set_world_checkpoint(map_id, str(entry.get_meta("entry_id", fallback_entry)), _player.global_position)
+		_last_saved_position = _player.global_position
 	else:
 		push_warning("IzrdralarCheckpointTracker: no entry point for %s/%s" % [map_id, fallback_entry])
 
