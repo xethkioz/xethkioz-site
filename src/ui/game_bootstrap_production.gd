@@ -17,4 +17,8 @@ func _continue_game() -> void:
 	if loaded.is_empty():
 		_show_main_menu()
 		return
+	if not bool(loaded.get("intro_seen", false)):
+		intro_index = 0
+		_show_intro()
+		return
 	get_tree().change_scene_to_file(world_scene_path())
