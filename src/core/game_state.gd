@@ -2,6 +2,7 @@ extends Node
 
 const MAX_LEVEL := 60
 const LEGENDARY_SPECIES := ["xethkioz", "itzuke", "mozaruk", "killaruna", "heller", "kahezer", "okuninust", "dvalin"]
+const PRISM_STEP_FLAG := "prism_step_unlocked"
 
 var player_level: int = 1
 var player_xp: int = 0
@@ -185,11 +186,12 @@ func choose_mentor(mentor_id: String) -> bool:
 	return true
 
 func unlock_prism_step() -> bool:
-	if prism_step_unlocked:
-		return false
+	var newly_unlocked := not prism_step_unlocked
 	prism_step_unlocked = true
-	EventBus.traversal_unlocked.emit("paso_prismatico")
-	return true
+	set_world_flag(PRISM_STEP_FLAG)
+	if newly_unlocked:
+		EventBus.traversal_unlocked.emit("paso_prismatico")
+	return newly_unlocked
 
 func familiar_data(species_id: String) -> Dictionary:
 	if not captured_familiars.has(species_id):
@@ -275,6 +277,9 @@ func apply_dict(data: Dictionary) -> void:
 	if raw_position is Array and raw_position.size() >= 2:
 		last_world_position = Vector2(float(raw_position[0]), float(raw_position[1]))
 	world_flags = data.get("world_flags", {}).duplicate(true)
+	if prism_step_unlocked or has_world_flag(PRISM_STEP_FLAG):
+		prism_step_unlocked = true
+		set_world_flag(PRISM_STEP_FLAG)
 	EventBus.player_progress_changed.emit(player_level, player_xp, 0 if player_level >= MAX_LEVEL else xp_to_next())
 	EventBus.currency_changed.emit(crystals)
 	EventBus.pet_bond_changed.emit(xethkioz_bond)
