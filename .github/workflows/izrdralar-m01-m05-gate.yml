@@ -51,18 +51,36 @@ jobs:
       - name: Check production scripts
         shell: bash
         run: |
-          set -euxo pipefail
+          set -uo pipefail
           GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
-          "$GODOT" --headless --path . --check-only --script res://src/core/game_state.gd
-          "$GODOT" --headless --path . --check-only --script res://src/core/save_service.gd
-          "$GODOT" --headless --path . --check-only --script res://src/fx/izrdralar_fx_factory.gd
-          "$GODOT" --headless --path . --check-only --script res://src/fx/world_feedback_fx.gd
-          "$GODOT" --headless --path . --check-only --script res://src/player/player_controller_production.gd
-          "$GODOT" --headless --path . --check-only --script res://src/npc/enemy_controller_production.gd
-          "$GODOT" --headless --path . --check-only --script res://src/world/izrdralar_navigation_graph.gd
-          "$GODOT" --headless --path . --check-only --script res://src/world/izrdralar_map_transition.gd
-          "$GODOT" --headless --path . --check-only --script res://src/world/izrdralar_entry_point.gd
-          "$GODOT" --headless --path . --check-only --script res://src/world/izrdralar_checkpoint_tracker.gd
+          : > /tmp/izrdralar-script-check.log
+          SCRIPTS=(
+            res://src/core/game_state.gd
+            res://src/core/save_service.gd
+            res://src/fx/izrdralar_fx_factory.gd
+            res://src/fx/world_feedback_fx.gd
+            res://src/player/player_controller_production.gd
+            res://src/npc/enemy_controller_production.gd
+            res://src/world/izrdralar_navigation_graph.gd
+            res://src/world/izrdralar_map_transition.gd
+            res://src/world/izrdralar_entry_point.gd
+            res://src/world/izrdralar_checkpoint_tracker.gd
+          )
+          FAILED=0
+          for SCRIPT in "${SCRIPTS[@]}"; do
+            echo "===== CHECK $SCRIPT =====" | tee -a /tmp/izrdralar-script-check.log
+            set +e
+            "$GODOT" --headless --path . --check-only --script "$SCRIPT" 2>&1 | tee -a /tmp/izrdralar-script-check.log
+            STATUS=${PIPESTATUS[0]}
+            set -e
+            if [ "$STATUS" -ne 0 ]; then
+              echo "FAILED $SCRIPT status=$STATUS" | tee -a /tmp/izrdralar-script-check.log
+              FAILED=1
+            else
+              echo "PASS $SCRIPT" | tee -a /tmp/izrdralar-script-check.log
+            fi
+          done
+          exit "$FAILED"
 
       - name: Visual contract smoke
         shell: bash
@@ -105,6 +123,7 @@ jobs:
           name: izrdralar-m01-m05-gate-logs
           path: |
             /tmp/izrdralar-import.log
+            /tmp/izrdralar-script-check.log
             /tmp/izrdralar-visual.log
             /tmp/izrdralar-navigation.log
             /tmp/izrdralar-save.log
