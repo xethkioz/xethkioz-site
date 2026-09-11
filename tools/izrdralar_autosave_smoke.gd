@@ -1,7 +1,7 @@
 extends Node
 
 const RUNTIME_SCENE := preload("res://scenes/izrdralar/IzrdralarM01M05Runtime.tscn")
-const EXPECTED_POSITION := Vector2(333, 444)
+const TEST_POSITION := Vector2(333, 444)
 
 var failures: Array[String] = []
 
@@ -18,6 +18,7 @@ func _run() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 
+	var saved_position := Vector2.ZERO
 	var player := runtime.get_node_or_null("Player")
 	var tracker := runtime.get_node_or_null("CheckpointTracker")
 	if player == null or tracker == null:
@@ -25,9 +26,12 @@ func _run() -> void:
 	else:
 		tracker.set("autosave_interval", 0.01)
 		tracker.set("autosave_distance", 1.0)
-		player.global_position = EXPECTED_POSITION
+		player.global_position = TEST_POSITION
 		for _index in range(5):
 			await get_tree().physics_frame
+		saved_position = player.global_position
+		if saved_position == Vector2.ZERO:
+			_fail("physics-valid autosave position was zero")
 		if not SaveService.has_save():
 			_fail("position autosave did not create a recoverable save")
 
@@ -42,8 +46,8 @@ func _run() -> void:
 	else:
 		if GameState.current_map_id != "M04" or GameState.current_entry_id != "from_m02":
 			_fail("autosave lost M04/from_m02 identity")
-		if not GameState.last_world_position.is_equal_approx(EXPECTED_POSITION):
-			_fail("autosave lost exact position: %s" % GameState.last_world_position)
+		if not GameState.last_world_position.is_equal_approx(saved_position):
+			_fail("autosave lost physics-valid exact position: saved=%s loaded=%s" % [saved_position, GameState.last_world_position])
 
 	SaveService.delete_save()
 	_finish()
