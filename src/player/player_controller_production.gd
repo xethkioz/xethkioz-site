@@ -125,9 +125,14 @@ func _apply_action_pose() -> void:
 func _perform_melee_attack() -> void:
 	_attack_pose_left = ATTACK_POSE_DURATION
 	_cast_pose_left = 0.0
-	super._perform_melee_attack()
+	var attack_direction: Vector2 = facing.normalized() if facing.length_squared() > 0.0001 else Vector2.DOWN
+	# Tiny collision-aware lunge adds weight without turning the attack into a dash.
+	move_and_collide(attack_direction * 3.0)
+	var targets: Array = _damage_area(global_position + attack_direction * 28.0, 22.0, attack_damage)
 	var accent: Color = CharacterProfile.accent_color_value()
-	_spawn_feedback("slash", global_position + facing * 17.0 + Vector2(0, -7), facing, accent, "")
+	_spawn_feedback("slash", global_position + attack_direction * 17.0 + Vector2(0, -7), attack_direction, accent, "")
+	if not targets.is_empty():
+		_spawn_feedback("burst", global_position + attack_direction * 25.0 + Vector2(0, -7), attack_direction, accent.lightened(0.18), "")
 
 func _use_ability(slot: String) -> void:
 	var previous_mana: float = mana
