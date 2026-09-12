@@ -18,6 +18,10 @@ func _draw() -> void:
 			_draw_trail()
 		"plaza_wear":
 			_draw_plaza_wear()
+		"garden_patch":
+			_draw_garden_patch()
+		"doorstep":
+			_draw_doorstep()
 		"reeds":
 			_draw_reeds()
 		"rubble":
@@ -44,6 +48,29 @@ func _draw_plaza_wear() -> void:
 		draw_line(center - Vector2(length * 0.5, 0), center + Vector2(length * 0.5, 0), _alpha(accent.darkened(0.32), 0.22), 1.0)
 		if index % 2 == 0:
 			draw_rect(Rect2(center + Vector2(2, 3), Vector2(2, 2)), _alpha(accent.lightened(0.10), 0.18), true)
+
+func _draw_garden_patch() -> void:
+	var soil := _alpha(accent.darkened(0.46), 0.34)
+	draw_rect(Rect2(-28, -9, 56, 18), soil, true)
+	for row in range(3):
+		var y := -5.0 + float(row) * 5.0
+		draw_line(Vector2(-25, y), Vector2(25, y), _alpha(accent.darkened(0.28), 0.30), 1.0)
+	for index in range(12):
+		var x := float((index * 13 + seed_value * 7) % 49) - 24.0
+		var y := float((index * 17 + seed_value * 3) % 13) - 6.0
+		var stem := Color("709a64") if index % 2 == 0 else Color("86a75f")
+		draw_line(Vector2(x, y + 2), Vector2(x, y - 2), _alpha(stem, 0.58), 1.0)
+		var flower := Color("e5b96d") if index % 3 == 0 else Color("d58ca8")
+		draw_circle(Vector2(x, y - 3), 1.2, _alpha(flower, 0.64))
+
+func _draw_doorstep() -> void:
+	# Flat threshold: readable as habitation detail without creating a prop the
+	# player should collide with.
+	draw_rect(Rect2(-18, -4, 36, 8), _alpha(accent.darkened(0.34), 0.42), true)
+	for index in range(4):
+		var x := -15.0 + float(index) * 10.0
+		draw_line(Vector2(x, -3), Vector2(x + 6.0, 3), _alpha(accent.lightened(0.08), 0.24), 1.0)
+	draw_line(Vector2(-18, 4), Vector2(18, 4), _alpha(Color("3f352b"), 0.48), 1.0)
 
 func _draw_reeds() -> void:
 	for cluster in range(5):
