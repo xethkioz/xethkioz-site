@@ -199,10 +199,9 @@ func _move_toward_position(target: Vector2, speed_multiplier: float) -> void:
 
 func _begin_attack() -> void:
 	var windup: float = _attack_windup_duration()
-	_attack_windup_total = windup
 	_set_state(STATE_WINDUP, windup)
 	_attack_windup_total = windup
-	_spawn_feedback("ward", _direction_to_player(), _telegraph_color(), "")
+	_spawn_feedback("ward", _direction_to_player(), _telegraph_color(), "", windup)
 
 func _resolve_attack() -> void:
 	var direction: Vector2 = _direction_to_player()
@@ -298,12 +297,12 @@ func _flash_visual() -> void:
 	var tween: Tween = create_tween()
 	tween.tween_property(_visual, "modulate", Color.WHITE, 0.11)
 
-func _spawn_feedback(kind_value: String, direction_value: Vector2, color_value: Color, text_value: String = "") -> void:
+func _spawn_feedback(kind_value: String, direction_value: Vector2, color_value: Color, text_value: String = "", duration_override: float = -1.0) -> void:
 	var scene: Node = get_tree().current_scene
 	if scene == null:
 		return
 	var effect_id: String = "enemy_%s" % kind_value
-	IzrdralarFxFactory.spawn(scene, effect_id, global_position + Vector2(0, -9), direction_value, color_value, text_value)
+	IzrdralarFxFactory.spawn(scene, effect_id, global_position + Vector2(0, -9), direction_value, color_value, text_value, duration_override)
 
 func _draw() -> void:
 	var health_ratio: float = health / max_health if max_health > 0.0 else 0.0
