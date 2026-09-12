@@ -14,7 +14,7 @@ func _build_ui() -> void:
 
 	_make_bar_back(Vector2(15, 27), Vector2(130, 6))
 	hp_bar = _make_bar_fill(Vector2(15, 27), Vector2(130, 6), C_ORANGE)
-	hp_value_label = _make_label(Vector2(150, 24), Vector2(64, 10), "HP 100/100", 5, C_TEXT, true, HORIZONTAL_ALIGNMENT_RIGHT)
+	hp_value_label = _make_label(Vector2(140, 24), Vector2(74, 10), "HP 100/100", 5, C_TEXT, true, HORIZONTAL_ALIGNMENT_RIGHT)
 
 	_make_bar_back(Vector2(15, 39), Vector2(100, 4))
 	mana_bar = _make_bar_fill(Vector2(15, 39), Vector2(100, 4), C_VIOLET)
@@ -80,7 +80,8 @@ func _on_health(current: float, maximum: float) -> void:
 		hp_bar.size.x = 130.0 * ratio
 		hp_bar.color = C_DANGER if ratio <= 0.30 else C_ORANGE
 	if hp_value_label:
-		hp_value_label.text = "HP %d/%d" % [roundi(current), roundi(maximum)]
+		var critical_suffix := " BAJA" if ratio <= 0.30 else ""
+		hp_value_label.text = "HP %d/%d%s" % [roundi(current), roundi(maximum), critical_suffix]
 		hp_value_label.add_theme_color_override("font_color", C_DANGER if ratio <= 0.30 else C_TEXT)
 
 func _on_mana(current: float, maximum: float) -> void:
