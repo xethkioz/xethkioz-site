@@ -6,6 +6,18 @@ extends "res://src/ui/hud_controller.gd"
 
 var hp_value_label: Label
 var mana_value_label: Label
+var interaction_hint_label: Label
+var _interaction_hint_text := ""
+
+func _ready() -> void:
+	super._ready()
+	if not EventBus.interaction_hint_changed.is_connected(_on_interaction_hint):
+		EventBus.interaction_hint_changed.connect(_on_interaction_hint)
+
+func _process(delta: float) -> void:
+	super._process(delta)
+	if interaction_hint_label:
+		interaction_hint_label.visible = not _interaction_hint_text.is_empty() and _dialog_timer <= 0.0
 
 func _build_ui() -> void:
 	_make_panel(Vector2(8, 8), Vector2(216, 44), C_BG, C_VIOLET)
@@ -43,6 +55,12 @@ func _build_ui() -> void:
 	lore_label = _make_label(Vector2(415, 329), Vector2(208, 8), "Atlas · Ecos 0/5", 5, C_VIOLET, false, HORIZONTAL_ALIGNMENT_RIGHT)
 	inventory_label = _make_label(Vector2(415, 340), Vector2(208, 8), "", 5, C_ORANGE, false, HORIZONTAL_ALIGNMENT_RIGHT)
 
+	interaction_hint_label = _make_label(Vector2(160, 236), Vector2(320, 14), "", 7, Color("d8ceff"), true, HORIZONTAL_ALIGNMENT_CENTER)
+	interaction_hint_label.add_theme_color_override("font_outline_color", Color(0.02, 0.025, 0.04, 0.95))
+	interaction_hint_label.add_theme_constant_override("outline_size", 3)
+	interaction_hint_label.z_index = 5
+	interaction_hint_label.visible = false
+
 	toast_label = _make_label(Vector2(188, 282), Vector2(264, 18), "", 7, C_TEXT, true, HORIZONTAL_ALIGNMENT_CENTER)
 	toast_label.visible = false
 
@@ -61,6 +79,11 @@ func _build_ui() -> void:
 	dialog_label = _make_label(Vector2(116, 260), Vector2(466, 52), "", 7, C_TEXT)
 	dialog_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	dialog_label.visible = false
+
+func _on_interaction_hint(label: String) -> void:
+	_interaction_hint_text = label.strip_edges()
+	if interaction_hint_label:
+		interaction_hint_label.text = "C · %s" % _interaction_hint_text if not _interaction_hint_text.is_empty() else ""
 
 func _make_compact_skill(pos: Vector2, key: String, name: String, accent: Color) -> Label:
 	var panel := _make_panel(pos, Vector2(50, 28), Color(0.09, 0.075, 0.12, 0.96), accent)
