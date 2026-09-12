@@ -9,6 +9,7 @@ GameState="*res://src/core/game_state.gd"
 CharacterProfile="*res://src/core/character_profile.gd"
 InventoryService="*res://src/items/inventory_service.gd"
 SaveService="*res://src/core/save_service.gd"
+AccessibilityService="*res://src/core/accessibility_service.gd"
 BestiaryOverlay="*res://src/ui/bestiary_overlay.gd"
 
 [debug]
