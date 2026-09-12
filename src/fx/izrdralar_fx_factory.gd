@@ -1,7 +1,7 @@
 class_name IzrdralarFxFactory
 extends RefCounted
 
-const WorldFeedbackFx := preload("res://src/fx/world_feedback_fx_impact.gd")
+const WorldFeedbackFx := preload("res://src/fx/world_feedback_fx_ability.gd")
 
 const PALETTE := {
 	"amber": Color("ff8c42"),
@@ -35,6 +35,22 @@ static func _spec(effect_id: String) -> Dictionary:
 			return {"kind": "line", "color": PALETTE["cyan"]}
 		"player_ward":
 			return {"kind": "rune", "color": PALETTE["violet"]}
+		"player_wave":
+			return {"kind": "wave", "color": PALETTE["cyan"]}
+		"player_guard":
+			return {"kind": "guard", "color": PALETTE["cyan"]}
+		"player_mark":
+			return {"kind": "mark", "color": PALETTE["violet_hi"]}
+		"player_root":
+			return {"kind": "root", "color": PALETTE["violet"]}
+		"player_shot":
+			return {"kind": "shot", "color": PALETTE["heal"]}
+		"player_trap":
+			return {"kind": "trap", "color": PALETTE["heal"]}
+		"player_charge":
+			return {"kind": "charge", "color": PALETTE["amber"]}
+		"player_regen":
+			return {"kind": "regen", "color": PALETTE["heal"]}
 		"player_hurt":
 			return {"kind": "hurt", "color": PALETTE["hurt"]}
 		"player_pickup":
