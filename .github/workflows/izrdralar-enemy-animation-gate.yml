@@ -1,0 +1,62 @@
+name: Izrdralar Enemy Animation Gate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'project.godot'
+      - 'src/npc/enemy_controller.gd'
+      - 'src/npc/enemy_controller_production.gd'
+      - 'src/npc/enemy_live_visual.gd'
+      - 'tools/izrdralar_enemy_animation_smoke.gd'
+      - 'tools/scenes/IzrdralarEnemyAnimationSmoke.tscn'
+      - '.github/workflows/izrdralar-enemy-animation-gate.yml'
+
+concurrency:
+  group: izrdralar-enemy-animation-${{ github.event.pull_request.number || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  enemy-animation:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Godot 4.7.2
+        shell: bash
+        run: |
+          set -euxo pipefail
+          wget -q https://godot-releases.nbg1.your-objectstorage.com/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -O /tmp/godot.zip
+          unzip -q /tmp/godot.zip -d /tmp/godot
+          chmod +x /tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          /tmp/godot/Godot_v4.7.2-stable_linux.x86_64 --version
+
+      - name: Import project and reject parser regressions
+        shell: bash
+        run: |
+          set -o pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --editor --quit 2>&1 | tee /tmp/enemy-animation-import.log
+          if grep -E "SCRIPT ERROR|Parse Error" /tmp/enemy-animation-import.log; then
+            exit 1
+          fi
+
+      - name: Validate all six articulated enemy families
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . res://tools/scenes/IzrdralarEnemyAnimationSmoke.tscn 2>&1 | tee /tmp/enemy-animation-smoke.log
+          grep -q "IZRDRALAR_ENEMY_ANIMATION_PASS" /tmp/enemy-animation-smoke.log
+
+      - name: Upload enemy animation logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: izrdralar-enemy-animation-gate-logs
+          path: |
+            /tmp/enemy-animation-import.log
+            /tmp/enemy-animation-smoke.log
+          if-no-files-found: warn

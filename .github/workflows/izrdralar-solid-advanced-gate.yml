@@ -1,0 +1,154 @@
+name: Izrdralar Solid Advanced Gate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'assets/production/characters/**'
+      - 'assets/production/izrdralar/**'
+      - 'data/regions/izrdralar_m01_m05_*.json'
+      - 'data/visual/izrdralar_m01_m05_visual_contract.json'
+      - 'scenes/izrdralar/**'
+      - 'scenes/v34/GameBootstrap.tscn'
+      - 'src/core/**'
+      - 'src/fx/**'
+      - 'src/player/**'
+      - 'src/npc/**'
+      - 'src/pets/**'
+      - 'src/ui/**'
+      - 'src/world/izrdralar_*'
+      - 'tools/izrdralar_*'
+      - 'tools/scenes/**'
+      - 'export_presets.cfg'
+      - 'project.godot'
+      - '.github/workflows/izrdralar-solid-advanced-gate.yml'
+
+concurrency:
+  group: izrdralar-solid-advanced-${{ github.event.pull_request.number || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  solid-advanced:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Godot 4.7.2
+        shell: bash
+        run: |
+          set -euxo pipefail
+          wget -q https://godot-releases.nbg1.your-objectstorage.com/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -O /tmp/godot.zip
+          unzip -q /tmp/godot.zip -d /tmp/godot
+          chmod +x /tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          /tmp/godot/Godot_v4.7.2-stable_linux.x86_64 --version
+
+      - name: Import and reject parser regressions
+        shell: bash
+        run: |
+          set -o pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --editor --quit 2>&1 | tee /tmp/solid-advanced-import.log
+          if grep -E "SCRIPT ERROR|Parse Error" /tmp/solid-advanced-import.log; then
+            exit 1
+          fi
+
+      - name: Production visual readiness smoke
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . res://tools/scenes/IzrdralarVisualReadinessSmoke.tscn 2>&1 | tee /tmp/solid-advanced-visual-readiness.log
+          grep -q "IZRDRALAR_VISUAL_READINESS_PASS" /tmp/solid-advanced-visual-readiness.log
+
+      - name: Capture real movement and combat sequence
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          rm -rf /tmp/izrdralar-motion-captures
+          if ! command -v xvfb-run >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq xvfb
+          fi
+          timeout 60s xvfb-run -a "$GODOT" --path . --rendering-method gl_compatibility res://tools/scenes/IzrdralarMotionSequenceCapture.tscn 2>&1 | tee /tmp/solid-advanced-motion.log
+          grep -q "IZRDRALAR_MOTION_SEQUENCE_PASS" /tmp/solid-advanced-motion.log
+          test "$(find /tmp/izrdralar-motion-captures -maxdepth 1 -name '*.png' | wc -l)" -eq 9
+
+      - name: Install Godot 4.7.2 export templates
+        shell: bash
+        run: |
+          set -euxo pipefail
+          wget -q https://godot-releases.nbg1.your-objectstorage.com/4.7.2-stable/Godot_v4.7.2-stable_export_templates.tpz -O /tmp/godot-templates.tpz
+          rm -rf /tmp/godot-export-templates
+          mkdir -p /tmp/godot-export-templates
+          unzip -q /tmp/godot-templates.tpz -d /tmp/godot-export-templates
+          mkdir -p "$HOME/.local/share/godot/export_templates/4.7.2.stable"
+          cp -R /tmp/godot-export-templates/templates/. "$HOME/.local/share/godot/export_templates/4.7.2.stable/"
+          test -f "$HOME/.local/share/godot/export_templates/4.7.2.stable/windows_release_x86_64.exe"
+
+      - name: Export Windows Internal Test Candidate
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          rm -rf build/windows
+          mkdir -p build/windows
+          "$GODOT" --headless --path . --export-release "Windows Desktop" build/windows/WorldOfXethkiozDemo.exe 2>&1 | tee /tmp/solid-advanced-export.log
+          if grep -E "SCRIPT ERROR|Parse Error|ERROR:.*export" /tmp/solid-advanced-export.log; then
+            exit 1
+          fi
+          test -s build/windows/WorldOfXethkiozDemo.exe
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('build/windows/WorldOfXethkiozDemo.exe')
+          if p.stat().st_size < 5_000_000:
+              raise SystemExit(f'Internal test executable unexpectedly small: {p.stat().st_size} bytes')
+          print(f'IZRDRALAR_INTERNAL_TEST_BUILD_READY size={p.stat().st_size}')
+          PY
+
+      - name: Package Windows Internal Test Candidate
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import zipfile
+          build = Path('build/windows')
+          out = Path('/tmp/WORLD_OF_XETHKIOZ_IZRDRALAR_M01_M05_INTERNAL_TEST_CANDIDATE.zip')
+          with zipfile.ZipFile(out, 'w', compression=zipfile.ZIP_DEFLATED) as z:
+              for path in sorted(build.rglob('*')):
+                  if path.is_file():
+                      z.write(path, path.relative_to(build.parent))
+          print(out)
+          PY
+          test -s /tmp/WORLD_OF_XETHKIOZ_IZRDRALAR_M01_M05_INTERNAL_TEST_CANDIDATE.zip
+
+      - name: Upload motion sequence evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: izrdralar-solid-advanced-motion-sequence
+          path: /tmp/izrdralar-motion-captures/*.png
+          if-no-files-found: warn
+
+      - name: Upload Windows Internal Test Candidate
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-of-xethkioz-izrdralar-m01-m05-internal-test-candidate
+          path: /tmp/WORLD_OF_XETHKIOZ_IZRDRALAR_M01_M05_INTERNAL_TEST_CANDIDATE.zip
+          if-no-files-found: error
+
+      - name: Upload Solid Advanced logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: izrdralar-solid-advanced-logs
+          path: |
+            /tmp/solid-advanced-import.log
+            /tmp/solid-advanced-visual-readiness.log
+            /tmp/solid-advanced-motion.log
+            /tmp/solid-advanced-export.log
+          if-no-files-found: warn

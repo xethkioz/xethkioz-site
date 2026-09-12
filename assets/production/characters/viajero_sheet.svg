@@ -1,26 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="96" height="128" viewBox="0 0 96 128" shape-rendering="crispEdges">
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="256" viewBox="0 0 96 256" shape-rendering="crispEdges">
 <defs>
   <g id="shadow"><ellipse cx="16" cy="28" rx="10" ry="2.5" fill="#050b10" opacity=".5"/></g>
 
   <g id="down-base">
     <use href="#shadow"/>
-    <!-- legs -->
     <path d="M10 22h6v7H9v-3h1z" fill="#11151b"/><path d="M17 22h6v4h1v3h-7z" fill="#11151b"/>
     <rect x="9" y="27" width="7" height="2" fill="#080c11"/><rect x="18" y="27" width="7" height="2" fill="#080c11"/>
-    <!-- coat / torso -->
     <path d="M8 12h16l2 4-2 9H8l-2-9z" fill="#202732"/>
     <rect x="10" y="13" width="12" height="10" fill="#29323e"/><rect x="10" y="14" width="3" height="8" fill="#34404b"/>
-    <!-- shoulders / arms -->
     <rect x="5" y="15" width="5" height="8" fill="#171d26"/><rect x="22" y="15" width="5" height="8" fill="#171d26"/>
     <rect x="6" y="21" width="4" height="3" fill="#252d36"/><rect x="22" y="21" width="4" height="3" fill="#252d36"/>
-    <!-- harness -->
     <path d="M10 15l6 5 6-5" fill="none" stroke="#6849b8" stroke-width="2"/>
     <rect x="8" y="19" width="16" height="3" fill="#6d50bd"/><rect x="15" y="18" width="3" height="4" fill="#e0d5ff"/>
     <rect x="12" y="22" width="8" height="2" fill="#865d3d"/><rect x="15" y="22" width="3" height="2" fill="#b87948"/>
-    <!-- head under profile overlay -->
     <rect x="11" y="7" width="10" height="7" fill="#c99975"/><rect x="10" y="6" width="12" height="4" fill="#222a33"/>
     <rect x="12" y="10" width="2" height="2" fill="#27313a"/><rect x="18" y="10" width="2" height="2" fill="#27313a"/>
-    <!-- prism clasp -->
     <polygon points="16,17 19,20 16,23 13,20" fill="#7656c7"/><rect x="16" y="18" width="1" height="3" fill="#eee6ff"/>
   </g>
 
@@ -34,7 +28,6 @@
     <rect x="12" y="22" width="8" height="2" fill="#865d3d"/>
     <rect x="10" y="7" width="10" height="7" fill="#c99975"/><rect x="9" y="6" width="12" height="4" fill="#222a33"/>
     <rect x="11" y="10" width="2" height="2" fill="#27313a"/>
-    <!-- small prism pack -->
     <rect x="21" y="13" width="4" height="7" fill="#313b45"/><rect x="23" y="14" width="2" height="4" fill="#3fc7c9"/>
   </g>
 
@@ -57,32 +50,83 @@
     <rect x="9" y="27" width="7" height="2" fill="#080c11"/><rect x="18" y="27" width="7" height="2" fill="#080c11"/>
     <path d="M8 12h16l2 4-2 9H8l-2-9z" fill="#1e252f"/><rect x="10" y="13" width="12" height="10" fill="#28313c"/>
     <rect x="5" y="15" width="5" height="8" fill="#171d26"/><rect x="22" y="15" width="5" height="8" fill="#171d26"/>
-    <!-- back harness / prism atlas pack -->
     <rect x="11" y="13" width="10" height="9" fill="#303945"/><rect x="13" y="15" width="6" height="5" fill="#1e2e38"/>
     <rect x="14" y="16" width="2" height="3" fill="#3fc7c9"/><rect x="17" y="16" width="2" height="3" fill="#7656c7"/>
     <path d="M9 14l7 6 7-6" fill="none" stroke="#6245ad" stroke-width="2"/>
     <rect x="11" y="7" width="10" height="7" fill="#202730"/><rect x="10" y="6" width="12" height="4" fill="#171d25"/>
     <rect x="12" y="22" width="8" height="2" fill="#865d3d"/>
   </g>
+
+  <g id="down-left-base">
+    <use href="#down-base"/>
+    <rect x="5" y="16" width="5" height="7" fill="#131922"/>
+    <rect x="22" y="14" width="4" height="7" fill="#313b45"/><rect x="24" y="15" width="2" height="4" fill="#3fc7c9"/>
+    <rect x="10" y="7" width="3" height="7" fill="#b68163" opacity=".6"/>
+    <rect x="11" y="10" width="2" height="2" fill="#182027"/>
+  </g>
+
+  <g id="down-right-base">
+    <use href="#down-base"/>
+    <rect x="22" y="16" width="5" height="7" fill="#131922"/>
+    <rect x="6" y="14" width="4" height="7" fill="#313b45"/><rect x="6" y="15" width="2" height="4" fill="#3fc7c9"/>
+    <rect x="19" y="7" width="3" height="7" fill="#b68163" opacity=".6"/>
+    <rect x="19" y="10" width="2" height="2" fill="#182027"/>
+  </g>
+
+  <g id="up-left-base">
+    <use href="#up-base"/>
+    <rect x="5" y="16" width="5" height="7" fill="#131922"/>
+    <rect x="20" y="13" width="4" height="8" fill="#36414b"/>
+    <rect x="22" y="15" width="2" height="4" fill="#3fc7c9"/>
+    <path d="M9 14l6 6" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+  </g>
+
+  <g id="up-right-base">
+    <use href="#up-base"/>
+    <rect x="22" y="16" width="5" height="7" fill="#131922"/>
+    <rect x="8" y="13" width="4" height="8" fill="#36414b"/>
+    <rect x="8" y="15" width="2" height="4" fill="#3fc7c9"/>
+    <path d="M23 14l-6 6" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+  </g>
 </defs>
 
-<!-- down: left step / idle / right step -->
+<!-- row 0: down -->
 <g transform="translate(0 0)"><use href="#down-base"/><rect x="8" y="26" width="7" height="3" fill="#080c11"/><rect x="19" y="25" width="5" height="3" fill="#11151b"/></g>
 <g transform="translate(32 0)"><use href="#down-base"/></g>
 <g transform="translate(64 0)"><use href="#down-base"/><rect x="9" y="25" width="5" height="3" fill="#11151b"/><rect x="18" y="26" width="7" height="3" fill="#080c11"/></g>
 
-<!-- left -->
-<g transform="translate(0 32)"><use href="#left-base"/><rect x="8" y="26" width="7" height="3" fill="#080c11"/></g>
-<g transform="translate(32 32)"><use href="#left-base"/></g>
-<g transform="translate(64 32)"><use href="#left-base"/><rect x="18" y="26" width="7" height="3" fill="#080c11"/></g>
+<!-- row 1: down-left -->
+<g transform="translate(0 32)"><use href="#down-left-base"/><rect x="8" y="26" width="7" height="3" fill="#080c11"/></g>
+<g transform="translate(32 32)"><use href="#down-left-base"/></g>
+<g transform="translate(64 32)"><use href="#down-left-base"/><rect x="18" y="26" width="7" height="3" fill="#080c11"/></g>
 
-<!-- right -->
-<g transform="translate(0 64)"><use href="#right-base"/><rect x="8" y="26" width="7" height="3" fill="#080c11"/></g>
-<g transform="translate(32 64)"><use href="#right-base"/></g>
-<g transform="translate(64 64)"><use href="#right-base"/><rect x="18" y="26" width="7" height="3" fill="#080c11"/></g>
+<!-- row 2: left -->
+<g transform="translate(0 64)"><use href="#left-base"/><rect x="8" y="26" width="7" height="3" fill="#080c11"/></g>
+<g transform="translate(32 64)"><use href="#left-base"/></g>
+<g transform="translate(64 64)"><use href="#left-base"/><rect x="18" y="26" width="7" height="3" fill="#080c11"/></g>
 
-<!-- up -->
-<g transform="translate(0 96)"><use href="#up-base"/><rect x="8" y="26" width="7" height="3" fill="#080c11"/></g>
-<g transform="translate(32 96)"><use href="#up-base"/></g>
-<g transform="translate(64 96)"><use href="#up-base"/><rect x="18" y="26" width="7" height="3" fill="#080c11"/></g>
+<!-- row 3: up-left -->
+<g transform="translate(0 96)"><use href="#up-left-base"/><rect x="8" y="26" width="7" height="3" fill="#080c11"/></g>
+<g transform="translate(32 96)"><use href="#up-left-base"/></g>
+<g transform="translate(64 96)"><use href="#up-left-base"/><rect x="18" y="26" width="7" height="3" fill="#080c11"/></g>
+
+<!-- row 4: up -->
+<g transform="translate(0 128)"><use href="#up-base"/><rect x="8" y="26" width="7" height="3" fill="#080c11"/></g>
+<g transform="translate(32 128)"><use href="#up-base"/></g>
+<g transform="translate(64 128)"><use href="#up-base"/><rect x="18" y="26" width="7" height="3" fill="#080c11"/></g>
+
+<!-- row 5: up-right -->
+<g transform="translate(0 160)"><use href="#up-right-base"/><rect x="8" y="26" width="7" height="3" fill="#080c11"/></g>
+<g transform="translate(32 160)"><use href="#up-right-base"/></g>
+<g transform="translate(64 160)"><use href="#up-right-base"/><rect x="18" y="26" width="7" height="3" fill="#080c11"/></g>
+
+<!-- row 6: right -->
+<g transform="translate(0 192)"><use href="#right-base"/><rect x="8" y="26" width="7" height="3" fill="#080c11"/></g>
+<g transform="translate(32 192)"><use href="#right-base"/></g>
+<g transform="translate(64 192)"><use href="#right-base"/><rect x="18" y="26" width="7" height="3" fill="#080c11"/></g>
+
+<!-- row 7: down-right -->
+<g transform="translate(0 224)"><use href="#down-right-base"/><rect x="8" y="26" width="7" height="3" fill="#080c11"/></g>
+<g transform="translate(32 224)"><use href="#down-right-base"/></g>
+<g transform="translate(64 224)"><use href="#down-right-base"/><rect x="18" y="26" width="7" height="3" fill="#080c11"/></g>
 </svg>

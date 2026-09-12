@@ -1,6 +1,9 @@
 extends CharacterBody2D
 
 @export var move_speed := 118.0
+@export var acceleration := 920.0
+@export var deceleration := 1280.0
+@export var turn_acceleration := 1560.0
 @export var dash_speed := 290.0
 @export var dash_duration := 0.14
 @export var dash_cooldown := 0.60
@@ -21,12 +24,33 @@ var _ability_cooldowns := {"Q": 0.0, "E": 0.0, "R": 0.0, "F": 0.0}
 
 func _ready() -> void:
 	add_to_group("player")
+	_ensure_core_inputs()
 	_ensure_ability_inputs()
 	health = max_health
 	mana = max_mana
 	queue_redraw()
 	EventBus.player_health_changed.emit(health, max_health)
 	EventBus.player_mana_changed.emit(mana, max_mana)
+
+func _ensure_core_inputs() -> void:
+	var bindings := {
+		"move_left": [KEY_A, KEY_LEFT],
+		"move_right": [KEY_D, KEY_RIGHT],
+		"move_up": [KEY_W, KEY_UP],
+		"move_down": [KEY_S, KEY_DOWN],
+		"dash": [KEY_SHIFT],
+		"attack": [KEY_J],
+		"interact": [KEY_C]
+	}
+	for action in bindings.keys():
+		if not InputMap.has_action(action):
+			InputMap.add_action(action)
+		if not InputMap.action_get_events(action).is_empty():
+			continue
+		for keycode in bindings[action]:
+			var event := InputEventKey.new()
+			event.physical_keycode = int(keycode)
+			InputMap.action_add_event(action, event)
 
 func _ensure_ability_inputs() -> void:
 	var bindings := {"ability_q": KEY_Q, "ability_e": KEY_E, "ability_r": KEY_R, "ability_f": KEY_F}
@@ -55,7 +79,10 @@ func _physics_process(delta: float) -> void:
 		_dash_time_left = dash_duration * duration_bonus
 		_dash_cooldown_left = dash_cooldown
 	var current_dash_speed := dash_speed * (1.28 if GameState.prism_step_unlocked else 1.0)
-	velocity = facing * current_dash_speed if _dash_time_left > 0.0 else input_vector * move_speed
+	if _dash_time_left > 0.0:
+		velocity = facing * current_dash_speed
+	else:
+		_apply_ground_movement(input_vector, delta)
 	move_and_slide()
 
 	if Input.is_action_just_pressed("attack") and _attack_cooldown_left <= 0.0:
@@ -72,6 +99,19 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("interact"):
 		_interact_with_nearest()
 	queue_redraw()
+
+func _apply_ground_movement(input_vector: Vector2, delta: float) -> void:
+	if input_vector.length_squared() <= 0.0001:
+		velocity = velocity.move_toward(Vector2.ZERO, deceleration * delta)
+		return
+	var target_velocity: Vector2 = input_vector * move_speed
+	var response: float = acceleration
+	if velocity.length_squared() > 1.0:
+		var current_direction: Vector2 = velocity.normalized()
+		var target_direction: Vector2 = input_vector.normalized()
+		if current_direction.dot(target_direction) < 0.70:
+			response = turn_acceleration
+	velocity = velocity.move_toward(target_velocity, response * delta)
 
 func _regenerate_mana(delta: float) -> void:
 	if mana >= max_mana:
@@ -209,7 +249,7 @@ func _use_brote_vivo() -> void:
 		return
 	_heal(max_health * 0.10)
 	_damage_area(global_position, 52.0, attack_damage)
-	EventBus.toast_requested.emit("Brote Vivo · Renacer Prismático [demo]")
+	EventBus.toast_requested.emit("Brote Vivo · Renacer Prismático")
 
 func _damage_line(amount: float, steps: int, spacing: float, radius: float) -> void:
 	var already_hit: Array = []

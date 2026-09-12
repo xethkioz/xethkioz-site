@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource path="res://src/npc/fermin_seismic_runtime.gd" type="Script" id="1_fermin"]
+
+[sub_resource type="CapsuleShape2D" id="Capsule_fermin"]
+radius = 8.5
+height = 19.0
+
+[node name="Fermin" type="CharacterBody2D"]
+script = ExtResource("1_fermin")
+collision_layer = 0
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 3)
+shape = SubResource("Capsule_fermin")

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="576" height="160" viewBox="0 0 576 160" shape-rendering="crispEdges">
+<rect width="576" height="160" fill="none"/>
+
+<!-- 0 M01 Cuenca: broken root/resonance basin. Center intentionally open. -->
+<g transform="translate(0 0)">
+  <path d="M18 104h20l8-8 20 3 10-8M174 52h-18l-9 8-20-4-9 7" fill="none" stroke="#284b35" stroke-width="4"/>
+  <path d="M31 111l10 10 17-2 8 9M158 45l-11-10-17 2-7-8" fill="none" stroke="#4b3528" stroke-width="3"/>
+  <path d="M51 44c17-19 42-28 68-20M141 118c-17 16-42 23-67 18" fill="none" stroke="#315a40" stroke-width="3" stroke-dasharray="8 5"/>
+  <path d="M59 54c12-11 24-16 38-17M133 107c-12 10-24 15-38 15" fill="none" stroke="#426e4b" stroke-width="2"/>
+  <path d="M43 79h20l9-7M149 80h-18l-9 8" fill="none" stroke="#6048a1" stroke-width="2"/>
+  <rect x="44" y="77" width="4" height="4" fill="#8b5cf6"/><rect x="58" y="76" width="2" height="2" fill="#d8ceff"/>
+  <rect x="145" y="78" width="4" height="4" fill="#3fc7c9"/><rect x="136" y="84" width="2" height="2" fill="#b8f2ef"/>
+  <rect x="25" y="96" width="9" height="3" fill="#6f5339"/><rect x="160" y="59" width="8" height="3" fill="#50704b"/>
+  <rect x="66" y="24" width="5" height="2" fill="#517a4e"/><rect x="124" y="134" width="6" height="2" fill="#76563a"/>
+  <rect x="84" y="30" width="2" height="2" fill="#8b5cf6"/><rect x="110" y="127" width="2" height="2" fill="#3fc7c9"/>
+</g>
+
+<!-- 1 M02 Aldea: irregular Prisma-Atlas plaza inlay, not a solid platform. -->
+<g transform="translate(192 0)">
+  <path d="M22 105h28l8 7h22M170 54h-27l-9-7h-23" fill="none" stroke="#8a704f" stroke-width="6"/>
+  <path d="M28 48h25l8-6h17M164 112h-24l-8 7h-19" fill="none" stroke="#a58a61" stroke-width="5"/>
+  <rect x="38" y="92" width="17" height="6" fill="#7d684d"/><rect x="41" y="91" width="12" height="2" fill="#c4a778"/>
+  <rect x="137" y="64" width="20" height="6" fill="#786249"/><rect x="140" y="63" width="14" height="2" fill="#bda071"/>
+  <rect x="61" y="121" width="13" height="5" fill="#695741"/><rect x="121" y="35" width="14" height="5" fill="#8c7452"/>
+  <path d="M96 31v16M96 113v16M47 80h16M129 80h16" fill="none" stroke="#5a92a0" stroke-width="2"/>
+  <path d="M68 52l12 10M124 98l-12-10M124 52l-12 10M68 108l12-10" fill="none" stroke="#7356b8" stroke-width="2"/>
+  <path d="M87 62h18l9 18-9 18H87L78 80z" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+  <path d="M91 68h10l6 12-6 12H91l-6-12z" fill="none" stroke="#3fc7c9" stroke-width="1"/>
+  <rect x="94" y="57" width="4" height="3" fill="#d8ceff"/><rect x="94" y="100" width="4" height="3" fill="#ffb074"/>
+  <rect x="73" y="78" width="3" height="4" fill="#b99aff"/><rect x="116" y="78" width="3" height="4" fill="#72d9d4"/>
+  <rect x="31" y="73" width="6" height="2" fill="#c7aa79"/><rect x="156" y="87" width="7" height="2" fill="#6f5b44"/>
+</g>
+
+<!-- 2 M04 Santuario: roots and rune channels break the tiled square while keeping puzzle space clear. -->
+<g transform="translate(384 0)">
+  <path d="M10 127c24-5 25-23 47-22 16 1 23 10 38 7M182 31c-24 5-26 22-48 21-16-1-23-10-38-7" fill="none" stroke="#31543b" stroke-width="5"/>
+  <path d="M18 137c20-6 28-17 41-17M173 22c-20 6-28 17-41 17" fill="none" stroke="#5f4933" stroke-width="3"/>
+  <path d="M21 39h22l8 9h17M171 120h-22l-8-9h-17" fill="none" stroke="#4d4466" stroke-width="3"/>
+  <path d="M49 25v17h13v12M143 136v-17h-13v-12" fill="none" stroke="#6e54b2" stroke-width="2"/>
+  <path d="M34 80h27M131 80h27M96 20v25M96 115v25" fill="none" stroke="#5b4a87" stroke-width="2"/>
+  <path d="M67 58l9 9M116 102l9 9M125 58l-9 9M76 102l-9 9" fill="none" stroke="#3f8f92" stroke-width="2"/>
+  <rect x="47" y="77" width="5" height="5" fill="#8b5cf6"/><rect x="140" y="77" width="5" height="5" fill="#a855f7"/>
+  <rect x="93" y="34" width="5" height="5" fill="#3fc7c9"/><rect x="93" y="121" width="5" height="5" fill="#d8ceff"/>
+  <rect x="57" y="117" width="8" height="3" fill="#4d8050"/><rect x="128" y="39" width="8" height="3" fill="#3f7047"/>
+  <rect x="24" y="132" width="10" height="3" fill="#6a5139"/><rect x="159" y="25" width="9" height="3" fill="#5d4632"/>
+</g>
+</svg>

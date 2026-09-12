@@ -3,7 +3,6 @@
 
 <!-- 0 Refugio de Elida: warm shelter + roots + salvaged 2150 tech -->
 <g transform="translate(0)">
-  <ellipse cx="48" cy="75" rx="45" ry="5" fill="#08100e" opacity=".52"/>
   <rect x="8" y="35" width="80" height="38" fill="#553a2b"/><rect x="12" y="39" width="72" height="34" fill="#68472f"/>
   <polygon points="3,37 48,7 93,37" fill="#2e2523"/><polygon points="10,36 48,12 86,36" fill="#473025"/>
   <path d="M12 34l36-20 36 20" fill="none" stroke="#76523a" stroke-width="3"/>
@@ -25,7 +24,6 @@
 
 <!-- 1 Aldea del Alba: improvised future home with copper and prism beacon -->
 <g transform="translate(96)">
-  <ellipse cx="48" cy="75" rx="44" ry="5" fill="#08100e" opacity=".5"/>
   <rect x="10" y="38" width="76" height="35" fill="#645441"/><rect x="14" y="41" width="68" height="32" fill="#78654e"/>
   <polygon points="5,39 48,11 91,39" fill="#30493f"/><polygon points="13,38 48,17 83,38" fill="#456a56"/>
   <path d="M15 35l33-17 33 17" fill="none" stroke="#63856d" stroke-width="3"/>
@@ -44,7 +42,6 @@
 
 <!-- 2 Santuario de las Raíces gate: ancient stone + living roots + prism locks -->
 <g transform="translate(192)">
-  <ellipse cx="48" cy="75" rx="45" ry="5" fill="#07100d" opacity=".54"/>
   <rect x="7" y="27" width="19" height="46" fill="#525a59"/><rect x="70" y="27" width="19" height="46" fill="#525a59"/>
   <rect x="10" y="30" width="13" height="40" fill="#6c7472"/><rect x="73" y="30" width="13" height="40" fill="#6c7472"/>
   <rect x="4" y="21" width="25" height="9" fill="#747c79"/><rect x="67" y="21" width="25" height="9" fill="#747c79"/>
@@ -62,7 +59,6 @@
 
 <!-- 3 Ruinas Vivas tower: broken future structure reclaimed by prism/nature -->
 <g transform="translate(288)">
-  <ellipse cx="48" cy="75" rx="43" ry="5" fill="#07100e" opacity=".52"/>
   <rect x="22" y="19" width="52" height="53" fill="#515959"/><rect x="26" y="23" width="44" height="47" fill="#626b6a"/>
   <rect x="17" y="13" width="62" height="10" fill="#747d7a"/><rect x="20" y="16" width="56" height="3" fill="#8a9290"/>
   <rect x="34" y="31" width="11" height="29" fill="#20292b"/><rect x="53" y="31" width="11" height="29" fill="#20292b"/>

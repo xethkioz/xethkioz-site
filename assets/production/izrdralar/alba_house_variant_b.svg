@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="80" viewBox="0 0 96 80" shape-rendering="crispEdges">
+<rect width="96" height="80" fill="none"/>
+<!-- Aldea del Alba house family B: asymmetrical workshop-home, entirely original. -->
+<!-- Ground shadow / stone footing -->
+<rect x="7" y="70" width="82" height="5" fill="#302921"/>
+<rect x="13" y="67" width="68" height="5" fill="#4d4435"/>
+<!-- Main wall mass -->
+<rect x="12" y="38" width="67" height="32" fill="#4e5e4f"/>
+<rect x="16" y="41" width="59" height="29" fill="#60725c"/>
+<!-- Right workshop annex -->
+<rect x="69" y="47" width="19" height="23" fill="#5a4938"/>
+<rect x="72" y="50" width="13" height="20" fill="#725943"/>
+<!-- Split roof, deliberately different from family A -->
+<polygon points="7,40 34,18 64,40" fill="#3b342e"/>
+<polygon points="13,39 34,23 58,39" fill="#51433a"/>
+<polygon points="54,42 78,30 92,45 69,48" fill="#2f4b43"/>
+<path d="M11 39l23-17 25 17" fill="none" stroke="#715545" stroke-width="3"/>
+<path d="M58 42l20-9 11 11" fill="none" stroke="#547266" stroke-width="2"/>
+<!-- Chimney / salvage vent -->
+<rect x="21" y="18" width="7" height="13" fill="#3c3531"/>
+<rect x="20" y="16" width="9" height="4" fill="#66564a"/>
+<rect x="23" y="11" width="3" height="5" fill="#3fc7c9"/>
+<!-- Large horizontal window -->
+<rect x="20" y="45" width="25" height="13" fill="#17343d"/>
+<rect x="23" y="48" width="19" height="7" fill="#2b6872"/>
+<path d="M32 48v7M23 51h19" stroke="#b8eef0" stroke-width="1"/>
+<!-- Door offset left of annex -->
+<rect x="50" y="48" width="14" height="22" fill="#362a25"/>
+<rect x="53" y="51" width="9" height="19" fill="#8c6548"/>
+<rect x="60" y="60" width="2" height="2" fill="#ffcc70"/>
+<!-- Workshop glow / bench -->
+<rect x="75" y="54" width="7" height="8" fill="#193944"/>
+<rect x="76" y="55" width="5" height="5" fill="#5ad2dc"/>
+<rect x="72" y="64" width="14" height="3" fill="#a26b45"/>
+<!-- Side-mounted prism marker instead of central roof beacon -->
+<rect x="84" y="29" width="2" height="17" fill="#9c6c48"/>
+<polygon points="85,20 91,28 88,37 82,37 79,28" fill="#6849ba"/>
+<polygon points="85,22 88,28 85,34 82,28" fill="#e0d7ff"/>
+<!-- Vegetation / lived-in detail -->
+<rect x="9" y="61" width="12" height="9" fill="#356641"/>
+<rect x="14" y="58" width="4" height="5" fill="#70aa62"/>
+<rect x="84" y="63" width="7" height="7" fill="#315f3d"/>
+<rect x="86" y="59" width="3" height="5" fill="#d44c55"/>
+<!-- Copper repair strips -->
+<rect x="36" y="34" width="9" height="2" fill="#b46c42"/>
+<rect x="65" y="44" width="7" height="2" fill="#9d633e"/>
+</svg>

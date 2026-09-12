@@ -2,6 +2,7 @@ extends Node
 
 const MAX_LEVEL := 60
 const LEGENDARY_SPECIES := ["xethkioz", "itzuke", "mozaruk", "killaruna", "heller", "kahezer", "okuninust", "dvalin"]
+const PRISM_STEP_FLAG := "prism_step_unlocked"
 
 var player_level: int = 1
 var player_xp: int = 0
@@ -17,6 +18,8 @@ var discovered_pois: Array[String] = []
 var captured_familiars: Dictionary = {}
 var active_familiar_id: String = ""
 var quest_snapshot: Dictionary = {}
+var current_map_id: String = "M01"
+var current_entry_id: String = "start"
 var last_world_position := Vector2.ZERO
 var world_flags: Dictionary = {}
 
@@ -98,6 +101,13 @@ func set_quest_snapshot(snapshot: Dictionary) -> void:
 func get_quest_snapshot() -> Dictionary:
 	return quest_snapshot.duplicate(true)
 
+func set_world_checkpoint(map_id: String, entry_id: String, position_value: Vector2 = Vector2.ZERO) -> void:
+	if not map_id.is_empty():
+		current_map_id = map_id
+	if not entry_id.is_empty():
+		current_entry_id = entry_id
+	last_world_position = position_value
+
 func set_last_world_position(position_value: Vector2) -> void:
 	last_world_position = position_value
 
@@ -108,8 +118,12 @@ func set_world_flag(flag_id: String, value: bool = true) -> void:
 		world_flags[flag_id] = true
 	else:
 		world_flags.erase(flag_id)
+	if flag_id == PRISM_STEP_FLAG:
+		prism_step_unlocked = value
 
 func has_world_flag(flag_id: String) -> bool:
+	if flag_id == PRISM_STEP_FLAG:
+		return prism_step_unlocked or bool(world_flags.get(flag_id, false))
 	return bool(world_flags.get(flag_id, false))
 
 func is_legendary_species(species_id: String) -> bool:
@@ -176,11 +190,11 @@ func choose_mentor(mentor_id: String) -> bool:
 	return true
 
 func unlock_prism_step() -> bool:
-	if prism_step_unlocked:
-		return false
-	prism_step_unlocked = true
-	EventBus.traversal_unlocked.emit("paso_prismatico")
-	return true
+	var newly_unlocked := not has_world_flag(PRISM_STEP_FLAG)
+	set_world_flag(PRISM_STEP_FLAG, true)
+	if newly_unlocked:
+		EventBus.traversal_unlocked.emit("paso_prismatico")
+	return newly_unlocked
 
 func familiar_data(species_id: String) -> Dictionary:
 	if not captured_familiars.has(species_id):
@@ -205,6 +219,8 @@ func reset_new_game() -> void:
 	captured_familiars.clear()
 	active_familiar_id = ""
 	quest_snapshot.clear()
+	current_map_id = "M01"
+	current_entry_id = "start"
 	last_world_position = Vector2.ZERO
 	world_flags.clear()
 	EventBus.player_progress_changed.emit(player_level, player_xp, xp_to_next())
@@ -213,9 +229,18 @@ func reset_new_game() -> void:
 	EventBus.set_progress_changed.emit("brote_vivo", 0)
 	EventBus.active_familiar_changed.emit(active_familiar_id)
 
+func _sync_prism_step_state() -> void:
+	if prism_step_unlocked or bool(world_flags.get(PRISM_STEP_FLAG, false)):
+		prism_step_unlocked = true
+		world_flags[PRISM_STEP_FLAG] = true
+	else:
+		prism_step_unlocked = false
+		world_flags.erase(PRISM_STEP_FLAG)
+
 func to_dict() -> Dictionary:
+	_sync_prism_step_state()
 	return {
-		"save_version": 9,
+		"save_version": 10,
 		"player_level": player_level,
 		"player_xp": player_xp,
 		"crystals": crystals,
@@ -230,6 +255,8 @@ func to_dict() -> Dictionary:
 		"captured_familiars": captured_familiars.duplicate(true),
 		"active_familiar_id": active_familiar_id,
 		"quest_snapshot": quest_snapshot.duplicate(true),
+		"map_id": current_map_id,
+		"entry_id": current_entry_id,
 		"last_world_position": [last_world_position.x, last_world_position.y],
 		"world_flags": world_flags.duplicate(true)
 	}
@@ -255,11 +282,14 @@ func apply_dict(data: Dictionary) -> void:
 	if not active_familiar_id.is_empty() and not captured_familiars.has(active_familiar_id):
 		active_familiar_id = ""
 	quest_snapshot = data.get("quest_snapshot", {}).duplicate(true)
+	current_map_id = str(data.get("map_id", data.get("current_map_id", "M01")))
+	current_entry_id = str(data.get("entry_id", data.get("current_entry_id", "start")))
 	last_world_position = Vector2.ZERO
 	var raw_position = data.get("last_world_position", [])
 	if raw_position is Array and raw_position.size() >= 2:
 		last_world_position = Vector2(float(raw_position[0]), float(raw_position[1]))
 	world_flags = data.get("world_flags", {}).duplicate(true)
+	_sync_prism_step_state()
 	EventBus.player_progress_changed.emit(player_level, player_xp, 0 if player_level >= MAX_LEVEL else xp_to_next())
 	EventBus.currency_changed.emit(crystals)
 	EventBus.pet_bond_changed.emit(xethkioz_bond)

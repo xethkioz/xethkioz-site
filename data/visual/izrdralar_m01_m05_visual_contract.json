@@ -1,0 +1,149 @@
+{
+  "contract_id": "izrdralar_m01_m05_visual_contract",
+  "version": "1.1.0",
+  "authority": {
+    "canon": "WORLD_OF_XETHKIOZ_BIBLIA_FINAL_CONSOLIDADA_SAGA_I_v1.0_2026-09-10.md",
+    "atlas": "WORLD_OF_XETHKIOZ_CONEXIONES_Y_NATURALEZA_v1.0_2026-09-10.md",
+    "navigation": "res://data/regions/izrdralar_m01_m05_navigation.json",
+    "runtime_scene": "res://scenes/izrdralar/IzrdralarM01M05Runtime.tscn",
+    "status": "authored_runtime_active_under_visual_qa"
+  },
+  "render": {
+    "logical_viewport": [640, 360],
+    "preview_scale": 2,
+    "tile_size_px": 16,
+    "chunk_size_px": 512,
+    "texture_filter": "nearest",
+    "pixel_snap": true,
+    "camera_rule": "player_and_companion_must_remain_readable_at_logical_resolution"
+  },
+  "palette": {
+    "forest": "#1C322D",
+    "wetland": "#29493D",
+    "water": "#244958",
+    "prism_violet": "#8B5CF6",
+    "refuge_amber": "#FF8C42",
+    "ui_primary": "#F0F0F5",
+    "ui_shadow": "#0A0A0F"
+  },
+  "style": {
+    "format": "pixel_art_2d_hd",
+    "silhouette": "readable_without_outline_noise",
+    "lighting": "layered_depth_with_soft_pixel_shadows",
+    "materials": ["argentine_reinterpreted_nature", "prismatic_anomalies", "future_ruins", "warm_safe_spaces"],
+    "prohibited": [
+      "untracked_third_party_assets",
+      "mockup_presented_as_runtime",
+      "pokemon_or_other_ip_copy",
+      "generic_flat_green_placeholder_terrain"
+    ]
+  },
+  "maps": [
+    {
+      "id": "M01",
+      "name": "Cuenca del Despertar",
+      "prototype_aliases": ["Despertar del Claro"],
+      "biome": "forest_river",
+      "runtime_poi": "awakening",
+      "safe_zone": false,
+      "visual_focus": ["opening basin", "shallow water", "broken bridge", "first readable path"],
+      "required_asset_groups": ["golden_ground", "water_edge", "traveler", "xethkioz", "first_creatures", "bridge_broken"],
+      "connections": [{"to": "M02", "kind": "main", "requires_all": ["opening_flow_complete"]}]
+    },
+    {
+      "id": "M02",
+      "name": "Aldea del Alba",
+      "prototype_aliases": ["Sendero de Raíces"],
+      "biome": "forest_settlement",
+      "runtime_poi": "initial_village",
+      "safe_zone": true,
+      "visual_focus": ["small settlement", "warm lamps", "readable NPC silhouettes", "Iván access"],
+      "required_asset_groups": ["settlement_ground", "wood_structures", "warm_lamps", "npc_support", "signage"],
+      "connections": [
+        {"to": "M01", "kind": "return", "requires_all": []},
+        {"to": "M03", "kind": "choice", "requires_all": ["prisma_atlas_unlocked"]},
+        {"to": "M04", "kind": "choice", "requires_all": ["prisma_atlas_unlocked"]}
+      ]
+    },
+    {
+      "id": "M03",
+      "name": "Lago Encantado",
+      "prototype_aliases": ["Círculo de Runas"],
+      "biome": "lake",
+      "runtime_poi": "enchanted_lake",
+      "safe_zone": false,
+      "visual_focus": ["water readability", "resonant stone", "shoreline routes", "creature habitat"],
+      "required_asset_groups": ["lake_water", "shoreline", "resonant_stone", "creature_habitat", "lore_interactable"],
+      "connections": [
+        {"to": "M02", "kind": "return", "requires_all": []},
+        {"to": "M05", "kind": "boss_gate", "requires_all": ["lake_resolved", "ruins_sanctuary_resolved"]}
+      ]
+    },
+    {
+      "id": "M04",
+      "name": "Ruinas Vivas / Santuario de las Raíces",
+      "prototype_aliases": ["Garganta Verde"],
+      "subareas": ["M04-A Ruinas Vivas", "M04-B Santuario de las Raíces"],
+      "biome": "living_ruins",
+      "runtime_poi": "living_ruins",
+      "safe_zone": false,
+      "visual_focus": ["organic ruins", "root corridors", "sanctuary arena", "lore-first exploration"],
+      "required_asset_groups": ["living_ruins", "roots", "sanctuary", "rune_light", "guardian_telegraphs"],
+      "connections": [
+        {"to": "M02", "kind": "return", "requires_all": []},
+        {"to": "M05", "kind": "boss_gate", "requires_all": ["lake_resolved", "ruins_sanctuary_resolved"]}
+      ]
+    },
+    {
+      "id": "M05",
+      "name": "Corazón del Bosque Velado",
+      "prototype_aliases": ["Brote Vivo"],
+      "biome": "veiled_forest_boss",
+      "runtime_poi": "veiled_forest_heart",
+      "safe_zone": false,
+      "visual_focus": ["boss arena", "living forest pressure", "clear telegraphs", "stabilization aftermath"],
+      "required_asset_groups": ["veiled_forest", "boss5", "boss_telegraphs", "stabilization_vfx", "return_gate"],
+      "connections": [
+        {"to": "M03", "kind": "return", "requires_all": ["boss5_stabilized"]},
+        {"to": "M04", "kind": "return", "requires_all": ["boss5_stabilized"]},
+        {"to": "M06", "kind": "scope_exit", "requires_all": ["boss5_stabilized", "prism_step_unlocked"], "enabled_in_production_pass_01": false}
+      ]
+    }
+  ],
+  "characters": {
+    "player": {
+      "id": "traveler",
+      "required_directions": 8,
+      "required_states": ["idle", "walk", "attack", "hurt", "interact"],
+      "pivot_rule": "feet_contact_point",
+      "collision_rule": "body_collision_must_not_follow_visual_glow"
+    },
+    "companion": {
+      "id": "xethkioz",
+      "legendary": true,
+      "capture": false,
+      "required_states": ["idle", "follow", "resonance_read", "hurt", "bond_feedback"],
+      "silhouette_rule": "vulpine_prismatic_and_recognizable_at_640x360"
+    }
+  },
+  "safe_zones": [
+    {"id": "elida_refuge", "map_id": "M07", "service": ["rest", "healing", "lore", "alchemy"], "runtime_rule": "persistent_hub_not_a_duplicate_per_expansion"},
+    {"id": "initial_village", "map_id": "M02", "service": ["orientation", "iván_access", "early_dialogue"], "runtime_rule": "warm_readable_settlement"},
+    {"id": "mirador", "map_id": "M31", "service": ["late_campaign_return"], "runtime_rule": "not_in_m01_m05_scope"}
+  ],
+  "qa": {
+    "visual_capture_size": [640, 360],
+    "required_runtime_checks": [
+      "all eight movement directions",
+      "attack feedback and hit reaction",
+      "player and Xethkioz collision",
+      "M02 choice to M03 and M04",
+      "both M03/M04 orders and return path",
+      "M05 stays blocked until lake_resolved and ruins_sanctuary_resolved",
+      "M05 boss telegraphs and stabilization",
+      "save and reopen preserves map_id entry_id position flags",
+      "no placeholder asset in the approved capture"
+    ],
+    "completion_rule": "do_not_mark_complete_until_runtime_capture_and_save_reopen_pass"
+  }
+}

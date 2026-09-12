@@ -1,0 +1,62 @@
+name: Izrdralar P07 Fermin Runtime Gate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'src/npc/fermin_*.gd'
+      - 'scenes/characters/P07FerminRuntime.tscn'
+      - 'tools/fermin_seismic_dummy.gd'
+      - 'tools/izrdralar_p07_fermin_runtime_smoke.gd'
+      - 'tools/scenes/IzrdralarP07FerminRuntimeSmoke.tscn'
+      - 'docs/character_core/P07_FERMIN_RUNTIME_CONTRACT.md'
+      - '.github/workflows/izrdralar-p07-fermin-runtime-gate.yml'
+
+concurrency:
+  group: izrdralar-p07-fermin-${{ github.event.pull_request.number || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  p07-fermin:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Godot 4.7.2
+        shell: bash
+        run: |
+          set -euxo pipefail
+          wget -q https://godot-releases.nbg1.your-objectstorage.com/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -O /tmp/godot.zip
+          unzip -q /tmp/godot.zip -d /tmp/godot
+          chmod +x /tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          /tmp/godot/Godot_v4.7.2-stable_linux.x86_64 --version
+
+      - name: Import project and reject parser regressions
+        shell: bash
+        run: |
+          set -o pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --editor --quit 2>&1 | tee /tmp/p07-import.log
+          if grep -E "SCRIPT ERROR|Parse Error" /tmp/p07-import.log; then
+            exit 1
+          fi
+
+      - name: Validate P07 Fermin seismic runtime contract
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . res://tools/scenes/IzrdralarP07FerminRuntimeSmoke.tscn 2>&1 | tee /tmp/p07-smoke.log
+          grep -q "IZRDRALAR_P07_FERMIN_RUNTIME_PASS" /tmp/p07-smoke.log
+
+      - name: Upload P07 logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: izrdralar-p07-fermin-runtime-gate-logs
+          path: |
+            /tmp/p07-import.log
+            /tmp/p07-smoke.log
+          if-no-files-found: warn

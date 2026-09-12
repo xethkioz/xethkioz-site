@@ -1,0 +1,369 @@
+{
+  "schema_version": 2,
+  "layout_id": "izrdralar_m01_m05_layouts",
+  "chunk_size_px": 512,
+  "tile_size_px": 16,
+  "runtime_scene": "res://scenes/izrdralar/IzrdralarM01M05Runtime.tscn",
+  "story_authority": "World_of_Xethkioz_Historia_Final_Canon_v3_6 + Biblia Final Consolidada Saga I v1.0",
+  "maps": {
+    "M01": {
+      "name": "Cuenca del Despertar",
+      "world_seed": 21500809,
+      "world_size": [1024, 1024],
+      "chunks": {
+        "0,0": {"biome":"river","exits":{"e":true,"s":true}},
+        "1,0": {"biome":"forest","exits":{"w":true,"s":true}},
+        "0,1": {"biome":"forest","exits":{"n":true,"e":true}},
+        "1,1": {"biome":"forest","exits":{"n":true,"w":true,"e":true}}
+      },
+      "landmarks": [
+        {"id":"awakening_ruin","frame":3,"position":[760,430],"scale":1.1,"collision_size":[48,46],"collision_offset":[0,12]}
+      ],
+      "entries": {
+        "start": [192, 792],
+        "from_m02": [884, 520]
+      },
+      "transitions": [
+        {"to":"M02","position":[980,520],"size":[48,150]}
+      ],
+      "objectives": [
+        {
+          "id":"m01_opening_resonance",
+          "name":"Eco del Despertar",
+          "position":[690,520],
+          "world_flag":"opening_flow_complete",
+          "requires_flag":"m01_survived_opening",
+          "blocked_message":"La Resonancia sigue inestable. Primero sobreviví al Brote Goblin y al Slime Prismático.",
+          "completed_message":"La Cuenca responde. Xethkioz mantiene la mirada hacia la Aldea del Alba.",
+          "accent":"#8B5CF6"
+        }
+      ],
+      "npcs": [
+        {
+          "id":"gustavo_unknown",
+          "name":"?????",
+          "position":[300,610],
+          "atlas":5,
+          "lines":[
+            "Un puente entero también puede estar roto. Todavía no es tu momento de cruzarlo.",
+            "No mires sólo lo que pasó. Hay cosas que hacen eco antes de ocurrir."
+          ]
+        },
+        {
+          "id":"alexis",
+          "name":"Alexis",
+          "position":[835,575],
+          "atlas":0,
+          "lines":[
+            "No vine a rescatarte. Vine siguiendo las huellas de Xethkioz... y eligió quedarse con vos.",
+            "Eso no lo hace con cualquiera. Si podés caminar, seguime hasta la Aldea del Alba."
+          ]
+        }
+      ],
+      "lore": [
+        {
+          "id":"medidor_sin_bateria",
+          "title":"Objeto extraño",
+          "speaker":"Medidor sin batería",
+          "body":"No tiene carga, pero al acercarlo a Xethkioz emite un pulso violeta durante un segundo. El dispositivo queda guardado para que Iván lo examine.",
+          "position":[720,470],
+          "accent":"#8B5CF6",
+          "total_hint":8
+        },
+        {
+          "id":"nota_doble_trueno",
+          "title":"Nota sin firma",
+          "speaker":"?????",
+          "body":"Si escuchás dos veces el mismo trueno, agachate con el segundo.",
+          "position":[345,835],
+          "accent":"#FF8C42",
+          "total_hint":8
+        }
+      ],
+      "enemies": [
+        {"id":"brote_goblin","position":[430,690],"hp":42,"speed":52,"damage":8,"xp":24,"atlas":0},
+        {"id":"explorador_goblin","position":[620,360],"hp":38,"speed":68,"damage":7,"xp":28,"atlas":1},
+        {"id":"slime_prismatico","position":[760,720],"hp":58,"speed":38,"damage":9,"xp":30,"atlas":2}
+      ]
+    },
+    "M02": {
+      "name": "Aldea del Alba",
+      "world_seed": 21500829,
+      "world_size": [1024, 1024],
+      "chunks": {
+        "0,0": {"biome":"forest","exits":{"e":true,"s":true}},
+        "1,0": {"biome":"refuge","exits":{"w":true,"s":true}},
+        "0,1": {"biome":"refuge","exits":{"n":true,"e":true,"w":true}},
+        "1,1": {"biome":"forest","exits":{"n":true,"w":true,"e":true}}
+      },
+      "landmarks": [
+        {"id":"alba_house_west","frame":1,"position":[330,430],"scale":1.2,"collision_size":[88,50],"collision_offset":[0,14]},
+        {"id":"alba_house_east","frame":1,"position":[705,620],"scale":1.15,"collision_size":[84,48],"collision_offset":[0,14]}
+      ],
+      "entries": {
+        "from_m01": [112,560],
+        "from_m03": [520,112],
+        "from_m04": [900,560]
+      },
+      "transitions": [
+        {"to":"M01","position":[44,560],"size":[48,150]},
+        {"to":"M03","position":[520,44],"size":[150,48]},
+        {"to":"M04","position":[980,560],"size":[48,150]}
+      ],
+      "objectives": [
+        {
+          "id":"m02_prisma_atlas",
+          "name":"Prisma-Atlas de Iván",
+          "position":[530,500],
+          "world_flag":"prisma_atlas_unlocked",
+          "requires_flag":"opening_flow_complete",
+          "completed_message":"Prisma-Atlas I-01 sincronizado. Lago Encantado y Ruinas Vivas aparecen como rutas posibles.",
+          "accent":"#6ED4E8"
+        }
+      ],
+      "npcs": [
+        {
+          "id":"ivan",
+          "name":"Iván",
+          "position":[500,450],
+          "atlas":6,
+          "lines":[
+            "Ese medidor no debería encenderse sin batería. Con Xethkioz y tu firma ocurre igual: ninguna lectura termina de fijarse.",
+            "El Prisma-Atlas no va a elegir por vos. Lago y Ruinas responden distinto, y necesitás entender los dos antes del Corazón."
+          ]
+        }
+      ]
+    },
+    "M03": {
+      "name": "Lago Encantado",
+      "world_seed": 21500849,
+      "world_size": [1024,1024],
+      "chunks": {
+        "0,0": {"biome":"forest","exits":{"e":true,"s":true}},
+        "1,0": {"biome":"lake","exits":{"w":true,"s":true}},
+        "0,1": {"biome":"lake","exits":{"n":true,"e":true,"s":true}},
+        "1,1": {"biome":"forest","exits":{"n":true,"w":true}}
+      },
+      "entries": {
+        "from_m02": [520,900],
+        "from_m05": [900,520]
+      },
+      "transitions": [
+        {"to":"M02","position":[520,980],"size":[150,48]},
+        {"to":"M05","position":[980,520],"size":[48,150]}
+      ],
+      "objectives": [
+        {
+          "id":"m03_lake_resonance",
+          "name":"Piedra Resonante del Lago",
+          "position":[650,485],
+          "world_flag":"lake_resolved",
+          "requires_flag":"m03_lake_ready",
+          "blocked_message":"El segundo latido todavía no se estabiliza. Primero resolvé el hábitat y el vínculo con el Carpinchito.",
+          "completed_message":"La frecuencia del Lago queda fijada en el Prisma-Atlas: un segundo latido acompaña a Izrdralar.",
+          "accent":"#3FC7C9"
+        }
+      ],
+      "npcs": [
+        {
+          "id":"val",
+          "name":"Val",
+          "position":[650,690],
+          "atlas":7,
+          "lines":[
+            "No toda Resonancia significa vínculo. Algunas son residuos, imitaciones o ecos de algo que ya no está acá.",
+            "El Carpinchito está asustado. No lo persigas: primero devolvé equilibrio al agua y dejá que decida acercarse."
+          ]
+        },
+        {
+          "id":"rola",
+          "name":"Rola",
+          "position":[600,750],
+          "atlas":8,
+          "lines":[
+            "Hay huellas frescas cerca de los juncos. Las corta cada vez que uno de esos focos cambia el agua.",
+            "Si vas a acercarte, llevá una Manzana de Bruma. Pero esperá a que vuelva a su zona segura."
+          ]
+        },
+        {
+          "id":"mela",
+          "name":"Mela",
+          "position":[735,755],
+          "atlas":9,
+          "lines":[
+            "La piedra hace dos pulsos. Uno fuerte y otro bajito... como si respondiera algo desde muy lejos.",
+            "La abuela que no es mi abuela todavía guarda frascos azules, ¿no? Val dice que Elida entiende estas cosas distinto."
+          ]
+        },
+        {
+          "id":"gustavo_lake_unknown",
+          "name":"?????",
+          "position":[900,455],
+          "atlas":5,
+          "lines":[
+            "Algún día va a faltar una mano que cura. Ese día mirá quién aprendió a caminar a tu lado.",
+            "No todos los ecos quieren volver. Algunos sólo quieren que los escuches una vez."
+          ]
+        }
+      ],
+      "resources": [
+        {"id":"manzana_bruma","position":[610,835],"amount":1,"profession":"botanica","xp":3,"atlas":0},
+        {"id":"manzana_bruma","position":[850,820],"amount":1,"profession":"botanica","xp":3,"atlas":0}
+      ],
+      "resonance_toggles": [
+        {"puzzle_id":"carpinchito_habitat","id":"foco_norte","name":"Foco norte","mode":"focus","position":[650,600],"solution_alternate":true,"completion_flag":"carpinchito_habitat_ready","completion_message":"El agua recupera su pulso. El Carpinchito vuelve a una zona segura.","accent":"#3FC7C9"},
+        {"puzzle_id":"carpinchito_habitat","id":"foco_centro","name":"Foco central","mode":"focus","position":[770,620],"solution_alternate":false,"completion_flag":"carpinchito_habitat_ready","completion_message":"El agua recupera su pulso. El Carpinchito vuelve a una zona segura.","accent":"#8B5CF6"},
+        {"puzzle_id":"carpinchito_habitat","id":"foco_sur","name":"Foco sur","mode":"focus","position":[875,600],"solution_alternate":true,"completion_flag":"carpinchito_habitat_ready","completion_message":"El agua recupera su pulso. El Carpinchito vuelve a una zona segura.","accent":"#3FC7C9"}
+      ],
+      "capture_targets": [
+        {
+          "id":"carpinchito_cristal",
+          "name":"Carpinchito de Cristal",
+          "position":[805,690],
+          "affinity":"impacto",
+          "mentor":"fermin",
+          "bait":"manzana_bruma",
+          "requires_flag":"carpinchito_habitat_ready",
+          "blocked_message":"El agua todavía vibra demasiado. Se aleja hacia los juncos antes de que puedas acercarte.",
+          "accent":"#8FC6A9"
+        }
+      ],
+      "lore": [
+        {
+          "id":"piedra_resonante",
+          "title":"Segundo latido",
+          "speaker":"Prisma-Atlas",
+          "body":"La Piedra Resonante vibra con dos frecuencias. Una pertenece a Izrdralar; la otra no coincide con ninguna firma estable del mapa.",
+          "position":[600,500],
+          "accent":"#3FC7C9",
+          "total_hint":8
+        }
+      ],
+      "enemies": [
+        {"id":"slime_prismatico","position":[320,610],"hp":62,"speed":40,"damage":10,"xp":32,"atlas":2},
+        {"id":"espiritu_bruma","position":[730,250],"hp":46,"speed":58,"damage":9,"xp":32,"atlas":4},
+        {"id":"escarabajo_corteza","position":[420,390],"hp":74,"speed":42,"damage":11,"xp":34,"atlas":3}
+      ]
+    },
+    "M04": {
+      "name": "Ruinas Vivas / Santuario de las Raíces",
+      "world_seed": 21500869,
+      "world_size": [1024,1024],
+      "chunks": {
+        "0,0": {"biome":"ruins","exits":{"e":true,"s":true}},
+        "1,0": {"biome":"ruins","exits":{"w":true,"s":true}},
+        "0,1": {"biome":"forest","exits":{"n":true,"e":true}},
+        "1,1": {"biome":"sanctuary","exits":{"n":true,"w":true,"e":true}}
+      },
+      "landmarks": [
+        {"id":"living_ruin_tower","frame":3,"position":[350,250],"scale":1.25,"collision_size":[52,54],"collision_offset":[0,12]},
+        {"id":"roots_sanctuary_gate","frame":2,"position":[760,640],"scale":1.35,"collision_size":[100,52],"collision_offset":[0,16]}
+      ],
+      "entries": {
+        "from_m02": [112,560],
+        "from_m05": [900,780]
+      },
+      "transitions": [
+        {"to":"M02","position":[44,560],"size":[48,150]},
+        {"to":"M05","position":[980,780],"size":[48,150]}
+      ],
+      "objectives": [
+        {
+          "id":"m04_sanctuary_resonance",
+          "name":"Núcleo del Santuario",
+          "position":[875,845],
+          "world_flag":"ruins_sanctuary_resolved",
+          "requires_flag":"m04_sanctuary_ready",
+          "blocked_message":"Las raíces todavía cortan la Resonancia. Orientá los cristales y derrotá al Custodio de Raíz.",
+          "completed_message":"Ruinas y Santuario quedan enlazados. El segundo sello del Corazón cede.",
+          "accent":"#A855F7"
+        }
+      ],
+      "npcs": [
+        {
+          "id":"gustavo_ruins_unknown",
+          "name":"?????",
+          "position":[555,500],
+          "atlas":5,
+          "lines":[
+            "Esa pared no está vacía. Sólo está esperando el momento correcto para tener una sombra.",
+            "Cuando alguien te diga que algo está lejos, preguntale primero en qué tiempo lo está midiendo."
+          ]
+        }
+      ],
+      "lore": [
+        {
+          "id":"nota_elida_raices",
+          "title":"Nota doblada de Elida",
+          "speaker":"Elida",
+          "body":"Las raíces no crecieron hacia la luz. Crecieron hacia un recuerdo. Si vuelven a hacerlo, no sigan el camino más corto.",
+          "position":[220,590],
+          "accent":"#FF8C42",
+          "total_hint":8
+        },
+        {
+          "id":"hoja_17b_a0",
+          "title":"Hoja de cálculo 17-B",
+          "speaker":"Registro de Iván",
+          "body":"El modelo sólo cierra si una firma permanece fuera de fase. En el margen hay una etiqueta antigua: A-0. No hay explicación adjunta.",
+          "position":[420,255],
+          "accent":"#6ED4E8",
+          "total_hint":8
+        },
+        {
+          "id":"sombra_anticipacion_santuario",
+          "title":"Sombra imposible",
+          "speaker":"Prisma-Atlas",
+          "body":"Durante un instante aparece una silueta humana donde no hay nadie. La huella temporal se registra antes de que el Atlas pueda identificarla.",
+          "position":[820,690],
+          "accent":"#8B5CF6",
+          "total_hint":8
+        }
+      ],
+      "resonance_toggles": [
+        {"puzzle_id":"roots_sanctuary","id":"cristal_oeste","name":"Cristal oeste","mode":"crystal","position":[650,730],"solution_alternate":true,"completion_flag":"sanctuary_puzzle_ready","completion_message":"Los canales vuelven a conducir luz. Las raíces aflojan el acceso al Núcleo.","accent":"#A855F7"},
+        {"puzzle_id":"roots_sanctuary","id":"cristal_centro","name":"Cristal central","mode":"crystal","position":[760,730],"solution_alternate":true,"completion_flag":"sanctuary_puzzle_ready","completion_message":"Los canales vuelven a conducir luz. Las raíces aflojan el acceso al Núcleo.","accent":"#6ED4E8"},
+        {"puzzle_id":"roots_sanctuary","id":"cristal_este","name":"Cristal este","mode":"crystal","position":[870,730],"solution_alternate":false,"completion_flag":"sanctuary_puzzle_ready","completion_message":"Los canales vuelven a conducir luz. Las raíces aflojan el acceso al Núcleo.","accent":"#A855F7"}
+      ],
+      "enemies": [
+        {"id":"explorador_goblin","position":[310,330],"hp":42,"speed":70,"damage":8,"xp":30,"atlas":1},
+        {"id":"escarabajo_corteza","position":[660,300],"hp":80,"speed":44,"damage":12,"xp":38,"atlas":3},
+        {"id":"espiritu_bruma","position":[470,720],"hp":52,"speed":62,"damage":11,"xp":38,"atlas":4},
+        {"id":"custodio_raices_menor","position":[760,835],"hp":125,"speed":46,"damage":14,"xp":70,"atlas":3}
+      ]
+    },
+    "M05": {
+      "name": "Corazón del Bosque Velado",
+      "world_seed": 21500889,
+      "world_size": [512,512],
+      "chunks": {
+        "0,0": {"biome":"boss","exits":{"w":true,"e":true}}
+      },
+      "entries": {
+        "from_m03": [100,256],
+        "from_m04": [412,256]
+      },
+      "transitions": [
+        {"to":"M03","position":[36,256],"size":[40,120]},
+        {"to":"M04","position":[476,256],"size":[40,120]}
+      ],
+      "boss": {
+        "id":"boss5_guardian_bosque_velado",
+        "position":[256,220]
+      },
+      "objectives": [
+        {
+          "id":"m05_stabilization",
+          "name":"Corazón Estabilizado",
+          "position":[256,300],
+          "world_flag":"boss5_stabilized",
+          "requires_flag":"boss5_defeated",
+          "unlock_prism_step":true,
+          "completed_message":"ESTABILIZAR · Paso Prismático desbloqueado. El Corazón vuelve a latir con Izrdralar.",
+          "blocked_message":"Primero tenés que purificar al Guardián del Bosque Velado.",
+          "accent":"#FF8C42"
+        }
+      ]
+    }
+  }
+}

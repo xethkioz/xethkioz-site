@@ -2,10 +2,16 @@ extends "res://src/player/player_controller.gd"
 
 const SHEET := preload("res://assets/production/characters/viajero_sheet.svg")
 const ProfileOverlayScript := preload("res://src/player/player_profile_overlay.gd")
-const FeedbackFxScript := preload("res://src/fx/world_feedback_fx.gd")
+const IzrdralarFxFactory := preload("res://src/fx/izrdralar_fx_factory.gd")
 const FRAME_SIZE := Vector2(32, 32)
 const ATTACK_POSE_DURATION := 0.18
 const CAST_POSE_DURATION := 0.24
+const BASE_MAX_HEALTH := 100.0
+const BASE_MAX_MANA := 80.0
+const BASE_ATTACK_DAMAGE := 22.0
+const HEALTH_PER_LEVEL := 6.0
+const MANA_PER_LEVEL := 4.0
+const DAMAGE_PER_LEVEL := 1.5
 
 var _visual: Sprite2D
 var _profile_overlay: Node2D
@@ -15,6 +21,7 @@ var _hit_flash_left: float = 0.0
 var _attack_pose_left: float = 0.0
 var _cast_pose_left: float = 0.0
 var _body_scale: float = 1.0
+var _applied_level: int = 1
 
 func _ready() -> void:
 	super._ready()
@@ -36,6 +43,9 @@ func _ready() -> void:
 	_profile_overlay.position = Vector2(0, -7)
 	_profile_overlay.configure(self)
 	add_child(_profile_overlay)
+	if not EventBus.player_progress_changed.is_connected(_on_player_progress_changed):
+		EventBus.player_progress_changed.connect(_on_player_progress_changed)
+	_apply_level_stats(GameState.player_level, false)
 	_update_visual(0.0)
 
 func _physics_process(delta: float) -> void:
@@ -45,26 +55,68 @@ func _physics_process(delta: float) -> void:
 	_cast_pose_left = maxf(0.0, _cast_pose_left - delta)
 	_update_visual(delta)
 
+func _apply_level_stats(level: int, grant_growth: bool) -> void:
+	var safe_level := clampi(level, 1, GameState.MAX_LEVEL)
+	var previous_max_health := max_health
+	var previous_max_mana := max_mana
+	max_health = BASE_MAX_HEALTH + float(safe_level - 1) * HEALTH_PER_LEVEL
+	max_mana = BASE_MAX_MANA + float(safe_level - 1) * MANA_PER_LEVEL
+	attack_damage = BASE_ATTACK_DAMAGE + float(safe_level - 1) * DAMAGE_PER_LEVEL
+	if grant_growth:
+		health = minf(max_health, health + maxf(0.0, max_health - previous_max_health))
+		mana = minf(max_mana, mana + maxf(0.0, max_mana - previous_max_mana))
+	else:
+		health = max_health
+		mana = max_mana
+	_applied_level = safe_level
+	EventBus.player_health_changed.emit(health, max_health)
+	EventBus.player_mana_changed.emit(mana, max_mana)
+
+func _on_player_progress_changed(level: int, _xp: int, _xp_to_next: int) -> void:
+	if level == _applied_level:
+		return
+	_apply_level_stats(level, true)
+
 func _update_visual(delta: float) -> void:
 	if not is_instance_valid(_visual):
 		return
 	var moving: bool = velocity.length_squared() > 4.0
 	if moving and _attack_pose_left <= 0.0 and _cast_pose_left <= 0.0:
 		_anim_clock += delta
-		if _anim_clock >= 0.12:
+		var frame_time: float = 0.095 if _dash_time_left > 0.0 else 0.12
+		if _anim_clock >= frame_time:
 			_anim_clock = 0.0
 			_anim_frame = (_anim_frame + 1) % 3
 	else:
 		_anim_clock = 0.0
 		_anim_frame = 1
-	var row: int = 0
-	if absf(facing.x) > absf(facing.y):
-		row = 1 if facing.x < 0.0 else 2
-	elif facing.y < 0.0:
-		row = 3
+	var row: int = _direction_row(facing)
 	_visual.region_rect = Rect2(Vector2(_anim_frame * 32, row * 32), FRAME_SIZE)
 	_visual.modulate = Color(1.0, 0.62, 0.58, 1.0) if _hit_flash_left > 0.0 else Color.WHITE
 	_apply_action_pose()
+
+func _direction_row(direction_value: Vector2) -> int:
+	var direction: Vector2 = direction_value
+	if direction.length_squared() <= 0.0001:
+		return 0
+	direction = direction.normalized()
+	var horizontal: float = direction.x
+	var vertical: float = direction.y
+	const DIAGONAL_THRESHOLD := 0.38268343
+
+	if vertical >= DIAGONAL_THRESHOLD:
+		if horizontal <= -DIAGONAL_THRESHOLD:
+			return 1 # down-left
+		if horizontal >= DIAGONAL_THRESHOLD:
+			return 7 # down-right
+		return 0 # down
+	if vertical <= -DIAGONAL_THRESHOLD:
+		if horizontal <= -DIAGONAL_THRESHOLD:
+			return 3 # up-left
+		if horizontal >= DIAGONAL_THRESHOLD:
+			return 5 # up-right
+		return 4 # up
+	return 2 if horizontal < 0.0 else 6 # left / right
 
 func _apply_action_pose() -> void:
 	if not is_instance_valid(_visual):
@@ -105,9 +157,14 @@ func _apply_action_pose() -> void:
 func _perform_melee_attack() -> void:
 	_attack_pose_left = ATTACK_POSE_DURATION
 	_cast_pose_left = 0.0
-	super._perform_melee_attack()
+	var attack_direction: Vector2 = facing.normalized() if facing.length_squared() > 0.0001 else Vector2.DOWN
+	# Tiny collision-aware lunge adds weight without turning the attack into a dash.
+	move_and_collide(attack_direction * 3.0)
+	var targets: Array = _damage_area(global_position + attack_direction * 28.0, 22.0, attack_damage)
 	var accent: Color = CharacterProfile.accent_color_value()
-	_spawn_feedback("slash", global_position + facing * 17.0 + Vector2(0, -7), facing, accent, "")
+	_spawn_feedback("slash", global_position + attack_direction * 17.0 + Vector2(0, -7), attack_direction, accent, "")
+	if not targets.is_empty():
+		_spawn_feedback("burst", global_position + attack_direction * 25.0 + Vector2(0, -7), attack_direction, accent.lightened(0.18), "")
 
 func _use_ability(slot: String) -> void:
 	var previous_mana: float = mana
@@ -125,19 +182,63 @@ func _spawn_ability_feedback(slot: String) -> void:
 	var color_value: Color = _mentor_feedback_color(mentor_id)
 	var kind_value: String = "burst"
 	var world_position: Vector2 = global_position + Vector2(0, -7)
-	match slot:
-		"Q":
-			kind_value = "line"
-			world_position += facing * 12.0
-		"E":
-			kind_value = "ward"
-		"R":
-			kind_value = "line" if mentor_id == "gael" or mentor_id == "fermin" else "burst"
-			if kind_value == "line":
-				world_position += facing * 10.0
-		"F":
-			kind_value = "ward"
-			color_value = Color("8fcf78")
+
+	if slot == "F":
+		_spawn_feedback("regen", global_position + Vector2(0, -10), Vector2.UP, Color("8fcf78"), "")
+		return
+
+	match mentor_id:
+		"ashley":
+			match slot:
+				"Q":
+					kind_value = "wave"
+					world_position += facing * 11.0
+				"E":
+					kind_value = "regen"
+				"R":
+					kind_value = "wave"
+					world_position += facing * 6.0
+		"fermin":
+			match slot:
+				"Q":
+					kind_value = "slash"
+					world_position += facing * 13.0
+				"E":
+					kind_value = "guard"
+				"R":
+					kind_value = "charge"
+					world_position += facing * 10.0
+		"isabella":
+			match slot:
+				"Q":
+					kind_value = "mark"
+					world_position += facing * 13.0
+				"E":
+					kind_value = "root"
+					world_position += facing * 18.0
+				"R":
+					kind_value = "mark"
+		"gael":
+			match slot:
+				"Q":
+					kind_value = "shot"
+					world_position += facing * 12.0
+				"E":
+					kind_value = "trap"
+					world_position += facing * 24.0
+				"R":
+					kind_value = "charge"
+					world_position += facing * 12.0
+		_:
+			match slot:
+				"Q":
+					kind_value = "line"
+					world_position += facing * 12.0
+				"E":
+					kind_value = "guard"
+				"R":
+					kind_value = "burst"
+
 	_spawn_feedback(kind_value, world_position, facing, color_value, "")
 
 func _mentor_feedback_color(mentor_id: String) -> Color:
@@ -159,8 +260,30 @@ func take_damage(amount: float) -> void:
 	var impact_position: Vector2 = global_position + Vector2(0, -8)
 	var applied: float = amount * (0.4 if _guard_time_left > 0.0 else 1.0)
 	_hit_flash_left = 0.13
-	super.take_damage(amount)
+	health = maxf(0.0, health - applied)
+	EventBus.player_health_changed.emit(health, max_health)
 	_spawn_feedback("hurt", impact_position, -facing, Color("ff6b6b"), "-%d" % roundi(applied))
+	if health > 0.0:
+		return
+
+	health = max_health
+	mana = max_mana
+	velocity = Vector2.ZERO
+	var respawn_position := _safe_respawn_position()
+	global_position = respawn_position
+	GameState.set_world_checkpoint(GameState.current_map_id, GameState.current_entry_id, respawn_position)
+	SaveService.save_game({"respawned": true, "respawn_map": GameState.current_map_id, "respawn_entry": GameState.current_entry_id})
+	EventBus.player_health_changed.emit(health, max_health)
+	EventBus.player_mana_changed.emit(mana, max_mana)
+	EventBus.toast_requested.emit("El Prisma te devuelve a la última entrada segura")
+
+func _safe_respawn_position() -> Vector2:
+	for node in get_tree().get_nodes_in_group("izrdralar_entry_point"):
+		if node is Node2D and str(node.get_meta("entry_id", "")) == GameState.current_entry_id:
+			return (node as Node2D).global_position
+	if GameState.last_world_position != Vector2.ZERO:
+		return GameState.last_world_position
+	return global_position
 
 func _use_brote_vivo() -> void:
 	var pieces: int = GameState.set_piece_count("brote_vivo")
@@ -172,17 +295,15 @@ func _use_brote_vivo() -> void:
 	_heal(max_health * 0.25)
 	_cast_pose_left = CAST_POSE_DURATION
 	_attack_pose_left = 0.0
-	_spawn_feedback("pickup", global_position + Vector2(0, -10), Vector2.UP, Color("8fcf78"), "+25% salud")
+	_spawn_feedback("regen", global_position + Vector2(0, -10), Vector2.UP, Color("8fcf78"), "+25% salud")
 	EventBus.toast_requested.emit("Brote Vivo · Renovación")
 
 func _spawn_feedback(kind_value: String, world_position: Vector2, direction_value: Vector2, color_value: Color, text_value: String) -> void:
 	var scene: Node = get_tree().current_scene
 	if scene == null:
 		return
-	var fx: Node2D = FeedbackFxScript.new() as Node2D
-	fx.global_position = world_position
-	scene.add_child(fx)
-	fx.call("configure", kind_value, direction_value, color_value, text_value)
+	var effect_id: String = "player_%s" % kind_value
+	IzrdralarFxFactory.spawn(scene, effect_id, world_position, direction_value, color_value, text_value)
 
 func _draw() -> void:
 	if _guard_time_left > 0.0:

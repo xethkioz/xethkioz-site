@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="32" viewBox="0 0 256 32" shape-rendering="crispEdges">
+<rect width="256" height="32" fill="none"/>
+
+<!-- 0 forest leaf litter -->
+<g transform="translate(0 0)">
+  <rect x="4" y="20" width="4" height="2" fill="#263f2d"/><rect x="5" y="19" width="2" height="1" fill="#55764a"/>
+  <rect x="13" y="8" width="3" height="2" fill="#6d5136"/><rect x="14" y="7" width="1" height="1" fill="#a27348"/>
+  <rect x="21" y="17" width="5" height="2" fill="#294b35"/><rect x="24" y="16" width="2" height="1" fill="#6a7f4d"/>
+  <rect x="9" y="25" width="2" height="2" fill="#72533a"/><rect x="26" y="6" width="2" height="1" fill="#456747"/>
+</g>
+
+<!-- 1 resonance pollen -->
+<g transform="translate(32 0)">
+  <rect x="5" y="9" width="1" height="2" fill="#8b5cf6"/><rect x="6" y="8" width="1" height="1" fill="#d8ceff"/>
+  <rect x="14" y="22" width="2" height="1" fill="#3fc7c9"/><rect x="15" y="21" width="1" height="1" fill="#a7f4ef"/>
+  <rect x="24" y="12" width="1" height="2" fill="#a855f7"/><rect x="23" y="13" width="1" height="1" fill="#e5d9ff"/>
+  <rect x="9" y="16" width="1" height="1" fill="#63d8d2"/><rect x="28" y="25" width="1" height="1" fill="#8b5cf6"/>
+</g>
+
+<!-- 2 exposed roots / temporal veins -->
+<g transform="translate(64 0)">
+  <path d="M3 24h7l3-5 5 2 4-6 7 1" fill="none" stroke="#3f3428" stroke-width="2"/>
+  <path d="M10 24l3 4M18 21l2 5M23 16l4-4" fill="none" stroke="#5e4933" stroke-width="1"/>
+  <rect x="5" y="22" width="4" height="1" fill="#47764d"/><rect x="20" y="18" width="3" height="1" fill="#5f8654"/>
+  <rect x="27" y="14" width="1" height="1" fill="#8b5cf6"/>
+</g>
+
+<!-- 3 meadow micro-cluster -->
+<g transform="translate(96 0)">
+  <path d="M7 26l2-8 2 8M15 27l1-10 3 9M24 26l-1-7 4 7" fill="none" stroke="#477a48" stroke-width="1"/>
+  <rect x="8" y="17" width="2" height="2" fill="#f0c778"/><rect x="9" y="16" width="1" height="1" fill="#fff1b7"/>
+  <rect x="16" y="16" width="2" height="2" fill="#a855f7"/><rect x="17" y="15" width="1" height="1" fill="#eadfff"/>
+  <rect x="24" y="18" width="2" height="2" fill="#e56a76"/><rect x="25" y="17" width="1" height="1" fill="#ffc0a7"/>
+</g>
+
+<!-- 4 village worn path chips -->
+<g transform="translate(128 0)">
+  <rect x="4" y="8" width="7" height="4" fill="#8e7655"/><rect x="5" y="8" width="5" height="1" fill="#c4a778"/>
+  <rect x="17" y="18" width="9" height="4" fill="#7d684d"/><rect x="18" y="18" width="7" height="1" fill="#b99a6d"/>
+  <rect x="10" y="25" width="5" height="2" fill="#65543f"/><rect x="25" y="6" width="3" height="2" fill="#d0b17d"/>
+  <rect x="7" y="14" width="2" height="1" fill="#62513e"/>
+</g>
+
+<!-- 5 wetland silt / low reeds -->
+<g transform="translate(160 0)">
+  <path d="M3 25c5-3 8 1 13-2 4-3 7 1 13-1" fill="none" stroke="#304f3f" stroke-width="2"/>
+  <rect x="6" y="23" width="8" height="3" fill="#53604b"/><rect x="18" y="22" width="9" height="3" fill="#435847"/>
+  <path d="M9 23l-1-8M12 23l3-7M22 22l1-9M25 22l3-6" fill="none" stroke="#557b4d" stroke-width="1"/>
+  <rect x="23" y="12" width="2" height="3" fill="#795338"/><rect x="8" y="14" width="2" height="3" fill="#704c35"/>
+  <rect x="16" y="20" width="1" height="1" fill="#54d6d2"/>
+</g>
+
+<!-- 6 ruin fracture / moss -->
+<g transform="translate(192 0)">
+  <path d="M4 7l7 5-3 6 8 3-2 7M27 5l-5 7 3 5-6 6" fill="none" stroke="#42484a" stroke-width="2"/>
+  <path d="M6 9l5 3M23 12l3 4" fill="none" stroke="#7f8787" stroke-width="1"/>
+  <rect x="7" y="22" width="6" height="2" fill="#3f7047"/><rect x="20" y="21" width="5" height="2" fill="#4d8050"/>
+  <rect x="15" y="19" width="2" height="2" fill="#8b5cf6"/>
+</g>
+
+<!-- 7 sanctuary rune fragment -->
+<g transform="translate(224 0)">
+  <path d="M5 24h5v-4h4v-5h4v-4h5v-4h4" fill="none" stroke="#5e4a86" stroke-width="2"/>
+  <path d="M8 26h8M20 9h8" fill="none" stroke="#8b5cf6" stroke-width="1"/>
+  <rect x="13" y="18" width="2" height="2" fill="#d8ceff"/><rect x="22" y="10" width="2" height="2" fill="#3fc7c9"/>
+  <rect x="6" y="23" width="2" height="1" fill="#a98cf0"/>
+</g>
+</svg>

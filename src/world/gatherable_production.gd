@@ -6,6 +6,7 @@ const FeedbackFxScript := preload("res://src/fx/world_feedback_fx.gd")
 var _visual: Sprite2D
 var _atlas_index: int = 0
 var _visual_time: float = 0.0
+var _collecting := false
 
 func configure_production(id_value: String, amount_value: int, profession_value: String, xp_value: int, atlas_index: int) -> void:
 	_atlas_index = clampi(atlas_index, 0, 3)
@@ -16,6 +17,7 @@ func configure_production(id_value: String, amount_value: int, profession_value:
 func _ready() -> void:
 	super._ready()
 	_visual = Sprite2D.new()
+	_visual.name = "GatherableVisual"
 	_visual.texture = ATLAS
 	_visual.region_enabled = true
 	_visual.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -26,26 +28,66 @@ func _ready() -> void:
 	_refresh_visual()
 
 func _process(delta: float) -> void:
-	if depleted or not is_instance_valid(_visual):
+	if depleted or _collecting or not is_instance_valid(_visual):
 		return
 	_visual_time += delta
 	_visual.position.y = -7.0 + sin(_visual_time * 2.4 + float(_atlas_index)) * 1.4
 	var pulse: float = 0.94 + sin(_visual_time * 3.1 + float(_atlas_index) * 0.7) * 0.05
 	_visual.modulate = Color(pulse, pulse, pulse, 1.0)
 
-func interact(_actor: Node = null) -> void:
-	if depleted:
+func interact(actor: Node = null) -> void:
+	if depleted or _collecting:
+		return
+	_collecting = true
+	remove_from_group("interactable")
+	await _play_collection_sequence(actor)
+	if not is_instance_valid(self):
 		return
 	if not InventoryService.add_item(item_id, amount):
+		_collecting = false
+		add_to_group("interactable")
+		_reset_collection_visual()
 		return
 	GameState.add_profession_xp(profession_id, profession_xp)
 	EventBus.toast_requested.emit("Recolectaste %s x%d · +%d XP %s" % [InventoryService.item_name(item_id), amount, profession_xp, profession_id.capitalize()])
 	_spawn_pickup_feedback()
 	depleted = true
 	GameState.set_world_flag(persistence_id, true)
-	remove_from_group("interactable")
 	visible = false
 	SaveService.save_game()
+
+func _play_collection_sequence(actor: Node) -> void:
+	if not is_instance_valid(_visual):
+		await get_tree().create_timer(0.12).timeout
+		return
+	var target_global := global_position + Vector2(0, -28)
+	if actor is Node2D and is_instance_valid(actor):
+		target_global = (actor as Node2D).global_position + Vector2(0, -12)
+	var start_global := global_position
+	var midpoint := start_global.lerp(target_global, 0.48) + Vector2(0, -18)
+
+	# First the object is physically lifted from the terrain, then it arcs toward
+	# the character instead of disappearing in place.
+	var lift := create_tween().set_parallel(true)
+	lift.tween_property(self, "global_position", midpoint, 0.14).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	lift.tween_property(_visual, "scale", Vector2.ONE * 1.16, 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	lift.tween_property(_visual, "rotation", -0.10 if target_global.x < start_global.x else 0.10, 0.14)
+	await lift.finished
+	if not is_instance_valid(self) or not is_instance_valid(_visual):
+		return
+
+	var receive := create_tween().set_parallel(true)
+	receive.tween_property(self, "global_position", target_global, 0.15).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	receive.tween_property(_visual, "scale", Vector2.ONE * 0.28, 0.15).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	receive.tween_property(_visual, "modulate", Color(1.0, 1.0, 1.0, 0.0), 0.13).set_delay(0.02)
+	await receive.finished
+
+func _reset_collection_visual() -> void:
+	if not is_instance_valid(_visual):
+		return
+	_visual.scale = Vector2.ONE
+	_visual.rotation = 0.0
+	_visual.modulate = Color.WHITE
 
 func _spawn_pickup_feedback() -> void:
 	var scene: Node = get_tree().current_scene
