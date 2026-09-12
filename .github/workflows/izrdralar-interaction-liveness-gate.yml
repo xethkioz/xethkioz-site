@@ -1,0 +1,69 @@
+name: Izrdralar Interaction Liveness Gate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'project.godot'
+      - 'src/items/inventory_service.gd'
+      - 'src/world/gatherable.gd'
+      - 'src/world/gatherable_production.gd'
+      - 'src/player/player_controller.gd'
+      - 'src/player/player_controller_production.gd'
+      - 'src/player/player_controller_production_pass02.gd'
+      - 'src/npc/enemy_controller.gd'
+      - 'src/npc/enemy_controller_production.gd'
+      - 'src/fx/consumable_use_feedback.gd'
+      - 'src/fx/izrdralar_fx_factory.gd'
+      - 'tools/izrdralar_interaction_liveness_smoke.gd'
+      - 'tools/scenes/IzrdralarInteractionLivenessSmoke.tscn'
+      - '.github/workflows/izrdralar-interaction-liveness-gate.yml'
+
+concurrency:
+  group: izrdralar-interaction-liveness-${{ github.event.pull_request.number || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  interaction-liveness:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Godot 4.7.2
+        shell: bash
+        run: |
+          set -euxo pipefail
+          wget -q https://godot-releases.nbg1.your-objectstorage.com/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -O /tmp/godot.zip
+          unzip -q /tmp/godot.zip -d /tmp/godot
+          chmod +x /tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          /tmp/godot/Godot_v4.7.2-stable_linux.x86_64 --version
+
+      - name: Import project and reject parser regressions
+        shell: bash
+        run: |
+          set -o pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --editor --quit 2>&1 | tee /tmp/interaction-liveness-import.log
+          if grep -E "SCRIPT ERROR|Parse Error" /tmp/interaction-liveness-import.log; then
+            exit 1
+          fi
+
+      - name: Pickup consume and physical defeat smoke
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . res://tools/scenes/IzrdralarInteractionLivenessSmoke.tscn 2>&1 | tee /tmp/interaction-liveness-smoke.log
+          grep -q "IZRDRALAR_INTERACTION_LIVENESS_PASS" /tmp/interaction-liveness-smoke.log
+
+      - name: Upload interaction liveness logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: izrdralar-interaction-liveness-gate-logs
+          path: |
+            /tmp/interaction-liveness-import.log
+            /tmp/interaction-liveness-smoke.log
+          if-no-files-found: warn
