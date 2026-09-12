@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tools/izrdralar_lake_collision_visual_smoke.gd" type="Script" id="1_smoke"]
+
+[node name="IzrdralarLakeCollisionVisualSmoke" type="Node"]
+script = ExtResource("1_smoke")
