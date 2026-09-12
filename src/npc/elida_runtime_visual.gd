@@ -48,7 +48,7 @@ func _draw() -> void:
 		origin.y += 7.0
 
 	# Contact shadow + robe silhouette. Renderer is intentionally procedural until final art approval.
-	draw_ellipse(Vector2(0, 12), Vector2(13, 4), Color(0.03, 0.05, 0.08, 0.38))
+	_draw_flat_ellipse(Vector2(0, 12), Vector2(13, 4), Color(0.03, 0.05, 0.08, 0.38))
 	if _downed:
 		draw_rect(Rect2(origin + Vector2(-14, -4), Vector2(28, 9)), robe, true)
 	else:
@@ -81,7 +81,7 @@ func _draw() -> void:
 	if _blessing_remaining > 0.0:
 		draw_arc(origin + Vector2(0, -5), 27.0, -PI * 0.2, PI * 1.2, 28, Color(0.94, 0.97, 1.0, 0.55), 1.2)
 
-func draw_ellipse(center: Vector2, radii: Vector2, color: Color) -> void:
+func _draw_flat_ellipse(center: Vector2, radii: Vector2, color: Color) -> void:
 	var points := PackedVector2Array()
 	for index in range(24):
 		var angle := TAU * float(index) / 24.0
