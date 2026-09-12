@@ -6,6 +6,7 @@ const TRAIL_SAMPLE_INTERVAL := 0.055
 const TRAIL_LENGTH := 14
 const TARGET_SAMPLE_INDEX := 6
 const SNAP_DISTANCE := 190.0
+const APPROVED_VISUAL_SCALE := 0.44
 
 var _visual: Node2D
 var _visual_facing := Vector2.DOWN
@@ -23,7 +24,7 @@ func _ready() -> void:
 	_visual.name = "XethkiozVisual"
 	_visual.set_script(ApprovedVisualScript)
 	_visual.position = Vector2(0.0, -3.0)
-	_visual.scale = Vector2.ONE * 0.56
+	_visual.scale = Vector2.ONE * APPROVED_VISUAL_SCALE
 	_visual.z_index = 2
 	add_child(_visual)
 	_visual.call("set_tail_count", 3)
@@ -94,7 +95,7 @@ func _update_animation() -> void:
 	_visual.call("set_action", &"follow_run" if moving else &"idle_companion")
 	var speed_ratio: float = clampf(_follow_velocity.length() / maxf(1.0, follow_speed), 0.0, 1.0)
 	var breathe := 1.0 + sin(_hover_clock * 2.4) * 0.012
-	_visual.scale = Vector2.ONE * (0.56 * breathe * (1.0 + speed_ratio * 0.018))
+	_visual.scale = Vector2.ONE * (APPROVED_VISUAL_SCALE * breathe * (1.0 + speed_ratio * 0.018))
 	_visual.rotation = clampf(_follow_velocity.x / maxf(1.0, follow_speed), -1.0, 1.0) * 0.025
 
 func play_tail_swipe() -> void:
