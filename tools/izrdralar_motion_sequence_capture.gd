@@ -94,9 +94,18 @@ func _run() -> void:
 		await _finish(runtime)
 		return
 
+	# Reuse the same geometry as the already validated combat capture. Keeping the
+	# enemy at its authored physics position avoids a one-frame broadphase mismatch
+	# after teleporting a CharacterBody2D immediately before the shape query.
+	player.global_position = attack_enemy.global_position + Vector2(-27, 0)
+	xethkioz.global_position = player.global_position + Vector2(-34, 22)
 	player.velocity = Vector2.ZERO
 	player.set("facing", Vector2.RIGHT)
-	attack_enemy.global_position = player.global_position + Vector2(38, 0)
+	if camera != null:
+		camera.reset_smoothing()
+	for _frame in range(2):
+		await get_tree().physics_frame
+
 	var enemy_health_before := float(attack_enemy.get("health"))
 	var attack_position_before := player.global_position
 	player.call("_perform_melee_attack")
