@@ -5,6 +5,7 @@ const GroundDecorScript := preload("res://src/world/izrdralar_authored_ground_de
 const AmbientAudioScript := preload("res://src/audio/izrdralar_ambient_audio.gd")
 const LevelUpFeedbackBridgeScript := preload("res://src/world/izrdralar_level_up_feedback_bridge.gd")
 const PauseMenuScript := preload("res://src/ui/izrdralar_pause_menu.gd")
+const OnboardingGuideScript := preload("res://src/ui/izrdralar_onboarding_guide.gd")
 
 # Pass 10 translates the useful *vocabulary* observed in the external reference
 # folders (wear, inhabited thresholds/gardens, reeds, rubble, root fractures)
@@ -16,6 +17,7 @@ func _ready() -> void:
 	_spawn_authored_ground_decor()
 	_spawn_authored_ambience()
 	_spawn_level_up_feedback_bridge()
+	_spawn_onboarding_guide()
 	_spawn_pause_menu()
 
 func _spawn_authored_ambience() -> void:
@@ -30,6 +32,15 @@ func _spawn_level_up_feedback_bridge() -> void:
 	bridge.name = "LevelUpFeedbackBridge"
 	bridge.set_script(LevelUpFeedbackBridgeScript)
 	add_child(bridge)
+
+func _spawn_onboarding_guide() -> void:
+	if map_id != "M01" or GameState.has_world_flag("m01_controls_onboarding_complete"):
+		return
+	var guide := CanvasLayer.new()
+	guide.name = "OnboardingGuide"
+	guide.set_script(OnboardingGuideScript)
+	guide.call("configure", map_id)
+	add_child(guide)
 
 func _spawn_pause_menu() -> void:
 	var pause_menu := CanvasLayer.new()
