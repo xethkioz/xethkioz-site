@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource path="res://src/npc/ashley_rhythm_runtime.gd" type="Script" id="1_ashley"]
+
+[sub_resource type="CapsuleShape2D" id="Capsule_ashley"]
+radius = 7.5
+height = 17.0
+
+[node name="Ashley" type="CharacterBody2D"]
+script = ExtResource("1_ashley")
+collision_layer = 0
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 3)
+shape = SubResource("Capsule_ashley")
