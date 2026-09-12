@@ -4,17 +4,19 @@ extends "res://src/world/izrdralar_m01_m05_runtime_visual_pass09.gd"
 const GroundDecorScript := preload("res://src/world/izrdralar_authored_ground_decor.gd")
 const AmbientAudioScript := preload("res://src/audio/izrdralar_ambient_audio.gd")
 const LevelUpFeedbackBridgeScript := preload("res://src/world/izrdralar_level_up_feedback_bridge.gd")
+const PauseMenuScript := preload("res://src/ui/izrdralar_pause_menu.gd")
 
 # Pass 10 translates the useful *vocabulary* observed in the external reference
 # folders (wear, inhabited thresholds/gardens, reeds, rubble, root fractures)
 # into original Godot-drawn ground details. No external pixels or XNB resources
 # are loaded by the runtime. It also mounts original procedural ambience and
-# non-gameplay progression feedback.
+# non-gameplay production UX layers.
 func _ready() -> void:
 	super._ready()
 	_spawn_authored_ground_decor()
 	_spawn_authored_ambience()
 	_spawn_level_up_feedback_bridge()
+	_spawn_pause_menu()
 
 func _spawn_authored_ambience() -> void:
 	var ambience := Node.new()
@@ -28,6 +30,12 @@ func _spawn_level_up_feedback_bridge() -> void:
 	bridge.name = "LevelUpFeedbackBridge"
 	bridge.set_script(LevelUpFeedbackBridgeScript)
 	add_child(bridge)
+
+func _spawn_pause_menu() -> void:
+	var pause_menu := CanvasLayer.new()
+	pause_menu.name = "PauseMenu"
+	pause_menu.set_script(PauseMenuScript)
+	add_child(pause_menu)
 
 func _spawn_authored_ground_decor() -> void:
 	var specs: Array[Dictionary] = []
