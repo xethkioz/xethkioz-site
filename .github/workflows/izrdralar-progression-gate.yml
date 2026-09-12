@@ -4,8 +4,11 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
+      - 'data/regions/izrdralar_m01_m05_layouts.json'
       - 'src/core/game_state.gd'
+      - 'src/npc/boss5_guardian.gd'
       - 'src/player/player_controller*.gd'
+      - 'src/world/izrdralar_route_objective.gd'
       - 'tools/izrdralar_level_progression_smoke.gd'
       - 'tools/scenes/IzrdralarLevelProgressionSmoke.tscn'
       - '.github/workflows/izrdralar-progression-gate.yml'
@@ -41,7 +44,7 @@ jobs:
             exit 1
           fi
 
-      - name: Level progression smoke
+      - name: Level and authored-route progression smoke
         shell: bash
         run: |
           set -euxo pipefail
