@@ -18,7 +18,9 @@ var _was_snapped: bool = false
 func _ready() -> void:
 	super._ready()
 	_visual = Node2D.new()
-	_visual.name = "XethkiozApprovedVisual"
+	# Preserve the production contract used by the visual-readiness gate while
+	# rendering the approved P02 implementation inside this node.
+	_visual.name = "XethkiozVisual"
 	_visual.set_script(ApprovedVisualScript)
 	_visual.position = Vector2(0.0, -3.0)
 	_visual.scale = Vector2.ONE * 0.56
