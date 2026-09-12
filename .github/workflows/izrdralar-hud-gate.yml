@@ -6,14 +6,17 @@ on:
     paths:
       - 'src/ui/hud_controller*.gd'
       - 'src/ui/izrdralar_pause_menu.gd'
+      - 'src/ui/izrdralar_onboarding_guide.gd'
       - 'src/core/game_state.gd'
       - 'src/core/accessibility_service.gd'
       - 'src/player/player_controller_production.gd'
       - 'src/world/izrdralar_m01_m05_runtime_visual_pass10.gd'
       - 'tools/izrdralar_hud_accessibility_smoke.gd'
       - 'tools/izrdralar_pause_menu_smoke.gd'
+      - 'tools/izrdralar_onboarding_smoke.gd'
       - 'tools/scenes/IzrdralarHudAccessibilitySmoke.tscn'
       - 'tools/scenes/IzrdralarPauseMenuSmoke.tscn'
+      - 'tools/scenes/IzrdralarOnboardingSmoke.tscn'
       - '.github/workflows/izrdralar-hud-gate.yml'
 
 concurrency:
@@ -63,6 +66,14 @@ jobs:
           "$GODOT" --headless --path . res://tools/scenes/IzrdralarPauseMenuSmoke.tscn 2>&1 | tee /tmp/pause-smoke.log
           grep -q "IZRDRALAR_PAUSE_MENU_PASS" /tmp/pause-smoke.log
 
+      - name: M01 control onboarding smoke
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . res://tools/scenes/IzrdralarOnboardingSmoke.tscn 2>&1 | tee /tmp/onboarding-smoke.log
+          grep -q "IZRDRALAR_ONBOARDING_PASS" /tmp/onboarding-smoke.log
+
       - name: Upload HUD gate logs
         if: always()
         uses: actions/upload-artifact@v4
@@ -72,4 +83,5 @@ jobs:
             /tmp/hud-import.log
             /tmp/hud-smoke.log
             /tmp/pause-smoke.log
+            /tmp/onboarding-smoke.log
           if-no-files-found: warn
