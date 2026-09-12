@@ -8,7 +8,6 @@ func _ready() -> void:
 	call_deferred("_run")
 
 func _run() -> void:
-	_ensure_runtime_inputs()
 	GameState.reset_new_game()
 	var player := CharacterBody2D.new()
 	player.name = "ProgressionPlayer"
@@ -20,6 +19,7 @@ func _run() -> void:
 	player.set_physics_process(false)
 	await get_tree().process_frame
 
+	_check_core_inputs()
 	_check_close("L1 max health", float(player.get("max_health")), 100.0)
 	_check_close("L1 max mana", float(player.get("max_mana")), 80.0)
 	_check_close("L1 attack", float(player.get("attack_damage")), 22.0)
@@ -50,10 +50,13 @@ func _run() -> void:
 	await get_tree().process_frame
 	_finish()
 
-func _ensure_runtime_inputs() -> void:
+func _check_core_inputs() -> void:
 	for action in ["move_left", "move_right", "move_up", "move_down", "dash", "attack", "interact"]:
 		if not InputMap.has_action(action):
-			InputMap.add_action(action)
+			failures.append("player did not register core input: %s" % action)
+			continue
+		if InputMap.action_get_events(action).is_empty():
+			failures.append("player registered %s without default key event" % action)
 
 func _check_close(label: String, actual: float, expected: float) -> void:
 	if absf(actual - expected) > 0.01:
