@@ -6,11 +6,16 @@ on:
     paths:
       - 'data/regions/izrdralar_m01_m05_layouts.json'
       - 'src/core/game_state.gd'
+      - 'src/fx/izrdralar_level_up_feedback.gd'
       - 'src/npc/boss5_guardian.gd'
       - 'src/player/player_controller*.gd'
+      - 'src/world/izrdralar_level_up_feedback_bridge.gd'
+      - 'src/world/izrdralar_m01_m05_runtime_visual_pass10.gd'
       - 'src/world/izrdralar_route_objective.gd'
       - 'tools/izrdralar_level_progression_smoke.gd'
+      - 'tools/izrdralar_level_up_feedback_smoke.gd'
       - 'tools/scenes/IzrdralarLevelProgressionSmoke.tscn'
+      - 'tools/scenes/IzrdralarLevelUpFeedbackSmoke.tscn'
       - '.github/workflows/izrdralar-progression-gate.yml'
 
 concurrency:
@@ -52,6 +57,14 @@ jobs:
           "$GODOT" --headless --path . res://tools/scenes/IzrdralarLevelProgressionSmoke.tscn 2>&1 | tee /tmp/progression-smoke.log
           grep -q "IZRDRALAR_LEVEL_PROGRESSION_PASS" /tmp/progression-smoke.log
 
+      - name: Level-up feedback smoke
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . res://tools/scenes/IzrdralarLevelUpFeedbackSmoke.tscn 2>&1 | tee /tmp/level-up-feedback-smoke.log
+          grep -q "IZRDRALAR_LEVEL_UP_FEEDBACK_PASS" /tmp/level-up-feedback-smoke.log
+
       - name: Upload progression logs
         if: always()
         uses: actions/upload-artifact@v4
@@ -60,4 +73,5 @@ jobs:
           path: |
             /tmp/progression-import.log
             /tmp/progression-smoke.log
+            /tmp/level-up-feedback-smoke.log
           if-no-files-found: warn
