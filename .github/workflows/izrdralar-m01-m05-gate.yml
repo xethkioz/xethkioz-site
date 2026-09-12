@@ -84,6 +84,14 @@ jobs:
           "$GODOT" --headless --path . res://tools/scenes/IzrdralarMeleeDirectionSmoke.tscn 2>&1 | tee /tmp/izrdralar-melee.log
           grep -q "IZRDRALAR_MELEE_DIRECTION_PASS" /tmp/izrdralar-melee.log
 
+      - name: Enemy and Boss telegraph timing smoke
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . res://tools/scenes/IzrdralarTelegraphTimingSmoke.tscn 2>&1 | tee /tmp/izrdralar-telegraph-timing.log
+          grep -q "IZRDRALAR_TELEGRAPH_TIMING_PASS" /tmp/izrdralar-telegraph-timing.log
+
       - name: Navigation graph smoke
         shell: bash
         run: |
@@ -207,6 +215,7 @@ jobs:
             /tmp/izrdralar-directional.log
             /tmp/izrdralar-xethkioz-direction.log
             /tmp/izrdralar-melee.log
+            /tmp/izrdralar-telegraph-timing.log
             /tmp/izrdralar-navigation.log
             /tmp/izrdralar-save.log
             /tmp/izrdralar-authored-runtime.log
