@@ -6,8 +6,10 @@ extends "res://src/player/player_controller_production.gd"
 # interaction readability.
 
 const ConsumableUseFeedbackScript := preload("res://src/fx/consumable_use_feedback.gd")
+const ViajeroApprovedVisualScript := preload("res://src/player/viajero_approved_visual.gd")
 
 var _world_camera: Camera2D
+var _approved_visual: Node2D
 var _camera_shake_left := 0.0
 var _camera_shake_duration := 0.0
 var _camera_shake_strength := 0.0
@@ -22,6 +24,18 @@ var _active_consumable_visual: Node2D
 func _ready() -> void:
 	super._ready()
 	_world_camera = get_node_or_null("WorldCamera") as Camera2D
+	# Keep the legacy 32x32 sprite alive for compatibility/readiness contracts,
+	# but do not render it. The approved P01 art is now the visible production body.
+	if is_instance_valid(_visual):
+		_visual.visible = false
+	if is_instance_valid(_profile_overlay):
+		_profile_overlay.visible = false
+	_approved_visual = Node2D.new()
+	_approved_visual.name = "ViajeroApprovedVisual"
+	_approved_visual.set_script(ViajeroApprovedVisualScript)
+	add_child(_approved_visual)
+	_approved_visual.call("configure_body_scale", _body_scale)
+	_update_approved_visual(0.0)
 
 func _exit_tree() -> void:
 	if not _interaction_hint.is_empty():
@@ -32,8 +46,33 @@ func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
 	if _consuming:
 		_apply_consumable_pose()
+	_update_approved_visual(delta)
 	_update_camera_feedback(delta)
 	_update_interaction_hint()
+
+func _update_approved_visual(delta: float) -> void:
+	if not is_instance_valid(_approved_visual):
+		return
+	_approved_visual.call(
+		"update_from_player",
+		delta,
+		facing,
+		velocity,
+		move_speed,
+		_dash_time_left,
+		_attack_pose_left,
+		ATTACK_POSE_DURATION,
+		_cast_pose_left,
+		CAST_POSE_DURATION,
+		_hit_flash_left
+	)
+	var consume_pose := 0.0
+	if _consuming and _consume_pose_total > 0.0:
+		var progress := 1.0 - clampf(_consume_pose_left / _consume_pose_total, 0.0, 1.0)
+		var lift := sin(clampf(progress / 0.62, 0.0, 1.0) * PI * 0.5)
+		var settle := 1.0 - clampf((progress - 0.72) / 0.28, 0.0, 1.0)
+		consume_pose = lift * settle
+	_approved_visual.call("set_consumable_pose", consume_pose)
 
 func _apply_ground_movement(input_vector: Vector2, delta: float) -> void:
 	# Consuming is intentionally more committed than casting: the player can
