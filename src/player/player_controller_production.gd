@@ -150,19 +150,63 @@ func _spawn_ability_feedback(slot: String) -> void:
 	var color_value: Color = _mentor_feedback_color(mentor_id)
 	var kind_value: String = "burst"
 	var world_position: Vector2 = global_position + Vector2(0, -7)
-	match slot:
-		"Q":
-			kind_value = "line"
-			world_position += facing * 12.0
-		"E":
-			kind_value = "ward"
-		"R":
-			kind_value = "line" if mentor_id == "gael" or mentor_id == "fermin" else "burst"
-			if kind_value == "line":
-				world_position += facing * 10.0
-		"F":
-			kind_value = "ward"
-			color_value = Color("8fcf78")
+
+	if slot == "F":
+		_spawn_feedback("regen", global_position + Vector2(0, -10), Vector2.UP, Color("8fcf78"), "")
+		return
+
+	match mentor_id:
+		"ashley":
+			match slot:
+				"Q":
+					kind_value = "wave"
+					world_position += facing * 11.0
+				"E":
+					kind_value = "regen"
+				"R":
+					kind_value = "wave"
+					world_position += facing * 6.0
+		"fermin":
+			match slot:
+				"Q":
+					kind_value = "slash"
+					world_position += facing * 13.0
+				"E":
+					kind_value = "guard"
+				"R":
+					kind_value = "charge"
+					world_position += facing * 10.0
+		"isabella":
+			match slot:
+				"Q":
+					kind_value = "mark"
+					world_position += facing * 13.0
+				"E":
+					kind_value = "root"
+					world_position += facing * 18.0
+				"R":
+					kind_value = "mark"
+		"gael":
+			match slot:
+				"Q":
+					kind_value = "shot"
+					world_position += facing * 12.0
+				"E":
+					kind_value = "trap"
+					world_position += facing * 24.0
+				"R":
+					kind_value = "charge"
+					world_position += facing * 12.0
+		_:
+			match slot:
+				"Q":
+					kind_value = "line"
+					world_position += facing * 12.0
+				"E":
+					kind_value = "guard"
+				"R":
+					kind_value = "burst"
+
 	_spawn_feedback(kind_value, world_position, facing, color_value, "")
 
 func _mentor_feedback_color(mentor_id: String) -> Color:
@@ -219,7 +263,7 @@ func _use_brote_vivo() -> void:
 	_heal(max_health * 0.25)
 	_cast_pose_left = CAST_POSE_DURATION
 	_attack_pose_left = 0.0
-	_spawn_feedback("pickup", global_position + Vector2(0, -10), Vector2.UP, Color("8fcf78"), "+25% salud")
+	_spawn_feedback("regen", global_position + Vector2(0, -10), Vector2.UP, Color("8fcf78"), "+25% salud")
 	EventBus.toast_requested.emit("Brote Vivo · Renovación")
 
 func _spawn_feedback(kind_value: String, world_position: Vector2, direction_value: Vector2, color_value: Color, text_value: String) -> void:
