@@ -1,11 +1,19 @@
 extends Node
 
 const ITEMS := {
-	"manzana_bruma": {"name": "Manzana de Bruma", "max_stack": 20},
+	"manzana_bruma": {
+		"name": "Manzana de Bruma",
+		"max_stack": 20,
+		"consumable": {"heal": 14.0, "mana": 4.0, "use_time": 0.72, "presentation": "apple"}
+	},
 	"hongo_azul_rocio": {"name": "Hongo Azul de Rocío", "max_stack": 20},
 	"ferrita_pampeana": {"name": "Ferrita Pampeana", "max_stack": 40},
 	"cuarzo_prismatico": {"name": "Cuarzo Prismático", "max_stack": 30},
-	"racion_bosque": {"name": "Ración del Bosque", "max_stack": 10}
+	"racion_bosque": {
+		"name": "Ración del Bosque",
+		"max_stack": 10,
+		"consumable": {"heal": 32.0, "mana": 10.0, "use_time": 1.02, "presentation": "ration"}
+	}
 }
 
 const RECIPES := {
@@ -26,13 +34,26 @@ func item_name(item_id: String) -> String:
 func amount_of(item_id: String) -> int:
 	return int(stacks.get(item_id, 0))
 
-func add_item(item_id: String, amount: int = 1) -> bool:
+func can_add(item_id: String, amount: int = 1) -> bool:
 	if not ITEMS.has(item_id) or amount <= 0:
 		return false
 	var maximum := int(ITEMS[item_id].get("max_stack", 99))
-	stacks[item_id] = mini(amount_of(item_id) + amount, maximum)
+	return amount_of(item_id) + amount <= maximum
+
+func add_item(item_id: String, amount: int = 1) -> bool:
+	if not can_add(item_id, amount):
+		return false
+	stacks[item_id] = amount_of(item_id) + amount
 	_emit_changed()
 	return true
+
+func is_consumable(item_id: String) -> bool:
+	return ITEMS.has(item_id) and (ITEMS[item_id] as Dictionary).has("consumable")
+
+func consumable_data(item_id: String) -> Dictionary:
+	if not is_consumable(item_id):
+		return {}
+	return ((ITEMS[item_id] as Dictionary).get("consumable", {}) as Dictionary).duplicate(true)
 
 func has_items(requirements: Dictionary) -> bool:
 	for item_id in requirements.keys():
@@ -53,6 +74,11 @@ func remove_items(requirements: Dictionary) -> bool:
 	_emit_changed()
 	return true
 
+func consume_one(item_id: String) -> bool:
+	if not is_consumable(item_id):
+		return false
+	return remove_items({item_id: 1})
+
 func craft(recipe_id: String) -> bool:
 	if not RECIPES.has(recipe_id):
 		return false
@@ -60,8 +86,12 @@ func craft(recipe_id: String) -> bool:
 	var ingredients: Dictionary = recipe["ingredients"]
 	if not has_items(ingredients):
 		return false
-	remove_items(ingredients)
 	var outputs: Dictionary = recipe["outputs"]
+	for item_id in outputs.keys():
+		if not can_add(str(item_id), int(outputs[item_id])):
+			EventBus.toast_requested.emit("No hay espacio para %s" % item_name(str(item_id)))
+			return false
+	remove_items(ingredients)
 	for item_id in outputs.keys():
 		add_item(str(item_id), int(outputs[item_id]))
 	GameState.add_profession_xp(str(recipe.get("profession", "cocina")), int(recipe.get("profession_xp", 0)))
