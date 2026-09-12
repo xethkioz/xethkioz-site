@@ -24,12 +24,33 @@ var _ability_cooldowns := {"Q": 0.0, "E": 0.0, "R": 0.0, "F": 0.0}
 
 func _ready() -> void:
 	add_to_group("player")
+	_ensure_core_inputs()
 	_ensure_ability_inputs()
 	health = max_health
 	mana = max_mana
 	queue_redraw()
 	EventBus.player_health_changed.emit(health, max_health)
 	EventBus.player_mana_changed.emit(mana, max_mana)
+
+func _ensure_core_inputs() -> void:
+	var bindings := {
+		"move_left": [KEY_A, KEY_LEFT],
+		"move_right": [KEY_D, KEY_RIGHT],
+		"move_up": [KEY_W, KEY_UP],
+		"move_down": [KEY_S, KEY_DOWN],
+		"dash": [KEY_SHIFT],
+		"attack": [KEY_J],
+		"interact": [KEY_C]
+	}
+	for action in bindings.keys():
+		if not InputMap.has_action(action):
+			InputMap.add_action(action)
+		if not InputMap.action_get_events(action).is_empty():
+			continue
+		for keycode in bindings[action]:
+			var event := InputEventKey.new()
+			event.physical_keycode = int(keycode)
+			InputMap.action_add_event(action, event)
 
 func _ensure_ability_inputs() -> void:
 	var bindings := {"ability_q": KEY_Q, "ability_e": KEY_E, "ability_r": KEY_R, "ability_f": KEY_F}
@@ -228,7 +249,7 @@ func _use_brote_vivo() -> void:
 		return
 	_heal(max_health * 0.10)
 	_damage_area(global_position, 52.0, attack_damage)
-	EventBus.toast_requested.emit("Brote Vivo · Renacer Prismático [demo]")
+	EventBus.toast_requested.emit("Brote Vivo · Renacer Prismático")
 
 func _damage_line(amount: float, steps: int, spacing: float, radius: float) -> void:
 	var already_hit: Array = []
