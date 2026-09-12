@@ -1,8 +1,9 @@
 extends "res://src/player/player_controller_production.gd"
 
-# Visual/feel layer for the authored Izrdralar production pass.
-# It deliberately keeps damage, timing, hitboxes and progression in the base
-# controller. Only camera feedback is added here.
+# Feel layer for the authored Izrdralar production pass. Damage, hitboxes,
+# cooldowns and progression stay in the parent controller; this layer adds
+# camera feedback plus short action commitment so attacks do not read like
+# normal movement with an effect drawn on top.
 
 var _world_camera: Camera2D
 var _camera_shake_left := 0.0
@@ -17,6 +18,19 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
 	_update_camera_feedback(delta)
+
+func _apply_ground_movement(input_vector: Vector2, delta: float) -> void:
+	# Dash is handled before this method by the base controller and therefore
+	# remains a responsive cancel. Ground movement alone is briefly committed.
+	if _attack_pose_left > 0.0:
+		super._apply_ground_movement(input_vector * 0.22, delta)
+		velocity = velocity.limit_length(move_speed * 0.52)
+		return
+	if _cast_pose_left > 0.0:
+		super._apply_ground_movement(input_vector * 0.52, delta)
+		velocity = velocity.limit_length(move_speed * 0.72)
+		return
+	super._apply_ground_movement(input_vector, delta)
 
 func _spawn_feedback(kind_value: String, world_position: Vector2, direction_value: Vector2, color_value: Color, text_value: String) -> void:
 	super._spawn_feedback(kind_value, world_position, direction_value, color_value, text_value)
