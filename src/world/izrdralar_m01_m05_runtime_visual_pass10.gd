@@ -4,8 +4,9 @@ extends "res://src/world/izrdralar_m01_m05_runtime_visual_pass09.gd"
 const GroundDecorScript := preload("res://src/world/izrdralar_authored_ground_decor.gd")
 
 # Pass 10 translates the useful *vocabulary* observed in the external reference
-# folders (wear, reeds, rubble, root fractures) into original Godot-drawn ground
-# details. No external pixels or XNB resources are loaded by the runtime.
+# folders (wear, inhabited thresholds/gardens, reeds, rubble, root fractures)
+# into original Godot-drawn ground details. No external pixels or XNB resources
+# are loaded by the runtime.
 func _ready() -> void:
 	super._ready()
 	_spawn_authored_ground_decor()
@@ -23,7 +24,11 @@ func _spawn_authored_ground_decor() -> void:
 			specs = [
 				{"kind":"plaza_wear", "position":Vector2(530, 500), "accent":Color("a98b68"), "seed":211},
 				{"kind":"pebbles", "position":Vector2(430, 650), "accent":Color("8d7d68"), "seed":223},
-				{"kind":"plaza_wear", "position":Vector2(715, 705), "accent":Color("947a62"), "seed":227}
+				{"kind":"plaza_wear", "position":Vector2(715, 705), "accent":Color("947a62"), "seed":227},
+				{"kind":"garden_patch", "position":Vector2(265, 490), "accent":Color("795f48"), "seed":229},
+				{"kind":"garden_patch", "position":Vector2(760, 680), "accent":Color("725944"), "seed":233},
+				{"kind":"doorstep", "position":Vector2(330, 472), "accent":Color("8a6a4d"), "seed":239},
+				{"kind":"doorstep", "position":Vector2(705, 662), "accent":Color("846447"), "seed":241}
 			]
 		"M03":
 			specs = [
