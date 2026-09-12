@@ -1,0 +1,76 @@
+name: Izrdralar P03 Alexis Visual Capture
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scenes/izrdralar/**'
+      - 'src/npc/alexis_*.gd'
+      - 'src/world/izrdralar_m01_m05_runtime_visual_pass12.gd'
+      - 'assets/production/characters/p03_approved/**'
+      - 'tools/izrdralar_p03_alexis_visual_capture.gd'
+      - 'tools/scenes/IzrdralarP03AlexisVisualCapture.tscn'
+      - '.github/workflows/izrdralar-p03-alexis-visual-capture.yml'
+
+concurrency:
+  group: izrdralar-p03-alexis-visual-${{ github.event.pull_request.number || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Godot 4.7.2
+        shell: bash
+        run: |
+          set -euxo pipefail
+          wget -q https://godot-releases.nbg1.your-objectstorage.com/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -O /tmp/godot.zip
+          unzip -q /tmp/godot.zip -d /tmp/godot
+          chmod +x /tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          /tmp/godot/Godot_v4.7.2-stable_linux.x86_64 --version
+
+      - name: Import project and reject parse errors
+        shell: bash
+        run: |
+          set -o pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          "$GODOT" --headless --path . --editor --quit 2>&1 | tee /tmp/p03-visual-import.log
+          if grep -E "SCRIPT ERROR|Parse Error" /tmp/p03-visual-import.log; then
+            exit 1
+          fi
+
+      - name: Capture Alexis production states at 640x360
+        shell: bash
+        run: |
+          set -euxo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.2-stable_linux.x86_64
+          rm -rf /tmp/izrdralar-p03-alexis-captures
+          if ! command -v xvfb-run >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq xvfb
+          fi
+          timeout 75s xvfb-run -a "$GODOT" --path . --rendering-method gl_compatibility res://tools/scenes/IzrdralarP03AlexisVisualCapture.tscn 2>&1 | tee /tmp/p03-visual-capture.log
+          grep -q "IZRDRALAR_P03_ALEXIS_VISUAL_CAPTURE_PASS" /tmp/p03-visual-capture.log
+          test "$(find /tmp/izrdralar-p03-alexis-captures -maxdepth 1 -name '*.png' | wc -l)" -eq 6
+
+      - name: Upload P03 Alexis captures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: izrdralar-p03-alexis-visual-captures
+          path: /tmp/izrdralar-p03-alexis-captures/*.png
+          if-no-files-found: warn
+
+      - name: Upload P03 Alexis capture log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: izrdralar-p03-alexis-visual-log
+          path: |
+            /tmp/p03-visual-import.log
+            /tmp/p03-visual-capture.log
+          if-no-files-found: warn
