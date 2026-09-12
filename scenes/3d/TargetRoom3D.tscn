@@ -1,0 +1,103 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://src/3d/player3d_controller.gd" id="1_player"]
+[ext_resource type="Script" path="res://src/3d/camera3d_rig.gd" id="2_camera"]
+[ext_resource type="Script" path="res://src/3d/interactable3d.gd" id="3_interact"]
+
+[sub_resource type="StandardMaterial3D" id="Material_floor"]
+albedo_color = Color(0.13, 0.21, 0.16, 1)
+roughness = 0.92
+
+[sub_resource type="PlaneMesh" id="Plane_floor"]
+material = SubResource("Material_floor")
+size = Vector2(24, 24)
+
+[sub_resource type="BoxShape3D" id="Shape_floor"]
+size = Vector3(24, 0.2, 24)
+
+[sub_resource type="StandardMaterial3D" id="Material_player"]
+albedo_color = Color(0.24, 0.48, 0.62, 1)
+metallic = 0.08
+roughness = 0.72
+
+[sub_resource type="CapsuleMesh" id="Mesh_player"]
+material = SubResource("Material_player")
+radius = 0.36
+height = 1.82
+
+[sub_resource type="CapsuleShape3D" id="Shape_player"]
+radius = 0.36
+height = 1.82
+
+[sub_resource type="StandardMaterial3D" id="Material_interact"]
+albedo_color = Color(0.66, 0.38, 0.92, 1)
+emission_enabled = true
+emission = Color(0.22, 0.08, 0.34, 1)
+emission_energy_multiplier = 1.35
+
+[sub_resource type="SphereMesh" id="Mesh_interact"]
+material = SubResource("Material_interact")
+radius = 0.48
+height = 0.96
+
+[sub_resource type="SphereShape3D" id="Shape_interact"]
+radius = 0.62
+
+[node name="TargetRoom3D" type="Node3D"]
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-52, -34, 0)
+light_energy = 1.35
+shadow_enabled = true
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+mesh = SubResource("Plane_floor")
+
+[node name="FloorBody" type="StaticBody3D" parent="."]
+position = Vector3(0, -0.1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FloorBody"]
+shape = SubResource("Shape_floor")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+position = Vector3(0, 1, 0)
+script = ExtResource("1_player")
+camera_path = NodePath("../CameraRig")
+
+[node name="TECH_PROXY_DO_NOT_APPROVE" type="MeshInstance3D" parent="Player"]
+mesh = SubResource("Mesh_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+shape = SubResource("Shape_player")
+
+[node name="CameraRig" type="Camera3D" parent="."]
+position = Vector3(7.5, 9.5, 7.5)
+current = true
+script = ExtResource("2_camera")
+target_path = NodePath("../Player")
+
+[node name="InteractionProbe" type="Area3D" parent="."]
+position = Vector3(2.8, 0.7, -1.6)
+script = ExtResource("3_interact")
+interaction_text = "Inspeccionar señal 3D"
+toast_text = "Fundación 3D activa · interacción confirmada"
+
+[node name="Visual" type="MeshInstance3D" parent="InteractionProbe"]
+mesh = SubResource("Mesh_interact")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionProbe"]
+shape = SubResource("Shape_interact")
+
+[node name="Label3D" type="Label3D" parent="InteractionProbe"]
+position = Vector3(0, 1.0, 0)
+text = "C · PRUEBA INTERACCIÓN"
+billboard = 1
+font_size = 24
+outline_size = 6
+
+[node name="TechnicalNotice" type="Label3D" parent="."]
+position = Vector3(-2.8, 0.08, -3.8)
+rotation_degrees = Vector3(-90, 0, 0)
+text = "FASE 1 · FUNDACIÓN TÉCNICA · NO ES OBJETIVO VISUAL"
+font_size = 20
+outline_size = 5
