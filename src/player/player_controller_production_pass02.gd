@@ -25,7 +25,7 @@ func _spawn_feedback(kind_value: String, world_position: Vector2, direction_valu
 			_kick_camera(0.095, 2.4)
 		"hurt":
 			_kick_camera(0.13, 3.2)
-		"line":
+		"line", "shot", "charge":
 			_kick_camera(0.055, 1.15)
 		_:
 			pass
@@ -33,11 +33,13 @@ func _spawn_feedback(kind_value: String, world_position: Vector2, direction_valu
 func _kick_camera(duration: float, strength: float) -> void:
 	if not is_instance_valid(_world_camera):
 		return
+	var effective_strength := strength * (0.22 if AccessibilityService.reduce_camera_motion else 1.0)
+	var effective_duration := duration * (0.55 if AccessibilityService.reduce_camera_motion else 1.0)
 	# Stronger feedback wins when multiple effects happen in the same frame.
-	if strength >= _camera_shake_strength or _camera_shake_left <= 0.0:
-		_camera_shake_duration = maxf(0.01, duration)
-		_camera_shake_strength = strength
-	_camera_shake_left = maxf(_camera_shake_left, duration)
+	if effective_strength >= _camera_shake_strength or _camera_shake_left <= 0.0:
+		_camera_shake_duration = maxf(0.01, effective_duration)
+		_camera_shake_strength = effective_strength
+	_camera_shake_left = maxf(_camera_shake_left, effective_duration)
 
 func _update_camera_feedback(delta: float) -> void:
 	if not is_instance_valid(_world_camera):
