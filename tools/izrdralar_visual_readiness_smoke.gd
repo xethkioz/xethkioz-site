@@ -143,7 +143,7 @@ func _validate_runtime_case(map_id: String, entry_id: String, flags: Array) -> v
 	if xethkioz == null:
 		failures.append("%s runtime missing Xethkioz" % map_id)
 	else:
-		_validate_named_sprite(xethkioz, "XethkiozVisual", "%s Xethkioz" % map_id)
+		_validate_xethkioz_live_visual(xethkioz, "%s Xethkioz" % map_id)
 		if xethkioz.get_node_or_null("ContactShadow") == null:
 			failures.append("%s Xethkioz missing authored contact shadow" % map_id)
 
@@ -173,6 +173,20 @@ func _validate_runtime_case(map_id: String, entry_id: String, flags: Array) -> v
 		failures.append("%s runtime enemy visual count mismatch: %d != %d" % [map_id, enemy_count, layout_enemy_count])
 
 	await _dispose_runtime(runtime)
+
+func _validate_xethkioz_live_visual(actor: Node2D, label: String) -> void:
+	var live_visual := actor.get_node_or_null("XethkiozVisual")
+	if live_visual == null:
+		failures.append("%s missing approved live XethkiozVisual" % label)
+		return
+	if live_visual.get_script() == null or not str(live_visual.get_script().resource_path).ends_with("xethkioz_approved_visual.gd"):
+		failures.append("%s is not using approved P02 live renderer" % label)
+	if not live_visual.has_method("set_facing") or not live_visual.has_method("set_action"):
+		failures.append("%s live renderer missing movement/action state contract" % label)
+	if not live_visual.has_method("set_tail_count") or not live_visual.has_method("set_rune_color"):
+		failures.append("%s live renderer missing tail/rune identity contract" % label)
+	if live_visual is CanvasItem and not (live_visual as CanvasItem).visible:
+		failures.append("%s approved live renderer is hidden" % label)
 
 func _validate_named_sprite(actor: Node2D, sprite_name: String, label: String) -> void:
 	var sprite := actor.get_node_or_null(sprite_name) as Sprite2D
