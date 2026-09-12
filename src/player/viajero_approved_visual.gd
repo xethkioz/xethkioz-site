@@ -21,6 +21,7 @@ var _attack_total: float = 0.18
 var _cast_left: float = 0.0
 var _cast_total: float = 0.24
 var _hit_left: float = 0.0
+var _consume_pose: float = 0.0
 var _body_scale: float = 1.0
 var _state: String = "idle"
 
@@ -55,6 +56,11 @@ func update_from_player(delta: float, facing_value: Vector2, velocity_value: Vec
 	_update_state()
 	_update_pose()
 
+func set_consumable_pose(value: float) -> void:
+	_consume_pose = clampf(value, 0.0, 1.0)
+	_update_state()
+	_update_pose()
+
 func state_name() -> String:
 	return _state
 
@@ -67,6 +73,8 @@ func frame_size() -> Vector2:
 func _update_state() -> void:
 	if _hit_left > 0.0:
 		_state = "hurt"
+	elif _consume_pose > 0.001:
+		_state = "consume"
 	elif _attack_left > 0.0:
 		_state = "attack"
 	elif _cast_left > 0.0:
@@ -125,6 +133,12 @@ func _update_pose() -> void:
 			visual_position.y -= 2.5 * pulse
 			visual_scale = Vector2.ONE * (1.0 + 0.045 * pulse)
 			visual_scale.x *= _body_scale
+		"consume":
+			var pose: float = _consume_pose
+			visual_position.y += 1.2 * pose
+			visual_position.x += _facing.x * 0.8 * pose
+			visual_rotation = -_facing.x * 0.035 * pose
+			visual_scale = Vector2(_body_scale * (1.0 - 0.025 * pose), 1.0 + 0.025 * pose)
 		"hurt":
 			var recoil: float = clampf(_hit_left / 0.13, 0.0, 1.0)
 			visual_position -= _facing * (2.5 * recoil)
