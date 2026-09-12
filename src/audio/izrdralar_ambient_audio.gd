@@ -8,9 +8,12 @@ extends Node
 
 const MIX_RATE := 11025
 const LOOP_SECONDS := 6.0
+const BOSS_DUCK_DB := -5.0
+const MIX_SLEW_DB_PER_SECOND := 18.0
 
 var map_id: String = "M01"
 var _player: AudioStreamPlayer
+var _boss_mix_active := false
 
 func configure(map_value: String) -> void:
 	map_id = map_value if not map_value.is_empty() else "M01"
@@ -23,12 +26,17 @@ func _ready() -> void:
 	_player = AudioStreamPlayer.new()
 	_player.name = "IzrdralarAmbientPlayer"
 	add_child(_player)
+	if not EventBus.boss_phase_changed.is_connected(_on_boss_phase_changed):
+		EventBus.boss_phase_changed.connect(_on_boss_phase_changed)
+	if not EventBus.enemy_defeated.is_connected(_on_enemy_defeated):
+		EventBus.enemy_defeated.connect(_on_enemy_defeated)
 	_refresh_stream()
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if not is_instance_valid(_player):
 		return
-	_player.volume_db = AccessibilityService.ambience_volume_db
+	var target_volume := AccessibilityService.ambience_volume_db + (BOSS_DUCK_DB if _boss_mix_active else 0.0)
+	_player.volume_db = move_toward(_player.volume_db, target_volume, MIX_SLEW_DB_PER_SECOND * delta)
 	_player.stream_paused = not AccessibilityService.ambience_enabled
 	if AccessibilityService.ambience_enabled and not _player.playing:
 		_player.play()
@@ -38,10 +46,19 @@ func _refresh_stream() -> void:
 		return
 	_player.stop()
 	_player.stream = build_stream(map_id)
-	_player.volume_db = AccessibilityService.ambience_volume_db
+	_player.volume_db = AccessibilityService.ambience_volume_db + (BOSS_DUCK_DB if _boss_mix_active else 0.0)
 	if AccessibilityService.ambience_enabled and _player.stream != null:
 		_player.play()
 	_player.stream_paused = not AccessibilityService.ambience_enabled
+
+func _on_boss_phase_changed(boss_id: String, phase: int) -> void:
+	if map_id != "M05" or boss_id != "boss5_guardian_bosque_velado":
+		return
+	_boss_mix_active = phase >= 1
+
+func _on_enemy_defeated(enemy_id: String, _xp_reward: int, _world_position: Vector2) -> void:
+	if enemy_id == "boss5_guardian_bosque_velado":
+		_boss_mix_active = false
 
 static func build_stream(map_value: String) -> AudioStreamWAV:
 	var profile := _profile(map_value)
