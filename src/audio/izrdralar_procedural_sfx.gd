@@ -64,5 +64,21 @@ static func _spec(kind: String) -> Dictionary:
 			return {"start_hz": 330.0, "end_hz": 265.0, "duration": 0.16, "gain": 0.11, "harmonic": 0.22, "click": 0.0}
 		"telegraph":
 			return {"start_hz": 220.0, "end_hz": 300.0, "duration": 0.11, "gain": 0.065, "harmonic": 0.12, "click": 0.0}
+		"wave":
+			return {"start_hz": 310.0, "end_hz": 620.0, "duration": 0.18, "gain": 0.13, "harmonic": 0.22, "click": 0.02}
+		"guard":
+			return {"start_hz": 280.0, "end_hz": 205.0, "duration": 0.18, "gain": 0.12, "harmonic": 0.30, "click": 0.03}
+		"mark":
+			return {"start_hz": 540.0, "end_hz": 430.0, "duration": 0.19, "gain": 0.11, "harmonic": 0.25, "click": 0.04}
+		"root":
+			return {"start_hz": 190.0, "end_hz": 115.0, "duration": 0.22, "gain": 0.14, "harmonic": 0.36, "click": 0.02}
+		"shot":
+			return {"start_hz": 650.0, "end_hz": 980.0, "duration": 0.10, "gain": 0.12, "harmonic": 0.16, "click": 0.10}
+		"trap":
+			return {"start_hz": 420.0, "end_hz": 315.0, "duration": 0.20, "gain": 0.10, "harmonic": 0.28, "click": 0.03}
+		"charge":
+			return {"start_hz": 235.0, "end_hz": 760.0, "duration": 0.17, "gain": 0.16, "harmonic": 0.26, "click": 0.10}
+		"regen":
+			return {"start_hz": 480.0, "end_hz": 840.0, "duration": 0.24, "gain": 0.10, "harmonic": 0.18, "click": 0.0}
 		_:
 			return {}
