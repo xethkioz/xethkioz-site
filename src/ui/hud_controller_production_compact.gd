@@ -2,15 +2,23 @@ extends "res://src/ui/hud_controller.gd"
 
 # Compact 640x360 HUD for the authored Izrdralar production pass.
 # All gameplay data is inherited from HudController; only composition changes.
+# Numeric HP/MP readouts prevent the combat state from depending on color alone.
+
+var hp_value_label: Label
+var mana_value_label: Label
 
 func _build_ui() -> void:
-	_make_panel(Vector2(8, 8), Vector2(166, 44), C_BG, C_VIOLET)
-	hp_label = _make_label(Vector2(15, 12), Vector2(148, 10), "VIAJERO · NIVEL 1", 7, C_TEXT, true)
-	_make_bar_back(Vector2(15, 27), Vector2(110, 6))
-	hp_bar = _make_bar_fill(Vector2(15, 27), Vector2(110, 6), C_ORANGE)
-	_make_bar_back(Vector2(15, 39), Vector2(84, 4))
-	mana_bar = _make_bar_fill(Vector2(15, 39), Vector2(84, 4), C_VIOLET)
-	progress_label = _make_label(Vector2(101, 35), Vector2(62, 10), "", 5, C_MUTED, false, HORIZONTAL_ALIGNMENT_RIGHT)
+	_make_panel(Vector2(8, 8), Vector2(216, 44), C_BG, C_VIOLET)
+	hp_label = _make_label(Vector2(15, 12), Vector2(112, 10), "VIAJERO · NIVEL 1", 7, C_TEXT, true)
+	progress_label = _make_label(Vector2(132, 12), Vector2(82, 10), "", 5, C_MUTED, false, HORIZONTAL_ALIGNMENT_RIGHT)
+
+	_make_bar_back(Vector2(15, 27), Vector2(130, 6))
+	hp_bar = _make_bar_fill(Vector2(15, 27), Vector2(130, 6), C_ORANGE)
+	hp_value_label = _make_label(Vector2(150, 24), Vector2(64, 10), "HP 100/100", 5, C_TEXT, true, HORIZONTAL_ALIGNMENT_RIGHT)
+
+	_make_bar_back(Vector2(15, 39), Vector2(100, 4))
+	mana_bar = _make_bar_fill(Vector2(15, 39), Vector2(100, 4), C_VIOLET)
+	mana_value_label = _make_label(Vector2(120, 35), Vector2(94, 10), "MP 80/80", 5, Color("d8ceff"), true, HORIZONTAL_ALIGNMENT_RIGHT)
 
 	# Controls are intentionally not pinned to the center of the screen. Tutorial
 	# prompts and context toasts own that information; the world stays readable.
@@ -67,11 +75,18 @@ func _make_compact_skill(pos: Vector2, key: String, name: String, accent: Color)
 	return skill_label
 
 func _on_health(current: float, maximum: float) -> void:
+	var ratio := clampf(current / maxf(1.0, maximum), 0.0, 1.0)
 	if hp_bar:
-		hp_bar.size.x = 110.0 * clampf(current / maxf(1.0, maximum), 0.0, 1.0)
+		hp_bar.size.x = 130.0 * ratio
+		hp_bar.color = C_DANGER if ratio <= 0.30 else C_ORANGE
+	if hp_value_label:
+		hp_value_label.text = "HP %d/%d" % [roundi(current), roundi(maximum)]
+		hp_value_label.add_theme_color_override("font_color", C_DANGER if ratio <= 0.30 else C_TEXT)
 
 func _on_mana(current: float, maximum: float) -> void:
 	_mana_current = current
 	if mana_bar:
-		mana_bar.size.x = 84.0 * clampf(current / maxf(1.0, maximum), 0.0, 1.0)
+		mana_bar.size.x = 100.0 * clampf(current / maxf(1.0, maximum), 0.0, 1.0)
+	if mana_value_label:
+		mana_value_label.text = "MP %d/%d" % [roundi(current), roundi(maximum)]
 	_update_skill_status()
