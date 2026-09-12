@@ -2,6 +2,7 @@ extends Node
 
 signal toast_requested(message: String)
 signal dialog_requested(speaker: String, text: String)
+signal interaction_hint_changed(label: String)
 signal npc_interacted(npc_id: String)
 signal lore_discovered(lore_id: String, title: String, discovered_count: int, total_hint: int)
 signal poi_discovered(poi_id: String, display_name: String, discovered_count: int, xp_reward: int)
