@@ -1,5 +1,7 @@
 extends Node2D
 
+const IzrdralarProceduralSfx := preload("res://src/audio/izrdralar_procedural_sfx.gd")
+
 var _kind: String = "hit"
 var _direction: Vector2 = Vector2.RIGHT
 var _accent: Color = Color.WHITE
@@ -7,6 +9,7 @@ var _text: String = ""
 var _elapsed: float = 0.0
 var _duration: float = 0.32
 var _label: Label
+var _sfx_player: AudioStreamPlayer2D
 
 func configure(kind_value: String, direction_value: Vector2, color_value: Color, text_value: String = "", duration_override: float = -1.0) -> void:
 	_kind = kind_value
@@ -42,6 +45,7 @@ func configure(kind_value: String, direction_value: Vector2, color_value: Color,
 		_duration = duration_override
 	if not _text.is_empty():
 		_ensure_label()
+	_play_authored_sfx()
 	queue_redraw()
 
 func _ready() -> void:
@@ -62,6 +66,21 @@ func _process(delta: float) -> void:
 	queue_redraw()
 	if _elapsed >= _duration:
 		queue_free()
+
+func _play_authored_sfx() -> void:
+	# CI/headless validates code and gameplay without opening an audio device.
+	if DisplayServer.get_name() == "headless":
+		return
+	var stream := IzrdralarProceduralSfx.build(_kind)
+	if stream == null:
+		return
+	if not is_instance_valid(_sfx_player):
+		_sfx_player = AudioStreamPlayer2D.new()
+		_sfx_player.name = "AuthoredSfx"
+		_sfx_player.volume_db = -10.5
+		add_child(_sfx_player)
+	_sfx_player.stream = stream
+	_sfx_player.play()
 
 func _ensure_label() -> void:
 	if is_instance_valid(_label):
