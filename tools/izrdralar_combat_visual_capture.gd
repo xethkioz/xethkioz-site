@@ -52,9 +52,10 @@ func _capture_enemy_telegraph() -> void:
 	var enemy := enemies[0] as Node2D
 	player.global_position = enemy.global_position + Vector2(38, 0)
 	_prepare_camera(player)
-	enemy.set_physics_process(false)
 	enemy.call("_begin_attack")
-	for _frame in range(3):
+	# Let the real FSM advance into the telegraph instead of freezing at t=0.
+	# This samples anticipation during actual windup while still preceding impact.
+	for _frame in range(8):
 		await get_tree().process_frame
 	await _save_viewport("M01_enemy_attack_telegraph")
 	await _dispose_runtime(runtime)
@@ -90,10 +91,10 @@ func _capture_boss_telegraph() -> void:
 	var boss := bosses[0] as Node2D
 	player.global_position = boss.global_position + Vector2(0, 112)
 	_prepare_camera(player)
-	boss.set_physics_process(false)
 	boss.call("_start_root_pulse")
-	boss.queue_redraw()
-	for _frame in range(4):
+	# Keep Boss 5 live and sample roughly one third into the 0.85 s windup so
+	# both the arena warning and progressive pulse read are represented.
+	for _frame in range(18):
 		await get_tree().process_frame
 	await _save_viewport("M05_boss5_root_pulse_telegraph")
 	await _dispose_runtime(runtime)
