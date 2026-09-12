@@ -53,7 +53,7 @@ func _physics_process(delta: float) -> void:
 
 func _start_root_pulse() -> void:
 	super._start_root_pulse()
-	_spawn_feedback("boss_telegraph", Vector2.UP, Color("8b5cf6"), "SALÍ DEL CÍRCULO")
+	_spawn_feedback("boss_telegraph", Vector2.UP, Color("8b5cf6"), "SALÍ DEL CÍRCULO", ROOT_PULSE_WINDUP)
 
 func take_damage(amount: float) -> void:
 	if amount <= 0.0:
@@ -75,12 +75,12 @@ func _impact_direction() -> Vector2:
 			return direction.normalized()
 	return Vector2.UP
 
-func _spawn_feedback(effect_id: String, direction_value: Vector2, color_value: Color, text_value: String) -> void:
+func _spawn_feedback(effect_id: String, direction_value: Vector2, color_value: Color, text_value: String, duration_override: float = -1.0) -> void:
 	var scene: Node = get_tree().current_scene
 	if scene == null:
 		return
 	var effect_position: Vector2 = global_position + (Vector2(0, 2) if effect_id == "boss_telegraph" else Vector2(0, -20))
-	IzrdralarFxFactory.spawn(scene, effect_id, effect_position, direction_value, color_value, text_value)
+	IzrdralarFxFactory.spawn(scene, effect_id, effect_position, direction_value, color_value, text_value, duration_override)
 
 func _draw() -> void:
 	var ratio: float = health / max_health if max_health > 0.0 else 0.0
