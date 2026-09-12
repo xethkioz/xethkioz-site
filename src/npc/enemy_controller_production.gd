@@ -2,6 +2,7 @@ extends "res://src/npc/enemy_controller.gd"
 
 const ATLAS := preload("res://assets/production/characters/enemy_atlas.svg")
 const IzrdralarFxFactory := preload("res://src/fx/izrdralar_fx_factory.gd")
+const LiveVisualScript := preload("res://src/npc/enemy_live_visual.gd")
 const FRAME_SIZE := Vector2(32, 32)
 
 const STATE_IDLE := "idle"
@@ -12,6 +13,7 @@ const STATE_RECOVER := "recover"
 const STATE_RETURN := "return"
 
 var _visual: Sprite2D
+var _live_visual: Node2D
 var _visual_index: int = 0
 var _production_defeated: bool = false
 var _ai_state: String = STATE_IDLE
@@ -37,21 +39,34 @@ func configure_production(id_value: String, hp: float, speed: float, damage: flo
 	_apply_species_behavior()
 	if is_inside_tree():
 		_refresh_visual()
+		if is_instance_valid(_live_visual):
+			_live_visual.call("configure_species", _visual_index)
 
 func _ready() -> void:
 	super._ready()
 	_home_position = global_position
 	_patrol_target = _home_position
 	_state_timer = 0.65 + float(_visual_index) * 0.09
+
 	_visual = Sprite2D.new()
 	_visual.name = "EnemyVisual"
 	_visual.texture = ATLAS
 	_visual.region_enabled = true
 	_visual.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_visual.region_rect = Rect2(Vector2(_visual_index * 32, 0), FRAME_SIZE)
 	_visual.position = Vector2(0, -7)
-	_visual.z_index = 2
+	_visual.z_index = 1
+	_visual.visible = false
 	add_child(_visual)
-	_refresh_visual()
+
+	_live_visual = Node2D.new()
+	_live_visual.name = "EnemyLiveVisual"
+	_live_visual.set_script(LiveVisualScript)
+	_live_visual.position = Vector2(0, -2)
+	_live_visual.z_index = 2
+	add_child(_live_visual)
+	_live_visual.call("configure_species", _visual_index)
+	_live_visual.call("set_motion_state", "idle", _last_move_direction, 0.0)
 
 func _physics_process(delta: float) -> void:
 	if _production_defeated:
@@ -149,20 +164,13 @@ func _desired_velocity_toward(target: Vector2, speed_multiplier: float, allow_we
 
 func _movement_acceleration() -> float:
 	match _visual_index:
-		0:
-			return 280.0
-		1:
-			return 390.0
-		2:
-			return 210.0
-		3:
-			return 250.0
-		4:
-			return 185.0
-		5:
-			return 320.0
-		_:
-			return 280.0
+		0: return 280.0
+		1: return 390.0
+		2: return 210.0
+		3: return 250.0
+		4: return 185.0
+		5: return 320.0
+		_: return 280.0
 
 func _movement_deceleration() -> float:
 	return _movement_acceleration() * (1.35 if _visual_index != 2 else 0.95)
@@ -182,22 +190,22 @@ func _update_status_timers(delta: float) -> void:
 
 func _apply_species_behavior() -> void:
 	match _visual_index:
-		0: # Brote goblin
+		0:
 			aggro_range = 148.0
 			attack_range = 23.0
-		1: # Explorador goblin
+		1:
 			aggro_range = 174.0
 			attack_range = 25.0
-		2: # Slime prismático
+		2:
 			aggro_range = 126.0
 			attack_range = 24.0
-		3: # Escarabajo de corteza
+		3:
 			aggro_range = 138.0
 			attack_range = 26.0
-		4: # Espíritu de bruma
+		4:
 			aggro_range = 188.0
 			attack_range = 68.0
-		5: # Drone pampeano roto
+		5:
 			aggro_range = 220.0
 			attack_range = 92.0
 
@@ -206,20 +214,13 @@ func _is_ranged() -> bool:
 
 func _attack_windup_duration() -> float:
 	match _visual_index:
-		0:
-			return 0.38
-		1:
-			return 0.26
-		2:
-			return 0.48
-		3:
-			return 0.52
-		4:
-			return 0.58
-		5:
-			return 0.66
-		_:
-			return 0.40
+		0: return 0.38
+		1: return 0.26
+		2: return 0.48
+		3: return 0.52
+		4: return 0.58
+		5: return 0.66
+		_: return 0.40
 
 func _attack_recovery_duration() -> float:
 	return 0.42 if _visual_index == 1 else (0.72 if _is_ranged() else 0.58)
@@ -250,6 +251,8 @@ func _resolve_attack() -> void:
 	var landed: bool = false
 	_attack_impact_left = 0.14
 	_last_move_direction = direction
+	if is_instance_valid(_live_visual):
+		_live_visual.call("set_motion_state", "attack", direction, 1.0)
 	if _is_ranged():
 		_spawn_feedback("line", direction, _attack_color(), "")
 		landed = _ranged_attack_hits_player()
@@ -287,60 +290,26 @@ func _attack_color() -> Color:
 func _refresh_visual() -> void:
 	if is_instance_valid(_visual):
 		_visual.region_rect = Rect2(Vector2(_visual_index * 32, 0), FRAME_SIZE)
+	if is_instance_valid(_live_visual):
+		_live_visual.call("configure_species", _visual_index)
 
 func _update_visual_motion(delta: float) -> void:
-	if not is_instance_valid(_visual):
-		return
 	_visual_time += delta
-	var speed_ratio: float = clampf(velocity.length() / maxf(1.0, move_speed), 0.0, 1.4)
-	var moving: bool = speed_ratio > 0.08
-	var base_y := -7.0
-	var bob := 0.0
-	var sway := 0.0
-	var scale_value := Vector2.ONE
-
-	match _visual_index:
-		0: # Brote goblin: pasos cortos e irregulares.
-			bob = absf(sin(_visual_time * 9.4)) * 1.35 * speed_ratio if moving else sin(_visual_time * 2.0) * 0.32
-			sway = sin(_visual_time * 4.7) * 0.65 * speed_ratio
-		1: # Explorador: zancada más rápida y ligera.
-			bob = absf(sin(_visual_time * 12.0)) * 1.15 * speed_ratio if moving else sin(_visual_time * 2.4) * 0.25
-			sway = sin(_visual_time * 6.0) * 0.85 * speed_ratio
-		2: # Slime: squash/stretch, sin sensación de "caminar".
-			var pulse: float = sin(_visual_time * (7.0 if moving else 2.5))
-			bob = maxf(0.0, pulse) * 1.5 * maxf(0.35, speed_ratio)
-			scale_value = Vector2(1.0 + pulse * 0.055, 1.0 - pulse * 0.075)
-		3: # Escarabajo: cuerpo bajo, pesado y estable.
-			bob = absf(sin(_visual_time * 8.0)) * 0.55 * speed_ratio
-			sway = sin(_visual_time * 4.0) * 0.30 * speed_ratio
-		4: # Espíritu: flotación continua independiente de los pasos.
-			bob = sin(_visual_time * 2.8) * 1.7 + sin(_visual_time * 6.1) * 0.25 * speed_ratio
-			sway = sin(_visual_time * 2.2) * 0.75
-		5: # Drone: oscilación mecánica controlada.
-			bob = sin(_visual_time * 5.2) * 0.45 + (0.35 if moving and fmod(_visual_time * 8.0, 1.0) > 0.82 else 0.0)
-			sway = sin(_visual_time * 3.3) * 0.25
-
-	if _ai_state == STATE_WINDUP and _attack_windup_total > 0.0:
-		var windup_progress := 1.0 - clampf(_state_timer / _attack_windup_total, 0.0, 1.0)
-		var anticipation := sin(windup_progress * PI * 0.5)
-		scale_value *= Vector2(1.0 + 0.055 * anticipation, 1.0 - 0.075 * anticipation)
-		base_y += 1.5 * anticipation
+	if not is_instance_valid(_live_visual):
+		return
+	var ratio: float = clampf(velocity.length() / maxf(1.0, move_speed), 0.0, 1.5)
+	var state := "idle"
+	if _stagger_left > 0.0:
+		state = "hurt"
 	elif _attack_impact_left > 0.0:
-		var attack_progress := 1.0 - clampf(_attack_impact_left / 0.14, 0.0, 1.0)
-		var attack_pulse := sin(attack_progress * PI)
-		base_y -= 0.8 * attack_pulse
-		sway += _last_move_direction.x * 2.8 * attack_pulse
-		scale_value *= Vector2(1.0 + 0.08 * attack_pulse, 1.0 - 0.045 * attack_pulse)
-	elif _ai_state == STATE_RECOVER:
-		scale_value *= Vector2(0.985, 1.025)
-
-	_visual.position = Vector2(sway, base_y - bob)
-	_visual.scale = scale_value
-	_visual.rotation = clampf(velocity.x / maxf(1.0, move_speed), -1.0, 1.0) * (0.035 if _visual_index != 4 else 0.06)
-	if velocity.x < -2.0:
-		_visual.flip_h = true
-	elif velocity.x > 2.0:
-		_visual.flip_h = false
+		state = "attack"
+	else:
+		match _ai_state:
+			STATE_PATROL, STATE_CHASE, STATE_RETURN: state = "move"
+			STATE_WINDUP: state = "windup"
+			STATE_RECOVER: state = "recover"
+			_: state = "idle"
+	_live_visual.call("set_motion_state", state, _last_move_direction, ratio)
 
 func take_damage(amount: float) -> void:
 	if _production_defeated or amount <= 0.0:
@@ -368,20 +337,19 @@ func take_damage(amount: float) -> void:
 		queue_free()
 
 func _play_defeat_sequence(impact_direction: Vector2) -> void:
-	if not is_instance_valid(_visual):
+	var target: Node2D = _live_visual if is_instance_valid(_live_visual) else _visual
+	if not is_instance_valid(target):
 		await get_tree().create_timer(0.34).timeout
 		return
 	var tween := create_tween().set_parallel(true)
 	if _visual_index == 4:
-		# Espíritu: pierde cohesión y asciende antes de disiparse.
-		tween.tween_property(_visual, "position", _visual.position + Vector2(impact_direction.x * 5.0, -11.0), 0.38).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-		tween.tween_property(_visual, "scale", Vector2(1.20, 1.34), 0.36).set_trans(Tween.TRANS_SINE)
+		tween.tween_property(target, "position", target.position + Vector2(impact_direction.x * 5.0, -11.0), 0.38).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween.tween_property(target, "scale", Vector2(1.20, 1.34), 0.36).set_trans(Tween.TRANS_SINE)
 	else:
-		# Criaturas físicas: reciben el último impulso, colapsan y pierden volumen.
-		tween.tween_property(_visual, "position", _visual.position + impact_direction * 8.0 + Vector2(0, 4), 0.34).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-		tween.tween_property(_visual, "rotation", clampf(impact_direction.x * 0.52, -0.52, 0.52), 0.30).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		tween.tween_property(_visual, "scale", Vector2(1.10, 0.28), 0.34).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	var fade := tween.tween_property(_visual, "modulate", Color(1.0, 1.0, 1.0, 0.0), 0.28)
+		tween.tween_property(target, "position", target.position + impact_direction * 8.0 + Vector2(0, 4), 0.34).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tween.tween_property(target, "rotation", clampf(impact_direction.x * 0.52, -0.52, 0.52), 0.30).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tween.tween_property(target, "scale", Vector2(1.10, 0.28), 0.34).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	var fade := tween.tween_property(target, "modulate", Color(1.0, 1.0, 1.0, 0.0), 0.28)
 	fade.set_delay(0.10)
 	await tween.finished
 
@@ -393,11 +361,12 @@ func _impact_direction() -> Vector2:
 	return Vector2.UP
 
 func _flash_visual() -> void:
-	if not is_instance_valid(_visual):
-		return
-	_visual.modulate = Color(1.0, 0.58, 0.46, 1.0)
-	var tween: Tween = create_tween()
-	tween.tween_property(_visual, "modulate", Color.WHITE, 0.11)
+	if is_instance_valid(_live_visual):
+		_live_visual.call("flash_hurt", 0.13)
+	if is_instance_valid(_visual):
+		_visual.modulate = Color(1.0, 0.58, 0.46, 1.0)
+		var tween: Tween = create_tween()
+		tween.tween_property(_visual, "modulate", Color.WHITE, 0.11)
 
 func _spawn_feedback(kind_value: String, direction_value: Vector2, color_value: Color, text_value: String = "", duration_override: float = -1.0) -> void:
 	var scene: Node = get_tree().current_scene
@@ -419,6 +388,6 @@ func _draw() -> void:
 		if _is_ranged() and is_instance_valid(_player):
 			var local_target: Vector2 = to_local(_player.global_position)
 			draw_line(Vector2(0, -7), local_target, Color(danger.r, danger.g, danger.b, 0.22 + telegraph_progress * 0.40), 1.0)
-	if health < max_health or _ai_state == STATE_CHASE or _ai_state == STATE_WINDUP or _ai_state == STATE_RECOVER:
+	if health < max_health or _ai_state in [STATE_CHASE, STATE_WINDUP, STATE_RECOVER]:
 		draw_rect(Rect2(-13, -25, 26, 3), Color("241f22"))
 		draw_rect(Rect2(-13, -25, 26 * health_ratio, 3), Color("ff6b6b"))
