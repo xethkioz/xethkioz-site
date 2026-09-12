@@ -74,6 +74,7 @@ func set_field_support_enabled(enabled: bool, target: Node2D = null) -> void:
 		_support_target = get_tree().get_first_node_in_group("player") as Node2D
 	if not _field_support_enabled:
 		_support_velocity = Vector2.ZERO
+	_update_approved_visual(0.0)
 
 func is_field_support_enabled() -> bool:
 	return _field_support_enabled
@@ -122,6 +123,7 @@ func receive_support_hit(amount: float, source_position: Vector2 = Vector2.ZERO)
 		_downed = true
 		_recover_left = 3.0
 		_support_velocity = Vector2.ZERO
+	_update_approved_visual(0.0)
 
 func heal_support(amount: float) -> void:
 	if amount <= 0.0:
@@ -137,6 +139,7 @@ func _begin_support_action(action_id: String, effect_id: String, accent: Color) 
 	_action_total = float(ACTION_DURATIONS[action_id])
 	_action_left = _action_total
 	_support_velocity = Vector2.ZERO
+	_update_approved_visual(0.0)
 	var scene := get_tree().current_scene
 	if scene != null:
 		IzrdralarFxFactory.spawn(scene, effect_id, global_position + Vector2(0, -28), _support_facing, accent, "")
