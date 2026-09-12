@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3]
 
-[ext_resource path="res://src/world/izrdralar_m01_m05_runtime_visual_pass12.gd" type="Script" id="1_runtime"]
+[ext_resource path="res://src/world/izrdralar_m01_m05_runtime_visual_pass13.gd" type="Script" id="1_runtime"]
 [ext_resource path="res://src/world/izrdralar_story_layer.gd" type="Script" id="2_story"]
 
 [node name="IzrdralarM01M05Runtime" type="Node2D"]
