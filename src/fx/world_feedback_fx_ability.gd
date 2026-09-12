@@ -1,5 +1,7 @@
 extends "res://src/fx/world_feedback_fx_impact.gd"
 
+const ProceduralSfx := preload("res://src/audio/izrdralar_procedural_sfx.gd")
+
 # Mentor ability readability pass. Gameplay semantics remain owned by the
 # player controller; this layer only gives each combat school a distinct shape.
 func configure(kind_value: String, direction_value: Vector2, color_value: Color, text_value: String = "", duration_override: float = -1.0) -> void:
@@ -23,6 +25,20 @@ func configure(kind_value: String, direction_value: Vector2, color_value: Color,
 			_duration = 0.38
 		"regen":
 			_duration = 0.72
+
+func _play_authored_sfx() -> void:
+	if DisplayServer.get_name() == "headless" or not AccessibilityService.sfx_enabled:
+		return
+	var stream := ProceduralSfx.build(_kind)
+	if stream == null:
+		return
+	if not is_instance_valid(_sfx_player):
+		_sfx_player = AudioStreamPlayer2D.new()
+		_sfx_player.name = "AuthoredSfx"
+		add_child(_sfx_player)
+	_sfx_player.volume_db = AccessibilityService.sfx_volume_db
+	_sfx_player.stream = stream
+	_sfx_player.play()
 
 func _draw() -> void:
 	var progress: float = clampf(_elapsed / maxf(_duration, 0.001), 0.0, 1.0)
