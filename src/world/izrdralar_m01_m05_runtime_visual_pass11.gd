@@ -56,4 +56,7 @@ func _spawn_nature_pass11() -> void:
 		prop.set_script(NaturePropScript)
 		prop.position = spec["position"]
 		add_child(prop)
+		# Ground/chunk layers already occupy negative z. Keeping props at z=0
+		# makes them visible while the actors/HUD remain above them.
+		prop.z_index = 0
 		prop.call("configure", str(spec["kind"]), str(spec["palette"]), int(spec["seed"]), float(spec["scale"]))
