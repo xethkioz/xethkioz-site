@@ -42,7 +42,6 @@ func _check_delayed_consumption(player: CharacterBody2D) -> void:
 	if not InventoryService.add_item("manzana_bruma", 1):
 		failures.append("could not seed Manzana de Bruma")
 		return
-
 	player.call("use_consumable", "manzana_bruma")
 	await get_tree().create_timer(0.16).timeout
 	if InventoryService.amount_of("manzana_bruma") != 1:
@@ -51,7 +50,6 @@ func _check_delayed_consumption(player: CharacterBody2D) -> void:
 		failures.append("health changed before physical consumption moment")
 	if player.get_node_or_null("ConsumableUseFeedback") == null:
 		failures.append("consumable use did not create visible feedback node")
-
 	await get_tree().create_timer(0.34).timeout
 	if InventoryService.amount_of("manzana_bruma") != 0:
 		failures.append("consumable was not removed at use moment")
@@ -134,11 +132,21 @@ func _check_physical_enemy_defeat(player: CharacterBody2D) -> void:
 	add_child(enemy)
 	await get_tree().process_frame
 	enemy.call("configure_production", "liveness_brote", 20.0, 52.0, 8.0, 1, 0)
-	var visual := enemy.get_node_or_null("EnemyVisual") as Sprite2D
-	if visual == null:
-		failures.append("production enemy missing visual before defeat")
+	var fallback := enemy.get_node_or_null("EnemyVisual") as Sprite2D
+	var live := enemy.get_node_or_null("EnemyLiveVisual") as Node2D
+	if fallback == null:
+		failures.append("production enemy missing fallback identity sprite")
+	if live == null:
+		failures.append("production enemy missing articulated live visual")
 		enemy.queue_free()
 		return
+	if live.get_script() == null or not str(live.get_script().resource_path).ends_with("enemy_live_visual.gd"):
+		failures.append("production enemy live visual uses wrong renderer")
+	if fallback != null and fallback.visible:
+		failures.append("legacy single-frame enemy sprite is visible instead of live renderer")
+	if not live.has_method("set_motion_state") or not live.has_method("flash_hurt"):
+		failures.append("live enemy renderer missing state/hurt animation contract")
+
 	enemy.call("take_damage", 999.0)
 	if enemy.collision_layer != 0 or enemy.collision_mask != 0:
 		failures.append("defeated mob kept collision during physical defeat sequence")
@@ -149,8 +157,8 @@ func _check_physical_enemy_defeat(player: CharacterBody2D) -> void:
 	if not is_instance_valid(enemy) or not enemy.is_inside_tree():
 		failures.append("mob defeat sequence is too short / immediate")
 		return
-	if visual.modulate.a >= 0.999 and visual.scale.y >= 0.95:
-		failures.append("mob defeat sequence did not visibly collapse/fade")
+	if live.modulate.a >= 0.999 and live.scale.y >= 0.95 and absf(live.rotation) < 0.02:
+		failures.append("live mob body did not visibly collapse/fade/rotate during defeat")
 	await get_tree().create_timer(0.38).timeout
 	await get_tree().process_frame
 	if is_instance_valid(enemy) and enemy.is_inside_tree():
