@@ -2,14 +2,24 @@ class_name IzrdralarM01M05RuntimeVisualPass10
 extends "res://src/world/izrdralar_m01_m05_runtime_visual_pass09.gd"
 
 const GroundDecorScript := preload("res://src/world/izrdralar_authored_ground_decor.gd")
+const AmbientAudioScript := preload("res://src/audio/izrdralar_ambient_audio.gd")
 
 # Pass 10 translates the useful *vocabulary* observed in the external reference
 # folders (wear, inhabited thresholds/gardens, reeds, rubble, root fractures)
 # into original Godot-drawn ground details. No external pixels or XNB resources
-# are loaded by the runtime.
+# are loaded by the runtime. It also mounts an original procedural ambience bed
+# whose profile is selected by canonical map_id.
 func _ready() -> void:
 	super._ready()
 	_spawn_authored_ground_decor()
+	_spawn_authored_ambience()
+
+func _spawn_authored_ambience() -> void:
+	var ambience := Node.new()
+	ambience.name = "IzrdralarAmbientAudio"
+	ambience.set_script(AmbientAudioScript)
+	add_child(ambience)
+	ambience.call("configure", map_id)
 
 func _spawn_authored_ground_decor() -> void:
 	var specs: Array[Dictionary] = []
