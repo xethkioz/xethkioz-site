@@ -1,6 +1,6 @@
 extends Node
 
-const PLAYER_SCRIPT := preload("res://src/player/player_controller_production.gd")
+const PLAYER_SCRIPT := preload("res://src/player/player_controller_production_pass02.gd")
 
 class DamageTarget:
 	extends CharacterBody2D
@@ -26,6 +26,7 @@ func _run() -> void:
 	]
 	for case_value in cases:
 		await _run_case(case_value)
+	await _validate_action_commitment()
 	_finish()
 
 func _run_case(case_data: Dictionary) -> void:
@@ -65,6 +66,30 @@ func _run_case(case_data: Dictionary) -> void:
 	player.queue_free()
 	target.queue_free()
 	await get_tree().physics_frame
+
+func _validate_action_commitment() -> void:
+	var player: CharacterBody2D = PLAYER_SCRIPT.new()
+	player.name = "ActionCommitmentPlayer"
+	add_child(player)
+	player.set_physics_process(false)
+	await get_tree().process_frame
+	var move_speed: float = float(player.get("move_speed"))
+
+	player.velocity = Vector2.RIGHT * move_speed
+	player.set("_attack_pose_left", 0.12)
+	player.call("_apply_ground_movement", Vector2.RIGHT, 1.0 / 60.0)
+	if player.velocity.length() > move_speed * 0.52 + 0.1:
+		failures.append("attack commitment exceeded 52%% movement cap: %.2f" % player.velocity.length())
+
+	player.velocity = Vector2.RIGHT * move_speed
+	player.set("_attack_pose_left", 0.0)
+	player.set("_cast_pose_left", 0.12)
+	player.call("_apply_ground_movement", Vector2.RIGHT, 1.0 / 60.0)
+	if player.velocity.length() > move_speed * 0.72 + 0.1:
+		failures.append("cast commitment exceeded 72%% movement cap: %.2f" % player.velocity.length())
+
+	player.queue_free()
+	await get_tree().process_frame
 
 func _finish() -> void:
 	if failures.is_empty():
