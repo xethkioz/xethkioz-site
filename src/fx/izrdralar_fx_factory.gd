@@ -14,7 +14,7 @@ const PALETTE := {
 	"shadow": Color("0a0a0f")
 }
 
-static func spawn(parent: Node, effect_id: String, world_position: Vector2, direction: Vector2 = Vector2.RIGHT, color_override: Color = Color.TRANSPARENT, text_value: String = "") -> Node2D:
+static func spawn(parent: Node, effect_id: String, world_position: Vector2, direction: Vector2 = Vector2.RIGHT, color_override: Color = Color.TRANSPARENT, text_value: String = "", duration_override: float = -1.0) -> Node2D:
 	if parent == null:
 		return null
 	var spec: Dictionary = _spec(effect_id)
@@ -22,7 +22,7 @@ static func spawn(parent: Node, effect_id: String, world_position: Vector2, dire
 	parent.add_child(fx)
 	fx.global_position = world_position
 	var selected_color: Color = color_override if color_override != Color.TRANSPARENT else spec["color"]
-	fx.call("configure", str(spec["kind"]), direction, selected_color, text_value)
+	fx.call("configure", str(spec["kind"]), direction, selected_color, text_value, duration_override)
 	return fx
 
 static func _spec(effect_id: String) -> Dictionary:
