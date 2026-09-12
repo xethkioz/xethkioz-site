@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource path="res://src/npc/elida_healer_runtime.gd" type="Script" id="1_elida"]
+
+[sub_resource type="CapsuleShape2D" id="Capsule_elida"]
+radius = 8.0
+height = 18.0
+
+[node name="Elida" type="CharacterBody2D"]
+script = ExtResource("1_elida")
+collision_layer = 0
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 3)
+shape = SubResource("Capsule_elida")
