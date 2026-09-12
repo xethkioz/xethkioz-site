@@ -1,7 +1,7 @@
 class_name IzrdralarFxFactory
 extends RefCounted
 
-const WorldFeedbackFx := preload("res://src/fx/world_feedback_fx.gd")
+const WorldFeedbackFx := preload("res://src/fx/world_feedback_fx_impact.gd")
 
 const PALETTE := {
 	"amber": Color("ff8c42"),
