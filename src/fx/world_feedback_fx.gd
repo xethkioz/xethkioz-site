@@ -8,7 +8,7 @@ var _elapsed: float = 0.0
 var _duration: float = 0.32
 var _label: Label
 
-func configure(kind_value: String, direction_value: Vector2, color_value: Color, text_value: String = "") -> void:
+func configure(kind_value: String, direction_value: Vector2, color_value: Color, text_value: String = "", duration_override: float = -1.0) -> void:
 	_kind = kind_value
 	_direction = direction_value.normalized() if direction_value.length_squared() > 0.001 else Vector2.UP
 	_accent = color_value
@@ -38,6 +38,8 @@ func configure(kind_value: String, direction_value: Vector2, color_value: Color,
 			_duration = 0.66
 		_:
 			_duration = 0.34
+	if duration_override > 0.0:
+		_duration = duration_override
 	if not _text.is_empty():
 		_ensure_label()
 	queue_redraw()
@@ -172,7 +174,6 @@ func _draw_hurt(progress: float, alpha: float) -> void:
 	var radius: float = 12.0 + progress * 10.0
 	draw_arc(Vector2.ZERO, radius, -2.6, -0.55, 18, _alpha(_accent, alpha), 2.5)
 	draw_arc(Vector2.ZERO, radius + 4.0, 0.55, 2.6, 18, _alpha(_accent.lightened(0.20), alpha * 0.75), 1.5)
-
 
 func _draw_telegraph(progress: float, alpha: float) -> void:
 	var radius: float = 15.0 + sin(progress * PI) * 10.0
