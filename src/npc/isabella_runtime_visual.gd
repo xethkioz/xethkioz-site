@@ -34,13 +34,13 @@ func visual_contract_name() -> String:
 	return "P08_ISABELLA_PROTOTYPE_RENDERER_NOT_FINAL_ART"
 
 func _draw() -> void:
-	var hop := abs(sin(_clock * 4.6)) * 1.2 if _state == "idle_playful" or _state == "walk_hop" else 0.0
-	var origin := Vector2(0, -hop)
-	var coat := Color("e74c3c")
-	var flame := Color("ff5722")
-	var spark := Color("ffeb3b")
-	var chaos := Color("8e44ad")
-	var skin := Color("edc6a2")
+	var hop: float = abs(sin(_clock * 4.6)) * 1.2 if _state == "idle_playful" or _state == "walk_hop" else 0.0
+	var origin: Vector2 = Vector2(0, -hop)
+	var coat: Color = Color("e74c3c")
+	var flame: Color = Color("ff5722")
+	var spark: Color = Color("ffeb3b")
+	var chaos: Color = Color("8e44ad")
+	var skin: Color = Color("edc6a2")
 	if _hurt_left > 0.0:
 		coat = Color("f6a3a3")
 	if _downed:
@@ -57,27 +57,27 @@ func _draw() -> void:
 		draw_colored_polygon(coat_points, coat)
 		draw_circle(origin + Vector2(0, -16), 5.5, skin)
 		draw_arc(origin + Vector2(0, -16), 6.2, PI, TAU, 12, Color("5a2a32"), 2.0)
-		var wand_x := -12.0 if _facing.x <= 0.0 else 12.0
+		var wand_x: float = -12.0 if _facing.x <= 0.0 else 12.0
 		draw_line(origin + Vector2(wand_x, -7), origin + Vector2(wand_x, 9), Color("5b3a29"), 1.8)
 		draw_circle(origin + Vector2(wand_x, -9), 2.8, spark)
 
 	if _state == "walk_hop":
-		var trail_alpha := clampf(_velocity.length() / 78.0, 0.15, 0.55)
+		var trail_alpha: float = clampf(_velocity.length() / 78.0, 0.15, 0.55)
 		draw_arc(origin + Vector2(0, 8), 9.0, 0.1, PI - 0.1, 16, Color(1.0, 0.34, 0.13, trail_alpha), 1.3)
 	elif _state == "spark_shot":
-		var progress := 1.0 - clampf(_action_left / _action_total, 0.0, 1.0)
-		var direction := _facing if _facing.length_squared() > 0.001 else Vector2.RIGHT
-		var p := origin + direction * (10.0 + progress * 18.0)
+		var progress: float = 1.0 - clampf(_action_left / _action_total, 0.0, 1.0)
+		var direction: Vector2 = _facing if _facing.length_squared() > 0.001 else Vector2.RIGHT
+		var p: Vector2 = origin + direction * (10.0 + progress * 18.0)
 		draw_circle(p, 3.0, spark)
 		draw_arc(p, 5.5, 0.0, TAU, 16, chaos, 1.2)
 	elif _state == "chaos_burst":
-		var progress := 1.0 - clampf(_action_left / _action_total, 0.0, 1.0)
+		var progress: float = 1.0 - clampf(_action_left / _action_total, 0.0, 1.0)
 		draw_arc(origin + Vector2(0, -3), 12.0 + progress * 23.0, 0.0, TAU, 28, Color(0.56, 0.27, 0.68, 0.72 - progress * 0.34), 2.2)
 		for index in range(5):
-			var angle := _clock * 4.0 + TAU * float(index) / 5.0
+			var angle: float = _clock * 4.0 + TAU * float(index) / 5.0
 			draw_circle(origin + Vector2(cos(angle), sin(angle)) * (10.0 + progress * 13.0), 1.8, flame if index % 2 == 0 else spark)
 	elif _state == "heller_fury":
-		var pulse := 19.0 + sin(_clock * 9.0) * 2.0
+		var pulse: float = 19.0 + sin(_clock * 9.0) * 2.0
 		draw_arc(origin + Vector2(0, 2), pulse, PI, TAU, 24, flame, 2.6)
 		draw_arc(origin + Vector2(0, 2), pulse + 4.0, PI * 1.08, PI * 1.92, 24, chaos, 1.3)
 
@@ -91,6 +91,6 @@ func _draw() -> void:
 func _draw_flat_ellipse(center: Vector2, radii: Vector2, color: Color) -> void:
 	var points := PackedVector2Array()
 	for index in range(24):
-		var angle := TAU * float(index) / 24.0
+		var angle: float = TAU * float(index) / 24.0
 		points.append(center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y))
 	draw_colored_polygon(points, color)
