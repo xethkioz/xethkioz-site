@@ -6,6 +6,12 @@ const IzrdralarFxFactory := preload("res://src/fx/izrdralar_fx_factory.gd")
 const FRAME_SIZE := Vector2(32, 32)
 const ATTACK_POSE_DURATION := 0.18
 const CAST_POSE_DURATION := 0.24
+const BASE_MAX_HEALTH := 100.0
+const BASE_MAX_MANA := 80.0
+const BASE_ATTACK_DAMAGE := 22.0
+const HEALTH_PER_LEVEL := 6.0
+const MANA_PER_LEVEL := 4.0
+const DAMAGE_PER_LEVEL := 1.5
 
 var _visual: Sprite2D
 var _profile_overlay: Node2D
@@ -15,6 +21,7 @@ var _hit_flash_left: float = 0.0
 var _attack_pose_left: float = 0.0
 var _cast_pose_left: float = 0.0
 var _body_scale: float = 1.0
+var _applied_level: int = 1
 
 func _ready() -> void:
 	super._ready()
@@ -36,6 +43,9 @@ func _ready() -> void:
 	_profile_overlay.position = Vector2(0, -7)
 	_profile_overlay.configure(self)
 	add_child(_profile_overlay)
+	if not EventBus.player_progress_changed.is_connected(_on_player_progress_changed):
+		EventBus.player_progress_changed.connect(_on_player_progress_changed)
+	_apply_level_stats(GameState.player_level, false)
 	_update_visual(0.0)
 
 func _physics_process(delta: float) -> void:
@@ -44,6 +54,28 @@ func _physics_process(delta: float) -> void:
 	_attack_pose_left = maxf(0.0, _attack_pose_left - delta)
 	_cast_pose_left = maxf(0.0, _cast_pose_left - delta)
 	_update_visual(delta)
+
+func _apply_level_stats(level: int, grant_growth: bool) -> void:
+	var safe_level := clampi(level, 1, GameState.MAX_LEVEL)
+	var previous_max_health := max_health
+	var previous_max_mana := max_mana
+	max_health = BASE_MAX_HEALTH + float(safe_level - 1) * HEALTH_PER_LEVEL
+	max_mana = BASE_MAX_MANA + float(safe_level - 1) * MANA_PER_LEVEL
+	attack_damage = BASE_ATTACK_DAMAGE + float(safe_level - 1) * DAMAGE_PER_LEVEL
+	if grant_growth:
+		health = minf(max_health, health + maxf(0.0, max_health - previous_max_health))
+		mana = minf(max_mana, mana + maxf(0.0, max_mana - previous_max_mana))
+	else:
+		health = max_health
+		mana = max_mana
+	_applied_level = safe_level
+	EventBus.player_health_changed.emit(health, max_health)
+	EventBus.player_mana_changed.emit(mana, max_mana)
+
+func _on_player_progress_changed(level: int, _xp: int, _xp_to_next: int) -> void:
+	if level == _applied_level:
+		return
+	_apply_level_stats(level, true)
 
 func _update_visual(delta: float) -> void:
 	if not is_instance_valid(_visual):
