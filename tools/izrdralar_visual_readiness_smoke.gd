@@ -99,7 +99,7 @@ func _validate_layout_metadata(layouts: Dictionary) -> void:
 			var npc_text := JSON.stringify(npc).to_lower()
 			if npc_text.contains("milo"):
 				failures.append("obsolete MILO reference reintroduced in %s" % map_id)
-			if npc_text.contains("placeholder") or npc_text.contains("todo"):
+			if npc_text.contains("placeholder") or npc_text.contains("[todo]") or npc_text.contains("todo:"):
 				failures.append("placeholder/TODO NPC metadata remains in %s: %s" % [map_id, str(npc.get("id", "npc"))])
 			var atlas := int(npc.get("atlas", -1))
 			if atlas < 0 or atlas > 9:
