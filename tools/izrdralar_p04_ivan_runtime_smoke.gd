@@ -37,14 +37,21 @@ func _validate_ivan(ivan: Node2D, player: Node2D) -> void:
 		failures.append("Iván must never replace the Viajero")
 	if not ivan.is_in_group("ivan_scientist"):
 		failures.append("Iván scientist runtime group missing")
-	if ivan.get_script() == null or not str(ivan.get_script().resource_path).ends_with("ivan_scientist_runtime.gd"):
-		failures.append("Iván is not using the specialized P04 runtime")
+	if ivan.get_script() == null or not str(ivan.get_script().resource_path).ends_with("npc_interactable_production_pass02.gd"):
+		failures.append("Iván authored interaction layer must stay on the generic production NPC contract")
+
+	var component := ivan.get_node_or_null("IvanScientistRuntime")
+	if component == null:
+		failures.append("Iván P04 runtime component missing")
+		return
+	if component.get_script() == null or not str(component.get_script().resource_path).ends_with("ivan_scientist_runtime.gd"):
+		failures.append("Iván P04 component script mismatch")
 
 	var legacy := ivan.get_node_or_null("NpcVisual") as Sprite2D
 	if legacy == null:
 		failures.append("Iván compatibility NpcVisual missing")
 	elif legacy.visible:
-		failures.append("generic Iván atlas sprite must be hidden")
+		failures.append("generic Iván atlas sprite must be hidden by the P04 visual layer")
 
 	var visual := ivan.get_node_or_null("IvanRuntimeVisual") as Node2D
 	if visual == null:
@@ -55,25 +62,25 @@ func _validate_ivan(ivan: Node2D, player: Node2D) -> void:
 	if str(visual.call("state_name")) != "idle_calculating":
 		failures.append("P04 default visual state must be idle_calculating")
 
-	var profile: Dictionary = ivan.call("analysis_profile")
+	var profile: Dictionary = component.call("analysis_profile")
 	if str(profile.get("resonant", "")) != "itzuke":
 		failures.append("P04 canon link must be Itzuke")
 	if bool(profile.get("player_fast_travel_granted", true)):
 		failures.append("Iván quantum reposition must not grant player fast travel")
 	if bool(profile.get("direct_player_input", true)):
 		failures.append("Iván support runtime must not read direct player input")
-	if bool(ivan.call("is_field_support_enabled")):
+	if bool(component.call("is_field_support_enabled")):
 		failures.append("Iván temporary field support must be disabled by default")
 
-	await _check_action(ivan, visual, "trigger_analyze_device", "analyze_device", 0.78)
-	await _check_action(ivan, visual, "trigger_lightning_strike", "lightning_strike", 0.64)
-	await _check_action(ivan, visual, "trigger_emp_field", "emp_field", 0.84)
-	await _check_action(ivan, visual, "trigger_overclock_buff", "overclock_buff", 0.88)
+	await _check_action(component, visual, "trigger_analyze_device", "analyze_device", 0.78)
+	await _check_action(component, visual, "trigger_lightning_strike", "lightning_strike", 0.64)
+	await _check_action(component, visual, "trigger_emp_field", "emp_field", 0.84)
+	await _check_action(component, visual, "trigger_overclock_buff", "overclock_buff", 0.88)
 
 	if player != null:
 		var player_origin := player.global_position
 		var ivan_origin := ivan.global_position
-		var quantum_ok := bool(ivan.call("trigger_quantum_reposition", Vector2.RIGHT, 36.0))
+		var quantum_ok := bool(component.call("trigger_quantum_reposition", Vector2.RIGHT, 36.0))
 		if not quantum_ok:
 			failures.append("P04 quantum reposition failed to start")
 		await get_tree().process_frame
@@ -88,7 +95,7 @@ func _validate_ivan(ivan: Node2D, player: Node2D) -> void:
 
 		var follow_origin := ivan.global_position
 		player.global_position = follow_origin + Vector2(-330, 80)
-		ivan.call("set_field_support_enabled", true, player)
+		component.call("set_field_support_enabled", true, player)
 		await get_tree().create_timer(0.24).timeout
 		var moved := ivan.global_position.distance_to(follow_origin)
 		if moved <= 1.0:
@@ -97,22 +104,22 @@ func _validate_ivan(ivan: Node2D, player: Node2D) -> void:
 			failures.append("P04 support mode teleported instead of accelerating")
 		if str(visual.call("state_name")) != "walk_fast":
 			failures.append("P04 support movement did not enter walk_fast")
-		ivan.call("set_field_support_enabled", false, player)
+		component.call("set_field_support_enabled", false, player)
 
-	ivan.call("receive_support_hit", 20.0, ivan.global_position + Vector2.RIGHT * 20.0)
+	component.call("receive_support_hit", 20.0, ivan.global_position + Vector2.RIGHT * 20.0)
 	await get_tree().process_frame
 	if str(visual.call("state_name")) != "hurt":
 		failures.append("P04 Iván did not enter hurt visual state")
-	if float(ivan.call("support_health")) >= float(ivan.call("support_max_health")):
+	if float(component.call("support_health")) >= float(component.call("support_max_health")):
 		failures.append("P04 support health did not decrease after hit")
 
-func _check_action(ivan: Node2D, visual: Node2D, method_name: String, expected_state: String, wait_time: float) -> void:
-	var activated := bool(ivan.call(method_name))
+func _check_action(component: Node, visual: Node2D, method_name: String, expected_state: String, wait_time: float) -> void:
+	var activated := bool(component.call(method_name))
 	if not activated:
 		failures.append("P04 action failed to start: %s" % expected_state)
 		return
 	await get_tree().process_frame
-	if str(ivan.call("support_state")) != expected_state:
+	if str(component.call("support_state")) != expected_state:
 		failures.append("P04 runtime state did not become %s" % expected_state)
 	if str(visual.call("state_name")) != expected_state:
 		failures.append("P04 visual state did not become %s" % expected_state)
