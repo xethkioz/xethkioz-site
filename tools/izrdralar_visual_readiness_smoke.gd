@@ -156,6 +156,9 @@ func _validate_runtime_case(map_id: String, entry_id: String, flags: Array) -> v
 		if script_path.ends_with("npc_interactable_production_pass02.gd"):
 			npc_count += 1
 			_validate_named_sprite(child, "NpcVisual", "%s NPC %s" % [map_id, child.name])
+		elif script_path.ends_with("alexis_guide_runtime.gd"):
+			npc_count += 1
+			_validate_alexis_production_visual(child as Node2D, "%s NPC Alexis" % map_id)
 		elif script_path.ends_with("enemy_controller_production.gd"):
 			enemy_count += 1
 			_validate_named_sprite(child, "EnemyVisual", "%s enemy %s" % [map_id, child.name])
@@ -187,6 +190,38 @@ func _validate_xethkioz_live_visual(actor: Node2D, label: String) -> void:
 		failures.append("%s live renderer missing tail/rune identity contract" % label)
 	if live_visual is CanvasItem and not (live_visual as CanvasItem).visible:
 		failures.append("%s approved live renderer is hidden" % label)
+
+func _validate_alexis_production_visual(actor: Node2D, label: String) -> void:
+	var legacy := actor.get_node_or_null("NpcVisual") as Sprite2D
+	if legacy == null:
+		failures.append("%s missing compatibility NpcVisual" % label)
+	elif legacy.visible:
+		failures.append("%s generic compatibility sprite must stay hidden" % label)
+	var approved := actor.get_node_or_null("AlexisApprovedVisual") as Node2D
+	if approved == null:
+		failures.append("%s missing AlexisApprovedVisual" % label)
+		return
+	if approved.get_script() == null or not str(approved.get_script().resource_path).ends_with("alexis_approved_visual.gd"):
+		failures.append("%s is not using approved P03 renderer" % label)
+	var sprite := approved.get_node_or_null("ApprovedSprite") as Sprite2D
+	if sprite == null:
+		failures.append("%s missing ApprovedSprite" % label)
+		return
+	if not sprite.visible:
+		failures.append("%s approved sprite is hidden" % label)
+	if sprite.texture == null:
+		failures.append("%s approved sprite has no production texture" % label)
+		return
+	if sprite.texture.get_width() != 52 or sprite.texture.get_height() != 48:
+		failures.append("%s approved frame must be 52x48 native" % label)
+	if sprite.region_enabled:
+		failures.append("%s approved frame must use independent texture, not atlas region" % label)
+	if sprite.texture_filter != CanvasItem.TEXTURE_FILTER_NEAREST:
+		failures.append("%s approved sprite is not using nearest filtering" % label)
+	if not approved.has_method("approved_texture_paths") or (approved.call("approved_texture_paths") as Array).size() != 9:
+		failures.append("%s approved renderer must expose nine production states" % label)
+	if not actor.has_method("is_field_support_enabled") or bool(actor.call("is_field_support_enabled")):
+		failures.append("%s temporary field support must remain disabled by default" % label)
 
 func _validate_named_sprite(actor: Node2D, sprite_name: String, label: String) -> void:
 	var sprite := actor.get_node_or_null(sprite_name) as Sprite2D
