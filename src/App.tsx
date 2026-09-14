@@ -29,7 +29,6 @@ const Home = lazy(() => import('./pages/Home'))
 const GamingHub = lazy(() => import('./pages/GamingHub'))
 const GamingGuides = lazy(() => import('./pages/GamingGuides'))
 const ScienceLab = lazy(() => import('./pages/ScienceLab'))
-const ComicUniverse = lazy(() => import('./pages/ComicUniverse'))
 const FunPortal = lazy(() => import('./pages/FunPortal'))
 const WebCreation = lazy(() => import('./pages/WebCreation'))
 const GreenNode = lazy(() => import('./pages/GreenNode'))
@@ -91,7 +90,6 @@ const routeNames = {
     '/gaming': 'Juegos',
     '/gaming/guides': 'Guías de juegos',
     '/science': 'Ciencia y tecnología',
-    '/comicon': 'Universo COMICON',
     '/fun': 'Nexus City',
     '/creacion-web': 'Creación web',
     '/green-node': 'Green Node',
@@ -115,7 +113,6 @@ const routeNames = {
     '/gaming': 'Gaming',
     '/gaming/guides': 'Gaming guides',
     '/science': 'Science and technology',
-    '/comicon': 'COMICON Universe',
     '/fun': 'Nexus City',
     '/creacion-web': 'Web creation',
     '/green-node': 'Green Node',
@@ -136,7 +133,7 @@ const routeNames = {
   },
 } as const
 
-const activityTrackedPortals = new Set(['/gaming', '/science', '/comicon', '/creacion-web', '/green-node', '/nexus-city'])
+const activityTrackedPortals = new Set(['/gaming', '/science', '/creacion-web', '/green-node', '/nexus-city'])
 
 function RouteAccessibility({ pathname }: { pathname: string }) {
   const { lang } = useLang()
@@ -225,7 +222,6 @@ function AppShell() {
               <Route path="/gaming" element={<GamingHub />} />
               <Route path="/gaming/guides" element={<GamingGuides />} />
               <Route path="/science" element={<ScienceLab />} />
-              <Route path="/comicon" element={<ComicUniverse />} />
               <Route path="/fun" element={<Navigate to="/nexus-city" replace />} />
               <Route path="/creacion-web" element={<WebCreation />} />
               <Route path="/community" element={<Community />} />
@@ -239,7 +235,6 @@ function AppShell() {
               <Route path="/en/gaming" element={<GamingHub />} />
               <Route path="/en/gaming/guides" element={<GamingGuides />} />
               <Route path="/en/science" element={<ScienceLab />} />
-              <Route path="/en/comicon" element={<ComicUniverse />} />
               <Route path="/en/fun" element={<Navigate to="/en/nexus-city" replace />} />
               <Route path="/en/nexus-city" element={<FunPortal />} />
               <Route path="/en/creacion-web" element={<WebCreation />} />

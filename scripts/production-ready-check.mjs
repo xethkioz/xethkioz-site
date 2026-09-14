@@ -69,7 +69,7 @@ const nexusDistrict = read('src/components/NexusDistrict.tsx')
 const nexusCity = read('src/pages/NexusCity.tsx')
 const webCreation = read('src/pages/WebCreation.tsx')
 
-check('11.1.2 security and resilience release version stamped', pkg.version === '11.1.2')
+check('11.2.0 COMICON removal release version stamped', pkg.version === '11.2.0')
 check('shared public footer exposes the centralized release version', footer.includes("import { SITE_VERSION, SOCIAL_LINKS }") && footer.includes('XETHKIOZ Web {SITE_VERSION}'))
 check(
   'installable web manifest is linked and versioned',
@@ -138,18 +138,16 @@ check(
     && home.includes('aria-labelledby="home-title"'),
 )
 check(
-  'Home exposes four primary magical portals with real interior depth',
+  'Home exposes three primary magical portals with real interior depth',
   home.includes("frame: '/assets/portal-games-clean-v1.webp'")
     && home.includes("frame: '/assets/portal-science-clean-v1.webp'")
-    && home.includes("world: '/assets/portal-comicon-duality-v11.webp'")
-    && exists('public/assets/portal-comicon-duality-v11.webp')
     && home.includes("world: '/assets/portal-mascotas-nature-v11-r2.webp'")
     && exists('public/assets/portal-mascotas-nature-v11-r2.webp')
     && home.includes("frame: '/assets/portal-fun-chaos-v2.webp'")
     && home.includes('className="xk-rb-window"')
     && home.includes('className="xk-rb-frame"')
     && homeCss.includes('.xk-rb-portals{')
-    && homeCss.includes('grid-template-columns:.78fr 1.02fr 1.02fr .78fr')
+    && homeCss.includes('grid-template-columns:repeat(3,minmax(0,1fr))')
     && homeCss.includes('scroll-snap-type:x mandatory'),
 )
 check(
@@ -382,4 +380,4 @@ if (failed) {
   process.exit(1)
 }
 
-console.log('XETHKIOZ 11.1.2 production-ready audit PASS')
+console.log('XETHKIOZ 11.2.0 production-ready audit PASS')

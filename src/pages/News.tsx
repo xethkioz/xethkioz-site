@@ -108,7 +108,6 @@ function getArticleMark(article: PublicNewsArticle) {
   if (article.category === 'tech') return '⚙️'
   if (article.category === 'science') return '🔬'
   if (article.category === 'community') return '💬'
-  if (article.category === 'comicon') return '◆'
   if (article.category === 'green') return '🟢'
   return '⌨️'
 }

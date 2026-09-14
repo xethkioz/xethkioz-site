@@ -1,4 +1,4 @@
-export const SITE_VERSION = 'v11.1.2'
+export const SITE_VERSION = 'v11.2.0'
 export const SITE_RELEASE = 'Adaptive Performance Release'
 export const SITE_BUILD_DATE = '2026-08-28'
 export const SITE_DOMAIN = 'https://xethkioz.com.ar'
@@ -130,7 +130,6 @@ export const VERIFIED_LINKS = [
   { area: 'Dominio', label: 'Web oficial', url: SITE_DOMAIN, status: 'confirmed' },
   { area: 'Gaming & Tech', label: 'Portal Gaming', url: '/gaming', status: 'internal' },
   { area: 'Science & Technology', label: 'ArgenCiencia', url: 'https://argenciencia.com/', status: 'confirmed' },
-  { area: 'Universo COMICON', label: 'Marvel, DC, Anime y cultura fan', url: '/comicon', status: 'internal' },
   { area: 'Fun Portal', label: 'Portal Fun', url: '/fun', status: 'internal' },
   { area: 'Community', label: 'Comunidad', url: '/community', status: 'internal' },
   { area: 'Creación Web', label: 'Servicios web', url: '/creacion-web', status: 'internal' },
@@ -244,7 +243,7 @@ export const GREEN_NODE_EASTER_EGGS = [
 ]
 
 export const LIVE_INTERNAL_LINKS = [
-  '/', '/news', '/gaming', '/science', '/comicon', '/fun', '/creacion-web', '/community', '/profile', '/login', '/account', '/cms', '/green-node'
+  '/', '/news', '/gaming', '/science', '/fun', '/creacion-web', '/community', '/profile', '/login', '/account', '/cms', '/green-node'
 ] as const
 
 export const SCIENCE_LAB_POLICY = {

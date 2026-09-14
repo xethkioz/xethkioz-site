@@ -1,5 +1,5 @@
 export type KnowledgeLang = 'es' | 'en'
-export type KnowledgeSector = 'gaming' | 'science' | 'comicon' | 'green' | 'pets' | 'web' | 'nexus'
+export type KnowledgeSector = 'gaming' | 'science' | 'green' | 'pets' | 'web' | 'nexus'
 
 type LocalizedText = Record<KnowledgeLang, string>
 
@@ -93,46 +93,6 @@ export const portalKnowledgeCatalog: Record<KnowledgeSector, PortalKnowledgeGuid
       },
       sourceLabel: 'NIST · AI Risk Management Framework',
       sourceUrl: 'https://www.nist.gov/itl/ai-risk-management-framework',
-    },
-  ],
-  comicon: [
-    {
-      id: 'comicon-marvel-entry',
-      eyebrow: { es: 'Ruta de lectura', en: 'Reading route' },
-      title: { es: 'Empezá Marvel sin leer décadas de continuidad', en: 'Start Marvel without reading decades of continuity' },
-      intro: {
-        es: 'Marvel Unlimited organiza arcos y personajes mediante listas de lectura. La clave es elegir una puerta de entrada y consultar contexto sólo cuando realmente haga falta.',
-        en: 'Marvel Unlimited organizes arcs and characters through reading lists. The key is choosing one entry point and looking up context only when it is truly needed.',
-      },
-      steps: {
-        es: ['Elegí un personaje, equipo o evento que ya te interese.', 'Abrí una lista editorial y empezá por el primer número indicado.', 'Leé el arco completo antes de saltar a referencias antiguas.', 'Guardá lo que te gustó y seguí al guionista o dibujante, no sólo al personaje.'],
-        en: ['Choose a character, team or event you already care about.', 'Open an editorial reading list and start with its first listed issue.', 'Finish the arc before jumping to older references.', 'Save what you liked and follow the writer or artist, not only the character.'],
-      },
-      limit: {
-        es: 'El catálogo y la disponibilidad cambian por región y tipo de suscripción. Una lista propone un recorrido; no existe un único orden obligatorio para disfrutar los cómics.',
-        en: 'Catalog and availability vary by region and subscription. A list suggests a route; there is no single mandatory order for enjoying comics.',
-      },
-      sourceLabel: 'Marvel · How to read comics the Marvel Unlimited way',
-      sourceUrl: 'https://www.marvel.com/articles/comics/how-to-read-comics-the-marvel-unlimited-way',
-    },
-    {
-      id: 'comicon-dc-entry',
-      eyebrow: { es: 'Punto de entrada', en: 'Entry point' },
-      title: { es: 'Armá una primera ruta de lectura en DC', en: 'Build a first DC reading route' },
-      intro: {
-        es: 'DC agrupa colecciones de inicio por héroe, universo y etapa. Eso permite comenzar con una historia completa sin convertir la continuidad en una barrera.',
-        en: 'DC groups starting collections by hero, universe and era. This lets readers begin with a complete story without turning continuity into a barrier.',
-      },
-      steps: {
-        es: ['Elegí héroe, tono o formato antes que una cronología completa.', 'Usá una colección “Where to Start” como mapa inicial.', 'Terminá un tomo o arco y anotá qué autores querés seguir.', 'Recién después explorá eventos relacionados o etapas anteriores.'],
-        en: ['Choose a hero, tone or format before attempting a complete chronology.', 'Use a Where to Start collection as the initial map.', 'Finish one volume or arc and note which creators you want to follow.', 'Only then explore related events or earlier eras.'],
-      },
-      limit: {
-        es: 'DC Universe Infinite no está disponible del mismo modo en todos los países. Verificá región, idioma, dispositivos y condiciones antes de suscribirte.',
-        en: 'DC Universe Infinite is not available in the same way in every country. Check region, language, devices and terms before subscribing.',
-      },
-      sourceLabel: 'DC Universe Infinite · Where to Start',
-      sourceUrl: 'https://www.dcuniverseinfinite.com/collections/cc-where-to-start-collections',
     },
   ],
   green: [
@@ -315,4 +275,3 @@ export const portalKnowledgeCatalog: Record<KnowledgeSector, PortalKnowledgeGuid
     },
   ],
 }
-

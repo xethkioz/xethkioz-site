@@ -3,7 +3,6 @@ import { expect, test } from '@playwright/test'
 const portals = [
   ['/gaming', 'gaming'],
   ['/science', 'science'],
-  ['/comicon', 'comicon'],
   ['/green-node', 'green'],
   ['/mascotas/', 'pets'],
   ['/creacion-web', 'web'],

@@ -12,19 +12,9 @@ test.describe('mejoras priorizadas de experiencia', () => {
     await expect(page.getByText(/NEXUS CITY \/\//i).first()).toBeVisible()
   })
 
-  test('COMICON abre con un mapa compacto y conserva vistas enlazables', async ({ page }) => {
+  test('la sección retirada no conserva una ruta pública', async ({ page }) => {
     await page.goto('/comicon')
-
-    await expect(page.getByRole('heading', { name: /Elegí qué querés explorar|Choose what you want to explore/i })).toBeVisible()
-    await expect(page.locator('.xk-comicon-library')).toHaveCount(0)
-
-    await page.getByRole('button', { name: /Archivo/i }).first().click()
-    await expect(page).toHaveURL(/\/comicon\?view=archive$/)
-    await expect(page.locator('.xk-comicon-library')).toBeVisible()
-
-    await page.getByRole('button', { name: /Noticias|News/i }).first().click()
-    await expect(page).toHaveURL(/\/comicon\?view=news$/)
-    await expect(page.locator('#comicon-transmissions')).toBeVisible()
+    await expect(page.getByText(/Página no encontrada|Page not found/i)).toBeVisible()
   })
 
   test('el perfil invitado muestra acciones reales y no contenido de prueba', async ({ page }) => {

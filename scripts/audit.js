@@ -131,10 +131,10 @@ const steps = [
     requiredFiles: ['scripts/portal-wisp-guides-check.mjs']
   },
   {
-    name: 'COMICON Portal',
+    name: 'COMICON Removal',
     command: 'node',
-    args: ['scripts/comicon-portal-check.mjs'],
-    requiredFiles: ['scripts/comicon-portal-check.mjs']
+    args: ['scripts/comicon-removal-check.mjs'],
+    requiredFiles: ['scripts/comicon-removal-check.mjs']
   },
   {
     name: 'Media Assets',
