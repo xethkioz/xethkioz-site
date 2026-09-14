@@ -254,8 +254,12 @@ export default function Home() {
   const t = copy[lang]
   const [activeRegion, setActiveRegion] = useState(0)
   const [activeAtlas, setActiveAtlas] = useState(0)
+  const [activeForm, setActiveForm] = useState(0)
+  const [activeCast, setActiveCast] = useState(0)
   const selectedRegion = regionDetails[lang][activeRegion]
   const selectedAtlas = atlasDetails[lang][activeAtlas]
+  const selectedForm = forms[lang][activeForm]
+  const selectedCast = cast[lang][activeCast]
   return (
     <>
       <SEO title={t.seo} description={t.description} url="/" image="/assets/world-of-xethkioz/world-of-xethkioz-logo.webp" />
@@ -409,12 +413,24 @@ export default function Home() {
             </div>
             <div className="wox-forms-grid">
               {forms[lang].map(([name, bond, affinity], index) => (
-                <article key={name}>
-                  <small>{String(index + 1).padStart(2, '0')}</small>
-                  <div><strong>{name}</strong><span>{bond}</span></div>
-                  <p>{affinity}</p>
+                <article key={name} className={activeForm === index ? 'is-active' : ''} data-form={index + 1}>
+                  <button type="button" onClick={() => setActiveForm(index)} aria-pressed={activeForm === index}>
+                    <small>{String(index + 1).padStart(2, '0')}</small>
+                    <div><strong>{name}</strong><span>{bond}</span></div>
+                    <p>{affinity}</p>
+                  </button>
                 </article>
               ))}
+            </div>
+            <div className="wox-form-console" aria-live="polite" data-form={activeForm + 1}>
+              <div className="wox-form-sigil" aria-hidden="true"><span>◇</span></div>
+              <div>
+                <small>{lang === 'es' ? 'FORMA DE CONVERGENCIA SELECCIONADA' : 'SELECTED CONVERGENCE FORM'}</small>
+                <h3>{selectedForm[0]}</h3>
+                <p><b>{lang === 'es' ? 'Vínculo' : 'Bond'}:</b> {selectedForm[1]}</p>
+                <p><b>{lang === 'es' ? 'Afinidad' : 'Affinity'}:</b> {selectedForm[2]}</p>
+              </div>
+              <span className="wox-canon-lock">CANON LOCK</span>
             </div>
           </section>
 
@@ -425,12 +441,23 @@ export default function Home() {
             </div>
             <div className="wox-cast-grid">
               {cast[lang].map(([name, title], index) => (
-                <article key={name}>
-                  <small>{String(index + 1).padStart(2, '0')}</small>
-                  <strong>{name}</strong>
-                  {title ? <span>{title}</span> : null}
+                <article key={name} className={activeCast === index ? 'is-active' : ''}>
+                  <button type="button" onClick={() => setActiveCast(index)} aria-pressed={activeCast === index}>
+                    <small>{String(index + 1).padStart(2, '0')}</small>
+                    <strong>{name}</strong>
+                    {title ? <span>{title}</span> : null}
+                  </button>
                 </article>
               ))}
+            </div>
+            <div className="wox-cast-console" aria-live="polite">
+              <div className="wox-cast-avatar" aria-hidden="true"><span>{selectedCast[0].slice(0, 1)}</span></div>
+              <div>
+                <small>{lang === 'es' ? 'IDENTIDAD CANÓNICA ACTIVA' : 'ACTIVE CANONICAL IDENTITY'}</small>
+                <h3>{selectedCast[0]}</h3>
+                {selectedCast[1] ? <p>{selectedCast[1]}</p> : null}
+              </div>
+              <span className="wox-canon-lock">WORLD OF XETHKIOZ</span>
             </div>
           </section>
 
