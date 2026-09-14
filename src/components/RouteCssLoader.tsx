@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react'
+﻿import { useLayoutEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
 type StylePromise = Promise<void>
@@ -31,8 +31,7 @@ function normalizeRoute(pathname: string) {
 }
 
 function isPortalRoute(pathname: string) {
-  return pathname === '/'
-    || pathname === '/gaming'
+  return pathname === '/gaming'
     || pathname === '/science'
     || pathname === '/fun'
     || pathname === '/green-node'
@@ -53,11 +52,6 @@ function isEditorialRoute(pathname: string) {
 export function loadRouteStyles(rawPathname: string): Promise<void> {
   const pathname = normalizeRoute(rawPathname)
   const styles: StylePromise[] = []
-
-  if (pathname === '/') {
-    styles.push(loadStyle('home', () => import('../generated/home-shell.css')))
-  }
-
   if (pathname === '/gaming' || pathname === '/fun') {
     styles.push(loadStyle('gaming-fun', () => import('../generated/gaming-fun-shell.css')))
   }
@@ -110,3 +104,4 @@ export default function RouteCssLoader() {
 
   return null
 }
+

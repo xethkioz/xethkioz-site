@@ -23,7 +23,6 @@ const publicHtmlFiles = [
 const MAX_INITIAL_CSS_BYTES = 225_000
 const MAX_INITIAL_CSS_GZIP_BYTES = 41_500
 const routeCssChunks = [
-  { label: 'Home shell', pattern: /^home-shell-[^/]+\.css$/i },
   { label: 'Gaming and Fun shell', pattern: /^gaming-fun-shell-[^/]+\.css$/i },
   { label: 'Gaming sections shell', pattern: /^gaming-sections-shell-[^/]+\.css$/i },
   { label: 'Science shell', pattern: /^science-shell-[^/]+\.css$/i },

@@ -1,20 +1,14 @@
-import { useEffect, useState, type CSSProperties, type ReactNode } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import SafeImage from '../components/SafeImage'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
-import { NexusDistrict } from '../components/NexusDistrict'
-import { fallbackWebServiceOffers } from '../data/webServiceFallbacks'
 import { useLang } from '../lib/LangContext'
-import { useWisp } from '../providers/WispProvider'
 import { useExperience } from '../lib/ExperienceContext'
 import { supportsAmbientVideo } from '../lib/experienceMode'
 import { SITE_VERSION } from '../lib/siteConfig'
-import type { WebServiceOffer } from '../types/webServices'
-import './HomeReborn.css'
+import './WorldOfXethkiozHome.css'
 
 type DataSavingConnection = {
   saveData?: boolean
-  effectiveType?: string
   addEventListener?: (type: 'change', listener: () => void) => void
   removeEventListener?: (type: 'change', listener: () => void) => void
 }
@@ -24,380 +18,209 @@ type IdleCapableWindow = Window & {
   cancelIdleCallback?: (handle: number) => void
 }
 
-type PortalCard = {
-  id: string
-  code: string
-  title: string
-  subtitle: string
-  action: string
-  route: string
-  external?: boolean
-  document?: boolean
-  world: string
-  frame: string
-  tone: string
-  position: string
-}
-
-type DestinationCard = {
-  id: 'nexus' | 'web' | 'green'
-  code: string
-  title: string
-  text: string
-  action: string
-  route: string
-  image: string
-  tone: string
-  position: string
-}
-
-const copy = {
-  es: {
-    kicker: 'XETHKIOZ // WORLD GATE',
-    titleTop: 'EL GAMING ES',
-    titleBottom: 'MI PASIÓN',
-    intro: 'Una entrada viva hacia tres mundos principales: gaming, ciencia y una red comunitaria para proteger a los animales de Puan y la región.',
-    seoDescription: 'Entrada inmersiva a la Red de Portales XETHKIOZ: gaming, ArgenCiencia, Huellas de Puan, Nexus City, Green Node y creación web.',
-    primaryCta: 'ELEGIR UN PORTAL',
-    newsCta: 'ABRIR RADAR DE NOTICIAS',
-    news: 'NOTICIAS',
-    portalLabel: 'PORTALES PRINCIPALES // SEÑAL ESTABLE',
-    liveSignal: '3 PORTALES PRINCIPALES ACTIVOS',
-    nexusSignal: 'NEXUS CITY EN LÍNEA',
-    safeSignal: 'PRIVACIDAD Y NAVEGACIÓN VERIFICADAS',
-    sectionNavLabel: 'Índice de secciones de XETHKIOZ',
-    sectionNav: [
-      { code: '01', label: 'Portales', href: '#portals' },
-      { code: '02', label: 'Red Nexus', href: '#network' },
-      { code: '03', label: 'Contenido', href: '#radar' },
-      { code: '04', label: 'Guías', href: '/gaming/guides' },
-      { code: '05', label: 'Estudio', href: '#studio' },
-      { code: '06', label: 'Contacto', href: '#contact' },
-    ],
-    secondaryEyebrow: 'OTRAS PUERTAS DEL NEXUS',
-    secondaryTitle: 'La Red de Portales continúa más allá de la escena principal.',
-    secondaryText: 'Destinos especiales para habitar, crear y descifrar XETHKIOZ sin competir con la escena principal.',
-    webEyebrow: 'XETHKIOZ // CREACIÓN WEB',
-    webTitle: 'Tu idea también puede convertirse en un mundo.',
-    webText: 'Diseño y desarrollo de páginas con identidad propia, rendimiento real y una presentación que no parece una plantilla genérica.',
-    webCta: 'EXPLORAR CREACIÓN WEB',
-    featured: 'PROPUESTA DESTACADA',
-    login: 'INICIAR SESIÓN',
-    brandLabel: 'Ir al inicio de XETHKIOZ',
-    switchLanguage: 'Cambiar a inglés',
-    switchCode: 'EN',
-    wispLabel: 'Abrir Green Node mediante Wisp',
-    primary: [
-      {
-        id: 'science',
-        code: 'XK-02',
-        title: 'CIENCIA & TECH',
-        subtitle: 'ArgenCiencia · Divulgación · Tecnología',
-        action: 'ABRIR ARGENCIENCIA',
-        route: 'https://argenciencia.com/',
-        external: true,
-        world: '/assets/portal-science-world-v3.webp',
-        frame: '/assets/portal-science-clean-v1.webp',
-        tone: '#22d3ee',
-        position: '50% 47%',
-      },
-      {
-        id: 'gaming',
-        code: 'XK-01',
-        title: 'GAMING',
-        subtitle: 'Noticias · Guías · Comunidad · Mundos',
-        action: 'ATRAVESAR PORTAL',
-        route: '/gaming',
-        world: '/assets/portal-games-world-v3.webp',
-        frame: '/assets/portal-games-clean-v1.webp',
-        tone: '#8b5cf6',
-        position: '50% 52%',
-      },
-      {
-        id: 'pets',
-        code: 'XK-03',
-        title: 'HUELLAS DE PUAN',
-        subtitle: 'Perdidos · Encontrados · Adopciones · Cuidados',
-        action: 'AYUDAR A UNA MASCOTA',
-        route: '/mascotas/',
-        document: true,
-        world: '/assets/portal-mascotas-nature-v11-r2.webp',
-        frame: '/assets/portal-fun-chaos-v2.webp',
-        tone: '#48f59b',
-        position: '50% 50%',
-      },
-    ] as PortalCard[],
-    destinations: [
-      {
-        id: 'nexus',
-        code: 'XK-05 // CIUDAD VIVA',
-        title: 'NEXUS CITY',
-        text: 'Creá tu identidad, recorré salas y conectate con la comunidad.',
-        action: 'ENTRAR A LA CIUDAD',
-        route: '/nexus-city',
-        image: '/assets/xethkioz-cover.webp',
-        tone: '#a855f7',
-        position: '50% 38%',
-      },
-      {
-        id: 'web',
-        code: 'XK-06 // ESTUDIO CREATIVO',
-        title: 'CREACIÓN WEB',
-        text: 'Proyectos digitales personalizados con estética, velocidad y estrategia.',
-        action: 'VER EL ESTUDIO',
-        route: '/creacion-web',
-        image: '/web-services/creacion-web-og.png',
-        tone: '#f59e0b',
-        position: '50% 50%',
-      },
-      {
-        id: 'green',
-        code: 'XK-13 // SEÑAL INFECTADA',
-        title: 'GREEN NODE',
-        text: 'El Archivo Negro permanece oculto hasta que Wisp abra el acceso.',
-        action: 'INTERCEPTAR SEÑAL',
-        route: '/green-node',
-        image: '/assets/identity/green-node-occult-malware-v1.webp',
-        tone: '#32ff8a',
-        position: '50% 40%',
-      },
-    ] as DestinationCard[],
-    copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia · XETHKIOZ Web',
-  },
-  en: {
-    kicker: 'XETHKIOZ // WORLD GATE',
-    titleTop: 'GAMING IS',
-    titleBottom: 'MY PASSION',
-    intro: 'A living entrance into three main worlds: gaming, science and a community network dedicated to protecting animals in Puan and the surrounding region.',
-    seoDescription: 'An immersive entrance to the XETHKIOZ Portal Network: gaming, ArgenCiencia, Huellas de Puan, Nexus City, Green Node and web creation.',
-    primaryCta: 'CHOOSE A PORTAL',
-    newsCta: 'OPEN NEWS RADAR',
-    news: 'NEWS',
-    portalLabel: 'MAIN PORTALS // STABLE SIGNAL',
-    liveSignal: '3 MAIN PORTALS ACTIVE',
-    nexusSignal: 'NEXUS CITY ONLINE',
-    safeSignal: 'PRIVACY AND NAVIGATION VERIFIED',
-    sectionNavLabel: 'XETHKIOZ section index',
-    sectionNav: [
-      { code: '01', label: 'Portals', href: '#portals' },
-      { code: '02', label: 'Nexus Network', href: '#network' },
-      { code: '03', label: 'Content', href: '#radar' },
-      { code: '04', label: 'Guides', href: '/gaming/guides' },
-      { code: '05', label: 'Studio', href: '#studio' },
-      { code: '06', label: 'Contact', href: '#contact' },
-    ],
-    secondaryEyebrow: 'OTHER NEXUS GATES',
-    secondaryTitle: 'The Portal Network continues beyond the main gates.',
-    secondaryText: 'Special destinations to inhabit, create and decode XETHKIOZ without competing with the main scene.',
-    webEyebrow: 'XETHKIOZ // WEB CREATION',
-    webTitle: 'Your idea can become a world of its own.',
-    webText: 'Web design and development with original identity, real performance and a presentation that never feels like a generic template.',
-    webCta: 'EXPLORE WEB CREATION',
-    featured: 'FEATURED PROPOSAL',
-    login: 'SIGN IN',
-    brandLabel: 'Go to XETHKIOZ home',
-    switchLanguage: 'Switch to Spanish',
-    switchCode: 'ES',
-    wispLabel: 'Open Green Node through Wisp',
-    primary: [
-      {
-        id: 'science',
-        code: 'XK-02',
-        title: 'SCIENCE & TECH',
-        subtitle: 'ArgenCiencia · Outreach · Technology',
-        action: 'OPEN ARGENCIENCIA',
-        route: 'https://argenciencia.com/',
-        external: true,
-        world: '/assets/portal-science-world-v3.webp',
-        frame: '/assets/portal-science-clean-v1.webp',
-        tone: '#22d3ee',
-        position: '50% 47%',
-      },
-      {
-        id: 'gaming',
-        code: 'XK-01',
-        title: 'GAMING',
-        subtitle: 'News · Guides · Community · Worlds',
-        action: 'CROSS PORTAL',
-        route: '/gaming',
-        world: '/assets/portal-games-world-v3.webp',
-        frame: '/assets/portal-games-clean-v1.webp',
-        tone: '#8b5cf6',
-        position: '50% 52%',
-      },
-      {
-        id: 'pets',
-        code: 'XK-03',
-        title: 'HUELLAS DE PUAN',
-        subtitle: 'Lost · Found · Adoption · Care',
-        action: 'HELP A PET',
-        route: '/mascotas/',
-        document: true,
-        world: '/assets/portal-mascotas-nature-v11-r2.webp',
-        frame: '/assets/portal-fun-chaos-v2.webp',
-        tone: '#48f59b',
-        position: '50% 50%',
-      },
-    ] as PortalCard[],
-    destinations: [
-      {
-        id: 'nexus',
-        code: 'XK-05 // LIVING CITY',
-        title: 'NEXUS CITY',
-        text: 'Create your identity, explore rooms and connect with the community.',
-        action: 'ENTER THE CITY',
-        route: '/nexus-city',
-        image: '/assets/xethkioz-cover.webp',
-        tone: '#a855f7',
-        position: '50% 38%',
-      },
-      {
-        id: 'web',
-        code: 'XK-06 // CREATIVE STUDIO',
-        title: 'WEB CREATION',
-        text: 'Custom digital projects built around aesthetics, speed and strategy.',
-        action: 'OPEN THE STUDIO',
-        route: '/creacion-web',
-        image: '/web-services/creacion-web-og.png',
-        tone: '#f59e0b',
-        position: '50% 50%',
-      },
-      {
-        id: 'green',
-        code: 'XK-13 // INFECTED SIGNAL',
-        title: 'GREEN NODE',
-        text: 'The Black Archive stays hidden until Wisp opens the access point.',
-        action: 'INTERCEPT SIGNAL',
-        route: '/green-node',
-        image: '/assets/identity/green-node-occult-malware-v1.webp',
-        tone: '#32ff8a',
-        position: '50% 40%',
-      },
-    ] as DestinationCard[],
-    copyright: '© 2026 Alexis Ivan Diaz Sellanes Santajulia · XETHKIOZ Web',
-  },
-} as const
-
 function scheduleIdleTask(task: () => void, timeout = 1200) {
   const idleWindow = window as IdleCapableWindow
   if (idleWindow.requestIdleCallback) {
     const handle = idleWindow.requestIdleCallback(task, { timeout })
     return () => idleWindow.cancelIdleCallback?.(handle)
   }
-
   const handle = window.setTimeout(task, timeout)
   return () => window.clearTimeout(handle)
 }
-
 function useAmbientVideoEnabled(graphicsMode: 'full' | 'lite') {
   const [enabled, setEnabled] = useState(false)
 
   useEffect(() => {
     const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const desktopViewport = window.matchMedia('(min-width: 1024px)')
+    const desktopViewport = window.matchMedia('(min-width: 900px)')
     const connection = (navigator as Navigator & { connection?: DataSavingConnection }).connection
-    let activationDelay: number | undefined
-    let cancelIdleTask: (() => void) | undefined
+    let cancelIdle: (() => void) | undefined
 
-    const clearPendingActivation = () => {
-      window.clearTimeout(activationDelay)
-      cancelIdleTask?.()
-      cancelIdleTask = undefined
-    }
-
-    const syncPreference = () => {
-      clearPendingActivation()
-      if (!supportsAmbientVideo(graphicsMode)) {
+    const sync = () => {
+      cancelIdle?.()
+      if (!supportsAmbientVideo(graphicsMode) || motionPreference.matches || connection?.saveData) {
         setEnabled(false)
         return
       }
-
-      activationDelay = window.setTimeout(() => {
-        cancelIdleTask = scheduleIdleTask(() => {
-          if (supportsAmbientVideo(graphicsMode)) setEnabled(true)
-        }, 1600)
-      }, 2200)
+      cancelIdle = scheduleIdleTask(() => setEnabled(true), desktopViewport.matches ? 900 : 1500)
     }
 
-    syncPreference()
-    motionPreference.addEventListener('change', syncPreference)
-    desktopViewport.addEventListener('change', syncPreference)
-    connection?.addEventListener?.('change', syncPreference)
-    document.addEventListener('visibilitychange', syncPreference)
-
+    sync()
+    motionPreference.addEventListener('change', sync)
+    desktopViewport.addEventListener('change', sync)
+    connection?.addEventListener?.('change', sync)
     return () => {
-      clearPendingActivation()
-      motionPreference.removeEventListener('change', syncPreference)
-      desktopViewport.removeEventListener('change', syncPreference)
-      connection?.removeEventListener?.('change', syncPreference)
-      document.removeEventListener('visibilitychange', syncPreference)
+      cancelIdle?.()
+      motionPreference.removeEventListener('change', sync)
+      desktopViewport.removeEventListener('change', sync)
+      connection?.removeEventListener?.('change', sync)
     }
   }, [graphicsMode])
-
   return enabled
 }
+const copy = {
+  es: {
+    seo: 'World of Xethkioz · Action RPG en desarrollo',
+    description: 'Sitio oficial de World of Xethkioz: historia, mundos, criaturas, desarrollo y comunidad del Action-RPG de XETHKIOZ.',
+    portals: { gaming: 'Gaming', science: 'Ciencia y tecnología', pets: 'Mascotas' },
+    status: 'ACTION RPG 3D/2.5D · UNITY · SAGA I EN DESARROLLO',
+    soul: 'UN MUNDO FRACTURADO. UNA FAMILIA UNIDA.',
+    lead: 'El tiempo, la memoria, la naturaleza y la tecnología dejaron de obedecer una sola versión de la realidad.',
+    explore: 'DESCUBRIR EL MUNDO',
+    chat: 'ABRIR CHAT',
+    atlas: 'ABRIR PRISMA-ATLAS',
+    scroll: 'Descender al mundo',
+    storyEyebrow: 'ARCHIVO // ORIGEN',
+    storyTitle: 'La Fisura Prismática cambió las reglas de la realidad.',
+    storyText: 'World of Xethkioz no trata de restaurar un mundo perfecto. Trata de aprender a vivir entre estados incompatibles sin borrar aquello que nació después de la fractura.',
+    travelerEyebrow: 'DOS PROTAGONISTAS // UNA RESONANCIA ABIERTA',
+    travelerTitle: 'El Viajero y Xethkioz',
+    travelerText: 'El Viajero nace sin una identidad cerrada y convierte cada experiencia en Memoria Propia. Xethkioz, la Forma Abierta, puede sostener múltiples afinidades sin dejar de ser quien es.',
+    worldsEyebrow: 'SAGA I // 32 MAPAS',
+    worldsTitle: 'Cuatro territorios. Una misma fractura.',
+    bestiaryEyebrow: 'PRISMA-ATLAS // VIDA Y AMENAZAS',
+    bestiaryTitle: 'El mundo no existe sólo para combatirlo.',
+    formsEyebrow: 'OCHO FORMAS DE CONVERGENCIA',
+    formsTitle: 'Una familia prismática. Ocho vínculos.',
+    devEyebrow: 'DESARROLLO // ESTADO DEL PROYECTO',
+    devTitle: 'Producción activa en Unity.',
+    devText: 'La web va a funcionar como el centro público del proyecto: lore, Atlas, avances, comunidad y estado del juego, sin mezclar el contenido interno de producción con la experiencia del visitante.',
+    final: 'UN MUNDO FRACTURADO NO SE REPARA VOLVIENDO A COMO ERA. SE APRENDE A VIVIR CON LOS CAMINOS QUE AHORA EXISTEN.',
+  },  en: {
+    seo: 'World of Xethkioz · Action RPG in development',
+    description: 'Official World of Xethkioz site: story, worlds, creatures, development and community for the XETHKIOZ action RPG.',
+    portals: { gaming: 'Gaming', science: 'Science & technology', pets: 'Pets' },
+    status: '3D/2.5D ACTION RPG · UNITY · SAGA I IN DEVELOPMENT',
+    soul: 'A FRACTURED WORLD. A UNITED FAMILY.',
+    lead: 'Time, memory, nature and technology no longer obey a single version of reality.',
+    explore: 'DISCOVER THE WORLD',
+    chat: 'OPEN CHAT',
+    atlas: 'OPEN PRISM ATLAS',
+    scroll: 'Descend into the world',
+    storyEyebrow: 'ARCHIVE // ORIGIN',
+    storyTitle: 'The Prismatic Fracture changed the rules of reality.',
+    storyText: 'World of Xethkioz is not about restoring a perfect world. It is about learning to live among incompatible states without erasing what was born after the fracture.',
+    travelerEyebrow: 'TWO PROTAGONISTS // ONE OPEN RESONANCE',
+    travelerTitle: 'The Traveler and Xethkioz',
+    travelerText: 'The Traveler is born without a fixed identity and turns each experience into a Personal Memory. Xethkioz, the Open Form, can sustain multiple affinities without losing its identity.',
+    worldsEyebrow: 'SAGA I // 32 MAPS',
+    worldsTitle: 'Four territories. One fracture.',
+    bestiaryEyebrow: 'PRISM ATLAS // LIFE AND THREATS',
+    bestiaryTitle: 'The world does not exist only to be fought.',
+    formsEyebrow: 'EIGHT CONVERGENCE FORMS',
+    formsTitle: 'One prismatic family. Eight bonds.',
+    devEyebrow: 'DEVELOPMENT // PROJECT STATUS',
+    devTitle: 'Active production in Unity.',
+    devText: 'The site becomes the public center of the project: lore, Atlas, progress, community and game status, without mixing internal production material into the visitor experience.',
+    final: 'A FRACTURED WORLD IS NOT REPAIRED BY GOING BACK TO WHAT IT WAS. YOU LEARN TO LIVE WITH THE PATHS THAT EXIST NOW.',
+  },
+} as const
+const timeline = {
+  es: [
+    ['2009', 'Elida muere. Su recuerdo quedará unido al origen emocional de la Fisura.'],
+    ['11·09·2026', 'Día Cero. El Cambio Prismático deja una firma imposible durante un día aparentemente normal.'],
+    ['2150', 'Una red experimental sincroniza aquella firma con el Eje Prismático y cierra una Vuelta causal.'],
+    ['FISURA', 'Tiempo, materia, memoria, vida y tecnología empiezan a ocupar estados incompatibles del mismo mundo.'],
+  ],
+  en: [
+    ['2009', 'Elida dies. Her memory will become tied to the emotional origin of the Fracture.'],
+    ['11·09·2026', 'Day Zero. The Prismatic Change leaves an impossible signature during an apparently ordinary day.'],
+    ['2150', 'An experimental network synchronizes that signature with the Prismatic Axis and closes a causal loop.'],
+    ['FRACTURE', 'Time, matter, memory, life and technology begin to occupy incompatible states of the same world.'],
+  ],
+} as const
 
-function useFeaturedWebService() {
-  const [offer, setOffer] = useState<WebServiceOffer>(fallbackWebServiceOffers[0])
+const regions = {
+  es: [
+    ['IZRDRALAR', 'M01–M08', 'Nivel 1–60', 'Juego base · Cuenca del Despertar, Aldea del Alba, Lago Encantado, tecnoflora, secretos y Primer Cisma.'],
+    ['DESFRALAR', 'M09–M17', 'Nivel 60–85', 'Expansión I · raíces hundidas, Caverna Viva, Ciénaga Espiritual, Mamporro y memoria.'],
+    ['XIOMALAR', 'M18–M25', 'Nivel 85–105', 'Expansión II · corrientes, jardines suspendidos, Observatorio Cuántico y Tiempo Primigenio.'],
+    ['ZODNIGHT', 'M26–M32', 'Nivel 105–120', 'Cierre Saga I · estados quietos, El Unísono, convergencias y la decisión de divergir.'],
+  ],
+  en: [
+    ['IZRDRALAR', 'M01–M08', 'Level 1–60', 'Base game · Awakening Basin, Dawn Village, Enchanted Lake, technoflora, secrets and the First Schism.'],
+    ['DESFRALAR', 'M09–M17', 'Level 60–85', 'Expansion I · sunken roots, Living Cavern, Spirit Swamp, Mamporro and memory.'],
+    ['XIOMALAR', 'M18–M25', 'Level 85–105', 'Expansion II · currents, suspended gardens, Quantum Observatory and Primordial Time.'],
+    ['ZODNIGHT', 'M26–M32', 'Level 105–120', 'Saga I finale · still states, the Unison, convergences and the choice to diverge.'],
+  ],
+} as const
+const atlasEntries = {
+  es: [
+    ['GOBLINS', 'Bandas recolectoras, acechadores, custodios y el Oráculo Goblin como boss aleatorio épico.'],
+    ['MECAS + TECNOFLORA', 'Máquinas de 2150 cubiertas por vegetación y protocolos incompletos: destruir no siempre es la mejor solución.'],
+    ['FAUNA', 'Ciervo Frondoso, Nutria Prismática y Zorrito de Ceibo viven, huyen, defienden territorio o simplemente observan.'],
+    ['RAROS + BOSSES', 'Colmillo Ancestral, Centinela Tecnoverde, Mago Negro y encuentros que cambian el estado persistente del mundo.'],
+  ],
+  en: [
+    ['GOBLINS', 'Scavenger bands, stalkers, custodians and the Goblin Oracle as an epic random boss.'],
+    ['MECHS + TECHNOFLORA', 'Machines from 2150 covered by vegetation and incomplete protocols: destruction is not always the best answer.'],
+    ['WILDLIFE', 'Leafy Deer, Prismatic Otter and Ceibo Fox live, flee, defend territory or simply watch.'],
+    ['RARES + BOSSES', 'Ancestral Fang, Technogreen Sentinel, Black Mage and encounters that change the persistent state of the world.'],
+  ],
+} as const
 
-  useEffect(() => {
-    let active = true
-    const cancelScheduled = scheduleIdleTask(() => {
-      import('../services/webServices')
-        .then(({ loadFeaturedWebService }) => loadFeaturedWebService())
-        .then((nextOffer) => {
-          if (active) setOffer(nextOffer)
-        })
-        .catch(() => {
-          // The static featured offer remains visible when the CMS is unavailable.
-        })
-    }, 1800)
+const regionDetails = {
+  es: [
+    { name: 'IZRDRALAR', code: 'BASE', maps: ['M01 Cuenca del Despertar', 'M02 Aldea del Alba', 'M03 Lago Encantado + Ruinas Vivas', 'M04 Expedición Matí + tecnoflora', 'M05 Jaula Prismática', 'M06 Refugio Vivo', 'M07 Secretos de Izrdralar', 'M08 Primer Cisma'], focus: 'El Viajero aprende a existir, conoce a Xethkioz y descubre que explorar, cuidar y comprender puede ser tan importante como combatir.' },
+    { name: 'DESFRALAR', code: 'EXP I', maps: ['M09 Umbral de Raíces Hundidas', 'M10 Galerías de la Caverna Viva', 'M11 Corazón de la Caverna Viva', 'M12 Borde de la Ciénaga Espiritual', 'M13 Campamento de las Anclas', 'M14 Fangal de los Ecos', 'M15 Santuario de la Ciénaga', 'M16 Zona Abisal', 'M17 Trono de la Ciénaga'], focus: 'El terreno empieza a comportarse como una memoria viva. Mamporro y la Ciénaga amplían la relación entre Resonancia, ecos y movimiento por el mundo.' },
+    { name: 'XIOMALAR', code: 'EXP II', maps: ['M18 Ascenso de las Corrientes', 'M19 Jardines Suspendidos', 'M20 Observatorio Cuántico', 'M21 Templos de Resonancia', 'M22 Mar de Nubes Fracturadas', 'M23 Archivo del Tiempo Primigenio', 'M24 Bastión del Custodio', 'M25 Umbral del Tiempo Primigenio'], focus: 'La exploración deja de ser sólo geográfica. El jugador empieza a recorrer corrientes temporales, estados incompatibles y el conocimiento que Iván logró reconstruir.' },
+    { name: 'ZODNIGHT', code: 'CIERRE', maps: ['M26 Frontera de la Noche Fija', 'M27 Ciudad de los Estados Quietos', 'M28 Santuario del Unísono', 'M29 Atrio de la Memoria de Elida', 'M30 Eclipse de Dvalin', 'M31 Campos de Convergencia', 'M32 Núcleo del Unísono'], focus: 'Saga I enfrenta la idea central del juego: aceptar la multiplicidad o imponer una única realidad estable. El final no restaura el mundo anterior.' },
+  ],
+  en: [
+    { name: 'IZRDRALAR', code: 'BASE', maps: ['M01 Awakening Basin', 'M02 Dawn Village', 'M03 Enchanted Lake + Living Ruins', 'M04 Mati Expedition + technoflora', 'M05 Prismatic Cage', 'M06 Living Refuge', 'M07 Secrets of Izrdralar', 'M08 First Schism'], focus: 'The Traveler learns to exist, meets Xethkioz and discovers that exploration, care and understanding can matter as much as combat.' },
+    { name: 'DESFRALAR', code: 'EXP I', maps: ['M09 Sunken Roots Threshold', 'M10 Living Cavern Galleries', 'M11 Heart of the Living Cavern', 'M12 Edge of the Spirit Swamp', 'M13 Anchor Camp', 'M14 Mire of Echoes', 'M15 Swamp Sanctuary', 'M16 Abyssal Zone', 'M17 Swamp Throne'], focus: 'Terrain starts behaving like living memory. Mamporro and the swamp expand the link between Resonance, echoes and movement through the world.' },
+    { name: 'XIOMALAR', code: 'EXP II', maps: ['M18 Rise of the Currents', 'M19 Suspended Gardens', 'M20 Quantum Observatory', 'M21 Resonance Temples', 'M22 Fractured Cloud Sea', 'M23 Primordial Time Archive', 'M24 Custodian Bastion', 'M25 Primordial Time Threshold'], focus: 'Exploration stops being only geographic. The player begins traversing temporal currents, incompatible states and the knowledge Ivan managed to reconstruct.' },
+    { name: 'ZODNIGHT', code: 'FINALE', maps: ['M26 Fixed Night Frontier', 'M27 City of Still States', 'M28 Unison Sanctuary', 'M29 Atrium of Elida Memory', 'M30 Dvalin Eclipse', 'M31 Convergence Fields', 'M32 Unison Core'], focus: 'Saga I confronts the central idea of the game: accept multiplicity or impose one stable reality. The ending does not restore the old world.' },
+  ],
+} as const
 
-    return () => {
-      active = false
-      cancelScheduled()
-    }
-  }, [])
+const atlasDetails = {
+  es: [
+    { title: 'GOBLINS', signal: 'CULTURA + SUPERVIVENCIA', items: ['Joven', 'Acechador', 'Embaucador', 'Custodio', 'Espinero · raro', 'Oráculo Goblin · épico random'], note: 'No son humanos mutados. Forman bandas con roles, rutas, alarmas, saqueo y conductas propias.' },
+    { title: 'MECAS + TECNOFLORA', signal: 'PROTOCOLOS INCOMPLETOS', items: ['Recolector Oxidado', 'Sabueso Meca', 'Avispa Meca Centinela', 'Nexo de Cuidado'], note: 'Algunas máquinas pueden repararse, liberarse de un protocolo o convertirse en parte persistente del mundo.' },
+    { title: 'FAUNA', signal: 'ECOLOGÍA VIVA', items: ['Ciervo Frondoso', 'Nutria Prismática', 'Zorrito de Ceibo', 'Carpinchito de Cristal · Familiar común'], note: 'Observar, evitar o proteger también son interacciones válidas. No toda criatura existe para entregar XP o iniciar una quest.' },
+    { title: 'RAROS + BOSSES', signal: 'ENCUENTROS DE HITO', items: ['Mago Negro · legendario random', 'Carcelero Prismático', 'Centinela Tecnoverde', 'Behemoth de la Caverna', 'Cazador Umbrío', 'El Unísono'], note: 'Los jefes importantes dejan consecuencias. Algunos cambian rutas, ecosistemas, servicios o el estado narrativo del mapa.' },
+  ],
+  en: [
+    { title: 'GOBLINS', signal: 'CULTURE + SURVIVAL', items: ['Young Goblin', 'Stalker', 'Trickster', 'Custodian', 'Spine Goblin · rare', 'Goblin Oracle · epic random'], note: 'They are not mutated humans. Their bands have roles, routes, alarms, scavenging behavior and their own culture.' },
+    { title: 'MECHS + TECHNOFLORA', signal: 'INCOMPLETE PROTOCOLS', items: ['Rust Collector', 'Meca Hound', 'Meca Sentinel Wasp', 'Care Nexus'], note: 'Some machines can be repaired, freed from a protocol or turned into persistent parts of the world.' },
+    { title: 'WILDLIFE', signal: 'LIVING ECOLOGY', items: ['Leafy Deer', 'Prismatic Otter', 'Ceibo Fox', 'Crystal Capybara · common Familiar'], note: 'Watching, avoiding or protecting are valid interactions too. Not every creature exists to grant XP or start a quest.' },
+    { title: 'RARES + BOSSES', signal: 'MILESTONE ENCOUNTERS', items: ['Black Mage · legendary random', 'Prismatic Jailer', 'Technogreen Sentinel', 'Cavern Behemoth', 'Shadow Hunter', 'The Unison'], note: 'Major bosses leave consequences. Some change routes, ecosystems, services or the narrative state of a map.' },
+  ],
+} as const
 
-  return offer
+const forms = [
+  ['XETHKIOZ', 'Viajero', 'Resonancia Abierta'],
+  ['KILLARUNA', 'Ashley', 'Resonancia · Maná · Silencio'],
+  ['MOZARUK', 'Fermín', 'Tierra · Resistencia · Defensa'],
+  ['HELLER', 'Isabella', 'Fuego · Caos con límites'],
+  ['KAHEZER', 'Gael', 'Viento · Adaptación'],
+  ['ITZUKE', 'Iván', 'Electricidad · Velocidad · Observación'],
+  ['DVALIN', 'Alexis', 'Hielo · Sombra · Anticipación'],
+  ['OKUNINUST', 'Elida', 'Agua · Memoria · Escudo'],
+] as const
+
+function openNexusChat() {
+  window.dispatchEvent(new CustomEvent('xethkioz:nexus-chat-open', { detail: { room: 'general' } }))
 }
 
 export default function Home() {
-  const navigate = useNavigate()
-  const { triggerGreenPortal } = useWisp()
   const { lang, setLang, localizePath } = useLang()
   const { graphicsMode } = useExperience()
   const videoEnabled = useAmbientVideoEnabled(graphicsMode)
-  const featuredWebOffer = useFeaturedWebService()
   const t = copy[lang]
-
-  const openWisp = () => {
-    triggerGreenPortal()
-    window.setTimeout(() => navigate('/green-node'), 450)
-  }
-
-  const scrollToPortals = () => {
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    document.getElementById('portals')?.scrollIntoView({
-      behavior: reduceMotion ? 'auto' : 'smooth',
-      block: 'center',
-    })
-  }
-
+  const [activeRegion, setActiveRegion] = useState(0)
+  const [activeAtlas, setActiveAtlas] = useState(0)
+  const selectedRegion = regionDetails[lang][activeRegion]
+  const selectedAtlas = atlasDetails[lang][activeAtlas]
   return (
     <>
-      <SEO
-        title="Gaming Is My Passion · World Gate"
-        description={t.seoDescription}
-        url="/"
-        image="/assets/xethkioz-cover.png"
-      />
-
-      <main className="xk-rb-home">
-        <div className="xk-rb-bg" aria-hidden="true" />
+      <SEO title={t.seo} description={t.description} url="/" image="/assets/world-of-xethkioz/world-of-xethkioz-logo.webp" />
+      <main className="wox-home">
+        <div className="wox-bg" aria-hidden="true" />
         {videoEnabled && (
           <video
-            className="xk-rb-bg-video"
+            className="wox-bg-video"
             src="/assets/bg-dragon-animated.mp4"
             autoPlay
             loop
@@ -408,282 +231,188 @@ export default function Home() {
             aria-hidden="true"
           />
         )}
-        <div className="xk-rb-shade" aria-hidden="true" />
-        <div className="xk-rb-grid" aria-hidden="true" />
+        <div className="wox-bg-shade" aria-hidden="true" />
+        <div className="wox-noise" aria-hidden="true" />
 
-        <div className="xk-rb-shell">
-          <header className="xk-rb-header">
-            <Link to="/" className="xk-rb-brand" aria-label={t.brandLabel}>
-              <span className="xk-rb-logo">XETHKIOZ</span>
-              <small>Gaming Is My Passion · Beyond The Game</small>
-            </Link>
+        <aside className="wox-utility-rail" aria-label={lang === 'es' ? 'Accesos rápidos' : 'Quick access'}>
+          <button type="button" onClick={openNexusChat}><span>◉</span><b>CHAT</b></button>
+          <a href="#atlas"><span>◇</span><b>ATLAS</b></a>
+          <Link to={localizePath('/support')}><span>＋</span><b>{lang === 'es' ? 'APOYAR' : 'SUPPORT'}</b></Link>
+        </aside>
 
-            <nav className="xk-rb-nav" aria-label={lang === 'es' ? 'Navegación principal' : 'Primary navigation'}>
-              <Link to={localizePath('/gaming')}>{lang === 'es' ? 'Juegos' : 'Gaming'}</Link>
-              <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ArgenCiencia ↗</a>
-              <a href="/mascotas/">{lang === 'es' ? 'Mascotas' : 'Pets'}</a>
-              <Link to={localizePath('/nexus-city')}>Nexus City</Link>
-              <Link to={localizePath('/creacion-web')}>{lang === 'es' ? 'Creación Web' : 'Web Creation'}</Link>
-            </nav>
+        <header className="wox-topbar">
+          <Link to="/" className="wox-brand" aria-label="XETHKIOZ">
+            <strong>XETHKIOZ</strong>
+            <small>BEYOND THE GAME</small>
+          </Link>
+          <nav className="wox-portals" aria-label={lang === 'es' ? 'Portales XETHKIOZ' : 'XETHKIOZ portals'}>
+            <Link to={localizePath('/gaming')}><span>01</span>{t.portals.gaming}</Link>
+            <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer"><span>02</span>{t.portals.science}</a>
+            <a href="/mascotas/"><span>03</span>{t.portals.pets}</a>
+          </nav>          <div className="wox-tools">
+            <button type="button" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} aria-label={lang === 'es' ? 'Cambiar a inglés' : 'Switch to Spanish'}>
+              {lang === 'es' ? 'EN' : 'ES'}
+            </button>
+            <Link to={localizePath('/login')}>{lang === 'es' ? 'CUENTA' : 'ACCOUNT'}</Link>
+          </div>
+        </header>
 
-            <div className="xk-rb-tools">
-              <Link to="/news">{t.news}</Link>
-              <button type="button" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} aria-label={t.switchLanguage}>
-                {t.switchCode}
-              </button>
-              <Link to={localizePath('/login')}>{t.login}</Link>
+        <section className="wox-hero" aria-labelledby="wox-title">
+          <h1 id="wox-title" className="sr-only">World of Xethkioz</h1>
+          <div className="wox-hero-core">
+            <picture className="wox-logo-wrap">
+              <source srcSet="/assets/world-of-xethkioz/world-of-xethkioz-logo.webp" type="image/webp" />
+              <img src="/assets/world-of-xethkioz/world-of-xethkioz-logo.svg" alt="World of Xethkioz" className="wox-world-logo" />
+            </picture>
+            <p className="wox-status">{t.status}</p>
+            <h2>{t.soul}</h2>
+            <p className="wox-lead">{t.lead}</p>
+            <div className="wox-actions">
+              <a href="#worlds">{t.explore}<span>↓</span></a>
+              <button type="button" onClick={openNexusChat}>{t.chat}<span>◉</span></button>
+              <a href="#atlas" className="is-quiet">{t.atlas}<span>↘</span></a>
             </div>
-          </header>
-
-          <section className="xk-rb-hero" aria-labelledby="home-title">
-            <div className="xk-rb-copy">
-              <p className="xk-rb-kicker">{t.kicker}</p>
-              <h1 id="home-title">
-                {t.titleTop}
-                <span>{t.titleBottom}</span>
-              </h1>
-              <p>{t.intro}</p>
-
-              <div className="xk-rb-copy-actions">
-                <button type="button" onClick={scrollToPortals}>{t.primaryCta} <span aria-hidden="true">↓</span></button>
-                <Link to="/news">{t.newsCta} <span aria-hidden="true">↗</span></Link>
-              </div>
-
-              <div className="xk-rb-signal" aria-label={lang === 'es' ? 'Estado del sistema' : 'System status'}>
-                <span>{t.liveSignal}</span>
-                <span>{t.nexusSignal}</span>
-                <span>{t.safeSignal}</span>
-              </div>
+          </div>
+          <a className="wox-scroll" href="#origin" aria-label={t.scroll}><span />{t.scroll}</a>
+        </section>
+        <div className="wox-content">
+          <section id="origin" className="wox-section wox-origin" aria-labelledby="origin-title">
+            <div className="wox-section-head">
+              <p>{t.storyEyebrow}</p>
+              <h2 id="origin-title">{t.storyTitle}</h2>
+              <span>{t.storyText}</span>
             </div>
-
-            <div id="portals" className="xk-rb-theatre" aria-label={lang === 'es' ? 'Portales principales' : 'Main portals'}>
-              <p className="xk-rb-theatre-label">{t.portalLabel}</p>
-              <div className="xk-rb-portals">
-                {t.primary.map((portal) => <PrimaryPortal key={portal.id} portal={portal} />)}
-              </div>
-            </div>
-
-            <FloatingWisp ariaLabel={t.wispLabel} onClick={openWisp} />
-          </section>
-
-          <nav className="xk-rb-section-map" aria-label={t.sectionNavLabel}>
-            {t.sectionNav.map((item) => item.href.startsWith('#') ? (
-              <a key={item.code} href={item.href}><small>{item.code}</small><strong>{item.label}</strong><span aria-hidden="true">↘</span></a>
-            ) : (
-              <Link key={item.code} to={localizePath(item.href)}><small>{item.code}</small><strong>{item.label}</strong><span aria-hidden="true">↗</span></Link>
-            ))}
-          </nav>
-
-          <section id="network" className="xk-rb-secondary xk-rb-deferred-section" aria-labelledby="secondary-gates-title">
-            <div className="xk-rb-section-head">
-              <div>
-                <p>{t.secondaryEyebrow}</p>
-                <h2 id="secondary-gates-title">{t.secondaryTitle}</h2>
-              </div>
-              <span>{t.secondaryText}</span>
-            </div>
-
-            <div className="xk-rb-destinations">
-              {t.destinations.map((destination) => (
-                <Destination key={destination.id} destination={destination} onOpenWisp={openWisp} />
+            <div className="wox-timeline">
+              {timeline[lang].map(([year, text]) => (
+                <article key={year}>
+                  <strong>{year}</strong>
+                  <p>{text}</p>
+                </article>
               ))}
             </div>
           </section>
 
-          <div id="radar" className="xk-rb-section-wrap xk-rb-deferred-section">
-            <NexusDistrict tone="home" compact />
-          </div>
-
-          <div id="studio" className="xk-rb-section-wrap xk-rb-deferred-section">
-            <WebCreationFeature
-              eyebrow={t.webEyebrow}
-              title={t.webTitle}
-              text={t.webText}
-              cta={t.webCta}
-              featuredLabel={t.featured}
-              offer={featuredWebOffer}
-            />
-          </div>
-
-          <section id="contact" className="xk-rb-contact xk-rb-deferred-section" aria-labelledby="home-contact-title">
-            <div className="xk-rb-contact-copy">
-              <p>{lang === 'es' ? 'XETHKIOZ // CONTACTO DIRECTO' : 'XETHKIOZ // DIRECT CONTACT'}</p>
-              <h2 id="home-contact-title">{lang === 'es' ? '¿Tenés una idea, consulta o proyecto?' : 'Have an idea, question or project?'}</h2>
-              <span>{lang === 'es' ? 'Escribime por el canal que te resulte más cómodo.' : 'Reach me through whichever channel works best for you.'}</span>
+          <section className="wox-section wox-duo" aria-labelledby="duo-title">
+            <div className="wox-section-head">
+              <p>{t.travelerEyebrow}</p>
+              <h2 id="duo-title">{t.travelerTitle}</h2>
+              <span>{t.travelerText}</span>
             </div>
-
-            <div className="xk-rb-contact-links">
-              <a href="https://www.instagram.com/xethkioz" target="_blank" rel="noopener noreferrer" aria-label="Instagram de XETHKIOZ">
-                <span>Instagram</span>
-                <strong>@xethkioz</strong>
-                <b aria-hidden="true">↗</b>
-              </a>
-              <Link to={localizePath('/contact')} aria-label={lang === 'es' ? 'Abrir formulario de contacto' : 'Open contact form'}>
-                <span>{lang === 'es' ? 'Formulario privado' : 'Private form'}</span>
-                <strong>{lang === 'es' ? 'Contacto XETHKIOZ' : 'Contact XETHKIOZ'}</strong>
-                <b aria-hidden="true">→</b>
-              </Link>
-              <Link to={localizePath('/creacion-web#presupuesto')} aria-label={lang === 'es' ? 'Solicitar presupuesto web' : 'Request a web quote'}>
-                <span>{lang === 'es' ? 'Presupuesto web' : 'Web quote'}</span>
-                <strong>{lang === 'es' ? 'Enviar solicitud' : 'Send request'}</strong>
-                <b aria-hidden="true">→</b>
-              </Link>
+            <div className="wox-duo-grid">
+              <article><small>01 // VIAJERO</small><strong>{lang === 'es' ? 'Nació de ecos que no eran suyos.' : 'Born from echoes that were not its own.'}</strong><p>{lang === 'es' ? 'Sin género, rostro ni pasado canónico. El nombre elegido por el jugador es su primer anclaje de identidad.' : 'No canonical gender, face or past. The player-chosen name becomes its first anchor of identity.'}</p></article>
+              <article><small>02 // XETHKIOZ</small><strong>{lang === 'es' ? 'No obedece. Acompaña.' : 'It does not obey. It accompanies.'}</strong><p>{lang === 'es' ? 'La Forma Abierta aprende afinidades sin perder identidad. Su progresión canónica de colas es 3 → 5 → 7 → 9.' : 'The Open Form learns affinities without losing identity. Its canonical tail progression is 3 → 5 → 7 → 9.'}</p></article>
+            </div>
+          </section>
+          <section id="worlds" className="wox-section" aria-labelledby="worlds-title">
+            <div className="wox-section-head">
+              <p>{t.worldsEyebrow}</p>
+              <h2 id="worlds-title">{t.worldsTitle}</h2>
+            </div>
+            <div className="wox-region-grid">
+              {regions[lang].map(([name, maps, level, description], index) => (
+                <article key={name} data-region={index + 1} className={activeRegion === index ? 'is-active' : ''}>
+                  <button type="button" onClick={() => setActiveRegion(index)} aria-pressed={activeRegion === index}>
+                    <div><small>{maps}</small><span>{level}</span></div>
+                    <h3>{name}</h3>
+                    <p>{description}</p>
+                    <b>{lang === 'es' ? 'EXPLORAR REGIÓN' : 'EXPLORE REGION'} <span>↘</span></b>
+                    <i aria-hidden="true">0{index + 1}</i>
+                  </button>
+                </article>
+              ))}
+            </div>
+            <div className="wox-region-console" aria-live="polite">
+              <div className="wox-region-console-head">
+                <span>{selectedRegion.code} // {selectedRegion.name}</span>
+                <strong>{lang === 'es' ? 'RUTA CANÓNICA DE SAGA I' : 'CANONICAL SAGA I ROUTE'}</strong>
+              </div>
+              <p>{selectedRegion.focus}</p>
+              <div className="wox-map-chips">
+                {selectedRegion.maps.map((map) => <span key={map}>{map}</span>)}
+              </div>
             </div>
           </section>
 
-          <footer className="xk-rb-footer">
-            <div>
-              <span>{t.copyright} {SITE_VERSION}</span>
-              <nav aria-label={lang === 'es' ? 'Enlaces legales' : 'Legal links'}>
-                <Link to={localizePath('/privacy')}>{lang === 'es' ? 'Privacidad' : 'Privacy'}</Link>
-                <Link to={localizePath('/editorial-policy')}>{lang === 'es' ? 'Política editorial' : 'Editorial policy'}</Link>
-                <Link to={localizePath('/contact')}>{lang === 'es' ? 'Contacto' : 'Contact'}</Link>
-              </nav>
+          <section id="atlas" className="wox-section wox-atlas" aria-labelledby="atlas-title">
+            <div className="wox-section-head">
+              <p>{t.bestiaryEyebrow}</p>
+              <h2 id="atlas-title">{t.bestiaryTitle}</h2>
+              <span>{lang === 'es' ? 'El Prisma-Atlas se completa por descubrimiento: avistamiento, conducta, interacción y análisis. Ver una criatura no implica una misión ni un combate.' : 'The Prism Atlas fills through discovery: sighting, behavior, interaction and analysis. Seeing a creature does not automatically mean a quest or a fight.'}</span>
             </div>
+            <div className="wox-atlas-grid">
+              {atlasEntries[lang].map(([title, text], index) => (
+                <article key={title} className={activeAtlas === index ? 'is-active' : ''}>
+                  <button type="button" onClick={() => setActiveAtlas(index)} aria-pressed={activeAtlas === index}>
+                    <span>◆</span><h3>{title}</h3><p>{text}</p>
+                  </button>
+                </article>
+              ))}
+            </div>
+            <div className="wox-atlas-console" aria-live="polite">
+              <div>
+                <small>{selectedAtlas.signal}</small>
+                <h3>{selectedAtlas.title}</h3>
+                <p>{selectedAtlas.note}</p>
+              </div>
+              <div className="wox-atlas-tags">
+                {selectedAtlas.items.map((item) => <span key={item}>{item}</span>)}
+              </div>
+            </div>
+          </section>
+          <section className="wox-section" aria-labelledby="forms-title">
+            <div className="wox-section-head">
+              <p>{t.formsEyebrow}</p>
+              <h2 id="forms-title">{t.formsTitle}</h2>
+            </div>
+            <div className="wox-forms-grid">
+              {forms.map(([name, bond, affinity], index) => (
+                <article key={name}>
+                  <small>{String(index + 1).padStart(2, '0')}</small>
+                  <div><strong>{name}</strong><span>{bond}</span></div>
+                  <p>{affinity}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section className="wox-section wox-dev" aria-labelledby="dev-title">
+            <div className="wox-section-head">
+              <p>{t.devEyebrow}</p>
+              <h2 id="dev-title">{t.devTitle}</h2>
+              <span>{t.devText}</span>
+            </div>
+            <div className="wox-dev-grid">
+              <article><strong>32</strong><span>{lang === 'es' ? 'mapas físicos en Saga I' : 'physical maps in Saga I'}</span></article>
+              <article><strong>120</strong><span>{lang === 'es' ? 'nivel máximo de Saga I' : 'Saga I level cap'}</span></article>
+              <article><strong>8</strong><span>{lang === 'es' ? 'Formas de Convergencia' : 'Convergence Forms'}</span></article>
+              <article><strong>UNITY</strong><span>{lang === 'es' ? 'motor de producción activo' : 'active production engine'}</span></article>
+            </div>
+            <div className="wox-dev-pulse" aria-label={lang === 'es' ? 'Hitos públicos del desarrollo' : 'Public development milestones'}>
+              <span><i />CANON v2.0 LOCK</span>
+              <span><i />32 MAPAS SAGA I</span>
+              <span><i />BESTIARIO 3D PIPELINE</span>
+              <span><i />VERTICAL SLICE EN PRODUCCIÓN</span>
+            </div>
+          </section>
+          <section className="wox-final" aria-label={lang === 'es' ? 'Mensaje final' : 'Final statement'}>
+            <span aria-hidden="true">◇</span>
+            <p>{t.final}</p>
+            <span aria-hidden="true">◇</span>
+          </section>
+
+          <footer className="wox-footer">
+            <div>
+              <strong>WORLD OF XETHKIOZ</strong>
+              <span>© 2026 XETHKIOZ · {SITE_VERSION}</span>
+            </div>
+            <nav aria-label={lang === 'es' ? 'Enlaces del sitio' : 'Site links'}>
+              <Link to={localizePath('/support')}>{lang === 'es' ? 'Apoyar proyecto' : 'Support project'}</Link>
+              <Link to={localizePath('/privacy')}>{lang === 'es' ? 'Privacidad' : 'Privacy'}</Link>
+              <Link to={localizePath('/contact')}>{lang === 'es' ? 'Contacto' : 'Contact'}</Link>
+            </nav>
           </footer>
         </div>
       </main>
     </>
-  )
-}
-
-function PrimaryPortal({ portal }: { portal: PortalCard }) {
-  const isFeatured = portal.id === 'gaming'
-  const isImmediate = portal.id === 'gaming' || portal.id === 'pets'
-  const hasEnhancedLighting = portal.id === 'pets'
-  const { localizePath } = useLang()
-  const content: ReactNode = (
-    <>
-      <span className="xk-rb-gate">
-        <span className="xk-rb-aura" aria-hidden="true" />
-        <span className="xk-rb-window">
-          <SafeImage
-            src={portal.world}
-            fallback="/images/articles/fallback.svg"
-            alt=""
-            loading={isImmediate ? 'eager' : 'lazy'}
-            fetchPriority={isFeatured ? 'high' : 'auto'}
-            style={{ objectPosition: portal.position }}
-          />
-        </span>
-        <span className="xk-rb-frame" aria-hidden="true" />
-        <span className="xk-rb-sparks" aria-hidden="true">
-          <i /><i /><i />
-          {hasEnhancedLighting && <><i /><i /></>}
-        </span>
-      </span>
-
-      <span className="xk-rb-portal-copy">
-        <small>{portal.code} // WORLD GATE</small>
-        <strong>{portal.title}</strong>
-        <span>{portal.subtitle}</span>
-        <b>{portal.action} ↗</b>
-      </span>
-    </>
-  )
-  const commonProps = {
-    className: 'xk-rb-portal',
-    style: { '--tone': portal.tone } as CSSProperties,
-    'data-portal': portal.id,
-    'aria-label': `${portal.action}: ${portal.title}`,
-  }
-
-  if (portal.external) return <a {...commonProps} href={portal.route} target="_blank" rel="noopener noreferrer">{content}</a>
-  if (portal.document) return <a {...commonProps} href={portal.route}>{content}</a>
-  return <Link {...commonProps} to={localizePath(portal.route)}>{content}</Link>
-}
-
-function Destination({ destination, onOpenWisp }: { destination: DestinationCard; onOpenWisp: () => void }) {
-  const { localizePath } = useLang()
-  const content = (
-    <>
-      <SafeImage
-        src={destination.image}
-        fallback="/images/articles/fallback.svg"
-        alt=""
-        loading="lazy"
-        fetchPriority="low"
-        style={{ objectPosition: destination.position }}
-      />
-      <span className="xk-rb-destination-copy">
-        <small>{destination.code}</small>
-        <strong>{destination.title}</strong>
-        <span>{destination.text}</span>
-        <b>{destination.action} ↗</b>
-      </span>
-    </>
-  )
-
-  const style = { '--tone': destination.tone } as CSSProperties
-
-  if (destination.id === 'green') {
-    return (
-      <button type="button" className="xk-rb-destination" style={style} onClick={onOpenWisp}>
-        {content}
-      </button>
-    )
-  }
-
-  return <Link to={localizePath(destination.route)} className="xk-rb-destination" style={style}>{content}</Link>
-}
-
-function FloatingWisp({ ariaLabel, onClick }: { ariaLabel: string; onClick: () => void }) {
-  return (
-    <div className="xk-rb-wisp">
-      <button type="button" onClick={onClick} aria-label={ariaLabel}>
-        <SafeImage
-          src="/assets/identity/wisp-digital-specter-v1.webp"
-          fallback="/images/articles/tech.svg"
-          alt=""
-          loading="lazy"
-          fetchPriority="low"
-        />
-      </button>
-    </div>
-  )
-}
-
-function WebCreationFeature({
-  eyebrow,
-  title,
-  text,
-  cta,
-  featuredLabel,
-  offer,
-}: {
-  eyebrow: string
-  title: string
-  text: string
-  cta: string
-  featuredLabel: string
-  offer: WebServiceOffer
-}) {
-  const { localizePath } = useLang()
-  return (
-    <section className="xk-rb-web" aria-labelledby="web-creation-home-title">
-      <div className="xk-rb-web-copy">
-        <small>{eyebrow}</small>
-        <h2 id="web-creation-home-title">{title}</h2>
-        <p>{text}</p>
-        <Link to={localizePath('/creacion-web')}>{cta} ↗</Link>
-      </div>
-
-      <Link to={localizePath('/creacion-web')} className="xk-rb-web-preview" aria-label={`${cta}: ${offer.title}`}>
-        <SafeImage
-          src={offer.image_url}
-          fallback="/web-services/landing-premium.svg"
-          alt={offer.image_alt || offer.title}
-          loading="lazy"
-          fetchPriority="low"
-        />
-        <div>
-          <span>
-            <small>{featuredLabel}</small>
-            <strong>{offer.title}</strong>
-          </span>
-          <b>{offer.price_label}</b>
-        </div>
-      </Link>
-    </section>
   )
 }
