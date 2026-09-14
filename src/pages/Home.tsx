@@ -328,7 +328,7 @@ export default function Home() {
           <a className="wox-scroll" href="#origin" aria-label={t.scroll}><span />{t.scroll}</a>
         </section>
         <div className="wox-content">
-          <section id="origin" className="wox-section wox-origin" aria-labelledby="origin-title">
+          <section id="origin" className="wox-section wox-origin wox-editorial-open" aria-labelledby="origin-title">
             <div className="wox-section-head">
               <p>{t.storyEyebrow}</p>
               <h2 id="origin-title">{t.storyTitle}</h2>
@@ -344,7 +344,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="wox-section wox-duo" aria-labelledby="duo-title">
+          <section className="wox-section wox-duo wox-editorial-open" aria-labelledby="duo-title">
             <div className="wox-section-head">
               <p>{t.travelerEyebrow}</p>
               <h2 id="duo-title">{t.travelerTitle}</h2>
@@ -355,7 +355,7 @@ export default function Home() {
               <article><small>02 // XETHKIOZ</small><strong>{lang === 'es' ? 'No obedece. Acompaña.' : 'It does not obey. It accompanies.'}</strong><p>{lang === 'es' ? 'La Forma Abierta aprende afinidades sin perder identidad. Su progresión canónica de colas es 3 → 5 → 7 → 9.' : 'The Open Form learns affinities without losing identity. Its canonical tail progression is 3 → 5 → 7 → 9.'}</p></article>
             </div>
           </section>
-          <section id="worlds" className="wox-section" aria-labelledby="worlds-title">
+          <section id="worlds" className="wox-section wox-world-showcase" aria-labelledby="worlds-title">
             <div className="wox-section-head">
               <p>{t.worldsEyebrow}</p>
               <h2 id="worlds-title">{t.worldsTitle}</h2>
@@ -385,7 +385,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section id="atlas" className="wox-section wox-atlas" aria-labelledby="atlas-title">
+          <section id="atlas" className="wox-section wox-atlas wox-atlas-showcase" aria-labelledby="atlas-title">
             <div className="wox-section-head">
               <p>{t.bestiaryEyebrow}</p>
               <h2 id="atlas-title">{t.bestiaryTitle}</h2>
@@ -411,7 +411,7 @@ export default function Home() {
               </div>
             </div>
           </section>
-          <section className="wox-section" aria-labelledby="forms-title">
+          <section className="wox-section wox-forms-showcase" aria-labelledby="forms-title">
             <div className="wox-section-head">
               <p>{t.formsEyebrow}</p>
               <h2 id="forms-title">{t.formsTitle}</h2>
@@ -439,7 +439,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section id="characters" className="wox-section wox-cast" aria-labelledby="cast-title">
+          <section id="characters" className="wox-section wox-cast wox-cast-showcase" aria-labelledby="cast-title">
             <div className="wox-section-head">
               <p>{t.castEyebrow}</p>
               <h2 id="cast-title">{t.castTitle}</h2>
@@ -466,7 +466,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section id="development" className="wox-section wox-dev" aria-labelledby="dev-title">
+          <section id="development" className="wox-section wox-dev wox-dev-showcase" aria-labelledby="dev-title">
             <div className="wox-section-head">
               <p>{t.devEyebrow}</p>
               <h2 id="dev-title">{t.devTitle}</h2>
@@ -486,7 +486,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="wox-section wox-roadmap" aria-labelledby="roadmap-title">
+          <section className="wox-section wox-roadmap wox-roadmap-showcase" aria-labelledby="roadmap-title">
             <div className="wox-section-head">
               <p>{t.roadmapEyebrow}</p>
               <h2 id="roadmap-title">{t.roadmapTitle}</h2>
