@@ -82,6 +82,8 @@ const copy = {
     bestiaryTitle: 'El mundo no existe sólo para combatirlo.',
     formsEyebrow: 'OCHO FORMAS DE CONVERGENCIA',
     formsTitle: 'Una familia prismática. Ocho vínculos.',
+    castEyebrow: 'PERSONAJES // IDENTIDADES CANÓNICAS',
+    castTitle: 'Nombres del mundo. Vínculos de la historia.',
     devEyebrow: 'DESARROLLO // ESTADO DEL PROYECTO',
     devTitle: 'Producción activa en Unity.',
     devText: 'La web va a funcionar como el centro público del proyecto: lore, Atlas, avances, comunidad y estado del juego, sin mezclar el contenido interno de producción con la experiencia del visitante.',
@@ -109,6 +111,8 @@ const copy = {
     bestiaryTitle: 'The world does not exist only to be fought.',
     formsEyebrow: 'EIGHT CONVERGENCE FORMS',
     formsTitle: 'One prismatic family. Eight bonds.',
+    castEyebrow: 'CHARACTERS // CANONICAL IDENTITIES',
+    castTitle: 'Names of the world. Bonds of the story.',
     devEyebrow: 'DEVELOPMENT // PROJECT STATUS',
     devTitle: 'Active production in Unity.',
     devText: 'The site becomes the public center of the project: lore, Atlas, progress, community and game status, without mixing internal production material into the visitor experience.',
@@ -133,13 +137,13 @@ const timeline = {
 const regions = {
   es: [
     ['IZRDRALAR', 'M01–M08', 'Nivel 1–60', 'Juego base · Cuenca del Despertar, Aldea del Alba, Lago Encantado, tecnoflora, secretos y Primer Cisma.'],
-    ['DESFRALAR', 'M09–M17', 'Nivel 60–85', 'Expansión I · raíces hundidas, Caverna Viva, Ciénaga Espiritual, Mamporro y memoria.'],
+    ['DESFRALAR', 'M09–M17', 'Nivel 60–85', 'Expansión I · raíces hundidas, Caverna Viva, Ciénaga Espiritual, Mamporath y memoria.'],
     ['XIOMALAR', 'M18–M25', 'Nivel 85–105', 'Expansión II · corrientes, jardines suspendidos, Observatorio Cuántico y Tiempo Primigenio.'],
     ['ZODNIGHT', 'M26–M32', 'Nivel 105–120', 'Cierre Saga I · estados quietos, El Unísono, convergencias y la decisión de divergir.'],
   ],
   en: [
     ['IZRDRALAR', 'M01–M08', 'Level 1–60', 'Base game · Awakening Basin, Dawn Village, Enchanted Lake, technoflora, secrets and the First Schism.'],
-    ['DESFRALAR', 'M09–M17', 'Level 60–85', 'Expansion I · sunken roots, Living Cavern, Spirit Swamp, Mamporro and memory.'],
+    ['DESFRALAR', 'M09–M17', 'Level 60–85', 'Expansion I · sunken roots, Living Cavern, Spirit Swamp, Mamporath and memory.'],
     ['XIOMALAR', 'M18–M25', 'Level 85–105', 'Expansion II · currents, suspended gardens, Quantum Observatory and Primordial Time.'],
     ['ZODNIGHT', 'M26–M32', 'Level 105–120', 'Saga I finale · still states, the Unison, convergences and the choice to diverge.'],
   ],
@@ -161,15 +165,15 @@ const atlasEntries = {
 
 const regionDetails = {
   es: [
-    { name: 'IZRDRALAR', code: 'BASE', maps: ['M01 Cuenca del Despertar', 'M02 Aldea del Alba', 'M03 Lago Encantado + Ruinas Vivas', 'M04 Expedición Matí + tecnoflora', 'M05 Jaula Prismática', 'M06 Refugio Vivo', 'M07 Secretos de Izrdralar', 'M08 Primer Cisma'], focus: 'El Viajero aprende a existir, conoce a Xethkioz y descubre que explorar, cuidar y comprender puede ser tan importante como combatir.' },
-    { name: 'DESFRALAR', code: 'EXP I', maps: ['M09 Umbral de Raíces Hundidas', 'M10 Galerías de la Caverna Viva', 'M11 Corazón de la Caverna Viva', 'M12 Borde de la Ciénaga Espiritual', 'M13 Campamento de las Anclas', 'M14 Fangal de los Ecos', 'M15 Santuario de la Ciénaga', 'M16 Zona Abisal', 'M17 Trono de la Ciénaga'], focus: 'El terreno empieza a comportarse como una memoria viva. Mamporro y la Ciénaga amplían la relación entre Resonancia, ecos y movimiento por el mundo.' },
-    { name: 'XIOMALAR', code: 'EXP II', maps: ['M18 Ascenso de las Corrientes', 'M19 Jardines Suspendidos', 'M20 Observatorio Cuántico', 'M21 Templos de Resonancia', 'M22 Mar de Nubes Fracturadas', 'M23 Archivo del Tiempo Primigenio', 'M24 Bastión del Custodio', 'M25 Umbral del Tiempo Primigenio'], focus: 'La exploración deja de ser sólo geográfica. El jugador empieza a recorrer corrientes temporales, estados incompatibles y el conocimiento que Iván logró reconstruir.' },
+    { name: 'IZRDRALAR', code: 'BASE', maps: ['M01 Cuenca del Despertar', 'M02 Aldea del Alba', 'M03 Lago Encantado + Ruinas Vivas', 'M04 Expedición Matrias + tecnoflora', 'M05 Jaula Prismática', 'M06 Refugio Vivo', 'M07 Secretos de Izrdralar', 'M08 Primer Cisma'], focus: 'El Viajero aprende a existir, conoce a Xethkioz y descubre que explorar, cuidar y comprender puede ser tan importante como combatir.' },
+    { name: 'DESFRALAR', code: 'EXP I', maps: ['M09 Umbral de Raíces Hundidas', 'M10 Galerías de la Caverna Viva', 'M11 Corazón de la Caverna Viva', 'M12 Borde de la Ciénaga Espiritual', 'M13 Campamento de las Anclas', 'M14 Fangal de los Ecos', 'M15 Santuario de la Ciénaga', 'M16 Zona Abisal', 'M17 Trono de la Ciénaga'], focus: 'El terreno empieza a comportarse como una memoria viva. Mamporath y la Ciénaga amplían la relación entre Resonancia, ecos y movimiento por el mundo.' },
+    { name: 'XIOMALAR', code: 'EXP II', maps: ['M18 Ascenso de las Corrientes', 'M19 Jardines Suspendidos', 'M20 Observatorio Cuántico', 'M21 Templos de Resonancia', 'M22 Mar de Nubes Fracturadas', 'M23 Archivo del Tiempo Primigenio', 'M24 Bastión del Custodio', 'M25 Umbral del Tiempo Primigenio'], focus: 'La exploración deja de ser sólo geográfica. El jugador empieza a recorrer corrientes temporales, estados incompatibles y el conocimiento que Ivander logró reconstruir.' },
     { name: 'ZODNIGHT', code: 'CIERRE', maps: ['M26 Frontera de la Noche Fija', 'M27 Ciudad de los Estados Quietos', 'M28 Santuario del Unísono', 'M29 Atrio de la Memoria de Elida', 'M30 Eclipse de Dvalin', 'M31 Campos de Convergencia', 'M32 Núcleo del Unísono'], focus: 'Saga I enfrenta la idea central del juego: aceptar la multiplicidad o imponer una única realidad estable. El final no restaura el mundo anterior.' },
   ],
   en: [
-    { name: 'IZRDRALAR', code: 'BASE', maps: ['M01 Awakening Basin', 'M02 Dawn Village', 'M03 Enchanted Lake + Living Ruins', 'M04 Mati Expedition + technoflora', 'M05 Prismatic Cage', 'M06 Living Refuge', 'M07 Secrets of Izrdralar', 'M08 First Schism'], focus: 'The Traveler learns to exist, meets Xethkioz and discovers that exploration, care and understanding can matter as much as combat.' },
-    { name: 'DESFRALAR', code: 'EXP I', maps: ['M09 Sunken Roots Threshold', 'M10 Living Cavern Galleries', 'M11 Heart of the Living Cavern', 'M12 Edge of the Spirit Swamp', 'M13 Anchor Camp', 'M14 Mire of Echoes', 'M15 Swamp Sanctuary', 'M16 Abyssal Zone', 'M17 Swamp Throne'], focus: 'Terrain starts behaving like living memory. Mamporro and the swamp expand the link between Resonance, echoes and movement through the world.' },
-    { name: 'XIOMALAR', code: 'EXP II', maps: ['M18 Rise of the Currents', 'M19 Suspended Gardens', 'M20 Quantum Observatory', 'M21 Resonance Temples', 'M22 Fractured Cloud Sea', 'M23 Primordial Time Archive', 'M24 Custodian Bastion', 'M25 Primordial Time Threshold'], focus: 'Exploration stops being only geographic. The player begins traversing temporal currents, incompatible states and the knowledge Ivan managed to reconstruct.' },
+    { name: 'IZRDRALAR', code: 'BASE', maps: ['M01 Awakening Basin', 'M02 Dawn Village', 'M03 Enchanted Lake + Living Ruins', 'M04 Matrias Expedition + technoflora', 'M05 Prismatic Cage', 'M06 Living Refuge', 'M07 Secrets of Izrdralar', 'M08 First Schism'], focus: 'The Traveler learns to exist, meets Xethkioz and discovers that exploration, care and understanding can matter as much as combat.' },
+    { name: 'DESFRALAR', code: 'EXP I', maps: ['M09 Sunken Roots Threshold', 'M10 Living Cavern Galleries', 'M11 Heart of the Living Cavern', 'M12 Edge of the Spirit Swamp', 'M13 Anchor Camp', 'M14 Mire of Echoes', 'M15 Swamp Sanctuary', 'M16 Abyssal Zone', 'M17 Swamp Throne'], focus: 'Terrain starts behaving like living memory. Mamporath and the swamp expand the link between Resonance, echoes and movement through the world.' },
+    { name: 'XIOMALAR', code: 'EXP II', maps: ['M18 Rise of the Currents', 'M19 Suspended Gardens', 'M20 Quantum Observatory', 'M21 Resonance Temples', 'M22 Fractured Cloud Sea', 'M23 Primordial Time Archive', 'M24 Custodian Bastion', 'M25 Primordial Time Threshold'], focus: 'Exploration stops being only geographic. The player begins traversing temporal currents, incompatible states and the knowledge Ivander managed to reconstruct.' },
     { name: 'ZODNIGHT', code: 'FINALE', maps: ['M26 Fixed Night Frontier', 'M27 City of Still States', 'M28 Unison Sanctuary', 'M29 Atrium of Elida Memory', 'M30 Dvalin Eclipse', 'M31 Convergence Fields', 'M32 Unison Core'], focus: 'Saga I confronts the central idea of the game: accept multiplicity or impose one stable reality. The ending does not restore the old world.' },
   ],
 } as const
@@ -189,16 +193,43 @@ const atlasDetails = {
   ],
 } as const
 
-const forms = [
-  ['XETHKIOZ', 'Viajero', 'Resonancia Abierta'],
-  ['KILLARUNA', 'Ashley', 'Resonancia · Maná · Silencio'],
-  ['MOZARUK', 'Fermín', 'Tierra · Resistencia · Defensa'],
-  ['HELLER', 'Isabella', 'Fuego · Caos con límites'],
-  ['KAHEZER', 'Gael', 'Viento · Adaptación'],
-  ['ITZUKE', 'Iván', 'Electricidad · Velocidad · Observación'],
-  ['DVALIN', 'Alexis', 'Hielo · Sombra · Anticipación'],
-  ['OKUNINUST', 'Elida', 'Agua · Memoria · Escudo'],
-] as const
+const forms = {
+  es: [
+    ['XETHKIOZ', 'Viajero', 'Resonancia Abierta'],
+    ['KILLARUNA', 'Ashley · Voz del Silencio', 'Resonancia · Maná · Silencio'],
+    ['MOZARUK', 'Fermín · Bastión de la Tierra', 'Tierra · Resistencia · Defensa'],
+    ['HELLER', 'Isabella · Llama Indómita', 'Fuego · Caos con límites'],
+    ['KAHEZER', 'Gael · Heredero del Viento', 'Viento · Adaptación'],
+    ['ITZUKE', 'Ivander · El Científico Cuántico', 'Electricidad · Velocidad · Observación'],
+    ['DVALIN', 'Alxion · Taumaturgo Primigenio', 'Hielo · Sombra · Anticipación'],
+    ['OKUNINUST', 'Elida · Guardiana de la Memoria', 'Agua · Memoria · Escudo'],
+  ],
+  en: [
+    ['XETHKIOZ', 'Traveler', 'Open Resonance'],
+    ['KILLARUNA', 'Ashley · Voice of Silence', 'Resonance · Mana · Silence'],
+    ['MOZARUK', 'Fermín · Bastion of Earth', 'Earth · Resistance · Defense'],
+    ['HELLER', 'Isabella · Untamed Flame', 'Fire · Controlled Chaos'],
+    ['KAHEZER', 'Gael · Heir of the Wind', 'Wind · Adaptation'],
+    ['ITZUKE', 'Ivander · The Quantum Scientist', 'Electricity · Speed · Observation'],
+    ['DVALIN', 'Alxion · Primordial Thaumaturge', 'Ice · Shadow · Anticipation'],
+    ['OKUNINUST', 'Elida · Guardian of Memory', 'Water · Memory · Shield'],
+  ],
+} as const
+
+const cast = {
+  es: [
+    ['Alxion', 'Taumaturgo Primigenio'], ['Ivander', 'El Científico Cuántico'], ['Andrealis', 'Anclaje de Resonancia'],
+    ['Valdros', 'Vinculadora de Bestias y Mascotas'], ['Matrias', 'Arconte Táctico'], ['Nikoras', 'Vanguardia de la Luz'],
+    ['Braxian', ''], ['Milaviel', ''], ['Mamporath', 'Titán de Choque'], ['Ashley', 'Voz del Silencio'],
+    ['Fermín', 'Bastión de la Tierra'], ['Isabella', 'Llama Indómita'], ['Gael', 'Heredero del Viento'], ['Elida', 'Guardiana de la Memoria'],
+  ],
+  en: [
+    ['Alxion', 'Primordial Thaumaturge'], ['Ivander', 'The Quantum Scientist'], ['Andrealis', 'Resonance Anchor'],
+    ['Valdros', 'Beast & Familiar Binder'], ['Matrias', 'Tactical Archon'], ['Nikoras', 'Vanguard of Light'],
+    ['Braxian', ''], ['Milaviel', ''], ['Mamporath', 'Titan of Impact'], ['Ashley', 'Voice of Silence'],
+    ['Fermín', 'Bastion of Earth'], ['Isabella', 'Untamed Flame'], ['Gael', 'Heir of the Wind'], ['Elida', 'Guardian of Memory'],
+  ],
+} as const
 
 function openNexusChat() {
   window.dispatchEvent(new CustomEvent('xethkioz:nexus-chat-open', { detail: { room: 'general' } }))
@@ -365,11 +396,27 @@ export default function Home() {
               <h2 id="forms-title">{t.formsTitle}</h2>
             </div>
             <div className="wox-forms-grid">
-              {forms.map(([name, bond, affinity], index) => (
+              {forms[lang].map(([name, bond, affinity], index) => (
                 <article key={name}>
                   <small>{String(index + 1).padStart(2, '0')}</small>
                   <div><strong>{name}</strong><span>{bond}</span></div>
                   <p>{affinity}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section className="wox-section wox-cast" aria-labelledby="cast-title">
+            <div className="wox-section-head">
+              <p>{t.castEyebrow}</p>
+              <h2 id="cast-title">{t.castTitle}</h2>
+            </div>
+            <div className="wox-cast-grid">
+              {cast[lang].map(([name, title], index) => (
+                <article key={name}>
+                  <small>{String(index + 1).padStart(2, '0')}</small>
+                  <strong>{name}</strong>
+                  {title ? <span>{title}</span> : null}
                 </article>
               ))}
             </div>
