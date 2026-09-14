@@ -288,19 +288,17 @@ export default function Home() {
         </aside>
 
         <header className="wox-topbar">
-          <Link to="/" className="wox-brand" aria-label="XETHKIOZ">
-            <strong>XETHKIOZ</strong>
-            <small>BEYOND THE GAME</small>
-          </Link>
-          <nav className="wox-portals" aria-label={lang === 'es' ? 'Portales XETHKIOZ' : 'XETHKIOZ portals'}>
-            <Link to={localizePath('/gaming')}><span>01</span>{t.portals.gaming}</Link>
-            <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer"><span>02</span>{t.portals.science}</a>
-            <a href="/mascotas/"><span>03</span>{t.portals.pets}</a>
-          </nav>          <div className="wox-tools">
-            <button type="button" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} aria-label={lang === 'es' ? 'Cambiar a inglés' : 'Switch to Spanish'}>
-              {lang === 'es' ? 'EN' : 'ES'}
-            </button>
-            <Link to={localizePath('/login')}>{lang === 'es' ? 'CUENTA' : 'ACCOUNT'}</Link>
+          <nav className="wox-ecosystem-nav" aria-label={lang === 'es' ? 'Ecosistema XETHKIOZ' : 'XETHKIOZ ecosystem'}>
+            <Link to={localizePath('/gaming')}>{lang === 'es' ? 'JUEGOS' : 'GAMING'}</Link>
+            <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ARGENCIENCIA <span>↗</span></a>
+            <a href="/mascotas/">{lang === 'es' ? 'MASCOTAS' : 'PETS'}</a>
+            <Link to={localizePath('/nexus-city')}>NEXUS CITY</Link>
+            <Link to={localizePath('/creacion-web')}>{lang === 'es' ? 'CREACIÓN WEB' : 'WEB CREATION'}</Link>
+          </nav>
+          <div className="wox-tools">
+            <Link to="/news" className="wox-news-link">{lang === 'es' ? 'NOTICIAS' : 'NEWS'}</Link>
+            <button type="button" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} aria-label={lang === 'es' ? 'Cambiar a inglés' : 'Switch to Spanish'}>{lang === 'es' ? 'EN' : 'ES'}</button>
+            <Link to="/login">{lang === 'es' ? 'INICIAR SESIÓN' : 'SIGN IN'}</Link>
           </div>
         </header>
 
@@ -319,6 +317,13 @@ export default function Home() {
               <button type="button" onClick={openNexusChat}>{t.chat}<span>◉</span></button>
               <a href="#atlas" className="is-quiet">{t.atlas}<span>↘</span></a>
             </div>
+            <nav className="wox-game-nav" aria-label={lang === 'es' ? 'Secciones de World of Xethkioz' : 'World of Xethkioz sections'}>
+              <a href="#origin">{lang === 'es' ? 'HISTORIA' : 'STORY'}</a>
+              <a href="#worlds">{lang === 'es' ? 'MUNDO' : 'WORLD'}</a>
+              <a href="#atlas">PRISMA-ATLAS</a>
+              <a href="#characters">{lang === 'es' ? 'PERSONAJES' : 'CHARACTERS'}</a>
+              <a href="#development">{lang === 'es' ? 'DESARROLLO' : 'DEVELOPMENT'}</a>
+            </nav>
           </div>
           <a className="wox-scroll" href="#origin" aria-label={t.scroll}><span />{t.scroll}</a>
         </section>
@@ -434,7 +439,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="wox-section wox-cast" aria-labelledby="cast-title">
+          <section id="characters" className="wox-section wox-cast" aria-labelledby="cast-title">
             <div className="wox-section-head">
               <p>{t.castEyebrow}</p>
               <h2 id="cast-title">{t.castTitle}</h2>
@@ -461,7 +466,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="wox-section wox-dev" aria-labelledby="dev-title">
+          <section id="development" className="wox-section wox-dev" aria-labelledby="dev-title">
             <div className="wox-section-head">
               <p>{t.devEyebrow}</p>
               <h2 id="dev-title">{t.devTitle}</h2>

@@ -15,6 +15,7 @@ for (const [name, viewport] of cases) {
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
   page.on('pageerror', (e) => errors.push(e.message))
   await page.goto(previewUrl, { waitUntil: 'networkidle' })
+  await page.screenshot({ path: `${out}/${name}-fold.png`, fullPage: false })
   await page.locator('.wox-forms-grid article').nth(3).locator('button').click()
   await page.locator('.wox-cast-grid article').nth(5).locator('button').click()
   const metrics = await page.evaluate(() => ({
@@ -25,6 +26,9 @@ for (const [name, viewport] of cases) {
     castCards: document.querySelectorAll('.wox-cast-grid article').length,
     activeForm: document.querySelector('.wox-form-console h3')?.textContent?.trim() || '',
     activeCast: document.querySelector('.wox-cast-console h3')?.textContent?.trim() || '',
+    ecosystemLinks: [...document.querySelectorAll('.wox-ecosystem-nav a, .wox-tools .wox-news-link')].map((a) => ({ text: a.textContent?.trim(), href: a.getAttribute('href') })),
+    gameNavLinks: document.querySelectorAll('.wox-game-nav a').length,
+    wispPresent: Boolean(document.querySelector('.xk-wisp.is-home-entry')),
   }))
   await page.screenshot({ path: `${out}/${name}.png`, fullPage: true })
   console.log(JSON.stringify({ name, ...metrics, overflow: metrics.width > metrics.client, errors }))
