@@ -18,7 +18,7 @@ const fusionConfig = read(path.join(root, 'src/lib/fusionConfig.ts'))
 const designSystem = read(path.join(root, 'src/lib/designSystem.ts'))
 
 add('Global Header remains outside routes', app.includes('<Header />') && app.indexOf('<Header />') < app.indexOf('<Routes>'), 'Header must render from AppShell before Routes so controls exist in every portal.')
-add('Public routes remain scoped', ['/gaming', '/science', '/comicon', '/fun', '/green-node'].every((route) => app.includes(`path="${route}"`)), 'Expected public routes are present.')
+add('Public routes remain scoped', ['/gaming', '/science', '/fun', '/green-node'].every((route) => app.includes(`path="${route}"`)) && !app.includes('path="/comicon"'), 'Expected public routes are present and COMICON is absent.')
 add('FusionPortalGate component exists', exists('src/components/fusion/FusionPortalGate.tsx') && portalGate.includes('FusionPortalGate'), 'Portal UI must be a reusable React component, not duplicated markup.')
 add('Home uses real portal component', (home.includes('<FusionPortalGate') || worldStage.includes('<FusionPortalGate')) && !home.includes('alpha6-portal-world'), 'Home must use reusable portal components through a React/CSS layer, not a flattened concept-art image as UI.')
 add('Green Wisp remains global route access', app.includes('<FusionGlobalWisp />') && globalWisp.includes("navigate('/green-node')") && globalWisp.includes('triggerGreenPortal()'), 'Wisp must remain a global Easter Egg access path to Green Node.')

@@ -7,7 +7,6 @@ export const LOCALIZED_PUBLIC_PATHS = new Set([
   '/gaming',
   '/gaming/guides',
   '/science',
-  '/comicon',
   '/nexus-city',
   '/creacion-web',
   '/community',

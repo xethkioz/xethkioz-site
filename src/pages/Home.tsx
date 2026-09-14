@@ -56,13 +56,13 @@ const copy = {
     kicker: 'XETHKIOZ // WORLD GATE',
     titleTop: 'EL GAMING ES',
     titleBottom: 'MI PASIÓN',
-    intro: 'Una entrada viva hacia cuatro mundos principales: gaming, ciencia, cultura fan y una red comunitaria para proteger a los animales de Puan y la región.',
-    seoDescription: 'Entrada inmersiva a la Red de Portales XETHKIOZ: gaming, ArgenCiencia, Universo COMICON, Huellas de Puan, Nexus City, Green Node y creación web.',
+    intro: 'Una entrada viva hacia tres mundos principales: gaming, ciencia y una red comunitaria para proteger a los animales de Puan y la región.',
+    seoDescription: 'Entrada inmersiva a la Red de Portales XETHKIOZ: gaming, ArgenCiencia, Huellas de Puan, Nexus City, Green Node y creación web.',
     primaryCta: 'ELEGIR UN PORTAL',
     newsCta: 'ABRIR RADAR DE NOTICIAS',
     news: 'NOTICIAS',
     portalLabel: 'PORTALES PRINCIPALES // SEÑAL ESTABLE',
-    liveSignal: '4 PORTALES PRINCIPALES ACTIVOS',
+    liveSignal: '3 PORTALES PRINCIPALES ACTIVOS',
     nexusSignal: 'NEXUS CITY EN LÍNEA',
     safeSignal: 'PRIVACIDAD Y NAVEGACIÓN VERIFICADAS',
     sectionNavLabel: 'Índice de secciones de XETHKIOZ',
@@ -112,18 +112,6 @@ const copy = {
         frame: '/assets/portal-games-clean-v1.webp',
         tone: '#8b5cf6',
         position: '50% 52%',
-      },
-      {
-        id: 'comicon',
-        code: 'XK-04',
-        title: 'UNIVERSO COMICON',
-        subtitle: 'Marvel · DC · Anime · Cultura Fan',
-        action: 'ABRIR MULTIVERSO',
-        route: '/comicon',
-        world: '/assets/portal-comicon-duality-v11.webp',
-        frame: '/assets/portal-games-clean-v1.webp',
-        tone: '#ff9d00',
-        position: '50% 50%',
       },
       {
         id: 'pets',
@@ -180,13 +168,13 @@ const copy = {
     kicker: 'XETHKIOZ // WORLD GATE',
     titleTop: 'GAMING IS',
     titleBottom: 'MY PASSION',
-    intro: 'A living entrance into four main worlds: gaming, science, fan culture and a community network dedicated to protecting animals in Puan and the surrounding region.',
-    seoDescription: 'An immersive entrance to the XETHKIOZ Portal Network: gaming, ArgenCiencia, COMICON Universe, Huellas de Puan, Nexus City, Green Node and web creation.',
+    intro: 'A living entrance into three main worlds: gaming, science and a community network dedicated to protecting animals in Puan and the surrounding region.',
+    seoDescription: 'An immersive entrance to the XETHKIOZ Portal Network: gaming, ArgenCiencia, Huellas de Puan, Nexus City, Green Node and web creation.',
     primaryCta: 'CHOOSE A PORTAL',
     newsCta: 'OPEN NEWS RADAR',
     news: 'NEWS',
     portalLabel: 'MAIN PORTALS // STABLE SIGNAL',
-    liveSignal: '4 MAIN PORTALS ACTIVE',
+    liveSignal: '3 MAIN PORTALS ACTIVE',
     nexusSignal: 'NEXUS CITY ONLINE',
     safeSignal: 'PRIVACY AND NAVIGATION VERIFIED',
     sectionNavLabel: 'XETHKIOZ section index',
@@ -236,18 +224,6 @@ const copy = {
         frame: '/assets/portal-games-clean-v1.webp',
         tone: '#8b5cf6',
         position: '50% 52%',
-      },
-      {
-        id: 'comicon',
-        code: 'XK-04',
-        title: 'COMICON UNIVERSE',
-        subtitle: 'Marvel · DC · Anime · Fan Culture',
-        action: 'OPEN MULTIVERSE',
-        route: '/comicon',
-        world: '/assets/portal-comicon-duality-v11.webp',
-        frame: '/assets/portal-games-clean-v1.webp',
-        tone: '#ff9d00',
-        position: '50% 50%',
       },
       {
         id: 'pets',
@@ -445,7 +421,6 @@ export default function Home() {
             <nav className="xk-rb-nav" aria-label={lang === 'es' ? 'Navegación principal' : 'Primary navigation'}>
               <Link to={localizePath('/gaming')}>{lang === 'es' ? 'Juegos' : 'Gaming'}</Link>
               <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ArgenCiencia ↗</a>
-              <Link to={localizePath('/comicon')}>COMICON</Link>
               <a href="/mascotas/">{lang === 'es' ? 'Mascotas' : 'Pets'}</a>
               <Link to={localizePath('/nexus-city')}>Nexus City</Link>
               <Link to={localizePath('/creacion-web')}>{lang === 'es' ? 'Creación Web' : 'Web Creation'}</Link>
@@ -575,7 +550,7 @@ export default function Home() {
 function PrimaryPortal({ portal }: { portal: PortalCard }) {
   const isFeatured = portal.id === 'gaming'
   const isImmediate = portal.id === 'gaming' || portal.id === 'pets'
-  const hasEnhancedLighting = portal.id === 'comicon' || portal.id === 'pets'
+  const hasEnhancedLighting = portal.id === 'pets'
   const { localizePath } = useLang()
   const content: ReactNode = (
     <>

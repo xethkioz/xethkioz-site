@@ -11,7 +11,6 @@ const petsBootstrap = read('public/mascotas/app.js')
 const routes = {
   gaming: 'src/pages/GamingHub.tsx',
   science: 'src/pages/ScienceLab.tsx',
-  comicon: 'src/pages/ComicUniverse.tsx',
   green: 'src/pages/GreenNode.tsx',
   pets: 'src/pages/MascotasPortal.tsx',
   web: 'src/pages/WebCreation.tsx',
@@ -23,8 +22,6 @@ const approvedHosts = new Set([
   'support.xbox.com',
   'science.nasa.gov',
   'www.nist.gov',
-  'www.marvel.com',
-  'www.dcuniverseinfinite.com',
   'www.cisa.gov',
   'owasp.org',
   'www.argentina.gob.ar',
@@ -43,7 +40,7 @@ for (const [sector, pagePath] of Object.entries(routes)) {
 }
 
 const urls = [...catalog.matchAll(/sourceUrl: '([^']+)'/g)].map((match) => match[1])
-check('catalog contains at least fifteen substantial guides', urls.length >= 15)
+check('catalog contains at least thirteen substantial guides', urls.length >= 13)
 check('every guide uses HTTPS', urls.every((url) => url.startsWith('https://')))
 check('every guide points to an approved primary source', urls.every((url) => approvedHosts.has(new URL(url).hostname)))
 check('component labels official sources', component.includes('{t.source}: {guide.sourceLabel}'))

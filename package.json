@@ -1,11 +1,11 @@
 {
   "name": "xethkioz",
   "private": true,
-  "version": "11.1.2",
+  "version": "11.2.0",
   "type": "module",
   "scripts": {
     "dev": "npm run generate:css-split && vite",
-    "build": "npm run generate:css-split && npm run typecheck && npm run audit:routes && npm run audit:runtime-seo && npm run audit:privacy-consent && npm run audit:telemetry-security && npm run audit:auth-session-security && npm run audit:community-security && npm run audit:editorial-integrity && npm run audit:editorial-depth && npm run audit:ads-monetization && npm run audit:international-indexing && npm run audit:news-layout-stability && npm run audit:content-design && npm run audit:portal-knowledge && npm run audit:css-source && npm run generate:seo-shells && vite build && npm run audit:initial-bundle",
+    "build": "npm run generate:css-split && npm run typecheck && npm run audit:routes && npm run audit:runtime-seo && npm run audit:privacy-consent && npm run audit:telemetry-security && npm run audit:auth-session-security && npm run audit:community-security && npm run audit:editorial-integrity && npm run audit:editorial-depth && npm run audit:ads-monetization && npm run audit:international-indexing && npm run audit:news-layout-stability && npm run audit:content-design && npm run audit:portal-knowledge && npm run audit:comicon-removal && npm run audit:css-source && npm run generate:seo-shells && vite build && npm run audit:initial-bundle",
     "preview": "vite preview",
     "test:e2e": "playwright test",
     "test:e2e:report": "playwright show-report",
@@ -22,7 +22,7 @@
     "audit:media": "node scripts/media-assets-review.mjs",
     "audit:wisp-engine": "node scripts/wisp-engine-check.mjs",
     "audit:portal-wisp-guides": "node scripts/portal-wisp-guides-check.mjs",
-    "audit:comicon": "node scripts/comicon-portal-check.mjs",
+    "audit:comicon-removal": "node scripts/comicon-removal-check.mjs",
     "audit:functionality": "node scripts/functionality-core-check.mjs",
     "audit:portal": "node scripts/portal-registry-check.mjs",
     "audit:runtime": "node scripts/runtime-integration-check.mjs",
