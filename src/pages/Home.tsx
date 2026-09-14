@@ -87,6 +87,12 @@ const copy = {
     devEyebrow: 'DESARROLLO // ESTADO DEL PROYECTO',
     devTitle: 'Producción activa en Unity.',
     devText: 'La web va a funcionar como el centro público del proyecto: lore, Atlas, avances, comunidad y estado del juego, sin mezclar el contenido interno de producción con la experiencia del visitante.',
+    roadmapEyebrow: 'ROADMAP // SIGUIENTE OBJETIVO',
+    roadmapTitle: 'Del canon al primer vertical slice jugable.',
+    roadmapText: 'La prioridad pública es convertir la base técnica en una experiencia corta, pulida y representativa de World of Xethkioz antes de ampliar alcance.',
+    supportEyebrow: 'APOYAR // PRODUCCIÓN INDEPENDIENTE',
+    supportTitle: 'Ayudar al proyecto también empuja el mundo hacia adelante.',
+    supportText: 'Las colaboraciones se destinan a herramientas, arte, infraestructura, pruebas y producción. El apoyo es voluntario y no compra ventajas dentro del juego.',
     final: 'UN MUNDO FRACTURADO NO SE REPARA VOLVIENDO A COMO ERA. SE APRENDE A VIVIR CON LOS CAMINOS QUE AHORA EXISTEN.',
   },  en: {
     seo: 'World of Xethkioz · Action RPG in development',
@@ -116,6 +122,12 @@ const copy = {
     devEyebrow: 'DEVELOPMENT // PROJECT STATUS',
     devTitle: 'Active production in Unity.',
     devText: 'The site becomes the public center of the project: lore, Atlas, progress, community and game status, without mixing internal production material into the visitor experience.',
+    roadmapEyebrow: 'ROADMAP // NEXT TARGET',
+    roadmapTitle: 'From locked canon to the first playable vertical slice.',
+    roadmapText: 'The public priority is turning the technical foundation into a short, polished experience that represents World of Xethkioz before expanding scope.',
+    supportEyebrow: 'SUPPORT // INDEPENDENT PRODUCTION',
+    supportTitle: 'Supporting the project helps move the world forward.',
+    supportText: 'Contributions go toward tools, art, infrastructure, testing and production. Support is voluntary and never buys gameplay advantages.',
     final: 'A FRACTURED WORLD IS NOT REPAIRED BY GOING BACK TO WHAT IT WAS. YOU LEARN TO LIVE WITH THE PATHS THAT EXIST NOW.',
   },
 } as const
@@ -441,6 +453,30 @@ export default function Home() {
               <span><i />VERTICAL SLICE EN PRODUCCIÓN</span>
             </div>
           </section>
+
+          <section className="wox-section wox-roadmap" aria-labelledby="roadmap-title">
+            <div className="wox-section-head">
+              <p>{t.roadmapEyebrow}</p>
+              <h2 id="roadmap-title">{t.roadmapTitle}</h2>
+              <span>{t.roadmapText}</span>
+            </div>
+            <div className="wox-roadmap-grid">
+              <article className="is-done"><small>01</small><em>{lang === 'es' ? 'CERRADO' : 'LOCKED'}</em><strong>{lang === 'es' ? 'Canon y estructura' : 'Canon & structure'}</strong><span>{lang === 'es' ? 'Historia, 32 mapas e identidades principales consolidados.' : 'Story, 32 maps and main identities consolidated.'}</span></article>
+              <article className="is-active" aria-current="step"><small>02</small><em>{lang === 'es' ? 'AHORA' : 'NOW'}</em><strong>Vertical slice</strong><span>{lang === 'es' ? 'M01–M03, combate, exploración, fauna, Goblins, Atlas y feedback visual.' : 'M01–M03, combat, exploration, wildlife, Goblins, Atlas and visual feedback.'}</span></article>
+              <article><small>03</small><em>{lang === 'es' ? 'SIGUIENTE' : 'NEXT'}</em><strong>{lang === 'es' ? 'Juego base' : 'Base game'}</strong><span>{lang === 'es' ? 'Izrdralar M01–M08 completo, progresión, quests, bosses y build Windows.' : 'Complete Izrdralar M01–M08, progression, quests, bosses and Windows build.'}</span></article>
+              <article><small>04</small><em>{lang === 'es' ? 'DESPUÉS' : 'LATER'}</em><strong>{lang === 'es' ? 'Expansión de Saga I' : 'Saga I expansion'}</strong><span>{lang === 'es' ? 'Desfralar, Xiomalar y Zodnight hasta nivel 120.' : 'Desfralar, Xiomalar and Zodnight through level 120.'}</span></article>
+            </div>
+          </section>
+
+          <section className="wox-support-card" aria-labelledby="support-title">
+            <div>
+              <p>{t.supportEyebrow}</p>
+              <h2 id="support-title">{t.supportTitle}</h2>
+              <span>{t.supportText}</span>
+            </div>
+            <Link to={localizePath('/support')}>{lang === 'es' ? 'VER FORMAS DE APOYAR' : 'SEE SUPPORT OPTIONS'}<span>↗</span></Link>
+          </section>
+
           <section className="wox-final" aria-label={lang === 'es' ? 'Mensaje final' : 'Final statement'}>
             <span aria-hidden="true">◇</span>
             <p>{t.final}</p>
