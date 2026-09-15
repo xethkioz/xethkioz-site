@@ -6,6 +6,7 @@ import { useExperience } from '../lib/ExperienceContext'
 import { supportsAmbientVideo } from '../lib/experienceMode'
 import { SITE_VERSION } from '../lib/siteConfig'
 import './WorldOfXethkiozHome.css'
+import './WorldOfXethkiozAAA.css'
 
 type DataSavingConnection = {
   saveData?: boolean
@@ -408,7 +409,7 @@ export default function Home() {
             </div>
             <div className="wox-duo-grid">
               <article><MediaPlaceholder orientation="portrait" code="PLAYER" subject={lang === 'es' ? 'EL VIAJERO' : 'THE TRAVELER'} label={lang === 'es' ? 'RENDER 3D EN PRODUCCION' : '3D RENDER IN PRODUCTION'} /><small>01 // VIAJERO</small><strong>{lang === 'es' ? 'Nació de ecos que no eran suyos.' : 'Born from echoes that were not its own.'}</strong><p>{lang === 'es' ? 'Sin género, rostro ni pasado canónico. El nombre elegido por el jugador es su primer anclaje de identidad.' : 'No canonical gender, face or past. The player-chosen name becomes its first anchor of identity.'}</p></article>
-              <article><MediaPlaceholder orientation="portrait" code="FORMA" subject="XETHKIOZ" label={lang === 'es' ? 'MODELO 3D EN PRODUCCION' : '3D MODEL IN PRODUCTION'} /><small>02 // XETHKIOZ</small><strong>{lang === 'es' ? 'No obedece. Acompaña.' : 'It does not obey. It accompanies.'}</strong><p>{lang === 'es' ? 'La Forma Abierta aprende afinidades sin perder identidad. Su progresión canónica de colas es 3 → 5 → 7 → 9.' : 'The Open Form learns affinities without losing identity. Its canonical tail progression is 3 → 5 → 7 → 9.'}</p></article>
+              <article><MediaPlaceholder orientation="portrait" code="FORMA" subject="XETHKIOZ" label={lang === 'es' ? 'MODELO 3D EN PRODUCCION' : '3D MODEL IN PRODUCTION'} /><small>02 // XETHKIOZ</small><strong>{lang === 'es' ? 'No obedece. Acompaña.' : 'It does not obey. It accompanies.'}</strong><p>{lang === 'es' ? 'La Forma Abierta aprende afinidades sin perder identidad. Su vínculo evoluciona con la Resonancia y con las decisiones del Viajero.' : 'The Open Form learns affinities without losing identity. Its bond evolves through Resonance and the Traveler’s choices.'}</p></article>
             </div>
           </section>
           <section id="worlds" className="wox-section wox-world-showcase" aria-labelledby="worlds-title">
