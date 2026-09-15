@@ -614,6 +614,7 @@ export default function Home() {
 
           <footer className="wox-footer">
             <div>
+              <small className="wox-footer-status">{lang === 'es' ? 'SAGA I // EN DESARROLLO' : 'SAGA I // IN DEVELOPMENT'}</small>
               <strong>WORLD OF XETHKIOZ</strong>
               <span>© 2026 XETHKIOZ · {SITE_VERSION}</span>
             </div>
