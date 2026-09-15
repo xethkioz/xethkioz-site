@@ -62,7 +62,7 @@ for (const viewport of edgeViewports) {
   await openPreview(page)
   await page.locator('.wox-ecosystem-nav a[href="/gaming"]').click()
   await page.waitForURL('**/gaming')
-  await page.waitForTimeout(120)
+  await page.waitForTimeout(350)
   const focused = await page.evaluate(() => document.activeElement?.id || '')
   console.log(JSON.stringify({ type: 'keyboard-route', focused }))
   if (focused !== 'main-content') throw new Error('WOX route keyboard focus failed')

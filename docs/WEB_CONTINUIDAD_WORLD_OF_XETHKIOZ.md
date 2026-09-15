@@ -192,3 +192,15 @@ Push de la rama Preview está permitido para generar Preview. No mergear a `main
 - Clearance remoto Veyr PASS en 390/430/768/1024: Hero 72/96 px, capítulos 56 px, 18–20 px bajo dock y 0 solapamientos en las 24 combinaciones.
 - Runtime Preview: 0 logs `error`/`fatal`; build Vercel completado sin fallos; 0 Vercel Toolbar threads sin resolver.
 - Producción continúa en `fc1df9c`; no promover a `main` hasta aprobación visual explícita del Preview en el chat actual.
+
+## Checkpoint AAA Rebuild V2 — Pass 12 edge + accesibilidad (2026-09-15)
+- Commit funcional: `66262a1 — fix(home): harden edge viewports and keyboard focus`.
+- Se amplió QA a 320, 360, 1366 y 1920 px además de la matriz estándar 390/430/768/1024/1440.
+- Se corrigió `UNITY` recortado a 320 px y `DESFRALAR` recortado a 1920 px, sin degradar 390–1440.
+- `RouteAccessibility` ya no fuerza foco a `main-content` en la primera carga; el primer Tab vuelve a ser `Saltar al contenido principal`.
+- En navegación SPA posterior el foco sí vuelve a `main-content`; el skip-link entra visualmente a `top:16px` tras su transición.
+- Se añadió `scripts/wox-edge-accessibility-check.mjs` + `npm run audit:wox-edge-accessibility`.
+- Axe WCAG A/AA: 0 violaciones; 320/360/1366/1920: 0 overflow global, 0 texto interno recortado, 14 personajes y 8 Formas.
+- QA visual remoto PASS en 320/360/390/430/768/1024/1366/1440/1920; 3 slots 3D, 0 imágenes random y 0 errores de navegador.
+- QA funcional remoto ES/EN PASS: 4 territorios, 4 Atlas, 8 Formas, 14 personajes, chat, Wisp/Green Node y cambio de idioma.
+- Primera visita remota PASS en 1440/430/390 con 3 acciones de consentimiento y 0 overflow.
