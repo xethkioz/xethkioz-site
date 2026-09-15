@@ -151,3 +151,10 @@ Push de la rama Preview está permitido para generar Preview. No mergear a `main
 - QA local PASS: build completo, production-ready, Wisp entity, visual 1440/1024/768/430/390, primera visita y flujo funcional ES/EN.
 - En los 5 viewports: `internalTextOverflow=[]`, 0 overflow horizontal y 0 errores de consola.
 - Producción continúa protegida en `fc1df9c`; Pass 09 sigue sólo por Preview hasta validación remota y aprobación visual explícita.
+### Cierre remoto Pass 09
+- Commits publicados en `wox-aaa-rebuild-v2`: `15c335a — feat(home): finish AAA responsive text and cast polish` y `680fe7c — docs: checkpoint World AAA visual pass 09`.
+- Preview Vercel READY: `xethkioz-site-3tm79uo3f-xethkioz-site.vercel.app` (`dpl_3WjjRuyGkumxXdDGMhw5cVXWDbbq`).
+- QA visual remoto autenticado PASS en 1440×1000, 1024×900, 768×900, 430×932 y 390×844; `internalTextOverflow=[]`, 0 overflow global y 0 errores de navegador.
+- QA funcional remoto ES/EN PASS: 4 territorios, 4 Atlas, 8 Formas, 14 personajes, chat, Wisp `/green-node` + `/en/green-node` y cambio de idioma.
+- Primera visita remota PASS en desktop, 430 px y 390 px; 3 controles de consentimiento, 0 overflow y 0 errores.
+- Runtime Preview: 0 logs `error`/`fatal`. Producción permanece en `fc1df9c`; gate siguiente sigue siendo aprobación visual explícita antes de `main`.
