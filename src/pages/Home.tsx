@@ -380,6 +380,12 @@ export default function Home() {
             <nav className="wox-game-nav" aria-label={lang === 'es' ? 'Secciones de World of Xethkioz' : 'World of Xethkioz sections'}>
               {gameSections[lang].map(([id, label]) => <a key={id} href={`#${id}`}>{label}</a>)}
             </nav>
+            <div className="wox-hero-specs" aria-label={lang === 'es' ? 'Datos principales de Saga I' : 'Saga I key data'}>
+              <a href="#worlds"><strong>04</strong><span>{lang === 'es' ? 'TERRITORIOS' : 'TERRITORIES'}</span></a>
+              <a href="#worlds"><strong>32</strong><span>{lang === 'es' ? 'MAPAS SAGA I' : 'SAGA I MAPS'}</span></a>
+              <a href="#characters"><strong>08</strong><span>{lang === 'es' ? 'FORMAS' : 'FORMS'}</span></a>
+              <a href="#development"><strong>3D</strong><span>UNITY + BLENDER</span></a>
+            </div>
           </div>
           <a className="wox-scroll" href="#origin" aria-label={t.scroll}><span />{t.scroll}</a>
         </section>
@@ -408,7 +414,7 @@ export default function Home() {
             </div>
             <div className="wox-duo-grid">
               <article><MediaPlaceholder orientation="portrait" code="PLAYER" subject={lang === 'es' ? 'EL VIAJERO' : 'THE TRAVELER'} label={lang === 'es' ? 'RENDER 3D EN PRODUCCION' : '3D RENDER IN PRODUCTION'} /><small>01 // VIAJERO</small><strong>{lang === 'es' ? 'Nació de ecos que no eran suyos.' : 'Born from echoes that were not its own.'}</strong><p>{lang === 'es' ? 'Sin género, rostro ni pasado canónico. El nombre elegido por el jugador es su primer anclaje de identidad.' : 'No canonical gender, face or past. The player-chosen name becomes its first anchor of identity.'}</p></article>
-              <article><MediaPlaceholder orientation="portrait" code="FORMA" subject="XETHKIOZ" label={lang === 'es' ? 'MODELO 3D EN PRODUCCION' : '3D MODEL IN PRODUCTION'} /><small>02 // XETHKIOZ</small><strong>{lang === 'es' ? 'No obedece. Acompaña.' : 'It does not obey. It accompanies.'}</strong><p>{lang === 'es' ? 'La Forma Abierta aprende afinidades sin perder identidad. Su progresión canónica de colas es 3 → 5 → 7 → 9.' : 'The Open Form learns affinities without losing identity. Its canonical tail progression is 3 → 5 → 7 → 9.'}</p></article>
+              <article><MediaPlaceholder orientation="portrait" code="FORMA" subject="XETHKIOZ" label={lang === 'es' ? 'MODELO 3D EN PRODUCCION' : '3D MODEL IN PRODUCTION'} /><small>02 // XETHKIOZ</small><strong>{lang === 'es' ? 'No obedece. Acompaña.' : 'It does not obey. It accompanies.'}</strong><p>{lang === 'es' ? 'La Forma Abierta aprende afinidades sin perder identidad. Su vínculo con el Viajero sostiene la diversidad sin imponer una única forma.' : 'The Open Form learns affinities without losing identity. Its bond with the Traveler sustains diversity without imposing a single form.'}</p></article>
             </div>
           </section>
           <section id="worlds" className="wox-section wox-world-showcase" data-region={activeRegion + 1} aria-labelledby="worlds-title">
@@ -604,15 +610,22 @@ export default function Home() {
           </section>
 
           <footer className="wox-footer">
-            <div>
+            <div className="wox-footer-brand">
+              <small>XETHKIOZ // WORLD SIGNAL</small>
               <strong>WORLD OF XETHKIOZ</strong>
               <span>© 2026 XETHKIOZ · {SITE_VERSION}</span>
             </div>
-            <nav aria-label={lang === 'es' ? 'Enlaces del sitio' : 'Site links'}>
-              <Link to={localizePath('/support')}>{lang === 'es' ? 'Apoyar proyecto' : 'Support project'}</Link>
-              <Link to={localizePath('/privacy')}>{lang === 'es' ? 'Privacidad' : 'Privacy'}</Link>
-              <Link to={localizePath('/contact')}>{lang === 'es' ? 'Contacto' : 'Contact'}</Link>
-            </nav>
+            <div className="wox-footer-navs">
+              <nav className="wox-footer-world-nav" aria-label={lang === 'es' ? 'Secciones del juego' : 'Game sections'}>
+                {gameSections[lang].map(([id, label]) => <a key={id} href={`#${id}`}>{label}</a>)}
+              </nav>
+              <nav className="wox-footer-site-nav" aria-label={lang === 'es' ? 'Enlaces del sitio' : 'Site links'}>
+                <Link to={localizePath('/support')}>{lang === 'es' ? 'Apoyar proyecto' : 'Support project'}</Link>
+                <Link to={localizePath('/privacy')}>{lang === 'es' ? 'Privacidad' : 'Privacy'}</Link>
+                <Link to={localizePath('/contact')}>{lang === 'es' ? 'Contacto' : 'Contact'}</Link>
+                <a href="#wox-title">{lang === 'es' ? 'Volver arriba' : 'Back to top'} ↑</a>
+              </nav>
+            </div>
           </footer>
         </div>
       </main>
