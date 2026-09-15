@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { Navigate, Routes, Route, useLocation } from 'react-router-dom'
 import { LangProvider, useLang } from './lib/LangContext'
 import { HudProvider } from './lib/HudContext'
@@ -138,6 +138,7 @@ const activityTrackedPortals = new Set(['/gaming', '/science', '/creacion-web', 
 function RouteAccessibility({ pathname }: { pathname: string }) {
   const { lang } = useLang()
   const [announcement, setAnnouncement] = useState('')
+  const initialRoute = useRef(true)
 
   useEffect(() => {
     const basePath = stripEnglishPrefix(pathname)
@@ -155,6 +156,10 @@ function RouteAccessibility({ pathname }: { pathname: string }) {
                 ?? (lang === 'es' ? 'Sección XETHKIOZ' : 'XETHKIOZ section')
 
     setAnnouncement(lang === 'es' ? `Página cargada: ${routeName}` : `Page loaded: ${routeName}`)
+    if (initialRoute.current) {
+      initialRoute.current = false
+      return
+    }
     const frame = window.requestAnimationFrame(() => {
       document.getElementById('main-content')?.focus({ preventScroll: true })
     })

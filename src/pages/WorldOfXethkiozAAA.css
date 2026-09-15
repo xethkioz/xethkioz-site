@@ -321,3 +321,11 @@ body:has(.wox-home) .xk-privacy-consent-dialog>h2{font-family:Orbitron,Inter,san
   body:has(.wox-home .wox-section-dock.is-visible) .xk-wisp.is-home-entry .xk-wisp-terminal{display:none}
 }
 @media(max-width:760px){body:has(.wox-home .wox-section-dock.is-visible) .xk-wisp.is-home-entry{top:128px}}
+
+/* PASS 12 — preserve development metrics on narrow 320px devices. */
+@media(max-width:340px){
+  .wox-dev-showcase .wox-dev-grid strong{font-size:1.65rem}
+}
+@media(min-width:1101px){
+  .wox-world-showcase .wox-region-grid article:not(.is-active) h3{font-size:clamp(1.75rem,2.7vw,3rem)}
+}
