@@ -105,3 +105,16 @@
 .wox-3d-note{position:relative;z-index:1;display:flex;align-items:center;gap:8px;margin-top:16px;padding:16px 18px;border:1px solid rgba(255,255,255,.07);border-radius:18px;background:rgba(0,0,0,.24)}.wox-3d-note>span{padding:7px 9px;border-radius:999px;background:rgba(112,202,255,.08);font:900 .52rem/1 ui-monospace,monospace;letter-spacing:.1em;color:#9ee4ff}.wox-3d-note p{margin:0 0 0 auto;max-width:720px;font-size:.82rem;line-height:1.55;color:rgba(255,255,255,.5);text-align:right}
 @media(max-width:1050px){.wox-3d-grid{grid-template-columns:1fr}.wox-3d-grid article{display:grid;grid-template-columns:minmax(260px,.7fr) minmax(0,1fr)}.wox-3d-viewport{aspect-ratio:auto;min-height:240px}.wox-3d-copy{display:flex;flex-direction:column;justify-content:center}.wox-3d-note{flex-wrap:wrap}.wox-3d-note p{flex-basis:100%;margin:6px 0 0;text-align:left}}
 @media(max-width:760px){.wox-3d-stage{padding:34px 16px;border-radius:0}.wox-3d-stage>.wox-section-head h2{font-size:clamp(2rem,11vw,3.3rem)}.wox-3d-grid article{display:block}.wox-3d-viewport{min-height:0;aspect-ratio:16/9}.wox-3d-note{align-items:flex-start}.wox-3d-note p{font-size:.76rem}}
+
+/* Compact mobile ecosystem launcher: all legacy destinations remain reachable without dominating the game Home. */
+.wox-mobile-ecosystem{display:none}
+@media(max-width:760px){
+  .wox-topbar{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:7px;padding:7px 8px}
+  .wox-ecosystem-nav{display:none}.wox-mobile-ecosystem{position:relative;display:block;min-width:0}
+  .wox-mobile-ecosystem summary{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:38px;padding:0 12px;border:1px solid rgba(139,92,246,.26);border-radius:12px;background:rgba(3,3,8,.58);list-style:none;cursor:pointer;font:900 .52rem/1 ui-monospace,monospace;letter-spacing:.13em;color:rgba(255,255,255,.78)}
+  .wox-mobile-ecosystem summary::-webkit-details-marker{display:none}.wox-mobile-ecosystem summary span{color:#ff9a5a;transition:transform .2s ease}.wox-mobile-ecosystem[open] summary span{transform:rotate(45deg)}
+  .wox-mobile-ecosystem nav{position:absolute;z-index:70;left:0;top:calc(100% + 8px);display:grid;width:min(310px,calc(100vw - 32px));padding:8px;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:rgba(7,7,13,.96);box-shadow:0 22px 60px rgba(0,0,0,.5);backdrop-filter:blur(18px)}
+  .wox-mobile-ecosystem nav a{display:flex;align-items:center;justify-content:space-between;padding:12px 11px;border-radius:10px;color:rgba(255,255,255,.72);text-decoration:none;font:850 .55rem/1 ui-monospace,monospace;letter-spacing:.09em}.wox-mobile-ecosystem nav a:hover,.wox-mobile-ecosystem nav a:focus-visible{outline:none;background:rgba(139,92,246,.12);color:#fff}
+  .wox-tools{position:static;display:flex;width:auto;justify-self:end}.wox-tools .wox-news-link{display:none}.wox-tools a:last-child{display:flex;padding-inline:10px}.wox-tools button{padding-inline:10px}
+  .wox-hero{padding-top:112px}
+}

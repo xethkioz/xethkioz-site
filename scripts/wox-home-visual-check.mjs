@@ -16,6 +16,12 @@ for (const [name, viewport] of cases) {
   page.on('pageerror', (e) => errors.push(e.message))
   await page.goto(previewUrl, { waitUntil: 'networkidle' })
   await page.screenshot({ path: `${out}/${name}-fold.png`, fullPage: false })
+  let mobileMenuLinks = null
+  if (name === 'mobile') {
+    await page.locator('.wox-mobile-ecosystem summary').click()
+    mobileMenuLinks = await page.locator('.wox-mobile-ecosystem nav a').count()
+    await page.locator('.wox-mobile-ecosystem summary').click()
+  }
   await page.locator('.wox-forms-grid article').nth(3).locator('button').click()
   await page.locator('.wox-cast-grid article').nth(5).locator('button').click()
   const metrics = await page.evaluate(() => ({
@@ -35,10 +41,10 @@ for (const [name, viewport] of cases) {
   }))
   await page.screenshot({ path: `${out}/${name}.png`, fullPage: true })
   const overflow = metrics.width > metrics.client
-  if (metrics.media3dSlots !== 3 || metrics.media3dImages !== 0 || metrics.legacyHeroLabelPresent || overflow || errors.length) {
-    throw new Error(`WOX visual QA failed for ${name}: ${JSON.stringify({ ...metrics, overflow, errors })}`)
+  if (metrics.media3dSlots !== 3 || metrics.media3dImages !== 0 || metrics.legacyHeroLabelPresent || (name === 'mobile' && mobileMenuLinks !== 6) || overflow || errors.length) {
+    throw new Error(`WOX visual QA failed for ${name}: ${JSON.stringify({ ...metrics, mobileMenuLinks, overflow, errors })}`)
   }
-  console.log(JSON.stringify({ name, ...metrics, overflow, errors }))
+  console.log(JSON.stringify({ name, ...metrics, mobileMenuLinks, overflow, errors }))
   await page.close()
 }
 await browser.close()

@@ -295,6 +295,17 @@ export default function Home() {
             <Link to={localizePath('/nexus-city')}>NEXUS CITY</Link>
             <Link to={localizePath('/creacion-web')}>{lang === 'es' ? 'CREACIÓN WEB' : 'WEB CREATION'}</Link>
           </nav>
+          <details className="wox-mobile-ecosystem">
+            <summary>{lang === 'es' ? 'XETHKIOZ' : 'XETHKIOZ'} <span aria-hidden="true">＋</span></summary>
+            <nav aria-label={lang === 'es' ? 'Ecosistema XETHKIOZ móvil' : 'Mobile XETHKIOZ ecosystem'}>
+              <Link to={localizePath('/gaming')}>{lang === 'es' ? 'JUEGOS' : 'GAMING'}</Link>
+              <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ARGENCIENCIA <span>↗</span></a>
+              <a href="/mascotas/">{lang === 'es' ? 'MASCOTAS' : 'PETS'}</a>
+              <Link to={localizePath('/nexus-city')}>NEXUS CITY</Link>
+              <Link to={localizePath('/creacion-web')}>{lang === 'es' ? 'CREACIÓN WEB' : 'WEB CREATION'}</Link>
+              <Link to="/news">{lang === 'es' ? 'NOTICIAS' : 'NEWS'}</Link>
+            </nav>
+          </details>
           <div className="wox-tools">
             <Link to="/news" className="wox-news-link">{lang === 'es' ? 'NOTICIAS' : 'NEWS'}</Link>
             <button type="button" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} aria-label={lang === 'es' ? 'Cambiar a inglés' : 'Switch to Spanish'}>{lang === 'es' ? 'EN' : 'ES'}</button>
