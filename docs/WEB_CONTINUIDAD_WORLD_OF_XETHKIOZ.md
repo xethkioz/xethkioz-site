@@ -84,7 +84,7 @@ La primera implementación AAA se publicó con layouts de escritorio comprimidos
 Desde entonces el rediseño se rehace en `wox-aaa-rebuild-v2`, con mobile-first real, capturas por sección y aprobación visual previa a producción.
 
 ## Próxima acción recomendada
-Revisar el Preview Pass 06 completo en teléfono y escritorio. Si la composición visual queda aprobada, hacer un último release-candidate pass centrado sólo en regresiones, ES/EN y smoke visual antes de considerar producción.
+Revisar el Preview Pass 07 completo en teléfono y escritorio. Si la composición visual queda aprobada, hacer un último release-candidate pass centrado sólo en regresiones, ES/EN y smoke visual antes de considerar producción.
 
 ## Regla de despliegue
 Push de la rama Preview está permitido para generar Preview. No mergear a `main`, no apuntar el dominio real y no publicar producción sin aprobación visual explícita del usuario en el chat actual.
@@ -109,3 +109,12 @@ Push de la rama Preview está permitido para generar Preview. No mergear a `main
 - Todos los placeholders oficiales comparten ahora señalética `OFFICIAL MEDIA // PENDING`, rejilla y tratamiento visual consistente; siguen sin usar arte random.
 - QA: build completo PASS; Home desktop/móvil PASS; primera visita desktop/móvil PASS; 0 overflow y 0 errores de consola.
 - Producción continúa estable en `fc1df9c`; Pass 06 permanece sólo en Preview hasta aprobación visual explícita.
+
+## Checkpoint AAA Rebuild V2 — Pass 07 (2026-09-15)
+- Commit visual: `b7f0f30 — feat(home): harden responsive AAA world layouts`.
+- Territorios móviles: región activa conserva ancho completo y las otras tres regiones pasan a una fila compacta de 3 tarjetas en pantallas ≥360 px; debajo de ese ancho se mantiene el fallback más amplio.
+- La matriz QA de Home se amplió a 1440×1000, 1024×900, 768×900, 430×932 y 390×844.
+- La primera visita/consentimiento se valida además explícitamente en 430×932, el ancho donde ocurrió la regresión visual anterior.
+- ES→EN→ES validado sobre Preview real: botón muestra idioma destino, rutas `/`↔`/en`, `html lang` correcto y copy inglés real.
+- Build completo PASS; todos los viewports PASS; 0 overflow y 0 errores de consola.
+- Preview Pass 06 previo quedó READY y validado remotamente; producción continúa en `fc1df9c`.
