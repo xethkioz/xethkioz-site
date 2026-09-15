@@ -313,3 +313,11 @@ body:has(.wox-home) .xk-privacy-consent-dialog>h2{font-family:Orbitron,Inter,san
 /* PASS 10 — anchor landings clear both sticky navigation layers. */
 .wox-content>.wox-section,.wox-content>.wox-support-card{scroll-margin-top:146px}
 @media(max-width:760px){.wox-content>.wox-section,.wox-content>.wox-support-card{scroll-margin-top:118px}}
+
+/* PASS 11 — keep Veyr cinematic in the Hero, then compact it beside the sticky chapter dock. */
+@media(max-width:1279px){
+  body:has(.wox-home .wox-section-dock.is-visible) .xk-wisp.is-home-entry{--wisp-size:56px;right:-8px;top:152px;bottom:auto;opacity:.72;transition:opacity .2s ease,filter .2s ease}
+  body:has(.wox-home .wox-section-dock.is-visible) .xk-wisp.is-home-entry:hover,body:has(.wox-home .wox-section-dock.is-visible) .xk-wisp.is-home-entry:focus-visible{opacity:1;filter:brightness(1.08)}
+  body:has(.wox-home .wox-section-dock.is-visible) .xk-wisp.is-home-entry .xk-wisp-terminal{display:none}
+}
+@media(max-width:760px){body:has(.wox-home .wox-section-dock.is-visible) .xk-wisp.is-home-entry{top:128px}}
