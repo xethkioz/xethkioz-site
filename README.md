@@ -20,6 +20,10 @@ XETHKIOZ Network es el ecosistema web modular de la marca XETHKIOZ. Reúne porta
 
 La web debe tratarse como proyecto vivo. Los cambios de infraestructura, auth, CMS, Supabase, rutas públicas o seguridad deben pasar por rama de revisión antes de mergear a `main`.
 
+La adaptación opcional a Cloudflare y su procedimiento de prueba están en
+[docs/CLOUDFLARE.md](docs/CLOUDFLARE.md). `npm run check:cloudflare` valida esa
+configuración sin cambiar el dominio de producción.
+
 ## Módulos públicos y rutas principales
 
 | Ruta | Módulo | Estado |
