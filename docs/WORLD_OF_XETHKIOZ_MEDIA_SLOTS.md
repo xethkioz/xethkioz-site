@@ -1,6 +1,6 @@
 # World of Xethkioz — Media Slots
 
-Estado: estructura web preparada; arte oficial pendiente.
+Estado: estructura web preparada; integración de medios 3D oficiales en progreso.
 
 Regla: no usar bocetos, sprites, concept art 2D/2.5D ni imagenes random como representacion actual del juego. Solo material aprobado del pipeline Unity + Blender 3D.
 
@@ -16,6 +16,15 @@ Regla: no usar bocetos, sprites, concept art 2D/2.5D ni imagenes random como rep
 - PRODUCCION 3D: Veyr ya integrado como primer activo vigente.
 - ESCENARIOS 3D: captura/render Unity, relacion 16:10.
 - GAMEPLAY REAL: captura o frame de gameplay Unity, relacion 16:10.
+
+## Estado de publicación — Pass 13
+
+- XETHKIOZ: PUBLICABLE COMO MODELO 3D EN PRODUCCIÓN. Render LOD0 vigente optimizado para web; no se etiqueta como gameplay ni como Game Ready final.
+- VIAJERO: BLOQUEADO PARA WEB. El asset actual sigue en rig/import QA y su preview es técnico, no una presentación AAA.
+- FORMAS: CANDIDATOS LOD0 DISPONIBLES, pero el mapeo Bestia Legendaria 1–8 ↔ nombres canónicos debe cerrarse antes de publicar.
+- PERSONAJES: Braxian/Milaviel y familia tienen candidatos 3D, pero faltan renders de presentación aprobados; no usar T-pose.
+- MUNDO / ESCENARIOS / GAMEPLAY: BLOQUEADOS hasta existir captura Unity oficial de la versión vigente.
+- PRODUCCIÓN 3D: Veyr permanece como activo público vigente.
 
 ## Convencion futura
 
