@@ -167,3 +167,14 @@ Push de la rama Preview está permitido para generar Preview. No mergear a `main
 - Resultado: las 6 anclas dejan 12 px de aire en desktop/tablet y 10 px en móvil; 0 errores de navegador.
 - Build completo PASS; visual 1440/1024/768/430/390 PASS; primera visita PASS; funcional ES/EN PASS; production-ready PASS; Wisp entity PASS; `git diff --check` PASS.
 - Producción continúa en `fc1df9c`; Pass 10 permanece sólo en Preview hasta validación remota y aprobación visual explícita.
+
+## Checkpoint AAA Rebuild V2 — Pass 10 remoto (2026-09-15)
+- Commit validado: `40e4ab1 — fix(home): clear sticky nav on World anchors`.
+- Preview Vercel READY: `xethkioz-site-mjcrjbokg-xethkioz-site.vercel.app` (`dpl_F265PCiiLgQEuYhVcLRDAmG7vm6M`).
+- QA visual remoto PASS en 1440×1000, 1024×900, 768×900, 430×932 y 390×844; 0 overflow global, `overflowText=[]`, 14 personajes, 8 Formas, 3 slots 3D y 0 imágenes random en Mundo/Atlas/Personajes.
+- QA funcional remoto ES/EN PASS: 4 territorios, 4 Atlas, 8 Formas, 14 personajes, chat, Wisp `/green-node` y `/en/green-node`, sin errores de navegador.
+- Primera visita remota PASS en 1440, 430 y 390 px; 3 acciones de consentimiento, 0 overflow y 0 errores.
+- Navegación por anclas remota PASS: 12 px de clearance en 1440/768 y 10 px en 390 para Historia, Mundo, Prisma-Atlas, Personajes, 3D y Desarrollo.
+- Runtime Preview: 0 logs error/fatal. Build Vercel completado; sólo informa timings diagnósticos de plugins Vite/Rolldown, sin fallo.
+- Vercel Toolbar: 0 threads sin resolver para `wox-aaa-rebuild-v2`.
+- Gate técnico de la rama: cerrado. Producción sigue en `fc1df9c`; no promover a `main` hasta aprobación visual explícita del Preview en el chat actual.
