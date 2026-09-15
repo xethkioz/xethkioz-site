@@ -288,3 +288,35 @@
 @media(max-width:760px){.wox-region-grid article>button::after{width:58%;opacity:.36}.wox-roadmap-grid article:not(:last-child)::before{display:none}.wox-content .wox-section::after{inset:9px}.wox-content .wox-section-head h2::after{margin-top:13px}.wox-atlas-grid article>button::after{width:44px}.wox-cast-grid article>button::after{width:54px}}
 @media(prefers-reduced-motion:reduce){.wox-3d-grid article:not(:first-child) .wox-3d-viewport::before{animation:none}.wox-map-chips span,.wox-roadmap-grid article{transition:none}}
 .wox-region-console[data-region='1']>.wox-media-placeholder .wox-media-placeholder-grid{background-image:linear-gradient(168deg,transparent 49%,rgba(111,199,255,.13) 50%,transparent 51%),linear-gradient(12deg,transparent 56%,rgba(231,182,109,.09) 57%,transparent 58%),linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px);background-size:auto,auto,32px 32px}
+
+/* AAA PASS 03 — unify every game chapter with the same futuristic display language as the World banner. */
+.wox-content{--aaa-display:Orbitron,Inter,system-ui,sans-serif}
+.wox-content .wox-section-head h2,.wox-origin .wox-timeline strong,.wox-duo-grid strong,.wox-region-grid h3,.wox-atlas-grid h3,.wox-atlas-console h3,.wox-forms-grid strong,.wox-form-console h3,.wox-cast-grid strong,.wox-cast-console h3,.wox-3d-stage>.wox-section-head h2,.wox-dev-showcase .wox-section-head h2,.wox-roadmap-showcase .wox-section-head h2,.wox-support-card h2,.wox-3d-copy strong,.wox-roadmap-grid strong{font-family:var(--aaa-display);font-weight:950}
+.wox-content .wox-section-head h2{letter-spacing:-.055em;text-transform:none}.wox-region-grid h3,.wox-atlas-console h3,.wox-form-console h3,.wox-cast-console h3{letter-spacing:-.06em}
+.wox-content .wox-section-head{padding-right:min(12vw,150px)}
+.wox-content .wox-section-head::after{content:'WORLD // XETHKIOZ';position:absolute;right:0;top:4px;font:900 .45rem/1 ui-monospace,monospace;letter-spacing:.2em;color:rgba(255,255,255,.17);writing-mode:vertical-rl}
+@media(max-width:760px){.wox-content .wox-section-head{padding-right:0}.wox-content .wox-section-head::after{display:none}}
+
+.wox-world-showcase .wox-region-grid article.is-active h3{font-size:clamp(3.25rem,7vw,7.2rem);line-height:.88;text-shadow:0 0 38px color-mix(in srgb,var(--region-accent) 18%,transparent)}
+.wox-region-console .wox-region-console-head span,.wox-atlas-console small,.wox-form-console small,.wox-cast-console small,.wox-3d-copy small{letter-spacing:.19em}
+.wox-atlas-console h3{background:linear-gradient(90deg,#fff,color-mix(in srgb,var(--atlas-accent) 72%,#fff),var(--atlas-accent2));background-clip:text;-webkit-background-clip:text;color:transparent}
+.wox-form-console h3{background:linear-gradient(90deg,#fff,color-mix(in srgb,var(--form-accent) 72%,#fff));background-clip:text;-webkit-background-clip:text;color:transparent}
+.wox-cast-console h3{background:linear-gradient(90deg,#fff,color-mix(in srgb,var(--cast-accent) 70%,#fff));background-clip:text;-webkit-background-clip:text;color:transparent}
+.wox-region-grid article:focus-within,.wox-atlas-grid article:focus-within,.wox-forms-grid article:focus-within,.wox-cast-grid article:focus-within{outline:1px solid rgba(255,255,255,.38);outline-offset:3px}
+.wox-region-grid button:focus-visible,.wox-atlas-grid button:focus-visible,.wox-forms-grid button:focus-visible,.wox-cast-grid button:focus-visible{outline:none}
+
+/* Selected codex entry now changes the atmosphere of its entire chapter. */
+.wox-world-showcase{--chapter-accent:#6fc7ff;--chapter-accent2:#e7b66d;background:radial-gradient(circle at 84% 12%,color-mix(in srgb,var(--chapter-accent) 15%,transparent),transparent 30%),radial-gradient(circle at 12% 88%,color-mix(in srgb,var(--chapter-accent2) 7%,transparent),transparent 28%),linear-gradient(180deg,rgba(4,8,15,.72),rgba(4,4,9,.96))}
+.wox-world-showcase[data-region='2']{--chapter-accent:#3be1a7;--chapter-accent2:#74f0da}.wox-world-showcase[data-region='3']{--chapter-accent:#66c4ff;--chapter-accent2:#9f8cff}.wox-world-showcase[data-region='4']{--chapter-accent:#ff4f9a;--chapter-accent2:#9a6cff}
+.wox-world-showcase>.wox-section-head>p{color:color-mix(in srgb,var(--chapter-accent2) 78%,#fff)}.wox-world-showcase>.wox-section-head h2::after{background:linear-gradient(90deg,var(--chapter-accent),var(--chapter-accent2),transparent)}
+.wox-atlas-showcase{--chapter-accent:#a96cff;--chapter-accent2:#ff7a67;background:radial-gradient(circle at 84% 18%,color-mix(in srgb,var(--chapter-accent) 14%,transparent),transparent 30%),linear-gradient(145deg,rgba(5,8,14,.96),rgba(4,4,9,.92))}
+.wox-atlas-showcase[data-atlas='2']{--chapter-accent:#4de0c3;--chapter-accent2:#72d7ff}.wox-atlas-showcase[data-atlas='3']{--chapter-accent:#d7b061;--chapter-accent2:#7acbff}.wox-atlas-showcase[data-atlas='4']{--chapter-accent:#ff566f;--chapter-accent2:#ff9b5f}
+.wox-atlas-showcase>.wox-section-head h2::after{background:linear-gradient(90deg,var(--chapter-accent),var(--chapter-accent2),transparent)}
+.wox-forms-showcase{--chapter-accent:#a855f7;background:radial-gradient(circle at 52% 4%,color-mix(in srgb,var(--chapter-accent) 15%,transparent),transparent 28%),linear-gradient(150deg,rgba(5,8,15,.97),rgba(4,4,9,.92))}
+.wox-forms-showcase[data-form='2']{--chapter-accent:#d8a35f}.wox-forms-showcase[data-form='3']{--chapter-accent:#57cf7b}.wox-forms-showcase[data-form='4']{--chapter-accent:#ff5a48}.wox-forms-showcase[data-form='5']{--chapter-accent:#62adff}.wox-forms-showcase[data-form='6']{--chapter-accent:#e0b95a}.wox-forms-showcase[data-form='7']{--chapter-accent:#8d73ff}.wox-forms-showcase[data-form='8']{--chapter-accent:#5fd8e9}
+.wox-forms-showcase>.wox-section-head h2::after{background:linear-gradient(90deg,var(--chapter-accent),#d8a35f,transparent)}
+
+.wox-cast-showcase{--chapter-accent:#e1a65e;background:radial-gradient(circle at 86% 14%,color-mix(in srgb,var(--chapter-accent) 12%,transparent),transparent 29%),radial-gradient(circle at 18% 80%,rgba(113,89,255,.07),transparent 28%),linear-gradient(150deg,rgba(6,8,14,.97),rgba(4,4,9,.94))}
+.wox-cast-showcase[data-cast='2']{--chapter-accent:#5ea7ff}.wox-cast-showcase[data-cast='3']{--chapter-accent:#c18cff}.wox-cast-showcase[data-cast='4']{--chapter-accent:#4dd6c0}.wox-cast-showcase[data-cast='5']{--chapter-accent:#e0b66b}.wox-cast-showcase[data-cast='6']{--chapter-accent:#d86cff}.wox-cast-showcase[data-cast='7']{--chapter-accent:#55d696}
+.wox-cast-showcase[data-cast='8']{--chapter-accent:#747dff}.wox-cast-showcase[data-cast='9']{--chapter-accent:#ff5b5b}.wox-cast-showcase[data-cast='10']{--chapter-accent:#e5ad65}.wox-cast-showcase[data-cast='11']{--chapter-accent:#7ec66e}.wox-cast-showcase[data-cast='12']{--chapter-accent:#5d9bff}.wox-cast-showcase[data-cast='13']{--chapter-accent:#8672ff}.wox-cast-showcase[data-cast='14']{--chapter-accent:#d56cff}
+.wox-cast-showcase>.wox-section-head h2::after{background:linear-gradient(90deg,var(--chapter-accent),#8b5cf6,transparent)}

@@ -411,7 +411,7 @@ export default function Home() {
               <article><MediaPlaceholder orientation="portrait" code="FORMA" subject="XETHKIOZ" label={lang === 'es' ? 'MODELO 3D EN PRODUCCION' : '3D MODEL IN PRODUCTION'} /><small>02 // XETHKIOZ</small><strong>{lang === 'es' ? 'No obedece. Acompaña.' : 'It does not obey. It accompanies.'}</strong><p>{lang === 'es' ? 'La Forma Abierta aprende afinidades sin perder identidad. Su progresión canónica de colas es 3 → 5 → 7 → 9.' : 'The Open Form learns affinities without losing identity. Its canonical tail progression is 3 → 5 → 7 → 9.'}</p></article>
             </div>
           </section>
-          <section id="worlds" className="wox-section wox-world-showcase" aria-labelledby="worlds-title">
+          <section id="worlds" className="wox-section wox-world-showcase" data-region={activeRegion + 1} aria-labelledby="worlds-title">
             <div className="wox-section-head">
               <p>{t.worldsEyebrow}</p>
               <h2 id="worlds-title">{t.worldsTitle}</h2>
@@ -441,7 +441,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section id="atlas" className="wox-section wox-atlas wox-atlas-showcase" aria-labelledby="atlas-title">
+          <section id="atlas" className="wox-section wox-atlas wox-atlas-showcase" data-atlas={activeAtlas + 1} aria-labelledby="atlas-title">
             <div className="wox-section-head">
               <p>{t.bestiaryEyebrow}</p>
               <h2 id="atlas-title">{t.bestiaryTitle}</h2>
@@ -467,7 +467,7 @@ export default function Home() {
               </div>
             </div>
           </section>
-          <section className="wox-section wox-forms-showcase" aria-labelledby="forms-title">
+          <section className="wox-section wox-forms-showcase" data-form={activeForm + 1} aria-labelledby="forms-title">
             <div className="wox-section-head">
               <p>{t.formsEyebrow}</p>
               <h2 id="forms-title">{t.formsTitle}</h2>
@@ -495,7 +495,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section id="characters" className="wox-section wox-cast wox-cast-showcase" aria-labelledby="cast-title">
+          <section id="characters" className="wox-section wox-cast wox-cast-showcase" data-cast={activeCast + 1} aria-labelledby="cast-title">
             <div className="wox-section-head">
               <p>{t.castEyebrow}</p>
               <h2 id="cast-title">{t.castTitle}</h2>
