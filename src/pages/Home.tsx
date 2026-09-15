@@ -393,7 +393,7 @@ export default function Home() {
           <a className="wox-scroll" href="#origin" aria-label={t.scroll}><span />{t.scroll}</a>
         </section>
         <div className="wox-content">
-          <section id="origin" className="wox-section wox-origin wox-editorial-open" aria-labelledby="origin-title">
+          <section id="origin" data-chapter="01" className="wox-section wox-origin wox-editorial-open" aria-labelledby="origin-title">
             <div className="wox-section-head">
               <p>{t.storyEyebrow}</p>
               <h2 id="origin-title">{t.storyTitle}</h2>
@@ -409,7 +409,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="wox-section wox-duo wox-editorial-open" aria-labelledby="duo-title">
+          <section data-chapter="02" className="wox-section wox-duo wox-editorial-open" aria-labelledby="duo-title">
             <div className="wox-section-head">
               <p>{t.travelerEyebrow}</p>
               <h2 id="duo-title">{t.travelerTitle}</h2>
@@ -420,7 +420,7 @@ export default function Home() {
               <article><MediaPlaceholder orientation="portrait" code="FORMA" subject="XETHKIOZ" label={lang === 'es' ? 'MODELO 3D EN PRODUCCION' : '3D MODEL IN PRODUCTION'} /><small>02 // XETHKIOZ</small><strong>{lang === 'es' ? 'No obedece. Acompaña.' : 'It does not obey. It accompanies.'}</strong><p>{lang === 'es' ? 'La Forma Abierta aprende afinidades sin perder identidad. Su vínculo evoluciona con la Resonancia y con las decisiones del Viajero.' : 'The Open Form learns affinities without losing identity. Its bond evolves through Resonance and the Traveler’s choices.'}</p></article>
             </div>
           </section>
-          <section id="worlds" className="wox-section wox-world-showcase" aria-labelledby="worlds-title">
+          <section id="worlds" data-chapter="03" className="wox-section wox-world-showcase" aria-labelledby="worlds-title">
             <div className="wox-section-head">
               <p>{t.worldsEyebrow}</p>
               <h2 id="worlds-title">{t.worldsTitle}</h2>
@@ -438,7 +438,7 @@ export default function Home() {
                 </article>
               ))}
             </div>
-            <div className="wox-region-console" data-region={activeRegion + 1} aria-live="polite"><MediaPlaceholder code="UNITY" subject={selectedRegion.name} label={lang === 'es' ? 'CAPTURA DE REGION PENDIENTE' : 'REGION CAPTURE PENDING'} />
+            <div key={`region-console-${activeRegion}`} className="wox-region-console" data-region={activeRegion + 1} aria-live="polite"><MediaPlaceholder code="UNITY" subject={selectedRegion.name} label={lang === 'es' ? 'CAPTURA DE REGION PENDIENTE' : 'REGION CAPTURE PENDING'} />
               <div className="wox-region-console-head">
                 <span>{selectedRegion.code} // {selectedRegion.name}</span>
                 <strong>{lang === 'es' ? 'RUTA CANÓNICA DE SAGA I' : 'CANONICAL SAGA I ROUTE'}</strong>
@@ -450,7 +450,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section id="atlas" className="wox-section wox-atlas wox-atlas-showcase" aria-labelledby="atlas-title">
+          <section id="atlas" data-chapter="04" className="wox-section wox-atlas wox-atlas-showcase" aria-labelledby="atlas-title">
             <div className="wox-section-head">
               <p>{t.bestiaryEyebrow}</p>
               <h2 id="atlas-title">{t.bestiaryTitle}</h2>
@@ -465,7 +465,7 @@ export default function Home() {
                 </article>
               ))}
             </div>
-            <div className="wox-atlas-console" data-atlas={activeAtlas + 1} aria-live="polite"><MediaPlaceholder orientation="square" code="ATLAS" subject={selectedAtlas.title} label={lang === 'es' ? 'MODELO / CAPTURA PENDIENTE' : 'MODEL / CAPTURE PENDING'} />
+            <div key={`atlas-console-${activeAtlas}`} className="wox-atlas-console" data-atlas={activeAtlas + 1} aria-live="polite"><MediaPlaceholder orientation="square" code="ATLAS" subject={selectedAtlas.title} label={lang === 'es' ? 'MODELO / CAPTURA PENDIENTE' : 'MODEL / CAPTURE PENDING'} />
               <div>
                 <small>{selectedAtlas.signal}</small>
                 <h3>{selectedAtlas.title}</h3>
@@ -476,7 +476,7 @@ export default function Home() {
               </div>
             </div>
           </section>
-          <section className="wox-section wox-forms-showcase" aria-labelledby="forms-title">
+          <section data-chapter="05" className="wox-section wox-forms-showcase" aria-labelledby="forms-title">
             <div className="wox-section-head">
               <p>{t.formsEyebrow}</p>
               <h2 id="forms-title">{t.formsTitle}</h2>
@@ -492,7 +492,7 @@ export default function Home() {
                 </article>
               ))}
             </div>
-            <div className="wox-form-console" aria-live="polite" data-form={activeForm + 1}>
+            <div key={`form-console-${activeForm}`} className="wox-form-console" aria-live="polite" data-form={activeForm + 1}>
               <MediaPlaceholder orientation="square" code="FORMA" subject={selectedForm[0]} label={lang === 'es' ? 'RENDER 3D PENDIENTE' : '3D RENDER PENDING'} />
               <div>
                 <small>{lang === 'es' ? 'FORMA DE CONVERGENCIA SELECCIONADA' : 'SELECTED CONVERGENCE FORM'}</small>
@@ -504,7 +504,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section id="characters" className="wox-section wox-cast wox-cast-showcase" aria-labelledby="cast-title">
+          <section id="characters" data-chapter="06" className="wox-section wox-cast wox-cast-showcase" aria-labelledby="cast-title">
             <div className="wox-section-head">
               <p>{t.castEyebrow}</p>
               <h2 id="cast-title">{t.castTitle}</h2>
@@ -520,7 +520,7 @@ export default function Home() {
                 </article>
               ))}
             </div>
-            <div className="wox-cast-console" data-cast={activeCast + 1} aria-live="polite">
+            <div key={`cast-console-${activeCast}`} className="wox-cast-console" data-cast={activeCast + 1} aria-live="polite">
               <MediaPlaceholder orientation="portrait" code="CHAR" subject={selectedCast[0]} label={lang === 'es' ? 'RENDER DE PERSONAJE PENDIENTE' : 'CHARACTER RENDER PENDING'} />
               <div>
                 <small>{lang === 'es' ? 'IDENTIDAD CANÓNICA ACTIVA' : 'ACTIVE CANONICAL IDENTITY'}</small>
@@ -531,7 +531,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section id="media-3d" className="wox-section wox-3d-stage" aria-labelledby="media-3d-title">
+          <section id="media-3d" data-chapter="07" className="wox-section wox-3d-stage" aria-labelledby="media-3d-title">
             <div className="wox-section-head">
               <p>{lang === 'es' ? 'WORLD OF XETHKIOZ // PRODUCCIÓN VISUAL 3D' : 'WORLD OF XETHKIOZ // 3D VISUAL PRODUCTION'}</p>
               <h2 id="media-3d-title">{lang === 'es' ? 'El mundo se está construyendo en 3D.' : 'The world is being built in 3D.'}</h2>
@@ -563,7 +563,7 @@ export default function Home() {
             <div className="wox-3d-note"><span>UNITY</span><span>BLENDER</span><span>3D</span><p>{lang === 'es' ? 'Veyr ya representa el pipeline 3D vigente. Los próximos espacios se reemplazan únicamente por renders, capturas o gameplay aprobados de Unity + Blender.' : 'Veyr already represents the current 3D pipeline. The remaining slots will be replaced only with approved Unity + Blender renders, captures or gameplay.'}</p></div>
           </section>
 
-          <section id="development" className="wox-section wox-dev wox-dev-showcase" aria-labelledby="dev-title">
+          <section id="development" data-chapter="08" className="wox-section wox-dev wox-dev-showcase" aria-labelledby="dev-title">
             <div className="wox-section-head">
               <p>{t.devEyebrow}</p>
               <h2 id="dev-title">{t.devTitle}</h2>
@@ -583,7 +583,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="wox-section wox-roadmap wox-roadmap-showcase" aria-labelledby="roadmap-title">
+          <section data-chapter="09" className="wox-section wox-roadmap wox-roadmap-showcase" aria-labelledby="roadmap-title">
             <div className="wox-section-head">
               <p>{t.roadmapEyebrow}</p>
               <h2 id="roadmap-title">{t.roadmapTitle}</h2>

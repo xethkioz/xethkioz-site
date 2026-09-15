@@ -220,3 +220,39 @@
   .wox-final{margin-top:24px}.wox-footer{min-height:0;padding-top:28px}.wox-footer-status{font-size:.42rem}.wox-footer nav{align-self:flex-start}
 }
 @media(prefers-reduced-motion:reduce){.wox-region-grid article>button::after,.wox-atlas-grid article>button::after,.wox-forms-grid article>button::after,.wox-cast-grid article>button::after,.wox-footer a::after{transition:none}.wox-region-grid article.is-active,.wox-atlas-grid article.is-active,.wox-forms-grid article.is-active,.wox-cast-grid article.is-active{transform:none}}
+
+/* PASS 05 — chapter identity + live console transitions. */
+.wox-content>.wox-section[data-chapter]{position:relative;isolation:isolate;}
+.wox-content>.wox-section[data-chapter]::before{content:attr(data-chapter);position:absolute;right:clamp(18px,3vw,42px);top:clamp(22px,3vw,40px);z-index:-1;font:950 clamp(5.5rem,11vw,10rem)/.8 Orbitron,Inter,sans-serif;letter-spacing:-.08em;color:rgba(255,255,255,.018);text-shadow:0 0 50px rgba(139,92,246,.025);pointer-events:none;}
+.wox-content>.wox-section[data-chapter]>.wox-section-head{position:relative;z-index:1;}
+.wox-content>.wox-section[data-chapter]>.wox-section-head::after{content:'CHAPTER ' attr(data-chapter) ' // WORLD OF XETHKIOZ';}
+.wox-world-showcase[data-chapter]::before{color:rgba(117,221,255,.024)}
+.wox-atlas-showcase[data-chapter]::before{color:rgba(159,114,255,.026)}
+.wox-forms-showcase[data-chapter]::before{color:rgba(185,129,255,.024)}
+.wox-cast-showcase[data-chapter]::before{color:rgba(255,147,79,.022)}
+.wox-3d-stage[data-chapter]::before{color:rgba(104,229,162,.022)}
+.wox-dev-showcase[data-chapter]::before{color:rgba(117,221,255,.02)}
+.wox-roadmap-showcase[data-chapter]::before{color:rgba(255,147,79,.02)}
+.wox-region-console,.wox-atlas-console,.wox-form-console,.wox-cast-console{animation:wox-console-enter .38s cubic-bezier(.2,.78,.22,1) both;transform-origin:50% 12%;}
+@keyframes wox-console-enter{from{opacity:.38;transform:translateY(8px) scale(.994);filter:blur(2px)}to{opacity:1;transform:none;filter:none}}
+.wox-region-console::after,.wox-atlas-console::after,.wox-form-console::after,.wox-cast-console::after{content:'';position:absolute;left:0;top:0;width:38%;height:1px;background:linear-gradient(90deg,currentColor,transparent);opacity:.22;pointer-events:none;}
+.wox-region-console,.wox-atlas-console,.wox-form-console,.wox-cast-console{overflow:hidden;}
+@media(max-width:760px){
+  .wox-content>.wox-section[data-chapter]::before{right:14px;top:20px;font-size:4.3rem;color:rgba(255,255,255,.015)}
+  .wox-content>.wox-section[data-chapter]>.wox-section-head::after{display:none}
+  .wox-region-console,.wox-atlas-console,.wox-form-console,.wox-cast-console{animation-duration:.24s}
+}
+@media(prefers-reduced-motion:reduce){
+  .wox-region-console,.wox-atlas-console,.wox-form-console,.wox-cast-console{animation:none}
+}
+@media(max-width:760px){
+  .wox-world-showcase .wox-region-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .wox-world-showcase .wox-region-grid article.is-active{grid-column:1/-1;grid-row:auto;min-height:250px}
+  .wox-world-showcase .wox-region-grid article:not(.is-active){grid-row:auto;min-height:118px}
+  .wox-world-showcase .wox-region-grid article:not(.is-active) h3{font-size:clamp(.78rem,4.2vw,1rem);letter-spacing:-.025em;overflow-wrap:anywhere}
+  .wox-world-showcase .wox-region-grid article:not(.is-active)>button{padding:13px 12px}
+}
+@media(max-width:760px){
+  .wox-world-showcase .wox-region-grid article.is-active h3{font-size:clamp(2rem,10vw,2.85rem);letter-spacing:-.045em;white-space:nowrap}
+  .wox-world-showcase .wox-region-grid article:not(.is-active) h3{font-size:.72rem;line-height:1;letter-spacing:-.045em;white-space:nowrap;overflow:visible}
+}
