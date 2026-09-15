@@ -127,3 +127,17 @@ Push de la rama Preview está permitido para generar Preview. No mergear a `main
 - `npm run verify` local se detiene únicamente en `audit:env` porque este worktree no contiene `.env`; las variables reales viven en hosting y el Preview con entorno real está READY.
 - Git de código queda limpio salvo `artifacts/` no versionados.
 - Gate siguiente: aprobación visual explícita del Preview; recién después considerar merge/promoción a producción.
+## Checkpoint AAA Rebuild V2 — Pass 08 funcional (2026-09-15)
+- Commit funcional: `786ff57 — fix: complete localized Wisp functional flow`.
+- Se agregó la ruta real `/en/green-node`, su rewrite de Vercel y cabecera `noindex, nofollow, noarchive` equivalente a la ruta ES.
+- Veyr/Wisp ahora normaliza rutas ES/EN y abre Green Node mediante `localizePath('/green-node')`, manteniendo estado Home y estado dentro de Green Node en ambos idiomas.
+- Se añadió `scripts/wox-home-functional-check.mjs` + `npm run audit:wox-functional` para probar interacciones completas de Home en español e inglés.
+- Funcionalidad validada: 4 territorios, 4 categorías Prisma-Atlas, 8 Formas, 14 personajes, chat abrir/cerrar, enlaces requeridos, Wisp y selector ES↔EN.
+- Build completo local PASS; `production-ready-check` PASS; `wisp-entity-check` PASS; `git diff --check` PASS.
+- QA visual local PASS en 1440×1000, 1024×900, 768×900, 430×932 y 390×844; 0 overflow y 0 errores de consola.
+- Primera visita local PASS en 1440×1000, 430×932 y 390×844.
+- Preview Vercel funcional READY: `xethkioz-site-aznc6pqfd-xethkioz-site.vercel.app`.
+- Preview remoto autenticado PASS en los 5 viewports; 14 personajes, 8 Formas, 4 métricas Hero, 9 capítulos, 3 slots 3D, 0 imágenes random y Wisp activo.
+- Preview remoto funcional ES/EN PASS: chat, selecciones, `/green-node`, `/en/green-node` y cambio `/`↔`/en` sin errores.
+- Primera visita remota PASS en desktop, 430 px y 390 px; Runtime Preview: 0 logs error/fatal en la ventana verificada.
+- Producción continúa en `fc1df9c`; no promover a `main` hasta aprobación visual explícita del Preview en el chat actual.
