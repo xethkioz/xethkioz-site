@@ -158,3 +158,12 @@ Push de la rama Preview está permitido para generar Preview. No mergear a `main
 - QA funcional remoto ES/EN PASS: 4 territorios, 4 Atlas, 8 Formas, 14 personajes, chat, Wisp `/green-node` + `/en/green-node` y cambio de idioma.
 - Primera visita remota PASS en desktop, 430 px y 390 px; 3 controles de consentimiento, 0 overflow y 0 errores.
 - Runtime Preview: 0 logs `error`/`fatal`. Producción permanece en `fc1df9c`; gate siguiente sigue siendo aprobación visual explícita antes de `main`.
+
+## Checkpoint AAA Rebuild V2 — Pass 10 anchor navigation (2026-09-15)
+- Se confirmó que `Saltar al contenido principal` permanece fuera del viewport salvo foco de teclado; su aparición en screenshots completos/por elemento era un artefacto de captura, no una regresión visible.
+- Se detectó una regresión real en navegación por anclas: cada capítulo aterrizaba parcialmente debajo del dock sticky (≈38 px desktop, ≈12 px móvil).
+- `WorldOfXethkiozAAA.css` ajusta ahora `scroll-margin-top` a 146 px desktop/tablet y 118 px móvil.
+- Se añadió `scripts/wox-anchor-navigation-check.mjs` + `npm run audit:wox-anchor-nav` para validar las 6 anclas en 1440, 768 y 390 px.
+- Resultado: las 6 anclas dejan 12 px de aire en desktop/tablet y 10 px en móvil; 0 errores de navegador.
+- Build completo PASS; visual 1440/1024/768/430/390 PASS; primera visita PASS; funcional ES/EN PASS; production-ready PASS; Wisp entity PASS; `git diff --check` PASS.
+- Producción continúa en `fc1df9c`; Pass 10 permanece sólo en Preview hasta validación remota y aprobación visual explícita.

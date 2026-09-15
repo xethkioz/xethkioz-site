@@ -309,3 +309,7 @@ body:has(.wox-home) .xk-privacy-consent-dialog>h2{font-family:Orbitron,Inter,san
 @media(min-width:761px) and (max-width:1100px){
   .wox-world-showcase .wox-region-grid article:not(.is-active) h3{font-size:clamp(1.35rem,2.2vw,1.65rem);overflow-wrap:anywhere}
 }
+
+/* PASS 10 — anchor landings clear both sticky navigation layers. */
+.wox-content>.wox-section,.wox-content>.wox-support-card{scroll-margin-top:146px}
+@media(max-width:760px){.wox-content>.wox-section,.wox-content>.wox-support-card{scroll-margin-top:118px}}
