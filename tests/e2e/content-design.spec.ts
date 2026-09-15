@@ -1,23 +1,26 @@
 import { expect, test } from '@playwright/test'
 
 test.describe('orden y navegación de secciones', () => {
-  test('Inicio ordena guías, noticias y comunidad antes del radar editorial', async ({ page }) => {
+  test('Inicio prioriza World of Xethkioz y conserva el ecosistema', async ({ page }) => {
     await page.goto('/')
 
-    const district = page.getByRole('region', { name: /Entrá directo a guías, noticias o comunidad/i })
-    const access = district.getByRole('navigation', { name: /accesos/i })
-    await expect(district).toBeVisible()
-    await expect(access.getByRole('link')).toHaveCount(3)
-    await expect(access.getByRole('link', { name: /Guías Gaming/i })).toHaveAttribute('href', '/gaming/guides')
-    await expect(access.getByRole('link', { name: /Noticias/i })).toHaveAttribute('href', '/news')
-    await expect(access.getByRole('link', { name: /Comunidad/i })).toHaveAttribute('href', '/community')
-    await expect(district.locator('.xk-nexus-transit')).toHaveCount(0)
+    await expect(page.getByRole('heading', { level: 1, name: 'World of Xethkioz' })).toBeAttached()
+    const ecosystem = page.getByRole('navigation', { name: 'Ecosistema XETHKIOZ' })
+    await expect(ecosystem).toBeVisible()
+    await expect(ecosystem.getByRole('link')).toHaveCount(5)
+    await expect(ecosystem.getByRole('link', { name: 'JUEGOS' })).toHaveAttribute('href', '/gaming')
+    await expect(ecosystem.getByRole('link', { name: /ARGENCIENCIA/ })).toHaveAttribute('href', 'https://argenciencia.com/')
+    await expect(ecosystem.getByRole('link', { name: 'MASCOTAS' })).toHaveAttribute('href', '/mascotas/')
+    await expect(page.getByRole('link', { name: 'NOTICIAS' })).toHaveAttribute('href', '/news')
 
-    const radar = page.locator('[data-home-recent-radar]')
-    await expect(radar).toBeVisible()
-    await expect(radar.getByRole('heading', { name: 'Lo nuevo en XETHKIOZ' })).toBeVisible()
-    await expect(radar.getByRole('link', { name: /Ver todas las noticias/i })).toHaveAttribute('href', '/news')
-    await expect.poll(async () => radar.getByRole('link').count()).toBeGreaterThanOrEqual(1)
+    const worldNavigation = page.getByRole('navigation', { name: 'Secciones de World of Xethkioz' })
+    await expect(worldNavigation).toBeVisible()
+    await expect(worldNavigation.getByRole('link')).toHaveCount(6)
+    await expect(page.locator('#origin')).toBeAttached()
+    await expect(page.locator('#worlds')).toBeAttached()
+    await expect(page.locator('#characters')).toBeAttached()
+    await expect(page.locator('#media-3d')).toBeAttached()
+    await expect(page.locator('.xk-wisp.is-home-entry')).toBeAttached()
   })
 
   test('Gaming muestra una sola navegación antes del contenido y conserva inglés', async ({ page }) => {

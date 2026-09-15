@@ -34,8 +34,10 @@ if (directVersion !== PATCHED_ROUTER_VERSION || lockedDomVersion !== PATCHED_ROU
   })
 }
 
-const audit = spawnSync('npm', ['audit', '--omit=dev', '--json'], {
+const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm'
+const audit = spawnSync(npmCommand, ['audit', '--omit=dev', '--json'], {
   cwd: root,
+  shell: process.platform === 'win32',
   encoding: 'utf8',
   maxBuffer: 10 * 1024 * 1024,
 })

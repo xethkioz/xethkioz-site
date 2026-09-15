@@ -40,7 +40,7 @@ const footer = read('src/components/Footer.tsx')
 const mainEntry = read('src/main.tsx')
 const routeCssLoader = read('src/components/RouteCssLoader.tsx')
 const home = read('src/pages/Home.tsx')
-const homeCss = read('src/pages/HomeReborn.css')
+const homeCss = read('src/pages/WorldOfXethkiozHome.css')
 const indexHtml = read('index.html')
 const webManifest = read('public/manifest.webmanifest')
 const publicNews = read('src/pages/News.tsx')
@@ -69,7 +69,7 @@ const nexusDistrict = read('src/components/NexusDistrict.tsx')
 const nexusCity = read('src/pages/NexusCity.tsx')
 const webCreation = read('src/pages/WebCreation.tsx')
 
-check('11.2.0 COMICON removal release version stamped', pkg.version === '11.2.0')
+check('11.3.1 World of Xethkioz release version stamped', pkg.version === '11.3.1')
 check('shared public footer exposes the centralized release version', footer.includes("import { SITE_VERSION, SOCIAL_LINKS }") && footer.includes('XETHKIOZ Web {SITE_VERSION}'))
 check(
   'installable web manifest is linked and versioned',
@@ -115,14 +115,11 @@ check(
     && home.includes('videoEnabled &&'),
 )
 check(
-  'Home uses the isolated infected Wisp without mobile duplication',
-  home.includes('className="xk-rb-wisp"')
-    && home.includes('wisp-digital-specter-v1.webp')
-    && home.includes('triggerGreenPortal()')
-    && homeCss.includes('.xk-rb-wisp{')
-    && homeCss.includes('display:none')
-    && homeCss.includes('@media (min-width:1280px){.xk-rb-wisp{display:block}}')
-    && !home.includes('/assets/green-wisp.png'),
+  'Home uses the canonical Veyr Wisp without duplicate Home implementation',
+  globalWisp.includes('/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp')
+    && globalWisp.includes("navigate('/green-node')")
+    && globalWisp.includes("location.pathname === '/' ? ' is-home-entry'")
+    && !home.includes('className="xk-rb-wisp"'),
 )
 check(
   'Home ambient video has a static poster fallback',
@@ -130,34 +127,29 @@ check(
     && home.includes('/assets/bg-dragon-poster.webp'),
 )
 check(
-  'Home exposes accessible navigation and reduced-motion scrolling',
-  home.includes('<main className="xk-rb-home">')
-    && home.includes('aria-label={lang ===')
-    && home.includes('to="/news"')
-    && home.includes("behavior: reduceMotion ? 'auto' : 'smooth'")
-    && home.includes('aria-labelledby="home-title"'),
+  'Home exposes accessible World navigation with reduced-motion support',
+  home.includes('<main className="wox-home">')
+    && home.includes('className="wox-ecosystem-nav"')
+    && home.includes('className={`wox-section-dock')
+    && home.includes("aria-current={activeSection === id ? 'location' : undefined}")
+    && homeCss.includes('@media(prefers-reduced-motion:reduce)'),
 )
 check(
-  'Home exposes three primary magical portals with real interior depth',
-  home.includes("frame: '/assets/portal-games-clean-v1.webp'")
-    && home.includes("frame: '/assets/portal-science-clean-v1.webp'")
-    && home.includes("world: '/assets/portal-mascotas-nature-v11-r2.webp'")
-    && exists('public/assets/portal-mascotas-nature-v11-r2.webp')
-    && home.includes("frame: '/assets/portal-fun-chaos-v2.webp'")
-    && home.includes('className="xk-rb-window"')
-    && home.includes('className="xk-rb-frame"')
-    && homeCss.includes('.xk-rb-portals{')
-    && homeCss.includes('grid-template-columns:repeat(3,minmax(0,1fr))')
-    && homeCss.includes('scroll-snap-type:x mandatory'),
+  'Home preserves the compact XETHKIOZ ecosystem while World stays primary',
+  home.includes("localizePath('/gaming')")
+    && home.includes('https://argenciencia.com/')
+    && home.includes('href="/mascotas/"')
+    && home.includes("localizePath('/nexus-city')")
+    && home.includes("localizePath('/creacion-web')")
+    && home.includes('className="wox-hero"'),
 )
 check(
-  'Home keeps Nexus, Web Creation and Green Node secondary to the main portal scene',
-  home.includes('className="xk-rb-destinations"')
-    && home.includes("id: 'nexus'")
-    && home.includes("id: 'web'")
-    && home.includes("id: 'green'")
-    && home.includes('<NexusDistrict tone="home" compact />')
-    && home.includes('offer={featuredWebOffer}'),
+  'Home keeps ecosystem services secondary to World of Xethkioz',
+  home.includes('className="wox-ecosystem-nav"')
+    && home.includes('className="wox-mobile-ecosystem"')
+    && home.includes('className="wox-content"')
+    && home.includes("localizePath('/creacion-web')")
+    && globalWisp.includes("navigate('/green-node')"),
 )
 check(
   'News supports searchable, shareable and progressive discovery',
@@ -323,17 +315,13 @@ check(
     && universeTransit.includes('aria-current'),
 )
 check(
-  'Wisp exposes a responsive Hack Zone identity and mobile Green Node entry',
+  'Veyr exposes a responsive Green Node identity and mobile entry',
   appShell.includes('FusionGlobalWisp')
     && appShell.includes('!isCmsRoute')
     && globalWisp.includes('xk-wisp-rune-ring')
-    && globalWisp.includes('ZONA HACK')
-    && globalWisp.includes("registerEvent('green-unlock', 'wisp-hack-zone-open'")
+    && globalWisp.includes('WISP // GREEN NODE')
     && globalWisp.includes("navigate('/green-node')")
-    && globalWisp.includes("location.pathname === '/' ? ' is-home-entry'")
-    && globalWispCss.includes('@keyframes xk-wisp-glitch')
     && globalWispCss.includes('@media (max-width: 767px)')
-    && globalWispCss.includes('@media (min-width: 1280px)')
     && globalWispCss.includes('@media (prefers-reduced-motion: reduce)'),
 )
 
@@ -380,4 +368,4 @@ if (failed) {
   process.exit(1)
 }
 
-console.log('XETHKIOZ 11.2.0 production-ready audit PASS')
+console.log('XETHKIOZ 11.3.1 production-ready audit PASS')

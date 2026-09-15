@@ -1,6 +1,8 @@
 import { defineConfig, devices } from '@playwright/test'
 
-const baseURL = 'http://127.0.0.1:4173'
+const playwrightPort = Number(process.env.PLAYWRIGHT_PORT || 4173)
+const baseURL = `http://127.0.0.1:${playwrightPort}`
+const localChrome = process.platform === 'win32' ? { channel: 'chrome' as const } : {}
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -19,10 +21,10 @@ export default defineConfig({
     baseURL,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
+    video: process.platform === 'win32' ? 'off' : 'retain-on-failure',
   },
   webServer: {
-    command: 'npm run preview -- --host 127.0.0.1 --port 4173',
+    command: `npm run preview -- --host 127.0.0.1 --port ${playwrightPort}`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
@@ -30,11 +32,11 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium-desktop',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'], ...localChrome },
     },
     {
       name: 'chromium-mobile',
-      use: { ...devices['Pixel 7'] },
+      use: { ...devices['Pixel 7'], ...localChrome },
     },
   ],
 })
