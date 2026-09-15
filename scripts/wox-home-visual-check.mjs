@@ -35,13 +35,14 @@ for (const [name, viewport] of cases) {
     ecosystemLinks: [...document.querySelectorAll('.wox-ecosystem-nav a, .wox-tools .wox-news-link')].map((a) => ({ text: a.textContent?.trim(), href: a.getAttribute('href') })),
     gameNavLinks: document.querySelectorAll('.wox-game-nav a').length,
     wispPresent: Boolean(document.querySelector('.xk-wisp.is-home-entry')),
+    wispAsset: document.querySelector('.xk-wisp-specter-veyr')?.getAttribute('src') || '',
     media3dSlots: document.querySelectorAll('#media-3d .wox-3d-grid article').length,
     media3dImages: document.querySelectorAll('#media-3d img').length,
     legacyHeroLabelPresent: document.querySelector('.wox-status')?.textContent?.includes('2.5D') || false,
   }))
   await page.screenshot({ path: `${out}/${name}.png`, fullPage: true })
   const overflow = metrics.width > metrics.client
-  if (metrics.media3dSlots !== 3 || metrics.media3dImages !== 0 || metrics.legacyHeroLabelPresent || (name === 'mobile' && mobileMenuLinks !== 6) || overflow || errors.length) {
+  if (metrics.media3dSlots !== 3 || metrics.media3dImages !== 0 || metrics.legacyHeroLabelPresent || metrics.wispAsset !== '/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp' || (name === 'mobile' && mobileMenuLinks !== 6) || overflow || errors.length) {
     throw new Error(`WOX visual QA failed for ${name}: ${JSON.stringify({ ...metrics, mobileMenuLinks, overflow, errors })}`)
   }
   console.log(JSON.stringify({ name, ...metrics, mobileMenuLinks, overflow, errors }))

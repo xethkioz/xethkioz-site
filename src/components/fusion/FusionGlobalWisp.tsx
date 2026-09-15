@@ -21,18 +21,18 @@ const innerRunes = ['0x66', 'XK', '06', 'NODE', 'W1SP', 'ROOT']
 
 const labels = {
   es: {
-    action: 'Abrir la Zona Hack y entrar a Green Node',
+    action: 'Abrir Green Node con Veyr, el Wisp de la Convergencia',
     marker: 'ZONA HACK',
-    node: 'XK-06 // GREEN NODE',
+    node: 'VEYR // XK-06 GREEN NODE',
     status: 'VECTOR DE ACCESO LISTO',
     helpAction: 'Pedir ayuda al WISP para usar Green Node',
     helpMarker: 'GUÍA WISP',
     helpStatus: 'TOCÁ PARA REABRIR EL RECORRIDO',
   },
   en: {
-    action: 'Open the Hack Zone and enter Green Node',
+    action: 'Open Green Node with Veyr, the Convergence Wisp',
     marker: 'HACK ZONE',
-    node: 'XK-06 // GREEN NODE',
+    node: 'VEYR // XK-06 GREEN NODE',
     status: 'ACCESS VECTOR READY',
     helpAction: 'Ask WISP how to use Green Node',
     helpMarker: 'WISP GUIDE',
@@ -138,9 +138,9 @@ export default function FusionGlobalWisp() {
 
           <span className="xk-wisp-specter-wrap">
             <SafeImage
-              src="/assets/identity/wisp-digital-specter-v1.webp"
-              fallback="/images/articles/tech.svg"
-              className="xk-wisp-specter"
+              src="/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp"
+              fallback="/assets/identity/wisp-digital-specter-v1.webp"
+              className="xk-wisp-specter xk-wisp-specter-veyr"
               alt=""
               loading={location.pathname === '/' ? 'eager' : 'lazy'}
               fetchPriority={location.pathname === '/' ? 'high' : 'low'}

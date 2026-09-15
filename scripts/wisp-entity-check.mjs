@@ -43,6 +43,8 @@ add(
   'Wisp access must remain hidden route access to Green Node.',
 )
 add('Wisp CSS is present', css.includes('.fusion-wisp-entity') && css.includes('@keyframes fusionWispDrift'), 'Wisp must have lightweight CSS animation, not an image-only UI.')
+add('Veyr 3D render is the active global Wisp visual', globalWisp.includes('/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp') && exists('public/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp'), 'The current World of Xethkioz Wisp must use the approved Veyr render while preserving the legacy specter only as fallback.')
+add('Veyr optimized GLB is staged for progressive 3D enhancement', exists('public/assets/world-of-xethkioz/veyr/veyr-wisp-v03.glb'), 'Keep the optimized 3D source available without forcing it into the initial bundle.')
 add('Guardrail documented', fusionConfig.includes('reusable entity component'), 'Wisp rule must be present in fusionConfig guardrails.')
 
 const failed = checks.filter((check) => !check.passed)

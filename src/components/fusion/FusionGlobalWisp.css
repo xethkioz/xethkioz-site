@@ -5,8 +5,8 @@
 }
 
 @keyframes xk-wisp-specter-breathe {
-  0%, 100% { transform: scale(.96); filter: brightness(.88) contrast(1.08) saturate(1.08) drop-shadow(0 0 13px rgba(50, 255, 138, .5)); }
-  48% { transform: scale(1.045); filter: brightness(1.18) contrast(1.14) saturate(1.28) drop-shadow(0 0 25px rgba(50, 255, 138, .92)); }
+  0%, 100% { transform: scale(.96); filter: brightness(.88) contrast(1.08) saturate(1.08) drop-shadow(0 0 12px rgba(34, 211, 238, .48)) drop-shadow(0 0 18px rgba(139, 92, 246, .2)); }
+  48% { transform: scale(1.045); filter: brightness(1.18) contrast(1.14) saturate(1.28) drop-shadow(0 0 24px rgba(50, 255, 138, .78)) drop-shadow(0 0 30px rgba(139, 92, 246, .34)); }
   52% { transform: scale(1.02) translateX(1px); }
 }
 
@@ -325,6 +325,13 @@
   -webkit-user-drag: none;
 }
 
+.xk-wisp-specter-veyr {
+  width: 118%;
+  height: 118%;
+  object-position: 50% 48%;
+  filter: drop-shadow(0 0 10px rgba(34, 211, 238, .32)) drop-shadow(0 0 18px rgba(139, 92, 246, .2));
+}
+
 .xk-wisp-scanline {
   position: absolute;
   left: 17%;
@@ -340,7 +347,7 @@
 .xk-wisp-glitch-slice {
   position: absolute;
   inset: 4%;
-  background: center/contain no-repeat url('/assets/identity/wisp-digital-specter-v1.webp');
+  background: center/contain no-repeat url('/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp');
   filter: hue-rotate(48deg) brightness(1.45) drop-shadow(0 0 8px var(--wisp-secondary));
   mix-blend-mode: screen;
   pointer-events: none;
