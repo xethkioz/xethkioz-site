@@ -429,7 +429,7 @@ export default function Home() {
                 </article>
               ))}
             </div>
-            <div className="wox-region-console" aria-live="polite"><MediaPlaceholder code="UNITY" subject={selectedRegion.name} label={lang === 'es' ? 'CAPTURA DE REGION PENDIENTE' : 'REGION CAPTURE PENDING'} />
+            <div className="wox-region-console" data-region={activeRegion + 1} aria-live="polite"><MediaPlaceholder code="UNITY" subject={selectedRegion.name} label={lang === 'es' ? 'CAPTURA DE REGION PENDIENTE' : 'REGION CAPTURE PENDING'} />
               <div className="wox-region-console-head">
                 <span>{selectedRegion.code} // {selectedRegion.name}</span>
                 <strong>{lang === 'es' ? 'RUTA CANÓNICA DE SAGA I' : 'CANONICAL SAGA I ROUTE'}</strong>
@@ -449,14 +449,14 @@ export default function Home() {
             </div>
             <div className="wox-atlas-grid">
               {atlasEntries[lang].map(([title, text], index) => (
-                <article key={title} className={activeAtlas === index ? 'is-active' : ''}>
+                <article key={title} data-atlas={index + 1} className={activeAtlas === index ? 'is-active' : ''}>
                   <button type="button" onClick={() => setActiveAtlas(index)} aria-pressed={activeAtlas === index}>
                     <span>◆</span><h3>{title}</h3><p>{text}</p>
                   </button>
                 </article>
               ))}
             </div>
-            <div className="wox-atlas-console" aria-live="polite"><MediaPlaceholder orientation="square" code="ATLAS" subject={selectedAtlas.title} label={lang === 'es' ? 'MODELO / CAPTURA PENDIENTE' : 'MODEL / CAPTURE PENDING'} />
+            <div className="wox-atlas-console" data-atlas={activeAtlas + 1} aria-live="polite"><MediaPlaceholder orientation="square" code="ATLAS" subject={selectedAtlas.title} label={lang === 'es' ? 'MODELO / CAPTURA PENDIENTE' : 'MODEL / CAPTURE PENDING'} />
               <div>
                 <small>{selectedAtlas.signal}</small>
                 <h3>{selectedAtlas.title}</h3>
@@ -502,7 +502,7 @@ export default function Home() {
             </div>
             <div className="wox-cast-grid">
               {cast[lang].map(([name, title], index) => (
-                <article key={name} className={activeCast === index ? 'is-active' : ''}>
+                <article key={name} data-cast={index + 1} className={activeCast === index ? 'is-active' : ''}>
                   <button type="button" onClick={() => setActiveCast(index)} aria-pressed={activeCast === index}>
                     <small>{String(index + 1).padStart(2, '0')}</small>
                     <strong>{name}</strong>
@@ -511,7 +511,7 @@ export default function Home() {
                 </article>
               ))}
             </div>
-            <div className="wox-cast-console" aria-live="polite">
+            <div className="wox-cast-console" data-cast={activeCast + 1} aria-live="polite">
               <MediaPlaceholder orientation="portrait" code="CHAR" subject={selectedCast[0]} label={lang === 'es' ? 'RENDER DE PERSONAJE PENDIENTE' : 'CHARACTER RENDER PENDING'} />
               <div>
                 <small>{lang === 'es' ? 'IDENTIDAD CANÓNICA ACTIVA' : 'ACTIVE CANONICAL IDENTITY'}</small>
