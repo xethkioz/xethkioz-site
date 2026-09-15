@@ -288,3 +288,24 @@ body:has(.wox-home) .xk-privacy-consent-dialog>h2{font-family:Orbitron,Inter,san
   .wox-world-showcase .wox-region-grid article:not(.is-active) h3{font-size:clamp(.54rem,2.9vw,.72rem);letter-spacing:-.05em;}
   .wox-world-showcase .wox-region-grid article:not(.is-active)>button{padding:12px 9px;}
 }
+
+/* PASS 09 — mobile legibility: remove inherited double-padding and keep the full cast discoverable. */
+@media(max-width:760px){
+  .wox-world-showcase .wox-region-grid article,
+  .wox-atlas-showcase .wox-atlas-grid article{padding:0}
+  .wox-world-showcase .wox-region-grid article:not(.is-active) h3{width:100%;max-width:100%;font-size:clamp(.5rem,2.55vw,.64rem);letter-spacing:-.055em}
+  .wox-cast-showcase .wox-cast-grid{grid-auto-flow:row;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none;grid-auto-columns:auto;grid-auto-rows:minmax(78px,auto);overflow-x:visible;scroll-snap-type:none;padding-bottom:0}
+  .wox-cast-showcase .wox-cast-grid article{min-width:0;scroll-snap-align:none}
+  .wox-cast-showcase .wox-cast-grid article>button{min-width:0;padding:10px 9px}
+  .wox-cast-showcase .wox-cast-grid strong,.wox-cast-showcase .wox-cast-grid span{min-width:0;overflow-wrap:anywhere}
+  .wox-cast-showcase .wox-cast-grid strong{font-size:.74rem}
+  .wox-cast-showcase .wox-cast-grid span{font-size:.54rem;line-height:1.22}
+}
+
+/* PASS 09 — internal text-fit guardrails for narrow desktop/laptop cards. */
+@media(min-width:1101px){
+  .wox-3d-grid>article:not(.wox-3d-veyr-card) .wox-3d-copy strong{font-size:clamp(1rem,1.35vw,1.3rem);line-height:1.05;overflow-wrap:anywhere}
+}
+@media(min-width:761px) and (max-width:1100px){
+  .wox-world-showcase .wox-region-grid article:not(.is-active) h3{font-size:clamp(1.35rem,2.2vw,1.65rem);overflow-wrap:anywhere}
+}

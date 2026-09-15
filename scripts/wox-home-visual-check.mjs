@@ -54,10 +54,11 @@ for (const [name, viewport] of cases) {
     randomSectionImages: document.querySelectorAll('#worlds img, #atlas img, #characters img').length,
     formMediaSubject: document.querySelector('.wox-form-console .wox-media-placeholder strong')?.textContent?.trim() || '',
     castMediaSubject: document.querySelector('.wox-cast-console .wox-media-placeholder strong')?.textContent?.trim() || '',
+    internalTextOverflow: ['.wox-region-grid h3', '.wox-atlas-grid h3', '.wox-forms-grid strong', '.wox-cast-grid strong', '.wox-3d-copy strong', '.wox-dev-grid strong', '.wox-roadmap-grid strong'].flatMap((selector) => [...document.querySelectorAll(selector)]).filter((el) => el.scrollWidth > el.clientWidth + 2).map((el) => el.textContent?.trim() || ''),
   }))
   await page.screenshot({ path: `${out}/${name}.png`, fullPage: true })
   const overflow = metrics.width > metrics.client
-  if (metrics.media3dSlots !== 3 || metrics.media3dImages !== 1 || metrics.media3dVeyr !== '/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp' || metrics.legacyHeroLabelPresent || metrics.wispAsset !== '/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp' || metrics.gameNavLinks !== 6 || metrics.heroSpecs !== 4 || metrics.chapterPanels !== 9 || metrics.sectionDockLinks !== 6 || !metrics.sectionDockVisible || metrics.reservedMediaFrames !== 6 || metrics.randomSectionImages !== 0 || metrics.formMediaSubject !== 'HELLER' || metrics.castMediaSubject !== 'Nikoras' || (compactNav && mobileMenuLinks !== 6) || overflow || errors.length) {
+  if (metrics.media3dSlots !== 3 || metrics.media3dImages !== 1 || metrics.media3dVeyr !== '/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp' || metrics.legacyHeroLabelPresent || metrics.wispAsset !== '/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp' || metrics.gameNavLinks !== 6 || metrics.heroSpecs !== 4 || metrics.chapterPanels !== 9 || metrics.sectionDockLinks !== 6 || !metrics.sectionDockVisible || metrics.reservedMediaFrames !== 6 || metrics.randomSectionImages !== 0 || metrics.formMediaSubject !== 'HELLER' || metrics.castMediaSubject !== 'Nikoras' || metrics.internalTextOverflow.length || (compactNav && mobileMenuLinks !== 6) || overflow || errors.length) {
     throw new Error(`WOX visual QA failed for ${name}: ${JSON.stringify({ ...metrics, mobileMenuLinks, overflow, errors })}`)
   }
   console.log(JSON.stringify({ name, ...metrics, mobileMenuLinks, overflow, errors }))
