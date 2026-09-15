@@ -58,6 +58,11 @@ function useAmbientVideoEnabled(graphicsMode: 'full' | 'lite') {
   }, [graphicsMode])
   return enabled
 }
+const gameSections = {
+  es: [['origin', 'HISTORIA'], ['worlds', 'MUNDO'], ['atlas', 'PRISMA-ATLAS'], ['characters', 'PERSONAJES'], ['media-3d', '3D'], ['development', 'DESARROLLO']],
+  en: [['origin', 'STORY'], ['worlds', 'WORLD'], ['atlas', 'PRISM-ATLAS'], ['characters', 'CHARACTERS'], ['media-3d', '3D'], ['development', 'DEVELOPMENT']],
+} as const
+
 const copy = {
   es: {
     seo: 'World of Xethkioz · Action RPG en desarrollo',
@@ -256,10 +261,26 @@ export default function Home() {
   const [activeAtlas, setActiveAtlas] = useState(0)
   const [activeForm, setActiveForm] = useState(0)
   const [activeCast, setActiveCast] = useState(0)
+  const [activeSection, setActiveSection] = useState('origin')
+  const [sectionDockVisible, setSectionDockVisible] = useState(false)
   const selectedRegion = regionDetails[lang][activeRegion]
   const selectedAtlas = atlasDetails[lang][activeAtlas]
   const selectedForm = forms[lang][activeForm]
   const selectedCast = cast[lang][activeCast]
+
+  useEffect(() => {
+    const ids = gameSections.es.map(([id]) => id)
+    const syncDock = () => setSectionDockVisible(window.scrollY > Math.max(420, window.innerHeight * .72))
+    syncDock()
+    window.addEventListener('scroll', syncDock, { passive: true })
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
+      if (visible?.target.id) setActiveSection(visible.target.id)
+    }, { rootMargin: '-20% 0px -62% 0px', threshold: [0, .15, .35, .6] })
+    ids.map((id) => document.getElementById(id)).filter(Boolean).forEach((section) => observer.observe(section as Element))
+    return () => { window.removeEventListener('scroll', syncDock); observer.disconnect() }
+  }, [])
+
   return (
     <>
       <SEO title={t.seo} description={t.description} url="/" image="/assets/world-of-xethkioz/world-of-xethkioz-logo.webp" />
@@ -313,6 +334,14 @@ export default function Home() {
           </div>
         </header>
 
+        <nav className={`wox-section-dock${sectionDockVisible ? ' is-visible' : ''}`} aria-label={lang === 'es' ? 'Navegacion rapida de World of Xethkioz' : 'World of Xethkioz quick navigation'}>
+          <span className="wox-section-dock-brand" aria-hidden="true">WOX</span>
+          <div>
+            {gameSections[lang].map(([id, label]) => <a key={id} href={`#${id}`} aria-current={activeSection === id ? 'location' : undefined}>{label}</a>)}
+          </div>
+          <a className="wox-section-dock-top" href="#wox-title" aria-label={lang === 'es' ? 'Volver al inicio' : 'Back to top'}>^</a>
+        </nav>
+
         <section className="wox-hero" aria-labelledby="wox-title">
           <h1 id="wox-title" className="sr-only">World of Xethkioz</h1>
           <div className="wox-hero-core">
@@ -329,12 +358,7 @@ export default function Home() {
               <a href="#atlas" className="is-quiet">{t.atlas}<span>↘</span></a>
             </div>
             <nav className="wox-game-nav" aria-label={lang === 'es' ? 'Secciones de World of Xethkioz' : 'World of Xethkioz sections'}>
-              <a href="#origin">{lang === 'es' ? 'HISTORIA' : 'STORY'}</a>
-              <a href="#worlds">{lang === 'es' ? 'MUNDO' : 'WORLD'}</a>
-              <a href="#atlas">PRISMA-ATLAS</a>
-              <a href="#characters">{lang === 'es' ? 'PERSONAJES' : 'CHARACTERS'}</a>
-              <a href="#media-3d">3D</a>
-              <a href="#development">{lang === 'es' ? 'DESARROLLO' : 'DEVELOPMENT'}</a>
+              {gameSections[lang].map(([id, label]) => <a key={id} href={`#${id}`}>{label}</a>)}
             </nav>
           </div>
           <a className="wox-scroll" href="#origin" aria-label={t.scroll}><span />{t.scroll}</a>

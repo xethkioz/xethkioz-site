@@ -128,3 +128,16 @@
 .wox-3d-link{display:inline-flex;align-items:center;gap:8px;margin-top:18px;width:max-content;padding:10px 12px;border:1px solid rgba(50,255,138,.22);border-radius:11px;background:rgba(50,255,138,.06);color:#caffdc;text-decoration:none;font:900 .5rem/1 ui-monospace,monospace;letter-spacing:.12em;transition:.2s ease}.wox-3d-link:hover,.wox-3d-link:focus-visible{outline:none;border-color:rgba(139,92,246,.45);background:rgba(139,92,246,.1);color:#fff;transform:translateY(-2px)}
 @media(max-width:760px){.wox-3d-viewport.is-veyr img{width:62%;height:94%}.wox-3d-live-badge{left:12px;top:12px}}
 @media(prefers-reduced-motion:reduce){.wox-3d-viewport.is-veyr img{animation:none}}
+
+/* Persistent in-world section dock: appears after the hero so long-form Home navigation stays reachable. */
+.wox-section-dock{position:fixed;z-index:38;top:88px;left:50%;display:flex;align-items:center;gap:8px;width:min(910px,calc(100% - 40px));padding:6px 7px;transform:translate(-50%,-12px);border:1px solid rgba(255,255,255,.09);border-radius:16px;background:rgba(5,5,10,.82);box-shadow:0 16px 48px rgba(0,0,0,.34);backdrop-filter:blur(18px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s ease,transform .22s ease,visibility .22s ease}
+.wox-section-dock.is-visible{opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%,0)}
+.wox-section-dock-brand{flex:0 0 auto;padding:7px 9px;border-radius:10px;background:linear-gradient(135deg,rgba(139,92,246,.16),rgba(255,107,26,.1));font:1000 .48rem/1 Orbitron,Inter,sans-serif;letter-spacing:.08em;color:#e7dcff}
+.wox-section-dock>div{display:flex;min-width:0;flex:1;align-items:center;justify-content:center;gap:3px;overflow-x:auto;scrollbar-width:none}.wox-section-dock>div::-webkit-scrollbar{display:none}
+.wox-section-dock>div a,.wox-section-dock-top{flex:0 0 auto;border:1px solid transparent;border-radius:10px;padding:8px 9px;color:rgba(255,255,255,.5);text-decoration:none;font:900 .46rem/1 ui-monospace,monospace;letter-spacing:.09em;white-space:nowrap;transition:.18s ease}
+.wox-section-dock>div a:hover,.wox-section-dock>div a:focus-visible,.wox-section-dock-top:hover,.wox-section-dock-top:focus-visible{outline:none;border-color:rgba(139,92,246,.28);background:rgba(139,92,246,.08);color:#fff}
+.wox-section-dock>div a[aria-current="location"]{border-color:rgba(255,140,66,.28);background:linear-gradient(135deg,rgba(139,92,246,.14),rgba(255,107,26,.1));color:#fff;box-shadow:inset 0 0 18px rgba(139,92,246,.06)}
+.wox-section-dock-top{display:grid;width:32px;height:32px;padding:0;place-items:center;border-color:rgba(255,255,255,.08);font-size:.7rem;color:#ffad72}
+.wox-home :where(#origin,#worlds,#atlas,#characters,#media-3d,#development){scroll-margin-top:156px}
+@media(max-width:760px){.wox-section-dock{top:66px;width:calc(100% - 18px);gap:5px;padding:5px}.wox-section-dock-brand{display:none}.wox-section-dock>div{justify-content:flex-start}.wox-section-dock>div a{padding:8px 9px;font-size:.42rem}.wox-section-dock-top{width:30px;height:30px}.wox-home :where(#origin,#worlds,#atlas,#characters,#media-3d,#development){scroll-margin-top:124px}}
+@media(prefers-reduced-motion:reduce){.wox-section-dock{transition:none}}
