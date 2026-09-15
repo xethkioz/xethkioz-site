@@ -9,8 +9,8 @@ Este archivo continúa exclusivamente el trabajo de la WEB pública. El juego en
 ## Estado seguro actual
 - Worktree: `E:\WEB XETHKIOZ\xethkioz-site-web-only`
 - Rama activa: `wox-aaa-rebuild-v2`
-- Último cambio visual funcional: `573b6a8 — feat(home): polish AAA interactions and cinematic closure`
-- Hito anterior: `3050486 — feat(home): add cinematic World hero shell`
+- Último cambio visual funcional: `7329029 — feat(home): add AAA chapter flow and mobile territory polish`
+- Hito anterior: `573b6a8 — feat(home): polish AAA interactions and cinematic closure`
 - Producción pública estable: `main` en rollback seguro `fc1df9c — revert(home): restore stable World layout after AAA regression`
 - NO reemplazar producción hasta aprobación visual explícita del usuario.
 
@@ -84,7 +84,18 @@ La primera implementación AAA se publicó con layouts de escritorio comprimidos
 Desde entonces el rediseño se rehace en `wox-aaa-rebuild-v2`, con mobile-first real, capturas por sección y aprobación visual previa a producción.
 
 ## Próxima acción recomendada
-Continuar con pulido AAA fino: microinteracciones controladas, transiciones de selección, consistencia de cierre/footer y revisión visual sección por sección. Después generar Preview Vercel, revisar desktop + móvil y sólo entonces considerar publicación.
+Revisar el Preview Pass 05 completo y hacer un último pase de terminación: densidad tipográfica, respiración entre capítulos, navegación móvil y consistencia de placeholders. Luego generar un release candidate Preview y sólo considerar producción con aprobación visual explícita.
 
 ## Regla de despliegue
 Push de la rama Preview está permitido para generar Preview. No mergear a `main`, no apuntar el dominio real y no publicar producción sin aprobación visual explícita del usuario en el chat actual.
+
+
+## Checkpoint AAA Rebuild V2 — Pass 05 (2026-09-15)
+- Commit visual: `7329029 — feat(home): add AAA chapter flow and mobile territory polish`.
+- Los 9 capítulos principales ahora llevan identidad numérica discreta (`01` a `09`) y señalética `CHAPTER // WORLD OF XETHKIOZ` en desktop.
+- Territorios, Prisma-Atlas, Formas y Personajes re-montan su consola seleccionada con transición corta al cambiar de opción; reduced-motion desactiva la animación.
+- QA suma contrato de 9 paneles/capítulos para evitar regresiones estructurales.
+- Mobile Territorios dejó la fila de 3 mini tarjetas comprimidas: ahora usa 2 columnas legibles y el territorio activo mantiene ancho completo.
+- Se corrigió el tamaño del nombre activo y los secundarios para evitar cortes en Izrdralar / Desfralar / Xiomalar / Zodnight.
+- Build completo PASS; QA local desktop 1440×1000 PASS y móvil 390×844 PASS; 0 overflow y 0 errores de consola.
+- Producción sigue en `fc1df9c`; este Pass continúa sólo en Preview hasta aprobación visual.
