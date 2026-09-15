@@ -21,19 +21,19 @@ const innerRunes = ['0x66', 'XK', '06', 'NODE', 'W1SP', 'ROOT']
 
 const labels = {
   es: {
-    action: 'Abrir Green Node con Veyr, el Wisp de la Convergencia',
-    marker: 'ZONA HACK',
-    node: 'VEYR // XK-06 GREEN NODE',
-    status: 'VECTOR DE ACCESO LISTO',
+    action: 'Abrir Green Node con Wisp, Custodio del Green Node',
+    marker: 'WISP',
+    node: 'WISP // GREEN NODE',
+    status: 'TE ESTABA ESPERANDO',
     helpAction: 'Pedir ayuda al WISP para usar Green Node',
     helpMarker: 'GUÍA WISP',
     helpStatus: 'TOCÁ PARA REABRIR EL RECORRIDO',
   },
   en: {
-    action: 'Open Green Node with Veyr, the Convergence Wisp',
-    marker: 'HACK ZONE',
-    node: 'VEYR // XK-06 GREEN NODE',
-    status: 'ACCESS VECTOR READY',
+    action: 'Open Green Node with Wisp, Custodian of the Green Node',
+    marker: 'WISP',
+    node: 'WISP // GREEN NODE',
+    status: 'I WAS WAITING FOR YOU',
     helpAction: 'Ask WISP how to use Green Node',
     helpMarker: 'WISP GUIDE',
     helpStatus: 'TAP TO REOPEN THE TOUR',
