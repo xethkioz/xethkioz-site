@@ -50,17 +50,15 @@ export default function FusionGlobalWisp() {
   const location = useLocation()
   const navigate = useNavigate()
   const t = labels[lang]
-  const routePath = location.pathname === '/en' || location.pathname === '/en/' ? '/' : location.pathname.startsWith('/en/') ? location.pathname.slice(3) : location.pathname
-  const insideGreenNode = routePath === '/green-node'
-  const isHomeEntry = routePath === '/'
+  const insideGreenNode = location.pathname === '/green-node'
   const actionLabel = insideGreenNode ? t.helpAction : t.action
 
   useEffect(() => {
-    const nextMood = insideGreenNode
+    const nextMood = location.pathname === '/green-node'
       ? 'GREEN_MODE'
       : account.status === 'connected'
         ? 'connected'
-        : routeMood[routePath] || 'idle'
+        : routeMood[location.pathname] || 'idle'
 
     setMood(nextMood)
     setPortalOpen(false)
@@ -85,7 +83,7 @@ export default function FusionGlobalWisp() {
     triggerGreenPortal()
     registerEvent('green-unlock', 'wisp-hack-zone-open', '/green-node')
     if (navigationTimer.current !== null) window.clearTimeout(navigationTimer.current)
-    navigationTimer.current = window.setTimeout(() => navigate(lang === 'en' ? '/en/green-node' : '/green-node'), 720)
+    navigationTimer.current = window.setTimeout(() => navigate('/green-node'), 720)
   }
 
   const focusWisp = () => registerEvent('portal-hover', 'wisp-hack-zone-focus', location.pathname)
@@ -105,7 +103,7 @@ export default function FusionGlobalWisp() {
       />
       <button
         type="button"
-        className={`xk-wisp xk-wisp-${moodClass}${isHomeEntry ? ' is-home-entry' : ''}${insideGreenNode ? ' is-inside-node' : ''}${portalOpen ? ' is-opening' : ''}`}
+        className={`xk-wisp xk-wisp-${moodClass}${location.pathname === '/' ? ' is-home-entry' : ''}${location.pathname === '/green-node' ? ' is-inside-node' : ''}${portalOpen ? ' is-opening' : ''}`}
         style={wispStyle}
         onClick={openPortal}
         onMouseEnter={focusWisp}
@@ -144,8 +142,8 @@ export default function FusionGlobalWisp() {
               fallback="/assets/identity/wisp-digital-specter-v1.webp"
               className="xk-wisp-specter xk-wisp-specter-veyr"
               alt=""
-              loading={isHomeEntry ? 'eager' : 'lazy'}
-              fetchPriority={isHomeEntry ? 'high' : 'low'}
+              loading={location.pathname === '/' ? 'eager' : 'lazy'}
+              fetchPriority={location.pathname === '/' ? 'high' : 'low'}
             />
             <span className="xk-wisp-scanline" />
             <span className="xk-wisp-glitch-slice" />

@@ -48,13 +48,10 @@ for (const [name, viewport] of cases) {
     randomSectionImages: document.querySelectorAll('#worlds img, #atlas img, #characters img').length,
     formMediaSubject: document.querySelector('.wox-form-console .wox-media-placeholder strong')?.textContent?.trim() || '',
     castMediaSubject: document.querySelector('.wox-cast-console .wox-media-placeholder strong')?.textContent?.trim() || '',
-    heroSpecs: document.querySelectorAll('.wox-hero-specs a').length,
-    footerWorldLinks: document.querySelectorAll('.wox-footer-world-nav a').length,
-    legacyTailCopyPresent: document.body.textContent?.includes('3 → 5 → 7 → 9') || false,
   }))
   await page.screenshot({ path: `${out}/${name}.png`, fullPage: true })
   const overflow = metrics.width > metrics.client
-  if (metrics.media3dSlots !== 3 || metrics.media3dImages !== 1 || metrics.media3dVeyr !== '/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp' || metrics.legacyHeroLabelPresent || !metrics.wispPresent || metrics.wispAsset !== '/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp' || metrics.gameNavLinks !== 6 || metrics.sectionDockLinks !== 6 || !metrics.sectionDockVisible || metrics.reservedMediaFrames !== 6 || metrics.randomSectionImages !== 0 || metrics.formMediaSubject !== 'HELLER' || metrics.castMediaSubject !== 'Nikoras' || metrics.heroSpecs !== 4 || metrics.footerWorldLinks !== 6 || metrics.legacyTailCopyPresent || (name === 'mobile' && mobileMenuLinks !== 6) || overflow || errors.length) {
+  if (metrics.media3dSlots !== 3 || metrics.media3dImages !== 1 || metrics.media3dVeyr !== '/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp' || metrics.legacyHeroLabelPresent || metrics.wispAsset !== '/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp' || metrics.gameNavLinks !== 6 || metrics.sectionDockLinks !== 6 || !metrics.sectionDockVisible || metrics.reservedMediaFrames !== 6 || metrics.randomSectionImages !== 0 || metrics.formMediaSubject !== 'HELLER' || metrics.castMediaSubject !== 'Nikoras' || (name === 'mobile' && mobileMenuLinks !== 6) || overflow || errors.length) {
     throw new Error(`WOX visual QA failed for ${name}: ${JSON.stringify({ ...metrics, mobileMenuLinks, overflow, errors })}`)
   }
   console.log(JSON.stringify({ name, ...metrics, mobileMenuLinks, overflow, errors }))

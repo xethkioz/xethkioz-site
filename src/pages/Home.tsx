@@ -380,12 +380,6 @@ export default function Home() {
             <nav className="wox-game-nav" aria-label={lang === 'es' ? 'Secciones de World of Xethkioz' : 'World of Xethkioz sections'}>
               {gameSections[lang].map(([id, label]) => <a key={id} href={`#${id}`}>{label}</a>)}
             </nav>
-            <div className="wox-hero-specs" aria-label={lang === 'es' ? 'Datos principales de Saga I' : 'Saga I key data'}>
-              <a href="#worlds"><strong>04</strong><span>{lang === 'es' ? 'TERRITORIOS' : 'TERRITORIES'}</span></a>
-              <a href="#worlds"><strong>32</strong><span>{lang === 'es' ? 'MAPAS SAGA I' : 'SAGA I MAPS'}</span></a>
-              <a href="#characters"><strong>08</strong><span>{lang === 'es' ? 'FORMAS' : 'FORMS'}</span></a>
-              <a href="#development"><strong>3D</strong><span>UNITY + BLENDER</span></a>
-            </div>
           </div>
           <a className="wox-scroll" href="#origin" aria-label={t.scroll}><span />{t.scroll}</a>
         </section>
@@ -414,10 +408,10 @@ export default function Home() {
             </div>
             <div className="wox-duo-grid">
               <article><MediaPlaceholder orientation="portrait" code="PLAYER" subject={lang === 'es' ? 'EL VIAJERO' : 'THE TRAVELER'} label={lang === 'es' ? 'RENDER 3D EN PRODUCCION' : '3D RENDER IN PRODUCTION'} /><small>01 // VIAJERO</small><strong>{lang === 'es' ? 'Nació de ecos que no eran suyos.' : 'Born from echoes that were not its own.'}</strong><p>{lang === 'es' ? 'Sin género, rostro ni pasado canónico. El nombre elegido por el jugador es su primer anclaje de identidad.' : 'No canonical gender, face or past. The player-chosen name becomes its first anchor of identity.'}</p></article>
-              <article><MediaPlaceholder orientation="portrait" code="FORMA" subject="XETHKIOZ" label={lang === 'es' ? 'MODELO 3D EN PRODUCCION' : '3D MODEL IN PRODUCTION'} /><small>02 // XETHKIOZ</small><strong>{lang === 'es' ? 'No obedece. Acompaña.' : 'It does not obey. It accompanies.'}</strong><p>{lang === 'es' ? 'La Forma Abierta aprende afinidades sin perder identidad. Su vínculo con el Viajero sostiene la diversidad sin imponer una única forma.' : 'The Open Form learns affinities without losing identity. Its bond with the Traveler sustains diversity without imposing a single form.'}</p></article>
+              <article><MediaPlaceholder orientation="portrait" code="FORMA" subject="XETHKIOZ" label={lang === 'es' ? 'MODELO 3D EN PRODUCCION' : '3D MODEL IN PRODUCTION'} /><small>02 // XETHKIOZ</small><strong>{lang === 'es' ? 'No obedece. Acompaña.' : 'It does not obey. It accompanies.'}</strong><p>{lang === 'es' ? 'La Forma Abierta aprende afinidades sin perder identidad. Su progresión canónica de colas es 3 → 5 → 7 → 9.' : 'The Open Form learns affinities without losing identity. Its canonical tail progression is 3 → 5 → 7 → 9.'}</p></article>
             </div>
           </section>
-          <section id="worlds" className="wox-section wox-world-showcase" data-region={activeRegion + 1} aria-labelledby="worlds-title">
+          <section id="worlds" className="wox-section wox-world-showcase" aria-labelledby="worlds-title">
             <div className="wox-section-head">
               <p>{t.worldsEyebrow}</p>
               <h2 id="worlds-title">{t.worldsTitle}</h2>
@@ -435,7 +429,7 @@ export default function Home() {
                 </article>
               ))}
             </div>
-            <div className="wox-region-console" data-region={activeRegion + 1} aria-live="polite"><MediaPlaceholder code="UNITY" subject={selectedRegion.name} label={lang === 'es' ? 'CAPTURA DE REGION PENDIENTE' : 'REGION CAPTURE PENDING'} />
+            <div className="wox-region-console" aria-live="polite"><MediaPlaceholder code="UNITY" subject={selectedRegion.name} label={lang === 'es' ? 'CAPTURA DE REGION PENDIENTE' : 'REGION CAPTURE PENDING'} />
               <div className="wox-region-console-head">
                 <span>{selectedRegion.code} // {selectedRegion.name}</span>
                 <strong>{lang === 'es' ? 'RUTA CANÓNICA DE SAGA I' : 'CANONICAL SAGA I ROUTE'}</strong>
@@ -447,7 +441,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section id="atlas" className="wox-section wox-atlas wox-atlas-showcase" data-atlas={activeAtlas + 1} aria-labelledby="atlas-title">
+          <section id="atlas" className="wox-section wox-atlas wox-atlas-showcase" aria-labelledby="atlas-title">
             <div className="wox-section-head">
               <p>{t.bestiaryEyebrow}</p>
               <h2 id="atlas-title">{t.bestiaryTitle}</h2>
@@ -455,14 +449,14 @@ export default function Home() {
             </div>
             <div className="wox-atlas-grid">
               {atlasEntries[lang].map(([title, text], index) => (
-                <article key={title} data-atlas={index + 1} className={activeAtlas === index ? 'is-active' : ''}>
+                <article key={title} className={activeAtlas === index ? 'is-active' : ''}>
                   <button type="button" onClick={() => setActiveAtlas(index)} aria-pressed={activeAtlas === index}>
                     <span>◆</span><h3>{title}</h3><p>{text}</p>
                   </button>
                 </article>
               ))}
             </div>
-            <div className="wox-atlas-console" data-atlas={activeAtlas + 1} aria-live="polite"><MediaPlaceholder orientation="square" code="ATLAS" subject={selectedAtlas.title} label={lang === 'es' ? 'MODELO / CAPTURA PENDIENTE' : 'MODEL / CAPTURE PENDING'} />
+            <div className="wox-atlas-console" aria-live="polite"><MediaPlaceholder orientation="square" code="ATLAS" subject={selectedAtlas.title} label={lang === 'es' ? 'MODELO / CAPTURA PENDIENTE' : 'MODEL / CAPTURE PENDING'} />
               <div>
                 <small>{selectedAtlas.signal}</small>
                 <h3>{selectedAtlas.title}</h3>
@@ -473,7 +467,7 @@ export default function Home() {
               </div>
             </div>
           </section>
-          <section className="wox-section wox-forms-showcase" data-form={activeForm + 1} aria-labelledby="forms-title">
+          <section className="wox-section wox-forms-showcase" aria-labelledby="forms-title">
             <div className="wox-section-head">
               <p>{t.formsEyebrow}</p>
               <h2 id="forms-title">{t.formsTitle}</h2>
@@ -501,14 +495,14 @@ export default function Home() {
             </div>
           </section>
 
-          <section id="characters" className="wox-section wox-cast wox-cast-showcase" data-cast={activeCast + 1} aria-labelledby="cast-title">
+          <section id="characters" className="wox-section wox-cast wox-cast-showcase" aria-labelledby="cast-title">
             <div className="wox-section-head">
               <p>{t.castEyebrow}</p>
               <h2 id="cast-title">{t.castTitle}</h2>
             </div>
             <div className="wox-cast-grid">
               {cast[lang].map(([name, title], index) => (
-                <article key={name} data-cast={index + 1} className={activeCast === index ? 'is-active' : ''}>
+                <article key={name} className={activeCast === index ? 'is-active' : ''}>
                   <button type="button" onClick={() => setActiveCast(index)} aria-pressed={activeCast === index}>
                     <small>{String(index + 1).padStart(2, '0')}</small>
                     <strong>{name}</strong>
@@ -517,7 +511,7 @@ export default function Home() {
                 </article>
               ))}
             </div>
-            <div className="wox-cast-console" data-cast={activeCast + 1} aria-live="polite">
+            <div className="wox-cast-console" aria-live="polite">
               <MediaPlaceholder orientation="portrait" code="CHAR" subject={selectedCast[0]} label={lang === 'es' ? 'RENDER DE PERSONAJE PENDIENTE' : 'CHARACTER RENDER PENDING'} />
               <div>
                 <small>{lang === 'es' ? 'IDENTIDAD CANÓNICA ACTIVA' : 'ACTIVE CANONICAL IDENTITY'}</small>
@@ -610,22 +604,15 @@ export default function Home() {
           </section>
 
           <footer className="wox-footer">
-            <div className="wox-footer-brand">
-              <small>XETHKIOZ // WORLD SIGNAL</small>
+            <div>
               <strong>WORLD OF XETHKIOZ</strong>
               <span>© 2026 XETHKIOZ · {SITE_VERSION}</span>
             </div>
-            <div className="wox-footer-navs">
-              <nav className="wox-footer-world-nav" aria-label={lang === 'es' ? 'Secciones del juego' : 'Game sections'}>
-                {gameSections[lang].map(([id, label]) => <a key={id} href={`#${id}`}>{label}</a>)}
-              </nav>
-              <nav className="wox-footer-site-nav" aria-label={lang === 'es' ? 'Enlaces del sitio' : 'Site links'}>
-                <Link to={localizePath('/support')}>{lang === 'es' ? 'Apoyar proyecto' : 'Support project'}</Link>
-                <Link to={localizePath('/privacy')}>{lang === 'es' ? 'Privacidad' : 'Privacy'}</Link>
-                <Link to={localizePath('/contact')}>{lang === 'es' ? 'Contacto' : 'Contact'}</Link>
-                <a href="#wox-title">{lang === 'es' ? 'Volver arriba' : 'Back to top'} ↑</a>
-              </nav>
-            </div>
+            <nav aria-label={lang === 'es' ? 'Enlaces del sitio' : 'Site links'}>
+              <Link to={localizePath('/support')}>{lang === 'es' ? 'Apoyar proyecto' : 'Support project'}</Link>
+              <Link to={localizePath('/privacy')}>{lang === 'es' ? 'Privacidad' : 'Privacy'}</Link>
+              <Link to={localizePath('/contact')}>{lang === 'es' ? 'Contacto' : 'Contact'}</Link>
+            </nav>
           </footer>
         </div>
       </main>

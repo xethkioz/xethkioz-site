@@ -63,8 +63,7 @@
     "audit:package-clean": "XETHKIOZ_STRICT_PACKAGE_AUDIT=1 node scripts/production-ready-check.mjs",
     "typecheck": "tsc -b --pretty false && tsc -p tsconfig.api.json --pretty false",
     "verify": "npm run audit:env && npm run audit:production-ready && npm run build",
-    "ci:check": "npm ci && npm run deploy:check",
-    "audit:wox-release": "node scripts/wox-home-release-candidate-check.mjs"
+    "ci:check": "npm ci && npm run deploy:check"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.7",
