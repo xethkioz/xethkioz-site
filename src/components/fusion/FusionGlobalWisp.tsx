@@ -42,7 +42,7 @@ const labels = {
 
 export default function FusionGlobalWisp() {
   const { account } = useHud()
-  const { lang } = useLang()
+  const { lang, localizePath } = useLang()
   const { mood, energy, setMood, setFocusRoute, registerEvent, triggerGreenPortal } = useWisp()
   const [portalOpen, setPortalOpen] = useState(false)
   const [portalPoint, setPortalPoint] = useState({ x: '50%', y: '50%' })
@@ -50,15 +50,18 @@ export default function FusionGlobalWisp() {
   const location = useLocation()
   const navigate = useNavigate()
   const t = labels[lang]
-  const insideGreenNode = location.pathname === '/green-node'
+  const localizedGreenNode = localizePath('/green-node')
+  const normalizedPath = location.pathname.replace(/^\/en(?=\/|$)/, '') || '/'
+  const insideGreenNode = normalizedPath === '/green-node'
+  const homeEntry = normalizedPath === '/'
   const actionLabel = insideGreenNode ? t.helpAction : t.action
 
   useEffect(() => {
-    const nextMood = location.pathname === '/green-node'
+    const nextMood = normalizedPath === '/green-node'
       ? 'GREEN_MODE'
       : account.status === 'connected'
         ? 'connected'
-        : routeMood[location.pathname] || 'idle'
+        : routeMood[normalizedPath] || 'idle'
 
     setMood(nextMood)
     setPortalOpen(false)
@@ -73,7 +76,7 @@ export default function FusionGlobalWisp() {
 
   const openPortal = (event: MouseEvent<HTMLButtonElement>) => {
     if (insideGreenNode) {
-      registerEvent('portal-hover', 'wisp-green-guide-open', '/green-node')
+      registerEvent('portal-hover', 'wisp-green-guide-open', localizedGreenNode)
       window.dispatchEvent(new CustomEvent(WISP_GREEN_GUIDE_EVENT))
       return
     }
@@ -81,9 +84,9 @@ export default function FusionGlobalWisp() {
     setPortalPoint({ x: `${rect.left + rect.width / 2}px`, y: `${rect.top + rect.height / 2}px` })
     setPortalOpen(true)
     triggerGreenPortal()
-    registerEvent('green-unlock', 'wisp-hack-zone-open', '/green-node')
+    registerEvent('green-unlock', 'wisp-hack-zone-open', localizedGreenNode)
     if (navigationTimer.current !== null) window.clearTimeout(navigationTimer.current)
-    navigationTimer.current = window.setTimeout(() => navigate('/green-node'), 720)
+    navigationTimer.current = window.setTimeout(() => navigate(localizedGreenNode), 720)
   }
 
   const focusWisp = () => registerEvent('portal-hover', 'wisp-hack-zone-focus', location.pathname)
@@ -103,7 +106,7 @@ export default function FusionGlobalWisp() {
       />
       <button
         type="button"
-        className={`xk-wisp xk-wisp-${moodClass}${location.pathname === '/' ? ' is-home-entry' : ''}${location.pathname === '/green-node' ? ' is-inside-node' : ''}${portalOpen ? ' is-opening' : ''}`}
+        className={`xk-wisp xk-wisp-${moodClass}${homeEntry ? ' is-home-entry' : ''}${insideGreenNode ? ' is-inside-node' : ''}${portalOpen ? ' is-opening' : ''}`}
         style={wispStyle}
         onClick={openPortal}
         onMouseEnter={focusWisp}

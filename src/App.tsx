@@ -238,6 +238,7 @@ function AppShell() {
               <Route path="/en/fun" element={<Navigate to="/en/nexus-city" replace />} />
               <Route path="/en/nexus-city" element={<FunPortal />} />
               <Route path="/en/creacion-web" element={<WebCreation />} />
+              <Route path="/en/green-node" element={<GreenNodeGate />} />
               <Route path="/en/community" element={<Community />} />
               <Route path="/en/about" element={<About />} />
               <Route path="/en/contact" element={<Contact />} />

@@ -9,6 +9,7 @@ export const LOCALIZED_PUBLIC_PATHS = new Set([
   '/science',
   '/nexus-city',
   '/creacion-web',
+  '/green-node',
   '/community',
   '/about',
   '/contact',

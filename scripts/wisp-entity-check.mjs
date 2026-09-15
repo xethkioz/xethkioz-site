@@ -31,7 +31,7 @@ add(
 add(
   'Home preserves the mobile Wisp entry and taunt',
   app.includes('<FusionGlobalWisp')
-    && globalWisp.includes("location.pathname === '/' ? ' is-home-entry'")
+    && globalWisp.includes("homeEntry ? ' is-home-entry'")
     && redesignCss.includes('.xk-wisp-taunt')
     && redesignCss.includes('.xk-wisp.is-home-entry'),
   'The homepage must expose the demon Wisp on mobile while avoiding a duplicate next to the desktop specter.',

@@ -117,8 +117,8 @@ check(
 check(
   'Home uses the canonical Veyr Wisp without duplicate Home implementation',
   globalWisp.includes('/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp')
-    && globalWisp.includes("navigate('/green-node')")
-    && globalWisp.includes("location.pathname === '/' ? ' is-home-entry'")
+    && globalWisp.includes("localizePath('/green-node')")
+    && globalWisp.includes("homeEntry ? ' is-home-entry'")
     && !home.includes('className="xk-rb-wisp"'),
 )
 check(
@@ -149,7 +149,7 @@ check(
     && home.includes('className="wox-mobile-ecosystem"')
     && home.includes('className="wox-content"')
     && home.includes("localizePath('/creacion-web')")
-    && globalWisp.includes("navigate('/green-node')"),
+    && globalWisp.includes("localizePath('/green-node')"),
 )
 check(
   'News supports searchable, shareable and progressive discovery',
@@ -320,7 +320,7 @@ check(
     && appShell.includes('!isCmsRoute')
     && globalWisp.includes('xk-wisp-rune-ring')
     && globalWisp.includes('WISP // GREEN NODE')
-    && globalWisp.includes("navigate('/green-node')")
+    && globalWisp.includes("localizePath('/green-node')")
     && globalWispCss.includes('@media (max-width: 767px)')
     && globalWispCss.includes('@media (prefers-reduced-motion: reduce)'),
 )
