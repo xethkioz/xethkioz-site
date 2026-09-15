@@ -141,3 +141,13 @@ Push de la rama Preview está permitido para generar Preview. No mergear a `main
 - Preview remoto funcional ES/EN PASS: chat, selecciones, `/green-node`, `/en/green-node` y cambio `/`↔`/en` sin errores.
 - Primera visita remota PASS en desktop, 430 px y 390 px; Runtime Preview: 0 logs error/fatal en la ventana verificada.
 - Producción continúa en `fc1df9c`; no promover a `main` hasta aprobación visual explícita del Preview en el chat actual.
+
+## Checkpoint AAA Rebuild V2 — Pass 09 visual fit (2026-09-15)
+- Se corrigió el doble padding heredado en Territorios/Atlas móvil que comprimía el ancho útil de las tarjetas secundarias.
+- DESFRALAR, XIOMALAR y ZODNIGHT muestran ahora el nombre completo en 390/430 px sin overflow ni recorte interno.
+- Personajes móvil deja el carrusel horizontal recortado y pasa a una grilla 2 columnas con las 14 identidades visibles y seleccionables.
+- Se corrigieron recortes internos de `ESCENARIOS 3D`, `GAMEPLAY REAL` en desktop y `DESFRALAR` en 1024 px.
+- `wox-home-visual-check.mjs` ahora falla también ante overflow interno de títulos, aunque la página no tenga overflow horizontal global.
+- QA local PASS: build completo, production-ready, Wisp entity, visual 1440/1024/768/430/390, primera visita y flujo funcional ES/EN.
+- En los 5 viewports: `internalTextOverflow=[]`, 0 overflow horizontal y 0 errores de consola.
+- Producción continúa protegida en `fc1df9c`; Pass 09 sigue sólo por Preview hasta validación remota y aprobación visual explícita.
