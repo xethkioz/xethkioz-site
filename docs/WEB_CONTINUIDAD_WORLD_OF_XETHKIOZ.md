@@ -178,3 +178,17 @@ Push de la rama Preview está permitido para generar Preview. No mergear a `main
 - Runtime Preview: 0 logs error/fatal. Build Vercel completado; sólo informa timings diagnósticos de plugins Vite/Rolldown, sin fallo.
 - Vercel Toolbar: 0 threads sin resolver para `wox-aaa-rebuild-v2`.
 - Gate técnico de la rama: cerrado. Producción sigue en `fc1df9c`; no promover a `main` hasta aprobación visual explícita del Preview en el chat actual.
+
+## Checkpoint AAA Rebuild V2 — Pass 11 Veyr clearance (2026-09-15)
+- Commit visual/QA: `d95c929 — fix(home): keep Veyr clear of chapter content`.
+- Se detectó que Veyr/Wisp flotante podía cubrir texto o métricas al navegar capítulos en 390, 768 y 1024 px.
+- El Hero conserva el tamaño cinematográfico original: 72 px en 390/430 y 96 px en 768/1024.
+- Cuando el dock de capítulos está visible, Veyr pasa a 56 px y se posiciona en el borde superior derecho: `top:128px` móvil y `top:152px` tablet/laptop.
+- En capítulos mantiene 18–20 px de clearance respecto del dock sticky y no intersecta texto visible.
+- Se añadió `scripts/wox-wisp-clearance-check.mjs` + `npm run audit:wox-wisp-clearance`; prueba 6 capítulos × 4 viewports = 24 combinaciones.
+- QA local PASS: clearance Veyr, visual 1440/1024/768/430/390, funcional ES/EN, primera visita, anclas, production-ready, Wisp entity y `git diff --check`.
+- Preview Vercel READY: `xethkioz-site-atkmf67ze-xethkioz-site.vercel.app` (`dpl_CGhruwk28Uh7mnZNytmtpAxPW5E4`).
+- QA remoto autenticado PASS: visual 5 viewports, funcional ES/EN, primera visita 1440/430/390 y anclas 1440/768/390.
+- Clearance remoto Veyr PASS en 390/430/768/1024: Hero 72/96 px, capítulos 56 px, 18–20 px bajo dock y 0 solapamientos en las 24 combinaciones.
+- Runtime Preview: 0 logs `error`/`fatal`; build Vercel completado sin fallos; 0 Vercel Toolbar threads sin resolver.
+- Producción continúa en `fc1df9c`; no promover a `main` hasta aprobación visual explícita del Preview en el chat actual.
