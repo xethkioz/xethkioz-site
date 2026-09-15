@@ -1,0 +1,300 @@
+/*
+ * WORLD OF XETHKIOZ — Stable AAA visual layer
+ * 2026-09-15
+ *
+ * Intentionally isolated from the functional Home stylesheet.
+ * All selectors are scoped to .wox-home so the wider XETHKIOZ ecosystem is untouched.
+ */
+
+.wox-home{
+  --aaa-line:rgba(255,255,255,.105);
+  --aaa-glow:rgba(139,92,246,.2);
+  --aaa-hot:rgba(255,107,26,.15);
+}
+
+.wox-home .wox-section{
+  isolation:isolate;
+  border-color:var(--aaa-line);
+  box-shadow:0 34px 110px rgba(0,0,0,.38),inset 0 1px rgba(255,255,255,.025);
+}
+
+.wox-home .wox-section::after{
+  content:'';
+  position:absolute;
+  z-index:0;
+  inset:10px;
+  border:1px solid rgba(255,255,255,.025);
+  border-radius:22px;
+  pointer-events:none;
+  mask-image:linear-gradient(110deg,#000,transparent 32%,#000 68%);
+}
+
+.wox-home .wox-section-head,
+.wox-home .wox-region-grid,
+.wox-home .wox-region-console,
+.wox-home .wox-atlas-grid,
+.wox-home .wox-atlas-console,
+.wox-home .wox-forms-grid,
+.wox-home .wox-form-console,
+.wox-home .wox-cast-grid,
+.wox-home .wox-cast-console,
+.wox-home .wox-3d-grid,
+.wox-home .wox-3d-note,
+.wox-home .wox-dev-grid,
+.wox-home .wox-dev-pulse,
+.wox-home .wox-roadmap-grid{
+  position:relative;
+  z-index:2;
+}
+
+/* Hero: retain stable structure, increase cinematic depth only. */
+.wox-home .wox-hero::after{
+  content:'';
+  position:absolute;
+  inset:auto 0 0;
+  height:38%;
+  background:linear-gradient(180deg,transparent,rgba(7,7,12,.86) 70%,#07070c);
+  pointer-events:none;
+}
+
+.wox-home .wox-logo-wrap{
+  filter:drop-shadow(0 34px 55px rgba(0,0,0,.42));
+}
+
+.wox-home .wox-status{
+  box-shadow:0 0 34px rgba(255,107,26,.08),inset 0 0 18px rgba(255,140,66,.03);
+}
+
+.wox-home .wox-game-nav a{
+  position:relative;
+  overflow:hidden;
+}
+
+.wox-home .wox-game-nav a::after{
+  content:'';
+  position:absolute;
+  left:14px;
+  right:14px;
+  bottom:5px;
+  height:1px;
+  transform:scaleX(0);
+  background:linear-gradient(90deg,#a855f7,#ff8c42);
+  transition:transform .24s ease;
+}
+
+.wox-home .wox-game-nav a:hover::after,
+.wox-home .wox-game-nav a:focus-visible::after{transform:scaleX(1)}
+
+/* ORIGIN — archive / temporal fracture */
+.wox-home .wox-origin{
+  background:
+    linear-gradient(145deg,rgba(16,10,20,.95),rgba(6,7,14,.89)),
+    radial-gradient(circle at 76% 18%,rgba(255,123,52,.12),transparent 33%);
+}
+
+.wox-home .wox-origin::before{
+  background:
+    linear-gradient(90deg,transparent 0 49.7%,rgba(255,255,255,.025) 49.8% 50.2%,transparent 50.3%),
+    radial-gradient(circle at 14% 14%,rgba(255,107,26,.12),transparent 29%),
+    radial-gradient(circle at 88% 82%,rgba(139,92,246,.13),transparent 28%);
+}
+
+.wox-home .wox-origin .wox-timeline article{
+  background:linear-gradient(160deg,rgba(255,255,255,.045),rgba(0,0,0,.28));
+  box-shadow:inset 0 1px rgba(255,255,255,.025);
+}
+
+.wox-home .wox-origin .wox-timeline article:first-child strong,
+.wox-home .wox-origin .wox-timeline article:nth-child(2) strong{color:#ffb27d}
+
+/* PROTAGONISTS — two resonances, one field */
+.wox-home .wox-duo{
+  background:
+    radial-gradient(circle at 24% 38%,rgba(139,92,246,.16),transparent 34%),
+    radial-gradient(circle at 80% 62%,rgba(255,107,26,.1),transparent 31%),
+    linear-gradient(145deg,rgba(10,8,19,.95),rgba(6,6,12,.86));
+}
+
+.wox-home .wox-duo-grid article{
+  box-shadow:0 20px 55px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.03);
+}
+
+/* WORLD — every active region owns its visual language. */
+.wox-home .wox-world-showcase{
+  --region-rgb:65,148,102;
+  --region-secondary:93,215,151;
+  transition:background .45s ease,border-color .45s ease,box-shadow .45s ease;
+  background:
+    radial-gradient(circle at 82% 12%,rgba(var(--region-rgb),.18),transparent 31%),
+    linear-gradient(145deg,rgba(7,13,14,.96),rgba(6,7,12,.9));
+  border-color:rgba(var(--region-rgb),.24);
+  box-shadow:0 38px 120px rgba(0,0,0,.4),inset 0 0 90px rgba(var(--region-rgb),.035);
+}
+
+@supports selector(.wox-world-showcase:has(.is-active)){
+  .wox-home .wox-world-showcase:has(.wox-region-grid article[data-region='1'].is-active){--region-rgb:57,155,101;--region-secondary:121,226,145}
+  .wox-home .wox-world-showcase:has(.wox-region-grid article[data-region='2'].is-active){--region-rgb:54,80,150;--region-secondary:72,156,192}
+  .wox-home .wox-world-showcase:has(.wox-region-grid article[data-region='3'].is-active){--region-rgb:123,77,219;--region-secondary:78,185,227}
+  .wox-home .wox-world-showcase:has(.wox-region-grid article[data-region='4'].is-active){--region-rgb:217,70,67;--region-secondary:255,132,54}
+}
+
+.wox-home .wox-world-showcase::before{
+  background:
+    linear-gradient(115deg,rgba(var(--region-rgb),.065),transparent 28%),
+    radial-gradient(circle at 88% 10%,rgba(var(--region-secondary),.14),transparent 31%),
+    radial-gradient(circle at 12% 92%,rgba(var(--region-rgb),.09),transparent 34%);
+}
+
+.wox-home .wox-world-showcase .wox-section-head>p{color:rgb(var(--region-secondary))}
+
+.wox-home .wox-region-grid article{
+  border-color:rgba(var(--region-rgb),.12);
+  background:
+    linear-gradient(145deg,rgba(var(--region-rgb),.055),rgba(4,5,10,.72) 58%),
+    rgba(0,0,0,.18);
+}
+
+.wox-home .wox-region-grid article:hover{
+  border-color:rgba(var(--region-rgb),.38);
+  box-shadow:0 18px 44px rgba(0,0,0,.25),inset 0 0 55px rgba(var(--region-rgb),.04);
+}
+
+.wox-home .wox-region-grid article.is-active{
+  border-color:rgba(var(--region-secondary),.58);
+  background:
+    linear-gradient(145deg,rgba(var(--region-rgb),.18),rgba(5,6,11,.72) 58%),
+    rgba(0,0,0,.22);
+  box-shadow:0 0 0 1px rgba(var(--region-secondary),.1),0 22px 58px rgba(0,0,0,.3),inset 0 0 80px rgba(var(--region-rgb),.07);
+}
+
+.wox-home .wox-region-grid article.is-active h3,
+.wox-home .wox-region-grid article.is-active b{color:rgb(var(--region-secondary))}
+
+.wox-home .wox-region-console{
+  border-color:rgba(var(--region-rgb),.25);
+  background:
+    radial-gradient(circle at 12% 20%,rgba(var(--region-rgb),.1),transparent 30%),
+    linear-gradient(145deg,rgba(var(--region-rgb),.075),rgba(0,0,0,.31));
+  box-shadow:inset 0 0 60px rgba(var(--region-rgb),.035);
+}
+
+.wox-home .wox-map-chips span{
+  border-color:rgba(var(--region-rgb),.2);
+  background:rgba(var(--region-rgb),.07);
+}
+
+/* PRISM ATLAS — biological / anomalous scanner. */
+.wox-home .wox-atlas-showcase{
+  background:
+    radial-gradient(circle at 86% 18%,rgba(96,230,187,.09),transparent 28%),
+    radial-gradient(circle at 18% 78%,rgba(168,85,247,.16),transparent 34%),
+    linear-gradient(145deg,rgba(8,11,16,.95),rgba(10,7,17,.89));
+  border-color:rgba(144,106,220,.22);
+}
+
+.wox-home .wox-atlas-grid article.is-active{
+  border-color:rgba(115,231,193,.42);
+  box-shadow:0 0 36px rgba(115,231,193,.055),inset 0 0 44px rgba(168,85,247,.055);
+}
+
+.wox-home .wox-atlas-console{
+  background:linear-gradient(145deg,rgba(52,31,87,.2),rgba(5,10,13,.5));
+  border-color:rgba(148,115,232,.22);
+}
+
+/* FORMS — prismatic convergence chamber. */
+.wox-home .wox-forms-showcase{
+  background:
+    conic-gradient(from 210deg at 86% 16%,rgba(255,107,26,.06),rgba(139,92,246,.14),rgba(76,170,230,.06),rgba(255,107,26,.06)),
+    linear-gradient(145deg,rgba(11,8,19,.96),rgba(6,6,12,.9));
+}
+
+.wox-home .wox-forms-grid article.is-active{
+  box-shadow:0 16px 48px rgba(0,0,0,.26),0 0 28px rgba(139,92,246,.075);
+}
+
+.wox-home .wox-form-console{
+  background:
+    radial-gradient(circle at 12% 20%,rgba(139,92,246,.13),transparent 28%),
+    linear-gradient(145deg,rgba(139,92,246,.08),rgba(0,0,0,.32));
+}
+
+/* CHARACTERS — identity dossier room. */
+.wox-home .wox-cast-showcase{
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),
+    linear-gradient(145deg,rgba(9,9,17,.96),rgba(6,6,11,.91));
+  background-size:58px 58px,58px 58px,auto;
+}
+
+.wox-home .wox-cast-grid article.is-active{
+  border-color:rgba(255,140,66,.42);
+  box-shadow:inset 3px 0 rgba(255,107,26,.38),0 12px 32px rgba(0,0,0,.2);
+}
+
+.wox-home .wox-cast-console{
+  background:linear-gradient(145deg,rgba(255,107,26,.06),rgba(139,92,246,.055),rgba(0,0,0,.34));
+}
+
+/* 3D — production bay. */
+.wox-home .wox-3d-stage{
+  background:
+    radial-gradient(circle at 78% 22%,rgba(63,191,219,.13),transparent 31%),
+    linear-gradient(145deg,rgba(5,13,17,.96),rgba(7,7,13,.91));
+  border-color:rgba(80,185,215,.2);
+}
+
+.wox-home .wox-3d-stage .wox-section-head>p{color:#79d8ee}
+.wox-home .wox-3d-grid article{box-shadow:0 22px 55px rgba(0,0,0,.24)}
+
+/* DEVELOPMENT — command center. */
+.wox-home .wox-dev-showcase{
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(rgba(255,255,255,.014) 1px,transparent 1px),
+    radial-gradient(circle at 86% 18%,rgba(255,107,26,.1),transparent 28%),
+    linear-gradient(145deg,rgba(10,9,14,.97),rgba(7,7,11,.9));
+  background-size:52px 52px,52px 52px,auto,auto;
+}
+
+.wox-home .wox-dev-grid article{
+  background:linear-gradient(150deg,rgba(255,255,255,.04),rgba(0,0,0,.27));
+}
+
+.wox-home .wox-dev-pulse{
+  border-color:rgba(255,107,26,.17);
+  background:rgba(255,107,26,.025);
+}
+
+/* ROADMAP — active build lane. */
+.wox-home .wox-roadmap-showcase{
+  background:
+    radial-gradient(circle at 38% 54%,rgba(139,92,246,.11),transparent 28%),
+    linear-gradient(145deg,rgba(9,8,16,.96),rgba(6,6,11,.91));
+}
+
+.wox-home .wox-roadmap-grid article.is-active{
+  border-color:rgba(168,85,247,.55);
+  box-shadow:0 0 36px rgba(139,92,246,.09),inset 0 0 50px rgba(139,92,246,.055);
+}
+
+/* Support/final: stronger ending without affecting links/functionality. */
+.wox-home .wox-support-card{
+  box-shadow:0 30px 90px rgba(0,0,0,.3),inset 0 0 65px rgba(255,107,26,.035);
+}
+
+.wox-home .wox-final{
+  text-shadow:0 0 26px rgba(139,92,246,.16);
+}
+
+@media (max-width:899px){
+  .wox-home .wox-section{box-shadow:0 22px 65px rgba(0,0,0,.32)}
+  .wox-home .wox-section::after{inset:7px;border-radius:18px}
+  .wox-home .wox-region-grid article.is-active{box-shadow:0 14px 42px rgba(0,0,0,.28),inset 0 0 55px rgba(var(--region-rgb),.055)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .wox-home .wox-world-showcase,
+  .wox-home .wox-game-nav a::after{transition:none}
+}
