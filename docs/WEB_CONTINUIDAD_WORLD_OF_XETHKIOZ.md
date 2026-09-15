@@ -9,8 +9,8 @@ Este archivo continúa exclusivamente el trabajo de la WEB pública. El juego en
 ## Estado seguro actual
 - Worktree: `E:\WEB XETHKIOZ\xethkioz-site-web-only`
 - Rama activa: `wox-aaa-rebuild-v2`
-- Último cambio visual funcional: `7329029 — feat(home): add AAA chapter flow and mobile territory polish`
-- Hito anterior: `573b6a8 — feat(home): polish AAA interactions and cinematic closure`
+- Último cambio visual funcional: `5f7cc6f — feat(home): polish AAA first visit and media placeholders`
+- Hito anterior: `7329029 — feat(home): add AAA chapter flow and mobile territory polish`
 - Producción pública estable: `main` en rollback seguro `fc1df9c — revert(home): restore stable World layout after AAA regression`
 - NO reemplazar producción hasta aprobación visual explícita del usuario.
 
@@ -84,7 +84,7 @@ La primera implementación AAA se publicó con layouts de escritorio comprimidos
 Desde entonces el rediseño se rehace en `wox-aaa-rebuild-v2`, con mobile-first real, capturas por sección y aprobación visual previa a producción.
 
 ## Próxima acción recomendada
-Revisar el Preview Pass 05 completo y hacer un último pase de terminación: densidad tipográfica, respiración entre capítulos, navegación móvil y consistencia de placeholders. Luego generar un release candidate Preview y sólo considerar producción con aprobación visual explícita.
+Revisar el Preview Pass 06 completo en teléfono y escritorio. Si la composición visual queda aprobada, hacer un último release-candidate pass centrado sólo en regresiones, ES/EN y smoke visual antes de considerar producción.
 
 ## Regla de despliegue
 Push de la rama Preview está permitido para generar Preview. No mergear a `main`, no apuntar el dominio real y no publicar producción sin aprobación visual explícita del usuario en el chat actual.
@@ -99,3 +99,13 @@ Push de la rama Preview está permitido para generar Preview. No mergear a `main
 - Se corrigió el tamaño del nombre activo y los secundarios para evitar cortes en Izrdralar / Desfralar / Xiomalar / Zodnight.
 - Build completo PASS; QA local desktop 1440×1000 PASS y móvil 390×844 PASS; 0 overflow y 0 errores de consola.
 - Producción sigue en `fc1df9c`; este Pass continúa sólo en Preview hasta aprobación visual.
+
+
+## Checkpoint AAA Rebuild V2 — Pass 06 (2026-09-15)
+- Commit visual: `5f7cc6f — feat(home): polish AAA first visit and media placeholders`.
+- El banner de privacidad de primera visita adopta la gramática visual World/AAA en Home, sin alterar su función ni decisiones de consentimiento.
+- En móvil, consentimiento usa 2 botones superiores + acción principal a ancho completo; conserva lectura cómoda y evita overflow.
+- Se añadió `scripts/wox-first-visit-visual-check.mjs` + `npm run audit:wox-first-visit` para validar el estado real de primera visita.
+- Todos los placeholders oficiales comparten ahora señalética `OFFICIAL MEDIA // PENDING`, rejilla y tratamiento visual consistente; siguen sin usar arte random.
+- QA: build completo PASS; Home desktop/móvil PASS; primera visita desktop/móvil PASS; 0 overflow y 0 errores de consola.
+- Producción continúa estable en `fc1df9c`; Pass 06 permanece sólo en Preview hasta aprobación visual explícita.
