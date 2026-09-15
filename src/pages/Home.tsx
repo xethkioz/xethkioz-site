@@ -484,10 +484,21 @@ export default function Home() {
               <h2 id="media-3d-title">{lang === 'es' ? 'El mundo se está construyendo en 3D.' : 'The world is being built in 3D.'}</h2>
               <span>{lang === 'es' ? 'La Home queda preparada para publicar únicamente renders, capturas y gameplay que representen la versión vigente de Unity + Blender.' : 'The Home is prepared to publish only renders, captures and gameplay that represent the current Unity + Blender version.'}</span>
             </div>
-            <div className="wox-3d-grid" aria-label={lang === 'es' ? 'Espacios para material 3D oficial' : 'Official 3D media slots'}>
+            <div className="wox-3d-grid" aria-label={lang === 'es' ? 'Material 3D oficial de World of Xethkioz' : 'Official World of Xethkioz 3D media'}>
+              <article className="wox-3d-veyr-card">
+                <div className="wox-3d-viewport is-veyr">
+                  <img src="/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp" alt={lang === 'es' ? 'Veyr — Wisp del Green Node' : 'Veyr — Green Node Wisp'} loading="lazy" decoding="async" />
+                  <span className="wox-3d-live-badge">{lang === 'es' ? '3D ACTIVO' : '3D ACTIVE'}</span>
+                </div>
+                <div className="wox-3d-copy">
+                  <small>{lang === 'es' ? 'PRIMER ACTIVO 3D INTEGRADO' : 'FIRST INTEGRATED 3D ASSET'}</small>
+                  <strong>VEYR · WISP DEL GREEN NODE</strong>
+                  <p>{lang === 'es' ? 'Modelo de Tripo corregido y optimizado en Blender, preparado para Unity y adaptado a la web como manifestación flotante del Green Node.' : 'Tripo model corrected and optimized in Blender, prepared for Unity and adapted to the site as the floating manifestation of Green Node.'}</p>
+                  <Link className="wox-3d-link" to={localizePath('/green-node')}>{lang === 'es' ? 'ENTRAR AL GREEN NODE' : 'ENTER GREEN NODE'} <span>↗</span></Link>
+                </div>
+              </article>
               {[
-                ['01', lang === 'es' ? 'ESCENARIOS 3D' : '3D ENVIRONMENTS', lang === 'es' ? 'Mapas, biomas, iluminación y atmósfera capturados desde Unity.' : 'Maps, biomes, lighting and atmosphere captured from Unity.'],
-                ['02', lang === 'es' ? 'PERSONAJES 3D' : '3D CHARACTERS', lang === 'es' ? 'Modelos, materiales, rig y presentación final desde Blender + Unity.' : 'Models, materials, rigs and final presentation from Blender + Unity.'],
+                ['02', lang === 'es' ? 'ESCENARIOS 3D' : '3D ENVIRONMENTS', lang === 'es' ? 'Mapas, biomas, iluminación y atmósfera capturados desde Unity.' : 'Maps, biomes, lighting and atmosphere captured from Unity.'],
                 ['03', lang === 'es' ? 'GAMEPLAY REAL' : 'REAL GAMEPLAY', lang === 'es' ? 'Movimiento, combate, exploración e interacción grabados directamente desde el juego.' : 'Movement, combat, exploration and interaction recorded directly from the game.'],
               ].map(([index, title, text]) => (
                 <article key={index}>
@@ -496,7 +507,7 @@ export default function Home() {
                 </article>
               ))}
             </div>
-            <div className="wox-3d-note"><span>UNITY</span><span>BLENDER</span><span>3D</span><p>{lang === 'es' ? 'Los viewports se reemplazan por material real cuando esté aprobado para publicación, sin rehacer la estructura de la Home.' : 'The viewports are replaced with real media once it is approved for publication, without rebuilding the Home structure.'}</p></div>
+            <div className="wox-3d-note"><span>UNITY</span><span>BLENDER</span><span>3D</span><p>{lang === 'es' ? 'Veyr ya representa el pipeline 3D vigente. Los próximos espacios se reemplazan únicamente por renders, capturas o gameplay aprobados de Unity + Blender.' : 'Veyr already represents the current 3D pipeline. The remaining slots will be replaced only with approved Unity + Blender renders, captures or gameplay.'}</p></div>
           </section>
 
           <section id="development" className="wox-section wox-dev wox-dev-showcase" aria-labelledby="dev-title">

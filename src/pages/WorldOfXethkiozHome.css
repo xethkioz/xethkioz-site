@@ -118,3 +118,13 @@
   .wox-tools{position:static;display:flex;width:auto;justify-self:end}.wox-tools .wox-news-link{display:none}.wox-tools a:last-child{display:flex;padding-inline:10px}.wox-tools button{padding-inline:10px}
   .wox-hero{padding-top:112px}
 }
+
+/* Veyr is the first approved 3D web-facing asset from the current Unity + Blender pipeline. */
+.wox-3d-viewport.is-veyr{background:radial-gradient(circle at 50% 42%,rgba(50,255,138,.14),transparent 31%),radial-gradient(circle at 64% 52%,rgba(139,92,246,.16),transparent 42%),linear-gradient(rgba(96,196,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(96,196,255,.035) 1px,transparent 1px),#05090d;background-size:auto,auto,28px 28px,28px 28px,auto}
+.wox-3d-viewport.is-veyr::before{width:58%;border-color:rgba(50,255,138,.22);box-shadow:0 0 36px rgba(50,255,138,.08)}
+.wox-3d-viewport.is-veyr::after{width:78%;border-color:rgba(139,92,246,.18)}
+.wox-3d-viewport.is-veyr img{position:relative;z-index:2;width:74%;height:92%;object-fit:contain;filter:drop-shadow(0 0 15px rgba(34,211,238,.28)) drop-shadow(0 0 30px rgba(139,92,246,.18));animation:wox-drift 7s ease-in-out infinite}
+.wox-3d-live-badge{position:absolute!important;left:16px;top:16px;z-index:4!important;padding:7px 9px;border:1px solid rgba(50,255,138,.28);border-radius:999px;background:rgba(3,15,10,.74);font:900 .46rem/1 ui-monospace,monospace!important;letter-spacing:.13em!important;color:#9dffbf!important;text-shadow:0 0 10px rgba(50,255,138,.42)}
+.wox-3d-link{display:inline-flex;align-items:center;gap:8px;margin-top:18px;width:max-content;padding:10px 12px;border:1px solid rgba(50,255,138,.22);border-radius:11px;background:rgba(50,255,138,.06);color:#caffdc;text-decoration:none;font:900 .5rem/1 ui-monospace,monospace;letter-spacing:.12em;transition:.2s ease}.wox-3d-link:hover,.wox-3d-link:focus-visible{outline:none;border-color:rgba(139,92,246,.45);background:rgba(139,92,246,.1);color:#fff;transform:translateY(-2px)}
+@media(max-width:760px){.wox-3d-viewport.is-veyr img{width:62%;height:94%}.wox-3d-live-badge{left:12px;top:12px}}
+@media(prefers-reduced-motion:reduce){.wox-3d-viewport.is-veyr img{animation:none}}
