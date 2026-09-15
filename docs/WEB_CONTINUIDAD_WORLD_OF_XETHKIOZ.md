@@ -117,4 +117,13 @@ Push de la rama Preview está permitido para generar Preview. No mergear a `main
 - La primera visita/consentimiento se valida además explícitamente en 430×932, el ancho donde ocurrió la regresión visual anterior.
 - ES→EN→ES validado sobre Preview real: botón muestra idioma destino, rutas `/`↔`/en`, `html lang` correcto y copy inglés real.
 - Build completo PASS; todos los viewports PASS; 0 overflow y 0 errores de consola.
-- Preview Pass 06 previo quedó READY y validado remotamente; producción continúa en `fc1df9c`.
+- Preview Pass 07 READY y validado remotamente: `xethkioz-site-ithlovwzb-xethkioz-site.vercel.app`; producción continúa en `fc1df9c`.
+
+## Gate preproducción después de Pass 07
+- Vercel Preview real: READY; smoke visual remoto PASS en 5 viewports y primera visita PASS en 3 viewports.
+- Runtime Preview: 0 logs error/fatal en la ventana verificada.
+- `npm run audit:production-ready`: PASS.
+- `npm run audit:dependencies`: PASS; sin advisories high/critical de producción.
+- `npm run verify` local se detiene únicamente en `audit:env` porque este worktree no contiene `.env`; las variables reales viven en hosting y el Preview con entorno real está READY.
+- Git de código queda limpio salvo `artifacts/` no versionados.
+- Gate siguiente: aprobación visual explícita del Preview; recién después considerar merge/promoción a producción.
