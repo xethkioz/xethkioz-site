@@ -279,3 +279,12 @@ body:has(.wox-home) .xk-privacy-consent-dialog>h2{font-family:Orbitron,Inter,san
 .wox-media-placeholder:not(:has(>img)){background:radial-gradient(circle at 50% 42%,rgba(139,92,246,.085),transparent 28%),linear-gradient(155deg,rgba(9,12,20,.98),rgba(4,5,10,.9) 58%,rgba(12,7,16,.94));}
 .wox-media-placeholder:not(:has(>img))>strong{color:rgba(255,255,255,.84);}
 @media(max-width:760px){.wox-media-placeholder:not(:has(>img)) .wox-media-placeholder-grid::before{right:10px;top:10px;font-size:.33rem;letter-spacing:.1em}}
+
+/* PASS 07 — compact territory switcher + explicit regression widths for the mobile-first rebuild. */
+@media(min-width:360px) and (max-width:760px){
+  .wox-world-showcase .wox-region-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .wox-world-showcase .wox-region-grid article.is-active{grid-column:1/-1;}
+  .wox-world-showcase .wox-region-grid article:not(.is-active){min-height:100px;}
+  .wox-world-showcase .wox-region-grid article:not(.is-active) h3{font-size:clamp(.54rem,2.9vw,.72rem);letter-spacing:-.05em;}
+  .wox-world-showcase .wox-region-grid article:not(.is-active)>button{padding:12px 9px;}
+}

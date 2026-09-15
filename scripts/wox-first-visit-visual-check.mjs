@@ -4,7 +4,7 @@ const base = process.env.WOX_PREVIEW_URL || 'http://127.0.0.1:4188/'
 const out = 'artifacts/wox-first-visit'
 await mkdir(out, { recursive: true })
 const browser = await chromium.launch({ headless: true, executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe' })
-for (const [name, viewport] of [['desktop',{width:1440,height:1000}],['mobile',{width:390,height:844}]]) {
+for (const [name, viewport] of [['desktop',{width:1440,height:1000}],['phone430',{width:430,height:932}],['mobile',{width:390,height:844}]]) {
   const context = await browser.newContext({ viewport })
   const page = await context.newPage()
   const errors = []
@@ -21,7 +21,7 @@ for (const [name, viewport] of [['desktop',{width:1440,height:1000}],['mobile',{
   })
   await page.screenshot({ path: `${out}/${name}.png`, fullPage: false })
   const overflow = metric.width > metric.client
-  const mobileStack = name !== 'mobile' || (metric.buttons[2]?.y > metric.buttons[0]?.y && metric.buttons[2]?.w > metric.buttons[0]?.w * 1.8)
+  const mobileStack = viewport.width > 760 || (metric.buttons[2]?.y > metric.buttons[0]?.y && metric.buttons[2]?.w > metric.buttons[0]?.w * 1.8)
   if (overflow || errors.length || metric.buttons.length !== 3 || !mobileStack) throw new Error(JSON.stringify({name,metric,overflow,errors}))
   console.log(JSON.stringify({name,...metric,overflow,errors}))
   await context.close()

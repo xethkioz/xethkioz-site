@@ -7,6 +7,9 @@ await mkdir(out, { recursive: true })
 const browser = await chromium.launch({ headless: true, executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe' })
 const cases = [
   ['desktop', { width: 1440, height: 1000 }],
+  ['laptop', { width: 1024, height: 900 }],
+  ['tablet', { width: 768, height: 900 }],
+  ['phone430', { width: 430, height: 932 }],
   ['mobile', { width: 390, height: 844 }],
 ]
 for (const [name, viewport] of cases) {
@@ -17,7 +20,8 @@ for (const [name, viewport] of cases) {
   await page.goto(previewUrl, { waitUntil: 'networkidle' })
   await page.screenshot({ path: `${out}/${name}-fold.png`, fullPage: false })
   let mobileMenuLinks = null
-  if (name === 'mobile') {
+  const compactNav = viewport.width <= 760
+  if (compactNav) {
     await page.locator('.wox-mobile-ecosystem summary').click()
     mobileMenuLinks = await page.locator('.wox-mobile-ecosystem nav a').count()
     await page.locator('.wox-mobile-ecosystem summary').click()
@@ -53,7 +57,7 @@ for (const [name, viewport] of cases) {
   }))
   await page.screenshot({ path: `${out}/${name}.png`, fullPage: true })
   const overflow = metrics.width > metrics.client
-  if (metrics.media3dSlots !== 3 || metrics.media3dImages !== 1 || metrics.media3dVeyr !== '/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp' || metrics.legacyHeroLabelPresent || metrics.wispAsset !== '/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp' || metrics.gameNavLinks !== 6 || metrics.heroSpecs !== 4 || metrics.chapterPanels !== 9 || metrics.sectionDockLinks !== 6 || !metrics.sectionDockVisible || metrics.reservedMediaFrames !== 6 || metrics.randomSectionImages !== 0 || metrics.formMediaSubject !== 'HELLER' || metrics.castMediaSubject !== 'Nikoras' || (name === 'mobile' && mobileMenuLinks !== 6) || overflow || errors.length) {
+  if (metrics.media3dSlots !== 3 || metrics.media3dImages !== 1 || metrics.media3dVeyr !== '/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp' || metrics.legacyHeroLabelPresent || metrics.wispAsset !== '/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp' || metrics.gameNavLinks !== 6 || metrics.heroSpecs !== 4 || metrics.chapterPanels !== 9 || metrics.sectionDockLinks !== 6 || !metrics.sectionDockVisible || metrics.reservedMediaFrames !== 6 || metrics.randomSectionImages !== 0 || metrics.formMediaSubject !== 'HELLER' || metrics.castMediaSubject !== 'Nikoras' || (compactNav && mobileMenuLinks !== 6) || overflow || errors.length) {
     throw new Error(`WOX visual QA failed for ${name}: ${JSON.stringify({ ...metrics, mobileMenuLinks, overflow, errors })}`)
   }
   console.log(JSON.stringify({ name, ...metrics, mobileMenuLinks, overflow, errors }))
