@@ -44,10 +44,14 @@ for (const [name, viewport] of cases) {
     media3dImages: document.querySelectorAll('#media-3d img').length,
     media3dVeyr: document.querySelector('#media-3d .wox-3d-viewport.is-veyr img')?.getAttribute('src') || '',
     legacyHeroLabelPresent: document.querySelector('.wox-status')?.textContent?.includes('2.5D') || false,
+    reservedMediaFrames: document.querySelectorAll('.wox-media-placeholder').length,
+    randomSectionImages: document.querySelectorAll('#worlds img, #atlas img, #characters img').length,
+    formMediaSubject: document.querySelector('.wox-form-console .wox-media-placeholder strong')?.textContent?.trim() || '',
+    castMediaSubject: document.querySelector('.wox-cast-console .wox-media-placeholder strong')?.textContent?.trim() || '',
   }))
   await page.screenshot({ path: `${out}/${name}.png`, fullPage: true })
   const overflow = metrics.width > metrics.client
-  if (metrics.media3dSlots !== 3 || metrics.media3dImages !== 1 || metrics.media3dVeyr !== '/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp' || metrics.legacyHeroLabelPresent || metrics.wispAsset !== '/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp' || metrics.gameNavLinks !== 6 || metrics.sectionDockLinks !== 6 || !metrics.sectionDockVisible || (name === 'mobile' && mobileMenuLinks !== 6) || overflow || errors.length) {
+  if (metrics.media3dSlots !== 3 || metrics.media3dImages !== 1 || metrics.media3dVeyr !== '/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp' || metrics.legacyHeroLabelPresent || metrics.wispAsset !== '/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp' || metrics.gameNavLinks !== 6 || metrics.sectionDockLinks !== 6 || !metrics.sectionDockVisible || metrics.reservedMediaFrames !== 6 || metrics.randomSectionImages !== 0 || metrics.formMediaSubject !== 'HELLER' || metrics.castMediaSubject !== 'Nikoras' || (name === 'mobile' && mobileMenuLinks !== 6) || overflow || errors.length) {
     throw new Error(`WOX visual QA failed for ${name}: ${JSON.stringify({ ...metrics, mobileMenuLinks, overflow, errors })}`)
   }
   console.log(JSON.stringify({ name, ...metrics, mobileMenuLinks, overflow, errors }))

@@ -63,6 +63,26 @@ const gameSections = {
   en: [['origin', 'STORY'], ['worlds', 'WORLD'], ['atlas', 'PRISM-ATLAS'], ['characters', 'CHARACTERS'], ['media-3d', '3D'], ['development', 'DEVELOPMENT']],
 } as const
 
+type MediaPlaceholderProps = {
+  label: string
+  subject: string
+  code?: string
+  orientation?: 'landscape' | 'portrait' | 'square'
+  src?: string
+  alt?: string
+}
+
+function MediaPlaceholder({ label, subject, code = '3D', orientation = 'landscape', src, alt }: MediaPlaceholderProps) {
+  return (
+    <div className={`wox-media-placeholder is-${orientation}`} aria-label={`${label}: ${subject}`}>
+      {src ? <img src={src} alt={alt ?? subject} loading="lazy" decoding="async" /> : <div className="wox-media-placeholder-grid" aria-hidden="true" />}
+      <span>{code}</span>
+      <strong>{subject}</strong>
+      <small>{label}</small>
+    </div>
+  )
+}
+
 const copy = {
   es: {
     seo: 'World of Xethkioz · Action RPG en desarrollo',
@@ -387,8 +407,8 @@ export default function Home() {
               <span>{t.travelerText}</span>
             </div>
             <div className="wox-duo-grid">
-              <article><small>01 // VIAJERO</small><strong>{lang === 'es' ? 'Nació de ecos que no eran suyos.' : 'Born from echoes that were not its own.'}</strong><p>{lang === 'es' ? 'Sin género, rostro ni pasado canónico. El nombre elegido por el jugador es su primer anclaje de identidad.' : 'No canonical gender, face or past. The player-chosen name becomes its first anchor of identity.'}</p></article>
-              <article><small>02 // XETHKIOZ</small><strong>{lang === 'es' ? 'No obedece. Acompaña.' : 'It does not obey. It accompanies.'}</strong><p>{lang === 'es' ? 'La Forma Abierta aprende afinidades sin perder identidad. Su progresión canónica de colas es 3 → 5 → 7 → 9.' : 'The Open Form learns affinities without losing identity. Its canonical tail progression is 3 → 5 → 7 → 9.'}</p></article>
+              <article><MediaPlaceholder orientation="portrait" code="PLAYER" subject={lang === 'es' ? 'EL VIAJERO' : 'THE TRAVELER'} label={lang === 'es' ? 'RENDER 3D EN PRODUCCION' : '3D RENDER IN PRODUCTION'} /><small>01 // VIAJERO</small><strong>{lang === 'es' ? 'Nació de ecos que no eran suyos.' : 'Born from echoes that were not its own.'}</strong><p>{lang === 'es' ? 'Sin género, rostro ni pasado canónico. El nombre elegido por el jugador es su primer anclaje de identidad.' : 'No canonical gender, face or past. The player-chosen name becomes its first anchor of identity.'}</p></article>
+              <article><MediaPlaceholder orientation="portrait" code="FORMA" subject="XETHKIOZ" label={lang === 'es' ? 'MODELO 3D EN PRODUCCION' : '3D MODEL IN PRODUCTION'} /><small>02 // XETHKIOZ</small><strong>{lang === 'es' ? 'No obedece. Acompaña.' : 'It does not obey. It accompanies.'}</strong><p>{lang === 'es' ? 'La Forma Abierta aprende afinidades sin perder identidad. Su progresión canónica de colas es 3 → 5 → 7 → 9.' : 'The Open Form learns affinities without losing identity. Its canonical tail progression is 3 → 5 → 7 → 9.'}</p></article>
             </div>
           </section>
           <section id="worlds" className="wox-section wox-world-showcase" aria-labelledby="worlds-title">
@@ -409,7 +429,7 @@ export default function Home() {
                 </article>
               ))}
             </div>
-            <div className="wox-region-console" aria-live="polite">
+            <div className="wox-region-console" aria-live="polite"><MediaPlaceholder code="UNITY" subject={selectedRegion.name} label={lang === 'es' ? 'CAPTURA DE REGION PENDIENTE' : 'REGION CAPTURE PENDING'} />
               <div className="wox-region-console-head">
                 <span>{selectedRegion.code} // {selectedRegion.name}</span>
                 <strong>{lang === 'es' ? 'RUTA CANÓNICA DE SAGA I' : 'CANONICAL SAGA I ROUTE'}</strong>
@@ -436,7 +456,7 @@ export default function Home() {
                 </article>
               ))}
             </div>
-            <div className="wox-atlas-console" aria-live="polite">
+            <div className="wox-atlas-console" aria-live="polite"><MediaPlaceholder orientation="square" code="ATLAS" subject={selectedAtlas.title} label={lang === 'es' ? 'MODELO / CAPTURA PENDIENTE' : 'MODEL / CAPTURE PENDING'} />
               <div>
                 <small>{selectedAtlas.signal}</small>
                 <h3>{selectedAtlas.title}</h3>
@@ -464,7 +484,7 @@ export default function Home() {
               ))}
             </div>
             <div className="wox-form-console" aria-live="polite" data-form={activeForm + 1}>
-              <div className="wox-form-sigil" aria-hidden="true"><span>◇</span></div>
+              <MediaPlaceholder orientation="square" code="FORMA" subject={selectedForm[0]} label={lang === 'es' ? 'RENDER 3D PENDIENTE' : '3D RENDER PENDING'} />
               <div>
                 <small>{lang === 'es' ? 'FORMA DE CONVERGENCIA SELECCIONADA' : 'SELECTED CONVERGENCE FORM'}</small>
                 <h3>{selectedForm[0]}</h3>
@@ -492,7 +512,7 @@ export default function Home() {
               ))}
             </div>
             <div className="wox-cast-console" aria-live="polite">
-              <div className="wox-cast-avatar" aria-hidden="true"><span>{selectedCast[0].slice(0, 1)}</span></div>
+              <MediaPlaceholder orientation="portrait" code="CHAR" subject={selectedCast[0]} label={lang === 'es' ? 'RENDER DE PERSONAJE PENDIENTE' : 'CHARACTER RENDER PENDING'} />
               <div>
                 <small>{lang === 'es' ? 'IDENTIDAD CANÓNICA ACTIVA' : 'ACTIVE CANONICAL IDENTITY'}</small>
                 <h3>{selectedCast[0]}</h3>
