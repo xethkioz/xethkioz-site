@@ -21,7 +21,7 @@ Regla: no usar bocetos, sprites, concept art 2D/2.5D ni imagenes random como rep
 
 - XETHKIOZ: PUBLICABLE COMO MODELO 3D EN PRODUCCIÓN. Render LOD0 vigente optimizado para web; no se etiqueta como gameplay ni como Game Ready final.
 - VIAJERO: BLOQUEADO PARA WEB. El asset actual sigue en rig/import QA y su preview es técnico, no una presentación AAA.
-- FORMAS: CANDIDATOS LOD0 DISPONIBLES, pero el mapeo Bestia Legendaria 1–8 ↔ nombres canónicos debe cerrarse antes de publicar.
+- FORMAS: BLOQUEADAS PARA MEDIA INDIVIDUAL. El Bestiario Maestro v2.0 fija que las Ocho Formas derivan de una misma familia/anatomia de Xethkioz; `Bestia_Legendaria_1..8` no tienen identidad canonica asignada y NO deben mapearse por numero o apariencia. Publicar cada Forma solo cuando exista variante aprobada de silueta/material/VFX/afinidad sobre la familia compartida.
 - PERSONAJES: Braxian/Milaviel y familia tienen candidatos 3D, pero faltan renders de presentación aprobados; no usar T-pose.
 - MUNDO / ESCENARIOS / GAMEPLAY: BLOQUEADOS hasta existir captura Unity oficial de la versión vigente.
 - PRODUCCIÓN 3D: Veyr permanece como activo público vigente.

@@ -233,3 +233,13 @@ Push de la rama Preview está permitido para generar Preview. No mergear a `main
 - QA de produccion PASS: visual 1440/1024/768/430/390 con Xethkioz oficial, funcional ES/EN, primera visita, 6 anclas, Veyr clearance, edge 320/360/1366/1920, Axe A/AA 0 violaciones y navegacion de teclado.
 - Runtime production: 0 logs `error`/`fatal`; build Vercel completado; Toolbar sin observaciones pendientes.
 - `artifacts/` permanece fuera de Git. `main` sigue siendo la fuente canonica de produccion.
+
+## Checkpoint AAA V2 - Pass 14 canon de Formas (2026-09-15)
+- Se cruzaron la Biblia Final Consolidada Saga I v2.0 (Canon Lock) y el Bestiario Maestro v2.0 (Canon 3D + Ecologia) desde Google Drive.
+- Canon vigente confirmado: Xethkioz, Killaruna, Mozaruk, Heller, Kahezer, Itzuke, Dvalin y Okuninust son las Ocho Formas de Convergencia y una sola familia prismatica.
+- `Bestia_Legendaria_1..8` NO poseen identidad canonica asignada a esas Formas; queda prohibido mapearlas por numero, parecido visual o suposicion.
+- Produccion de Formas: familia/anatomia compartida de Xethkioz con variantes controladas de silueta, materiales, VFX y afinidad. No publicar medios individuales hasta existir variantes aprobadas.
+- `WORLD_OF_XETHKIOZ_MEDIA_SLOTS.md` fue corregido para eliminar la suposicion vieja de mapeo 1-8.
+- `wox-home-visual-check.mjs` bloquea ahora los ocho nombres canonicos y su orden exacto.
+- Guard visual ejecutado contra produccion en 1440/1024/768/430/390: nombres canonicos exactos, 0 overflow y 0 errores.
+- Pass 14 no modifica UI runtime; es un lock documental/QA para impedir una futura integracion 3D incorrecta.
