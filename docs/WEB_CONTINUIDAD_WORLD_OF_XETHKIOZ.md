@@ -204,3 +204,14 @@ Push de la rama Preview estÃ¡ permitido para generar Preview. No mergear a `main
 - QA visual remoto PASS en 320/360/390/430/768/1024/1366/1440/1920; 3 slots 3D, 0 imÃ¡genes random y 0 errores de navegador.
 - QA funcional remoto ES/EN PASS: 4 territorios, 4 Atlas, 8 Formas, 14 personajes, chat, Wisp/Green Node y cambio de idioma.
 - Primera visita remota PASS en 1440/430/390 con 3 acciones de consentimiento y 0 overflow.
+
+## Producción AAA V2 publicada — 2026-09-15
+- Aprobación explícita de publicación recibida en el chat actual.
+- `main` avanzó por fast-forward desde `fc1df9c` hasta `7041512`; sin conflictos ni merge manual.
+- Deployment Vercel production: `dpl_HMw8vmv2vzp7Fbjw5a54wcAsMhj7`, READY, con alias `xethkioz.com.ar` y `www.xethkioz.com.ar`.
+- QA visual en producción PASS: 1440/1024/768/430/390; 14 personajes, 8 Formas, 3 slots 3D, 0 imágenes random, 0 overflow y 0 errores.
+- QA edge en producción PASS: 320/360/1366/1920 sin overflow ni texto recortado; Axe WCAG A/AA con 0 violaciones.
+- QA funcional producción ES/EN PASS: 4 territorios, 4 Atlas, 8 Formas, 14 personajes, chat, Wisp/Green Node y cambio de idioma.
+- Primera visita producción PASS en 1440/430/390; navegación por 6 anclas PASS; Veyr clearance PASS en 390/430/768/1024 con 0 intersecciones.
+- El foco SPA a `/gaming` fue medido en producción y llega correctamente a `main-content`; el audit usa ahora espera semántica en vez de timeout fijo para evitar falsos negativos por latencia.
+- `artifacts/` permanece fuera de Git. Estado objetivo: producción AAA activa; `main` vuelve a ser la fuente canónica.
