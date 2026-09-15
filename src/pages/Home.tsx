@@ -63,7 +63,7 @@ const copy = {
     seo: 'World of Xethkioz · Action RPG en desarrollo',
     description: 'Sitio oficial de World of Xethkioz: historia, mundos, criaturas, desarrollo y comunidad del Action-RPG de XETHKIOZ.',
     portals: { gaming: 'Gaming', science: 'Ciencia y tecnología', pets: 'Mascotas' },
-    status: 'ACTION RPG 3D/2.5D · UNITY · SAGA I EN DESARROLLO',
+    status: 'ACTION RPG 3D · UNITY + BLENDER · SAGA I EN DESARROLLO',
     soul: 'UN MUNDO FRACTURADO. UNA FAMILIA UNIDA.',
     lead: 'El tiempo, la memoria, la naturaleza y la tecnología dejaron de obedecer una sola versión de la realidad.',
     explore: 'DESCUBRIR EL MUNDO',
@@ -85,7 +85,7 @@ const copy = {
     castEyebrow: 'PERSONAJES // IDENTIDADES CANÓNICAS',
     castTitle: 'Nombres del mundo. Vínculos de la historia.',
     devEyebrow: 'DESARROLLO // ESTADO DEL PROYECTO',
-    devTitle: 'Producción activa en Unity.',
+    devTitle: 'Producción 3D activa en Unity + Blender.',
     devText: 'La web va a funcionar como el centro público del proyecto: lore, Atlas, avances, comunidad y estado del juego, sin mezclar el contenido interno de producción con la experiencia del visitante.',
     roadmapEyebrow: 'ROADMAP // SIGUIENTE OBJETIVO',
     roadmapTitle: 'Del canon al primer vertical slice jugable.',
@@ -98,7 +98,7 @@ const copy = {
     seo: 'World of Xethkioz · Action RPG in development',
     description: 'Official World of Xethkioz site: story, worlds, creatures, development and community for the XETHKIOZ action RPG.',
     portals: { gaming: 'Gaming', science: 'Science & technology', pets: 'Pets' },
-    status: '3D/2.5D ACTION RPG · UNITY · SAGA I IN DEVELOPMENT',
+    status: '3D ACTION RPG · UNITY + BLENDER · SAGA I IN DEVELOPMENT',
     soul: 'A FRACTURED WORLD. A UNITED FAMILY.',
     lead: 'Time, memory, nature and technology no longer obey a single version of reality.',
     explore: 'DISCOVER THE WORLD',
@@ -120,7 +120,7 @@ const copy = {
     castEyebrow: 'CHARACTERS // CANONICAL IDENTITIES',
     castTitle: 'Names of the world. Bonds of the story.',
     devEyebrow: 'DEVELOPMENT // PROJECT STATUS',
-    devTitle: 'Active production in Unity.',
+    devTitle: 'Active 3D production in Unity + Blender.',
     devText: 'The site becomes the public center of the project: lore, Atlas, progress, community and game status, without mixing internal production material into the visitor experience.',
     roadmapEyebrow: 'ROADMAP // NEXT TARGET',
     roadmapTitle: 'From locked canon to the first playable vertical slice.',
@@ -322,6 +322,7 @@ export default function Home() {
               <a href="#worlds">{lang === 'es' ? 'MUNDO' : 'WORLD'}</a>
               <a href="#atlas">PRISMA-ATLAS</a>
               <a href="#characters">{lang === 'es' ? 'PERSONAJES' : 'CHARACTERS'}</a>
+              <a href="#media-3d">3D</a>
               <a href="#development">{lang === 'es' ? 'DESARROLLO' : 'DEVELOPMENT'}</a>
             </nav>
           </div>
@@ -464,6 +465,27 @@ export default function Home() {
               </div>
               <span className="wox-canon-lock">WORLD OF XETHKIOZ</span>
             </div>
+          </section>
+
+          <section id="media-3d" className="wox-section wox-3d-stage" aria-labelledby="media-3d-title">
+            <div className="wox-section-head">
+              <p>{lang === 'es' ? 'WORLD OF XETHKIOZ // PRODUCCIÓN VISUAL 3D' : 'WORLD OF XETHKIOZ // 3D VISUAL PRODUCTION'}</p>
+              <h2 id="media-3d-title">{lang === 'es' ? 'El mundo se está construyendo en 3D.' : 'The world is being built in 3D.'}</h2>
+              <span>{lang === 'es' ? 'La Home queda preparada para publicar únicamente renders, capturas y gameplay que representen la versión vigente de Unity + Blender.' : 'The Home is prepared to publish only renders, captures and gameplay that represent the current Unity + Blender version.'}</span>
+            </div>
+            <div className="wox-3d-grid" aria-label={lang === 'es' ? 'Espacios para material 3D oficial' : 'Official 3D media slots'}>
+              {[
+                ['01', lang === 'es' ? 'ESCENARIOS 3D' : '3D ENVIRONMENTS', lang === 'es' ? 'Mapas, biomas, iluminación y atmósfera capturados desde Unity.' : 'Maps, biomes, lighting and atmosphere captured from Unity.'],
+                ['02', lang === 'es' ? 'PERSONAJES 3D' : '3D CHARACTERS', lang === 'es' ? 'Modelos, materiales, rig y presentación final desde Blender + Unity.' : 'Models, materials, rigs and final presentation from Blender + Unity.'],
+                ['03', lang === 'es' ? 'GAMEPLAY REAL' : 'REAL GAMEPLAY', lang === 'es' ? 'Movimiento, combate, exploración e interacción grabados directamente desde el juego.' : 'Movement, combat, exploration and interaction recorded directly from the game.'],
+              ].map(([index, title, text]) => (
+                <article key={index}>
+                  <div className="wox-3d-viewport" aria-hidden="true"><span>{index}</span><i /><b /></div>
+                  <div className="wox-3d-copy"><small>{lang === 'es' ? 'MATERIAL EN PREPARACIÓN' : 'MEDIA IN PREPARATION'}</small><strong>{title}</strong><p>{text}</p></div>
+                </article>
+              ))}
+            </div>
+            <div className="wox-3d-note"><span>UNITY</span><span>BLENDER</span><span>3D</span><p>{lang === 'es' ? 'Los viewports se reemplazan por material real cuando esté aprobado para publicación, sin rehacer la estructura de la Home.' : 'The viewports are replaced with real media once it is approved for publication, without rebuilding the Home structure.'}</p></div>
           </section>
 
           <section id="development" className="wox-section wox-dev wox-dev-showcase" aria-labelledby="dev-title">

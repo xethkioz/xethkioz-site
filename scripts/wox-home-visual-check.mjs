@@ -29,9 +29,16 @@ for (const [name, viewport] of cases) {
     ecosystemLinks: [...document.querySelectorAll('.wox-ecosystem-nav a, .wox-tools .wox-news-link')].map((a) => ({ text: a.textContent?.trim(), href: a.getAttribute('href') })),
     gameNavLinks: document.querySelectorAll('.wox-game-nav a').length,
     wispPresent: Boolean(document.querySelector('.xk-wisp.is-home-entry')),
+    media3dSlots: document.querySelectorAll('#media-3d .wox-3d-grid article').length,
+    media3dImages: document.querySelectorAll('#media-3d img').length,
+    legacyHeroLabelPresent: document.querySelector('.wox-status')?.textContent?.includes('2.5D') || false,
   }))
   await page.screenshot({ path: `${out}/${name}.png`, fullPage: true })
-  console.log(JSON.stringify({ name, ...metrics, overflow: metrics.width > metrics.client, errors }))
+  const overflow = metrics.width > metrics.client
+  if (metrics.media3dSlots !== 3 || metrics.media3dImages !== 0 || metrics.legacyHeroLabelPresent || overflow || errors.length) {
+    throw new Error(`WOX visual QA failed for ${name}: ${JSON.stringify({ ...metrics, overflow, errors })}`)
+  }
+  console.log(JSON.stringify({ name, ...metrics, overflow, errors }))
   await page.close()
 }
 await browser.close()
