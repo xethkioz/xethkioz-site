@@ -4,7 +4,7 @@ export const SITE_BUILD_DATE = '2026-09-14'
 export const SITE_DOMAIN = 'https://xethkioz.com.ar'
 
 export const DONATION_LINKS = {
-  paypal: 'https://www.paypal.com/ncp/payment/5ZYB8NGEGC8AS',
+  paypal: 'https://www.paypal.com/ncp/payment/VT4476UQ76F4S',
   mercadoPago: 'https://link.mercadopago.com.ar/xethkioz',
 }
 
