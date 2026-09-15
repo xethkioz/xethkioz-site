@@ -75,7 +75,9 @@ async function resolvePublicRows<T>(query: URLSearchParams, label: string): Prom
   }
 
   if (lastNetworkError) {
-    throw new Error(`${label.toUpperCase().replace(/-/g, '_')}_NETWORK_UNAVAILABLE`, { cause: lastNetworkError })
+    const networkError = new Error(`${label.toUpperCase().replace(/-/g, '_')}_NETWORK_UNAVAILABLE`)
+    ;(networkError as Error & { cause?: unknown }).cause = lastNetworkError
+    throw networkError
   }
 
   console.error(JSON.stringify({
