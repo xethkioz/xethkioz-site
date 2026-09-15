@@ -256,3 +256,26 @@
   .wox-world-showcase .wox-region-grid article.is-active h3{font-size:clamp(2rem,10vw,2.85rem);letter-spacing:-.045em;white-space:nowrap}
   .wox-world-showcase .wox-region-grid article:not(.is-active) h3{font-size:.72rem;line-height:1;letter-spacing:-.045em;white-space:nowrap;overflow:visible}
 }
+
+/* PASS 06 — first-visit privacy UI belongs to the World shell instead of floating above it as a generic panel. */
+body:has(.wox-home) .xk-privacy-consent-banner{overflow:hidden;border-color:rgba(255,140,66,.25)!important;border-radius:18px!important;background:linear-gradient(120deg,rgba(6,8,14,.97),rgba(14,9,24,.97) 58%,rgba(21,10,8,.96))!important;box-shadow:0 22px 80px rgba(0,0,0,.68),0 0 0 1px rgba(139,92,246,.08),0 0 42px rgba(139,92,246,.1)!important;}
+body:has(.wox-home) .xk-privacy-consent-banner::before{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,#69dfff,#9d73ff 48%,#ff934f) top/100% 1px no-repeat,radial-gradient(circle at 88% 15%,rgba(255,107,26,.08),transparent 30%);}
+body:has(.wox-home) .xk-privacy-consent-banner h2{font-family:Orbitron,Inter,sans-serif;letter-spacing:-.035em;}
+body:has(.wox-home) .xk-privacy-consent-actions button{border-radius:10px!important;letter-spacing:.1em!important;}
+body:has(.wox-home) .xk-privacy-consent-dialog{border-color:rgba(159,114,255,.34)!important;background:linear-gradient(145deg,#080a11,#100b19 62%,#0b090d)!important;box-shadow:0 30px 110px rgba(0,0,0,.84),0 0 44px rgba(139,92,246,.12)!important;}
+body:has(.wox-home) .xk-privacy-consent-dialog>h2{font-family:Orbitron,Inter,sans-serif;letter-spacing:-.035em;}
+@media(max-width:760px){
+  body:has(.wox-home) .xk-privacy-consent-banner{inset-inline:7px!important;bottom:calc(7px + env(safe-area-inset-bottom))!important;padding:12px!important;border-radius:15px!important;}
+  body:has(.wox-home) .xk-privacy-consent-banner h2{font-size:.94rem!important;line-height:1.15;}
+  body:has(.wox-home) .xk-privacy-consent-banner p:not(:first-child){font-size:.7rem!important;line-height:1.45!important;}
+  body:has(.wox-home) .xk-privacy-consent-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important;}
+  body:has(.wox-home) .xk-privacy-consent-actions button{min-height:38px!important;padding:8px 7px!important;font-size:.43rem!important;}
+  body:has(.wox-home) .xk-privacy-consent-actions button:last-child{grid-column:1/-1;}
+}
+
+/* PASS 06 — one visual contract for every reserved official render slot. */
+.wox-media-placeholder:not(:has(>img)) .wox-media-placeholder-grid::before{content:'OFFICIAL MEDIA // PENDING';position:absolute;right:14px;top:14px;padding:5px 7px;border:1px solid rgba(255,255,255,.07);border-radius:7px;background:rgba(3,4,8,.5);font:850 .38rem/1 ui-monospace,monospace;letter-spacing:.14em;color:rgba(255,255,255,.25);}
+.wox-media-placeholder:not(:has(>img)) .wox-media-placeholder-grid::after{content:'';position:absolute;right:15%;bottom:18%;width:38%;height:1px;background:linear-gradient(90deg,transparent,rgba(117,221,255,.16),rgba(159,114,255,.25),transparent);box-shadow:0 0 18px rgba(139,92,246,.14);}
+.wox-media-placeholder:not(:has(>img)){background:radial-gradient(circle at 50% 42%,rgba(139,92,246,.085),transparent 28%),linear-gradient(155deg,rgba(9,12,20,.98),rgba(4,5,10,.9) 58%,rgba(12,7,16,.94));}
+.wox-media-placeholder:not(:has(>img))>strong{color:rgba(255,255,255,.84);}
+@media(max-width:760px){.wox-media-placeholder:not(:has(>img)) .wox-media-placeholder-grid::before{right:10px;top:10px;font-size:.33rem;letter-spacing:.1em}}

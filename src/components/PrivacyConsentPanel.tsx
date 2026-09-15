@@ -82,7 +82,7 @@ export default function PrivacyConsentPanel() {
     <>
       {!hasChoice && !panelOpen ? (
         <section
-          className="fixed inset-x-2 bottom-[calc(.65rem+env(safe-area-inset-bottom))] z-[120] mx-auto max-w-5xl rounded-[1.25rem] border border-violet-400/35 bg-[#08080d]/95 p-3 text-white shadow-[0_18px_80px_rgba(0,0,0,.72),0_0_38px_rgba(139,92,246,.18)] backdrop-blur-xl sm:inset-x-3 sm:bottom-[calc(1rem+env(safe-area-inset-bottom))] sm:rounded-[1.6rem] sm:p-5"
+          className="xk-privacy-consent-banner fixed inset-x-2 bottom-[calc(.65rem+env(safe-area-inset-bottom))] z-[120] mx-auto max-w-5xl rounded-[1.25rem] border border-violet-400/35 bg-[#08080d]/95 p-3 text-white shadow-[0_18px_80px_rgba(0,0,0,.72),0_0_38px_rgba(139,92,246,.18)] backdrop-blur-xl sm:inset-x-3 sm:bottom-[calc(1rem+env(safe-area-inset-bottom))] sm:rounded-[1.6rem] sm:p-5"
           role="region"
           aria-labelledby="privacy-consent-banner-title"
         >
@@ -92,7 +92,7 @@ export default function PrivacyConsentPanel() {
               <h2 id="privacy-consent-banner-title" className="mt-1.5 text-base font-black sm:mt-2 sm:text-xl">{t.bannerTitle}</h2>
               <p className="mt-1.5 max-w-3xl text-[12px] leading-5 text-slate-300 sm:mt-2 sm:text-sm sm:leading-6">{t.bannerText}</p>
             </div>
-            <div className="grid grid-cols-3 gap-1.5 sm:gap-2 lg:min-w-[430px]">
+            <div className="xk-privacy-consent-actions grid grid-cols-3 gap-1.5 sm:gap-2 lg:min-w-[430px]">
               <button type="button" onClick={essentialOnly} className="min-h-11 rounded-full border border-white/15 px-2 py-2 font-mono text-[8px] font-black tracking-[.08em] text-slate-200 transition hover:border-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 sm:px-4 sm:py-3 sm:text-[10px] sm:tracking-[.12em]">{t.essentialOnly}</button>
               <button type="button" onClick={openSettings} className="min-h-11 rounded-full border border-violet-400/45 bg-violet-400/10 px-2 py-2 font-mono text-[8px] font-black tracking-[.08em] text-violet-200 transition hover:border-violet-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 sm:px-4 sm:py-3 sm:text-[10px] sm:tracking-[.12em]">{t.configure}</button>
               <button type="button" onClick={acceptAll} className="min-h-11 rounded-full border border-orange-400 bg-orange-400/15 px-2 py-2 font-mono text-[8px] font-black tracking-[.08em] text-orange-100 transition hover:bg-orange-400 hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300 sm:px-4 sm:py-3 sm:text-[10px] sm:tracking-[.12em]">{t.acceptAll}</button>
@@ -102,9 +102,9 @@ export default function PrivacyConsentPanel() {
       ) : null}
 
       {panelOpen ? (
-        <div className="fixed inset-0 z-[130] grid place-items-center overflow-y-auto bg-black/75 p-4 backdrop-blur-sm" role="presentation">
+        <div className="xk-privacy-consent-backdrop fixed inset-0 z-[130] grid place-items-center overflow-y-auto bg-black/75 p-4 backdrop-blur-sm" role="presentation">
           <section
-            className="relative my-auto w-full max-w-3xl rounded-[2rem] border border-violet-400/40 bg-[#09090f] p-5 text-white shadow-[0_28px_100px_rgba(0,0,0,.85),0_0_50px_rgba(139,92,246,.18)] sm:p-7"
+            className="xk-privacy-consent-dialog relative my-auto w-full max-w-3xl rounded-[2rem] border border-violet-400/40 bg-[#09090f] p-5 text-white shadow-[0_28px_100px_rgba(0,0,0,.85),0_0_50px_rgba(139,92,246,.18)] sm:p-7"
             role="dialog"
             aria-modal="true"
             aria-labelledby="privacy-preferences-title"
