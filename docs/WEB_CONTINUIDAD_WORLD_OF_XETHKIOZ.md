@@ -215,3 +215,21 @@ Push de la rama Preview estÃ¡ permitido para generar Preview. No mergear a `main
 - Primera visita producción PASS en 1440/430/390; navegación por 6 anclas PASS; Veyr clearance PASS en 390/430/768/1024 con 0 intersecciones.
 - El foco SPA a `/gaming` fue medido en producción y llega correctamente a `main-content`; el audit usa ahora espera semántica en vez de timeout fijo para evitar falsos negativos por latencia.
 - `artifacts/` permanece fuera de Git. Estado objetivo: producción AAA activa; `main` vuelve a ser la fuente canónica.
+
+## Checkpoint AAA V2 - Pass 13 medios 3D reales (2026-09-15)
+- Commit de medio oficial: `9cf1502 - feat(home): publish Xethkioz production render`.
+- Commit de QA: `5299fb2 - test(web): support protected Vercel previews`.
+- Xethkioz LOD0 es el primer render adicional del pipeline Blender/Unity integrado en Home como `MODELO 3D EN PRODUCCION`; no se presenta como gameplay ni como Game Ready final.
+- Asset web: `/assets/world-of-xethkioz/xethkioz/xethkioz-lod0-production.webp`, WebP 4:5 optimizado, con encuadre especifico para presentacion web.
+- En movil se ocultan los rotulos internos redundantes del frame de Xethkioz para mantener el modelo limpio; el badge `FORMA` y el texto canonico exterior permanecen visibles.
+- Viajero sigue bloqueado para publicacion por rig/import QA; Braxian/Milaviel y familia requieren renders de presentacion aprobados; Formas requieren cerrar el mapeo Bestia Legendaria 1-8 a nombres canonicos antes de integrarlas.
+- Mundo, Escenarios 3D y Gameplay Real permanecen bloqueados hasta disponer de capturas Unity oficiales de la version vigente.
+- `wox-home-visual-check.mjs` exige ahora el asset oficial de Xethkioz y evita una regresion silenciosa a placeholder o imagen random.
+- `wox-home-functional-check.mjs` soporta Preview Vercel protegido autenticando primero la entrada temporal y navegando luego por el hostname limpio.
+- QA local PASS: build completo, production-ready, visual 1440/1024/768/430/390, edge 320/360/1366/1920, Axe A/AA 0 violaciones, teclado, primera visita, anclas, Veyr clearance y funcional ES/EN.
+- Preview remoto PASS en `9cf1502`: visual 5 viewports, funcional ES/EN, primera visita y edge/accesibilidad; runtime 0 error/fatal.
+- `main` avanzo por fast-forward de `190c896` a `5299fb2`; sin conflictos ni merge manual.
+- Deployment production `dpl_4kMzjYLsY3DQfvui3pfH6zpYyyxJ` READY con alias `www.xethkioz.com.ar` y `xethkioz.com.ar`.
+- QA de produccion PASS: visual 1440/1024/768/430/390 con Xethkioz oficial, funcional ES/EN, primera visita, 6 anclas, Veyr clearance, edge 320/360/1366/1920, Axe A/AA 0 violaciones y navegacion de teclado.
+- Runtime production: 0 logs `error`/`fatal`; build Vercel completado; Toolbar sin observaciones pendientes.
+- `artifacts/` permanece fuera de Git. `main` sigue siendo la fuente canonica de produccion.
