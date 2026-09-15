@@ -365,7 +365,9 @@ export default function Home() {
 
         <section className="wox-hero" aria-labelledby="wox-title">
           <h1 id="wox-title" className="sr-only">World of Xethkioz</h1>
+          <div className="wox-hero-frame" aria-hidden="true"><span /><span /><span /><span /></div>
           <div className="wox-hero-core">
+            <div className="wox-hero-overline" aria-hidden="true"><span>XK // PRISMATIC RESONANCE</span><span>SAGA I // ACTIVE DEVELOPMENT</span></div>
             <picture className="wox-logo-wrap">
               <source srcSet="/assets/world-of-xethkioz/world-of-xethkioz-logo.webp" type="image/webp" />
               <img src="/assets/world-of-xethkioz/world-of-xethkioz-logo.svg" alt="World of Xethkioz" className="wox-world-logo" />
@@ -377,6 +379,12 @@ export default function Home() {
               <a href="#worlds">{t.explore}<span>↓</span></a>
               <button type="button" onClick={openNexusChat}>{t.chat}<span>◉</span></button>
               <a href="#atlas" className="is-quiet">{t.atlas}<span>↘</span></a>
+            </div>
+            <div className="wox-hero-specs" aria-label={lang === 'es' ? 'Datos principales de Saga I' : 'Saga I key facts'}>
+              <a href="#worlds"><strong>04</strong><span>{lang === 'es' ? 'TERRITORIOS' : 'TERRITORIES'}</span></a>
+              <a href="#worlds"><strong>32</strong><span>{lang === 'es' ? 'MAPAS' : 'MAPS'}</span></a>
+              <a href="#characters"><strong>08</strong><span>{lang === 'es' ? 'FORMAS' : 'FORMS'}</span></a>
+              <a href="#development"><strong>3D</strong><span>UNITY + BLENDER</span></a>
             </div>
             <nav className="wox-game-nav" aria-label={lang === 'es' ? 'Secciones de World of Xethkioz' : 'World of Xethkioz sections'}>
               {gameSections[lang].map(([id, label]) => <a key={id} href={`#${id}`}>{label}</a>)}

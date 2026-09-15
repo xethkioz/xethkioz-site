@@ -5,7 +5,7 @@ const out = 'artifacts/wox-aaa-v2'
 await mkdir(out, { recursive: true })
 const browser = await chromium.launch({ headless: true, executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe' })
 const views = [['desktop',1440,1000],['mobile',390,844]]
-const selectors = [['origin','#origin'],['duo','.wox-duo'],['worlds','#worlds'],['atlas','#atlas'],['forms','.wox-forms-showcase'],['characters','#characters'],['media3d','#media-3d'],['development','#development'],['roadmap','.wox-roadmap-showcase'],['support','.wox-support-card']]
+const selectors = [['hero','.wox-hero'],['origin','#origin'],['duo','.wox-duo'],['worlds','#worlds'],['atlas','#atlas'],['forms','.wox-forms-showcase'],['characters','#characters'],['media3d','#media-3d'],['development','#development'],['roadmap','.wox-roadmap-showcase'],['support','.wox-support-card']]
 for (const [name,width,height] of views) {
   const page = await browser.newPage({ viewport: { width, height } })
   await page.addInitScript(() => localStorage.setItem('xethkioz.privacy-consent.v1', JSON.stringify({version:1,analytics:false,marketing:false,updatedAt:new Date().toISOString()})))

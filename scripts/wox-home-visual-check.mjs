@@ -35,6 +35,7 @@ for (const [name, viewport] of cases) {
     activeCast: document.querySelector('.wox-cast-console h3')?.textContent?.trim() || '',
     ecosystemLinks: [...document.querySelectorAll('.wox-ecosystem-nav a, .wox-tools .wox-news-link')].map((a) => ({ text: a.textContent?.trim(), href: a.getAttribute('href') })),
     gameNavLinks: document.querySelectorAll('.wox-game-nav a').length,
+    heroSpecs: document.querySelectorAll('.wox-hero-specs a').length,
     sectionDockLinks: document.querySelectorAll('.wox-section-dock div a').length,
     sectionDockVisible: document.querySelector('.wox-section-dock')?.classList.contains('is-visible') || false,
     sectionDockActive: document.querySelector('.wox-section-dock a[aria-current="location"]')?.textContent?.trim() || '',
@@ -51,7 +52,7 @@ for (const [name, viewport] of cases) {
   }))
   await page.screenshot({ path: `${out}/${name}.png`, fullPage: true })
   const overflow = metrics.width > metrics.client
-  if (metrics.media3dSlots !== 3 || metrics.media3dImages !== 1 || metrics.media3dVeyr !== '/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp' || metrics.legacyHeroLabelPresent || metrics.wispAsset !== '/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp' || metrics.gameNavLinks !== 6 || metrics.sectionDockLinks !== 6 || !metrics.sectionDockVisible || metrics.reservedMediaFrames !== 6 || metrics.randomSectionImages !== 0 || metrics.formMediaSubject !== 'HELLER' || metrics.castMediaSubject !== 'Nikoras' || (name === 'mobile' && mobileMenuLinks !== 6) || overflow || errors.length) {
+  if (metrics.media3dSlots !== 3 || metrics.media3dImages !== 1 || metrics.media3dVeyr !== '/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp' || metrics.legacyHeroLabelPresent || metrics.wispAsset !== '/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp' || metrics.gameNavLinks !== 6 || metrics.heroSpecs !== 4 || metrics.sectionDockLinks !== 6 || !metrics.sectionDockVisible || metrics.reservedMediaFrames !== 6 || metrics.randomSectionImages !== 0 || metrics.formMediaSubject !== 'HELLER' || metrics.castMediaSubject !== 'Nikoras' || (name === 'mobile' && mobileMenuLinks !== 6) || overflow || errors.length) {
     throw new Error(`WOX visual QA failed for ${name}: ${JSON.stringify({ ...metrics, mobileMenuLinks, overflow, errors })}`)
   }
   console.log(JSON.stringify({ name, ...metrics, mobileMenuLinks, overflow, errors }))
