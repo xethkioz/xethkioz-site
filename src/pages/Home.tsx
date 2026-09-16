@@ -376,6 +376,7 @@ export default function Home() {
 
         <section className="wox-hero" aria-labelledby="wox-title">
           <h1 id="wox-title" className="sr-only">World of Xethkioz</h1>
+          <img className="wox-hero-keyart" src="/assets/world-of-xethkioz/web-art/hero-family-resonance.svg" alt="" aria-hidden="true" decoding="async" fetchPriority="high" />
           <div className="wox-hero-frame" aria-hidden="true"><span /><span /><span /><span /></div>
           <div className="wox-hero-core">
             <div className="wox-hero-overline" aria-hidden="true"><span>XK // PRISMATIC RESONANCE</span><span>SAGA I // ACTIVE DEVELOPMENT</span></div>

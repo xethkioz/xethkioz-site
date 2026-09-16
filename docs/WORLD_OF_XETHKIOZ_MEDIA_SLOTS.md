@@ -31,6 +31,7 @@ Estado: estructura web preparada; producción interna Unity + Blender separada d
 - `/assets/world-of-xethkioz/web-art/biome-desfralar.svg`
 - `/assets/world-of-xethkioz/web-art/biome-xiomalar.svg`
 - `/assets/world-of-xethkioz/web-art/biome-zodnight.svg`
+- `/assets/world-of-xethkioz/web-art/hero-family-resonance.svg`
 
 ## Guardrail automático
 

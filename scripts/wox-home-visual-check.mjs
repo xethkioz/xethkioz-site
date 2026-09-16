@@ -42,6 +42,7 @@ for (const [name, viewport] of cases) {
     ecosystemLinks: [...document.querySelectorAll('.wox-ecosystem-nav a, .wox-tools .wox-news-link')].map((a) => ({ text: a.textContent?.trim(), href: a.getAttribute('href') })),
     gameNavLinks: document.querySelectorAll('.wox-game-nav a').length,
     heroSpecs: document.querySelectorAll('.wox-hero-specs a').length,
+    heroKeyArt: document.querySelector('.wox-hero-keyart')?.getAttribute('src') || '',
     chapterPanels: document.querySelectorAll('.wox-section[data-chapter]').length,
     sectionDockLinks: document.querySelectorAll('.wox-section-dock div a').length,
     sectionDockVisible: document.querySelector('.wox-section-dock')?.classList.contains('is-visible') || false,
@@ -64,7 +65,7 @@ for (const [name, viewport] of cases) {
   }))
   await page.screenshot({ path: `${out}/${name}.png`, fullPage: true })
   const overflow = metrics.width > metrics.client
-  if (metrics.media3dSlots !== 3 || metrics.media3dImages !== 1 || metrics.media3dVeyr !== '/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg' || metrics.legacyHeroLabelPresent || metrics.wispAsset !== '/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg' || metrics.gameNavLinks !== 6 || metrics.heroSpecs !== 4 || metrics.chapterPanels !== 9 || metrics.sectionDockLinks !== 6 || !metrics.sectionDockVisible || metrics.reservedMediaFrames !== 6 || metrics.protectedSigils !== 3 || metrics.duoTravelerImage !== '/assets/world-of-xethkioz/web-art/player-etereo-sigil.svg' || metrics.duoXethkiozImage !== '/assets/world-of-xethkioz/web-art/xethkioz-resonance-sigil.svg' || metrics.regionKeyArt.length !== 4 || metrics.randomSectionImages !== 0 || JSON.stringify(metrics.formNames) !== JSON.stringify(canonicalFormNames) || metrics.formMediaSubject !== 'HELLER' || metrics.castMediaSubject !== 'Nikoras' || metrics.internalTextOverflow.length || (compactNav && mobileMenuLinks !== 6) || overflow || errors.length) {
+  if (metrics.media3dSlots !== 3 || metrics.media3dImages !== 1 || metrics.media3dVeyr !== '/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg' || metrics.legacyHeroLabelPresent || metrics.wispAsset !== '/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg' || metrics.gameNavLinks !== 6 || metrics.heroSpecs !== 4 || metrics.heroKeyArt !== '/assets/world-of-xethkioz/web-art/hero-family-resonance.svg' || metrics.chapterPanels !== 9 || metrics.sectionDockLinks !== 6 || !metrics.sectionDockVisible || metrics.reservedMediaFrames !== 6 || metrics.protectedSigils !== 3 || metrics.duoTravelerImage !== '/assets/world-of-xethkioz/web-art/player-etereo-sigil.svg' || metrics.duoXethkiozImage !== '/assets/world-of-xethkioz/web-art/xethkioz-resonance-sigil.svg' || metrics.regionKeyArt.length !== 4 || metrics.randomSectionImages !== 0 || JSON.stringify(metrics.formNames) !== JSON.stringify(canonicalFormNames) || metrics.formMediaSubject !== 'HELLER' || metrics.castMediaSubject !== 'Nikoras' || metrics.internalTextOverflow.length || (compactNav && mobileMenuLinks !== 6) || overflow || errors.length) {
     throw new Error(`WOX visual QA failed for ${name}: ${JSON.stringify({ ...metrics, mobileMenuLinks, overflow, errors })}`)
   }
   console.log(JSON.stringify({ name, ...metrics, mobileMenuLinks, overflow, errors }))

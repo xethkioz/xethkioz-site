@@ -366,3 +366,11 @@ body:has(.wox-home) .xk-privacy-consent-dialog>h2{font-family:Orbitron,Inter,san
 .wox-cast-console .wox-protected-sigil{--sigil:var(--c,#ff8c42);width:66%;border-radius:50% 34% 50% 34%;transform:translate(-50%,-50%) rotate(-8deg)}.wox-cast-console .wox-protected-sigil b{transform:rotate(8deg)}
 .wox-atlas-console .wox-media-placeholder,.wox-form-console .wox-media-placeholder,.wox-cast-console .wox-media-placeholder{background:radial-gradient(circle at 50% 40%,color-mix(in srgb,var(--a,var(--form-accent,var(--c,#9f72ff))) 8%,transparent),transparent 42%),linear-gradient(145deg,rgba(7,8,14,.98),rgba(2,3,7,.9))}
 @media(max-width:760px){.wox-protected-sigil{width:48%}.wox-cast-console .wox-protected-sigil{width:58%}.wox-protected-sigil b{font-size:1.2rem}}
+
+/* PASS 15C — protected family-resonance hero composition. */
+.wox-hero-keyart{position:absolute;z-index:0;inset:70px 2.6vw 24px;width:calc(100% - 5.2vw);height:calc(100% - 94px);object-fit:cover;object-position:center 52%;opacity:.72;filter:saturate(1.08) contrast(1.06) brightness(.72);mask-image:radial-gradient(ellipse at 50% 48%,#000 0 58%,rgba(0,0,0,.92) 68%,transparent 96%);pointer-events:none}
+.wox-hero-core{position:relative;z-index:3}.wox-hero-frame{z-index:2}
+.wox-hero-core::after{content:'';position:absolute;z-index:-1;left:50%;top:22%;width:min(900px,84vw);height:58%;transform:translateX(-50%);background:radial-gradient(ellipse at center,rgba(3,5,9,.86) 0,rgba(3,5,9,.54) 40%,transparent 74%);filter:blur(6px);pointer-events:none}
+.wox-hero::before{content:'';position:absolute;z-index:1;inset:0;background:linear-gradient(90deg,rgba(4,10,8,.36),transparent 28%,transparent 72%,rgba(18,6,22,.32)),linear-gradient(180deg,rgba(3,5,8,.06),rgba(3,5,8,.08) 62%,rgba(3,5,8,.72));pointer-events:none}
+@media(max-width:760px){.wox-hero-keyart{inset:92px 0 32px;width:100%;height:calc(100% - 124px);object-position:center 52%;opacity:.58;filter:saturate(1.12) contrast(1.08) brightness(.62);mask-image:linear-gradient(180deg,transparent 0,#000 12%,#000 72%,transparent 98%)}.wox-hero-core::after{top:18%;width:94vw;height:66%;background:radial-gradient(ellipse at center,rgba(3,5,9,.9),rgba(3,5,9,.58) 44%,transparent 76%)}}
+@media(prefers-reduced-motion:reduce){.wox-hero-keyart{filter:saturate(1.04) contrast(1.04) brightness(.7)}}

@@ -265,3 +265,10 @@ Push de la rama Preview est√° permitido para generar Preview. No mergear a `main
 - Guard visual exige 3 sigilos protegidos ademas de 4 key arts de region y 7 assets web-safe.
 - Revision visual manual: Izrdralar, Desfralar, Xiomalar y Zodnight muestran atmosferas diferenciadas y coherentes.
 - QA visual 1440/1024/768/430/390 PASS; funcional ES/EN PASS; 0 overflow y 0 errores.
+
+## Pass 15C - Hero familiar protegido (2026-09-15)
+- Hero usa `hero-family-resonance.svg`, arte vectorial derivado y no un asset de produccion.
+- Composicion: Etereo + Xethkioz + cuatro emblemas prism·ticos para Ashley, Fermin, Isabella y Gael.
+- El centro queda libre para logo, lema y CTA; el elenco ocupa laterales y funciona como constelacion visual.
+- Guard visual exige el asset oficial del Hero y guard IP lo incluye entre los web-art requeridos.
+- Produccion no se modifica hasta Preview remoto aprobado.
