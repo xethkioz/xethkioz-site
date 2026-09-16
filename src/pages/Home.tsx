@@ -191,6 +191,7 @@ export default function Home() {
               <strong>WORLD OF XETHKIOZ</strong>
               <span>© 2026 XETHKIOZ · {SITE_VERSION}</span>
               <small>{lang === 'es' ? 'Arte conceptual promocional. Los assets, modelos y materiales internos del juego no se publican en esta superficie.' : 'Promotional concept art. Internal game assets, models and production materials are not published on this surface.'}</small>
+              <small className="wox-footer-owner">{lang === 'es' ? 'XETHKIOZ es propiedad de Alexis Díaz Santajulia. Todos los derechos reservados.' : 'XETHKIOZ is the property of Alexis Díaz Santajulia. All rights reserved.'}</small>
             </div>
             <nav aria-label={lang === 'es' ? 'Enlaces del sitio' : 'Site links'}>
               <Link to={localizePath('/support')}>{lang === 'es' ? 'Apoyar proyecto' : 'Support project'}</Link>
