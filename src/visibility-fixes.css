@@ -1,3 +1,23 @@
 #world-gates-heading + p + div > a:nth-child(3) {
   display: none !important;
 }
+
+/* World Home: let the dynamic background breathe. The protected family key-art is
+   intentionally kept out of the public hero; Veyr remains only as the floating Wisp. */
+.wox-home .wox-hero-keyart {
+  display: none !important;
+}
+
+.wox-home .wox-bg-video {
+  filter: saturate(1.08) contrast(1.04) brightness(.9) !important;
+}
+
+.wox-home .wox-noise {
+  opacity: .07 !important;
+}
+
+.wox-home .wox-hero::before {
+  inset: 18% 18% 9% !important;
+  background: radial-gradient(ellipse at center, rgba(7,7,12,.1), rgba(7,7,12,.24) 50%, transparent 74%) !important;
+  filter: blur(28px) !important;
+}
