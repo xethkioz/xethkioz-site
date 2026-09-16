@@ -107,7 +107,9 @@ const copy = {
     travelerTitle: 'El Viajero y Xethkioz',
     travelerText: 'El Viajero nace sin una identidad cerrada y convierte cada experiencia en Memoria Propia. Xethkioz, la Forma Abierta, puede sostener múltiples afinidades sin dejar de ser quien es.',
     worldsEyebrow: 'SAGA I // 32 MAPAS',
-    worldsTitle: 'Cuatro territorios. Una misma fractura.',
+    worldsTitle: 'Cuatro territorios. Una isla fuera del tiempo.',
+    demo: 'DEMO EN PREPARACIÓN',
+    lore: 'EXPLORAR LORE DE SAGA I',
     bestiaryEyebrow: 'PRISMA-ATLAS // VIDA Y AMENAZAS',
     bestiaryTitle: 'El mundo no existe sólo para combatirlo.',
     formsEyebrow: 'OCHO FORMAS DE CONVERGENCIA',
@@ -115,8 +117,8 @@ const copy = {
     castEyebrow: 'PERSONAJES // IDENTIDADES CANÓNICAS',
     castTitle: 'Nombres del mundo. Vínculos de la historia.',
     devEyebrow: 'DESARROLLO // ESTADO DEL PROYECTO',
-    devTitle: 'Producción 3D activa en Unity + Blender.',
-    devText: 'La web va a funcionar como el centro público del proyecto: lore, Atlas, avances, comunidad y estado del juego, sin mezclar el contenido interno de producción con la experiencia del visitante.',
+    devTitle: 'Producción 2D activa en Godot 4.',
+    devText: 'La web funciona como centro público del proyecto: lore, Atlas, arte conceptual, avances y comunidad, mientras los assets originales y el material interno permanecen reservados.',
     roadmapEyebrow: 'ROADMAP // SIGUIENTE OBJETIVO',
     roadmapTitle: 'Del canon al primer vertical slice jugable.',
     roadmapText: 'La prioridad pública es convertir la base técnica en una experiencia corta, pulida y representativa de World of Xethkioz antes de ampliar alcance.',
@@ -142,7 +144,9 @@ const copy = {
     travelerTitle: 'The Traveler and Xethkioz',
     travelerText: 'The Traveler is born without a fixed identity and turns each experience into a Personal Memory. Xethkioz, the Open Form, can sustain multiple affinities without losing its identity.',
     worldsEyebrow: 'SAGA I // 32 MAPS',
-    worldsTitle: 'Four territories. One fracture.',
+    worldsTitle: 'Four territories. One island outside time.',
+    demo: 'DEMO IN PREPARATION',
+    lore: 'EXPLORE SAGA I LORE',
     bestiaryEyebrow: 'PRISM ATLAS // LIFE AND THREATS',
     bestiaryTitle: 'The world does not exist only to be fought.',
     formsEyebrow: 'EIGHT CONVERGENCE FORMS',
@@ -150,8 +154,8 @@ const copy = {
     castEyebrow: 'CHARACTERS // CANONICAL IDENTITIES',
     castTitle: 'Names of the world. Bonds of the story.',
     devEyebrow: 'DEVELOPMENT // PROJECT STATUS',
-    devTitle: 'Active 3D production in Unity + Blender.',
-    devText: 'The site becomes the public center of the project: lore, Atlas, progress, community and game status, without mixing internal production material into the visitor experience.',
+    devTitle: 'Active 2D production in Godot 4.',
+    devText: 'The site is the public center of the project: lore, Atlas, concept art, progress and community, while original assets and internal production material remain private.',
     roadmapEyebrow: 'ROADMAP // NEXT TARGET',
     roadmapTitle: 'From locked canon to the first playable vertical slice.',
     roadmapText: 'The public priority is turning the technical foundation into a short, polished experience that represents World of Xethkioz before expanding scope.',
@@ -182,12 +186,14 @@ const regions = {
     ['DESFRALAR', 'M09–M17', 'Nivel 60–85', 'Expansión I · raíces hundidas, Caverna Viva, Ciénaga Espiritual, Mamporath y memoria.'],
     ['XIOMALAR', 'M18–M25', 'Nivel 85–105', 'Expansión II · corrientes, jardines suspendidos, Observatorio Cuántico y Tiempo Primigenio.'],
     ['ZODNIGHT', 'M26–M32', 'Nivel 105–120', 'Cierre Saga I · estados quietos, El Unísono, convergencias y la decisión de divergir.'],
+    ['ISLA TEMPORAL', 'POST-FINAL', 'Bucle de 5 estados', 'Zona post-final · memoria, rescate de Andrealis y una realidad que se niega a permanecer igual.'],
   ],
   en: [
     ['IZRDRALAR', 'M01–M08', 'Level 1–60', 'Base game · Awakening Basin, Dawn Village, Enchanted Lake, technoflora, secrets and the First Schism.'],
     ['DESFRALAR', 'M09–M17', 'Level 60–85', 'Expansion I · sunken roots, Living Cavern, Spirit Swamp, Mamporath and memory.'],
     ['XIOMALAR', 'M18–M25', 'Level 85–105', 'Expansion II · currents, suspended gardens, Quantum Observatory and Primordial Time.'],
     ['ZODNIGHT', 'M26–M32', 'Level 105–120', 'Saga I finale · still states, the Unison, convergences and the choice to diverge.'],
+    ['TEMPORAL ISLAND', 'POST-FINALE', '5-state loop', 'Post-finale zone · memory, Andrealis rescue and a reality that refuses to stay fixed.'],
   ],
 } as const
 const regionArt = [
@@ -195,6 +201,7 @@ const regionArt = [
   '/assets/world-of-xethkioz/web-art/biome-desfralar.svg',
   '/assets/world-of-xethkioz/web-art/biome-xiomalar.svg',
   '/assets/world-of-xethkioz/web-art/biome-zodnight.svg',
+  '/assets/world-of-xethkioz/web-art/biome-isla-temporal.svg',
 ] as const
 
 const atlasEntries = {
@@ -218,12 +225,14 @@ const regionDetails = {
     { name: 'DESFRALAR', code: 'EXP I', maps: ['M09 Umbral de Raíces Hundidas', 'M10 Galerías de la Caverna Viva', 'M11 Corazón de la Caverna Viva', 'M12 Borde de la Ciénaga Espiritual', 'M13 Campamento de las Anclas', 'M14 Fangal de los Ecos', 'M15 Santuario de la Ciénaga', 'M16 Zona Abisal', 'M17 Trono de la Ciénaga'], focus: 'El terreno empieza a comportarse como una memoria viva. Mamporath y la Ciénaga amplían la relación entre Resonancia, ecos y movimiento por el mundo.' },
     { name: 'XIOMALAR', code: 'EXP II', maps: ['M18 Ascenso de las Corrientes', 'M19 Jardines Suspendidos', 'M20 Observatorio Cuántico', 'M21 Templos de Resonancia', 'M22 Mar de Nubes Fracturadas', 'M23 Archivo del Tiempo Primigenio', 'M24 Bastión del Custodio', 'M25 Umbral del Tiempo Primigenio'], focus: 'La exploración deja de ser sólo geográfica. El jugador empieza a recorrer corrientes temporales, estados incompatibles y el conocimiento que Ivander logró reconstruir.' },
     { name: 'ZODNIGHT', code: 'CIERRE', maps: ['M26 Frontera de la Noche Fija', 'M27 Ciudad de los Estados Quietos', 'M28 Santuario del Unísono', 'M29 Atrio de la Memoria de Elida', 'M30 Eclipse de Dvalin', 'M31 Campos de Convergencia', 'M32 Núcleo del Unísono'], focus: 'Saga I enfrenta la idea central del juego: aceptar la multiplicidad o imponer una única realidad estable. El final no restaura el mundo anterior.' },
+    { name: 'ISLA TEMPORAL', code: 'POST', maps: ['Estado I · Eco', 'Estado II · Desvío', 'Estado III · Ruptura', 'Estado IV · Recuerdo', 'Estado V · Rescate'], focus: 'Después del cierre de Saga I, la Isla Temporal convierte la memoria en espacio jugable. El rescate de Andrealis exige comprender cinco estados del mismo lugar sin tratar ninguno como una simple copia.' },
   ],
   en: [
     { name: 'IZRDRALAR', code: 'BASE', maps: ['M01 Awakening Basin', 'M02 Dawn Village', 'M03 Enchanted Lake + Living Ruins', 'M04 Matrias Expedition + technoflora', 'M05 Prismatic Cage', 'M06 Living Refuge', 'M07 Secrets of Izrdralar', 'M08 First Schism'], focus: 'The Traveler learns to exist, meets Xethkioz and discovers that exploration, care and understanding can matter as much as combat.' },
     { name: 'DESFRALAR', code: 'EXP I', maps: ['M09 Sunken Roots Threshold', 'M10 Living Cavern Galleries', 'M11 Heart of the Living Cavern', 'M12 Edge of the Spirit Swamp', 'M13 Anchor Camp', 'M14 Mire of Echoes', 'M15 Swamp Sanctuary', 'M16 Abyssal Zone', 'M17 Swamp Throne'], focus: 'Terrain starts behaving like living memory. Mamporath and the swamp expand the link between Resonance, echoes and movement through the world.' },
     { name: 'XIOMALAR', code: 'EXP II', maps: ['M18 Rise of the Currents', 'M19 Suspended Gardens', 'M20 Quantum Observatory', 'M21 Resonance Temples', 'M22 Fractured Cloud Sea', 'M23 Primordial Time Archive', 'M24 Custodian Bastion', 'M25 Primordial Time Threshold'], focus: 'Exploration stops being only geographic. The player begins traversing temporal currents, incompatible states and the knowledge Ivander managed to reconstruct.' },
     { name: 'ZODNIGHT', code: 'FINALE', maps: ['M26 Fixed Night Frontier', 'M27 City of Still States', 'M28 Unison Sanctuary', 'M29 Atrium of Elida Memory', 'M30 Dvalin Eclipse', 'M31 Convergence Fields', 'M32 Unison Core'], focus: 'Saga I confronts the central idea of the game: accept multiplicity or impose one stable reality. The ending does not restore the old world.' },
+    { name: 'TEMPORAL ISLAND', code: 'POST', maps: ['State I · Echo', 'State II · Detour', 'State III · Rupture', 'State IV · Memory', 'State V · Rescue'], focus: 'After Saga I closes, Temporal Island turns memory into playable space. Rescuing Andrealis means understanding five states of the same place without treating any of them as a simple copy.' },
   ],
 } as const
 
@@ -262,6 +271,48 @@ const forms = {
     ['ITZUKE', 'Ivander · The Quantum Scientist', 'Electricity · Speed · Observation'],
     ['DVALIN', 'Alxion · Primordial Thaumaturge', 'Ice · Shadow · Anticipation'],
     ['OKUNINUST', 'Elida · Guardian of Memory', 'Water · Memory · Shield'],
+  ],
+} as const
+
+
+const ecosystemCards = {
+  es: [
+    ['GREEN NODE + WISP', 'Infraestructura viva, Veyr y la conexión transmedia entre el mundo del juego y esta Superficie de Luz.', '/green-node', 'NODE'],
+    ['ARGENCIENCIA', 'Divulgación científica, física, tecnología y puente educativo conectado con la curiosidad detrás de XETHKIOZ.', 'https://argenciencia.com/', 'SCI'],
+    ['CREADOR WEB', 'Diseño y desarrollo de experiencias web profesionales para proyectos independientes, marcas y empresas.', '/creacion-web', 'WEB'],
+    ['DONACIONES', 'Soporte transparente para producción, infraestructura y causas reales vinculadas al ecosistema.', '/support', 'SUP'],
+  ],
+  en: [
+    ['GREEN NODE + WISP', 'Living infrastructure, Veyr and the transmedia connection between the game world and this Surface of Light.', '/en/green-node', 'NODE'],
+    ['ARGENCIENCIA', 'Science communication, physics, technology and an educational bridge tied to XETHKIOZ curiosity.', 'https://argenciencia.com/', 'SCI'],
+    ['WEB CREATOR', 'Professional web design and development for independent projects, brands and companies.', '/en/creacion-web', 'WEB'],
+    ['DONATIONS', 'Transparent support for production, infrastructure and real-world causes connected to the ecosystem.', '/en/support', 'SUP'],
+  ],
+} as const
+
+const familiarCards = {
+  es: [
+    ['XETHKIOZ', 'FORMA ABIERTA', 'Gato Andino Místico · vínculo central de Resonancia y compañero del Viajero.', 'XE'],
+    ['JOLITO', 'FAMILIAR COMÚN', 'Gallo criollo de Dany · presencia territorial, memoria cotidiana y carácter propio.', 'JO'],
+    ['CARPINCHITO DE CRISTAL', 'FAMILIAR COMÚN', 'Fauna prismática vinculada al refugio y a la exploración no hostil del mundo.', 'CC'],
+  ],
+  en: [
+    ['XETHKIOZ', 'OPEN FORM', 'Mystic Andean Cat · central Resonance bond and companion of the Traveler.', 'XE'],
+    ['JOLITO', 'COMMON FAMILIAR', 'Dany’s creole rooster · territorial presence, everyday memory and a character of his own.', 'JO'],
+    ['CRYSTAL CAPYBARA', 'COMMON FAMILIAR', 'Prismatic wildlife tied to the refuge and non-hostile exploration of the world.', 'CC'],
+  ],
+} as const
+
+const featuredCast = {
+  es: [
+    ['Alxion', 'Taumaturgo Primigenio', 'AL'], ['Ivander', 'Científico Cuántico', 'IV'], ['Elida', 'Guardiana de la Memoria', 'EL'],
+    ['Ashley', 'Voz del Silencio', 'AS'], ['Fermín', 'Bastión de la Tierra', 'FE'], ['Isabella', 'Llama Indómita', 'IS'],
+    ['Gael', 'Heredero del Viento', 'GA'], ['Chippo', 'Duelista Convergente', 'CH'], ['Dany + Jolito', 'Vínculo cotidiano', 'DJ'],
+  ],
+  en: [
+    ['Alxion', 'Primordial Thaumaturge', 'AL'], ['Ivander', 'Quantum Scientist', 'IV'], ['Elida', 'Guardian of Memory', 'EL'],
+    ['Ashley', 'Voice of Silence', 'AS'], ['Fermín', 'Bastion of Earth', 'FE'], ['Isabella', 'Untamed Flame', 'IS'],
+    ['Gael', 'Heir of the Wind', 'GA'], ['Chippo', 'Convergence Duelist', 'CH'], ['Dany + Jolito', 'Everyday Bond', 'DJ'],
   ],
 } as const
 
@@ -342,21 +393,24 @@ export default function Home() {
 
         <header className="wox-topbar">
           <nav className="wox-ecosystem-nav" aria-label={lang === 'es' ? 'Ecosistema XETHKIOZ' : 'XETHKIOZ ecosystem'}>
-            <Link to={localizePath('/gaming')}>{lang === 'es' ? 'JUEGOS' : 'GAMING'}</Link>
+            <a href="#origin">{lang === 'es' ? 'JUEGO' : 'GAME'}</a>
             <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ARGENCIENCIA <span>↗</span></a>
+            <Link to={localizePath('/gaming')}>{lang === 'es' ? 'BIBLIOTECA DE JUEGOS' : 'GAME LIBRARY'}</Link>
             <a href="/mascotas/">{lang === 'es' ? 'MASCOTAS' : 'PETS'}</a>
-            <Link to={localizePath('/nexus-city')}>NEXUS CITY</Link>
-            <Link to={localizePath('/creacion-web')}>{lang === 'es' ? 'CREACIÓN WEB' : 'WEB CREATION'}</Link>
+            <Link to={localizePath('/green-node')}>GREEN NODE</Link>
+            <Link to={localizePath('/creacion-web')}>{lang === 'es' ? 'CREADOR WEB' : 'WEB CREATOR'}</Link>
+            <Link to={localizePath('/support')}>{lang === 'es' ? 'DONACIONES' : 'DONATIONS'}</Link>
           </nav>
           <details className="wox-mobile-ecosystem">
             <summary>{lang === 'es' ? 'XETHKIOZ' : 'XETHKIOZ'} <span aria-hidden="true">＋</span></summary>
             <nav aria-label={lang === 'es' ? 'Ecosistema XETHKIOZ móvil' : 'Mobile XETHKIOZ ecosystem'}>
-              <Link to={localizePath('/gaming')}>{lang === 'es' ? 'JUEGOS' : 'GAMING'}</Link>
+              <a href="#origin">{lang === 'es' ? 'JUEGO' : 'GAME'}</a>
               <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ARGENCIENCIA <span>↗</span></a>
+              <Link to={localizePath('/gaming')}>{lang === 'es' ? 'BIBLIOTECA DE JUEGOS' : 'GAME LIBRARY'}</Link>
               <a href="/mascotas/">{lang === 'es' ? 'MASCOTAS' : 'PETS'}</a>
-              <Link to={localizePath('/nexus-city')}>NEXUS CITY</Link>
-              <Link to={localizePath('/creacion-web')}>{lang === 'es' ? 'CREACIÓN WEB' : 'WEB CREATION'}</Link>
-              <Link to="/news">{lang === 'es' ? 'NOTICIAS' : 'NEWS'}</Link>
+              <Link to={localizePath('/green-node')}>GREEN NODE</Link>
+              <Link to={localizePath('/creacion-web')}>{lang === 'es' ? 'CREADOR WEB' : 'WEB CREATOR'}</Link>
+              <Link to={localizePath('/support')}>{lang === 'es' ? 'DONACIONES' : 'DONATIONS'}</Link>
             </nav>
           </details>
           <div className="wox-tools">
@@ -387,16 +441,15 @@ export default function Home() {
             <p className="wox-status">{t.status}</p>
             <h2>{t.soul}</h2>
             <p className="wox-lead">{t.lead}</p>
-            <div className="wox-actions">
-              <a href="#worlds">{t.explore}<span>↓</span></a>
-              <button type="button" onClick={openNexusChat}>{t.chat}<span>◉</span></button>
-              <a href="#atlas" className="is-quiet">{t.atlas}<span>↘</span></a>
+            <div className="wox-actions wox-actions-pass16">
+              <a href="#development" className="is-demo" aria-label={lang === 'es' ? 'Demo todavía en preparación' : 'Demo currently in preparation'}>{t.demo}<span>◇</span></a>
+              <a href="#origin" className="is-lore">{t.lore}<span>↓</span></a>
             </div>
             <div className="wox-hero-specs" aria-label={lang === 'es' ? 'Datos principales de Saga I' : 'Saga I key facts'}>
-              <a href="#worlds"><strong>04</strong><span>{lang === 'es' ? 'TERRITORIOS' : 'TERRITORIES'}</span></a>
+              <a href="#worlds"><strong>04+1</strong><span>{lang === 'es' ? 'REGIONES' : 'REGIONS'}</span></a>
               <a href="#worlds"><strong>32</strong><span>{lang === 'es' ? 'MAPAS' : 'MAPS'}</span></a>
               <a href="#characters"><strong>08</strong><span>{lang === 'es' ? 'FORMAS' : 'FORMS'}</span></a>
-              <a href="#development"><strong>3D</strong><span>UNITY + BLENDER</span></a>
+              <a href="#development"><strong>G4</strong><span>GODOT 4 · ARPG 2D</span></a>
             </div>
             <nav className="wox-game-nav" aria-label={lang === 'es' ? 'Secciones de World of Xethkioz' : 'World of Xethkioz sections'}>
               {gameSections[lang].map(([id, label]) => <a key={id} href={`#${id}`}>{label}</a>)}
@@ -522,6 +575,17 @@ export default function Home() {
               <p>{t.castEyebrow}</p>
               <h2 id="cast-title">{t.castTitle}</h2>
             </div>
+            <div className="wox-featured-cast" aria-label={lang === 'es' ? 'Elenco principal de la Convergencia' : 'Main Convergence cast'}>
+              {featuredCast[lang].map(([name, title, glyph], index) => (
+                <article key={name} data-featured={index + 1}>
+                  <div className="wox-featured-cast-art" aria-hidden="true"><i /><i /><b>{glyph}</b></div>
+                  <small>{String(index + 1).padStart(2, '0')}</small>
+                  <strong>{name}</strong>
+                  <span>{title}</span>
+                </article>
+              ))}
+            </div>
+            <div className="wox-cast-archive-label"><span>{lang === 'es' ? 'ARCHIVO AMPLIADO' : 'EXPANDED ARCHIVE'}</span><b>{lang === 'es' ? '14 identidades canónicas registradas' : '14 canonical identities registered'}</b></div>
             <div className="wox-cast-grid">
               {cast[lang].map(([name, title], index) => (
                 <article key={name} data-cast={index + 1} className={activeCast === index ? 'is-active' : ''}>
@@ -544,7 +608,40 @@ export default function Home() {
             </div>
           </section>
 
-          <section id="media-3d" data-chapter="07" className="wox-section wox-3d-stage" aria-labelledby="media-3d-title">
+          <section id="ecosystem" data-chapter="07" className="wox-section wox-ecosystem-stage" aria-labelledby="ecosystem-title">
+            <div className="wox-section-head">
+              <p>{lang === 'es' ? 'XETHKIOZ // ECOSISTEMA CONECTADO' : 'XETHKIOZ // CONNECTED ECOSYSTEM'}</p>
+              <h2 id="ecosystem-title">{lang === 'es' ? 'El juego es un mundo. XETHKIOZ es una red.' : 'The game is a world. XETHKIOZ is a network.'}</h2>
+              <span>{lang === 'es' ? 'Green Node, ciencia, desarrollo web y apoyo conviven como extensiones reales de la misma identidad, sin romper la inmersión de World of Xethkioz.' : 'Green Node, science, web development and support coexist as real extensions of the same identity without breaking World of Xethkioz immersion.'}</span>
+            </div>
+            <div className="wox-ecosystem-grid">
+              {ecosystemCards[lang].map(([title, text, href, code]) => {
+                const body = <><small>{code}</small><strong>{title}</strong><p>{text}</p><span>{lang === 'es' ? 'ABRIR PORTAL' : 'OPEN PORTAL'} ↗</span></>
+                return href.startsWith('http')
+                  ? <a key={title} href={href} target="_blank" rel="noopener noreferrer">{body}</a>
+                  : <Link key={title} to={href}>{body}</Link>
+              })}
+            </div>
+          </section>
+
+          <section id="familiars" data-chapter="08" className="wox-section wox-familiars-stage" aria-labelledby="familiars-title">
+            <div className="wox-section-head">
+              <p>{lang === 'es' ? 'MASCOTAS // REFUGIO DE FAUNA' : 'PETS // WILDLIFE REFUGE'}</p>
+              <h2 id="familiars-title">{lang === 'es' ? 'Compañeros, familiares y vida que no existe sólo para combatir.' : 'Companions, familiars and life that exists beyond combat.'}</h2>
+              <span>{lang === 'es' ? 'El refugio de Valdros, Rola y Mela conecta cuidado, exploración y vínculo. Las piezas públicas son ilustraciones derivadas; los modelos originales permanecen reservados.' : 'Valdros, Rola and Mela’s refuge connects care, exploration and bonding. Public pieces are derived illustrations; original models remain private.'}</span>
+            </div>
+            <div className="wox-familiar-strip">
+              {familiarCards[lang].map(([name, type, text, glyph], index) => (
+                <article key={name} data-familiar={index + 1}>
+                  <div className="wox-familiar-art" aria-hidden="true"><i /><i /><b>{glyph}</b></div>
+                  <small>{type}</small><strong>{name}</strong><p>{text}</p>
+                </article>
+              ))}
+            </div>
+            <a className="wox-familiar-link" href="/mascotas/">{lang === 'es' ? 'ENTRAR AL HUB DE MASCOTAS Y REFUGIO' : 'ENTER PETS & REFUGE HUB'} <span>↗</span></a>
+          </section>
+
+          <section id="media-3d" data-chapter="09" className="wox-section wox-3d-stage" aria-labelledby="media-3d-title">
             <div className="wox-section-head">
               <p>{lang === 'es' ? 'WORLD OF XETHKIOZ // ARTE VISUAL' : 'WORLD OF XETHKIOZ // VISUAL ART'}</p>
               <h2 id="media-3d-title">{lang === 'es' ? 'El mundo toma forma antes de convertirse en juego.' : 'The world takes shape before it becomes a game.'}</h2>
@@ -564,8 +661,8 @@ export default function Home() {
                 </div>
               </article>
               {[
-                ['02', lang === 'es' ? 'ESCENARIOS 3D' : '3D ENVIRONMENTS', lang === 'es' ? 'Mapas, biomas, iluminación y atmósfera capturados desde Unity.' : 'Maps, biomes, lighting and atmosphere captured from Unity.'],
-                ['03', lang === 'es' ? 'GAMEPLAY REAL' : 'REAL GAMEPLAY', lang === 'es' ? 'Movimiento, combate, exploración e interacción grabados directamente desde el juego.' : 'Movement, combat, exploration and interaction recorded directly from the game.'],
+                ['02', lang === 'es' ? 'ATMÓSFERAS DEL MUNDO' : 'WORLD ATMOSPHERES', lang === 'es' ? 'Biomas, arquitectura, luz y composición reinterpretados como arte promocional seguro.' : 'Biomes, architecture, light and composition reinterpreted as safe promotional art.'],
+                ['03', lang === 'es' ? 'BOCETOS + PROCESO' : 'SKETCHES + PROCESS', lang === 'es' ? 'Estudios de símbolos, criaturas y escenarios sin publicar modelos, sprites ni capturas crudas.' : 'Studies of symbols, creatures and environments without publishing raw models, sprites or captures.'],
               ].map(([index, title, text]) => (
                 <article key={index}>
                   <div className="wox-3d-viewport" aria-hidden="true"><span>{index}</span><i /><b /></div>
@@ -576,7 +673,7 @@ export default function Home() {
             <div className="wox-3d-note"><span>CONCEPT ART</span><span>WORLD DESIGN</span><span>RESONANCE</span><p>{lang === 'es' ? 'El archivo visual crecerá con conceptos, bocetos, pruebas de atmósfera y piezas promocionales del universo.' : 'The visual archive will grow with concepts, sketches, atmosphere studies and promotional pieces from the universe.'}</p></div>
           </section>
 
-          <section id="development" data-chapter="08" className="wox-section wox-dev wox-dev-showcase" aria-labelledby="dev-title">
+          <section id="development" data-chapter="10" className="wox-section wox-dev wox-dev-showcase" aria-labelledby="dev-title">
             <div className="wox-section-head">
               <p>{t.devEyebrow}</p>
               <h2 id="dev-title">{t.devTitle}</h2>
@@ -586,17 +683,17 @@ export default function Home() {
               <article><strong>32</strong><span>{lang === 'es' ? 'mapas físicos en Saga I' : 'physical maps in Saga I'}</span></article>
               <article><strong>120</strong><span>{lang === 'es' ? 'nivel máximo de Saga I' : 'Saga I level cap'}</span></article>
               <article><strong>8</strong><span>{lang === 'es' ? 'Formas de Convergencia' : 'Convergence Forms'}</span></article>
-              <article><strong>UNITY</strong><span>{lang === 'es' ? 'motor de producción activo' : 'active production engine'}</span></article>
+              <article><strong>GODOT 4</strong><span>{lang === 'es' ? 'motor de producción activo' : 'active production engine'}</span></article>
             </div>
             <div className="wox-dev-pulse" aria-label={lang === 'es' ? 'Hitos públicos del desarrollo' : 'Public development milestones'}>
               <span><i />CANON v2.0 LOCK</span>
               <span><i />32 MAPAS SAGA I</span>
-              <span><i />BESTIARIO 3D PIPELINE</span>
+              <span><i />ARTE CONCEPTUAL + GODOT 4</span>
               <span><i />VERTICAL SLICE EN PRODUCCIÓN</span>
             </div>
           </section>
 
-          <section data-chapter="09" className="wox-section wox-roadmap wox-roadmap-showcase" aria-labelledby="roadmap-title">
+          <section data-chapter="11" className="wox-section wox-roadmap wox-roadmap-showcase" aria-labelledby="roadmap-title">
             <div className="wox-section-head">
               <p>{t.roadmapEyebrow}</p>
               <h2 id="roadmap-title">{t.roadmapTitle}</h2>
@@ -626,10 +723,12 @@ export default function Home() {
           </section>
 
           <footer className="wox-footer">
+            <div className="wox-tech-seals" aria-label={lang === 'es' ? 'Tecnologías y red' : 'Technology and network'}><span>GODOT 4</span><span>TRIPO 3D</span><span>GREEN NODE</span><span>VEYR/WISP</span></div>
             <div>
               <small className="wox-footer-status">{lang === 'es' ? 'SAGA I // EN DESARROLLO' : 'SAGA I // IN DEVELOPMENT'}</small>
               <strong>WORLD OF XETHKIOZ</strong>
               <span>© 2026 XETHKIOZ · {SITE_VERSION}</span>
+              <small>{lang === 'es' ? 'Arte conceptual promocional. Los assets, modelos y materiales internos del juego no se publican en esta superficie.' : 'Promotional concept art. Internal game assets, models and production materials are not published on this surface.'}</small>
             </div>
             <nav aria-label={lang === 'es' ? 'Enlaces del sitio' : 'Site links'}>
               <Link to={localizePath('/support')}>{lang === 'es' ? 'Apoyar proyecto' : 'Support project'}</Link>

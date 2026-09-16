@@ -1,4 +1,3 @@
-#world-gates-heading + p + div > a:nth-child(3),
-a[href="/green-node"] {
+#world-gates-heading + p + div > a:nth-child(3) {
   display: none !important;
 }

@@ -374,3 +374,130 @@ body:has(.wox-home) .xk-privacy-consent-dialog>h2{font-family:Orbitron,Inter,san
 .wox-hero::before{content:'';position:absolute;z-index:1;inset:0;background:linear-gradient(90deg,rgba(4,10,8,.36),transparent 28%,transparent 72%,rgba(18,6,22,.32)),linear-gradient(180deg,rgba(3,5,8,.06),rgba(3,5,8,.08) 62%,rgba(3,5,8,.72));pointer-events:none}
 @media(max-width:760px){.wox-hero-keyart{inset:92px 0 32px;width:100%;height:calc(100% - 124px);object-position:center 52%;opacity:.58;filter:saturate(1.12) contrast(1.08) brightness(.62);mask-image:linear-gradient(180deg,transparent 0,#000 12%,#000 72%,transparent 98%)}.wox-hero-core::after{top:18%;width:94vw;height:66%;background:radial-gradient(ellipse at center,rgba(3,5,9,.9),rgba(3,5,9,.58) 44%,transparent 76%)}}
 @media(prefers-reduced-motion:reduce){.wox-hero-keyart{filter:saturate(1.04) contrast(1.04) brightness(.7)}}
+/* PASS 16 - landing AAA: less dashboard, more cinematic world chapters. */
+.wox-world-showcase{overflow:visible;border:0;border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;padding-inline:clamp(18px,4vw,64px)}
+.wox-world-showcase::after{display:none}.wox-world-showcase::before{inset:-40px -5vw;background:radial-gradient(circle at 12% 30%,rgba(48,154,88,.14),transparent 30%),radial-gradient(circle at 80% 18%,rgba(139,92,246,.1),transparent 24%);filter:blur(24px)}
+.wox-world-showcase>.wox-section-head{max-width:980px;margin-bottom:34px}.wox-world-showcase>.wox-section-head h2{max-width:920px}
+.wox-world-showcase .wox-region-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:repeat(3,minmax(150px,1fr));gap:12px;min-height:590px;margin-top:0}
+.wox-world-showcase .wox-region-grid article{min-width:0;min-height:0;overflow:hidden;border:0;border-radius:0;background:#05090a;clip-path:polygon(0 0,96% 0,100% 12%,100% 100%,4% 100%,0 88%);box-shadow:none;transition:filter .25s ease,transform .25s ease}
+.wox-world-showcase .wox-region-grid article.is-active{order:0;grid-column:1/9;grid-row:1/4;min-height:590px;transform:none;clip-path:polygon(0 0,94% 0,100% 8%,100% 92%,94% 100%,0 100%);box-shadow:0 34px 90px rgba(0,0,0,.35)}
+.wox-world-showcase .wox-region-grid article:not(.is-active){grid-column:9/13;min-height:0;transform:none;clip-path:polygon(5% 0,100% 0,100% 82%,94% 100%,0 100%,0 16%)}
+.wox-world-showcase .wox-region-grid article>button,.wox-world-showcase .wox-region-grid article.is-active>button{position:relative;display:flex;height:100%;min-height:100%;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:clamp(24px,3vw,44px);text-align:left}
+.wox-world-showcase .wox-region-grid article>button::before{content:'';position:absolute;z-index:1;inset:0;background:linear-gradient(180deg,rgba(3,5,8,.02) 12%,rgba(3,5,8,.16) 44%,rgba(3,5,8,.92) 100%),linear-gradient(90deg,rgba(3,5,8,.78),transparent 58%);pointer-events:none}
+.wox-world-showcase .wox-region-grid article:not(.is-active)>button::before{background:linear-gradient(90deg,rgba(3,5,8,.86),rgba(3,5,8,.35) 58%,rgba(3,5,8,.18)),linear-gradient(180deg,transparent,rgba(3,5,8,.66))}
+.wox-world-showcase .wox-region-keyart,.wox-world-showcase .wox-region-grid article.is-active .wox-region-keyart{inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:.84;filter:saturate(1.24) contrast(1.08) brightness(.8);mask-image:none}
+.wox-world-showcase .wox-region-grid article:not(.is-active) .wox-region-keyart{opacity:.6;filter:saturate(1.12) contrast(1.05) brightness(.66)}
+.wox-world-showcase .wox-region-grid article.is-active h3{max-width:80%;margin:14px 0 12px;font-size:clamp(4rem,7vw,7.6rem);line-height:.82;letter-spacing:-.065em}
+.wox-world-showcase .wox-region-grid article.is-active p{max-width:620px;margin:0;font-size:1rem;line-height:1.65;color:rgba(255,255,255,.78)}
+.wox-world-showcase .wox-region-grid article:not(.is-active) h3{margin:8px 0 0;font-size:clamp(1.45rem,2vw,2.5rem);line-height:.9;letter-spacing:-.045em;color:#fff}
+.wox-world-showcase .wox-region-grid article:not(.is-active) p{display:none}.wox-world-showcase .wox-region-grid article:not(.is-active) b{margin-top:14px;font-size:.45rem;opacity:.72}
+.wox-world-showcase .wox-region-grid article:not(.is-active) i{right:18px;bottom:10px;font-size:4.8rem;opacity:.04}
+.wox-world-showcase .wox-region-console{position:relative;display:grid;grid-template-columns:minmax(240px,.62fr) minmax(0,1.38fr);gap:26px;margin-top:26px;padding:0 0 0 18px;border:0;border-left:2px solid var(--r,#8b5cf6);border-radius:0;background:transparent;box-shadow:none;overflow:visible}
+.wox-world-showcase .wox-region-console::after{display:none}.wox-world-showcase .wox-region-console>.wox-media-placeholder{min-height:0;aspect-ratio:16/9;border:0;border-radius:0;clip-path:polygon(0 0,92% 0,100% 16%,100% 100%,8% 100%,0 84%)}
+.wox-world-showcase .wox-region-console-head{align-self:end}.wox-world-showcase .wox-region-console>p{max-width:760px;font-size:1.02rem;line-height:1.72}.wox-world-showcase .wox-map-chips{align-self:start}
+
+/* PASS 16 - Hero opens up like a game landing instead of a framed dashboard. */
+.wox-hero-frame{border:0;box-shadow:none}.wox-hero-frame span{display:none}
+.wox-hero-keyart{inset:64px 0 0;width:100%;height:calc(100% - 64px);opacity:.82;mask-image:linear-gradient(180deg,#000 0,#000 72%,transparent 100%)}
+.wox-hero::before{background:linear-gradient(90deg,rgba(2,8,6,.48),transparent 32%,transparent 68%,rgba(18,5,22,.42)),linear-gradient(180deg,rgba(3,5,8,.02),rgba(3,5,8,.18) 56%,rgba(3,5,8,.92))}
+.wox-hero-specs{border:0;border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;gap:2px;overflow:visible}
+.wox-hero-specs a{border:0;border-top:1px solid rgba(255,255,255,.14);background:linear-gradient(180deg,rgba(7,8,13,.2),rgba(7,8,13,.52))}.wox-hero-specs a:last-child{border-right:0}
+/* PASS 16 - Green Node is a gateway chapter, not a 3D dashboard. */
+.wox-3d-stage{overflow:visible;border:0;border-radius:0;background:transparent;box-shadow:none;padding-inline:clamp(18px,4vw,64px)}.wox-3d-stage::after{display:none}
+.wox-3d-grid{grid-template-columns:minmax(0,1.45fr) minmax(260px,.55fr);gap:12px}
+.wox-3d-grid .wox-3d-veyr-card{overflow:hidden;border:0;border-radius:0;background:linear-gradient(135deg,rgba(4,18,14,.9),rgba(5,7,12,.92));clip-path:polygon(0 0,96% 0,100% 8%,100% 100%,0 100%)}
+.wox-3d-grid .wox-3d-veyr-card .wox-3d-viewport{min-height:520px;border:0;border-radius:0}.wox-3d-grid .wox-3d-veyr-card .wox-3d-copy{padding:28px 30px 34px}
+.wox-3d-grid>article:not(.wox-3d-veyr-card){overflow:hidden;border:0;border-radius:0;background:linear-gradient(135deg,rgba(7,10,17,.82),rgba(4,5,9,.92));clip-path:polygon(7% 0,100% 0,100% 84%,93% 100%,0 100%,0 14%)}
+.wox-3d-grid>article:not(.wox-3d-veyr-card) .wox-3d-viewport{border:0;border-radius:0}.wox-3d-note{border:0;border-top:1px solid rgba(117,221,255,.18);border-radius:0;background:transparent}
+@media(max-width:1100px){.wox-world-showcase .wox-region-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto;min-height:0}.wox-world-showcase .wox-region-grid article.is-active{grid-column:1/-1;grid-row:auto;min-height:460px}.wox-world-showcase .wox-region-grid article:not(.is-active){grid-column:auto;min-height:150px}.wox-3d-grid{grid-template-columns:1fr}}
+@media(max-width:760px){
+  .wox-world-showcase{padding:30px 8px 26px}.wox-world-showcase>.wox-section-head{padding-inline:8px;margin-bottom:22px}
+  .wox-world-showcase .wox-region-grid{display:flex;flex-direction:column;gap:8px;min-height:0}.wox-world-showcase .wox-region-grid article.is-active{order:-1;min-height:420px;clip-path:polygon(0 0,94% 0,100% 6%,100% 94%,94% 100%,0 100%)}
+  .wox-world-showcase .wox-region-grid article:not(.is-active){min-height:104px;clip-path:polygon(4% 0,100% 0,100% 76%,94% 100%,0 100%,0 20%)}
+  .wox-world-showcase .wox-region-grid article>button,.wox-world-showcase .wox-region-grid article.is-active>button{padding:18px 16px}.wox-world-showcase .wox-region-grid article.is-active h3{max-width:100%;margin:10px 0 10px;font-size:clamp(2.9rem,15vw,4.6rem);white-space:normal}
+  .wox-world-showcase .wox-region-grid article.is-active p{max-width:88%;font-size:.82rem;line-height:1.52}.wox-world-showcase .wox-region-grid article:not(.is-active) h3{font-size:1.15rem;white-space:normal}.wox-world-showcase .wox-region-grid article:not(.is-active) b{display:none}
+  .wox-world-showcase .wox-region-keyart,.wox-world-showcase .wox-region-grid article.is-active .wox-region-keyart{width:100%;opacity:.72;mask-image:none}.wox-world-showcase .wox-region-grid article:not(.is-active) .wox-region-keyart{opacity:.46}
+  .wox-world-showcase .wox-region-console{grid-template-columns:1fr;gap:14px;margin-top:18px;padding:0 8px 0 14px}.wox-world-showcase .wox-region-console>.wox-media-placeholder{aspect-ratio:16/9}.wox-world-showcase .wox-region-console>p{font-size:.88rem;line-height:1.6}
+  .wox-hero-frame{display:none}.wox-hero-keyart{inset:80px 0 0;height:calc(100% - 80px);opacity:.66;mask-image:linear-gradient(180deg,#000 0,#000 68%,transparent 100%)}
+  .wox-hero-specs{gap:1px}.wox-hero-specs a{background:rgba(5,7,12,.42)}
+  .wox-3d-stage{padding:30px 8px 26px}.wox-3d-stage>.wox-section-head{padding-inline:8px}.wox-3d-grid .wox-3d-veyr-card .wox-3d-viewport{min-height:0;aspect-ratio:4/3}.wox-3d-grid>article:not(.wox-3d-veyr-card){grid-template-columns:110px minmax(0,1fr);min-height:142px}
+}
+
+/* PASS 16B - full hybrid landing architecture. */
+.wox-world-showcase .wox-region-grid{grid-template-rows:repeat(4,minmax(126px,1fr));min-height:650px}
+.wox-world-showcase .wox-region-grid article.is-active{grid-row:1/5;min-height:650px}
+.wox-world-showcase .wox-region-grid article[data-region='5'],.wox-region-console[data-region='5']{--r:#d4af37;--r2:#65f7dd}
+.wox-world-showcase .wox-region-grid article[data-region='5']{background:radial-gradient(circle at 70% 22%,rgba(212,175,55,.16),transparent 30%),linear-gradient(150deg,#07131a,#171029 58%,#130b08)}
+.wox-world-showcase .wox-region-grid article.is-active h3{font-size:clamp(3.4rem,5.7vw,6.4rem);overflow-wrap:anywhere}
+.wox-actions-pass16{max-width:760px}.wox-actions-pass16>a{min-width:250px}
+.wox-actions-pass16 .is-demo{border-color:rgba(212,175,55,.7);background:linear-gradient(135deg,rgba(212,175,55,.2),rgba(118,78,16,.36));box-shadow:0 0 34px rgba(212,175,55,.12);color:#f7df8b}
+.wox-actions-pass16 .is-lore{border-color:rgba(138,43,226,.58);background:linear-gradient(135deg,rgba(138,43,226,.2),rgba(30,13,58,.46));color:#e7d3ff}
+.wox-ecosystem-nav{gap:clamp(8px,1.3vw,20px)}.wox-ecosystem-nav a{font-size:clamp(.43rem,.55vw,.58rem);white-space:nowrap}
+
+.wox-ecosystem-stage,.wox-familiars-stage{position:relative;margin-top:clamp(52px,7vw,96px);padding:clamp(54px,6.5vw,90px) clamp(18px,4vw,64px);border:0;border-radius:0;background:transparent;box-shadow:none;overflow:visible}
+.wox-ecosystem-stage::before{content:'';position:absolute;inset:-40px -4vw;background:radial-gradient(circle at 10% 34%,rgba(0,245,212,.1),transparent 30%),radial-gradient(circle at 86% 22%,rgba(138,43,226,.13),transparent 28%);filter:blur(24px);z-index:-1}
+.wox-ecosystem-stage>.wox-section-head,.wox-familiars-stage>.wox-section-head{max-width:1050px;margin-bottom:34px}.wox-ecosystem-stage>.wox-section-head h2,.wox-familiars-stage>.wox-section-head h2{font-size:clamp(3rem,5.2vw,5.8rem)}
+.wox-ecosystem-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px}
+.wox-ecosystem-grid>a{position:relative;display:flex;min-height:250px;flex-direction:column;justify-content:flex-end;padding:28px 30px;overflow:hidden;text-decoration:none;color:#fff;background:linear-gradient(145deg,rgba(7,12,18,.92),rgba(4,5,9,.98));clip-path:polygon(0 0,95% 0,100% 14%,100% 100%,6% 100%,0 84%);transition:transform .24s ease,filter .24s ease}
+.wox-ecosystem-grid>a:nth-child(1){grid-column:1/7;background:radial-gradient(circle at 72% 22%,rgba(0,245,212,.18),transparent 34%),linear-gradient(145deg,#061713,#05070b)}.wox-ecosystem-grid>a:nth-child(2){grid-column:7/13;background:radial-gradient(circle at 72% 22%,rgba(90,180,255,.15),transparent 34%),linear-gradient(145deg,#07121c,#05070b)}
+.wox-ecosystem-grid>a:nth-child(3){grid-column:1/5;background:radial-gradient(circle at 72% 22%,rgba(138,43,226,.16),transparent 34%),linear-gradient(145deg,#12091c,#05070b)}.wox-ecosystem-grid>a:nth-child(4){grid-column:5/13;background:radial-gradient(circle at 72% 22%,rgba(212,175,55,.14),transparent 34%),linear-gradient(145deg,#171109,#05070b)}
+.wox-ecosystem-grid>a::before{content:'';position:absolute;inset:0;border-top:1px solid rgba(255,255,255,.13);background:linear-gradient(120deg,transparent 60%,rgba(255,255,255,.045));pointer-events:none}.wox-ecosystem-grid>a:hover,.wox-ecosystem-grid>a:focus-visible{transform:translateY(-4px);filter:brightness(1.1);outline:none}
+.wox-ecosystem-grid small{font:900 .48rem/1 ui-monospace,monospace;letter-spacing:.2em;color:#00f5d4}.wox-ecosystem-grid strong{margin-top:12px;font:950 clamp(1.6rem,2.4vw,2.8rem)/.95 Orbitron,Inter,sans-serif;letter-spacing:-.045em}.wox-ecosystem-grid p{max-width:590px;margin:14px 0 22px;color:rgba(255,255,255,.68);line-height:1.65}.wox-ecosystem-grid>a>span{font:900 .48rem/1 ui-monospace,monospace;letter-spacing:.16em;color:#d4af37}
+
+.wox-familiars-stage{background:radial-gradient(circle at 12% 22%,rgba(60,190,120,.09),transparent 30%),radial-gradient(circle at 84% 18%,rgba(212,175,55,.09),transparent 28%)}
+.wox-familiar-strip{display:grid;grid-template-columns:1.25fr .9fr .9fr;gap:12px}.wox-familiar-strip article{position:relative;min-height:360px;padding:28px;overflow:hidden;background:linear-gradient(155deg,rgba(6,13,14,.94),rgba(5,5,10,.98));clip-path:polygon(0 0,94% 0,100% 10%,100% 100%,5% 100%,0 88%)}
+.wox-familiar-strip article:nth-child(2){background:linear-gradient(155deg,rgba(22,13,7,.94),rgba(5,5,10,.98))}.wox-familiar-strip article:nth-child(3){background:linear-gradient(155deg,rgba(8,14,22,.94),rgba(5,5,10,.98))}
+.wox-familiar-art{position:absolute;inset:0 0 auto auto;width:72%;height:72%;opacity:.74;pointer-events:none;background:radial-gradient(circle at 58% 42%,rgba(0,245,212,.12),transparent 42%)}
+.wox-familiar-art::before,.wox-familiar-art::after{content:'';position:absolute;left:50%;top:46%;width:44%;aspect-ratio:1;border:1px solid rgba(0,245,212,.26);transform:translate(-50%,-50%) rotate(45deg)}.wox-familiar-art::after{width:26%;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 44px rgba(138,43,226,.16)}
+.wox-familiar-art i{position:absolute;left:18%;right:8%;top:48%;height:1px;background:linear-gradient(90deg,transparent,#00f5d4,transparent);opacity:.46}.wox-familiar-art i:nth-child(2){transform:rotate(-28deg)}.wox-familiar-art b{position:absolute;left:58%;top:44%;transform:translate(-50%,-50%);font:950 clamp(2.4rem,4vw,5rem)/1 Orbitron,Inter,sans-serif;color:rgba(255,255,255,.78);text-shadow:0 0 26px rgba(138,43,226,.3)}
+.wox-familiar-strip article>small,.wox-familiar-strip article>strong,.wox-familiar-strip article>p{position:relative;z-index:2}.wox-familiar-strip article>small{display:block;margin-top:210px;font:900 .46rem/1 ui-monospace,monospace;letter-spacing:.18em;color:#d4af37}.wox-familiar-strip article>strong{display:block;margin-top:10px;font:950 clamp(1.5rem,2vw,2.5rem)/.96 Orbitron,Inter,sans-serif}.wox-familiar-strip article>p{max-width:470px;margin-top:12px;color:rgba(255,255,255,.65);line-height:1.6}
+.wox-familiar-link{display:inline-flex;margin-top:20px;padding:13px 18px;border-top:1px solid rgba(212,175,55,.4);color:#efd980;text-decoration:none;font:900 .5rem/1 ui-monospace,monospace;letter-spacing:.14em}
+.wox-tech-seals{display:flex!important;grid-column:1/-1!important;flex-wrap:wrap;gap:8px!important;margin-bottom:14px}.wox-tech-seals span{padding:7px 9px;border:1px solid rgba(255,255,255,.09);font:900 .42rem/1 ui-monospace,monospace;letter-spacing:.14em;color:rgba(255,255,255,.5)}
+.wox-footer>div:not(.wox-tech-seals) small:last-child{display:block;max-width:720px;margin-top:8px;color:rgba(255,255,255,.35);font-size:.68rem;line-height:1.5}
+
+@media(max-width:1100px){.wox-ecosystem-grid>a:nth-child(n){grid-column:span 6}.wox-familiar-strip{grid-template-columns:1fr 1fr}.wox-familiar-strip article:first-child{grid-column:1/-1}}
+@media(max-width:760px){
+  .wox-actions-pass16{display:grid;grid-template-columns:1fr;gap:7px}.wox-actions-pass16>a{min-width:0;width:100%}
+  .wox-world-showcase .wox-region-grid{grid-template-rows:auto}.wox-world-showcase .wox-region-grid article.is-active{min-height:430px}.wox-world-showcase .wox-region-grid article:not(.is-active){min-height:92px}
+  .wox-world-showcase .wox-region-grid article.is-active h3{font-size:clamp(2.55rem,13vw,4rem);overflow-wrap:anywhere}.wox-world-showcase .wox-region-grid article:not(.is-active) h3{font-size:1rem}
+  .wox-ecosystem-stage,.wox-familiars-stage{margin-top:26px;padding:32px 8px 28px}.wox-ecosystem-stage>.wox-section-head,.wox-familiars-stage>.wox-section-head{padding-inline:8px;margin-bottom:22px}.wox-ecosystem-stage>.wox-section-head h2,.wox-familiars-stage>.wox-section-head h2{font-size:clamp(2rem,9vw,3rem)}
+  .wox-ecosystem-grid{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 8px 6px;scrollbar-width:none}.wox-ecosystem-grid::-webkit-scrollbar{display:none}.wox-ecosystem-grid>a{flex:0 0 84%;min-height:280px;padding:22px;scroll-snap-align:center}.wox-ecosystem-grid strong{font-size:1.6rem}
+  .wox-familiar-strip{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 8px 6px;scrollbar-width:none}.wox-familiar-strip::-webkit-scrollbar{display:none}.wox-familiar-strip article,.wox-familiar-strip article:first-child{flex:0 0 86%;min-height:340px;scroll-snap-align:center}.wox-familiar-link{margin-left:8px}
+  .wox-tech-seals{gap:5px!important}.wox-tech-seals span{font-size:.36rem}
+}
+
+/* PASS 16B - Convergence cast: cinematic constellation, not a uniform card grid. */
+.wox-featured-cast{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-auto-rows:104px;gap:10px;margin:26px 0 38px}
+.wox-featured-cast article{position:relative;overflow:hidden;min-height:210px;padding:22px 22px 20px;display:flex;flex-direction:column;justify-content:flex-end;border:0;background:linear-gradient(145deg,rgba(8,10,17,.94),rgba(12,7,18,.78));clip-path:polygon(0 0,92% 0,100% 12%,100% 100%,7% 100%,0 86%)}
+.wox-featured-cast article::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 72% 26%,rgba(151,91,255,.18),transparent 28%),linear-gradient(120deg,transparent 46%,rgba(0,245,212,.05));pointer-events:none}
+.wox-featured-cast article:nth-child(1){grid-column:1/5;grid-row:1/3}.wox-featured-cast article:nth-child(2){grid-column:5/9;grid-row:1/4}.wox-featured-cast article:nth-child(3){grid-column:9/13;grid-row:1/3}
+.wox-featured-cast article:nth-child(4){grid-column:1/4;grid-row:3/5}.wox-featured-cast article:nth-child(5){grid-column:4/7;grid-row:4/6}.wox-featured-cast article:nth-child(6){grid-column:7/10;grid-row:4/6}.wox-featured-cast article:nth-child(7){grid-column:10/13;grid-row:3/5}
+.wox-featured-cast article:nth-child(8){grid-column:1/7;grid-row:6/8}.wox-featured-cast article:nth-child(9){grid-column:7/13;grid-row:6/8}
+.wox-featured-cast-art{position:absolute;right:8%;top:8%;width:42%;aspect-ratio:1;border:1px solid rgba(0,245,212,.18);transform:rotate(45deg);opacity:.78}.wox-featured-cast-art i{position:absolute;inset:18%;border:1px solid rgba(151,91,255,.3);border-radius:50%}.wox-featured-cast-art i+ i{inset:34%;border-color:rgba(212,175,55,.36)}
+.wox-featured-cast-art b{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-45deg);font:900 clamp(1.8rem,3vw,3.8rem)/1 Orbitron,sans-serif;color:rgba(255,255,255,.58);letter-spacing:-.08em}
+.wox-featured-cast article>small,.wox-featured-cast article>strong,.wox-featured-cast article>span{position:relative;z-index:2}.wox-featured-cast article>small{font-size:.55rem;color:#00f5d4;letter-spacing:.14em}.wox-featured-cast article>strong{margin-top:7px;font:900 clamp(1.15rem,2vw,2.1rem)/.95 Orbitron,sans-serif;color:#fff}.wox-featured-cast article>span{margin-top:7px;color:rgba(255,255,255,.58);font-size:.82rem}
+.wox-cast-archive-label{display:flex;justify-content:space-between;gap:16px;margin:0 0 16px;padding-top:18px;border-top:1px solid rgba(255,255,255,.1);font:800 .58rem/1.3 Orbitron,sans-serif;letter-spacing:.12em}.wox-cast-archive-label span{color:#ff8c42}.wox-cast-archive-label b{color:rgba(255,255,255,.45);font-weight:700}
+.wox-world-showcase .wox-region-grid article.is-active h3{max-width:100%;font-size:clamp(3.2rem,5.7vw,6.3rem);overflow-wrap:anywhere}
+.wox-home .wox-ecosystem-nav a[href="/green-node"],.wox-home .wox-ecosystem-grid>a[href="/green-node"]{display:flex!important}
+
+@media(max-width:900px){
+  .wox-featured-cast{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:auto;gap:8px}
+  .wox-featured-cast article,.wox-featured-cast article:nth-child(n){grid-column:auto;grid-row:auto;min-height:190px}
+  .wox-featured-cast article:nth-child(1),.wox-featured-cast article:nth-child(2),.wox-featured-cast article:nth-child(9){grid-column:1/-1;min-height:230px}
+}
+@media(max-width:560px){
+  .wox-featured-cast{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 8px 14px;margin-inline:-8px;scrollbar-width:none}
+  .wox-featured-cast::-webkit-scrollbar{display:none}.wox-featured-cast article,.wox-featured-cast article:nth-child(n){flex:0 0 78vw;min-height:250px;scroll-snap-align:start}
+  .wox-cast-archive-label{align-items:flex-start;flex-direction:column}.wox-cast-archive-label b{max-width:26ch}
+  .wox-world-showcase .wox-region-grid article.is-active h3{font-size:clamp(2.7rem,13.5vw,4.2rem);overflow-wrap:anywhere}
+}
+
+@media(max-width:560px){
+  .wox-dev-grid article:last-child strong{font-size:clamp(1.05rem,5.2vw,1.65rem);letter-spacing:-.04em;overflow-wrap:anywhere}
+}
+
+/* PASS16 accessibility: readable IP disclaimer */
+.wox-footer > div > small:last-child { color: #a7a7af; }
+
+/* PASS16 footer AA contrast */
+.wox-footer small { color: #b7b7c2 !important; }

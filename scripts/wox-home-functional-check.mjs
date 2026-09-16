@@ -19,11 +19,11 @@ for (const test of cases) {
   if (protectedEntry) await page.goto(protectedEntry, { waitUntil: 'domcontentloaded' })
   await page.goto(new URL(test.path, `${baseOrigin}/`).href, { waitUntil: 'networkidle' })
 
-  const sectionIds = ['origin', 'worlds', 'atlas', 'characters', 'media-3d', 'development']
+  const sectionIds = ['origin', 'worlds', 'atlas', 'characters', 'ecosystem', 'familiars', 'media-3d', 'development']
   for (const id of sectionIds) if (await page.locator(`#${id}`).count() !== 1) throw new Error(`${test.name}: missing #${id}`)
   if ((await page.locator('.wox-tools button').innerText()).trim() !== test.langButton) throw new Error(`${test.name}: wrong language target`)
 
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 5; i++) {
     await page.locator('.wox-region-grid article').nth(i).locator('button').click()
     if (await page.locator(`.wox-region-console[data-region="${i + 1}"]`).count() !== 1) throw new Error(`${test.name}: region ${i + 1} did not activate`)
   }
@@ -40,14 +40,18 @@ for (const test of cases) {
     if (await page.locator(`.wox-cast-console[data-cast="${i + 1}"]`).count() !== 1) throw new Error(`${test.name}: cast ${i + 1} did not activate`)
   }
 
-  await page.locator('.wox-actions button').click()
+  if (await page.locator('.wox-actions .is-demo').count() !== 1) throw new Error(`${test.name}: demo CTA missing`)
+  if (await page.locator('.wox-actions .is-lore').count() !== 1) throw new Error(`${test.name}: lore CTA missing`)
+  if (await page.locator('.wox-featured-cast article').count() !== 9) throw new Error(`${test.name}: featured cast count mismatch`)
+  if (await page.locator('.wox-ecosystem-grid > a').count() !== 4) throw new Error(`${test.name}: ecosystem card count mismatch`)
+  await page.locator('.wox-utility-rail button').click()
   await page.locator('#nexus-chat-panel').waitFor({ state: 'visible' })
   await page.locator('button[aria-controls="nexus-chat-panel"]').click()
   await page.locator('#nexus-chat-panel').waitFor({ state: 'detached' })
 
   const expectedLinks = test.name === 'es'
-    ? ['/gaming', '/nexus-city', '/creacion-web', '/news', '/login', '/support', '/privacy', '/contact', '/green-node']
-    : ['/en/gaming', '/en/nexus-city', '/en/creacion-web', '/news', '/login', '/en/support', '/en/privacy', '/en/contact', '/en/green-node']
+    ? ['/gaming', '/creacion-web', '/news', '/login', '/support', '/privacy', '/contact', '/green-node']
+    : ['/en/gaming', '/en/creacion-web', '/news', '/login', '/en/support', '/en/privacy', '/en/contact', '/en/green-node']
   const hrefs = await page.locator('a').evaluateAll(nodes => nodes.map(node => node.getAttribute('href')).filter(Boolean))
   for (const href of expectedLinks) if (!hrefs.includes(href)) throw new Error(`${test.name}: missing link ${href}`)
 
@@ -62,7 +66,7 @@ for (const test of cases) {
   const expectedTogglePath = test.name === 'es' ? '/en' : '/'
   await page.waitForURL(url => url.pathname === expectedTogglePath, { timeout: 5000 })
   if (errors.length) throw new Error(`${test.name}: browser errors ${JSON.stringify(errors)}`)
-  console.log(JSON.stringify({ locale: test.name, sections: sectionIds.length, regions: 4, atlas: 4, forms: 8, cast: 14, chat: 'PASS', wisp: test.green, languageToggle: expectedTogglePath, errors }))
+  console.log(JSON.stringify({ locale: test.name, sections: sectionIds.length, regions: 5, atlas: 4, forms: 8, featuredCast: 9, cast: 14, ecosystem: 4, chat: 'PASS', wisp: test.green, languageToggle: expectedTogglePath, errors }))
   await context.close()
 }
 
