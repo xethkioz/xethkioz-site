@@ -272,3 +272,12 @@ Push de la rama Preview está permitido para generar Preview. No mergear a `main
 - El centro queda libre para logo, lema y CTA; el elenco ocupa laterales y funciona como constelacion visual.
 - Guard visual exige el asset oficial del Hero y guard IP lo incluye entre los web-art requeridos.
 - Produccion no se modifica hasta Preview remoto aprobado.
+
+## PASS 15F — HOME ART DIRECTION + SOURCE INTEGRITY
+- Los SVG web-safe del Hero y los 4 territorios deben existir como texto UTF-8 real; nunca aceptar assets de 6 bytes o copias residuales de `dist`.
+- Hero público: lenguaje de saga y Resonancia; no exponer herramientas internas como mensaje principal.
+- Hero visual: naturaleza verde + fractura prismática + Resonancia nocturna; Etereo/Xethkioz/hermanos sólo como arte derivado no reconstruible.
+- Territorios: Izrdralar verde/esmeralda; Desfralar turquesa/caverna viva; Xiomalar azul-cian/islas suspendidas; Zodnight magenta/nocturno.
+- Etiquetas públicas: usar lenguaje inmersivo (`VISIÓN DEL TERRITORIO`, `REGISTRO DEL PRISMA-ATLAS`, `ECO DE IDENTIDAD`) y mantener las reglas de protección sólo en guards/documentación.
+- Capturas de validación deben generarse desde un Preview limpio y actual, no reutilizar `artifacts` de pases anteriores.
+- QA Pass 15F: build PASS; visual 1440/1024/768/430/390 PASS; 320/360/1366/1920 PASS; Axe 0; ES/EN PASS; anclas PASS; Wisp clearance PASS; IP guard PASS.

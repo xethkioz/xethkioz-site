@@ -93,7 +93,7 @@ const copy = {
     seo: 'World of Xethkioz · Action RPG en desarrollo',
     description: 'Sitio oficial de World of Xethkioz: historia, mundos, criaturas, desarrollo y comunidad del Action-RPG de XETHKIOZ.',
     portals: { gaming: 'Gaming', science: 'Ciencia y tecnología', pets: 'Mascotas' },
-    status: 'ACTION RPG 3D · UNITY + BLENDER · SAGA I EN DESARROLLO',
+    status: 'SAGA I · RESONANCIA PRISMÁTICA · MUNDO EN EXPANSIÓN',
     soul: 'UN MUNDO FRACTURADO. UNA FAMILIA UNIDA.',
     lead: 'El tiempo, la memoria, la naturaleza y la tecnología dejaron de obedecer una sola versión de la realidad.',
     explore: 'DESCUBRIR EL MUNDO',
@@ -128,7 +128,7 @@ const copy = {
     seo: 'World of Xethkioz · Action RPG in development',
     description: 'Official World of Xethkioz site: story, worlds, creatures, development and community for the XETHKIOZ action RPG.',
     portals: { gaming: 'Gaming', science: 'Science & technology', pets: 'Pets' },
-    status: '3D ACTION RPG · UNITY + BLENDER · SAGA I IN DEVELOPMENT',
+    status: 'SAGA I · PRISMATIC RESONANCE · AN EXPANDING WORLD',
     soul: 'A FRACTURED WORLD. A UNITED FAMILY.',
     lead: 'Time, memory, nature and technology no longer obey a single version of reality.',
     explore: 'DISCOVER THE WORLD',
@@ -379,7 +379,7 @@ export default function Home() {
           <img className="wox-hero-keyart" src="/assets/world-of-xethkioz/web-art/hero-family-resonance.svg" alt="" aria-hidden="true" decoding="async" fetchPriority="high" />
           <div className="wox-hero-frame" aria-hidden="true"><span /><span /><span /><span /></div>
           <div className="wox-hero-core">
-            <div className="wox-hero-overline" aria-hidden="true"><span>XK // PRISMATIC RESONANCE</span><span>SAGA I // ACTIVE DEVELOPMENT</span></div>
+            <div className="wox-hero-overline" aria-hidden="true"><span>XK // PRISMATIC RESONANCE</span><span>SAGA I // PRISMATIC FRACTURE</span></div>
             <picture className="wox-logo-wrap">
               <source srcSet="/assets/world-of-xethkioz/world-of-xethkioz-logo.webp" type="image/webp" />
               <img src="/assets/world-of-xethkioz/world-of-xethkioz-logo.svg" alt="World of Xethkioz" className="wox-world-logo" />
@@ -478,7 +478,7 @@ export default function Home() {
                 </article>
               ))}
             </div>
-            <div key={`atlas-console-${activeAtlas}`} className="wox-atlas-console" data-atlas={activeAtlas + 1} aria-live="polite"><MediaPlaceholder orientation="square" code="ATLAS" subject={selectedAtlas.title} glyph={['GOB', 'MEC', 'FAU', 'BOS'][activeAtlas]} label={lang === 'es' ? 'ARCHIVO VISUAL PROTEGIDO' : 'PROTECTED VISUAL DOSSIER'} />
+            <div key={`atlas-console-${activeAtlas}`} className="wox-atlas-console" data-atlas={activeAtlas + 1} aria-live="polite"><MediaPlaceholder orientation="square" code="ATLAS" subject={selectedAtlas.title} glyph={['GOB', 'MEC', 'FAU', 'BOS'][activeAtlas]} label={lang === 'es' ? 'REGISTRO DEL PRISMA-ATLAS' : 'PRISM-ATLAS RECORD'} />
               <div>
                 <small>{selectedAtlas.signal}</small>
                 <h3>{selectedAtlas.title}</h3>
@@ -513,7 +513,7 @@ export default function Home() {
                 <p><b>{lang === 'es' ? 'Vínculo' : 'Bond'}:</b> {selectedForm[1]}</p>
                 <p><b>{lang === 'es' ? 'Afinidad' : 'Affinity'}:</b> {selectedForm[2]}</p>
               </div>
-              <span className="wox-canon-lock">CANON LOCK</span>
+              <span className="wox-canon-lock">{lang === 'es' ? 'RESONANCIA ACTIVA' : 'ACTIVE RESONANCE'}</span>
             </div>
           </section>
 
@@ -534,7 +534,7 @@ export default function Home() {
               ))}
             </div>
             <div key={`cast-console-${activeCast}`} className="wox-cast-console" data-cast={activeCast + 1} aria-live="polite">
-              <MediaPlaceholder orientation="portrait" code="CHAR" subject={selectedCast[0]} glyph={selectedCast[0].slice(0, 2).toUpperCase()} label={lang === 'es' ? 'IDENTIDAD VISUAL PROTEGIDA' : 'PROTECTED VISUAL IDENTITY'} />
+              <MediaPlaceholder orientation="portrait" code="CHAR" subject={selectedCast[0]} glyph={selectedCast[0].slice(0, 2).toUpperCase()} label={lang === 'es' ? 'ECO DE IDENTIDAD' : 'IDENTITY ECHO'} />
               <div>
                 <small>{lang === 'es' ? 'IDENTIDAD CANÓNICA ACTIVA' : 'ACTIVE CANONICAL IDENTITY'}</small>
                 <h3>{selectedCast[0]}</h3>

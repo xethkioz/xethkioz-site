@@ -97,14 +97,14 @@
 
 /* PASS 02 — each territory and codex family gets a distinct visual identity. */
 .wox-world-showcase .wox-region-grid article{--r:#8b5cf6;--r2:#ff8c42}
-.wox-world-showcase .wox-region-grid article[data-region='1'],.wox-region-console[data-region='1']{--r:#67d9ff;--r2:#d8b76a}
+.wox-world-showcase .wox-region-grid article[data-region='1'],.wox-region-console[data-region='1']{--r:#54f29a;--r2:#b7ff72}
 .wox-world-showcase .wox-region-grid article[data-region='2'],.wox-region-console[data-region='2']{--r:#62e7ae;--r2:#2f8f69}
 .wox-world-showcase .wox-region-grid article[data-region='3'],.wox-region-console[data-region='3']{--r:#9ddcff;--r2:#9b7bff}
 .wox-world-showcase .wox-region-grid article[data-region='4'],.wox-region-console[data-region='4']{--r:#ff5fa2;--r2:#8d5cff}
 .wox-world-showcase .wox-region-grid article{border-color:color-mix(in srgb,var(--r) 22%,transparent);background:radial-gradient(circle at 84% 12%,color-mix(in srgb,var(--r) 12%,transparent),transparent 28%),linear-gradient(150deg,rgba(10,12,20,.94),rgba(3,4,9,.92))}
 .wox-world-showcase .wox-region-grid article.is-active{border-color:color-mix(in srgb,var(--r) 65%,transparent);box-shadow:inset 0 0 90px color-mix(in srgb,var(--r) 8%,transparent),0 0 42px color-mix(in srgb,var(--r) 10%,transparent)}
 .wox-world-showcase .wox-region-grid article.is-active h3{color:var(--r);text-shadow:0 0 28px color-mix(in srgb,var(--r) 20%,transparent)}
-.wox-world-showcase .wox-region-grid article[data-region='1']::after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(8deg,transparent 0 33px,rgba(103,217,255,.07) 34px 35px);mask-image:linear-gradient(to bottom,#000,transparent 92%)}
+.wox-world-showcase .wox-region-grid article[data-region='1']::after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(8deg,transparent 0 33px,rgba(84,242,154,.075) 34px 35px);mask-image:linear-gradient(to bottom,#000,transparent 92%)}
 .wox-world-showcase .wox-region-grid article[data-region='2']::after{content:'';position:absolute;right:-10%;bottom:-35%;width:58%;aspect-ratio:1;border:1px solid rgba(98,231,174,.2);border-radius:43% 57% 63% 37%;box-shadow:0 0 0 28px rgba(98,231,174,.025),0 0 0 64px rgba(98,231,174,.02);transform:rotate(18deg)}
 .wox-world-showcase .wox-region-grid article[data-region='3']::after{content:'';position:absolute;right:8%;top:14%;width:30%;aspect-ratio:1;border:1px solid rgba(157,220,255,.2);border-radius:50%;box-shadow:0 0 0 28px rgba(155,123,255,.035),0 0 0 58px rgba(157,220,255,.02)}
 .wox-world-showcase .wox-region-grid article[data-region='4']::after{content:'';position:absolute;right:10%;top:8%;width:1px;height:84%;background:linear-gradient(transparent,#ff5fa2 35%,#8d5cff 68%,transparent);box-shadow:-24px 54px 0 rgba(255,95,162,.2),18px 112px 0 rgba(141,92,255,.18);transform:rotate(17deg)}
@@ -336,9 +336,9 @@ body:has(.wox-home) .xk-privacy-consent-dialog>h2{font-family:Orbitron,Inter,san
 /* PASS 15 — protected promotional art + unmistakable biome identity. */
 .wox-world-showcase{background:radial-gradient(circle at 10% 22%,rgba(48,126,82,.12),transparent 28%),radial-gradient(circle at 88% 8%,rgba(117,221,255,.08),transparent 24%),linear-gradient(150deg,rgba(5,12,13,.98),rgba(5,6,11,.94));}
 .wox-region-grid article>button>*:not(.wox-region-keyart){position:relative;z-index:2}
-.wox-region-keyart{position:absolute;z-index:0;right:0;top:0;width:58%;height:100%;object-fit:cover;object-position:center;opacity:.28;filter:saturate(1.22) contrast(1.05);mask-image:linear-gradient(90deg,transparent 0,#000 38%);transition:opacity .28s ease,transform .45s ease;pointer-events:none}
-.wox-region-grid article.is-active .wox-region-keyart{width:66%;opacity:.78;filter:saturate(1.28) contrast(1.07) brightness(.9);mask-image:linear-gradient(90deg,transparent 0,#000 35%,#000 100%)}
-.wox-region-grid article:hover .wox-region-keyart{transform:scale(1.025);opacity:.54}.wox-region-grid article.is-active:hover .wox-region-keyart{opacity:.84}
+.wox-region-keyart{position:absolute;z-index:0;right:0;top:0;width:64%;height:100%;object-fit:cover;object-position:center;opacity:.34;filter:saturate(1.22) contrast(1.05);mask-image:linear-gradient(90deg,transparent 0,#000 38%);transition:opacity .28s ease,transform .45s ease;pointer-events:none}
+.wox-region-grid article.is-active .wox-region-keyart{width:74%;opacity:.9;filter:saturate(1.32) contrast(1.08) brightness(.92);mask-image:linear-gradient(90deg,transparent 0,#000 28%,#000 100%)}
+.wox-region-grid article:hover .wox-region-keyart{transform:scale(1.025);opacity:.62}.wox-region-grid article.is-active:hover .wox-region-keyart{opacity:.94}
 .wox-world-showcase .wox-region-grid article[data-region='1']{--r:#54f29a;--r2:#b7ff72;background:radial-gradient(circle at 18% 16%,rgba(48,154,88,.22),transparent 33%),linear-gradient(150deg,#07190f 0,#07130d 44%,#040709 100%)}
 .wox-world-showcase .wox-region-grid article[data-region='1'].is-active{box-shadow:inset 0 0 110px rgba(35,189,99,.12),0 0 48px rgba(61,229,134,.1)}
 .wox-world-showcase .wox-region-grid article[data-region='2']{--r:#48d9b0;--r2:#63f4e0;background:radial-gradient(circle at 22% 18%,rgba(22,104,88,.22),transparent 34%),linear-gradient(150deg,#06171a,#07110f 52%,#030707)}
