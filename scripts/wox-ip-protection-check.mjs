@@ -9,7 +9,7 @@ const forbiddenLegacyPaths = [
   'public/assets/world-of-xethkioz/veyr/veyr-wisp-v03.glb',
   'public/assets/world-of-xethkioz/xethkioz/xethkioz-lod0-production.webp',
 ]
-const requiredWebArt = ['player-etereo-sigil.svg','xethkioz-resonance-sigil.svg','veyr-green-sigil.svg','biome-izrdralar.svg','biome-desfralar.svg','biome-xiomalar.svg','biome-zodnight.svg','hero-family-resonance.svg']
+const requiredWebArt = ['player-etereo-sigil.svg','xethkioz-resonance-sigil.svg','veyr-green-sigil.svg','biome-izrdralar.svg','biome-desfralar.svg','biome-xiomalar.svg','biome-zodnight.svg','biome-isla-temporal.svg','hero-family-resonance.svg']
 const files = []
 const walk = (dir) => fs.readdirSync(dir, { withFileTypes: true }).forEach((entry) => {
   const full = path.join(dir, entry.name)
