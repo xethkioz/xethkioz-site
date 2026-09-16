@@ -281,3 +281,20 @@ Push de la rama Preview está permitido para generar Preview. No mergear a `main
 - Etiquetas públicas: usar lenguaje inmersivo (`VISIÓN DEL TERRITORIO`, `REGISTRO DEL PRISMA-ATLAS`, `ECO DE IDENTIDAD`) y mantener las reglas de protección sólo en guards/documentación.
 - Capturas de validación deben generarse desde un Preview limpio y actual, no reutilizar `artifacts` de pases anteriores.
 - QA Pass 15F: build PASS; visual 1440/1024/768/430/390 PASS; 320/360/1366/1920 PASS; Axe 0; ES/EN PASS; anclas PASS; Wisp clearance PASS; IP guard PASS.
+
+## PASS 15F — cierre remoto protegido (2026-09-16)
+- Rama validada: `wox-web-art-protection-v1` en `4bf8fac3eb4cc04c2141cc201b3db0ba6c2a1e4a`.
+- Árbol Git local/remoto verificado idéntico: `05555f94cc12cd8c42c173b79fa08ed4b3a2b727`.
+- Preview Vercel READY: `dpl_3XBfSQFhTTNJTpRSGNaLgHcseaP1` / `xethkioz-site-a3xuzadv5-xethkioz-site.vercel.app`.
+- QA visual remoto PASS en 1440/1024/768/430/390: 14 personajes, 8 Formas canónicas, 4 artes de territorio, 3 sigilos protegidos, Hero protegido, 0 imágenes random, 0 overflow y 0 texto recortado.
+- QA funcional remoto ES/EN PASS: 4 territorios, 4 familias Atlas, 8 Formas, 14 personajes, chat, Green Node localizado y cambio de idioma.
+- Primera visita remota PASS en 1440/430/390; consentimiento AAA legible y sin overflow.
+- Edge/accesibilidad remoto PASS en 320/360/1366/1920; Axe A/AA 0 violaciones; skip-link y foco SPA correctos.
+- Anclas: 6/6 PASS; clearance 12 px en 1440/768 y 10 px en 390. El audit permanente capturó un 403 externo de proveedor en una ejecución, por lo que la geometría se revalidó de forma aislada sin ocultar errores propios de la página.
+- Veyr clearance remoto PASS: 24 combinaciones, Hero 72/96 px, modo capítulo 56 px y 0 intersecciones con texto.
+- Protección IP remota verificada: los 8 recursos web-safe responden HTTP 200; `xethkioz-lod0-production.webp`, `veyr-wisp-poster.webp` y `veyr-wisp-v03.glb` responden HTTP 404.
+- Runtime del Preview: 0 logs `error`/`fatal`; build Vercel completado sin fallo; Toolbar: 0 threads sin resolver.
+- Revisión manual de capturas remotas PASS: Hero, Mundo, Prisma-Atlas, Formas, Personajes y Arte Visual en desktop/móvil mantienen composición, identidad temática y legibilidad.
+- Las posiciones extrañas de header/consentimiento/skip-link en screenshots `fullPage` son artefactos de stitching de Playwright ya documentados; las capturas por sección no muestran esa anomalía.
+- `artifacts/` permanece fuera de Git. Los scripts temporales de validación remota fueron eliminados.
+- `main` permanece intacto en `1350d6e2a4f6ba611069bf74199dd719a3561ab2`; no promover esta rama sin aprobación visual explícita del Preview en el chat actual.
