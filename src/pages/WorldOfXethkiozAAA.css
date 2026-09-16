@@ -332,3 +332,24 @@ body:has(.wox-home) .xk-privacy-consent-dialog>h2{font-family:Orbitron,Inter,san
 
 /* PASS 13 - keep the approved Xethkioz render unobstructed in compact duo cards. */
 @media(max-width:760px){.wox-duo .wox-duo-grid article:nth-child(2)>.wox-media-placeholder:has(>img)>strong,.wox-duo .wox-duo-grid article:nth-child(2)>.wox-media-placeholder:has(>img)>small{display:none}}
+
+/* PASS 15 — protected promotional art + unmistakable biome identity. */
+.wox-world-showcase{background:radial-gradient(circle at 10% 22%,rgba(48,126,82,.12),transparent 28%),radial-gradient(circle at 88% 8%,rgba(117,221,255,.08),transparent 24%),linear-gradient(150deg,rgba(5,12,13,.98),rgba(5,6,11,.94));}
+.wox-region-grid article>button>*:not(.wox-region-keyart){position:relative;z-index:2}
+.wox-region-keyart{position:absolute;z-index:0;right:0;top:0;width:58%;height:100%;object-fit:cover;object-position:center;opacity:.28;filter:saturate(1.22) contrast(1.05);mask-image:linear-gradient(90deg,transparent 0,#000 38%);transition:opacity .28s ease,transform .45s ease;pointer-events:none}
+.wox-region-grid article.is-active .wox-region-keyart{width:66%;opacity:.78;filter:saturate(1.28) contrast(1.07) brightness(.9);mask-image:linear-gradient(90deg,transparent 0,#000 35%,#000 100%)}
+.wox-region-grid article:hover .wox-region-keyart{transform:scale(1.025);opacity:.54}.wox-region-grid article.is-active:hover .wox-region-keyart{opacity:.84}
+.wox-world-showcase .wox-region-grid article[data-region='1']{--r:#54f29a;--r2:#b7ff72;background:radial-gradient(circle at 18% 16%,rgba(48,154,88,.22),transparent 33%),linear-gradient(150deg,#07190f 0,#07130d 44%,#040709 100%)}
+.wox-world-showcase .wox-region-grid article[data-region='1'].is-active{box-shadow:inset 0 0 110px rgba(35,189,99,.12),0 0 48px rgba(61,229,134,.1)}
+.wox-world-showcase .wox-region-grid article[data-region='2']{--r:#48d9b0;--r2:#63f4e0;background:radial-gradient(circle at 22% 18%,rgba(22,104,88,.22),transparent 34%),linear-gradient(150deg,#06171a,#07110f 52%,#030707)}
+.wox-world-showcase .wox-region-grid article[data-region='3']{--r:#74dcff;--r2:#a888ff;background:radial-gradient(circle at 18% 16%,rgba(64,146,210,.19),transparent 32%),linear-gradient(150deg,#07172a,#11132d 56%,#090811)}
+.wox-world-showcase .wox-region-grid article[data-region='4']{--r:#ff66ad;--r2:#8f6dff;background:radial-gradient(circle at 18% 16%,rgba(137,56,130,.2),transparent 32%),linear-gradient(150deg,#090815,#170b22 56%,#08060c)}
+.wox-region-console[data-region='1']{--r:#54f29a;background:radial-gradient(circle at 70% 28%,rgba(62,220,131,.1),transparent 32%),linear-gradient(145deg,#06110b,#05090a)}
+.wox-region-console[data-region='2']{--r:#48d9b0;background:radial-gradient(circle at 70% 28%,rgba(42,190,151,.09),transparent 32%),linear-gradient(145deg,#061114,#050909)}
+.wox-region-console[data-region='3']{--r:#74dcff;background:radial-gradient(circle at 70% 28%,rgba(117,221,255,.1),transparent 32%),linear-gradient(145deg,#07111d,#080814)}
+.wox-region-console[data-region='4']{--r:#ff66ad;background:radial-gradient(circle at 70% 28%,rgba(255,102,173,.1),transparent 32%),linear-gradient(145deg,#100814,#08060d)}
+.wox-region-console>.wox-media-placeholder>img{filter:saturate(1.22) contrast(1.04) brightness(.88)}
+.wox-duo-grid .wox-media-placeholder>img{filter:saturate(1.15) contrast(1.04) brightness(.88)}
+.wox-3d-viewport.is-veyr img{filter:drop-shadow(0 0 16px rgba(50,255,138,.2)) drop-shadow(0 0 30px rgba(34,211,238,.15));}
+@media(max-width:760px){.wox-region-keyart{width:72%;opacity:.2}.wox-region-grid article.is-active .wox-region-keyart{width:100%;opacity:.55;mask-image:linear-gradient(90deg,transparent 0,#000 48%)}.wox-world-showcase .wox-region-grid article[data-region='1'].is-active h3{color:#8affb5}.wox-region-console>.wox-media-placeholder>img{filter:saturate(1.2) contrast(1.04) brightness(.9)}}
+@media(prefers-reduced-motion:reduce){.wox-region-keyart{transition:none}.wox-region-grid article:hover .wox-region-keyart{transform:none}}

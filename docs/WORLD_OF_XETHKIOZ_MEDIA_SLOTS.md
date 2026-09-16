@@ -1,43 +1,41 @@
-# World of Xethkioz — Media Slots
+# World of Xethkioz — Media Slots y Protección de IP
 
-Estado: estructura web preparada; integración de medios 3D oficiales en progreso.
+Estado: estructura web preparada; producción interna Unity + Blender separada de la presentación pública.
 
-Regla: no usar bocetos, sprites, concept art 2D/2.5D ni imagenes random como representacion actual del juego. Solo material aprobado del pipeline Unity + Blender 3D.
+## Regla vigente — 2026-09-15
 
-## Slots preparados
+- NO publicar modelos 3D limpios, renders técnicos, mallas, materiales, UV, rig, model sheets ni archivos GLB/GLTF/FBX/OBJ/BLEND/ZIP.
+- NO usar capturas de Unity, graybox, T-pose o QA como material promocional público.
+- El material fuente permanece en `02_REFERENCIAS_PRIVADAS_NO_PUBLICAR` y fuera del repo desplegable.
+- La web usa únicamente arte promocional transformado que conserve identidad sin permitir reconstruir el asset fuente.
+- Screenshots/gameplay reales se habilitarán más adelante mediante una revisión visual y legal específica.
+- Las Resonancias negativas se presentan con misterio; no se muestran modelos completos sin aprobación expresa.
 
-- HERO: banner World of Xethkioz + fondo animado actual. No requiere imagen adicional por ahora.
-- VIAJERO: retrato/render 3D, relacion 4:5.
-- XETHKIOZ: render/modelo 3D, relacion 4:5.
-- MUNDO: captura oficial por region, relacion 16:9. Izrdralar, Desfralar, Xiomalar y Zodnight.
-- PRISMA-ATLAS: criatura/entidad seleccionada, relacion 1:1.
-- FORMAS DE CONVERGENCIA: render de la Forma seleccionada, relacion 1:1.
-- PERSONAJES: retrato del personaje seleccionado, relacion 4:5.
-- PRODUCCION 3D: Veyr ya integrado como primer activo vigente.
-- ESCENARIOS 3D: captura/render Unity, relacion 16:10.
-- GAMEPLAY REAL: captura o frame de gameplay Unity, relacion 16:10.
+## Slots públicos
 
-## Estado de publicación — Pass 13
+- HERO: key art cinematográfico transformado + logo oficial.
+- VIAJERO / ETEREO: silueta o sigilo editorial, nunca el modelo limpio.
+- XETHKIOZ: arte de Resonancia derivado, nunca LOD0/T-pose/render técnico.
+- MUNDO: key art propio por bioma; no captura Unity por ahora.
+- PRISMA-ATLAS: arte editorial o silueta transformada de criaturas.
+- FORMAS: sigilos / afinidades hasta que exista un paquete promocional aprobado.
+- PERSONAJES: retrato promocional transformado; originales privados.
+- VEYR / WISP: manifestación gráfica derivada del asset interno.
+- ESCENARIOS / GAMEPLAY: placeholders hasta habilitar material in-game seguro.
 
-- XETHKIOZ: PUBLICABLE COMO MODELO 3D EN PRODUCCIÓN. Render LOD0 vigente optimizado para web; no se etiqueta como gameplay ni como Game Ready final.
-- VIAJERO: BLOQUEADO PARA WEB. El asset actual sigue en rig/import QA y su preview es técnico, no una presentación AAA.
-- FORMAS: BLOQUEADAS PARA MEDIA INDIVIDUAL. El Bestiario Maestro v2.0 fija que las Ocho Formas derivan de una misma familia/anatomia de Xethkioz; `Bestia_Legendaria_1..8` no tienen identidad canonica asignada y NO deben mapearse por numero o apariencia. Publicar cada Forma solo cuando exista variante aprobada de silueta/material/VFX/afinidad sobre la familia compartida.
-- PERSONAJES: Braxian/Milaviel y familia tienen candidatos 3D, pero faltan renders de presentación aprobados; no usar T-pose.
-- MUNDO / ESCENARIOS / GAMEPLAY: BLOQUEADOS hasta existir captura Unity oficial de la versión vigente.
-- PRODUCCIÓN 3D: Veyr permanece como activo público vigente.
+## Arte web protegido vigente
+- `/assets/world-of-xethkioz/web-art/player-etereo-sigil.svg`
+- `/assets/world-of-xethkioz/web-art/xethkioz-resonance-sigil.svg`
+- `/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg`
+- `/assets/world-of-xethkioz/web-art/biome-izrdralar.svg`
+- `/assets/world-of-xethkioz/web-art/biome-desfralar.svg`
+- `/assets/world-of-xethkioz/web-art/biome-xiomalar.svg`
+- `/assets/world-of-xethkioz/web-art/biome-zodnight.svg`
 
-## Convencion futura
+## Guardrail automático
 
-Usar WebP/AVIF para renders estaticos y mantener GLB/GLTF solo cuando la interaccion 3D aporte valor real.
+`scripts/wox-ip-protection-check.mjs` debe bloquear el build si aparece un archivo 3D/archive prohibido bajo `public/assets/world-of-xethkioz` o si vuelve una referencia pública a los assets limpios retirados.
 
-Rutas sugeridas:
+El criterio anterior de Pass 13 que permitía publicar el LOD0 de Xethkioz y el GLB/render limpio de Veyr queda reemplazado por esta política.
 
-- `/assets/world-of-xethkioz/characters/<slug>/`
-- `/assets/world-of-xethkioz/forms/<slug>/`
-- `/assets/world-of-xethkioz/regions/<slug>/`
-- `/assets/world-of-xethkioz/atlas/<slug>/`
-- `/assets/world-of-xethkioz/gameplay/`
-
-Los marcos `MediaPlaceholder` aceptan `src` y `alt`, por lo que el arte final se puede insertar sin rehacer la composicion de la Home.
-
-Objetivo: reemplazar un slot solamente cuando el material represente la version 3D vigente del juego y este aprobado para publicacion.
+Objetivo: mostrar suficiente identidad para vender el universo sin entregar los archivos o detalles de producción necesarios para copiarlo.

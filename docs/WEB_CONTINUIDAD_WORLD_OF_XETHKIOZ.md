@@ -243,3 +243,17 @@ Push de la rama Preview está permitido para generar Preview. No mergear a `main
 - `wox-home-visual-check.mjs` bloquea ahora los ocho nombres canonicos y su orden exacto.
 - Guard visual ejecutado contra produccion en 1440/1024/768/430/390: nombres canonicos exactos, 0 overflow y 0 errores.
 - Pass 14 no modifica UI runtime; es un lock documental/QA para impedir una futura integracion 3D incorrecta.
+
+## Checkpoint AAA V2 - Pass 15 proteccion IP + biomas (2026-09-15)
+- Nueva politica: los assets 3D limpios y detalles reconstruibles quedan fuera del paquete publico hasta un gate posterior.
+- Este checkpoint reemplaza la autorizacion de Pass 13 para exponer el LOD0 de Xethkioz y el render/GLB limpio de Veyr.
+- Originales resguardados fuera del repo en E:\\WEB XETHKIOZ\\02_REFERENCIAS_PRIVADAS_NO_PUBLICAR.
+- Retirados de public: xethkioz-lod0-production.webp, veyr-wisp-poster.webp y veyr-wisp-v03.glb.
+- Web-safe activos: Etereo, Xethkioz y Veyr como sigilos/arte derivado; cuatro key arts de bioma.
+- Izrdralar usa verde/esmeralda, vegetacion dominante y cristales verde-cian; Desfralar turquesa/cienaga; Xiomalar cian-violeta/cielo; Zodnight magenta-violeta/noche.
+- Guard obligatorio: scripts/wox-ip-protection-check.mjs bloquea raw 3D/archive y referencias legacy en el arbol publico.
+- Build completo PASS; production-ready PASS; guard IP PASS.
+- QA visual PASS 1440/1024/768/430/390: 0 overflow, 0 errores, 4 key arts, 8 Formas y 14 personajes.
+- QA funcional ES/EN PASS: territorios, Atlas, Formas, personajes, chat, Wisp/Green Node y cambio de idioma.
+- Primera visita PASS 1440/430/390; edge PASS 320/360/1366/1920; Axe A/AA 0 violaciones; anclas y Wisp clearance PASS.
+- Produccion permanece intacta mientras esta rama se valida en Preview.

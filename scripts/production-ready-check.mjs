@@ -116,7 +116,7 @@ check(
 )
 check(
   'Home uses the canonical Veyr Wisp without duplicate Home implementation',
-  globalWisp.includes('/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp')
+  globalWisp.includes('/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg')
     && globalWisp.includes("localizePath('/green-node')")
     && globalWisp.includes("homeEntry ? ' is-home-entry'")
     && !home.includes('className="xk-rb-wisp"'),
@@ -353,6 +353,7 @@ runNodeAudit('news factory audit', 'scripts/news-factory-check.mjs')
 runNodeAudit('web services audit', 'scripts/web-services-check.mjs')
 runNodeAudit('Green, Games and Guides depth audit', 'scripts/green-games-guides-check.mjs')
 runNodeAudit('content design audit', 'scripts/content-design-check.mjs')
+runNodeAudit('World IP protection audit', 'scripts/wox-ip-protection-check.mjs')
 
 let failed = 0
 for (const item of checks) {

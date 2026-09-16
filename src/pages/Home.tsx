@@ -186,6 +186,13 @@ const regions = {
     ['ZODNIGHT', 'M26–M32', 'Level 105–120', 'Saga I finale · still states, the Unison, convergences and the choice to diverge.'],
   ],
 } as const
+const regionArt = [
+  '/assets/world-of-xethkioz/web-art/biome-izrdralar.svg',
+  '/assets/world-of-xethkioz/web-art/biome-desfralar.svg',
+  '/assets/world-of-xethkioz/web-art/biome-xiomalar.svg',
+  '/assets/world-of-xethkioz/web-art/biome-zodnight.svg',
+] as const
+
 const atlasEntries = {
   es: [
     ['GOBLINS', 'Bandas recolectoras, acechadores, custodios y el Oráculo Goblin como boss aleatorio épico.'],
@@ -416,8 +423,8 @@ export default function Home() {
               <span>{t.travelerText}</span>
             </div>
             <div className="wox-duo-grid">
-              <article><MediaPlaceholder orientation="portrait" code="PLAYER" subject={lang === 'es' ? 'EL VIAJERO' : 'THE TRAVELER'} label={lang === 'es' ? 'RENDER 3D EN PRODUCCION' : '3D RENDER IN PRODUCTION'} /><small>01 // VIAJERO</small><strong>{lang === 'es' ? 'Nació de ecos que no eran suyos.' : 'Born from echoes that were not its own.'}</strong><p>{lang === 'es' ? 'Sin género, rostro ni pasado canónico. El nombre elegido por el jugador es su primer anclaje de identidad.' : 'No canonical gender, face or past. The player-chosen name becomes its first anchor of identity.'}</p></article>
-              <article><MediaPlaceholder orientation="portrait" code="FORMA" subject="XETHKIOZ" label={lang === 'es' ? 'MODELO 3D EN PRODUCCIÓN' : '3D MODEL IN PRODUCTION'} src="/assets/world-of-xethkioz/xethkioz/xethkioz-lod0-production.webp" alt={lang === 'es' ? 'Xethkioz — modelo 3D LOD0 de producción' : 'Xethkioz — production LOD0 3D model'} /><small>02 // XETHKIOZ</small><strong>{lang === 'es' ? 'No obedece. Acompaña.' : 'It does not obey. It accompanies.'}</strong><p>{lang === 'es' ? 'La Forma Abierta aprende afinidades sin perder identidad. Su vínculo evoluciona con la Resonancia y con las decisiones del Viajero.' : 'The Open Form learns affinities without losing identity. Its bond evolves through Resonance and the Traveler’s choices.'}</p></article>
+              <article><MediaPlaceholder orientation="portrait" code="PLAYER" subject={lang === 'es' ? 'EL VIAJERO' : 'THE TRAVELER'} label={lang === 'es' ? 'ARTE WEB PROTEGIDO' : 'PROTECTED WEB ART'} src="/assets/world-of-xethkioz/web-art/player-etereo-sigil.svg" alt={lang === 'es' ? 'Representación abstracta protegida del Viajero' : 'Protected abstract representation of the Traveler'} /><small>01 // VIAJERO</small><strong>{lang === 'es' ? 'Nació de ecos que no eran suyos.' : 'Born from echoes that were not its own.'}</strong><p>{lang === 'es' ? 'Sin género, rostro ni pasado canónico. El nombre elegido por el jugador es su primer anclaje de identidad.' : 'No canonical gender, face or past. The player-chosen name becomes its first anchor of identity.'}</p></article>
+              <article><MediaPlaceholder orientation="portrait" code="FORMA" subject="XETHKIOZ" label={lang === 'es' ? 'ARTE DE RESONANCIA PROTEGIDO' : 'PROTECTED RESONANCE ART'} src="/assets/world-of-xethkioz/web-art/xethkioz-resonance-sigil.svg" alt={lang === 'es' ? 'Emblema prismático protegido de Xethkioz' : 'Protected prismatic emblem of Xethkioz'} /><small>02 // XETHKIOZ</small><strong>{lang === 'es' ? 'No obedece. Acompaña.' : 'It does not obey. It accompanies.'}</strong><p>{lang === 'es' ? 'La Forma Abierta aprende afinidades sin perder identidad. Su vínculo evoluciona con la Resonancia y con las decisiones del Viajero.' : 'The Open Form learns affinities without losing identity. Its bond evolves through Resonance and the Traveler’s choices.'}</p></article>
             </div>
           </section>
           <section id="worlds" data-chapter="03" className="wox-section wox-world-showcase" aria-labelledby="worlds-title">
@@ -429,6 +436,7 @@ export default function Home() {
               {regions[lang].map(([name, maps, level, description], index) => (
                 <article key={name} data-region={index + 1} className={activeRegion === index ? 'is-active' : ''}>
                   <button type="button" onClick={() => setActiveRegion(index)} aria-pressed={activeRegion === index}>
+                    <img className="wox-region-keyart" src={regionArt[index]} alt="" loading="lazy" decoding="async" aria-hidden="true" />
                     <div><small>{maps}</small><span>{level}</span></div>
                     <h3>{name}</h3>
                     <p>{description}</p>
@@ -438,7 +446,7 @@ export default function Home() {
                 </article>
               ))}
             </div>
-            <div key={`region-console-${activeRegion}`} className="wox-region-console" data-region={activeRegion + 1} aria-live="polite"><MediaPlaceholder code="UNITY" subject={selectedRegion.name} label={lang === 'es' ? 'CAPTURA DE REGION PENDIENTE' : 'REGION CAPTURE PENDING'} />
+            <div key={`region-console-${activeRegion}`} className="wox-region-console" data-region={activeRegion + 1} aria-live="polite"><MediaPlaceholder code="BIOMA" subject={selectedRegion.name} label={lang === 'es' ? 'KEY ART PROTEGIDO · NO GAMEPLAY' : 'PROTECTED KEY ART · NOT GAMEPLAY'} src={regionArt[activeRegion]} alt={lang === 'es' ? `Arte atmosférico protegido de ${selectedRegion.name}` : `Protected atmospheric art of ${selectedRegion.name}`} />
               <div className="wox-region-console-head">
                 <span>{selectedRegion.code} // {selectedRegion.name}</span>
                 <strong>{lang === 'es' ? 'RUTA CANÓNICA DE SAGA I' : 'CANONICAL SAGA I ROUTE'}</strong>
@@ -533,20 +541,20 @@ export default function Home() {
 
           <section id="media-3d" data-chapter="07" className="wox-section wox-3d-stage" aria-labelledby="media-3d-title">
             <div className="wox-section-head">
-              <p>{lang === 'es' ? 'WORLD OF XETHKIOZ // PRODUCCIÓN VISUAL 3D' : 'WORLD OF XETHKIOZ // 3D VISUAL PRODUCTION'}</p>
-              <h2 id="media-3d-title">{lang === 'es' ? 'El mundo se está construyendo en 3D.' : 'The world is being built in 3D.'}</h2>
-              <span>{lang === 'es' ? 'La Home queda preparada para publicar únicamente renders, capturas y gameplay que representen la versión vigente de Unity + Blender.' : 'The Home is prepared to publish only renders, captures and gameplay that represent the current Unity + Blender version.'}</span>
+              <p>{lang === 'es' ? 'WORLD OF XETHKIOZ // PRODUCCIÓN VISUAL PROTEGIDA' : 'WORLD OF XETHKIOZ // PROTECTED VISUAL PRODUCTION'}</p>
+              <h2 id="media-3d-title">{lang === 'es' ? 'El mundo se construye en 3D. Sus secretos quedan fuera de la web.' : 'The world is built in 3D. Its secrets stay off the public web.'}</h2>
+              <span>{lang === 'es' ? 'Los modelos, mallas, materiales y capturas internas permanecen privados. La web publica arte derivado y, más adelante, material in-game seleccionado.' : 'Models, meshes, materials and internal captures remain private. The site publishes derived art and, later, selected in-game media.'}</span>
             </div>
-            <div className="wox-3d-grid" aria-label={lang === 'es' ? 'Material 3D oficial de World of Xethkioz' : 'Official World of Xethkioz 3D media'}>
+            <div className="wox-3d-grid" aria-label={lang === 'es' ? 'Presentación visual protegida de World of Xethkioz' : 'Protected World of Xethkioz visual presentation'}>
               <article className="wox-3d-veyr-card">
                 <div className="wox-3d-viewport is-veyr">
-                  <img src="/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp" alt={lang === 'es' ? 'Veyr — Wisp del Green Node' : 'Veyr — Green Node Wisp'} loading="lazy" decoding="async" />
-                  <span className="wox-3d-live-badge">{lang === 'es' ? '3D ACTIVO' : '3D ACTIVE'}</span>
+                  <img src="/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg" alt={lang === 'es' ? 'Manifestación web protegida de Veyr' : 'Protected web manifestation of Veyr'} loading="lazy" decoding="async" />
+                  <span className="wox-3d-live-badge">{lang === 'es' ? 'ARTE WEB' : 'WEB ART'}</span>
                 </div>
                 <div className="wox-3d-copy">
-                  <small>{lang === 'es' ? 'PRIMER ACTIVO 3D INTEGRADO' : 'FIRST INTEGRATED 3D ASSET'}</small>
+                  <small>{lang === 'es' ? 'PIPELINE 3D PRIVADO' : 'PRIVATE 3D PIPELINE'}</small>
                   <strong>VEYR · WISP DEL GREEN NODE</strong>
-                  <p>{lang === 'es' ? 'Modelo de Tripo corregido y optimizado en Blender, preparado para Unity y adaptado a la web como manifestación flotante del Green Node.' : 'Tripo model corrected and optimized in Blender, prepared for Unity and adapted to the site as the floating manifestation of Green Node.'}</p>
+                  <p>{lang === 'es' ? 'El asset de producción de Veyr permanece privado. Esta manifestación gráfica conserva su identidad sin exponer geometría, materiales ni detalles reconstruibles.' : 'Veyr’s production asset remains private. This graphic manifestation preserves its identity without exposing geometry, materials or reconstructable detail.'}</p>
                   <Link className="wox-3d-link" to={localizePath('/green-node')}>{lang === 'es' ? 'ENTRAR AL GREEN NODE' : 'ENTER GREEN NODE'} <span>↗</span></Link>
                 </div>
               </article>
@@ -560,7 +568,7 @@ export default function Home() {
                 </article>
               ))}
             </div>
-            <div className="wox-3d-note"><span>UNITY</span><span>BLENDER</span><span>3D</span><p>{lang === 'es' ? 'Veyr ya representa el pipeline 3D vigente. Los próximos espacios se reemplazan únicamente por renders, capturas o gameplay aprobados de Unity + Blender.' : 'Veyr already represents the current 3D pipeline. The remaining slots will be replaced only with approved Unity + Blender renders, captures or gameplay.'}</p></div>
+            <div className="wox-3d-note"><span>UNITY</span><span>BLENDER</span><span>3D</span><p>{lang === 'es' ? 'Unity y Blender siguen siendo el pipeline interno. La web sólo expone arte promocional transformado hasta habilitar material in-game seguro.' : 'Unity and Blender remain the internal pipeline. The public site exposes only transformed promotional art until safe in-game media is cleared.'}</p></div>
           </section>
 
           <section id="development" data-chapter="08" className="wox-section wox-dev wox-dev-showcase" aria-labelledby="dev-title">

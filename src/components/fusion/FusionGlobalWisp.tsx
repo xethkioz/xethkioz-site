@@ -141,7 +141,7 @@ export default function FusionGlobalWisp() {
 
           <span className="xk-wisp-specter-wrap">
             <SafeImage
-              src="/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp"
+              src="/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg"
               fallback="/assets/identity/wisp-digital-specter-v1.webp"
               className="xk-wisp-specter xk-wisp-specter-veyr"
               alt=""

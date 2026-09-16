@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "npm run generate:css-split && vite",
-    "build": "npm run generate:css-split && npm run typecheck && npm run audit:routes && npm run audit:runtime-seo && npm run audit:privacy-consent && npm run audit:telemetry-security && npm run audit:auth-session-security && npm run audit:community-security && npm run audit:editorial-integrity && npm run audit:editorial-depth && npm run audit:ads-monetization && npm run audit:international-indexing && npm run audit:news-layout-stability && npm run audit:content-design && npm run audit:portal-knowledge && npm run audit:comicon-removal && npm run audit:css-source && npm run generate:seo-shells && vite build && npm run audit:initial-bundle",
+    "build": "npm run generate:css-split && npm run typecheck && npm run audit:routes && npm run audit:runtime-seo && npm run audit:privacy-consent && npm run audit:telemetry-security && npm run audit:auth-session-security && npm run audit:community-security && npm run audit:editorial-integrity && npm run audit:editorial-depth && npm run audit:ads-monetization && npm run audit:international-indexing && npm run audit:news-layout-stability && npm run audit:content-design && npm run audit:portal-knowledge && npm run audit:comicon-removal && npm run audit:wox-ip-protection && npm run audit:css-source && npm run generate:seo-shells && vite build && npm run audit:initial-bundle",
     "preview": "vite preview",
     "test:e2e": "playwright test",
     "test:e2e:report": "playwright show-report",
@@ -16,6 +16,7 @@
     "audit:architecture": "node scripts/architecture-audit.mjs",
     "audit:fusion": "node scripts/fusion-safety-check.mjs",
     "audit:wisp": "node scripts/wisp-entity-check.mjs",
+    "audit:wox-ip-protection": "node scripts/wox-ip-protection-check.mjs",
     "audit:hud": "node scripts/hud-persistence-check.mjs",
     "audit:live": "node scripts/live-candidate-check.mjs",
     "audit:code": "node scripts/code-structure-review.mjs",

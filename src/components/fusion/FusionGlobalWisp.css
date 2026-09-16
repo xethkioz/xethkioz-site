@@ -347,7 +347,7 @@
 .xk-wisp-glitch-slice {
   position: absolute;
   inset: 4%;
-  background: center/contain no-repeat url('/assets/world-of-xethkioz/veyr/veyr-wisp-poster.webp');
+  background: center/contain no-repeat url('/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg');
   filter: hue-rotate(48deg) brightness(1.45) drop-shadow(0 0 8px var(--wisp-secondary));
   mix-blend-mode: screen;
   pointer-events: none;
