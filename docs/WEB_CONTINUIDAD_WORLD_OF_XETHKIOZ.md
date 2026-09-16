@@ -257,3 +257,11 @@ Push de la rama Preview está permitido para generar Preview. No mergear a `main
 - QA funcional ES/EN PASS: territorios, Atlas, Formas, personajes, chat, Wisp/Green Node y cambio de idioma.
 - Primera visita PASS 1440/430/390; edge PASS 320/360/1366/1920; Axe A/AA 0 violaciones; anclas y Wisp clearance PASS.
 - Produccion permanece intacta mientras esta rama se valida en Preview.
+
+### Pass 15B - sigilos protegidos y cierre visual
+- Atlas, Formas y Personajes reemplazan los marcos vacios por sigilos geometricos web-safe.
+- El color del sigilo responde a la familia Atlas, afinidad de Forma o identidad seleccionada.
+- Labels publicos ya no prometen renders pendientes: usan Archivo visual protegido, Sigilo de Resonancia e Identidad visual protegida.
+- Guard visual exige 3 sigilos protegidos ademas de 4 key arts de region y 7 assets web-safe.
+- Revision visual manual: Izrdralar, Desfralar, Xiomalar y Zodnight muestran atmosferas diferenciadas y coherentes.
+- QA visual 1440/1024/768/430/390 PASS; funcional ES/EN PASS; 0 overflow y 0 errores.

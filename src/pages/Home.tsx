@@ -71,12 +71,16 @@ type MediaPlaceholderProps = {
   orientation?: 'landscape' | 'portrait' | 'square'
   src?: string
   alt?: string
+  glyph?: string
 }
 
-function MediaPlaceholder({ label, subject, code = '3D', orientation = 'landscape', src, alt }: MediaPlaceholderProps) {
+function MediaPlaceholder({ label, subject, code = '3D', orientation = 'landscape', src, alt, glyph }: MediaPlaceholderProps) {
   return (
     <div className={`wox-media-placeholder is-${orientation}`} aria-label={`${label}: ${subject}`}>
-      {src ? <img src={src} alt={alt ?? subject} loading="lazy" decoding="async" /> : <div className="wox-media-placeholder-grid" aria-hidden="true" />}
+      {src ? <img src={src} alt={alt ?? subject} loading="lazy" decoding="async" /> : <>
+        <div className="wox-media-placeholder-grid" aria-hidden="true" />
+        <div className="wox-protected-sigil" aria-hidden="true"><i /><i /><i /><b>{glyph ?? code.slice(0, 2)}</b></div>
+      </>}
       <span>{code}</span>
       <strong>{subject}</strong>
       <small>{label}</small>
@@ -473,7 +477,7 @@ export default function Home() {
                 </article>
               ))}
             </div>
-            <div key={`atlas-console-${activeAtlas}`} className="wox-atlas-console" data-atlas={activeAtlas + 1} aria-live="polite"><MediaPlaceholder orientation="square" code="ATLAS" subject={selectedAtlas.title} label={lang === 'es' ? 'MODELO / CAPTURA PENDIENTE' : 'MODEL / CAPTURE PENDING'} />
+            <div key={`atlas-console-${activeAtlas}`} className="wox-atlas-console" data-atlas={activeAtlas + 1} aria-live="polite"><MediaPlaceholder orientation="square" code="ATLAS" subject={selectedAtlas.title} glyph={['GOB', 'MEC', 'FAU', 'BOS'][activeAtlas]} label={lang === 'es' ? 'ARCHIVO VISUAL PROTEGIDO' : 'PROTECTED VISUAL DOSSIER'} />
               <div>
                 <small>{selectedAtlas.signal}</small>
                 <h3>{selectedAtlas.title}</h3>
@@ -501,7 +505,7 @@ export default function Home() {
               ))}
             </div>
             <div key={`form-console-${activeForm}`} className="wox-form-console" aria-live="polite" data-form={activeForm + 1}>
-              <MediaPlaceholder orientation="square" code="FORMA" subject={selectedForm[0]} label={lang === 'es' ? 'RENDER 3D PENDIENTE' : '3D RENDER PENDING'} />
+              <MediaPlaceholder orientation="square" code="FORMA" subject={selectedForm[0]} glyph={selectedForm[0].slice(0, 2)} label={lang === 'es' ? 'SIGILO DE RESONANCIA' : 'RESONANCE SIGIL'} />
               <div>
                 <small>{lang === 'es' ? 'FORMA DE CONVERGENCIA SELECCIONADA' : 'SELECTED CONVERGENCE FORM'}</small>
                 <h3>{selectedForm[0]}</h3>
@@ -529,7 +533,7 @@ export default function Home() {
               ))}
             </div>
             <div key={`cast-console-${activeCast}`} className="wox-cast-console" data-cast={activeCast + 1} aria-live="polite">
-              <MediaPlaceholder orientation="portrait" code="CHAR" subject={selectedCast[0]} label={lang === 'es' ? 'RENDER DE PERSONAJE PENDIENTE' : 'CHARACTER RENDER PENDING'} />
+              <MediaPlaceholder orientation="portrait" code="CHAR" subject={selectedCast[0]} glyph={selectedCast[0].slice(0, 2).toUpperCase()} label={lang === 'es' ? 'IDENTIDAD VISUAL PROTEGIDA' : 'PROTECTED VISUAL IDENTITY'} />
               <div>
                 <small>{lang === 'es' ? 'IDENTIDAD CANÓNICA ACTIVA' : 'ACTIVE CANONICAL IDENTITY'}</small>
                 <h3>{selectedCast[0]}</h3>

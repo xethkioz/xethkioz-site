@@ -53,6 +53,7 @@ for (const [name, viewport] of cases) {
     media3dVeyr: document.querySelector('#media-3d .wox-3d-viewport.is-veyr img')?.getAttribute('src') || '',
     legacyHeroLabelPresent: document.querySelector('.wox-status')?.textContent?.includes('2.5D') || false,
     reservedMediaFrames: document.querySelectorAll('.wox-media-placeholder').length,
+    protectedSigils: document.querySelectorAll('.wox-atlas-console .wox-protected-sigil, .wox-form-console .wox-protected-sigil, .wox-cast-console .wox-protected-sigil').length,
     duoXethkiozImage: document.querySelector('.wox-duo-grid article:nth-child(2) .wox-media-placeholder img')?.getAttribute('src') || '',
     regionKeyArt: [...document.querySelectorAll('#worlds .wox-region-keyart')].map((el) => el.getAttribute('src') || ''),
     duoTravelerImage: document.querySelector('.wox-duo-grid article:first-child .wox-media-placeholder img')?.getAttribute('src') || '',
@@ -63,7 +64,7 @@ for (const [name, viewport] of cases) {
   }))
   await page.screenshot({ path: `${out}/${name}.png`, fullPage: true })
   const overflow = metrics.width > metrics.client
-  if (metrics.media3dSlots !== 3 || metrics.media3dImages !== 1 || metrics.media3dVeyr !== '/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg' || metrics.legacyHeroLabelPresent || metrics.wispAsset !== '/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg' || metrics.gameNavLinks !== 6 || metrics.heroSpecs !== 4 || metrics.chapterPanels !== 9 || metrics.sectionDockLinks !== 6 || !metrics.sectionDockVisible || metrics.reservedMediaFrames !== 6 || metrics.duoTravelerImage !== '/assets/world-of-xethkioz/web-art/player-etereo-sigil.svg' || metrics.duoXethkiozImage !== '/assets/world-of-xethkioz/web-art/xethkioz-resonance-sigil.svg' || metrics.regionKeyArt.length !== 4 || metrics.randomSectionImages !== 0 || JSON.stringify(metrics.formNames) !== JSON.stringify(canonicalFormNames) || metrics.formMediaSubject !== 'HELLER' || metrics.castMediaSubject !== 'Nikoras' || metrics.internalTextOverflow.length || (compactNav && mobileMenuLinks !== 6) || overflow || errors.length) {
+  if (metrics.media3dSlots !== 3 || metrics.media3dImages !== 1 || metrics.media3dVeyr !== '/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg' || metrics.legacyHeroLabelPresent || metrics.wispAsset !== '/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg' || metrics.gameNavLinks !== 6 || metrics.heroSpecs !== 4 || metrics.chapterPanels !== 9 || metrics.sectionDockLinks !== 6 || !metrics.sectionDockVisible || metrics.reservedMediaFrames !== 6 || metrics.protectedSigils !== 3 || metrics.duoTravelerImage !== '/assets/world-of-xethkioz/web-art/player-etereo-sigil.svg' || metrics.duoXethkiozImage !== '/assets/world-of-xethkioz/web-art/xethkioz-resonance-sigil.svg' || metrics.regionKeyArt.length !== 4 || metrics.randomSectionImages !== 0 || JSON.stringify(metrics.formNames) !== JSON.stringify(canonicalFormNames) || metrics.formMediaSubject !== 'HELLER' || metrics.castMediaSubject !== 'Nikoras' || metrics.internalTextOverflow.length || (compactNav && mobileMenuLinks !== 6) || overflow || errors.length) {
     throw new Error(`WOX visual QA failed for ${name}: ${JSON.stringify({ ...metrics, mobileMenuLinks, overflow, errors })}`)
   }
   console.log(JSON.stringify({ name, ...metrics, mobileMenuLinks, overflow, errors }))
