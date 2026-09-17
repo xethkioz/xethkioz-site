@@ -101,9 +101,18 @@ export default function Home() {
       <main className="wox-home">
         <div className="wox-bg" aria-hidden="true" />
         {videoEnabled && (
-          <video className="wox-bg-video" src="/assets/bg-dragon-animated.mp4" autoPlay loop muted playsInline preload="metadata" aria-hidden="true" />
+          <video
+            className="wox-bg-video"
+            src="/assets/bg-dragon-animated.mp4"
+            poster="/assets/bg-dragon-poster.webp"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+          />
         )}
-        <div className="wox-noise" aria-hidden="true" />
 
         <aside className="wox-utility-rail" aria-label={lang === 'es' ? 'Accesos rápidos' : 'Quick access'}>
           <button type="button" onClick={openNexusChat}><span>◉</span><b>CHAT</b></button>
