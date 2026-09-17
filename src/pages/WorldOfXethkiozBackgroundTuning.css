@@ -5,6 +5,19 @@
   transform: none;
   filter: brightness(.79) saturate(1.01);
   backface-visibility: hidden;
+  image-rendering: auto;
+}
+
+/* The old grid/noise overlay made the compressed video read as more pixelated on large displays. */
+.wox-noise {
+  display: none;
+}
+
+/* Keep only a restrained readability vignette so the animated scene remains visible. */
+.wox-hero::before {
+  inset: 10% 11% 8%;
+  background: radial-gradient(ellipse at center, rgba(7,7,12,.08), rgba(7,7,12,.32) 54%, transparent 74%);
+  filter: blur(14px);
 }
 
 @media (min-width: 1600px) {
