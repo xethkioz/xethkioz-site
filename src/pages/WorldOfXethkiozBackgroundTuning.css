@@ -1,0 +1,20 @@
+/* Background fidelity pass: preserve the current mage/goblin/fairy animation while avoiding extra browser resampling. */
+.wox-bg-video {
+  object-fit: cover;
+  object-position: 50% 50%;
+  transform: none;
+  filter: brightness(.79) saturate(1.01);
+  backface-visibility: hidden;
+}
+
+@media (min-width: 1600px) {
+  .wox-bg-video {
+    object-position: 50% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wox-bg-video {
+    display: none;
+  }
+}
