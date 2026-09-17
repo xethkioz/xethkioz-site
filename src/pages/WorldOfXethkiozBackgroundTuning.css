@@ -20,6 +20,26 @@
   filter: blur(14px);
 }
 
+/* Home rule: Veyr stays a discreet floating Wisp. It must not become a second oversized hero element. */
+@media (min-width: 1280px) {
+  .xk-wisp.is-home-entry {
+    --wisp-size: 96px;
+    position: fixed !important;
+    right: 1.5rem !important;
+    bottom: 6.25rem !important;
+    top: auto !important;
+  }
+
+  .xk-wisp.is-home-entry .xk-wisp-home-marker {
+    display: none !important;
+  }
+
+  .xk-wisp.is-home-entry .xk-wisp-terminal {
+    top: calc(100% + .8rem);
+    left: 50%;
+  }
+}
+
 @media (min-width: 1600px) {
   .wox-bg-video {
     object-position: 50% 50%;
