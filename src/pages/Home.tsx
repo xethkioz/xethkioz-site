@@ -7,6 +7,7 @@ import { supportsAmbientVideo } from '../lib/experienceMode'
 import { SITE_VERSION } from '../lib/siteConfig'
 import './WorldOfXethkiozHome.css'
 import './WorldOfXethkiozAAA.css'
+import './WorldOfXethkiozBackgroundTuning.css'
 
 type DataSavingConnection = {
   saveData?: boolean
