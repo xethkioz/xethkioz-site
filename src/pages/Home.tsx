@@ -6,6 +6,7 @@ import { useExperience } from '../lib/ExperienceContext'
 import { supportsAmbientVideo } from '../lib/experienceMode'
 import { SITE_VERSION } from '../lib/siteConfig'
 import './WorldOfXethkiozLanding.css'
+import './WorldOfXethkiozBackgroundTuning.css'
 
 type DataSavingConnection = {
   saveData?: boolean
@@ -13,43 +14,27 @@ type DataSavingConnection = {
   removeEventListener?: (type: 'change', listener: () => void) => void
 }
 
-type IdleCapableWindow = Window & {
-  requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number
-  cancelIdleCallback?: (handle: number) => void
-}
-
-function scheduleIdleTask(task: () => void, timeout = 1200) {
-  const idleWindow = window as IdleCapableWindow
-  if (idleWindow.requestIdleCallback) {
-    const handle = idleWindow.requestIdleCallback(task, { timeout })
-    return () => idleWindow.cancelIdleCallback?.(handle)
-  }
-  const handle = window.setTimeout(task, timeout)
-  return () => window.clearTimeout(handle)
-}
-
 function useAmbientVideoEnabled(graphicsMode: 'full' | 'lite') {
-  const [enabled, setEnabled] = useState(false)
+  const [enabled, setEnabled] = useState(
+    () => typeof window !== 'undefined' && supportsAmbientVideo(graphicsMode),
+  )
 
   useEffect(() => {
     const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)')
     const connection = (navigator as Navigator & { connection?: DataSavingConnection }).connection
-    let cancelIdle: (() => void) | undefined
 
     const sync = () => {
-      cancelIdle?.()
-      if (!supportsAmbientVideo(graphicsMode) || motionPreference.matches || connection?.saveData) {
-        setEnabled(false)
-        return
-      }
-      cancelIdle = scheduleIdleTask(() => setEnabled(true), 900)
+      setEnabled(
+        supportsAmbientVideo(graphicsMode)
+        && !motionPreference.matches
+        && !connection?.saveData,
+      )
     }
 
     sync()
     motionPreference.addEventListener('change', sync)
     connection?.addEventListener?.('change', sync)
     return () => {
-      cancelIdle?.()
       motionPreference.removeEventListener('change', sync)
       connection?.removeEventListener?.('change', sync)
     }
