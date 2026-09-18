@@ -40,7 +40,7 @@ const footer = read('src/components/Footer.tsx')
 const mainEntry = read('src/main.tsx')
 const routeCssLoader = read('src/components/RouteCssLoader.tsx')
 const home = read('src/pages/Home.tsx')
-const homeCss = read('src/pages/WorldOfXethkiozHome.css')
+const homeCss = read('src/pages/WorldOfXethkiozLanding.css')
 const indexHtml = read('index.html')
 const webManifest = read('public/manifest.webmanifest')
 const publicNews = read('src/pages/News.tsx')
@@ -130,8 +130,9 @@ check(
   'Home exposes accessible World navigation with reduced-motion support',
   home.includes('<main className="wox-home">')
     && home.includes('className="wox-ecosystem-nav"')
-    && home.includes('className={`wox-section-dock')
-    && home.includes("aria-current={activeSection === id ? 'location' : undefined}")
+    && home.includes('className="wox-mobile-ecosystem"')
+    && home.includes('aria-label={lang === \'es\' ? \'Ecosistema XETHKIOZ\' : \'XETHKIOZ ecosystem\'}')
+    && home.includes('prefers-reduced-motion: reduce')
     && homeCss.includes('@media(prefers-reduced-motion:reduce)'),
 )
 check(
