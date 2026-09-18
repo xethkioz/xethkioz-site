@@ -5,9 +5,7 @@ import { useLang } from '../lib/LangContext'
 import { useExperience } from '../lib/ExperienceContext'
 import { supportsAmbientVideo } from '../lib/experienceMode'
 import { SITE_VERSION } from '../lib/siteConfig'
-import './WorldOfXethkiozHome.css'
-import './WorldOfXethkiozAAA.css'
-import './WorldOfXethkiozBackgroundTuning.css'
+import './WorldOfXethkiozLanding.css'
 
 type DataSavingConnection = {
   saveData?: boolean
