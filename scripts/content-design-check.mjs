@@ -32,6 +32,19 @@ check('Home avoids fake safety or simulated live claims', !home.includes('SISTEM
 check('Home exposes the existing Nexus chat launcher', home.includes('xethkioz:nexus-chat-open'))
 check('Home dedicated landing CSS stays below 32 kB source', Buffer.byteLength(landingCss, 'utf8') <= 32 * 1024)
 check(
+  'Home landing CSS excludes retired section and grid selectors',
+  !landingCss.includes('.wox-section-dock')
+    && !landingCss.includes('.wox-section')
+    && !landingCss.includes('.wox-region-grid')
+    && !landingCss.includes('.wox-atlas-grid')
+    && !landingCss.includes('.wox-forms-grid')
+    && !landingCss.includes('.wox-cast-grid')
+    && !landingCss.includes('.wox-ecosystem-grid')
+    && !landingCss.includes('.wox-bg-shade')
+    && !landingCss.includes('.wox-noise')
+    && !landingCss.includes('.is-quiet'),
+)
+check(
   'Home loads only the dedicated World landing stylesheet',
   home.includes("import './WorldOfXethkiozLanding.css'")
     && !home.includes('WorldOfXethkiozHome.css')
