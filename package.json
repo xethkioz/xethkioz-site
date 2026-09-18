@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "npm run generate:css-split && vite",
-    "build": "npm run generate:css-split && npm run typecheck && npm run audit:routes && npm run audit:runtime-seo && npm run audit:privacy-consent && npm run audit:telemetry-security && npm run audit:auth-session-security && npm run audit:community-security && npm run audit:editorial-integrity && npm run audit:editorial-depth && npm run audit:ads-monetization && npm run audit:international-indexing && npm run audit:news-layout-stability && npm run audit:content-design && npm run audit:portal-knowledge && npm run audit:comicon-removal && npm run audit:css-source && npm run generate:seo-shells && vite build && npm run audit:initial-bundle",
+    "build": "npm run generate:css-split && npm run audit:ip-boundary && npm run typecheck && npm run audit:routes && npm run audit:runtime-seo && npm run audit:privacy-consent && npm run audit:telemetry-security && npm run audit:auth-session-security && npm run audit:community-security && npm run audit:editorial-integrity && npm run audit:editorial-depth && npm run audit:ads-monetization && npm run audit:international-indexing && npm run audit:news-layout-stability && npm run audit:content-design && npm run audit:portal-knowledge && npm run audit:comicon-removal && npm run audit:css-source && npm run generate:seo-shells && vite build && npm run audit:initial-bundle",
     "preview": "vite preview",
     "test:e2e": "playwright test",
     "test:e2e:report": "playwright show-report",
@@ -68,7 +68,8 @@
     "audit:wox-functional": "node scripts/wox-home-functional-check.mjs",
     "audit:wox-anchor-nav": "node scripts/wox-anchor-navigation-check.mjs",
     "audit:wox-wisp-clearance": "node scripts/wox-wisp-clearance-check.mjs",
-    "audit:wox-edge-accessibility": "node scripts/wox-edge-accessibility-check.mjs"
+    "audit:wox-edge-accessibility": "node scripts/wox-edge-accessibility-check.mjs",
+    "audit:ip-boundary": "node scripts/private-ip-boundary-check.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.7",
