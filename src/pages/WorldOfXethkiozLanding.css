@@ -6,7 +6,7 @@
 @keyframes wox-logo-breathe{0%,100%{filter:drop-shadow(0 0 18px rgba(139,92,246,.26)) drop-shadow(0 0 28px rgba(255,107,26,.08));transform:translateZ(0) scale(1)}50%{filter:drop-shadow(0 0 32px rgba(139,92,246,.48)) drop-shadow(0 0 36px rgba(255,107,26,.14));transform:translateZ(0) scale(1.012)}}
 @keyframes wox-drift{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-8px,0)}}
 .wox-home{--wox-purple:#8b5cf6;--wox-violet:#a855f7;--wox-orange:#ff6b1a;--wox-amber:#ff8c42;--wox-ink:#07070c;position:relative;min-height:100svh;overflow:hidden;background:var(--wox-ink);color:#f5f5f7}
-.wox-bg,.wox-bg-video,.wox-bg-shade,.wox-noise{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+.wox-bg,.wox-bg-video{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
 .wox-bg{z-index:0;background:center/cover no-repeat url('/assets/bg-dragon-poster.webp')}
 .wox-bg-video{z-index:0;object-fit:cover;filter:saturate(1.03) contrast(1.03) brightness(.78);transform:scale(1.015)}
 .wox-topbar{position:fixed;z-index:42;top:14px;left:50%;width:min(1540px,calc(100% - 28px));min-height:64px;transform:translateX(-50%);display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px;padding:8px 10px 8px 16px;border:1px solid rgba(255,255,255,.1);border-radius:22px;background:rgba(6,6,12,.66);box-shadow:0 18px 60px rgba(0,0,0,.32),inset 0 1px rgba(255,255,255,.035);backdrop-filter:blur(18px)}
@@ -24,7 +24,7 @@
 .wox-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:28px}
 .wox-actions a,.wox-actions button{display:flex;align-items:center;gap:11px;padding:14px 17px;border:1px solid rgba(139,92,246,.4);border-radius:13px;background:linear-gradient(135deg,rgba(139,92,246,.22),rgba(255,107,26,.12));color:#fff;text-decoration:none;font:950 .61rem/1 ui-monospace,monospace;letter-spacing:.15em;cursor:pointer;box-shadow:0 0 28px rgba(139,92,246,.12);transition:.25s ease}
 .wox-actions a:hover,.wox-actions button:hover{transform:translateY(-2px);border-color:rgba(255,140,66,.65);box-shadow:0 0 34px rgba(255,107,26,.18)}
-.wox-actions .is-quiet{background:rgba(3,3,8,.46);border-color:rgba(255,255,255,.12);color:rgba(255,255,255,.78)}
+
 .wox-content{position:relative;z-index:5;width:min(1480px,calc(100% - 32px));margin:0 auto;padding:26px 0 72px}
 .wox-support-card{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:28px;align-items:center;margin-top:18px;padding:34px 38px;border:1px solid rgba(255,140,66,.22);border-radius:28px;background:radial-gradient(circle at 85% 50%,rgba(255,107,26,.12),transparent 30%),linear-gradient(135deg,rgba(139,92,246,.09),rgba(0,0,0,.38));box-shadow:0 24px 80px rgba(0,0,0,.22)}
 .wox-support-card p{margin:0;font:950 .56rem/1 ui-monospace,monospace;letter-spacing:.18em;color:#ff9d60}
@@ -65,7 +65,7 @@
 .wox-footer nav{justify-content:flex-start}
 }
 @media (prefers-reduced-motion:reduce){.wox-logo-wrap,.wox-world-logo{animation:none}
-.wox-actions a,.wox-actions button,.wox-region-grid article,.wox-forms-grid article,.wox-cast-grid article{transition:none}
+.wox-actions a,.wox-actions button{transition:none}
 }
 @media (max-width:760px){.wox-hero{grid-template-columns:minmax(0,1fr)}
 .wox-hero-core,.wox-logo-wrap,.wox-world-logo,.wox-hero h2,.wox-lead{min-width:0;max-width:100%}
@@ -137,7 +137,7 @@
 /* WorldOfXethkiozAAA.css */
 .wox-home{--aaa-panel:rgba(5,7,12,.9);--aaa-line:rgba(255,255,255,.085);--aaa-copy:rgba(255,255,255,.67);--aaa-muted:rgba(255,255,255,.43);--aaa-orange:#ff934f;--aaa-violet:#9f72ff;--aaa-cyan:#75ddff;}
 .wox-content{width:min(1520px,calc(100% - 36px));padding-top:18px;}
-.wox-section,.wox-support-card{isolation:isolate;box-shadow:0 34px 110px rgba(0,0,0,.34);}
+.wox-support-card{isolation:isolate;box-shadow:0 34px 110px rgba(0,0,0,.34);}
 .wox-support-card{padding:40px 44px;border-radius:26px;background:radial-gradient(circle at 88% 50%,rgba(255,107,26,.16),transparent 30%),linear-gradient(135deg,rgba(139,92,246,.1),rgba(3,4,8,.7));}
 @media(max-width:760px){.wox-content{width:calc(100% - 12px);padding-top:8px}
 .wox-support-card{grid-template-columns:1fr;gap:18px;margin-top:12px;padding:26px 18px;border-radius:22px}
@@ -173,12 +173,12 @@
 .wox-hero-specs a:hover,.wox-hero-specs a:focus-visible{outline:none;background:linear-gradient(145deg,rgba(139,92,246,.12),rgba(255,107,26,.05))}
 .wox-hero-specs strong{font:950 clamp(1.2rem,2vw,2rem)/1 Orbitron,Inter,sans-serif;color:#fff;text-shadow:0 0 20px rgba(139,92,246,.16)}
 .wox-hero-specs span{font:850 .5rem/1.25 ui-monospace,monospace;letter-spacing:.15em;color:rgba(255,255,255,.5)}
-.wox-content>.wox-section,.wox-content>.wox-support-card{scroll-margin-top:96px}
-.wox-content>.wox-section{margin-top:clamp(42px,5.5vw,82px)}
-.wox-content>.wox-section:first-child{margin-top:18px}
-.wox-content>.wox-section .wox-section-head{padding-top:8px}
-.wox-content>.wox-section .wox-section-head::before{content:'';display:block;width:84px;height:2px;margin-bottom:18px;background:linear-gradient(90deg,var(--aaa-orange),var(--aaa-violet),transparent);box-shadow:0 0 16px rgba(139,92,246,.22)}
-.wox-content>.wox-section .wox-section-head::after{content:'WORLD OF XETHKIOZ';position:absolute;right:0;top:8px;font:900 .42rem/1 ui-monospace,monospace;letter-spacing:.2em;color:rgba(255,255,255,.16)}
+.wox-content>.wox-support-card{scroll-margin-top:96px}
+
+
+
+
+
 @media(max-width:760px){.wox-hero{padding:124px 10px 62px;min-height:100svh;align-content:center}
 .wox-hero-frame{inset:82px 7px 26px;border-radius:20px}
 .wox-hero-frame span{width:24px;height:24px}
@@ -191,24 +191,24 @@
 .wox-lead{margin-top:12px;font-size:.82rem;line-height:1.55}
 .wox-actions{gap:7px;margin-top:18px}
 .wox-actions a,.wox-actions button{flex:1 1 calc(50% - 7px);min-width:0;padding:11px 9px;font-size:.43rem;letter-spacing:.09em}
-.wox-actions .is-quiet{flex-basis:100%}
+
 .wox-hero-specs{width:100%;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px;border-radius:14px}
 .wox-hero-specs a{min-height:54px;padding:9px;border-bottom:1px solid rgba(255,255,255,.07)}
 .wox-hero-specs a:nth-child(2){border-right:0}
 .wox-hero-specs a:nth-child(n+3){border-bottom:0}
 .wox-hero-specs strong{font-size:1.05rem}
 .wox-hero-specs span{font-size:.39rem;letter-spacing:.1em}
-.wox-content>.wox-section{margin-top:16px}
-.wox-content>.wox-section:first-child{margin-top:8px}
-.wox-content>.wox-section .wox-section-head::before{width:58px;margin-bottom:12px}
-.wox-content>.wox-section .wox-section-head::after{display:none}
+
+
+
+
 }
 @media(max-width:390px){.wox-hero{padding-top:116px}
 .wox-hero-overline{font-size:.33rem}
 .wox-hero-specs a{gap:7px}
 .wox-hero-specs span{font-size:.36rem}
 }
-.wox-content>.wox-section:not(:first-child)::after{border-color:rgba(255,255,255,.04)}
+
 .wox-support-card{position:relative;overflow:hidden}
 .wox-support-card::before{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,transparent 0 60%,rgba(255,140,66,.055) 72%,transparent 84%)}
 .wox-support-card>a{transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
@@ -229,15 +229,13 @@
 .wox-footer-status{font-size:.42rem}
 .wox-footer nav{align-self:flex-start}
 }
-@media(prefers-reduced-motion:reduce){.wox-region-grid article>button::after,.wox-atlas-grid article>button::after,.wox-forms-grid article>button::after,.wox-cast-grid article>button::after,.wox-footer a::after{transition:none}
+@media(prefers-reduced-motion:reduce){.wox-footer a::after{transition:none}
 }
-.wox-content>.wox-section[data-chapter]{position:relative;isolation:isolate;}
-.wox-content>.wox-section[data-chapter]::before{content:attr(data-chapter);position:absolute;right:clamp(18px,3vw,42px);top:clamp(22px,3vw,40px);z-index:-1;font:950 clamp(5.5rem,11vw,10rem)/.8 Orbitron,Inter,sans-serif;letter-spacing:-.08em;color:rgba(255,255,255,.018);text-shadow:0 0 50px rgba(139,92,246,.025);pointer-events:none;}
-.wox-content>.wox-section[data-chapter]>.wox-section-head{position:relative;z-index:1;}
-.wox-content>.wox-section[data-chapter]>.wox-section-head::after{content:'CHAPTER ' attr(data-chapter) ' // WORLD OF XETHKIOZ';}
-@media(max-width:760px){.wox-content>.wox-section[data-chapter]::before{right:14px;top:20px;font-size:4.3rem;color:rgba(255,255,255,.015)}
-.wox-content>.wox-section[data-chapter]>.wox-section-head::after{display:none}
-}
+
+
+
+
+
 body:has(.wox-home) .xk-privacy-consent-banner{overflow:hidden;border-color:rgba(255,140,66,.25)!important;border-radius:18px!important;background:linear-gradient(120deg,rgba(6,8,14,.97),rgba(14,9,24,.97) 58%,rgba(21,10,8,.96))!important;box-shadow:0 22px 80px rgba(0,0,0,.68),0 0 0 1px rgba(139,92,246,.08),0 0 42px rgba(139,92,246,.1)!important;}
 body:has(.wox-home) .xk-privacy-consent-banner::before{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,#69dfff,#9d73ff 48%,#ff934f) top/100% 1px no-repeat,radial-gradient(circle at 88% 15%,rgba(255,107,26,.08),transparent 30%);}
 body:has(.wox-home) .xk-privacy-consent-banner h2{font-family:Orbitron,Inter,sans-serif;letter-spacing:-.035em;}
@@ -251,15 +249,11 @@ body:has(.wox-home) .xk-privacy-consent-actions{grid-template-columns:repeat(2,m
 body:has(.wox-home) .xk-privacy-consent-actions button{min-height:38px!important;padding:8px 7px!important;font-size:.43rem!important;}
 body:has(.wox-home) .xk-privacy-consent-actions button:last-child{grid-column:1/-1;}
 }
-.wox-content>.wox-section,.wox-content>.wox-support-card{scroll-margin-top:146px}
-@media(max-width:760px){.wox-content>.wox-section,.wox-content>.wox-support-card{scroll-margin-top:118px}
+.wox-content>.wox-support-card{scroll-margin-top:146px}
+@media(max-width:760px){.wox-content>.wox-support-card{scroll-margin-top:118px}
 }
-@media(max-width:1279px){body:has(.wox-home .wox-section-dock.is-visible) .xk-wisp.is-home-entry{--wisp-size:56px;right:-8px;top:152px;bottom:auto;opacity:.72;transition:opacity .2s ease,filter .2s ease}
-body:has(.wox-home .wox-section-dock.is-visible) .xk-wisp.is-home-entry:hover,body:has(.wox-home .wox-section-dock.is-visible) .xk-wisp.is-home-entry:focus-visible{opacity:1;filter:brightness(1.08)}
-body:has(.wox-home .wox-section-dock.is-visible) .xk-wisp.is-home-entry .xk-wisp-terminal{display:none}
-}
-@media(max-width:760px){body:has(.wox-home .wox-section-dock.is-visible) .xk-wisp.is-home-entry{top:128px}
-}
+
+
 .wox-hero-core{position:relative;z-index:3}
 .wox-hero-frame{z-index:2}
 .wox-hero-core::after{content:'';position:absolute;z-index:-1;left:50%;top:22%;width:min(900px,84vw);height:58%;transform:translateX(-50%);background:radial-gradient(ellipse at center,rgba(3,5,9,.86) 0,rgba(3,5,9,.54) 40%,transparent 74%);filter:blur(6px);pointer-events:none}
@@ -284,7 +278,7 @@ body:has(.wox-home .wox-section-dock.is-visible) .xk-wisp.is-home-entry .xk-wisp
 @media(max-width:760px){.wox-tech-seals{gap:5px!important}
 .wox-tech-seals span{font-size:.36rem}
 }
-.wox-home .wox-ecosystem-nav a[href="/green-node"],.wox-home .wox-ecosystem-grid>a[href="/green-node"]{display:flex!important}
+.wox-home .wox-ecosystem-nav a[href="/green-node"]{display:flex!important}
 .wox-footer > div > small:last-child{ color: #a7a7af; }
 .wox-footer small{ color: #b7b7c2 !important; }
 
