@@ -35,3 +35,25 @@ pnpm-debug.log*
 .idea/
 .DS_Store
 Thumbs.db
+
+# Proprietary World of Xethkioz source must never enter the public web repository
+*.blend
+*.blend1
+*.fbx
+*.obj
+*.glb
+*.gltf
+*.stl
+*.unity
+*.prefab
+*.unitypackage
+*.psd
+*.kra
+*.7z
+*.rar
+Assets/
+ProjectSettings/
+Packages/
+game/
+World of Xethkioz/
+world-of-xethkioz-private/
