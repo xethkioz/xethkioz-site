@@ -30,6 +30,7 @@ check('Home does not hide Mascotas behind a legacy override', !rootDocument.incl
 check('Home keeps ambient motion with reduced-motion support', home.includes('/assets/bg-dragon-animated.mp4') && landingCss.includes('prefers-reduced-motion: reduce'))
 check('Home avoids fake safety or simulated live claims', !home.includes('SISTEMA SEGURO 24/7') && !home.includes('JUGADORES CONECTADOS') && !home.includes('PRIVACIDAD Y NAVEGACIÓN VERIFICADAS'))
 check('Home exposes the existing Nexus chat launcher', home.includes('xethkioz:nexus-chat-open'))
+check('Home dedicated landing CSS stays below 32 kB source', Buffer.byteLength(landingCss, 'utf8') <= 32 * 1024)
 check(
   'Home loads only the dedicated World landing stylesheet',
   home.includes("import './WorldOfXethkiozLanding.css'")
