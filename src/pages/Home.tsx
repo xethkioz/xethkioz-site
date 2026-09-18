@@ -124,8 +124,9 @@ export default function Home() {
             <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ARGENCIENCIA <span>↗</span></a>
             <Link to={localizePath('/gaming')}>{lang === 'es' ? 'BIBLIOTECA DE JUEGOS' : 'GAME LIBRARY'}</Link>
             <a href="/mascotas/">{lang === 'es' ? 'MASCOTAS' : 'PETS'}</a>
+            <Link to={localizePath('/nexus-city')}>NEXUS CITY</Link>
             <Link to={localizePath('/green-node')}>GREEN NODE</Link>
-            <Link to={localizePath('/creacion-web')}>{lang === 'es' ? 'CREADOR WEB' : 'WEB CREATOR'}</Link>
+            <Link to={localizePath('/creacion-web')}>{lang === 'es' ? 'CREACIÓN WEB' : 'WEB CREATION'}</Link>
             <Link to={localizePath('/support')}>{lang === 'es' ? 'DONACIONES' : 'DONATIONS'}</Link>
           </nav>
           <details className="wox-mobile-ecosystem">
@@ -135,8 +136,9 @@ export default function Home() {
               <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ARGENCIENCIA <span>↗</span></a>
               <Link to={localizePath('/gaming')}>{lang === 'es' ? 'BIBLIOTECA DE JUEGOS' : 'GAME LIBRARY'}</Link>
               <a href="/mascotas/">{lang === 'es' ? 'MASCOTAS' : 'PETS'}</a>
+              <Link to={localizePath('/nexus-city')}>NEXUS CITY</Link>
               <Link to={localizePath('/green-node')}>GREEN NODE</Link>
-              <Link to={localizePath('/creacion-web')}>{lang === 'es' ? 'CREADOR WEB' : 'WEB CREATOR'}</Link>
+              <Link to={localizePath('/creacion-web')}>{lang === 'es' ? 'CREACIÓN WEB' : 'WEB CREATION'}</Link>
               <Link to={localizePath('/support')}>{lang === 'es' ? 'DONACIONES' : 'DONATIONS'}</Link>
             </nav>
           </details>
