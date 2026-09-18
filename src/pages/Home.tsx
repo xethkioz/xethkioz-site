@@ -168,7 +168,7 @@ export default function Home() {
               <span><strong>04+1</strong><b>{lang === 'es' ? 'REGIONES' : 'REGIONS'}</b></span>
               <span><strong>32</strong><b>{lang === 'es' ? 'MAPAS' : 'MAPS'}</b></span>
               <span><strong>08</strong><b>{lang === 'es' ? 'FORMAS' : 'FORMS'}</b></span>
-              <span><strong>G4</strong><b>GODOT 4 · ARPG 2D</b></span>
+              <span><strong>U6</strong><b>UNITY 6 · URP · 3D/2.5D</b></span>
             </div>
           </div>
         </section>
@@ -191,7 +191,7 @@ export default function Home() {
 
           <footer className="wox-footer">
             <div className="wox-tech-seals" aria-label={lang === 'es' ? 'Tecnologías y red' : 'Technology and network'}>
-              <span>GODOT 4</span><span>TRIPO 3D</span><span>GREEN NODE</span><span>VEYR/WISP</span>
+              <span>UNITY 6 · URP</span><span>TRIPO 3D</span><span>GREEN NODE</span><span>VEYR/WISP</span>
             </div>
             <div>
               <small className="wox-footer-status">{lang === 'es' ? 'SAGA I // EN DESARROLLO' : 'SAGA I // IN DEVELOPMENT'}</small>
