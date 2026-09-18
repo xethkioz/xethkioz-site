@@ -6,7 +6,6 @@ import { useExperience } from '../lib/ExperienceContext'
 import { supportsAmbientVideo } from '../lib/experienceMode'
 import { SITE_VERSION } from '../lib/siteConfig'
 import './WorldOfXethkiozLanding.css'
-import './WorldOfXethkiozBackgroundTuning.css'
 
 type DataSavingConnection = {
   saveData?: boolean
