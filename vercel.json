@@ -3,6 +3,20 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
+  "git": {
+    "deploymentEnabled": {
+      "game/**": false,
+      "security/**": false,
+      "feat/izrdralar-*": false,
+      "_tmp-*": false,
+      "agent/editorial-september15-*": false,
+      "wox-media-*": false,
+      "wox-web-home-*": false,
+      "wox-web-art-*": false,
+      "wox-aaa-*": false,
+      "fix/world-aaa-*": false
+    }
+  },
   "trailingSlash": false,
   "redirects": [
     { "source": "/fun", "destination": "/nexus-city", "permanent": true },
