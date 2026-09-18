@@ -113,11 +113,11 @@ const englishRoutes = [
   {
     file: 'en-home.html',
     path: '/en',
-    title: 'XETHKIOZ | Gaming, Tech, Science and Digital Culture',
-    description: 'An independent portal network for gaming, technology, science, artificial intelligence, community and digital culture.',
-    keywords: 'gaming, technology, science, artificial intelligence, streaming, digital culture, XETHKIOZ',
-    image: '/og-image.svg',
-    imageAlt: 'XETHKIOZ global portal network',
+    title: 'World of Xethkioz · Action RPG in development | XETHKIOZ',
+    description: 'Official portal for World of Xethkioz and the XETHKIOZ ecosystem.',
+    keywords: 'World of Xethkioz, action RPG, RPG, Godot 4, independent game, XETHKIOZ',
+    image: '/assets/world-of-xethkioz/world-of-xethkioz-logo.webp',
+    imageAlt: 'World of Xethkioz official logo',
   },
   {
     file: 'en-gaming.html',
