@@ -115,7 +115,7 @@ const englishRoutes = [
     path: '/en',
     title: 'World of Xethkioz · Action RPG in development | XETHKIOZ',
     description: 'Official portal for World of Xethkioz and the XETHKIOZ ecosystem.',
-    keywords: 'World of Xethkioz, action RPG, RPG, Godot 4, independent game, XETHKIOZ',
+    keywords: 'World of Xethkioz, action RPG, RPG, Unity 6, URP, 3D/2.5D, independent game, XETHKIOZ',
     image: '/assets/world-of-xethkioz/world-of-xethkioz-logo.webp',
     imageAlt: 'World of Xethkioz official logo',
   },
