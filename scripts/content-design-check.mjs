@@ -13,7 +13,9 @@ const rootDocument = read('index.html')
 const routeCssLoader = read('src/components/RouteCssLoader.tsx')
 const accessibility = read('src/accessibility.css')
 const browserTest = read('tests/e2e/content-design.spec.ts')
-const homeCss = read('src/pages/WorldOfXethkiozHome.css')
+const landingCss = read('src/pages/WorldOfXethkiozLanding.css')
+const globalCss = read('src/index.css')
+const mainEntry = read('src/main.tsx')
 const checks = []
 const check = (name, ok) => checks.push([name, Boolean(ok)])
 
@@ -25,9 +27,31 @@ check('Home content shortcuts avoid duplicated portal destinations', district.in
 check('Home removes heavyweight portal theatre artwork', !home.includes('xk-rb-portals') && !home.includes('PrimaryPortal'))
 check('Home uses a lightweight transparent World logo', home.includes('world-of-xethkioz-logo.webp') && fs.existsSync(path.join(root, 'public/assets/world-of-xethkioz/world-of-xethkioz-logo.svg')))
 check('Home does not hide Mascotas behind a legacy override', !rootDocument.includes('huellas-portal-inline.css') && !fs.existsSync(path.join(root, 'public/huellas-portal-inline.css')) && !fs.existsSync(path.join(root, 'public/huellas-portal-image.js')))
-check('Home keeps ambient motion with reduced-motion support', home.includes('/assets/bg-dragon-animated.mp4') && homeCss.includes('prefers-reduced-motion:reduce'))
+check('Home keeps ambient motion with reduced-motion support', home.includes('/assets/bg-dragon-animated.mp4') && landingCss.includes('prefers-reduced-motion: reduce'))
 check('Home avoids fake safety or simulated live claims', !home.includes('SISTEMA SEGURO 24/7') && !home.includes('JUGADORES CONECTADOS') && !home.includes('PRIVACIDAD Y NAVEGACIÓN VERIFICADAS'))
 check('Home exposes the existing Nexus chat launcher', home.includes('xethkioz:nexus-chat-open'))
+check(
+  'Home loads only the dedicated World landing stylesheet',
+  home.includes("import './WorldOfXethkiozLanding.css'")
+    && !home.includes('WorldOfXethkiozHome.css')
+    && !home.includes('WorldOfXethkiozAAA.css')
+    && !home.includes('WorldOfXethkiozBackgroundTuning.css'),
+)
+check('Global entry no longer loads obsolete World visibility fixes', !mainEntry.includes("import './visibility-fixes.css'"))
+check(
+  'Global CSS keeps obsolete World Home artwork removed',
+  !globalCss.includes('.xeth-world')
+    && !globalCss.includes('.xeth-dragon')
+    && !globalCss.includes('.green-wisp-secret')
+    && !globalCss.includes('.portal-ring-card'),
+)
+check(
+  'Modern Fusion portal CSS remains available',
+  globalCss.includes('.wow-portal {')
+    && globalCss.includes('.portal-vortex {')
+    && globalCss.includes('.portal-runes {')
+    && globalCss.includes('.portal-title {'),
+)
 check('Home loads only three recent articles through a deferred import', district.includes("import('../services/news/publicNewsService')") && district.includes("fetchPublishedNews('all')") && district.includes('articles.slice(0, 3)'))
 check('Home identifies Spanish-only editorial content in English', district.includes('LATEST FROM THE SPANISH NEWSROOM') && district.includes('Open Spanish news'))
 check('Home reserves the editorial radar before data arrives', district.includes('data-home-recent-radar') && district.includes('min-h-[210px]'))
