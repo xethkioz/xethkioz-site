@@ -6,8 +6,6 @@ Integrar el ecosistema de directos.
 
 ## Módulos
 
-- Twitch
-- Kick
 - YouTube
 - Estado EN VIVO
 - Calendario

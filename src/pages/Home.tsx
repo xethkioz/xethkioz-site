@@ -221,7 +221,7 @@ export default function Home() {
             </div>
             <nav aria-label={lang === 'es' ? 'Enlaces del sitio y redes' : 'Site and social links'}>
               <a href="https://www.xethkioz.com.ar" target="_blank" rel="noopener noreferrer">WEB</a>
-              {SOCIAL_LINKS.filter((item) => ['Threads', 'Instagram', 'TikTok Principal', 'YouTube', 'Twitch', 'Kick'].includes(item.name)).map((item) => (
+              {SOCIAL_LINKS.filter((item) => ['Threads', 'Instagram', 'TikTok Principal', 'YouTube'].includes(item.name)).map((item) => (
                 <a key={item.name} href={item.url} target="_blank" rel="noopener noreferrer">{item.name === 'TikTok Principal' ? 'TikTok' : item.name}</a>
               ))}
               <Link to={localizePath('/support')}>{lang === 'es' ? 'Apoyar proyecto' : 'Support project'}</Link>

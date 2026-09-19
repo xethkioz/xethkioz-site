@@ -18,10 +18,10 @@ export default function ChatOverlayPage() {
 
   return (
     <div className="animate-fade-in max-w-7xl mx-auto px-4 sm:px-6 py-8">
-      <SEO title="Chat Overlay" description="Overlay visual para streams de XETHKIOZ en OBS, Kick y Twitch." url="/chat-overlay" />
+      <SEO title="Chat Overlay" description="Overlay visual para streams de XETHKIOZ en OBS y YouTube." url="/chat-overlay" />
       <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="section-eyebrow">OBS / KICK / TWITCH</p>
+          <p className="section-eyebrow">OBS / YOUTUBE</p>
           <h1 className="font-display text-3xl md:text-5xl font-black gradient-text">Centro de prueba del Chat Overlay</h1>
           <p className="mt-2 max-w-2xl text-sm text-gray-400">Esta página sirve para revisar cómo se ve el overlay antes de agregarlo como fuente de navegador en OBS.</p>
         </div>

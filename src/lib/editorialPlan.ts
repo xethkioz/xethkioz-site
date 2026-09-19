@@ -63,7 +63,7 @@ export const editorialSlots: EditorialSlot[] = [
     title: 'Flujo de redes',
     priority: 'media',
     status: 'pendiente',
-    goal: 'Preparar publicaciones para Instagram, Threads, TikTok, YouTube y Kick desde un mismo plan.',
+    goal: 'Preparar publicaciones para Instagram, Threads, TikTok y YouTube desde un mismo plan.',
     nextAction: 'Definir plantillas de texto corto, carrusel y video.',
   },
   {
@@ -99,7 +99,7 @@ export const publishingLanes: PublishingLane[] = [
     name: 'Pack de streaming',
     cadence: 'Antes de cada directo',
     source: 'Calendario, juego del día, clips, CTA',
-    output: 'Banner, texto redes, título Kick/Twitch y miniatura',
+    output: 'Banner, texto redes, título YouTube y miniatura',
     owner: 'Creator Studio',
   },
   {

@@ -1,7 +1,14 @@
 # WEB CONTINUIDAD — WORLD OF XETHKIOZ
 
-Actualizado: 2026-09-15
+Actualizado: 2026-09-19
 Proyecto: XETHKIOZ / World of Xethkioz — WEB
+
+## Canales oficiales vigentes
+- Web: https://www.xethkioz.com.ar
+- Threads: https://www.threads.com/@xethkioz
+- Instagram: https://www.instagram.com/xethkioz
+- TikTok: https://www.tiktok.com/@xethkioz0
+- YouTube: https://www.youtube.com/@XETHKIOZ
 
 ## Regla de alcance
 Este archivo continúa exclusivamente el trabajo de la WEB pública. El juego en Unity/Blender sirve como fuente de contenido y arte, pero no se desarrollan sistemas del juego desde este flujo salvo pedido explícito.

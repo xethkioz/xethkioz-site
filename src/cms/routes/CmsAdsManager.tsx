@@ -38,7 +38,7 @@ const fallbackSlots: AdSlot[] = [
   { id: 'home-hero', label: 'Home Hero', placement: 'Inicio / portada', is_active: true },
   { id: 'news-inline', label: 'News Inline', placement: 'Entre tarjetas de noticias', is_active: true },
   { id: 'section-sidebar', label: 'Section Sidebar', placement: 'Gaming / Science / Fun / Green Node', is_active: true },
-  { id: 'stream-banner', label: 'Stream Banner', placement: 'Avisos Kick / Twitch / YouTube', is_active: true },
+  { id: 'stream-banner', label: 'Stream Banner', placement: 'Avisos YouTube / Shorts', is_active: true },
 ]
 const statusOptions: AdStatus[] = ['draft', 'review', 'active', 'paused', 'archived']
 const emptyForm: AdForm = { slot_id: 'home-hero', sponsor_name: '', title: '', description: '', target_url: '', image_url: '', status: 'draft', starts_at: '', ends_at: '' }
@@ -61,7 +61,7 @@ const copy = {
     filter: 'Filtrar campañas', allStatuses: 'Todos los estados', imageLabel: 'Imagen', destination: 'Destino', dates: 'Inicio / fin', noDate: 'Sin fecha', edit: 'Editar', activate: 'Activar', pause: 'Pausar', archive: 'Archivar',
     emptyTitle: 'Sin campañas todavía', emptyText: 'Ejecutá la migración de ads y creá la primera campaña desde este panel.', noResults: 'No hay campañas en este estado.', listLabel: 'Campañas publicitarias', formLabel: 'Formulario de campaña publicitaria',
     presetsContent: {
-      stream: ['XETHKIOZ en vivo', 'Streams, gaming, tecnología y comunidad. Activá este banner cuando estés por salir en Twitch, Kick o YouTube.'],
+      stream: ['XETHKIOZ en vivo', 'Streams, gaming, tecnología y comunidad. Activá este banner cuando estés por publicar o salir en YouTube.'],
       news: ['Radar XETHKIOZ actualizado', 'Noticias gaming, IA, tecnología, memes y comunidad con lectura ampliada y fuente visible.'],
       community: ['Sumate a la comunidad XETHKIOZ', 'Gaming Is My Passion • Beyond The Game. Comunidad, noticias, tecnología y directos.'],
     },
@@ -151,7 +151,7 @@ export default function CmsAdsManager() {
   function applyPreset(kind: 'stream' | 'news' | 'community') {
     const [title, description] = t.presetsContent[kind]
     const presetMeta = {
-      stream: { slot_id: 'stream-banner', target_url: 'https://www.twitch.tv/xethkioz' },
+      stream: { slot_id: 'stream-banner', target_url: 'https://www.youtube.com/@XETHKIOZ' },
       news: { slot_id: 'news-inline', target_url: 'https://xethkioz.com.ar/news' },
       community: { slot_id: 'section-sidebar', target_url: 'https://xethkioz.com.ar/community' },
     }[kind]

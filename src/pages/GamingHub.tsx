@@ -42,9 +42,8 @@ const content = {
       standby: 'CANAL EN ESPERA',
       heading: 'Directos y videos en un solo punto',
       liveDescription: 'La señal está marcada como activa en el CMS. Podés entrar al canal y seguir la transmisión.',
-      standbyDescription: 'Abrí Kick para comprobar el directo o continuá con los últimos videos de YouTube.',
+      standbyDescription: 'Revisá YouTube para ver transmisiones o continuá con los últimos videos publicados.',
       openLive: 'ENTRAR AL DIRECTO',
-      openKick: 'ABRIR KICK',
       latestVod: 'VER ÚLTIMO VOD',
       openYoutube: 'VER YOUTUBE',
       live: 'LIVE',
@@ -82,7 +81,7 @@ const content = {
       cards: [
         { id: 'guides', code: 'BUILD', title: 'Guías y builds completas', detail: 'WoW, Diablo IV, FFXIV y PoE 2 por clase, equipo y rotación.', action: 'ABRIR GUÍAS', to: '/gaming/guides' },
         { id: 'news', code: 'RADAR', title: 'Noticias y lanzamientos', detail: 'Señales gaming verificadas y ordenadas por fecha.', action: 'VER RADAR', to: '?section=news' },
-        { id: 'live', code: 'LIVE', title: 'Directos y videos', detail: 'Kick, YouTube y estado de transmisión.', action: 'ABRIR SEÑAL', to: '?section=live' },
+        { id: 'live', code: 'LIVE', title: 'Directos y videos', detail: 'YouTube y estado de transmisión.', action: 'ABRIR SEÑAL', to: '?section=live' },
         { id: 'community', code: 'PARTY', title: 'Comunidad y escuadrones', detail: 'Buscá grupo, compartí builds y entrá al Nexus.', action: 'BUSCAR PARTY', to: '?section=community' },
       ],
     },
@@ -114,9 +113,8 @@ const content = {
       standby: 'CHANNEL STANDBY',
       heading: 'Streams and videos in one place',
       liveDescription: 'The signal is marked active in the CMS. Open the channel to follow the broadcast.',
-      standbyDescription: 'Open Kick to check the live channel or continue with the latest YouTube videos.',
+      standbyDescription: 'Check YouTube for live broadcasts or continue with the latest published videos.',
       openLive: 'ENTER LIVE STREAM',
-      openKick: 'OPEN KICK',
       latestVod: 'WATCH LATEST VOD',
       openYoutube: 'OPEN YOUTUBE',
       live: 'LIVE',
@@ -154,7 +152,7 @@ const content = {
       cards: [
         { id: 'guides', code: 'BUILD', title: 'Complete guides and builds', detail: 'WoW, Diablo IV, FFXIV and PoE 2 by class, gear and rotation.', action: 'OPEN GUIDES', to: '/gaming/guides' },
         { id: 'news', code: 'RADAR', title: 'News and releases', detail: 'Verified gaming signals ordered by date.', action: 'OPEN RADAR', to: '?section=news' },
-        { id: 'live', code: 'LIVE', title: 'Streams and videos', detail: 'Kick, YouTube and live status.', action: 'OPEN SIGNAL', to: '?section=live' },
+        { id: 'live', code: 'LIVE', title: 'Streams and videos', detail: 'YouTube and live status.', action: 'OPEN SIGNAL', to: '?section=live' },
         { id: 'community', code: 'PARTY', title: 'Community and squads', detail: 'Find a group, share builds and enter the Nexus.', action: 'FIND PARTY', to: '?section=community' },
       ],
     },
@@ -195,7 +193,7 @@ export default function GamingHub() {
       try {
         const { data } = await supabase.from('streams').select('*').order('published_at', { ascending: false }).limit(12)
         if (!alive) return
-        const streams = (data ?? []) as Stream[]
+        const streams = ((data ?? []) as Stream[]).filter((stream) => stream.platform === 'youtube')
         setLiveStream(streams.find((stream) => stream.is_live) ?? null)
         setLatestVod(streams.find((stream) => !stream.is_live) ?? null)
       } catch {
@@ -260,7 +258,7 @@ export default function GamingHub() {
               <h2 id="creator-signal-title">{t.stream.heading}</h2>
               <span>{streamDescription}</span>
               <div>
-                <a href={liveStream?.channel_url || STREAM_LINKS.kick} target="_blank" rel="noreferrer noopener">{liveStream ? t.stream.openLive : t.stream.openKick} ↗</a>
+                {liveStream ? <a href={liveStream.channel_url} target="_blank" rel="noreferrer noopener">{t.stream.openLive} ↗</a> : null}
                 <a href={latestVod?.channel_url || STREAM_LINKS.youtube} target="_blank" rel="noreferrer noopener">{latestVod ? t.stream.latestVod : t.stream.openYoutube} ↗</a>
               </div>
             </div>

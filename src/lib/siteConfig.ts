@@ -15,13 +15,9 @@ export const SOCIAL_LINKS = [
   { name: 'TikTok Principal', handle: '@xethkioz0', url: 'https://www.tiktok.com/@xethkioz0', icon: '🎵', verified: true },
   { name: 'TikTok Asia', handle: '@xethkioz.asia', url: 'https://www.tiktok.com/@xethkioz.asia', icon: '🌏', verified: true },
   { name: 'YouTube', handle: '@XETHKIOZ', url: 'https://www.youtube.com/@XETHKIOZ', icon: '▶️', verified: false },
-  { name: 'Twitch', handle: 'xethkioz', url: 'https://www.twitch.tv/xethkioz', icon: '🟣', verified: true },
-  { name: 'Kick', handle: 'xethkioz', url: 'https://kick.com/xethkioz', icon: '🟢', verified: true },
 ]
 
 export const STREAM_LINKS = {
-  twitch: 'https://www.twitch.tv/xethkioz',
-  kick: 'https://kick.com/xethkioz',
   youtube: 'https://www.youtube.com/@XETHKIOZ',
   tiktok: 'https://www.tiktok.com/@xethkioz0',
 }
@@ -37,7 +33,7 @@ export const CONTENT_SECTIONS = {
   gaming: ['Esports', 'MMORPG', 'Pokémon', 'LoL', 'Mobile Legends', 'Fortnite', 'GTA VI', 'Asia Gaming'],
   tech: ['IA', 'Hardware', 'Ciberseguridad', 'Software', 'Streaming Tech', 'Creadores'],
   science: ['Astronomía', 'Espacio', 'Medicina', 'Biología', 'Fake News', 'Pensamiento crítico'],
-  streaming: ['Kick', 'Twitch', 'YouTube', 'Shorts', 'OBS', 'Clips'],
+  streaming: ['YouTube', 'Shorts', 'OBS', 'Clips'],
 }
 
 export const XETHKIOZ_NETWORK_PORTALS = [
@@ -103,7 +99,7 @@ export const XETHKIOZ_NETWORK_PORTALS = [
     path: '/fun',
     status: 'branch',
     accent: 'purple',
-    description: 'OBS, Kick, Twitch, YouTube, audio, video y producción de contenido.'
+    description: 'OBS, YouTube, audio, video y producción de contenido.'
   },
   {
     id: 'web-creation',
@@ -134,8 +130,6 @@ export const VERIFIED_LINKS = [
   { area: 'Community', label: 'Comunidad', url: '/community', status: 'internal' },
   { area: 'Creación Web', label: 'Servicios web', url: '/creacion-web', status: 'internal' },
   { area: 'Green Zone', label: 'Acceso oculto por Wisp', url: '/green-node', status: 'hidden' },
-  { area: 'Streaming', label: 'Twitch', url: STREAM_LINKS.twitch, status: 'confirmed' },
-  { area: 'Streaming', label: 'Kick', url: STREAM_LINKS.kick, status: 'confirmed' },
   { area: 'Redes', label: 'Instagram', url: 'https://www.instagram.com/xethkioz', status: 'confirmed' },
   { area: 'Redes', label: 'Threads', url: 'https://www.threads.com/@xethkioz', status: 'confirmed' },
   { area: 'Redes', label: 'TikTok principal', url: 'https://www.tiktok.com/@xethkioz0', status: 'confirmed' },
@@ -217,7 +211,7 @@ export const NETWORK_SECTORS_DETAILED = [
     route: '/fun',
     status: 'branch',
     priority: 'Media',
-    focus: ['OBS', 'Kick', 'Twitch', 'YouTube', 'Overlays', 'Audio y video'],
+    focus: ['OBS', 'YouTube', 'Shorts', 'Overlays', 'Audio y video'],
     next: 'Unificar herramientas de stream, clips y panel de recursos.'
   },
   {

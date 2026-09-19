@@ -34,8 +34,6 @@
 ## Fase 4 — Streaming
 
 - Estado EN VIVO.
-- Integración Twitch.
-- Integración Kick.
 - Integración YouTube.
 - Calendario de streams.
 

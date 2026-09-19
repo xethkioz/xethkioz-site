@@ -32,8 +32,6 @@ const SAME_AS = [
   'https://www.threads.com/@xethkioz',
   'https://www.tiktok.com/@xethkioz0',
   'https://www.youtube.com/@XETHKIOZ',
-  'https://www.twitch.tv/xethkioz',
-  'https://kick.com/xethkioz',
 ]
 
 function absoluteUrl(value: string) {
