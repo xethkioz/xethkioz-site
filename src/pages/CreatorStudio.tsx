@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
-import { STREAM_LINKS } from '../lib/siteConfig'
 
 const creatorModules = [
-  { icon: '🎥', title: 'OBS y escenas', body: 'Escenas, overlays, chat, alertas, capturas y organización para directos en Kick, Twitch y YouTube.' },
+  { icon: '🎥', title: 'OBS y escenas', body: 'Escenas, overlays, chat, alertas, capturas y organización para directos en YouTube.' },
   { icon: '🎙️', title: 'Audio y voz', body: 'Checklist de micrófono, música sin copyright, volumen, filtros y ambiente para cada portal.' },
   { icon: '📱', title: 'Shorts y reels', body: 'Flujo para convertir directos, noticias y clips en contenido para TikTok, Instagram, YouTube y Threads.' },
   { icon: '🧰', title: 'Herramientas IA', body: 'Automatización para miniaturas, títulos, descripciones, hashtags, guiones y resúmenes.' },
@@ -11,7 +10,7 @@ const creatorModules = [
 
 const checklist = [
   'Crear plantilla de directo para gaming, noticias, Science Lab y Green Node.',
-  'Centralizar links de Kick, Twitch, YouTube, TikTok e Instagram.',
+  'Centralizar links de YouTube, TikTok, Instagram y Threads.',
   'Preparar miniaturas 16:9 y verticales para shorts.',
   'Documentar configuraciones OBS y escenas reutilizables.',
 ]
@@ -36,8 +35,7 @@ export default function CreatorStudio() {
             Centro operativo para streaming, OBS, overlays, clips, shorts, audio, cámaras, miniaturas y contenido multiplataforma. La meta es que todo lo que se publique en redes salga desde una base ordenada.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
-            <a href={STREAM_LINKS.kick} target="_blank" rel="noopener noreferrer" className="btn-primary text-sm">Abrir Kick</a>
-            <a href={STREAM_LINKS.twitch} target="_blank" rel="noopener noreferrer" className="btn-secondary text-sm">Abrir Twitch</a>
+            <a href="https://www.youtube.com/@XETHKIOZ" target="_blank" rel="noopener noreferrer" className="btn-primary text-sm">Abrir YouTube</a>
             <Link to="/chat-overlay" className="btn-secondary text-sm">Overlay OBS</Link>
           </div>
         </div>
