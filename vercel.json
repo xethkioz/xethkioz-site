@@ -32,6 +32,8 @@
     { "source": "/news-sitemap.xml", "destination": "/api/news-sitemap" },
     { "source": "/feed.xml", "destination": "/api/feed" },
     { "source": "/", "destination": "/index.html" },
+    { "source": "/world-of-xethkioz", "destination": "/seo-shells/world-of-xethkioz.html" },
+    { "source": "/en/world-of-xethkioz", "destination": "/seo-shells/en-world-of-xethkioz.html" },
     { "source": "/en", "destination": "/seo-shells/en-home.html" },
     { "source": "/en/gaming/guides", "destination": "/seo-shells/en-gaming-guides.html" },
     { "source": "/en/gaming", "destination": "/seo-shells/en-gaming.html" },
