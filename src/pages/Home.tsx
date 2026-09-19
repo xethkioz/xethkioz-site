@@ -104,7 +104,7 @@ export default function Home() {
 
         <header className="wox-topbar">
           <nav className="wox-ecosystem-nav" aria-label={lang === 'es' ? 'Ecosistema XETHKIOZ' : 'XETHKIOZ ecosystem'}>
-            <a href="#wox-title">{lang === 'es' ? 'JUEGO' : 'GAME'}</a>
+            <Link to={localizePath('/world-of-xethkioz')}>{lang === 'es' ? 'JUEGO' : 'GAME'}</Link>
             <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ARGENCIENCIA <span>↗</span></a>
             <Link to={localizePath('/gaming')}>{lang === 'es' ? 'BIBLIOTECA DE JUEGOS' : 'GAME LIBRARY'}</Link>
             <a href="/mascotas/">{lang === 'es' ? 'MASCOTAS' : 'PETS'}</a>
