@@ -22,7 +22,7 @@ test.describe('orden y navegación de secciones', () => {
     await expect(ecosystem.getByRole('link', { name: 'MASCOTAS', exact: true })).toHaveAttribute('href', '/mascotas/')
     await expect(ecosystem.getByRole('link', { name: 'NEXUS CITY', exact: true })).toHaveAttribute('href', '/nexus-city')
     await expect(ecosystem.getByRole('link', { name: 'CREACIÓN WEB', exact: true })).toHaveAttribute('href', '/creacion-web')
-    await expect(page.getByRole('link', { name: 'NOTICIAS' })).toHaveAttribute('href', '/news')
+    await expect(page.locator('a.wox-news-link').first()).toHaveAttribute('href', '/news')
 
     await expect(page.locator('.wox-hero')).toBeVisible()
     await expect(page.getByText('UNITY 6 · URP · 3D/2.5D', { exact: true })).toBeVisible()
