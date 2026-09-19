@@ -329,3 +329,13 @@ body:has(.wox-home) .xk-privacy-consent-actions button:last-child{grid-column:1/
 .wox-utility-rail a,.wox-utility-rail button{background:rgba(5,5,10,.9)}
 .wox-hero-specs{background:linear-gradient(90deg,rgba(5,7,12,.9),rgba(10,8,18,.88),rgba(5,7,12,.9))}
 @media(max-width:760px){.wox-mobile-ecosystem nav{background:rgba(7,7,13,.985)}}
+
+
+/* PASS 18 mobile frame-rate profile */
+@media(max-width:760px){
+  .wox-logo-wrap,
+  .wox-world-logo{animation:none}
+  .wox-hero::before,
+  .wox-hero-core::before{filter:none}
+  .wox-footer nav{gap:10px 12px}
+}
