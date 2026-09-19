@@ -410,3 +410,7 @@
   .wox-portal-art-surface{min-height:280px}
   .wox-portal-footer{width:calc(100% - 24px);flex-direction:column}
 }
+
+/* Keep internal chapters clear of the persistent public header. */
+#wox-portal-title,#historia,#mundo,#convergencia,#arte-visual{scroll-margin-top:104px}
+@media(max-width:720px){#wox-portal-title,#historia,#mundo,#convergencia,#arte-visual{scroll-margin-top:88px}}
