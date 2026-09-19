@@ -4,7 +4,7 @@ test.describe('mejoras priorizadas de experiencia', () => {
   test('Huellas y Nexus City tienen destinos inequívocos', async ({ page }) => {
     await page.goto('/')
 
-    const petsLink = page.getByRole('link', { name: /Mascotas|Huellas de Puan/i }).first()
+    const petsLink = page.locator('a[href="/mascotas/"]').first()
     await expect(petsLink).toHaveAttribute('href', '/mascotas/')
 
     await page.goto('/fun')

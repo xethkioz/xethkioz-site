@@ -5,22 +5,28 @@ test.describe('orden y navegación de secciones', () => {
     await page.goto('/')
 
     await expect(page.getByRole('heading', { level: 1, name: 'World of Xethkioz' })).toBeAttached()
-    const ecosystem = page.getByRole('navigation', { name: 'Ecosistema XETHKIOZ' })
-    await expect(ecosystem).toBeVisible()
-    await expect(ecosystem.getByRole('link')).toHaveCount(5)
-    await expect(ecosystem.getByRole('link', { name: 'JUEGOS' })).toHaveAttribute('href', '/gaming')
-    await expect(ecosystem.getByRole('link', { name: /ARGENCIENCIA/ })).toHaveAttribute('href', 'https://argenciencia.com/')
-    await expect(ecosystem.getByRole('link', { name: 'MASCOTAS' })).toHaveAttribute('href', '/mascotas/')
-    await expect(page.getByRole('link', { name: 'NOTICIAS' })).toHaveAttribute('href', '/news')
 
-    const worldNavigation = page.getByRole('navigation', { name: 'Secciones de World of Xethkioz' })
-    await expect(worldNavigation).toBeVisible()
-    await expect(worldNavigation.getByRole('link')).toHaveCount(6)
-    await expect(page.locator('#origin')).toBeAttached()
-    await expect(page.locator('#worlds')).toBeAttached()
-    await expect(page.locator('#characters')).toBeAttached()
-    await expect(page.locator('#media-3d')).toBeAttached()
-    await expect(page.locator('.xk-wisp.is-home-entry')).toBeAttached()
+    const mobileEcosystem = page.locator('.wox-mobile-ecosystem')
+    if (await mobileEcosystem.isVisible()) {
+      await mobileEcosystem.locator('summary').click()
+    }
+
+    const ecosystem = page.locator(
+      'nav[aria-label="Ecosistema XETHKIOZ"]:visible, nav[aria-label="Ecosistema XETHKIOZ móvil"]:visible',
+    )
+    await expect(ecosystem).toBeVisible()
+    await expect(ecosystem.getByRole('link')).toHaveCount(8)
+    await expect(ecosystem.getByRole('link', { name: 'JUEGO', exact: true })).toHaveAttribute('href', '/world-of-xethkioz')
+    await expect(ecosystem.getByRole('link', { name: 'BIBLIOTECA DE JUEGOS', exact: true })).toHaveAttribute('href', '/gaming')
+    await expect(ecosystem.getByRole('link', { name: /ARGENCIENCIA/ })).toHaveAttribute('href', 'https://argenciencia.com/')
+    await expect(ecosystem.getByRole('link', { name: 'MASCOTAS', exact: true })).toHaveAttribute('href', '/mascotas/')
+    await expect(ecosystem.getByRole('link', { name: 'NEXUS CITY', exact: true })).toHaveAttribute('href', '/nexus-city')
+    await expect(ecosystem.getByRole('link', { name: 'CREACIÓN WEB', exact: true })).toHaveAttribute('href', '/creacion-web')
+    await expect(page.locator('a.wox-news-link').first()).toHaveAttribute('href', '/news')
+
+    await expect(page.locator('.wox-hero')).toBeVisible()
+    await expect(page.getByText('UNITY 6 · URP · 3D/2.5D', { exact: true })).toBeVisible()
+    await expect(page.locator('#origin, #worlds, #characters, #media-3d')).toHaveCount(0)
   })
 
   test('Gaming muestra una sola navegación antes del contenido y conserva inglés', async ({ page }) => {
