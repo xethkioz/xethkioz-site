@@ -4,8 +4,13 @@ test.describe('mejoras priorizadas de experiencia', () => {
   test('Huellas y Nexus City tienen destinos inequívocos', async ({ page }) => {
     await page.goto('/')
 
-    const petsLink = page.getByRole('link', { name: /Mascotas|Huellas de Puan/i }).first()
-    await expect(petsLink).toHaveAttribute('href', '/mascotas/')
+    const mobileEcosystem = page.locator('.wox-mobile-ecosystem')
+    if (await mobileEcosystem.isVisible()) {
+      await mobileEcosystem.locator('summary').click()
+    }
+
+    const petsLink = page.locator('a[href="/mascotas/"]:visible').first()
+    await expect(petsLink).toHaveText(/Mascotas|Pets|Huellas de Puan/i)
 
     await page.goto('/fun')
     await expect(page).toHaveURL(/\/nexus-city$/)
