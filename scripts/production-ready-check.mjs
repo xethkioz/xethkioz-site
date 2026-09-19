@@ -118,7 +118,7 @@ check(
   'Home exposes official XETHKIOZ web and social signals',
   home.includes("import { SITE_VERSION, SOCIAL_LINKS } from '../lib/siteConfig'")
     && home.includes('https://www.xethkioz.com.ar')
-    && home.includes("['Threads', 'Instagram', 'TikTok Principal', 'YouTube', 'Twitch', 'Kick']"),
+    && home.includes("['Threads', 'Instagram', 'TikTok Principal', 'YouTube']"),
 )
 check(
   'Home uses the canonical Veyr Wisp without duplicate Home implementation',
