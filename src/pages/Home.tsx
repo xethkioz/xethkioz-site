@@ -13,6 +13,11 @@ type DataSavingConnection = {
   removeEventListener?: (type: 'change', listener: () => void) => void
 }
 
+type IdleWindow = Window & {
+  requestIdleCallback?: (callback: () => void, options?: { timeout?: number }) => number
+  cancelIdleCallback?: (handle: number) => void
+}
+
 function useAmbientVideoEnabled(graphicsMode: 'full' | 'lite') {
   const [enabled, setEnabled] = useState(
     () => typeof window !== 'undefined' && supportsAmbientVideo(graphicsMode),
@@ -40,6 +45,33 @@ function useAmbientVideoEnabled(graphicsMode: 'full' | 'lite') {
   }, [graphicsMode])
 
   return enabled
+}
+
+function useDeferredAmbientVideo(enabled: boolean) {
+  const [ready, setReady] = useState(false)
+
+  useEffect(() => {
+    setReady(false)
+    if (!enabled) return undefined
+
+    const idleWindow = window as IdleWindow
+    let idleId: number | null = null
+    let timeoutId: number | null = null
+    const activate = () => setReady(true)
+
+    if (idleWindow.requestIdleCallback) {
+      idleId = idleWindow.requestIdleCallback(activate, { timeout: 900 })
+    } else {
+      timeoutId = window.setTimeout(activate, 350)
+    }
+
+    return () => {
+      if (idleId !== null) idleWindow.cancelIdleCallback?.(idleId)
+      if (timeoutId !== null) window.clearTimeout(timeoutId)
+    }
+  }, [enabled])
+
+  return ready
 }
 
 function openNexusChat() {
@@ -75,6 +107,7 @@ export default function Home() {
   const { lang, setLang, localizePath } = useLang()
   const { graphicsMode } = useExperience()
   const videoEnabled = useAmbientVideoEnabled(graphicsMode)
+  const videoReady = useDeferredAmbientVideo(videoEnabled)
   const t = copy[lang]
 
   return (
@@ -82,7 +115,7 @@ export default function Home() {
       <SEO title={t.seo} description={t.description} url="/" image="/assets/world-of-xethkioz/world-of-xethkioz-logo.webp" />
       <main className="wox-home">
         <div className="wox-bg" aria-hidden="true" />
-        {videoEnabled && (
+        {videoEnabled && videoReady && (
           <video
             className="wox-bg-video"
             src="/assets/bg-dragon-animated.mp4"
@@ -91,7 +124,7 @@ export default function Home() {
             loop
             muted
             playsInline
-            preload="auto"
+            preload="metadata"
             aria-hidden="true"
           />
         )}
