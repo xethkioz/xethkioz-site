@@ -85,7 +85,7 @@ export default function WorldOfXethkioz() {
         <section className="wox-portal-hero" aria-labelledby="wox-portal-title">
           <div className="wox-portal-hero-copy">
             <p>{t.eyebrow}</p>
-            <img src="/assets/world-of-xethkioz/world-of-xethkioz-logo.webp" alt="World of Xethkioz" />
+            <img src="/assets/world-of-xethkioz/world-of-xethkioz-logo.webp" alt="World of Xethkioz" fetchPriority="high" decoding="async" />
             <h1 id="wox-portal-title">{t.title}</h1>
             <span>{t.lead}</span>
           </div>
@@ -93,7 +93,7 @@ export default function WorldOfXethkioz() {
           <div className="wox-portal-orbit" aria-label={lang === 'es' ? 'Núcleo público de personajes' : 'Public character core'}>
             {cast.map((member, index) => (
               <article key={member.name} style={{ '--orbit-index': index } as CSSProperties}>
-                {member.art ? <img src={member.art} alt="" aria-hidden="true" /> : <i aria-hidden="true">{member.code}</i>}
+                {member.art ? <img src={member.art} alt="" aria-hidden="true" decoding="async" /> : <i aria-hidden="true">{member.code}</i>}
                 <strong>{member.name}</strong>
                 <small>{lang === 'es' ? member.kindEs : member.kindEn}</small>
               </article>
@@ -142,7 +142,7 @@ export default function WorldOfXethkioz() {
           <div className="wox-portal-cast-line">
             {cast.map((member) => (
               <article key={member.name}>
-                <div>{member.art ? <img src={member.art} alt="" aria-hidden="true" /> : <i aria-hidden="true">{member.code}</i>}</div>
+                <div>{member.art ? <img src={member.art} alt="" aria-hidden="true" loading="lazy" decoding="async" /> : <i aria-hidden="true">{member.code}</i>}</div>
                 <strong>{member.name}</strong>
               </article>
             ))}

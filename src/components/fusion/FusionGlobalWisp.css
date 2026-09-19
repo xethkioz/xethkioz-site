@@ -642,8 +642,34 @@
 }
 
 
-/* PASS 18 mobile Wisp frame-rate profile */
+/* PASS 19 mobile Wisp frame-rate profile
+   Veyr stays present and interactive on every route, while expensive ambient
+   animation/filter layers are frozen on phone-sized viewports. */
 @media (max-width: 767px){
+  .xk-wisp .xk-wisp-field,
+  .xk-wisp .xk-wisp-energy-cloud,
+  .xk-wisp .xk-wisp-energy-arc,
+  .xk-wisp .xk-wisp-rune-ring,
+  .xk-wisp .xk-wisp-rune-ring i,
+  .xk-wisp .xk-wisp-specter,
+  .xk-wisp .xk-wisp-scanline,
+  .xk-wisp .xk-wisp-glitch-slice,
+  .xk-wisp .xk-wisp-particles i{
+    animation:none;
+  }
+  .xk-wisp .xk-wisp-energy-cloud,
+  .xk-wisp .xk-wisp-energy-arc,
+  .xk-wisp .xk-wisp-specter-wrap::before,
+  .xk-wisp .xk-wisp-specter-veyr,
+  .xk-wisp .xk-wisp-glitch-slice{
+    filter:none;
+  }
+  .xk-wisp .xk-wisp-scanline,
+  .xk-wisp .xk-wisp-glitch-slice,
+  .xk-wisp .xk-wisp-particles{
+    display:none;
+  }
+
   .xk-wisp.is-home-entry .xk-wisp-field,
   .xk-wisp.is-home-entry .xk-wisp-rune-ring,
   .xk-wisp.is-home-entry .xk-wisp-rune-ring-inner{

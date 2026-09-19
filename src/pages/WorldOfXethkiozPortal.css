@@ -387,6 +387,33 @@
 }
 
 @media(max-width:720px){
+  .wox-portal::before{
+    position:absolute;
+    background-size:72px 72px;
+    opacity:.2;
+    mask-image:none;
+  }
+  .wox-portal-ambient{display:none}
+  .wox-portal-story,
+  .wox-portal-world,
+  .wox-portal-cast,
+  .wox-portal-art,
+  .wox-portal-footer{
+    content-visibility:auto;
+    contain-intrinsic-size:auto 680px;
+  }
+  .wox-portal-world{contain-intrinsic-size:auto 820px}
+  .wox-portal-cast{contain-intrinsic-size:auto 760px}
+  .wox-portal-orbit,
+  .wox-portal-fracture,
+  .wox-portal-art-surface,
+  .wox-portal-regions article{contain:layout paint}
+  .wox-portal-orbit article::before,
+  .wox-portal-cast-line article>div{box-shadow:none}
+  .wox-portal-orbit img,
+  .wox-portal-orbit i,
+  .wox-portal-regions article::before{filter:none}
+  .wox-portal-art-surface b{text-shadow:none}
   .wox-portal::before{background-size:72px 72px}
   .wox-portal-hero{width:calc(100% - 24px);padding:104px 0 52px}
   .wox-portal-hero-copy>p{font-size:.46rem}
