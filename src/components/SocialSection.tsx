@@ -8,8 +8,6 @@ export default function SocialSection() {
     Instagram: { color: 'text-pink-400', bg: 'bg-gradient-to-br from-pink-500/20 to-purple-600/20 border-pink-500/30', emoji: '📸' },
     TikTok: { color: 'text-white', bg: 'bg-black border-white/30', emoji: '🎵' },
     YouTube: { color: 'text-red-500', bg: 'bg-red-600/10 border-red-500/30', emoji: '▶️' },
-    Twitch: { color: 'text-neon-400', bg: 'bg-neon-500/10 border-neon-500/30', emoji: '🎮' },
-    Kick: { color: 'text-green-400', bg: 'bg-green-500/10 border-green-500/30', emoji: '🟢' },
   }
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
