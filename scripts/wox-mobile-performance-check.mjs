@@ -6,6 +6,7 @@ function read(path) {
 
 const css = read('src/pages/WorldOfXethkiozPortal.css')
 const page = read('src/pages/WorldOfXethkioz.tsx')
+const wispCss = read('src/components/fusion/FusionGlobalWisp.css')
 
 const checks = [
   ['mobile portal defers below-fold chapters', css.includes('content-visibility:auto') && css.includes('contain-intrinsic-size:auto 680px')],
@@ -15,6 +16,9 @@ const checks = [
   ['isolated decorative blocks use containment', css.includes('.wox-portal-orbit,') && css.includes('contain:layout paint')],
   ['hero art is prioritized', page.includes('fetchPriority="high"') && page.includes('decoding="async"')],
   ['below-fold cast art is lazy', page.includes('loading="lazy" decoding="async"')],
+  ['mobile Veyr freezes ambient animations globally', wispCss.includes('.xk-wisp .xk-wisp-field,') && wispCss.includes('animation:none;')],
+  ['mobile Veyr removes expensive filters globally', wispCss.includes('.xk-wisp .xk-wisp-specter-veyr,') && wispCss.includes('filter:none;')],
+  ['mobile Veyr hides scanline glitch and particles', wispCss.includes('.xk-wisp .xk-wisp-scanline,') && wispCss.includes('.xk-wisp .xk-wisp-particles{') && wispCss.includes('display:none;')],
 ]
 
 let failed = 0
