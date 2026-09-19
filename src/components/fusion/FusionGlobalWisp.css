@@ -640,3 +640,17 @@
 .xk-wisp.is-home-entry .xk-wisp-particles{
   display:none;
 }
+
+
+/* PASS 18 mobile Wisp frame-rate profile */
+@media (max-width: 767px){
+  .xk-wisp.is-home-entry .xk-wisp-field,
+  .xk-wisp.is-home-entry .xk-wisp-rune-ring,
+  .xk-wisp.is-home-entry .xk-wisp-rune-ring-inner{
+    animation:none;
+  }
+  .xk-wisp.is-home-entry .xk-wisp-energy-cloud,
+  .xk-wisp.is-home-entry .xk-wisp-energy-arc{
+    filter:none;
+  }
+}
