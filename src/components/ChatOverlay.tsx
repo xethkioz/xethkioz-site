@@ -1,8 +1,8 @@
-import { SOCIAL_LINKS, STREAM_LINKS, XETHKIOZ_STATS } from '../lib/siteConfig'
+import { SOCIAL_LINKS, XETHKIOZ_STATS } from '../lib/siteConfig'
 import { communityRooms, starterChatMessages } from '../lib/mockData'
 
 export default function ChatOverlay({ compact = false, obsMode = false }: { compact?: boolean; obsMode?: boolean }) {
-  const mainSocials = SOCIAL_LINKS.filter((s) => ['Instagram', 'Threads', 'TikTok Principal', 'TikTok Asia', 'Twitch', 'Kick'].includes(s.name))
+  const mainSocials = SOCIAL_LINKS.filter((s) => ['Instagram', 'Threads', 'TikTok Principal', 'TikTok Asia', 'YouTube'].includes(s.name))
   const chatMessages = starterChatMessages.slice(0, obsMode ? 5 : 4)
 
   return (
@@ -16,7 +16,7 @@ export default function ChatOverlay({ compact = false, obsMode = false }: { comp
           <div>
             <p className="section-eyebrow">STREAMING OVERLAY</p>
             <h2 className={`${obsMode ? 'text-2xl' : 'text-2xl md:text-4xl'} font-display font-black gradient-text`}>Chat Overlay XETHKIOZ</h2>
-            {!obsMode && <p className="text-sm text-gray-400 mt-2">Diseñado para OBS, Kick, Twitch y escenas de comunidad. Usá <strong>/chat-overlay?obs=1</strong> como Browser Source.</p>}
+            {!obsMode && <p className="text-sm text-gray-400 mt-2">Diseñado para OBS, YouTube y escenas de comunidad. Usá <strong>/chat-overlay?obs=1</strong> como Browser Source.</p>}
           </div>
           <div className="flex items-center gap-2 rounded-full border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm font-bold text-red-300">
             <span className="h-2.5 w-2.5 rounded-full bg-red-500 animate-pulse" /> EN VIVO
@@ -62,9 +62,8 @@ export default function ChatOverlay({ compact = false, obsMode = false }: { comp
                 <p className="text-xs font-bold text-neon mb-2">Salas preparadas</p>
                 <div className="flex flex-wrap gap-1.5">{communityRooms.map((room) => <span key={room.id} className="rounded-full border border-white/10 px-2 py-1 text-[10px] text-gray-300">{room.icon} {room.name}</span>)}</div>
               </div>
-              <div className="grid grid-cols-2 gap-2">
-                <a href={STREAM_LINKS.kick} target="_blank" rel="noopener noreferrer" className="btn-primary text-center text-sm">Kick</a>
-                <a href={STREAM_LINKS.twitch} target="_blank" rel="noopener noreferrer" className="btn-secondary text-center text-sm">Twitch</a>
+              <div className="grid grid-cols-1 gap-2">
+                <a href="https://www.youtube.com/@XETHKIOZ" target="_blank" rel="noopener noreferrer" className="btn-primary text-center text-sm">YouTube</a>
               </div>
             </aside>
           )}
