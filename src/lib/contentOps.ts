@@ -1,5 +1,5 @@
 
-import { STREAM_LINKS, SOCIAL_LINKS } from './siteConfig'
+import { SOCIAL_LINKS } from './siteConfig'
 
 export type ContentLaneId = 'own-news' | 'external-radar' | 'science-report' | 'green-node-log' | 'video-stream' | 'community-post'
 export type ContentStatus = 'ready' | 'needs-source' | 'editorial-review' | 'cms-ready' | 'automation-ready'
@@ -67,7 +67,7 @@ export const contentLanes: ContentLane[] = [
     portal: 'Creator Studio / Streaming',
     icon: '📺',
     status: 'cms-ready',
-    description: 'Miniaturas, embeds, directos Kick/Twitch/YouTube, clips, shorts y recursos para OBS/overlay.',
+    description: 'Miniaturas, embeds, directos de YouTube, clips, shorts y recursos para OBS/overlay.',
     owner: 'Creator / Admin',
     nextStep: 'Normalizar video_id, platform, thumbnail y canonical_url.',
     database: 'videos, streams, media'
@@ -99,7 +99,7 @@ export const networkHomeSlots = [
   { slot: 'Tendencias', content: 'Mix de gaming, tecnología, IA y streaming con mayor interacción.', route: '/news' },
   { slot: 'Science Highlight', content: 'Informe serio con fuente y nivel de evidencia.', route: '/science' },
   { slot: 'Green Signal', content: 'No visible como menú: solo Wisp/EGG y microseñales.', route: '/green-node' },
-  { slot: 'Creator Live', content: 'Estado Kick/Twitch/YouTube y clips recientes.', route: '/streaming' },
+  { slot: 'Creator Live', content: 'Estado de YouTube y clips recientes.', route: '/streaming' },
   { slot: 'Community Pulse', content: 'Chat, salas, ranking y roles activos.', route: '/community' },
 ]
 
@@ -114,8 +114,6 @@ export const roleEscalationRules = [
 export const officialLinkTargets = [
   { label: 'Web oficial', url: 'https://xethkioz.com.ar', type: 'canonical' },
   ...SOCIAL_LINKS.map((item) => ({ label: item.name, url: item.url, type: item.verified ? 'verified-social' : 'pending-social' })),
-  { label: 'Twitch directo', url: STREAM_LINKS.twitch, type: 'streaming' },
-  { label: 'Kick directo', url: STREAM_LINKS.kick, type: 'streaming' },
 ]
 
 export const finalQaChecklist = [
