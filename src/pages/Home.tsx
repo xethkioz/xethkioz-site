@@ -4,7 +4,7 @@ import SEO from '../components/SEO'
 import { useLang } from '../lib/LangContext'
 import { useExperience } from '../lib/ExperienceContext'
 import { supportsAmbientVideo } from '../lib/experienceMode'
-import { SITE_VERSION } from '../lib/siteConfig'
+import { SITE_VERSION, SOCIAL_LINKS } from '../lib/siteConfig'
 import './WorldOfXethkiozLanding.css'
 
 type DataSavingConnection = {
@@ -219,7 +219,11 @@ export default function Home() {
               <small>{lang === 'es' ? 'Arte conceptual promocional. Los assets, modelos y materiales internos del juego no se publican en esta superficie.' : 'Promotional concept art. Internal game assets, models and production materials are not published on this surface.'}</small>
               <small className="wox-footer-owner">{lang === 'es' ? 'XETHKIOZ es propiedad de Alexis Díaz Santajulia. Todos los derechos reservados.' : 'XETHKIOZ is the property of Alexis Díaz Santajulia. All rights reserved.'}</small>
             </div>
-            <nav aria-label={lang === 'es' ? 'Enlaces del sitio' : 'Site links'}>
+            <nav aria-label={lang === 'es' ? 'Enlaces del sitio y redes' : 'Site and social links'}>
+              <a href="https://www.xethkioz.com.ar" target="_blank" rel="noopener noreferrer">WEB</a>
+              {SOCIAL_LINKS.filter((item) => ['Threads', 'Instagram', 'TikTok Principal', 'YouTube', 'Twitch', 'Kick'].includes(item.name)).map((item) => (
+                <a key={item.name} href={item.url} target="_blank" rel="noopener noreferrer">{item.name === 'TikTok Principal' ? 'TikTok' : item.name}</a>
+              ))}
               <Link to={localizePath('/support')}>{lang === 'es' ? 'Apoyar proyecto' : 'Support project'}</Link>
               <Link to={localizePath('/privacy')}>{lang === 'es' ? 'Privacidad' : 'Privacy'}</Link>
               <Link to={localizePath('/contact')}>{lang === 'es' ? 'Contacto' : 'Contact'}</Link>
