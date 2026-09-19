@@ -26,6 +26,7 @@ const FusionGlobalWisp = lazy(() => import('./components/fusion/FusionGlobalWisp
 const NexusChatWidget = lazy(() => import('./components/nexus/NexusChatWidget'))
 
 const Home = lazy(() => import('./pages/Home'))
+const WorldOfXethkioz = lazy(() => import('./pages/WorldOfXethkioz'))
 const GamingHub = lazy(() => import('./pages/GamingHub'))
 const GamingGuides = lazy(() => import('./pages/GamingGuides'))
 const ScienceLab = lazy(() => import('./pages/ScienceLab'))
@@ -87,6 +88,7 @@ function RouteFallback() {
 const routeNames = {
   es: {
     '/': 'Inicio',
+    '/world-of-xethkioz': 'World of Xethkioz',
     '/gaming': 'Juegos',
     '/gaming/guides': 'Guías de juegos',
     '/science': 'Ciencia y tecnología',
@@ -110,6 +112,7 @@ const routeNames = {
   },
   en: {
     '/': 'Home',
+    '/world-of-xethkioz': 'World of Xethkioz',
     '/gaming': 'Gaming',
     '/gaming/guides': 'Gaming guides',
     '/science': 'Science and technology',
@@ -133,7 +136,7 @@ const routeNames = {
   },
 } as const
 
-const activityTrackedPortals = new Set(['/gaming', '/science', '/creacion-web', '/green-node', '/nexus-city'])
+const activityTrackedPortals = new Set(['/world-of-xethkioz', '/gaming', '/science', '/creacion-web', '/green-node', '/nexus-city'])
 
 function RouteAccessibility({ pathname }: { pathname: string }) {
   const { lang } = useLang()
@@ -224,6 +227,7 @@ function AppShell() {
           <Suspense fallback={<RouteFallback />}>
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/world-of-xethkioz" element={<WorldOfXethkioz />} />
               <Route path="/gaming" element={<GamingHub />} />
               <Route path="/gaming/guides" element={<GamingGuides />} />
               <Route path="/science" element={<ScienceLab />} />
@@ -237,6 +241,7 @@ function AppShell() {
               <Route path="/editorial-policy" element={<EditorialPolicy />} />
 
               <Route path="/en" element={<Home />} />
+              <Route path="/en/world-of-xethkioz" element={<WorldOfXethkioz />} />
               <Route path="/en/gaming" element={<GamingHub />} />
               <Route path="/en/gaming/guides" element={<GamingGuides />} />
               <Route path="/en/science" element={<ScienceLab />} />
