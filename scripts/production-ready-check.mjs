@@ -115,6 +115,12 @@ check(
     && home.includes('videoEnabled &&'),
 )
 check(
+  'Home exposes official XETHKIOZ web and social signals',
+  home.includes("import { SITE_VERSION, SOCIAL_LINKS } from '../lib/siteConfig'")
+    && home.includes('https://www.xethkioz.com.ar')
+    && home.includes("['Threads', 'Instagram', 'TikTok Principal', 'YouTube', 'Twitch', 'Kick']"),
+)
+check(
   'Home uses the canonical Veyr Wisp without duplicate Home implementation',
   globalWisp.includes('/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg')
     && globalWisp.includes("localizePath('/green-node')")

@@ -20,6 +20,7 @@ add('Integration component exists', exists('src/engines/world/runtime/WorldRunti
 add('Scheduler phase order is deterministic', ['"frame"', '"state"', '"orchestrator"', '"theme"', '"lighting"', '"camera"', '"ui"'].every((token) => scheduler.includes(token)), 'Scheduler must keep frame → state → orchestrator → theme → lighting → camera → ui.')
 add('Runtime registers every phase', ['"frame"', '"state"', '"orchestrator"', '"theme"', '"lighting"', '"camera"', '"ui"'].every((token) => integration.includes(token)) && integration.includes('scheduler.register'), 'Runtime integration must register one task per phase.')
 add('Phase metrics publish to Event Bus', events.includes('SCHEDULER_PHASE_METRIC') && integration.includes('bus.emit("SCHEDULER_PHASE_METRIC"'), 'Each phase must publish metrics through the World Event Bus.')
+add('Runtime metric scheduler is capped for web performance', integration.includes('const RUNTIME_METRIC_FPS = 4') && integration.includes('targetFps: RUNTIME_METRIC_FPS'), 'Telemetry must not run the global web shell at a 60 FPS metrics cadence.')
 add('Runtime exports integration and scheduler', runtimeIndex.includes('WorldRuntimeIntegration') && runtimeIndex.includes('WorldScheduler'), 'Runtime index must expose Sprint D integration and scheduler contracts.')
 
 const failed = checks.filter((check) => !check.passed)

@@ -614,3 +614,43 @@
     opacity: .78;
   }
 }
+
+
+/* PASS 18 Home performance profile
+   Keep Veyr present and interactive, but avoid stacking dozens of filtered
+   animations over the fullscreen Home video. */
+.xk-wisp.is-home-entry .xk-wisp-field{
+  animation-duration:10s;
+  will-change:transform;
+}
+.xk-wisp.is-home-entry .xk-wisp-specter{
+  animation:none;
+}
+.xk-wisp.is-home-entry .xk-wisp-energy-cloud,
+.xk-wisp.is-home-entry .xk-wisp-energy-arc{
+  animation:none;
+}
+.xk-wisp.is-home-entry .xk-wisp-rune-ring i{
+  animation:none;
+  opacity:.68;
+  text-shadow:0 0 5px var(--wisp-accent);
+}
+.xk-wisp.is-home-entry .xk-wisp-scanline,
+.xk-wisp.is-home-entry .xk-wisp-glitch-slice,
+.xk-wisp.is-home-entry .xk-wisp-particles{
+  display:none;
+}
+
+
+/* PASS 18 mobile Wisp frame-rate profile */
+@media (max-width: 767px){
+  .xk-wisp.is-home-entry .xk-wisp-field,
+  .xk-wisp.is-home-entry .xk-wisp-rune-ring,
+  .xk-wisp.is-home-entry .xk-wisp-rune-ring-inner{
+    animation:none;
+  }
+  .xk-wisp.is-home-entry .xk-wisp-energy-cloud,
+  .xk-wisp.is-home-entry .xk-wisp-energy-arc{
+    filter:none;
+  }
+}

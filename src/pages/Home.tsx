@@ -4,13 +4,18 @@ import SEO from '../components/SEO'
 import { useLang } from '../lib/LangContext'
 import { useExperience } from '../lib/ExperienceContext'
 import { supportsAmbientVideo } from '../lib/experienceMode'
-import { SITE_VERSION } from '../lib/siteConfig'
+import { SITE_VERSION, SOCIAL_LINKS } from '../lib/siteConfig'
 import './WorldOfXethkiozLanding.css'
 
 type DataSavingConnection = {
   saveData?: boolean
   addEventListener?: (type: 'change', listener: () => void) => void
   removeEventListener?: (type: 'change', listener: () => void) => void
+}
+
+type IdleWindow = Window & {
+  requestIdleCallback?: (callback: () => void, options?: { timeout?: number }) => number
+  cancelIdleCallback?: (handle: number) => void
 }
 
 function useAmbientVideoEnabled(graphicsMode: 'full' | 'lite') {
@@ -40,6 +45,33 @@ function useAmbientVideoEnabled(graphicsMode: 'full' | 'lite') {
   }, [graphicsMode])
 
   return enabled
+}
+
+function useDeferredAmbientVideo(enabled: boolean) {
+  const [ready, setReady] = useState(false)
+
+  useEffect(() => {
+    setReady(false)
+    if (!enabled) return undefined
+
+    const idleWindow = window as IdleWindow
+    let idleId: number | null = null
+    let timeoutId: number | null = null
+    const activate = () => setReady(true)
+
+    if (idleWindow.requestIdleCallback) {
+      idleId = idleWindow.requestIdleCallback(activate, { timeout: 900 })
+    } else {
+      timeoutId = window.setTimeout(activate, 350)
+    }
+
+    return () => {
+      if (idleId !== null) idleWindow.cancelIdleCallback?.(idleId)
+      if (timeoutId !== null) window.clearTimeout(timeoutId)
+    }
+  }, [enabled])
+
+  return ready
 }
 
 function openNexusChat() {
@@ -75,6 +107,7 @@ export default function Home() {
   const { lang, setLang, localizePath } = useLang()
   const { graphicsMode } = useExperience()
   const videoEnabled = useAmbientVideoEnabled(graphicsMode)
+  const videoReady = useDeferredAmbientVideo(videoEnabled)
   const t = copy[lang]
 
   return (
@@ -82,7 +115,7 @@ export default function Home() {
       <SEO title={t.seo} description={t.description} url="/" image="/assets/world-of-xethkioz/world-of-xethkioz-logo.webp" />
       <main className="wox-home">
         <div className="wox-bg" aria-hidden="true" />
-        {videoEnabled && (
+        {videoEnabled && videoReady && (
           <video
             className="wox-bg-video"
             src="/assets/bg-dragon-animated.mp4"
@@ -91,7 +124,7 @@ export default function Home() {
             loop
             muted
             playsInline
-            preload="auto"
+            preload="metadata"
             aria-hidden="true"
           />
         )}
@@ -186,7 +219,11 @@ export default function Home() {
               <small>{lang === 'es' ? 'Arte conceptual promocional. Los assets, modelos y materiales internos del juego no se publican en esta superficie.' : 'Promotional concept art. Internal game assets, models and production materials are not published on this surface.'}</small>
               <small className="wox-footer-owner">{lang === 'es' ? 'XETHKIOZ es propiedad de Alexis Díaz Santajulia. Todos los derechos reservados.' : 'XETHKIOZ is the property of Alexis Díaz Santajulia. All rights reserved.'}</small>
             </div>
-            <nav aria-label={lang === 'es' ? 'Enlaces del sitio' : 'Site links'}>
+            <nav aria-label={lang === 'es' ? 'Enlaces del sitio y redes' : 'Site and social links'}>
+              <a href="https://www.xethkioz.com.ar" target="_blank" rel="noopener noreferrer">WEB</a>
+              {SOCIAL_LINKS.filter((item) => ['Threads', 'Instagram', 'TikTok Principal', 'YouTube', 'Twitch', 'Kick'].includes(item.name)).map((item) => (
+                <a key={item.name} href={item.url} target="_blank" rel="noopener noreferrer">{item.name === 'TikTok Principal' ? 'TikTok' : item.name}</a>
+              ))}
               <Link to={localizePath('/support')}>{lang === 'es' ? 'Apoyar proyecto' : 'Support project'}</Link>
               <Link to={localizePath('/privacy')}>{lang === 'es' ? 'Privacidad' : 'Privacy'}</Link>
               <Link to={localizePath('/contact')}>{lang === 'es' ? 'Contacto' : 'Contact'}</Link>
