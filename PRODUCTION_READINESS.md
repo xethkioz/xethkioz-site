@@ -73,7 +73,7 @@ Database populated with:
 - **Categories:** 26 rows across gaming/tech/science
 - **Authors:** 3 profiles
 - **Articles:** 19 articles with full content
-- **Streams:** 10 across YouTube/Twitch/Kick
+- **Streams:** 10 across YouTube
 - **Media Items:** 16 items (images/videos/shorts/reels/carousels)
 - **Social Links:** 12 platform links
 
