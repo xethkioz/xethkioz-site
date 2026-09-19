@@ -35,8 +35,6 @@ Resultado:
 - TikTok principal: https://www.tiktok.com/@xethkioz0
 - TikTok Asia: https://www.tiktok.com/@xethkioz.asia
 - YouTube: https://www.youtube.com/@xethkioz
-- Twitch: https://www.twitch.tv/xethkioz
-- Kick: https://kick.com/xethkioz
 
 ## Archivos excluidos del ZIP entregable
 
