@@ -8,6 +8,15 @@ const siteUrl = 'https://www.xethkioz.com.ar'
 
 const spanishRoutes = [
   {
+    file: 'world-of-xethkioz.html',
+    path: '/world-of-xethkioz',
+    title: 'World of Xethkioz | Portal oficial del juego | XETHKIOZ',
+    description: 'Portal oficial de World of Xethkioz: Saga I, regiones, protagonistas y arte conceptual protegido del action RPG en desarrollo.',
+    keywords: 'World of Xethkioz, action RPG, Unity 6, URP, 3D/2.5D, Saga I, XETHKIOZ',
+    image: '/assets/world-of-xethkioz/world-of-xethkioz-logo.webp',
+    imageAlt: 'Logo oficial de World of Xethkioz',
+  },
+  {
     file: 'gaming.html',
     path: '/gaming',
     title: 'Nexus Gaming | Noticias, guías y comunidad | XETHKIOZ',
@@ -110,6 +119,15 @@ const spanishRoutes = [
 ]
 
 const englishRoutes = [
+  {
+    file: 'en-world-of-xethkioz.html',
+    path: '/en/world-of-xethkioz',
+    title: 'World of Xethkioz | Official Game Portal | XETHKIOZ',
+    description: 'Official World of Xethkioz portal: Saga I, regions, protagonists and protected concept art for the action RPG in development.',
+    keywords: 'World of Xethkioz, action RPG, Unity 6, URP, 3D/2.5D, Saga I, XETHKIOZ',
+    image: '/assets/world-of-xethkioz/world-of-xethkioz-logo.webp',
+    imageAlt: 'World of Xethkioz official logo',
+  },
   {
     file: 'en-home.html',
     path: '/en',
@@ -222,6 +240,7 @@ const englishRoutes = [
 
 const localizedPairs = new Map([
   ['/', '/en'],
+  ['/world-of-xethkioz', '/en/world-of-xethkioz'],
   ['/gaming', '/en/gaming'],
   ['/gaming/guides', '/en/gaming/guides'],
   ['/science', '/en/science'],

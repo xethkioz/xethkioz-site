@@ -24,6 +24,10 @@ assert(redirectMap.get('/admin')?.destination === '/cms', 'Legacy admin path mus
 
 const rewrites = vercel.rewrites ?? []
 const rewriteMap = new Map(rewrites.map((item) => [item.source, item.destination]))
+assert(rewriteMap.get('/world-of-xethkioz') === '/seo-shells/world-of-xethkioz.html', 'World of Xethkioz must have a first-class indexable SEO shell.')
+assert(rewriteMap.get('/en/world-of-xethkioz') === '/seo-shells/en-world-of-xethkioz.html', 'English World of Xethkioz must have a localized SEO shell.')
+assert(sitemap.includes("es: '/world-of-xethkioz', en: '/en/world-of-xethkioz'"), 'World of Xethkioz localized routes must remain in the sitemap.')
+assert(seoShells.includes("path: '/world-of-xethkioz'") && seoShells.includes("path: '/en/world-of-xethkioz'"), 'World of Xethkioz must generate standalone localized SEO shells.')
 assert(rewriteMap.get('/nexus-city') === '/seo-shells/fun.html', 'Nexus City must have a first-class indexable SEO shell.')
 assert(rewriteMap.get('/en/nexus-city') === '/seo-shells/en-fun.html', 'English Nexus City must have a localized SEO shell.')
 assert(sitemap.includes("es: '/nexus-city', en: '/en/nexus-city'"), 'Nexus City and its English counterpart must remain in the sitemap.')
@@ -80,4 +84,4 @@ if (issues.length) {
   process.exit(1)
 }
 
-console.log('PASS runtime/SEO contracts: real 404, article WHATWG query parsing, deep links, redirects, passport privacy, enforced CSP, streams RLS/indexes and telemetry hygiene.')
+console.log('PASS runtime/SEO contracts: World portal shells, real 404, article WHATWG query parsing, deep links, redirects, passport privacy, enforced CSP, streams RLS/indexes and telemetry hygiene.')

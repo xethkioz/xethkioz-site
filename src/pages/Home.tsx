@@ -13,43 +13,27 @@ type DataSavingConnection = {
   removeEventListener?: (type: 'change', listener: () => void) => void
 }
 
-type IdleCapableWindow = Window & {
-  requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number
-  cancelIdleCallback?: (handle: number) => void
-}
-
-function scheduleIdleTask(task: () => void, timeout = 1200) {
-  const idleWindow = window as IdleCapableWindow
-  if (idleWindow.requestIdleCallback) {
-    const handle = idleWindow.requestIdleCallback(task, { timeout })
-    return () => idleWindow.cancelIdleCallback?.(handle)
-  }
-  const handle = window.setTimeout(task, timeout)
-  return () => window.clearTimeout(handle)
-}
-
 function useAmbientVideoEnabled(graphicsMode: 'full' | 'lite') {
-  const [enabled, setEnabled] = useState(false)
+  const [enabled, setEnabled] = useState(
+    () => typeof window !== 'undefined' && supportsAmbientVideo(graphicsMode),
+  )
 
   useEffect(() => {
     const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)')
     const connection = (navigator as Navigator & { connection?: DataSavingConnection }).connection
-    let cancelIdle: (() => void) | undefined
 
     const sync = () => {
-      cancelIdle?.()
-      if (!supportsAmbientVideo(graphicsMode) || motionPreference.matches || connection?.saveData) {
-        setEnabled(false)
-        return
-      }
-      cancelIdle = scheduleIdleTask(() => setEnabled(true), 900)
+      setEnabled(
+        supportsAmbientVideo(graphicsMode)
+        && !motionPreference.matches
+        && !connection?.saveData,
+      )
     }
 
     sync()
     motionPreference.addEventListener('change', sync)
     connection?.addEventListener?.('change', sync)
     return () => {
-      cancelIdle?.()
       motionPreference.removeEventListener('change', sync)
       connection?.removeEventListener?.('change', sync)
     }
@@ -120,7 +104,7 @@ export default function Home() {
 
         <header className="wox-topbar">
           <nav className="wox-ecosystem-nav" aria-label={lang === 'es' ? 'Ecosistema XETHKIOZ' : 'XETHKIOZ ecosystem'}>
-            <a href="#wox-title">{lang === 'es' ? 'JUEGO' : 'GAME'}</a>
+            <Link to={localizePath('/world-of-xethkioz')}>{lang === 'es' ? 'JUEGO' : 'GAME'}</Link>
             <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ARGENCIENCIA <span>↗</span></a>
             <Link to={localizePath('/gaming')}>{lang === 'es' ? 'BIBLIOTECA DE JUEGOS' : 'GAME LIBRARY'}</Link>
             <a href="/mascotas/">{lang === 'es' ? 'MASCOTAS' : 'PETS'}</a>
@@ -132,7 +116,7 @@ export default function Home() {
           <details className="wox-mobile-ecosystem">
             <summary>XETHKIOZ <span aria-hidden="true">＋</span></summary>
             <nav aria-label={lang === 'es' ? 'Ecosistema XETHKIOZ móvil' : 'Mobile XETHKIOZ ecosystem'}>
-              <a href="#wox-title">{lang === 'es' ? 'JUEGO' : 'GAME'}</a>
+              <Link to={localizePath('/world-of-xethkioz')}>{lang === 'es' ? 'JUEGO' : 'GAME'}</Link>
               <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ARGENCIENCIA <span>↗</span></a>
               <Link to={localizePath('/gaming')}>{lang === 'es' ? 'BIBLIOTECA DE JUEGOS' : 'GAME LIBRARY'}</Link>
               <a href="/mascotas/">{lang === 'es' ? 'MASCOTAS' : 'PETS'}</a>
