@@ -115,7 +115,7 @@ export default function Home() {
           <details className="wox-mobile-ecosystem">
             <summary>XETHKIOZ <span aria-hidden="true">＋</span></summary>
             <nav aria-label={lang === 'es' ? 'Ecosistema XETHKIOZ móvil' : 'Mobile XETHKIOZ ecosystem'}>
-              <a href="#wox-title">{lang === 'es' ? 'JUEGO' : 'GAME'}</a>
+              <Link to={localizePath('/world-of-xethkioz')}>{lang === 'es' ? 'JUEGO' : 'GAME'}</Link>
               <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ARGENCIENCIA <span>↗</span></a>
               <Link to={localizePath('/gaming')}>{lang === 'es' ? 'BIBLIOTECA DE JUEGOS' : 'GAME LIBRARY'}</Link>
               <a href="/mascotas/">{lang === 'es' ? 'MASCOTAS' : 'PETS'}</a>
