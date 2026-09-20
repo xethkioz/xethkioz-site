@@ -1,416 +1,109 @@
-:root{
-  --woxp-ink:#05070b;
-  --woxp-panel:#090d13;
-  --woxp-violet:#8a2be2;
-  --woxp-cyan:#00f5d4;
-  --woxp-gold:#d4af37;
-  --woxp-orange:#ff7a32;
+/* Premium Fantasy: self-contained public game portal. No animation loops or backdrop filters. */
+.wox-portal{--woxp-ink:#090b10;--woxp-panel:#101219;--woxp-gold:#d6bc86;--woxp-line:rgba(214,188,134,.23);--woxp-soft:#bdbac8;--woxp-violet:#bda7eb;color:#f4f0e8;background:var(--woxp-ink);min-height:100svh;isolation:isolate;font-family:Inter,system-ui,sans-serif;overflow-x:clip}
+.wox-portal *{box-sizing:border-box}
+.wox-portal a,.wox-portal button{touch-action:manipulation}
+.wox-portal a{text-decoration:none;color:inherit}
+.wox-portal button{font:inherit;cursor:pointer}
+.wox-portal :is(a,button,summary,[tabindex="0"]):focus-visible{outline:2px solid var(--woxp-gold);outline-offset:5px}
+.woxp-masthead{height:88px;width:min(1440px,calc(100% - 80px));margin:auto;display:flex;align-items:center;justify-content:space-between;gap:24px;border-bottom:1px solid var(--woxp-line);position:relative;z-index:5}
+.woxp-brand{font:600 16px/1.4 Georgia,'Times New Roman',serif;letter-spacing:.22em;color:var(--woxp-gold)!important;display:inline-flex;align-items:center;gap:10px}
+.woxp-brand span{font-size:26px}
+.woxp-masthead-center{font-size:10px;letter-spacing:.24em;color:var(--woxp-soft)}
+.woxp-masthead>div{display:flex;gap:16px;align-items:center}
+.woxp-masthead>div a,.woxp-masthead button{min-height:44px;display:inline-flex;align-items:center;background:transparent;color:#e0d6c4;border:0;font-size:12px;padding:8px}
+.woxp-masthead button{min-width:44px;border:1px solid var(--woxp-line)}
+.wox-portal-hero{position:relative;isolation:isolate;min-height:min(820px,calc(100svh - 88px));display:flex;align-items:center;max-width:1680px;margin:auto;overflow:hidden;padding:80px max(40px,calc((100% - 1360px)/2)) 108px}
+.woxp-hero-art{position:absolute;inset:0 0 0 34%;display:block;z-index:-2}
+.woxp-hero-art img{height:100%;width:100%;object-fit:cover;object-position:50% 48%;display:block}
+.woxp-hero-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#090b10 6%,rgba(9,11,16,.96) 28%,rgba(9,11,16,.75) 43%,rgba(9,11,16,.12) 72%),linear-gradient(0deg,#090b10,transparent 24%,transparent 85%,rgba(9,11,16,.25))}
+.wox-portal-hero-copy{position:relative;width:58%;max-width:730px;z-index:1}
+.woxp-kicker{margin:0 0 24px;font-size:10px;font-weight:600;line-height:1.7;letter-spacing:.2em;color:var(--woxp-gold);text-transform:uppercase}
+.woxp-game-name{font-family:Georgia,'Times New Roman',serif;letter-spacing:.43em;color:#e7decc;font-size:19px;line-height:1.3;margin:32px 0 20px}
+.woxp-game-name strong{display:block;font-size:clamp(48px,6.7vw,100px);letter-spacing:.035em;font-weight:400;line-height:1.05;color:#f6efde;margin-top:8px}
+.woxp-ornament{display:flex;align-items:center;gap:16px;max-width:400px;color:var(--woxp-gold);font-size:9px;margin:25px 0}
+.woxp-ornament::before,.woxp-ornament::after{content:'';height:1px;flex:1;background:linear-gradient(90deg,var(--woxp-gold),transparent)}
+.woxp-ornament::before{flex:0 0 50px}
+.wox-portal-hero h1{font:400 clamp(26px,2.65vw,40px)/1.2 Georgia,'Times New Roman',serif;margin:0 0 20px;letter-spacing:-.02em}
+.woxp-lead{max-width:420px;font-size:15px;line-height:1.85;color:#c3bfcc;margin:0}
+.woxp-actions{display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin-top:34px}
+.wox-portal .woxp-button{display:inline-flex;align-items:center;justify-content:center;gap:24px;min-height:50px;padding:15px 24px;color:#17120b;background:#d6bc86;border:1px solid #e5d0a4;font-size:12px;font-weight:700;letter-spacing:.03em;transition:background-color .18s ease}
+.wox-portal .woxp-text-link{display:inline-flex;align-items:center;min-height:44px;background:none;border:0;border-bottom:1px solid var(--woxp-line);padding:9px 0;color:#e1cc9f;font-size:12px;line-height:1.5;text-align:left}
+.woxp-art-caption{position:absolute;right:40px;bottom:46px;font-size:9px;letter-spacing:.16em;color:#cec5de;margin:0;max-width:42%;line-height:1.8}
+.woxp-scroll-cue{position:absolute;bottom:29px;left:max(40px,calc((100% - 1360px)/2));font-size:24px;padding:8px;min-height:44px;min-width:44px;color:var(--woxp-gold)!important;border:1px solid var(--woxp-line);text-align:center}
+.wox-portal-anchor-nav{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:center;gap:8px;background:#0d0f15;border-top:1px solid var(--woxp-line);border-bottom:1px solid var(--woxp-line);padding:8px 24px}
+.wox-portal-anchor-nav a{display:flex;align-items:center;gap:9px;font-size:12px;line-height:1.5;min-height:46px;padding:10px 22px;color:#d7d0c1;white-space:nowrap}
+.wox-portal-anchor-nav a>span{color:#bba16b;font-size:9px}
+.woxp-section{width:min(1240px,calc(100% - 96px));margin:0 auto;padding:108px 0;border-bottom:1px solid var(--woxp-line);scroll-margin-top:88px;content-visibility:auto;contain-intrinsic-size:auto 680px}
+.woxp-section h2{font:400 clamp(34px,4vw,58px)/1.13 Georgia,'Times New Roman',serif;letter-spacing:-.025em;margin:0 0 26px;color:#eee9de;white-space:pre-line;text-wrap:balance}
+.woxp-body{max-width:570px;font-size:15px;line-height:1.9;color:var(--woxp-soft);margin:0 0 24px}
+.wox-portal-story{display:grid;grid-template-columns:1fr 1fr;gap:90px}
+.woxp-principles{display:grid;margin-top:32px}
+.woxp-principles article{display:flex;gap:22px;border-top:1px solid var(--woxp-line);padding:21px 0}
+.woxp-principles article>span{color:var(--woxp-gold);font-size:11px;padding-top:7px}
+.woxp-principles h3{font:400 22px/1.2 Georgia,serif;margin:0 0 8px;color:#eae0cc}
+.woxp-principles p{font-size:13px;line-height:1.65;color:var(--woxp-soft);margin:0}
+.wox-portal-world>header{max-width:650px;margin-bottom:38px}
+.wox-portal-world{contain-intrinsic-size:auto 950px}
+.woxp-atmosphere{position:relative;background:#10121a;border:1px solid var(--woxp-line);padding:7px}
+.woxp-view-tabs{display:flex;gap:4px;border-bottom:1px solid var(--woxp-line);padding:7px 12px 14px}
+.woxp-view-tabs button{color:#c6c0d1;background:transparent;border:1px solid transparent;padding:10px 22px;min-height:44px;font-size:12px}
+.woxp-view-tabs button[aria-selected="true"]{color:#f0dfb9;border-color:#9f8655;background:#201d1b}
+.woxp-atmosphere figure{position:relative;margin:0;min-height:440px;height:min(50vw,550px);overflow:hidden;contain:layout paint;background:#10111a}
+.woxp-atmosphere-image{width:100%;height:100%;display:block;object-fit:cover;object-position:50% 52%}
+.woxp-crop-1{transform:scale(1.65);transform-origin:22% 55%}
+.woxp-crop-2{transform:scale(1.5);transform-origin:70% 16%}
+.woxp-atmosphere figcaption{position:absolute;inset:auto 0 0;padding:58px 32px 26px;background:linear-gradient(transparent,rgba(7,9,14,.94));color:#eee9f1}
+.woxp-atmosphere figcaption small{font-size:9px;letter-spacing:.16em;color:#e0cfa8}
+.woxp-atmosphere figcaption p{font:400 23px/1.4 Georgia,serif;max-width:650px;margin:12px 0 0}
+.wox-portal-cast{display:grid;grid-template-columns:1fr 1fr;gap:90px;align-items:center}
+.wox-portal-cast h2{font-size:clamp(60px,7vw,100px)}
+.woxp-veyr-seal{position:relative;min-height:350px;display:grid;place-items:center;background:radial-gradient(ellipse,rgba(95,62,145,.16),transparent 66%);contain:layout paint}
+.woxp-veyr-seal::before,.woxp-veyr-seal::after{content:'';position:absolute;width:290px;height:290px;border:1px solid #645735;border-radius:50%}
+.woxp-veyr-seal::after{width:256px;height:256px;border-color:rgba(177,151,102,.3)}
+.woxp-veyr-seal span{position:absolute;width:240px;height:240px;border:1px solid rgba(175,153,105,.24);transform:rotate(45deg)}
+.woxp-veyr-seal img{width:220px;height:220px;position:relative;object-fit:contain}
+.woxp-note{display:block;color:#b4afbe;font-size:12px;line-height:1.8;margin-top:22px;max-width:560px}
+.wox-portal-art{display:grid;grid-template-columns:1fr 1fr;gap:90px;align-items:center}
+.woxp-development{border-top:1px solid var(--woxp-line)}
+.woxp-development>div{display:grid;grid-template-columns:24px 1fr;gap:8px 18px;padding:28px 0;border-bottom:1px solid var(--woxp-line)}
+.woxp-development>div>span{grid-row:span 2;font-size:11px;color:var(--woxp-gold);padding-top:6px}
+.woxp-development h3{font:400 24px/1.3 Georgia,serif;margin:0;color:#eee3cf}
+.woxp-development small{font-size:12px;color:var(--woxp-soft)}
+.woxp-faq{display:grid;grid-template-columns:1fr 1.15fr;gap:90px}
+.woxp-faq details{border-top:1px solid var(--woxp-line)}
+.woxp-faq details:last-child{border-bottom:1px solid var(--woxp-line)}
+.woxp-faq summary{display:flex;align-items:center;justify-content:space-between;gap:22px;cursor:pointer;list-style:none;padding:23px 3px;color:#e5dfd1;font-size:14px;line-height:1.65;min-height:60px}
+.woxp-faq summary::-webkit-details-marker{display:none}
+.woxp-faq summary>span{color:var(--woxp-gold);font-size:20px;flex:none}
+.woxp-faq details[open] summary>span{transform:rotate(45deg)}
+.woxp-faq details p{font-size:14px;line-height:1.9;color:var(--woxp-soft);margin:0;padding:0 26px 26px 3px}
+.woxp-closing{text-align:center;padding:100px 24px;background:radial-gradient(ellipse at center,rgba(97,70,126,.12),transparent 70%)}
+.woxp-closing>span{font-size:38px;color:var(--woxp-gold);display:block;margin-bottom:24px}
+.woxp-closing .woxp-actions{justify-content:center}
+.woxp-closing .woxp-note{margin-inline:auto}
+.wox-portal-footer{width:min(1360px,calc(100% - 80px));display:flex;justify-content:space-between;align-items:flex-start;gap:40px;margin:auto;padding:48px 0 100px}
+.wox-portal-footer p,.wox-portal-footer small{font-size:11px;line-height:1.8;color:#b6b0bc;margin:16px 0 0}
+.wox-portal-footer nav{display:flex;gap:3px 15px;flex-wrap:wrap;justify-content:flex-end;max-width:510px}
+.wox-portal-footer nav a{display:inline-flex;align-items:center;min-height:44px;color:#d1c2a3;font-size:12px;padding:10px 2px}
+/* Veyr's existing global behavior is retained; the public artwork is not a 3D model. */
+.woxp-hero-art,.woxp-hero-shade{pointer-events:none}
+@media(hover:hover) and (pointer:fine){.wox-portal .woxp-button:hover{background:#ead7af}.wox-portal .woxp-text-link:hover,.wox-portal-anchor-nav a:hover{color:#fff3d9}.woxp-atmosphere-image{transition:transform .25s ease}}
+@media(max-width:1050px){.woxp-masthead-center{display:none}.wox-portal-hero-copy{width:70%}.wox-portal-hero{padding-inline:40px;min-height:750px}.woxp-game-name strong{font-size:clamp(50px,8vw,82px)}.wox-portal-story,.wox-portal-cast,.wox-portal-art,.woxp-faq{gap:44px}.wox-portal-anchor-nav a{padding-inline:12px}}
+@media(max-width:760px){
+ .woxp-masthead{width:calc(100% - 36px);height:72px;gap:12px}.woxp-brand{font-size:13px;letter-spacing:.16em}.woxp-masthead>div{gap:8px}.woxp-masthead>div a{font-size:11px}
+ .wox-portal-hero{min-height:730px;min-height:max(690px,calc(100svh - 72px));padding:76px 24px 104px;align-items:flex-end}
+ .woxp-hero-art{inset:0 0 0 0}.woxp-hero-art img{object-position:50% 20%}
+ .woxp-hero-shade{background:linear-gradient(0deg,#090b10 0%,rgba(9,11,16,.94) 18%,rgba(9,11,16,.84) 50%,rgba(9,11,16,.22) 90%),linear-gradient(90deg,rgba(9,11,16,.22),transparent)}
+ .wox-portal-hero-copy{width:100%;max-width:600px}.woxp-game-name{font-size:15px;letter-spacing:.4em;margin:16px 0}.woxp-game-name strong{font-size:clamp(40px,11vw,78px);letter-spacing:.025em}
+ .wox-portal-hero .woxp-kicker{font-size:9px;max-width:300px;line-height:1.9}.wox-portal-hero h1{font-size:29px}.woxp-lead{font-size:14px;line-height:1.8}.woxp-ornament{max-width:290px;margin:19px 0}.woxp-actions{gap:14px;margin-top:26px}
+ .wox-portal .woxp-button{min-height:50px;padding:14px 20px;font-size:12px}.woxp-art-caption{right:24px;bottom:37px;max-width:70%;font-size:8px;text-align:right}.woxp-scroll-cue{left:24px;bottom:25px}
+ .wox-portal-anchor-nav{justify-content:flex-start;overflow-x:auto;scrollbar-width:thin;gap:0;padding:5px 12px}.wox-portal-anchor-nav a{font-size:11px;padding:12px}.wox-portal-anchor-nav a>span{display:none}
+ .woxp-section{width:calc(100% - 40px);padding:68px 0;scroll-margin-top:76px;contain-intrinsic-size:auto 680px}.woxp-section h2{font-size:36px}.woxp-body{font-size:14px;line-height:1.9}.woxp-kicker{font-size:9px;margin-bottom:20px}
+ .wox-portal-story,.wox-portal-cast,.wox-portal-art,.woxp-faq{grid-template-columns:1fr;gap:24px}.woxp-principles{margin-top:8px}.woxp-principles article{padding:18px 0}
+ .wox-portal-world{contain-intrinsic-size:auto 820px}.woxp-view-tabs{padding:5px 2px 10px;gap:0}.woxp-view-tabs button{padding:10px 12px;flex:1;font-size:11px}.woxp-atmosphere figure{height:430px;min-height:0}.woxp-atmosphere figcaption{padding:60px 18px 22px}.woxp-atmosphere figcaption p{font-size:20px}.woxp-atmosphere figcaption small{font-size:8px;letter-spacing:.08em}
+ .wox-portal-cast{contain-intrinsic-size:auto 760px}.woxp-veyr-seal{min-height:310px;order:1}.wox-portal-cast>div:last-child{order:0}.wox-portal-cast h2{font-size:72px}.woxp-development>div{padding:23px 0}.woxp-development h3{font-size:23px}
+ .woxp-faq summary{font-size:14px;padding-block:20px}.woxp-closing{padding-inline:10px}.woxp-closing .woxp-actions{flex-direction:column}
+ .wox-portal-footer{width:calc(100% - 40px);flex-direction:column;gap:24px;padding-bottom:110px}.wox-portal-footer nav{justify-content:flex-start;gap:3px 20px}
 }
-
-.wox-portal{
-  position:relative;
-  min-height:100vh;
-  overflow:hidden;
-  background:
-    radial-gradient(circle at 14% 10%,rgba(0,245,212,.08),transparent 26%),
-    radial-gradient(circle at 86% 18%,rgba(138,43,226,.12),transparent 30%),
-    linear-gradient(180deg,#05070b,#080711 38%,#05070b);
-  color:#f4f3f7;
-}
-.wox-portal::before{
-  content:'';
-  position:fixed;
-  z-index:0;
-  inset:0;
-  pointer-events:none;
-  background:
-    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px),
-    linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px);
-  background-size:96px 96px;
-  mask-image:linear-gradient(#000,transparent 82%);
-  opacity:.38;
-}
-.wox-portal-ambient{
-  position:absolute;
-  z-index:0;
-  inset:0;
-  pointer-events:none;
-  background:
-    radial-gradient(circle at 50% 18%,rgba(138,43,226,.12),transparent 28%),
-    radial-gradient(circle at 24% 58%,rgba(0,245,212,.05),transparent 24%),
-    radial-gradient(circle at 78% 74%,rgba(212,175,55,.05),transparent 26%);
-}
-.wox-portal>section,.wox-portal>footer{position:relative;z-index:1}
-
-.wox-portal-hero{
-  min-height:92svh;
-  display:grid;
-  grid-template-columns:minmax(0,1.05fr) minmax(430px,.95fr);
-  align-items:center;
-  gap:clamp(24px,5vw,80px);
-  width:min(1500px,calc(100% - 48px));
-  margin:0 auto;
-  padding:clamp(118px,12vw,170px) 0 74px;
-}
-.wox-portal-hero-copy{max-width:760px}
-.wox-portal-hero-copy>p,
-.wox-portal-chapter p,
-.wox-portal-world header p,
-.wox-portal-art p{
-  margin:0;
-  font:900 .58rem/1 ui-monospace,monospace;
-  letter-spacing:.24em;
-  color:var(--woxp-cyan);
-}
-.wox-portal-hero-copy>img{
-  display:block;
-  width:min(760px,90%);
-  height:auto;
-  margin:18px 0 10px;
-  filter:drop-shadow(0 20px 64px rgba(0,0,0,.48));
-}
-.wox-portal-hero-copy h1{
-  max-width:760px;
-  margin:18px 0 0;
-  font:950 clamp(2.1rem,4.5vw,5rem)/.92 Orbitron,Inter,sans-serif;
-  letter-spacing:-.052em;
-  text-wrap:balance;
-}
-.wox-portal-hero-copy>span{
-  display:block;
-  max-width:700px;
-  margin-top:22px;
-  font-size:clamp(.95rem,1.2vw,1.12rem);
-  line-height:1.8;
-  color:rgba(255,255,255,.66);
-}
-
-.wox-portal-orbit{
-  position:relative;
-  min-height:570px;
-  display:grid;
-  place-items:center;
-}
-.wox-portal-orbit::before,
-.wox-portal-orbit::after{
-  content:'';
-  position:absolute;
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:50%;
-  pointer-events:none;
-}
-.wox-portal-orbit::before{width:min(520px,90%);aspect-ratio:1;box-shadow:0 0 100px rgba(138,43,226,.08)}
-.wox-portal-orbit::after{width:min(330px,60%);aspect-ratio:1;border-color:rgba(0,245,212,.12)}
-.wox-portal-orbit article{
-  --angle:calc(var(--orbit-index) * 60deg - 90deg);
-  position:absolute;
-  left:50%;
-  top:50%;
-  width:148px;
-  min-height:148px;
-  transform:
-    translate(-50%,-50%)
-    rotate(var(--angle))
-    translateY(-225px)
-    rotate(calc(var(--angle) * -1));
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-}
-.wox-portal-orbit article::before{
-  content:'';
-  position:absolute;
-  inset:8px;
-  transform:rotate(45deg);
-  border:1px solid rgba(255,255,255,.1);
-  background:linear-gradient(145deg,rgba(11,15,22,.92),rgba(8,8,14,.74));
-  box-shadow:inset 0 0 36px rgba(138,43,226,.06),0 18px 40px rgba(0,0,0,.22);
-}
-.wox-portal-orbit img,.wox-portal-orbit i{
-  position:relative;
-  z-index:1;
-  display:grid;
-  place-items:center;
-  width:62px;
-  height:62px;
-  object-fit:contain;
-  color:#e8ddff;
-  font:950 1.5rem/1 Orbitron,sans-serif;
-  font-style:normal;
-  filter:drop-shadow(0 0 18px rgba(138,43,226,.28));
-}
-.wox-portal-orbit strong,.wox-portal-orbit small{position:relative;z-index:1}
-.wox-portal-orbit strong{margin-top:7px;font:900 .72rem/1 Orbitron,sans-serif;letter-spacing:.02em}
-.wox-portal-orbit small{margin-top:5px;font:800 .43rem/1.2 ui-monospace,monospace;letter-spacing:.08em;color:rgba(255,255,255,.48)}
-
-.wox-portal-anchor-nav{
-  grid-column:1/-1;
-  display:flex;
-  justify-content:center;
-  gap:6px;
-  margin-top:12px;
-}
-.wox-portal-anchor-nav a{
-  min-width:132px;
-  padding:12px 16px;
-  border-top:1px solid rgba(255,255,255,.12);
-  color:rgba(255,255,255,.62);
-  text-decoration:none;
-  text-align:center;
-  font:900 .5rem/1 ui-monospace,monospace;
-  letter-spacing:.16em;
-  transition:.2s ease;
-}
-.wox-portal-anchor-nav a:hover,.wox-portal-anchor-nav a:focus-visible{
-  outline:none;
-  color:#fff;
-  border-color:var(--woxp-violet);
-  background:linear-gradient(180deg,rgba(138,43,226,.08),transparent);
-}
-
-.wox-portal-chapter,
-.wox-portal-art{
-  width:min(1440px,calc(100% - 48px));
-  margin:0 auto;
-  padding:clamp(72px,9vw,138px) clamp(10px,4vw,62px);
-}
-.wox-portal-chapter h2,
-.wox-portal-world h2,
-.wox-portal-art h2{
-  margin:16px 0 0;
-  font:950 clamp(2.4rem,5.4vw,6rem)/.92 Orbitron,Inter,sans-serif;
-  letter-spacing:-.058em;
-  text-wrap:balance;
-}
-.wox-portal-chapter span,.wox-portal-art span{
-  display:block;
-  max-width:790px;
-  margin-top:24px;
-  font-size:clamp(.95rem,1.25vw,1.14rem);
-  line-height:1.8;
-  color:rgba(255,255,255,.64);
-}
-
-.wox-portal-story{
-  display:grid;
-  grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);
-  gap:clamp(38px,7vw,110px);
-  align-items:center;
-  border-top:1px solid rgba(255,255,255,.07);
-}
-.wox-portal-fracture{
-  position:relative;
-  min-height:420px;
-  display:grid;
-  place-items:center;
-}
-.wox-portal-fracture::before{
-  content:'';
-  width:12px;
-  height:82%;
-  transform:rotate(12deg);
-  background:linear-gradient(180deg,transparent,var(--woxp-cyan),var(--woxp-violet),var(--woxp-orange),transparent);
-  filter:blur(1px);
-  box-shadow:0 0 40px rgba(138,43,226,.35);
-}
-.wox-portal-fracture i{
-  position:absolute;
-  width:58%;
-  height:1px;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);
-  transform:rotate(calc(-20deg + var(--fracture,0deg)));
-}
-.wox-portal-fracture i:nth-child(1){--fracture:6deg;top:32%}
-.wox-portal-fracture i:nth-child(2){--fracture:-18deg;top:52%;width:76%}
-.wox-portal-fracture i:nth-child(3){--fracture:22deg;top:70%;width:48%}
-
-.wox-portal-world{
-  padding:clamp(84px,9vw,140px) 0;
-  background:linear-gradient(180deg,rgba(255,255,255,.018),rgba(255,255,255,.005));
-  border-top:1px solid rgba(255,255,255,.06);
-  border-bottom:1px solid rgba(255,255,255,.06);
-}
-.wox-portal-world>header{
-  width:min(1360px,calc(100% - 48px));
-  margin:0 auto 38px;
-}
-.wox-portal-regions{
-  display:grid;
-  grid-template-columns:1.45fr .9fr .9fr;
-  grid-template-rows:260px 220px;
-  gap:8px;
-  width:min(1500px,calc(100% - 32px));
-  margin:0 auto;
-}
-.wox-portal-regions article{
-  position:relative;
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-end;
-  min-height:0;
-  padding:24px 26px;
-  isolation:isolate;
-  clip-path:polygon(0 0,94% 0,100% 12%,100% 100%,6% 100%,0 88%);
-  background:#080b11;
-}
-.wox-portal-regions article::before{
-  content:'';
-  position:absolute;
-  z-index:-2;
-  inset:0;
-  background-image:var(--region-art);
-  background-size:cover;
-  background-position:center;
-  opacity:.72;
-  filter:saturate(1.08) contrast(1.04) brightness(.72);
-}
-.wox-portal-regions article::after{
-  content:'';
-  position:absolute;
-  z-index:-1;
-  inset:0;
-  background:linear-gradient(180deg,transparent 16%,rgba(4,6,10,.2) 46%,rgba(4,6,10,.94) 100%);
-}
-.wox-portal-regions article:first-child{grid-row:1/3}
-.wox-portal-regions article:nth-child(4){grid-column:2/3}
-.wox-portal-regions article:nth-child(5){grid-column:3/4}
-.wox-portal-regions small{font:900 .5rem/1 ui-monospace,monospace;color:var(--woxp-cyan);letter-spacing:.16em}
-.wox-portal-regions strong{margin-top:8px;font:950 clamp(1.4rem,2.8vw,3.4rem)/.9 Orbitron,sans-serif;letter-spacing:-.05em}
-.wox-portal-regions span{margin-top:9px;font:800 .55rem/1.3 ui-monospace,monospace;letter-spacing:.08em;color:rgba(255,255,255,.62)}
-
-.wox-portal-cast{border-bottom:1px solid rgba(255,255,255,.06)}
-.wox-portal-cast header{max-width:900px}
-.wox-portal-cast-line{
-  display:grid;
-  grid-template-columns:repeat(6,minmax(0,1fr));
-  gap:8px;
-  margin-top:50px;
-}
-.wox-portal-cast-line article{text-align:center}
-.wox-portal-cast-line article>div{
-  display:grid;
-  place-items:center;
-  width:100%;
-  aspect-ratio:1;
-  max-width:150px;
-  margin:0 auto;
-  border-radius:50%;
-  border:1px solid rgba(255,255,255,.09);
-  background:radial-gradient(circle,rgba(138,43,226,.12),rgba(5,7,11,.72) 68%);
-  box-shadow:inset 0 0 40px rgba(0,245,212,.035);
-}
-.wox-portal-cast-line img,.wox-portal-cast-line i{
-  width:60%;
-  height:60%;
-  object-fit:contain;
-  display:grid;
-  place-items:center;
-  font:950 clamp(1.6rem,3vw,2.8rem)/1 Orbitron,sans-serif;
-  font-style:normal;
-  color:#d9c8ff;
-}
-.wox-portal-cast-line strong{
-  display:block;
-  margin-top:14px;
-  font:900 clamp(.68rem,1vw,.9rem)/1 Orbitron,sans-serif;
-}
-
-.wox-portal-art{
-  display:grid;
-  grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);
-  gap:clamp(40px,7vw,100px);
-  align-items:center;
-}
-.wox-portal-art p{color:var(--woxp-gold)}
-.wox-portal-art-surface{
-  position:relative;
-  min-height:360px;
-  display:grid;
-  place-items:center;
-}
-.wox-portal-art-surface::before,
-.wox-portal-art-surface::after,
-.wox-portal-art-surface i{
-  content:'';
-  position:absolute;
-  left:50%;
-  top:50%;
-  width:240px;
-  aspect-ratio:1;
-  transform:translate(-50%,-50%) rotate(45deg);
-  border:1px solid rgba(212,175,55,.22);
-}
-.wox-portal-art-surface::after{width:174px;border-color:rgba(0,245,212,.18);transform:translate(-50%,-50%) rotate(18deg)}
-.wox-portal-art-surface i:nth-child(1){width:300px;border-color:rgba(138,43,226,.12);transform:translate(-50%,-50%) rotate(68deg)}
-.wox-portal-art-surface i:nth-child(2){width:112px;border-radius:50%;transform:translate(-50%,-50%);border-color:rgba(255,255,255,.16)}
-.wox-portal-art-surface i:nth-child(3){width:1px;height:320px;aspect-ratio:auto;transform:translate(-50%,-50%);background:linear-gradient(transparent,var(--woxp-violet),transparent);border:0}
-.wox-portal-art-surface b{
-  position:relative;
-  z-index:2;
-  font:950 3rem/1 Orbitron,sans-serif;
-  letter-spacing:-.08em;
-  color:rgba(255,255,255,.72);
-  text-shadow:0 0 34px rgba(138,43,226,.35);
-}
-
-.wox-portal-footer{
-  width:min(1440px,calc(100% - 48px));
-  margin:0 auto;
-  padding:34px 0 62px;
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  border-top:1px solid rgba(255,255,255,.08);
-}
-.wox-portal-footer a{
-  padding:13px 16px;
-  border-top:1px solid rgba(255,255,255,.13);
-  color:rgba(255,255,255,.65);
-  text-decoration:none;
-  font:900 .52rem/1 ui-monospace,monospace;
-  letter-spacing:.14em;
-}
-.wox-portal-footer a:last-child{border-color:rgba(212,175,55,.45);color:#ead98a}
-
-@media(max-width:1050px){
-  .wox-portal-hero{grid-template-columns:1fr;padding-top:120px}
-  .wox-portal-hero-copy{margin:0 auto;text-align:center}
-  .wox-portal-hero-copy>img{margin-inline:auto}
-  .wox-portal-orbit{min-height:520px}
-  .wox-portal-regions{grid-template-columns:1fr 1fr;grid-template-rows:360px repeat(2,210px)}
-  .wox-portal-regions article:first-child{grid-column:1/-1;grid-row:auto}
-  .wox-portal-regions article:nth-child(n){grid-column:auto}
-  .wox-portal-cast-line{grid-template-columns:repeat(3,1fr);row-gap:26px}
-}
-
-@media(max-width:720px){
-  .wox-portal::before{background-size:72px 72px}
-  .wox-portal-hero{width:calc(100% - 24px);padding:104px 0 52px}
-  .wox-portal-hero-copy>p{font-size:.46rem}
-  .wox-portal-hero-copy h1{font-size:clamp(2rem,11vw,3.4rem)}
-  .wox-portal-hero-copy>span{font-size:.9rem;line-height:1.65}
-  .wox-portal-orbit{min-height:420px;overflow:hidden}
-  .wox-portal-orbit::before{width:330px}.wox-portal-orbit::after{width:220px}
-  .wox-portal-orbit article{width:105px;min-height:105px;transform:translate(-50%,-50%) rotate(var(--angle)) translateY(-155px) rotate(calc(var(--angle) * -1))}
-  .wox-portal-orbit article::before{inset:5px}.wox-portal-orbit img,.wox-portal-orbit i{width:42px;height:42px;font-size:1rem}.wox-portal-orbit strong{font-size:.55rem}.wox-portal-orbit small{display:none}
-  .wox-portal-anchor-nav{display:grid;grid-template-columns:1fr 1fr;width:100%;gap:4px}
-  .wox-portal-anchor-nav a{min-width:0;font-size:.44rem}
-  .wox-portal-chapter,.wox-portal-art{width:calc(100% - 24px);padding:72px 4px}
-  .wox-portal-story,.wox-portal-art{grid-template-columns:1fr}
-  .wox-portal-fracture{min-height:260px}
-  .wox-portal-world>header{width:calc(100% - 24px)}
-  .wox-portal-world h2,.wox-portal-chapter h2,.wox-portal-art h2{font-size:clamp(2.1rem,11vw,3.5rem)}
-  .wox-portal-regions{display:flex;width:100%;gap:6px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 12px 10px;scrollbar-width:none}
-  .wox-portal-regions::-webkit-scrollbar{display:none}
-  .wox-portal-regions article,.wox-portal-regions article:first-child{flex:0 0 82vw;min-height:340px;scroll-snap-align:center}
-  .wox-portal-cast-line{grid-template-columns:repeat(2,1fr)}
-  .wox-portal-art-surface{min-height:280px}
-  .wox-portal-footer{width:calc(100% - 24px);flex-direction:column}
-}
-
-/* Keep internal chapters clear of the persistent public header. */
-#wox-portal-title,#historia,#mundo,#convergencia,#arte-visual{scroll-margin-top:104px}
-@media(max-width:720px){#wox-portal-title,#historia,#mundo,#convergencia,#arte-visual{scroll-margin-top:88px}}
+@media(prefers-reduced-motion: reduce){.wox-portal *,.wox-portal *::before,.wox-portal *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media(max-width:359px){.woxp-masthead>div a{font-size:10px}.woxp-game-name strong{font-size:38px}.wox-portal-hero{padding-inline:20px}.woxp-section h2{font-size:31px}}

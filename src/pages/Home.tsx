@@ -1,141 +1,53 @@
-import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
+import './PremiumFantasyShell.css'
 import { useLang } from '../lib/LangContext'
-import { useExperience } from '../lib/ExperienceContext'
-import { supportsAmbientVideo } from '../lib/experienceMode'
 import { SITE_VERSION, SOCIAL_LINKS } from '../lib/siteConfig'
 import './WorldOfXethkiozLanding.css'
-
-type DataSavingConnection = {
-  saveData?: boolean
-  addEventListener?: (type: 'change', listener: () => void) => void
-  removeEventListener?: (type: 'change', listener: () => void) => void
-}
-
-type IdleWindow = Window & {
-  requestIdleCallback?: (callback: () => void, options?: { timeout?: number }) => number
-  cancelIdleCallback?: (handle: number) => void
-}
-
-function useAmbientVideoEnabled(graphicsMode: 'full' | 'lite') {
-  const [enabled, setEnabled] = useState(
-    () => typeof window !== 'undefined' && supportsAmbientVideo(graphicsMode),
-  )
-
-  useEffect(() => {
-    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const connection = (navigator as Navigator & { connection?: DataSavingConnection }).connection
-
-    const sync = () => {
-      setEnabled(
-        supportsAmbientVideo(graphicsMode)
-        && !motionPreference.matches
-        && !connection?.saveData,
-      )
-    }
-
-    sync()
-    motionPreference.addEventListener('change', sync)
-    connection?.addEventListener?.('change', sync)
-    return () => {
-      motionPreference.removeEventListener('change', sync)
-      connection?.removeEventListener?.('change', sync)
-    }
-  }, [graphicsMode])
-
-  return enabled
-}
-
-function useDeferredAmbientVideo(enabled: boolean) {
-  const [ready, setReady] = useState(false)
-
-  useEffect(() => {
-    setReady(false)
-    if (!enabled) return undefined
-
-    const idleWindow = window as IdleWindow
-    let idleId: number | null = null
-    let timeoutId: number | null = null
-    const activate = () => setReady(true)
-
-    if (idleWindow.requestIdleCallback) {
-      idleId = idleWindow.requestIdleCallback(activate, { timeout: 900 })
-    } else {
-      timeoutId = window.setTimeout(activate, 350)
-    }
-
-    return () => {
-      if (idleId !== null) idleWindow.cancelIdleCallback?.(idleId)
-      if (timeoutId !== null) window.clearTimeout(timeoutId)
-    }
-  }, [enabled])
-
-  return ready
-}
 
 function openNexusChat() {
   window.dispatchEvent(new CustomEvent('xethkioz:nexus-chat-open', { detail: { room: 'general' } }))
 }
-
+const socialNames = ['Threads', 'Instagram', 'TikTok Principal', 'YouTube']
 const copy = {
   es: {
     seo: 'World of Xethkioz · Action RPG en desarrollo',
-    description: 'Portal oficial de World of Xethkioz y del ecosistema XETHKIOZ.',
-    status: 'SAGA I · RESONANCIA PRISMÁTICA · EN DESARROLLO',
-    soul: 'UN MUNDO FRACTURADO. UNA FAMILIA UNIDA.',
-    lead: 'El tiempo, la memoria, la naturaleza y la tecnología dejaron de obedecer una sola versión de la realidad.',
-    supportEyebrow: 'APOYAR // PRODUCCIÓN INDEPENDIENTE',
-    supportTitle: 'Ayudar al proyecto también empuja el mundo hacia adelante.',
-    supportText: 'Las colaboraciones se destinan a herramientas, arte, infraestructura, pruebas y producción. El apoyo es voluntario y no compra ventajas dentro del juego.',
-    final: 'UN MUNDO FRACTURADO NO SE REPARA VOLVIENDO A COMO ERA. SE APRENDE A VIVIR CON LOS CAMINOS QUE AHORA EXISTEN.',
+    description: 'Entrá al universo XETHKIOZ. Fantasía, videojuegos, tecnología y un Action RPG independiente en desarrollo.',
+    status: 'ACTION RPG INDEPENDIENTE · EN DESARROLLO',
+    soul: 'Más allá de lo conocido.',
+    lead: 'Un mundo por descubrir. Un proyecto que crece con cada paso. El viaje comienza acá.',
+    explore: 'EXPLORAR EL JUEGO', follow: 'SEGUIR EN THREADS',
+    supportEyebrow: 'PRODUCCIÓN INDEPENDIENTE',
+    supportTitle: 'Sé parte de lo que viene.',
+    supportText: 'Acompañá el desarrollo, compartí el proyecto o ayudá a hacerlo crecer. El apoyo es voluntario; no es una preventa ni compra ventajas dentro del juego.',
+    routes: [['01', 'Noticias y miradas', 'Gaming, tecnología y cultura digital.', '/news'], ['02', 'La biblioteca gamer', 'Guías para tu próxima aventura.', '/gaming'], ['03', 'Tu proyecto, en la web', 'Diseño y desarrollo con identidad.', '/creacion-web']],
+    caption: 'ILUSTRACIÓN PROMOCIONAL · NO ES GAMEPLAY',
   },
   en: {
     seo: 'World of Xethkioz · Action RPG in development',
-    description: 'Official portal for World of Xethkioz and the XETHKIOZ ecosystem.',
-    status: 'SAGA I · PRISMATIC RESONANCE · IN DEVELOPMENT',
-    soul: 'A FRACTURED WORLD. A UNITED FAMILY.',
-    lead: 'Time, memory, nature and technology no longer obey a single version of reality.',
-    supportEyebrow: 'SUPPORT // INDEPENDENT PRODUCTION',
-    supportTitle: 'Supporting the project helps move the world forward.',
-    supportText: 'Contributions go toward tools, art, infrastructure, testing and production. Support is voluntary and never buys gameplay advantages.',
-    final: 'A FRACTURED WORLD IS NOT REPAIRED BY GOING BACK TO WHAT IT WAS. YOU LEARN TO LIVE WITH THE PATHS THAT EXIST NOW.',
+    description: 'Enter the XETHKIOZ universe. Fantasy, gaming, technology and an independent action RPG in development.',
+    status: 'INDEPENDENT ACTION RPG · IN DEVELOPMENT',
+    soul: 'Beyond the familiar.',
+    lead: 'A world to discover. A project growing with every step. The journey starts here.',
+    explore: 'EXPLORE THE GAME', follow: 'FOLLOW ON THREADS',
+    supportEyebrow: 'INDEPENDENT PRODUCTION',
+    supportTitle: 'Be part of what comes next.',
+    supportText: 'Follow development, share the project or help it grow. Support is voluntary; it is not a preorder and buys no gameplay advantages.',
+    routes: [['01', 'News and perspectives', 'Gaming, technology and digital culture.', '/news'], ['02', 'The gaming library', 'Guides for your next adventure.', '/gaming'], ['03', 'Your project, online', 'Web design and development with identity.', '/creacion-web']],
+    caption: 'PROMOTIONAL ILLUSTRATION · NOT GAMEPLAY',
   },
 } as const
 
 export default function Home() {
   const { lang, setLang, localizePath } = useLang()
-  const { graphicsMode } = useExperience()
-  const videoEnabled = useAmbientVideoEnabled(graphicsMode)
-  const videoReady = useDeferredAmbientVideo(videoEnabled)
   const t = copy[lang]
-
+  const socials = socialNames.flatMap(name => SOCIAL_LINKS.filter(item => item.name === name))
   return (
     <>
       <SEO title={t.seo} description={t.description} url="/" image="/assets/world-of-xethkioz/world-of-xethkioz-logo.webp" />
-      <main className="wox-home">
-        <div className="wox-bg" aria-hidden="true" />
-        {videoEnabled && videoReady && (
-          <video
-            className="wox-bg-video"
-            src="/assets/bg-dragon-animated.mp4"
-            poster="/assets/bg-dragon-poster.webp"
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            aria-hidden="true"
-          />
-        )}
-
-        <aside className="wox-utility-rail" aria-label={lang === 'es' ? 'Accesos rápidos' : 'Quick access'}>
-          <button type="button" onClick={openNexusChat}><span>◉</span><b>CHAT</b></button>
-          <Link to={localizePath('/green-node')}><span>◇</span><b>GREEN NODE</b></Link>
-          <Link to={localizePath('/support')}><span>＋</span><b>{lang === 'es' ? 'APOYAR' : 'SUPPORT'}</b></Link>
-        </aside>
-
+      <main className="wox-home" data-public-presentation="fantasy">
         <header className="wox-topbar">
+          <Link to={localizePath('/')} className="wox-home-brand"><span aria-hidden="true">✦</span> XETHKIOZ</Link>
           <nav className="wox-ecosystem-nav" aria-label={lang === 'es' ? 'Ecosistema XETHKIOZ' : 'XETHKIOZ ecosystem'}>
             <Link to={localizePath('/world-of-xethkioz')}>{lang === 'es' ? 'JUEGO' : 'GAME'}</Link>
             <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ARGENCIENCIA <span>↗</span></a>
@@ -165,70 +77,24 @@ export default function Home() {
             <Link to="/login">{lang === 'es' ? 'INICIAR SESIÓN' : 'SIGN IN'}</Link>
           </div>
         </header>
-
         <section className="wox-hero" aria-labelledby="wox-title">
+          <picture className="wox-bg" aria-hidden="true"><img src="/assets/portal-games-world-v3.webp" alt="" width="800" height="800" fetchPriority="high" decoding="async" /></picture>
           <h1 id="wox-title" className="sr-only">World of Xethkioz</h1>
-          <div className="wox-hero-frame" aria-hidden="true"><span /><span /><span /><span /></div>
           <div className="wox-hero-core">
-            <div className="wox-hero-overline" aria-hidden="true"><span>XK // PRISMATIC RESONANCE</span><span>SAGA I // PRISMATIC FRACTURE</span></div>
-            <picture className="wox-logo-wrap">
-              <source srcSet="/assets/world-of-xethkioz/world-of-xethkioz-logo.webp" type="image/webp" />
-              <img src="/assets/world-of-xethkioz/world-of-xethkioz-logo.svg" alt="World of Xethkioz" className="wox-world-logo" />
-            </picture>
             <p className="wox-status">{t.status}</p>
-            <h2>{t.soul}</h2>
-            <p className="wox-lead">{t.lead}</p>
-            <div className="wox-actions">
-              <a href="#wox-title" onClick={(event) => { event.preventDefault(); openNexusChat() }}>{lang === 'es' ? 'ABRIR CHAT' : 'OPEN CHAT'} <span>◉</span></a>
-              <Link to={localizePath('/green-node')}>GREEN NODE <span>↗</span></Link>
-              <Link to={localizePath('/support')}>{lang === 'es' ? 'APOYAR PROYECTO' : 'SUPPORT PROJECT'} <span>↗</span></Link>
-            </div>
-            <div className="wox-hero-specs" aria-label={lang === 'es' ? 'Datos principales de Saga I' : 'Saga I key facts'}>
-              <span><strong>04+1</strong><b>{lang === 'es' ? 'REGIONES' : 'REGIONS'}</b></span>
-              <span><strong>32</strong><b>{lang === 'es' ? 'MAPAS' : 'MAPS'}</b></span>
-              <span><strong>08</strong><b>{lang === 'es' ? 'FORMAS' : 'FORMS'}</b></span>
-              <span><strong>U6</strong><b>UNITY 6 · URP · 3D/2.5D</b></span>
-            </div>
+            <picture className="wox-logo-wrap"><img src="/assets/world-of-xethkioz/world-of-xethkioz-logo.svg" alt="World of Xethkioz" className="wox-world-logo" width="1800" height="560" decoding="async" /></picture>
+            <div className="wox-fantasy-rule" aria-hidden="true">◆</div>
+            <h2>{t.soul}</h2><p className="wox-lead">{t.lead}</p>
+            <div className="wox-actions"><Link to={localizePath('/world-of-xethkioz')}>{t.explore} <span aria-hidden="true">↗</span></Link><a href="https://www.threads.com/@xethkioz" target="_blank" rel="noopener noreferrer">{t.follow} <span aria-hidden="true">↗</span></a></div>
+            <div className="wox-hero-specs" aria-label={lang === 'es' ? 'Presentación del proyecto' : 'Project overview'}><span>ACTION RPG</span><span>{lang === 'es' ? 'FANTASÍA' : 'FANTASY'}</span><span>{lang === 'es' ? 'EN DESARROLLO' : 'IN DEVELOPMENT'}</span></div>
           </div>
+          <small className="wox-art-credit">{t.caption}</small>
         </section>
-
+        <aside className="wox-utility-rail" aria-label={lang === 'es' ? 'Accesos rápidos' : 'Quick access'}><button type="button" onClick={openNexusChat}><span aria-hidden="true">◉</span><b>CHAT</b></button><Link to={localizePath('/green-node')}><span aria-hidden="true">◇</span><b>GREEN NODE</b></Link></aside>
         <div className="wox-content">
-          <section id="support" className="wox-support-card" aria-labelledby="support-title">
-            <div>
-              <p>{t.supportEyebrow}</p>
-              <h2 id="support-title">{t.supportTitle}</h2>
-              <span>{t.supportText}</span>
-            </div>
-            <Link to={localizePath('/support')}>{lang === 'es' ? 'VER FORMAS DE APOYAR' : 'SEE SUPPORT OPTIONS'}<span>↗</span></Link>
-          </section>
-
-          <section className="wox-final" aria-label={lang === 'es' ? 'Mensaje final' : 'Final statement'}>
-            <span aria-hidden="true">◇</span>
-            <p>{t.final}</p>
-            <span aria-hidden="true">◇</span>
-          </section>
-
-          <footer className="wox-footer">
-            <div className="wox-tech-seals" aria-label={lang === 'es' ? 'Tecnologías y red' : 'Technology and network'}>
-              <span>UNITY 6 · URP</span><span>TRIPO 3D</span><span>GREEN NODE</span><span>VEYR/WISP</span>
-            </div>
-            <div>
-              <small className="wox-footer-status">{lang === 'es' ? 'SAGA I // EN DESARROLLO' : 'SAGA I // IN DEVELOPMENT'}</small>
-              <strong>WORLD OF XETHKIOZ</strong>
-              <span>© 2026 XETHKIOZ · {SITE_VERSION}</span>
-              <small>{lang === 'es' ? 'Arte conceptual promocional. Los assets, modelos y materiales internos del juego no se publican en esta superficie.' : 'Promotional concept art. Internal game assets, models and production materials are not published on this surface.'}</small>
-              <small className="wox-footer-owner">{lang === 'es' ? 'XETHKIOZ es propiedad de Alexis Díaz Santajulia. Todos los derechos reservados.' : 'XETHKIOZ is the property of Alexis Díaz Santajulia. All rights reserved.'}</small>
-            </div>
-            <nav aria-label={lang === 'es' ? 'Enlaces del sitio y redes' : 'Site and social links'}>
-              <a href="https://www.xethkioz.com.ar" target="_blank" rel="noopener noreferrer">WEB</a>
-              {SOCIAL_LINKS.filter((item) => ['Threads', 'Instagram', 'TikTok Principal', 'YouTube'].includes(item.name)).map((item) => (
-                <a key={item.name} href={item.url} target="_blank" rel="noopener noreferrer">{item.name === 'TikTok Principal' ? 'TikTok' : item.name}</a>
-              ))}
-              <Link to={localizePath('/support')}>{lang === 'es' ? 'Apoyar proyecto' : 'Support project'}</Link>
-              <Link to={localizePath('/privacy')}>{lang === 'es' ? 'Privacidad' : 'Privacy'}</Link>
-              <Link to={localizePath('/contact')}>{lang === 'es' ? 'Contacto' : 'Contact'}</Link>
-            </nav>
-          </footer>
+          <nav className="wox-pathways" aria-label={lang === 'es' ? 'Más de XETHKIOZ' : 'More from XETHKIOZ'}>{t.routes.map(([number, name, description, route]) => <Link key={number} to={localizePath(route)}><small>{number}</small><div><h2>{name}</h2><p>{description}</p></div><span aria-hidden="true">↗</span></Link>)}</nav>
+          <section id="support" className="wox-support-card" aria-labelledby="support-title"><div><p>{t.supportEyebrow}</p><h2 id="support-title">{t.supportTitle}</h2><span>{t.supportText}</span></div><Link to={localizePath('/support')}>{lang === 'es' ? 'VER FORMAS DE APOYAR' : 'SEE SUPPORT OPTIONS'}<span aria-hidden="true">↗</span></Link></section>
+          <footer className="wox-footer"><div><strong>XETHKIOZ</strong><span>© {new Date().getFullYear()} XETHKIOZ · {SITE_VERSION}</span><small>{lang === 'es' ? 'Todos los derechos reservados. Ilustraciones promocionales; no son gameplay.' : 'All rights reserved. Promotional illustrations; not gameplay.'}</small><small className="wox-tech-seals">UNITY 6 · URP · 3D/2.5D</small></div><nav aria-label={lang === 'es' ? 'Enlaces del sitio y redes' : 'Site and social links'}><a href="https://www.xethkioz.com.ar">WEB</a>{socials.map(item => <a key={item.name} href={item.url} target="_blank" rel="noopener noreferrer">{item.name === 'TikTok Principal' ? 'TikTok' : item.name}</a>)}<Link to={localizePath('/support')}>{lang === 'es' ? 'Apoyar proyecto' : 'Support project'}</Link><Link to={localizePath('/privacy')}>{lang === 'es' ? 'Privacidad' : 'Privacy'}</Link><Link to={localizePath('/contact')}>{lang === 'es' ? 'Contacto' : 'Contact'}</Link></nav></footer>
         </div>
       </main>
     </>
