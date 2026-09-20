@@ -1,15 +1,15 @@
 import { expect, test } from '@playwright/test'
 
 test.describe('mejoras priorizadas de experiencia', () => {
-  test('Huellas y Nexus City tienen destinos inequívocos', async ({ page }) => {
+  test('Huellas permanece separado de la transición del portal retirado', async ({ page }) => {
     await page.goto('/')
 
     const petsLink = page.locator('a[href="/mascotas/"]').first()
     await expect(petsLink).toHaveAttribute('href', '/mascotas/')
 
     await page.goto('/fun')
-    await expect(page).toHaveURL(/\/nexus-city$/)
-    await expect(page.getByText(/NEXUS CITY \/\//i).first()).toBeVisible()
+    await expect(page).toHaveURL(/\/community$/)
+    await expect(page.getByRole('button', { name: 'Abrir chat', exact: true })).toBeVisible()
   })
 
   test('la sección retirada no conserva una ruta pública', async ({ page }) => {

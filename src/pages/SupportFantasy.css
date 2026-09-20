@@ -1,0 +1,32 @@
+/* Scoped support page: static art and gradients, no autoplay, filters or timers. */
+.xks-support{--xks-gold:#dec590;--xks-line:#685337;color:#ede7dd;font-family:Inter,system-ui,sans-serif;width:min(1160px,calc(100% - 220px));margin:0 auto;padding:36px 0 120px}
+.xks-support *{box-sizing:border-box}
+.xks-support a{text-decoration:none;touch-action:manipulation}
+.xks-support :is(a,button):focus-visible{outline:2px solid #d9bcff;outline-offset:5px}
+.xks-support .xks-back{display:inline-flex;align-items:center;min-height:44px;color:#d9c6a3;font-size:13px;margin-bottom:20px}
+.xks-support .xks-hero{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,1fr);gap:48px;align-items:center;padding:48px 0 64px;border-top:1px solid var(--xks-line)}
+.xks-support .xks-hero::before{content:'';position:absolute;inset:0 15% 0 0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,#0a0a0f 0%,rgba(10,10,15,.9) 40%,rgba(10,10,15,.65)),url('/assets/portal-games-world-v3.webp') center/cover;opacity:.65}
+.xks-support .xks-eyebrow{font-size:12px;line-height:1.7;letter-spacing:.14em;color:var(--xks-gold);margin:0 0 20px}
+.xks-support h1{font:400 clamp(36px,4.5vw,64px)/1.07 Georgia,serif;letter-spacing:-.035em;margin:0 0 26px;text-wrap:balance}
+.xks-support .xks-lead{font-size:16px;line-height:1.9;color:#ccc4d1;max-width:510px;margin:0}
+.xks-support h2{font:400 clamp(25px,3vw,36px)/1.2 Georgia,serif;letter-spacing:-.02em;color:#f0e1c6;margin:0 0 20px}
+.xks-support .xks-contribute{padding:30px;background:linear-gradient(140deg,#201929,#101117);border:1px solid #927446;border-top:3px solid var(--xks-gold);border-radius:3px}
+.xks-support .xks-mark{display:block;font-size:30px;color:var(--xks-gold);margin-bottom:20px}
+.xks-support .xks-voluntary{font-size:14px;line-height:1.8;color:#d1c8d4;margin:0 0 22px}
+.xks-support .xks-primary,.xks-support .xks-secondary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;padding:14px 18px;font-size:14px;line-height:1.5;font-weight:600;border:1px solid var(--xks-gold);border-radius:2px}
+.xks-support .xks-primary{background:#dec590;color:#1b140b}
+.xks-support .xks-secondary{color:#ead9b9;background:#121117;margin-top:12px}
+.xks-support .xks-payment-note{font-size:12px;line-height:1.75;color:#bfb6c5;margin:18px 0 0}
+.xks-support .xks-alias{font-size:13px;color:#cec4d3;margin:20px 0 0;line-height:1.8}
+.xks-support .xks-alias code{font-size:14px;color:#f4e5c3;user-select:all}
+.xks-support .xks-purpose{padding:48px 0;border-top:1px solid #443948}
+.xks-support .xks-purpose ol{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;padding:16px 0 0;margin:0}
+.xks-support .xks-purpose li>span{color:var(--xks-gold);font-size:13px}
+.xks-support .xks-purpose h3{font:400 24px/1.3 Georgia,serif;margin:16px 0 12px;color:#eadeca}
+.xks-support .xks-purpose p,.xks-support .xks-share p:not(.xks-eyebrow),.xks-support .xks-sponsor p{font-size:15px;line-height:1.85;color:#c4bbcb;margin:0;max-width:700px}
+.xks-support .xks-share{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:40px;align-items:center;background:#17141e;border-block:1px solid #6f5942;padding:38px;margin:20px 0 48px}
+.xks-support .xks-text-link{display:inline-flex;align-items:center;min-height:44px;padding:10px 0;margin-top:12px;border-bottom:1px solid #786043;color:#ead2a8;font-size:14px;line-height:1.65}
+@media(hover:hover){.xks-support .xks-primary:hover{background:#f0dcaf}.xks-support .xks-secondary:hover{border-color:#e3c991}.xks-support .xks-text-link:hover,.xks-support .xks-back:hover{color:#fff2d3}}
+@media(max-width:1100px){.xks-support .xks-hero{grid-template-columns:1fr;gap:32px}.xks-support .xks-contribute{max-width:620px}.xks-support .xks-share{grid-template-columns:1fr;gap:24px}.xks-support .xks-share-actions{max-width:420px}}
+@media(max-width:767px){.xks-support{width:calc(100% - 40px);padding:18px 0 170px}.xks-support .xks-hero{padding:28px 0 42px}.xks-support .xks-hero::before{inset:0}.xks-support h1{font-size:clamp(34px,9vw,44px)}.xks-support .xks-contribute{padding:24px 20px}.xks-support .xks-purpose ol{grid-template-columns:1fr;gap:28px}.xks-support .xks-purpose li+li{border-top:1px solid #342c3e;padding-top:24px}.xks-support .xks-share{padding:28px 20px}.xks-support .xks-primary,.xks-support .xks-secondary{font-size:13px;padding-inline:14px}}
+@media(prefers-reduced-motion:reduce){.xks-support *{transition:none!important;animation:none!important}}

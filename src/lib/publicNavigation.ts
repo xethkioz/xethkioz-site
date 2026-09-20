@@ -5,7 +5,6 @@ export const PUBLIC_NAVIGATION = [
   { id: 'news', es: 'Noticias', en: 'News', href: '/news' },
   { id: 'science', es: 'ArgenCiencia', en: 'ArgenCiencia', href: 'https://argenciencia.com/', external: true },
   { id: 'pets', es: 'Mascotas', en: 'Pets', href: '/mascotas/', document: true },
-  { id: 'nexus', es: 'Nexus City', en: 'Nexus City', href: '/nexus-city' },
   { id: 'green', es: 'Green Node', en: 'Green Node', href: '/green-node' },
   { id: 'services', es: 'Creación web', en: 'Web creation', href: '/creacion-web' },
   { id: 'support', es: 'Apoyar', en: 'Support', href: '/support' },

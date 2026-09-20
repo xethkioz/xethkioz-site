@@ -359,6 +359,12 @@ export default function NexusChatWidget({ clearMobileDock = false }: { clearMobi
     }
   }, [open, room, t.empty, t.localReady, t.sendError])
 
+  // Coordinate launchers without touching chat data or subscriptions.
+  useEffect(() => {
+    document.documentElement.toggleAttribute('data-nexus-chat-open', open)
+    return () => document.documentElement.removeAttribute('data-nexus-chat-open')
+  }, [open])
+
   const sendMessage = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const text = cleanText(draft)

@@ -6,7 +6,6 @@ const portals = [
   ['/green-node', 'green'],
   ['/mascotas/', 'pets'],
   ['/creacion-web', 'web'],
-  ['/nexus-city', 'nexus'],
 ] as const
 
 test.describe('guías verificadas de los portales', () => {
@@ -26,3 +25,14 @@ test.describe('guías verificadas de los portales', () => {
     })
   }
 })
+
+// The retired game section is a compatibility route, not an active knowledge portal.
+for (const prefix of ['', '/en']) {
+  test(`retired City route preserves the active community (${prefix || 'es'})`, async ({ page }) => {
+    await page.goto(`${prefix}/nexus-city`)
+    await expect(page).toHaveURL(new RegExp(`${prefix}/community$`))
+    await expect(page.locator('[data-knowledge-sector="nexus"]')).toHaveCount(0)
+    await expect(page.locator('#main-content')).not.toContainText('Nexus City')
+    await expect(page.getByRole('button', { name: prefix ? 'Open chat' : 'Abrir chat', exact: true })).toBeVisible()
+  })
+}

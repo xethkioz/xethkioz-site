@@ -2,86 +2,70 @@ import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
 import { useLang } from '../lib/LangContext'
 import { DONATION_LINKS } from '../lib/siteConfig'
-
-const paypalUrl = DONATION_LINKS.paypal
-const mercadoPagoUrl = DONATION_LINKS.mercadoPago
+import './SupportFantasy.css'
 
 const copy = {
   es: {
-    seoTitle: 'Apoyá XETHKIOZ',
-    seoDescription: 'Donaciones, patrocinios y colaboraciones para ayudar a crecer el proyecto XETHKIOZ.',
-    eyebrow: 'XETHKIOZ SUPPORT',
-    title: 'Apoyá el crecimiento del proyecto',
-    intro: 'XETHKIOZ es una plataforma independiente de gaming, tecnología, IA, streaming y comunidad. Cada aporte ayuda a sostener la web, mejorar el contenido y construir nuevas funciones dentro de la Red de Portales.',
-    paypal: 'Donar con PayPal',
-    mercadoPago: 'Donar con Mercado Pago',
-    helpTitle: '¿En qué ayuda tu aporte?',
-    helpItems: ['Mantener online xethkioz.com.ar.', 'Crear noticias, análisis, videos y carruseles.', 'Mejorar la comunidad, perfiles y comentarios.', 'Financiar herramientas, IA, hosting y producción.'],
-    cards: [
-      ['🎮', 'Donaciones', 'Para quienes quieren acompañar el proyecto de forma directa.', 'Aportar ahora', 'paypal'],
-      ['🤝', 'Patrocinios', 'Para marcas, negocios, empresas o creadores que quieran aparecer en XETHKIOZ.', 'Consultar patrocinio', 'contact'],
-      ['🚀', 'Colaboraciones', 'Para trabajar contenido, entrevistas, streams, notas o proyectos audiovisuales.', 'Proponer colaboración', 'contact'],
-    ],
-    sponsorTitle: 'Opciones para patrocinadores',
-    sponsorOptions: ['Logo o mención en secciones seleccionadas', 'Presencia en artículos, videos o streams', 'Campañas para gaming, tecnología, IA o comunidad', 'Espacios para marcas locales, regionales o digitales'],
+    seoTitle: 'Apoyá el proyecto | XETHKIOZ',
+    seoDescription: 'Formas voluntarias de acompañar World of Xethkioz, la web y su contenido independiente.',
+    eyebrow: 'PRODUCCIÓN INDEPENDIENTE', title: 'Un mundo por crear. Un impulso compartido.',
+    intro: 'Detrás de World of Xethkioz hay un proyecto independiente que crece con trabajo, creatividad y comunidad. Tu apoyo acompaña el desarrollo y ayuda a sostener la web y sus contenidos.',
+    back: 'Descubrir World of Xethkioz', contribute: 'Elegí cómo acompañar',
+    voluntary: 'El aporte es voluntario. No es una preventa, una inversión ni una compra de ventajas dentro del juego.',
+    paypal: 'Aportar con PayPal', mercadoPago: 'Aportar con Mercado Pago',
+    payments: 'El aporte se realiza en el sitio del proveedor. Revisá allí el importe y los datos antes de confirmar.',
+    alias: 'Alias de Mercado Pago', helpTitle: 'Lo que ayudás a sostener',
+    help: [['01', 'Desarrollo y arte', 'Tiempo, herramientas y producción del proyecto.'], ['02', 'Una web independiente', 'Infraestructura, mantenimiento y mejoras de la experiencia.'], ['03', 'Contenido y comunidad', 'Noticias de gaming, tecnología e IA, y espacios para encontrarnos.']],
+    freeTitle: 'Compartir también es apoyar.', freeText: 'Seguir las novedades, compartir una publicación o acercar una idea también suma. No hace falta aportar dinero para ser parte.',
+    follow: 'Seguir en Threads', contact: 'Proponer una colaboración',
+    sponsorTitle: '¿Tu marca quiere acompañar?', sponsorText: 'Conversemos sobre una colaboración o patrocinio con un alcance acordado. Las propuestas comerciales se identifican como tales.',
+    sponsor: 'Consultar patrocinio',
   },
   en: {
-    seoTitle: 'Support XETHKIOZ',
-    seoDescription: 'Donations, sponsorships and collaborations that help the XETHKIOZ project grow.',
-    eyebrow: 'XETHKIOZ SUPPORT',
-    title: 'Support the project’s growth',
-    intro: 'XETHKIOZ is an independent platform for gaming, technology, AI, streaming and community. Every contribution helps keep the website online, improve content and build new features across the Portal Network.',
-    paypal: 'Donate with PayPal',
-    mercadoPago: 'Donate with Mercado Pago',
-    helpTitle: 'What does your contribution support?',
-    helpItems: ['Keeping xethkioz.com.ar online.', 'Creating news, analysis, videos and carousels.', 'Improving the community, profiles and comments.', 'Funding tools, AI, hosting and production.'],
-    cards: [
-      ['🎮', 'Donations', 'For people who want to support the project directly.', 'Contribute now', 'paypal'],
-      ['🤝', 'Sponsorships', 'For brands, businesses, companies or creators that want a presence in XETHKIOZ.', 'Ask about sponsorship', 'contact'],
-      ['🚀', 'Collaborations', 'For content, interviews, streams, articles or audiovisual projects.', 'Propose a collaboration', 'contact'],
-    ],
-    sponsorTitle: 'Options for sponsors',
-    sponsorOptions: ['Logo or mention in selected sections', 'Presence in articles, videos or streams', 'Campaigns for gaming, technology, AI or community', 'Placements for local, regional or digital brands'],
+    seoTitle: 'Support the project | XETHKIOZ',
+    seoDescription: 'Voluntary ways to support World of Xethkioz, the website and independent content.',
+    eyebrow: 'INDEPENDENT PRODUCTION', title: 'A world to create. A shared beginning.',
+    intro: 'World of Xethkioz is an independent project built through work, creativity and community. Your support helps its development and sustains the website and its content.',
+    back: 'Discover World of Xethkioz', contribute: 'Choose how to contribute',
+    voluntary: 'Support is voluntary. It is not a preorder, an investment or a purchase of gameplay advantages.',
+    paypal: 'Contribute with PayPal', mercadoPago: 'Contribute with Mercado Pago',
+    payments: 'Contributions take place on the provider’s website. Review the amount and recipient details there before confirming.',
+    alias: 'Mercado Pago alias', helpTitle: 'What your support helps sustain',
+    help: [['01', 'Development and art', 'Time, tools and project production.'], ['02', 'An independent website', 'Infrastructure, maintenance and experience improvements.'], ['03', 'Content and community', 'Gaming, technology and AI news, and spaces to connect.']],
+    freeTitle: 'Sharing is support, too.', freeText: 'Following updates, sharing a post or suggesting an idea helps as well. You do not need to contribute money to take part.',
+    follow: 'Follow on Threads', contact: 'Suggest a collaboration',
+    sponsorTitle: 'Would your brand like to help?', sponsorText: 'Let’s discuss a collaboration or sponsorship with an agreed scope. Commercial placements are identified as such.',
+    sponsor: 'Ask about sponsorship',
   },
 } as const
 
 export default function Support() {
-  const { lang } = useLang()
+  const { lang, localizePath } = useLang()
   const t = copy[lang]
-
   return (
-    <main className="animate-fade-in max-w-6xl mx-auto px-4 sm:px-6 py-8 text-white">
-      <SEO title={t.seoTitle} description={t.seoDescription} url="/support" />
-
-      <section className="relative overflow-hidden rounded-3xl glass border border-orange/25 p-6 md:p-10 mb-8" aria-labelledby="support-title">
-        <div className="absolute inset-0 bg-gradient-to-br from-orange/15 via-transparent to-neon/15 pointer-events-none" aria-hidden="true" />
-        <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-          <div>
-            <p className="section-eyebrow">{t.eyebrow}</p>
-            <h1 id="support-title" className="font-display text-3xl md:text-5xl font-black gradient-text mb-4">{t.title}</h1>
-            <p className="text-gray-300 leading-relaxed mb-6">{t.intro}</p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <a href={paypalUrl} target="_blank" rel="noopener noreferrer" className="btn-primary text-center">{t.paypal}</a>
-              <a href={mercadoPagoUrl} target="_blank" rel="noopener noreferrer" className="btn-secondary text-center">{t.mercadoPago}</a>
-            </div>
-          </div>
-
-          <div className="glass-strong rounded-2xl border border-white/10 p-6">
-            <div className="text-5xl mb-4" aria-hidden="true">💜</div>
-            <h2 className="font-display text-xl font-bold text-white mb-3">{t.helpTitle}</h2>
-            <ul className="space-y-3 text-sm text-gray-400">{t.helpItems.map((item) => <li key={item}><span aria-hidden="true">✅</span> {item}</li>)}</ul>
-          </div>
+    <main className="xks-support">
+      <SEO title={t.seoTitle} description={t.seoDescription} url={localizePath('/support')} />
+      <Link className="xks-back" to={localizePath('/world-of-xethkioz')}>← {t.back}</Link>
+      <section className="xks-hero" aria-labelledby="support-title">
+        <div className="xks-intro"><p className="xks-eyebrow">{t.eyebrow}</p><h1 id="support-title">{t.title}</h1><p className="xks-lead">{t.intro}</p></div>
+        <div className="xks-contribute" aria-labelledby="support-methods-title">
+          <span className="xks-mark" aria-hidden="true">✦</span><h2 id="support-methods-title">{t.contribute}</h2>
+          <p className="xks-voluntary">{t.voluntary}</p>
+          <a className="xks-primary" href={DONATION_LINKS.paypal} target="_blank" rel="noopener noreferrer">{t.paypal}<span aria-hidden="true">↗</span></a>
+          <a className="xks-secondary" href={DONATION_LINKS.mercadoPago} target="_blank" rel="noopener noreferrer">{t.mercadoPago}<span aria-hidden="true">↗</span></a>
+          <p className="xks-alias">{t.alias}: <code>xethkioz</code></p>
+          <p className="xks-payment-note">{t.payments}</p>
         </div>
       </section>
-
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8" aria-label={lang === 'es' ? 'Formas de apoyar XETHKIOZ' : 'Ways to support XETHKIOZ'}>
-        {t.cards.map(([icon, title, description, action, destination]) => <article key={title} className="glass border border-white/10 rounded-2xl p-6 card-hover"><div className="text-3xl mb-3" aria-hidden="true">{icon}</div><h2 className="font-display text-lg font-bold text-white mb-2">{title}</h2><p className="text-sm text-gray-400 mb-4">{description}</p>{destination === 'paypal' ? <a href={paypalUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-orange hover:neon-text-orange">{action} →</a> : <Link to="/contact" className="text-sm text-orange hover:neon-text-orange">{action} →</Link>}</article>)}
+      <section className="xks-purpose" aria-labelledby="support-purpose-title">
+        <h2 id="support-purpose-title">{t.helpTitle}</h2>
+        <ol>{t.help.map(([number, title, detail]) => <li key={number}><span aria-hidden="true">{number}</span><h3>{title}</h3><p>{detail}</p></li>)}</ol>
       </section>
-
-      <section className="glass border border-white/10 rounded-2xl p-6 md:p-8" aria-labelledby="sponsor-options-title">
-        <h2 id="sponsor-options-title" className="font-display text-2xl font-bold gradient-text-purple mb-4">{t.sponsorTitle}</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">{t.sponsorOptions.map((item) => <div key={item} className="flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-4"><span className="text-orange" aria-hidden="true">✦</span><span className="text-sm text-gray-300">{item}</span></div>)}</div>
+      <section className="xks-share" aria-labelledby="support-share-title">
+        <div><p className="xks-eyebrow">XETHKIOZ · {lang === 'es' ? 'COMUNIDAD' : 'COMMUNITY'}</p><h2 id="support-share-title">{t.freeTitle}</h2><p>{t.freeText}</p></div>
+        <div className="xks-share-actions"><a className="xks-primary" href="https://www.threads.com/@xethkioz" target="_blank" rel="noopener noreferrer">{t.follow}<span aria-hidden="true">↗</span></a><Link className="xks-text-link" to={localizePath('/contact')}>{t.contact} ↗</Link></div>
       </section>
+      <section className="xks-sponsor" aria-labelledby="sponsor-options-title"><h2 id="sponsor-options-title">{t.sponsorTitle}</h2><p>{t.sponsorText}</p><Link className="xks-text-link" to={localizePath('/contact')}>{t.sponsor} ↗</Link></section>
     </main>
   )
 }

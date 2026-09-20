@@ -6,7 +6,8 @@ async function essentials(page: Page) {
   if (await button.isVisible()) await button.click()
 }
 async function openMenu(page: Page) {
-  const summary = page.locator('.xkf-mobile summary')
+  await expect(page.locator('.xkf-header')).toBeVisible()
+  const summary = page.locator('button.xkf-mobile')
   if (await summary.isVisible()) await summary.click()
 }
 
@@ -47,11 +48,11 @@ test('WEB-03: denied session storage cannot crash or silently redirect the publi
 })
 test('WEB-06: mobile menu closes with Escape and keeps its links above the hero', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 }); await page.goto('/'); await essentials(page)
-  await openMenu(page); await expect(page.locator('.xkf-mobile')).toHaveAttribute('open', '')
+  await openMenu(page); await expect(page.locator('.xkf-mobile')).toHaveAttribute('aria-expanded', 'true')
   expect(await page.evaluate(() => document.querySelector('.xkf-header')!.getBoundingClientRect().bottom <= document.querySelector('.wox-hero')!.getBoundingClientRect().top + 1)).toBe(true)
-  await page.locator('.xkf-mobile nav a').first().focus(); await page.keyboard.press('Escape')
-  await expect(page.locator('.xkf-mobile')).not.toHaveAttribute('open', '')
-  await expect(page.locator('.xkf-mobile summary')).toBeFocused()
+  await page.locator('.xkf-mobile-panel a').first().focus(); await page.keyboard.press('Escape')
+  await expect(page.locator('.xkf-mobile')).toHaveAttribute('aria-expanded', 'false')
+  await expect(page.locator('button.xkf-mobile')).toBeFocused()
 })
 
 test('WEB-01/07: shared navigation has no text collision across the audit viewport matrix', async ({ page }, testInfo) => {

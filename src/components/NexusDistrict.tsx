@@ -15,12 +15,12 @@ const districtLinks: Record<Lang, Record<NexusDistrictTone, DistrictLink[]>> = {
       { code: 'RED', glyph: '◆', title: 'Comunidad', detail: 'Perfiles, grupos y conexión', to: '/community' },
     ],
     gaming: [
-      { code: 'LIVE', glyph: '●', title: 'Directos y videos', detail: 'Kick, YouTube y estado del canal', to: '/gaming?section=live' },
+      { code: 'LIVE', glyph: '●', title: 'Directos y videos', detail: 'YouTube y estado del canal', to: '/gaming?section=live' },
       { code: 'RADAR', glyph: '⌁', title: 'Noticias Gaming', detail: 'Lanzamientos y señales verificadas', to: '/news?category=gaming' },
       { code: 'PARTY', glyph: '◆', title: 'Comunidad', detail: 'Grupos, perfiles y compañeros', to: '/community' },
     ],
     fun: [
-      { code: 'MEME', glyph: '☺', title: 'Meme Arcade', detail: 'Humor y publicaciones de la comunidad', to: '/nexus-city' },
+      { code: 'MEME', glyph: '☺', title: 'Meme Arcade', detail: 'Humor y publicaciones de la comunidad', to: '/community' },
       { code: 'CLIP', glyph: '▶', title: 'Clip semanal', detail: 'Videos y momentos destacados', to: '/news?category=community' },
       { code: 'CLUB', glyph: '?!', title: 'Comunidad', detail: 'Entrá, participá y compartí', to: '/community' },
     ],
@@ -42,12 +42,12 @@ const districtLinks: Record<Lang, Record<NexusDistrictTone, DistrictLink[]>> = {
       { code: 'NET', glyph: '◆', title: 'Community', detail: 'Profiles, groups and connection', to: '/community' },
     ],
     gaming: [
-      { code: 'LIVE', glyph: '●', title: 'Streams and videos', detail: 'Kick, YouTube and channel status', to: '/gaming?section=live' },
+      { code: 'LIVE', glyph: '●', title: 'Streams and videos', detail: 'YouTube and channel status', to: '/gaming?section=live' },
       { code: 'RADAR', glyph: '⌁', title: 'Gaming news', detail: 'Releases and verified signals', to: '/news?category=gaming' },
       { code: 'PARTY', glyph: '◆', title: 'Community', detail: 'Groups, profiles and teammates', to: '/community' },
     ],
     fun: [
-      { code: 'MEME', glyph: '☺', title: 'Meme Arcade', detail: 'Humor and community posts', to: '/en/nexus-city' },
+      { code: 'MEME', glyph: '☺', title: 'Meme Arcade', detail: 'Humor and community posts', to: '/en/community' },
       { code: 'CLIP', glyph: '▶', title: 'Weekly clip', detail: 'Videos and featured moments', to: '/news?category=community' },
       { code: 'CLUB', glyph: '?!', title: 'Community', detail: 'Join, participate and share', to: '/community' },
     ],

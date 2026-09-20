@@ -1,6 +1,18 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test, type Page } from '@playwright/test'
 
+// Explicit local-only REST fixture; CI and live smoke retain their real network.
+// A missing synthetic hostname is not an application rendering failure.
+test.beforeEach(async ({ page }) => {
+  if (process.env.PLAYWRIGHT_MOCK_PUBLIC_DATA !== '1') return
+  await page.route('https://xethkioz-e2e-lab.supabase.co/rest/v1/**', async route => {
+    if (!['GET', 'HEAD'].includes(route.request().method())) {
+      throw new Error('Public rendering tests must not write to the data service')
+    }
+    await route.fulfill({ status: 200, contentType: 'application/json', body: '[]' })
+  })
+})
+
 const publicRoutes = [
   '/',
   '/gaming',
@@ -125,14 +137,14 @@ test.describe('navegación y estados especiales', () => {
     await expect(page).toHaveURL(/\/creacion-web$/)
 
     await page.goto('/nexus-city')
-    await expect(page).toHaveURL(/\/nexus-city$/)
-    await expect(page.getByText(/NEXUS CITY \/\//i).first()).toBeVisible()
+    await expect(page).toHaveURL(/\/community$/)
+    await expect(page.getByRole('button', { name: 'Abrir chat', exact: true })).toBeVisible()
   })
 
-  test('/fun conserva compatibilidad y deriva a Nexus City', async ({ page }) => {
+  test('/fun conserva compatibilidad y deriva a la comunidad activa', async ({ page }) => {
     await page.goto('/fun')
-    await expect(page).toHaveURL(/\/nexus-city$/)
-    await expect(page.getByText(/NEXUS CITY \/\//i).first()).toBeVisible()
+    await expect(page).toHaveURL(/\/community$/)
+    await expect(page.getByRole('button', { name: 'Abrir chat', exact: true })).toBeVisible()
   })
 
   test('una ruta inexistente muestra el estado 404', async ({ page }) => {

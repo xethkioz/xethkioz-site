@@ -73,6 +73,7 @@ const universeTransit = read('src/components/universe/UniverseTransitRail.tsx')
 const nexusDistrict = read('src/components/NexusDistrict.tsx')
 const nexusCity = read('src/pages/NexusCity.tsx')
 const webCreation = read('src/pages/WebCreation.tsx')
+const serviceStudio = read('src/components/services/ServiceStudio.tsx')
 
 check(
   'release version matches the public stamp and both lockfile versions',
@@ -156,7 +157,7 @@ check(
   destinations.includes("href: '/gaming'")
     && destinations.includes('https://argenciencia.com/')
     && destinations.includes("href: '/mascotas/'")
-    && destinations.includes("href: '/nexus-city'")
+    && !destinations.includes("href: '/nexus-city'")
     && destinations.includes("href: '/creacion-web'")
     && home.includes('className="wox-hero"'),
 )
@@ -267,7 +268,7 @@ check(
 check(
   'Gaming and Huellas expose real content without decorative duplication',
   gamingHub.includes("fetchPublishedNews('gaming')")
-    && gamingHub.includes('gaming-anime-nexus-v1.webp')
+    && gamingHub.includes('/assets/portal-games-world-v3.webp') && gamingHub.includes('xke-gaming')
     && gamingHub.includes('xk-gaming-start')
     && gamingHub.includes("activeSection === 'news'")
     && gamingHub.includes('xk-feature-rank')
@@ -322,13 +323,15 @@ check(
     && funPortal.includes("const NexusCity = lazy(() => import('./NexusCity'))")
     && funPortal.includes('<NexusCity />')
     && !funPortal.includes('MascotasRedirect')
-    && appShell.includes('<Route path="/fun" element={<Navigate to="/nexus-city" replace />} />')
+    && appShell.includes('<Route path="/fun" element={<Navigate to="/community" replace />} />')
     && scienceLab.includes('<NexusDistrict tone="science"')
     && scienceLab.includes('data-science-primary-content')
     && !greenNode.includes('<NexusDistrict tone="green"')
     && greenNode.includes('xk-green-view-nav')
     && nexusCity.includes('<UniverseTransitRail />')
-    && webCreation.includes('<UniverseTransitRail />')
+    && webCreation.includes('<ServiceStudio') && serviceStudio.includes('className="xks-local-nav"')
+    && ['#propuestas', '#mi-proyecto', '#proceso', '#web-faq-title'].every(anchor => serviceStudio.includes(anchor))
+    && !webCreation.includes('<UniverseTransitRail') && !serviceStudio.includes('UniverseTransitRail')
     && universeTransit.includes('aria-current'),
 )
 check(
@@ -364,7 +367,7 @@ runNodeAudit('eventbus telemetry audit', 'scripts/eventbus-telemetry-check.mjs')
 runNodeAudit('shader pipeline audit', 'scripts/shader-pipeline-sandbox-check.mjs')
 runNodeAudit('visual runtime audit', 'scripts/visual-runtime-sandbox-check.mjs')
 runNodeAudit('world runtime integration audit', 'scripts/runtime-integration-check.mjs')
-runNodeAudit('Nexus City social safety audit', 'scripts/nexus-city-check.mjs')
+runNodeAudit('Archived social safety and retirement audit', 'scripts/nexus-city-check.mjs')
 runNodeAudit('buttons, links, images and translations audit', 'scripts/ui-contract-check.mjs')
 runNodeAudit('news factory audit', 'scripts/news-factory-check.mjs')
 runNodeAudit('web services audit', 'scripts/web-services-check.mjs')

@@ -54,8 +54,8 @@ const copy = {
     shortcutsEyebrow: 'ACCESOS EN VIVO',
     shortcutsTitle: 'Volvé al multiverso',
     shortcuts: [
-      { to: '/nexus-city/room/xethkioz', label: 'Continuar aventura', detail: 'Plaza, Casa Wisp y Gran Sala', glyph: '▶' },
-      { to: '/nexus-city/vip', label: 'Salas privadas', detail: 'Invitaciones y conversaciones VIP', glyph: '◆' },
+      { to: '/world-of-xethkioz', label: 'World of Xethkioz', detail: 'Descubrí el proyecto del juego', glyph: '▶' },
+      { to: '/news', label: 'Últimas noticias', detail: 'Gaming, tecnología e inteligencia artificial', glyph: '◆' },
       { to: '/community', label: 'Canal comunitario', detail: 'Chat, contactos y señales', glyph: '⌁' },
     ],
     progressionEyebrow: 'PROGRESIÓN WISP',
@@ -128,8 +128,8 @@ const copy = {
     shortcutsEyebrow: 'LIVE SHORTCUTS',
     shortcutsTitle: 'Return to the multiverse',
     shortcuts: [
-      { to: '/nexus-city/room/xethkioz', label: 'Continue adventure', detail: 'Plaza, Wisp House and Grand Hall', glyph: '▶' },
-      { to: '/nexus-city/vip', label: 'Private rooms', detail: 'Invitations and VIP conversations', glyph: '◆' },
+      { to: '/world-of-xethkioz', label: 'World of Xethkioz', detail: 'Discover the game project', glyph: '▶' },
+      { to: '/news', label: 'Latest news', detail: 'Gaming, technology and artificial intelligence', glyph: '◆' },
       { to: '/community', label: 'Community channel', detail: 'Chat, contacts and signals', glyph: '⌁' },
     ],
     progressionEyebrow: 'WISP PROGRESSION',
@@ -332,7 +332,7 @@ export default function ProfileHub() {
           <p className="font-mono text-[10px] font-black uppercase tracking-[0.28em] text-orange-300">{c.shortcutsEyebrow}</p>
           <h2 id="profile-shortcuts-title" className="mt-2 text-2xl font-black uppercase">{c.shortcutsTitle}</h2>
           <div className="mt-5 grid gap-3 md:grid-cols-3">
-            {c.shortcuts.map((shortcut) => <Link key={shortcut.to} to={shortcut.to} className="group grid grid-cols-[auto_1fr] items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-4 transition hover:-translate-y-0.5 hover:border-orange-300/40 hover:bg-orange-400/[0.07]">
+            {c.shortcuts.map((shortcut) => <Link key={shortcut.to} to={localizePath(shortcut.to)} className="group grid grid-cols-[auto_1fr] items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-4 transition hover:-translate-y-0.5 hover:border-orange-300/40 hover:bg-orange-400/[0.07]">
               <span className="grid h-11 w-11 place-items-center rounded-xl border border-orange-300/25 bg-orange-400/10 text-xl text-orange-200" aria-hidden="true">{shortcut.glyph}</span>
               <span><strong className="block text-sm">{shortcut.label}</strong><small className="mt-1 block text-xs leading-5 text-slate-400">{shortcut.detail}</small></span>
             </Link>)}

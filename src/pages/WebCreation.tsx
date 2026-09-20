@@ -3,11 +3,14 @@ import { Link } from 'react-router-dom'
 import SafeImage from '../components/SafeImage'
 import SEO from '../components/SEO'
 import PortalKnowledgeBriefing from '../components/PortalKnowledgeBriefing'
-import { UniverseTransitRail } from '../components/universe/UniverseTransitRail'
-import { PortalPulseRail } from '../components/PortalPulseRail'
 import { useLang } from '../lib/LangContext'
 import { loadPublishedWebServices } from '../services/webServices'
 import type { WebServiceOffer } from '../types/webServices'
+
+import EditorialCrosslinks from '../components/EditorialCrosslinks'
+import './EditorialFantasy.css'
+import ServiceStudio, { StudioSelectionSummary } from '../components/services/ServiceStudio'
+import { STUDIO_SELECTION_KEY, STUDIO_INSTAGRAM, normalizeSelection, readStudioSelection, buildStudioBrief, studioDetailsLimit, type StudioSelection } from '../data/serviceStudio'
 
 type QuoteForm = {
   serviceId: string
@@ -125,21 +128,21 @@ const copy = {
     featured: 'Destacada',
     included: 'Incluye',
     processEyebrow: 'Cómo trabajamos',
-    processTitle: 'Un proceso claro, sin perder la magia.',
+    processTitle: 'Elegís, conversamos y recién después contratás.',
     process: [
-      ['01 · Descubrimiento', 'Entendemos tu proyecto, audiencia, contenido y objetivo comercial.'],
-      ['02 · Diseño', 'Definimos estructura, identidad visual y experiencia responsive antes de construir.'],
-      ['03 · Desarrollo', 'Implementamos, probamos rendimiento, accesibilidad, formularios y SEO base.'],
-      ['04 · Lanzamiento', 'Publicamos, verificamos el recorrido completo y dejamos una base preparada para crecer.'],
+      ['01 · Tu selección', 'Elegís servicios y extras. Enviás una consulta privada sin comprar ni pagar.'],
+      ['02 · Propuesta', 'Revisamos disponibilidad y acordamos alcance, entregables, revisiones, precio y tiempos.'],
+      ['03 · Confirmación', 'Decidís si avanzar. El medio de pago y las condiciones se confirman con la propuesta aceptada.'],
+      ['04 · Trabajo y entrega', 'Realizamos el servicio acordado, revisamos el resultado y entregamos con indicaciones de uso.'],
     ],
-    quoteEyebrow: 'Contanos tu idea',
-    quoteTitle: 'Recibí un presupuesto pensado para tu proyecto.',
-    quoteText: 'Completá estos datos y revisamos alcance, tiempos y necesidades. No es una respuesta automática: analizamos cada consulta.',
+    quoteEyebrow: 'Tu próxima idea, en marcha',
+    quoteTitle: 'Del proyecto a una propuesta concreta.',
+    quoteText: 'Revisamos tu selección y lo que necesitás resolver. Recibís alcance, entregables, precio y condiciones antes de decidir. Enviar esta solicitud no confirma una compra.',
     quoteStep: 'Paso',
     quoteSteps: ['Proyecto', 'Contacto'],
     requestProgress: 'Progreso de la solicitud',
     projectStepTitle: 'Primero, definamos la idea.',
-    projectStepText: 'Elegí una referencia y contanos qué resultado necesitás conseguir.',
+    projectStepText: 'Revisá los servicios elegidos y contanos qué necesitás resolver. No adjuntes contraseñas ni información privada.',
     contactStepTitle: 'Ahora, ¿cómo te contactamos?',
     contactStepText: 'Usamos estos datos únicamente para responder tu solicitud.',
     nextStep: 'Continuar con mis datos',
@@ -156,14 +159,14 @@ const copy = {
     projectType: 'Tipo de proyecto',
     budget: 'Rango de inversión',
     contact: 'Preferencia de contacto',
-    details: '¿Qué necesitás construir?',
-    detailsPlaceholder: 'Contanos qué hacés, qué secciones imaginás, si ya tenés logo/contenido y qué resultado esperás de la página.',
+    details: '¿Qué necesitás resolver?',
+    detailsPlaceholder: 'Contanos de tu proyecto, la tarea que necesitás resolver y el material disponible. Para soporte técnico, describí el problema sin enviar contraseñas.',
     consent: 'Acepto que XETHKIOZ use estos datos únicamente para responder esta solicitud de presupuesto.',
     privacyLabel: 'Privacidad',
     honeypot: 'Sitio web de la empresa',
     submit: 'Enviar solicitud',
     submitting: 'Enviando…',
-    success: 'Solicitud recibida. Te vamos a contactar con los próximos pasos.',
+    success: 'Solicitud recibida. Revisaremos alcance y disponibilidad. Todavía no hay una compra ni un pago.',
     successTitle: 'Tu idea ya está en camino.',
     newRequest: 'Enviar otra solicitud',
     genericError: 'No pudimos enviar la solicitud. Revisá los datos e intentá nuevamente.',
@@ -190,6 +193,8 @@ const copy = {
     faqEyebrow: 'Preguntas frecuentes',
     faqTitle: 'Lo importante, antes de empezar.',
     faqs: [
+      ['¿Puedo combinar servicios sin contratar una web?', 'Sí. IA, contenido y soporte básico de PC también se consultan de forma independiente. Elegí uno o varios servicios y revisamos el alcance.'],
+      ['¿Seleccionar un servicio ya genera una compra?', 'No. Es una solicitud de propuesta. El precio, los plazos, los entregables y cualquier pago se acuerdan antes de empezar. Los aportes voluntarios al proyecto son otra cosa y no pagan estos servicios.'],
       ['¿Cuánto cuesta una página web?', 'Depende del alcance, cantidad de secciones, contenido e integraciones. Por eso primero entendemos el proyecto y después enviamos una propuesta clara, sin costos ocultos.'],
       ['¿Necesito tener logo, textos e imágenes?', 'No necesariamente. Podemos trabajar con el material que ya tengas y definir juntos qué piezas faltan antes de comenzar el diseño.'],
       ['¿La página funciona bien en celular?', 'Sí. Cada propuesta se diseña y prueba para mobile, tablet y escritorio, cuidando velocidad, lectura, accesibilidad y formularios.'],
@@ -231,21 +236,21 @@ const copy = {
     featured: 'Featured',
     included: 'Includes',
     processEyebrow: 'How we work',
-    processTitle: 'A clear process without losing the magic.',
+    processTitle: 'Choose, discuss, then decide to hire.',
     process: [
-      ['01 · Discovery', 'We understand your project, audience, content and commercial goal.'],
-      ['02 · Design', 'We define structure, visual identity and responsive experience before building.'],
-      ['03 · Development', 'We implement and test performance, accessibility, forms and baseline SEO.'],
-      ['04 · Launch', 'We publish, verify the complete journey and leave a foundation ready to grow.'],
+      ['01 · Your selection', 'Choose services and extras. Send a private inquiry without buying or paying.'],
+      ['02 · Proposal', 'We review availability and agree scope, deliverables, revisions, price and timing.'],
+      ['03 · Confirmation', 'You decide whether to proceed. Payment method and terms are confirmed with the accepted proposal.'],
+      ['04 · Work & delivery', 'We perform the agreed service, review the result and deliver with usage guidance.'],
     ],
     quoteEyebrow: 'Tell us your idea',
-    quoteTitle: 'Get a quote designed around your project.',
-    quoteText: 'Share the essentials and we will review scope, timing and needs. This is not an automated response: every inquiry is assessed.',
+    quoteTitle: 'From your project to a clear proposal.',
+    quoteText: 'We review your selection and what you need to solve. You receive scope, deliverables, price and terms before deciding. Sending this request does not confirm a purchase.',
     quoteStep: 'Step',
     quoteSteps: ['Project', 'Contact'],
     requestProgress: 'Request progress',
     projectStepTitle: 'First, let’s define the idea.',
-    projectStepText: 'Choose a reference and tell us what outcome you need to achieve.',
+    projectStepText: 'Review your selected services and tell us what you need to solve. Do not include passwords or private information.',
     contactStepTitle: 'Now, how should we contact you?',
     contactStepText: 'We use this information only to reply to your request.',
     nextStep: 'Continue with my details',
@@ -262,14 +267,14 @@ const copy = {
     projectType: 'Project type',
     budget: 'Investment range',
     contact: 'Contact preference',
-    details: 'What do you need to build?',
-    detailsPlaceholder: 'Tell us what you do, the sections you imagine, whether you already have a logo/content and what result you expect.',
+    details: 'What do you need to solve?',
+    detailsPlaceholder: 'Tell us about your project, the task you need to solve and available material. For technical support, describe the issue without sending passwords.',
     consent: 'I agree that XETHKIOZ may use this information only to respond to this quote request.',
     privacyLabel: 'Privacy',
     honeypot: 'Company website',
     submit: 'Send request',
     submitting: 'Sending…',
-    success: 'Request received. We will contact you with the next steps.',
+    success: 'Request received. We will review scope and availability. No purchase or payment has been made.',
     successTitle: 'Your idea is already moving.',
     newRequest: 'Send another request',
     genericError: 'We could not send the request. Check the information and try again.',
@@ -296,6 +301,8 @@ const copy = {
     faqEyebrow: 'Frequently asked questions',
     faqTitle: 'The important things, before we start.',
     faqs: [
+      ['Can I combine services without ordering a website?', 'Yes. AI guidance, content and basic PC support can be requested independently. Choose one or more services and we will review scope.'],
+      ['Does selecting a service create a purchase?', 'No. It is a proposal request. Price, timing, deliverables and any payment are agreed before work starts. Voluntary project contributions are separate and do not pay for these services.'],
       ['How much does a website cost?', 'It depends on scope, number of sections, content and integrations. We understand the project first and then send a clear proposal without hidden costs.'],
       ['Do I need a logo, copy and images?', 'Not necessarily. We can work with what you already have and define together which pieces are missing before design begins.'],
       ['Will the website work well on mobile?', 'Yes. Every solution is designed and tested for mobile, tablet and desktop, with attention to speed, readability, accessibility and forms.'],
@@ -316,10 +323,15 @@ function localizeOffer(offer: WebServiceOffer, lang: 'es' | 'en'): WebServiceOff
 }
 
 export default function WebCreation() {
-  const { lang } = useLang()
+  const { lang, localizePath } = useLang()
   const t = copy[lang]
   const quoteFormRef = useRef<HTMLFormElement>(null)
   const stepHeadingRef = useRef<HTMLHeadingElement>(null)
+  const [selection, setSelection] = useState<StudioSelection>(readStudioSelection)
+  const [requestId, setRequestId] = useState('')
+  const busyRef = useRef(false)
+  const abortRef = useRef<AbortController | null>(null)
+  const mountedRef = useRef(true)
   const [offers, setOffers] = useState<WebServiceOffer[]>([])
   const [catalogNotice, setCatalogNotice] = useState<string | null>(null)
   const [catalogLoading, setCatalogLoading] = useState(true)
@@ -344,16 +356,31 @@ export default function WebCreation() {
     return () => { active = false }
   }, [t.fallbackDescription])
 
+  useEffect(() => {
+    try { sessionStorage.setItem(STUDIO_SELECTION_KEY, JSON.stringify(normalizeSelection(selection))) } catch { /* Selection remains usable without browser storage. */ }
+  }, [selection])
+  useEffect(() => { mountedRef.current = true; return () => { mountedRef.current = false; abortRef.current?.abort() } }, [])
+
+  function updateSelection(value: StudioSelection) {
+    if (busyRef.current) return
+    setSelection(normalizeSelection(value))
+    if (submitState.status === 'success') { setRequestId(''); setForm(emptyForm); setQuoteStep(1) }
+    setSubmitState({ status: 'idle', message: '' })
+  }
+
   const displayOffers = useMemo(() => offers.map((offer) => localizeOffer(offer, lang)), [lang, offers])
-  const selectedOffer = useMemo(() => displayOffers.find((offer) => offer.id === form.serviceId) ?? null, [displayOffers, form.serviceId])
-  const heroOffer = displayOffers[0]
+  const selectedOffer = useMemo(() => selection.services.includes('web') ? displayOffers.find((offer) => offer.id === form.serviceId) ?? null : null, [displayOffers, form.serviceId, selection.services])
+  const detailsLimit = studioDetailsLimit(selection)
 
   function updateForm<Key extends keyof QuoteForm>(field: Key, value: QuoteForm[Key]) {
+    if (busyRef.current) return
     setForm((current) => ({ ...current, [field]: value }))
     if (submitState.status !== 'idle') setSubmitState({ status: 'idle', message: '' })
   }
 
   function chooseOffer(offer: WebServiceOffer) {
+    if (busyRef.current) return
+    updateSelection({ ...selection, services: [...selection.services, 'web'] })
     setForm((current) => ({ ...current, serviceId: offer.id, projectType: projectTypeByOfferSlug[offer.slug] ?? current.projectType }))
     setQuoteStep(1)
     setSubmitState({ status: 'idle', message: '' })
@@ -361,12 +388,26 @@ export default function WebCreation() {
   }
 
   function focusStep(step: QuoteStep) {
+    if (busyRef.current) return
     setQuoteStep(step)
     setSubmitState({ status: 'idle', message: '' })
     window.requestAnimationFrame(() => stepHeadingRef.current?.focus())
   }
 
+  function validateProject() {
+    if (!selection.services.length) {
+      setSubmitState({ status: 'error', message: lang === 'es' ? 'Elegí al menos un servicio antes de continuar.' : 'Choose at least one service before continuing.' })
+      return false
+    }
+    if (form.details.trim().length < 20 || form.details.length > detailsLimit) {
+      setSubmitState({ status: 'error', message: lang === 'es' ? `Escribí entre 20 y ${detailsLimit} caracteres sobre tu proyecto.` : `Write between 20 and ${detailsLimit} characters about your project.` })
+      return false
+    }
+    return true
+  }
+
   function continueQuote() {
+    if (busyRef.current || !validateProject()) return
     if (!quoteFormRef.current?.reportValidity()) {
       setSubmitState({ status: 'error', message: t.invalidError })
       return
@@ -375,107 +416,70 @@ export default function WebCreation() {
   }
 
   function resetQuote() {
+    if (busyRef.current) return
+    setSelection({ services: [], extras: [] })
+    setRequestId('')
     setForm({ ...emptyForm, serviceId: offers[0]?.id ?? '' })
     focusStep(1)
   }
 
   async function submitQuote(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (quoteStep === 1) {
-      continueQuote()
-      return
-    }
+    if (busyRef.current) return
+    if (quoteStep === 1) { continueQuote(); return }
+    if (!validateProject() || !quoteFormRef.current?.reportValidity()) return
+    busyRef.current = true
+    const controller = new AbortController()
+    abortRef.current = controller
+    const timeout = window.setTimeout(() => controller.abort(), 15_000)
     setSubmitState({ status: 'submitting', message: t.submitting })
-
     try {
       const response = await fetch('/api/web-quote', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: controller.signal,
         body: JSON.stringify({
-          serviceId: selectedOffer?.id ?? null,
-          serviceSlug: selectedOffer?.slug ?? null,
-          name: form.name,
-          email: form.email,
-          whatsapp: form.whatsapp,
-          businessName: form.businessName,
-          projectType: form.projectType,
-          budgetRange: form.budgetRange,
-          contactPreference: form.contactPreference,
-          details: form.details,
-          consent: form.consent,
-          companyWebsite: form.companyWebsite,
-          source: '/creacion-web',
+          serviceId: selectedOffer?.id ?? null, serviceSlug: selectedOffer?.slug ?? null,
+          name: form.name, email: form.email, whatsapp: form.whatsapp, businessName: form.businessName,
+          projectType: selection.services.includes('web') ? form.projectType : 'other',
+          budgetRange: form.budgetRange, contactPreference: form.contactPreference,
+          details: buildStudioBrief(selection, lang, form.details), consent: form.consent,
+          companyWebsite: form.companyWebsite, source: '/creacion-web',
         }),
       })
-      const payload = await response.json().catch(() => null) as { ok?: boolean; error?: string } | null
-      if (!response.ok || !payload?.ok) throw new Error(payload?.error || 'REQUEST_FAILED')
+      const payload = await response.json().catch(() => null) as { ok?: boolean; error?: string; requestId?: string } | null
+      const validReference = typeof payload?.requestId === 'string' && /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i.test(payload.requestId)
+      if (response.status !== 201 || payload?.ok !== true || !validReference) throw new Error(payload?.error || 'REQUEST_FAILED')
+      if (!mountedRef.current) return
+      setRequestId(payload!.requestId!)
       setSubmitState({ status: 'success', message: t.success })
-      setForm((current) => ({ ...emptyForm, serviceId: current.serviceId, projectType: current.projectType, budgetRange: current.budgetRange }))
+      setForm((current) => ({ ...emptyForm, serviceId: current.serviceId, projectType: current.projectType }))
     } catch (error) {
-      const code = error instanceof Error ? error.message : 'REQUEST_FAILED'
+      if (!mountedRef.current) return
+      const code = controller.signal.aborted ? 'REQUEST_TIMEOUT' : error instanceof Error ? error.message : 'REQUEST_FAILED'
       const messages: Record<string, string> = {
-        INVALID_REQUEST: t.invalidError,
-        WHATSAPP_REQUIRED: t.whatsappError,
-        RATE_LIMITED: t.rateError,
-        SERVICE_UNAVAILABLE: t.unavailableError,
+        INVALID_REQUEST: t.invalidError, WHATSAPP_REQUIRED: t.whatsappError,
+        RATE_LIMITED: t.rateError, SERVICE_UNAVAILABLE: t.unavailableError,
+        BRIEF_TOO_LONG: lang === 'es' ? 'Acortá la descripción para incluir todos los servicios seleccionados.' : 'Shorten the description to include every selected service.',
+        REQUEST_TIMEOUT: lang === 'es' ? 'No pudimos confirmar el envío a tiempo. Consultá por Instagram antes de reenviar para evitar duplicados.' : 'We could not confirm the submission in time. Check with us on Instagram before resending to avoid duplicates.',
       }
       setSubmitState({ status: 'error', message: messages[code] ?? t.genericError })
+    } finally {
+      window.clearTimeout(timeout)
+      if (abortRef.current === controller) abortRef.current = null
+      busyRef.current = false
     }
   }
 
   return (
-    <main className="min-h-screen overflow-hidden bg-[#07070c] text-white">
+    <main className="xke-page xke-services xks-page min-h-screen overflow-hidden bg-[#07070c] text-white">
       <SEO
-        title={lang === 'es' ? 'Creación Web · Diseño y desarrollo a medida' : 'Web Creation · Custom design and development'}
-        description={lang === 'es' ? 'Diseño y desarrollo de páginas web, landing pages, tiendas online y sitios profesionales con presupuesto personalizado.' : 'Design and development of websites, landing pages, online stores and professional sites with a custom quote.'}
+        title={lang === 'es' ? 'Creación Web y Servicios Digitales' : 'Web Creation & Digital Services'}
+        description={lang === 'es' ? 'Creación web, acompañamiento con IA, contenido para redes y soporte básico de PC. Elegí servicios y solicitá una propuesta a medida.' : 'Web creation, practical AI guidance, social content and basic PC support. Choose services and request a custom proposal.'}
         url="/creacion-web"
         image="/web-services/creacion-web-og.png"
       />
 
-      <section className="relative isolate px-5 pb-24 pt-36 md:px-10 md:pt-44 lg:px-14" aria-labelledby="web-creation-title">
-        <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_18%_18%,rgba(255,106,0,.18),transparent_28%),radial-gradient(circle_at_82%_22%,rgba(139,92,246,.24),transparent_31%),linear-gradient(180deg,#08070d_0%,#0c0914_70%,#07070c_100%)]" />
-        <div className="xk-noise absolute inset-0 -z-10 opacity-[0.12]" aria-hidden="true" />
-        <div className="mx-auto grid max-w-[1500px] items-center gap-14 xl:grid-cols-[0.92fr_1.08fr]">
-          <div>
-            <Link to="/" className="inline-flex items-center gap-2 font-mono text-xs font-black uppercase tracking-[0.2em] text-purple-200 transition hover:text-orange-300"><span aria-hidden="true">←</span> {t.backHome}</Link>
-            <p className="mt-10 font-mono text-xs font-black uppercase tracking-[0.34em] text-orange-300">{t.eyebrow}</p>
-            <h1 id="web-creation-title" className="mt-5 max-w-4xl text-5xl font-black leading-[0.96] tracking-[-0.045em] sm:text-6xl lg:text-7xl">{t.title}</h1>
-            <p className="mt-7 max-w-2xl text-base leading-8 text-white/70 md:text-lg">{t.intro}</p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <button type="button" onClick={() => scrollTo('propuestas')} className="rounded-full bg-gradient-to-r from-orange-500 to-orange-300 px-7 py-4 font-mono text-xs font-black uppercase tracking-[0.18em] text-black shadow-[0_0_34px_rgba(255,106,0,.28)] transition hover:scale-[1.02] hover:shadow-[0_0_52px_rgba(255,106,0,.48)]">{t.heroPrimary} →</button>
-              <button type="button" onClick={() => scrollTo('presupuesto')} className="rounded-full border border-purple-400/50 bg-purple-500/10 px-7 py-4 font-mono text-xs font-black uppercase tracking-[0.18em] text-purple-100 transition hover:border-purple-300 hover:bg-purple-500/20">{t.heroSecondary}</button>
-            </div>
-            <p className="mt-8 inline-flex rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-white/60">{t.heroBadge}</p>
-          </div>
-          <div className="relative">
-            <div className="absolute -inset-8 rounded-[3rem] bg-gradient-to-br from-orange-500/15 via-purple-500/20 to-cyan-400/10 blur-3xl" aria-hidden="true" />
-            <div className="relative overflow-hidden rounded-[2rem] border border-white/15 bg-black/55 p-2 shadow-[0_40px_120px_rgba(0,0,0,.65)] backdrop-blur-xl sm:p-3">
-              <div className="flex h-9 items-center gap-2 border-b border-white/10 px-3" aria-hidden="true"><span className="h-2.5 w-2.5 rounded-full bg-orange-400" /><span className="h-2.5 w-2.5 rounded-full bg-purple-400" /><span className="h-2.5 w-2.5 rounded-full bg-cyan-400" /><span className="ml-3 h-3 flex-1 rounded-full bg-white/[0.06]" /></div>
-              <SafeImage src={heroOffer?.image_url} fallback="/web-services/landing-premium.svg" alt={heroOffer?.image_alt || t.heroAlt} loading="eager" fetchPriority="high" className="aspect-[12/7.6] w-full rounded-[1.35rem] object-cover" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <div className="relative z-10 mx-auto max-w-[1500px] px-5 md:px-10 lg:px-14"><UniverseTransitRail /></div>
-
-      <section className="relative z-10 mt-4 px-5 md:px-10 lg:px-14" aria-label={t.commitmentsLabel}>
-        <div className="mx-auto grid max-w-[1500px] gap-3 rounded-[2rem] border border-white/10 bg-[#0c0914]/90 p-3 shadow-[0_28px_90px_rgba(0,0,0,.45)] backdrop-blur-xl md:grid-cols-3">
-          {t.trust.map(([title, description], index) => <article key={title} className="rounded-[1.4rem] border border-white/[0.07] bg-white/[0.035] p-5"><div className="flex items-start gap-4"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-orange-300/30 bg-orange-400/10 font-mono text-xs font-black text-orange-200" aria-hidden="true">0{index + 1}</span><div><h2 className="font-mono text-xs font-black uppercase tracking-[0.15em] text-white">{title}</h2><p className="mt-2 text-xs leading-5 text-white/55">{description}</p></div></div></article>)}
-        </div>
-      </section>
-
-      <div className="relative z-10 mx-auto max-w-7xl px-5 pt-16 md:px-10 lg:px-14"><PortalPulseRail tone="gold" eyebrow={t.loop.eyebrow} title={t.loop.title} description={t.loop.description} items={t.loop.items} /></div>
-
-      <section id="propuestas" className="scroll-mt-28 px-5 py-16 md:px-10 lg:px-14" aria-labelledby="web-catalog-title">
-        <div className="mx-auto max-w-[1500px]">
-          <div className="max-w-3xl"><p className="font-mono text-xs font-black uppercase tracking-[0.3em] text-purple-300">{t.catalogEyebrow}</p><h2 id="web-catalog-title" className="mt-4 text-4xl font-black tracking-[-0.035em] md:text-6xl">{t.catalogTitle}</h2><p className="mt-5 text-base leading-7 text-white/65 md:text-lg">{t.catalogText}</p></div>
-          {catalogNotice ? <p className="mt-8 max-w-3xl rounded-2xl border border-orange-400/25 bg-orange-400/[0.07] px-5 py-4 text-sm leading-6 text-orange-100" role="status"><strong className="mr-2 font-black uppercase tracking-[0.12em]">{t.fallbackNotice}:</strong>{lang === 'es' ? catalogNotice : t.fallbackDescription}</p> : null}
-          {catalogLoading ? <div className="mt-12 grid gap-7 lg:grid-cols-3" role="status" aria-live="polite" aria-busy="true"><span className="sr-only">{t.catalogLoading}</span>{[0, 1, 2].map((item) => <div key={item} aria-hidden="true" className="h-[580px] animate-pulse rounded-[2rem] border border-white/10 bg-white/[0.035]" />)}</div> : displayOffers.length ? <div className="mt-12 grid gap-7 lg:grid-cols-3">
-            {displayOffers.map((offer) => <article key={offer.id} className="group flex overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-white/[0.065] to-white/[0.025] shadow-[0_28px_80px_rgba(0,0,0,.32)] transition hover:-translate-y-1 hover:border-purple-400/40"><div className="flex w-full flex-col"><div className="relative overflow-hidden border-b border-white/10"><SafeImage src={offer.image_url} fallback="/web-services/landing-premium.svg" alt={offer.image_alt} className="aspect-[12/7.4] w-full object-cover transition duration-700 group-hover:scale-[1.035]" />{offer.featured ? <span className="absolute left-4 top-4 rounded-full border border-orange-300/40 bg-black/70 px-3 py-2 font-mono text-[9px] font-black uppercase tracking-[0.18em] text-orange-200 backdrop-blur">{t.featured}</span> : null}</div><div className="flex flex-1 flex-col p-6 md:p-7">{offer.eyebrow ? <p className="font-mono text-[10px] font-black uppercase tracking-[0.24em] text-orange-300">{offer.eyebrow}</p> : null}<h3 className="mt-3 text-3xl font-black tracking-[-0.025em]">{offer.title}</h3><p className="mt-4 text-sm leading-6 text-white/65">{offer.summary}</p><p className="mt-5 font-mono text-xs font-black uppercase tracking-[0.14em] text-purple-200">{offer.price_label}</p>{offer.delivery_label ? <p className="mt-2 text-xs text-white/45">{offer.delivery_label}</p> : null}<div className="mt-6 border-t border-white/10 pt-5"><p className="font-mono text-[10px] font-black uppercase tracking-[0.22em] text-white/45">{t.included}</p><ul className="mt-4 space-y-3 text-sm text-white/70">{offer.features.map((feature) => <li key={feature} className="flex gap-3"><span className="text-orange-300" aria-hidden="true">◆</span><span>{feature}</span></li>)}</ul></div><button type="button" onClick={() => chooseOffer(offer)} className="mt-8 w-full rounded-full border border-purple-400/45 bg-purple-500/10 px-5 py-4 font-mono text-xs font-black uppercase tracking-[0.16em] text-purple-100 transition hover:border-orange-300 hover:bg-orange-400/10 hover:text-orange-100">{offer.cta_label} →</button></div></div></article>)}
-          </div> : <p className="mt-10 rounded-2xl border border-white/10 bg-white/[0.035] p-6 text-white/65" role="status">{t.catalogEmpty}</p>}
-        </div>
-      </section>
+      <ServiceStudio lang={lang} selection={selection} onChange={updateSelection} onQuote={() => { if (!busyRef.current) { focusStep(1); scrollTo('presupuesto') } }} />
+      <details className="xks-reference-catalog"><summary>{lang === 'es' ? '¿Buscás una web? Mirá las referencias de estructura.' : 'Need a website? Explore structure references.'}</summary><p>{lang === 'es' ? 'Orientaciones visuales, no trabajos reales de clientes. Alcance, integraciones y plazos sujetos a propuesta.' : 'Visual directions, not actual client work. Scope, integrations and timing are subject to a proposal.'}</p>{catalogLoading ? <p role="status">{t.catalogLoading}</p> : <div className="xks-reference-options">{displayOffers.map(offer => <button type="button" key={offer.id} onClick={() => chooseOffer(offer)}>{offer.title}<small>{lang === 'es' ? 'Agregar creación web y usar esta referencia →' : 'Add web creation and use this reference →'}</small></button>)}</div>}{catalogNotice && <p role="status">{lang === 'es' ? 'Mostramos referencias base; la disponibilidad se confirma al responder tu consulta.' : 'Showing base references; availability is confirmed when we reply to your inquiry.'}</p>}</details>
 
       <section id="proceso" className="scroll-mt-28 border-y border-white/10 bg-white/[0.025] px-5 py-16 md:px-10 lg:px-14" aria-labelledby="web-process-title">
         <div className="mx-auto max-w-[1500px]"><p className="font-mono text-xs font-black uppercase tracking-[0.3em] text-orange-300">{t.processEyebrow}</p><h2 id="web-process-title" className="mt-4 max-w-3xl text-4xl font-black tracking-[-0.035em] md:text-6xl">{t.processTitle}</h2><ol className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">{t.process.map(([title, description]) => <li key={title} className="rounded-[1.75rem] border border-white/10 bg-black/25 p-6"><h3 className="font-mono text-xs font-black uppercase tracking-[0.16em] text-purple-200">{title}</h3><p className="mt-4 text-sm leading-6 text-white/60">{description}</p></li>)}</ol></div>
@@ -488,14 +492,15 @@ export default function WebCreation() {
           <form ref={quoteFormRef} onSubmit={submitQuote} aria-busy={submitState.status === 'submitting'} className="rounded-[2rem] border border-white/12 bg-gradient-to-br from-purple-500/[0.08] via-black/40 to-orange-500/[0.055] p-6 shadow-[0_35px_100px_rgba(0,0,0,.45)] md:p-9">
             <div className="border-b border-white/10 pb-6"><p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-white/45">{t.quoteStep} {quoteStep} / 2</p><ol className="mt-4 grid grid-cols-2 gap-3" aria-label={t.requestProgress}>{t.quoteSteps.map((label, index) => { const step = (index + 1) as QuoteStep; const active = quoteStep === step; const completed = quoteStep > step; return <li key={label} aria-current={active ? 'step' : undefined} className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-xs font-black uppercase tracking-[0.12em] ${active ? 'border-orange-300/45 bg-orange-400/10 text-orange-100' : completed ? 'border-purple-300/30 bg-purple-400/10 text-purple-100' : 'border-white/10 bg-black/20 text-white/35'}`}><span className={`grid h-7 w-7 place-items-center rounded-full font-mono text-[10px] ${active ? 'bg-orange-300 text-black' : completed ? 'bg-purple-400 text-black' : 'bg-white/10 text-white/50'}`} aria-hidden={completed}>{completed ? '✓' : step}</span>{label}</li> })}</ol></div>
 
-            {submitState.status === 'success' ? <div role="status" aria-live="polite" className="py-10 text-center"><span className="mx-auto grid h-16 w-16 place-items-center rounded-full border border-orange-300/40 bg-orange-400/10 text-2xl text-orange-200" aria-hidden="true">✓</span><h3 className="mt-6 text-3xl font-black tracking-[-0.025em]">{t.successTitle}</h3><p className="mx-auto mt-4 max-w-lg text-sm leading-7 text-white/65">{t.success}</p><button type="button" onClick={resetQuote} className="mt-7 rounded-full border border-purple-400/45 bg-purple-500/10 px-6 py-3 font-mono text-xs font-black uppercase tracking-[0.16em] text-purple-100 transition hover:border-orange-300 hover:text-orange-100">{t.newRequest}</button></div> : <>
+            <StudioSelectionSummary selection={selection} lang={lang} />
+            {submitState.status === 'success' ? <div role="status" aria-live="polite" className="py-10 text-center"><span className="mx-auto grid h-16 w-16 place-items-center rounded-full border border-orange-300/40 bg-orange-400/10 text-2xl text-orange-200" aria-hidden="true">✓</span><h3 className="mt-6 text-3xl font-black tracking-[-0.025em]">{t.successTitle}</h3><p className="mx-auto mt-4 max-w-lg text-sm leading-7 text-white/65">{t.success}</p><p className="xks-reference-id">{lang === 'es' ? 'Referencia: ' : 'Reference: '}{requestId}</p><button type="button" onClick={resetQuote} className="mt-7 rounded-full border border-purple-400/45 bg-purple-500/10 px-6 py-3 font-mono text-xs font-black uppercase tracking-[0.16em] text-purple-100 transition hover:border-orange-300 hover:text-orange-100">{t.newRequest}</button></div> : <>
               <div className="pt-7"><h3 ref={stepHeadingRef} tabIndex={-1} className="text-2xl font-black tracking-[-0.02em] outline-none md:text-3xl">{quoteStep === 1 ? t.projectStepTitle : t.contactStepTitle}</h3><p className="mt-3 text-sm leading-6 text-white/55">{quoteStep === 1 ? t.projectStepText : t.contactStepText}</p></div>
               {quoteStep === 1 ? <div className="mt-7 grid gap-5 md:grid-cols-2">
-                <label className="grid gap-2 text-xs font-black uppercase tracking-[0.14em] text-purple-100 md:col-span-2">{t.service}<select value={form.serviceId} onChange={(event) => updateForm('serviceId', event.target.value)} className="min-h-12 rounded-2xl border border-white/12 bg-[#0d0b14] px-4 py-3 text-sm font-medium normal-case tracking-normal text-white outline-none transition focus:border-orange-300"><option value="">{t.servicePlaceholder}</option>{displayOffers.map((offer) => <option key={offer.id} value={offer.id}>{offer.title}</option>)}</select></label>
+                {selection.services.includes('web') ? <label className="grid gap-2 text-xs font-black uppercase tracking-[0.14em] text-purple-100 md:col-span-2">{t.service}<select value={form.serviceId} onChange={(event) => updateForm('serviceId', event.target.value)} className="min-h-12 rounded-2xl border border-white/12 bg-[#0d0b14] px-4 py-3 text-sm font-medium normal-case tracking-normal text-white outline-none transition focus:border-orange-300"><option value="">{t.servicePlaceholder}</option>{displayOffers.map((offer) => <option key={offer.id} value={offer.id}>{offer.title}</option>)}</select></label> : null}
                 {selectedOffer ? <div className="flex items-center gap-4 rounded-2xl border border-orange-300/20 bg-orange-400/[0.055] p-4 md:col-span-2"><SafeImage src={selectedOffer.image_url} fallback="/web-services/landing-premium.svg" alt="" className="h-16 w-24 shrink-0 rounded-xl object-cover" /><div className="min-w-0 flex-1"><p className="font-mono text-[9px] font-black uppercase tracking-[0.16em] text-orange-200">{t.selectedOffer}</p><p className="mt-1 truncate text-sm font-black text-white">{selectedOffer.title}</p></div><button type="button" onClick={() => scrollTo('propuestas')} className="shrink-0 text-[10px] font-black uppercase tracking-[0.12em] text-purple-200 underline decoration-purple-300/40 underline-offset-4">{t.changeOffer}</button></div> : null}
-                <label className="grid gap-2 text-xs font-black uppercase tracking-[0.14em] text-purple-100">{t.projectType}<select value={form.projectType} onChange={(event) => updateForm('projectType', event.target.value)} className="min-h-12 rounded-2xl border border-white/12 bg-[#0d0b14] px-4 py-3 text-sm font-medium normal-case tracking-normal text-white outline-none transition focus:border-orange-300">{t.projectTypes.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+                {selection.services.includes('web') ? <label className="grid gap-2 text-xs font-black uppercase tracking-[0.14em] text-purple-100">{t.projectType}<select value={form.projectType} onChange={(event) => updateForm('projectType', event.target.value)} className="min-h-12 rounded-2xl border border-white/12 bg-[#0d0b14] px-4 py-3 text-sm font-medium normal-case tracking-normal text-white outline-none transition focus:border-orange-300">{t.projectTypes.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label> : null}
                 <label className="grid gap-2 text-xs font-black uppercase tracking-[0.14em] text-purple-100">{t.budget}<select value={form.budgetRange} onChange={(event) => updateForm('budgetRange', event.target.value)} className="min-h-12 rounded-2xl border border-white/12 bg-[#0d0b14] px-4 py-3 text-sm font-medium normal-case tracking-normal text-white outline-none transition focus:border-orange-300">{t.budgets.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
-                <label className="grid gap-2 text-xs font-black uppercase tracking-[0.14em] text-purple-100 md:col-span-2"><span className="flex items-end justify-between gap-4"><span>{t.details}</span><span className="font-mono text-[9px] font-medium normal-case tracking-normal text-white/35">{form.details.length} / 2000 {t.characters}</span></span><textarea required minLength={20} maxLength={2000} rows={7} value={form.details} onChange={(event) => updateForm('details', event.target.value)} placeholder={t.detailsPlaceholder} className="rounded-2xl border border-white/12 bg-[#0d0b14] px-4 py-3 text-sm font-medium leading-6 normal-case tracking-normal text-white outline-none transition placeholder:text-white/25 focus:border-orange-300" /></label>
+                <label className="grid gap-2 text-xs font-black uppercase tracking-[0.14em] text-purple-100 md:col-span-2"><span className="flex items-end justify-between gap-4"><span>{t.details}</span><span className="font-mono text-[9px] font-medium normal-case tracking-normal text-white/35">{form.details.length} / {detailsLimit} {t.characters}</span></span><textarea required minLength={20} maxLength={detailsLimit} rows={6} value={form.details} onChange={(event) => updateForm('details', event.target.value)} placeholder={t.detailsPlaceholder} className="rounded-2xl border border-white/12 bg-[#0d0b14] px-4 py-3 text-sm font-medium leading-6 normal-case tracking-normal text-white outline-none transition placeholder:text-white/25 focus:border-orange-300" /></label>
               </div> : <div className="mt-7 grid gap-5 md:grid-cols-2">
                 <label className="grid gap-2 text-xs font-black uppercase tracking-[0.14em] text-purple-100">{t.name}<input required minLength={2} maxLength={80} autoComplete="name" value={form.name} onChange={(event) => updateForm('name', event.target.value)} className="min-h-12 rounded-2xl border border-white/12 bg-[#0d0b14] px-4 py-3 text-sm font-medium normal-case tracking-normal text-white outline-none transition focus:border-orange-300" /></label>
                 <label className="grid gap-2 text-xs font-black uppercase tracking-[0.14em] text-purple-100">{t.email}<input required type="email" maxLength={254} autoComplete="email" value={form.email} onChange={(event) => updateForm('email', event.target.value)} className="min-h-12 rounded-2xl border border-white/12 bg-[#0d0b14] px-4 py-3 text-sm font-medium normal-case tracking-normal text-white outline-none transition focus:border-orange-300" /></label>
@@ -509,6 +514,7 @@ export default function WebCreation() {
               {submitState.status === 'error' ? <p role="alert" className="mt-5 rounded-2xl border border-red-400/30 bg-red-400/10 px-5 py-4 text-sm text-red-100">{submitState.message}</p> : null}
               {quoteStep === 1 ? <button type="button" onClick={continueQuote} className="mt-7 w-full rounded-full bg-gradient-to-r from-orange-500 to-orange-300 px-7 py-4 font-mono text-xs font-black uppercase tracking-[0.16em] text-black shadow-[0_0_34px_rgba(255,106,0,.25)] transition hover:scale-[1.01] hover:shadow-[0_0_50px_rgba(255,106,0,.42)]">{t.nextStep} →</button> : <div className="mt-7 flex flex-col-reverse gap-3 sm:flex-row"><button type="button" onClick={() => focusStep(1)} className="rounded-full border border-purple-400/40 bg-purple-500/[0.07] px-6 py-4 font-mono text-xs font-black uppercase tracking-[0.14em] text-purple-100 transition hover:border-purple-300 sm:w-auto">← {t.previousStep}</button><button disabled={submitState.status === 'submitting'} type="submit" className="flex-1 rounded-full bg-gradient-to-r from-orange-500 to-orange-300 px-7 py-4 font-mono text-xs font-black uppercase tracking-[0.18em] text-black shadow-[0_0_34px_rgba(255,106,0,.25)] transition hover:scale-[1.01] hover:shadow-[0_0_50px_rgba(255,106,0,.42)] disabled:cursor-wait disabled:opacity-60">{submitState.status === 'submitting' ? t.submitting : `${t.submit} →`}</button></div>}
             </>}
+            <div className="xks-manual-fallback"><p>{lang === 'es' ? 'La consulta no tiene costo. El inicio del trabajo y cualquier pago requieren una propuesta aceptada. No envíes contraseñas, datos bancarios ni documentación confidencial.' : 'The inquiry is free. Starting work and any payment require an accepted proposal. Do not send passwords, banking details or confidential documents.'}</p><a href={STUDIO_INSTAGRAM} target="_blank" rel="noopener noreferrer">{lang === 'es' ? 'También podés consultar por Instagram: @xethkioz' : 'You can also inquire on Instagram: @xethkioz'} ↗</a></div>
           </form>
         </div>
       </section>
@@ -518,6 +524,7 @@ export default function WebCreation() {
       </div>
 
       <section className="border-t border-white/10 bg-white/[0.02] px-5 py-16 md:px-10 lg:px-14" aria-labelledby="web-faq-title"><div className="mx-auto grid max-w-[1500px] gap-12 xl:grid-cols-[0.7fr_1.3fr]"><div><p className="font-mono text-xs font-black uppercase tracking-[0.3em] text-orange-300">{t.faqEyebrow}</p><h2 id="web-faq-title" className="mt-4 max-w-xl text-4xl font-black tracking-[-0.035em] md:text-6xl">{t.faqTitle}</h2></div><div className="space-y-3">{t.faqs.map(([question, answer], index) => <details key={question} className="group rounded-[1.5rem] border border-white/10 bg-black/25 open:border-purple-400/35 open:bg-purple-500/[0.055]"><summary className="flex cursor-pointer list-none items-center justify-between gap-5 px-5 py-5 text-left text-base font-black marker:hidden md:px-6"><span className="flex items-center gap-4"><span className="font-mono text-[10px] text-orange-300" aria-hidden="true">0{index + 1}</span>{question}</span><span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/10 text-purple-200 transition group-open:rotate-45 group-open:border-orange-300/40 group-open:text-orange-200" aria-hidden="true">+</span></summary><p className="px-5 pb-6 pr-14 text-sm leading-7 text-white/60 md:px-6 md:pr-20">{answer}</p></details>)}</div></div></section>
+      <EditorialCrosslinks />
     </main>
   )
 }
