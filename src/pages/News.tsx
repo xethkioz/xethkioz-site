@@ -288,7 +288,7 @@ export default function News() {
             <p className="font-mono text-[9px] font-black uppercase tracking-[0.22em] text-violet-200/70">{ui.topics}</p>
             {activeTopics.length ? (
               <div className="-mx-5 mt-3 flex snap-x gap-2 overflow-x-auto px-5 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
-                {activeTopics.map(([topic, count]) => <button key={topic} type="button" onClick={() => updateQuery(topic)} className="shrink-0 snap-start rounded-full border border-violet-400/20 bg-violet-500/[0.06] px-3 py-1.5 text-[10px] font-bold text-violet-100 transition hover:border-orange-300/40 hover:text-orange-100">#{topic} <span className="text-white/35">{count}</span></button>)}
+                {activeTopics.map(([topic, count]) => <button key={topic} type="button" onClick={() => updateQuery(topic)} className="shrink-0 snap-start rounded-full border border-violet-400/20 bg-violet-500/[0.06] px-3 py-1.5 text-[10px] font-bold text-violet-100 transition hover:border-orange-300/40 hover:text-orange-100">#{topic} <span className="text-white/60">{count}</span></button>)}
               </div>
             ) : (
               <div className="mt-3 flex gap-2" aria-hidden="true">
