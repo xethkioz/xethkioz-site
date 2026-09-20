@@ -49,6 +49,8 @@ const homeCss = read('src/pages/WorldOfXethkiozLanding.css')
 const indexHtml = read('index.html')
 const webManifest = read('public/manifest.webmanifest')
 const publicNews = read('src/pages/News.tsx')
+const publicNewsService = read('src/services/news/publicNewsService.ts')
+const publicNewsFeed = read('api/_public-news-feed.ts')
 const greenNode = read('src/pages/GreenNode.tsx')
 const greenDossiers = read('src/data/greenNodeDossiers.ts')
 const gamingGuides = read('src/pages/GamingGuides.tsx')
@@ -168,6 +170,15 @@ check(
     && home.includes('className="wox-content"')
     && destinations.includes("href: '/creacion-web'")
     && globalWisp.includes("localizePath('/green-node')"),
+)
+check(
+  'Retired Nexus City editorial material stays out of public feeds and article metadata',
+  publicNewsService.includes("RETIRED_PUBLIC_ARTICLE_SLUGS")
+    && publicNewsService.includes("tag.toLocaleLowerCase('es') === 'nexus-city'")
+    && publicNewsService.includes("title.toLocaleLowerCase('es').includes('nexus city')")
+    && publicNewsFeed.includes("RETIRED_PUBLIC_ARTICLE_SLUGS")
+    && publicNewsFeed.includes("fetchPublishedArticleMetadata")
+    && publicNewsFeed.includes("RETIRED_PUBLIC_ARTICLE_SLUGS.has(normalizedSlug)"),
 )
 check(
   'News supports searchable, shareable and progressive discovery',

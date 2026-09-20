@@ -1,6 +1,31 @@
 import { expect, test } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 
+test('retired Nexus City editorial material stays out of the public news feed', async ({ page }) => {
+  await page.route(/\/rest\/v1\/news_articles\?/, route => route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    body: JSON.stringify([{
+      id: '11111111-1111-4111-8111-111111111111',
+      slug: 'community-discord-comunidad-segura-moderacion-guia',
+      title: 'Nexus City · Guía para una comunidad segura',
+      summary: 'Contenido heredado del proyecto retirado.',
+      content: [],
+      category: 'community',
+      status: 'published',
+      published_at: '2026-09-15T20:15:00Z',
+      tags: ['nexus-city'],
+      source_urls: ['https://discord.com/guidelines'],
+      ai_generated: false,
+      created_at: '2026-09-15T20:15:00Z',
+      cover_image_url: null,
+      cover_image_alt: null,
+    }]),
+  }))
+  await page.goto('/news')
+  await expect(page.locator('#main-content')).not.toContainText('Nexus City')
+})
+
 for (const lang of ['es', 'en'] as const) {
   const prefix = lang === 'en' ? '/en' : ''
   test(`retired City aliases preserve ${lang} community without loading the old game`, async ({ page }) => {
