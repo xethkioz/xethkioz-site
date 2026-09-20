@@ -1,0 +1,14 @@
+/* Shared navigation: restrained fantasy materials, unchanged account/audio controls. */
+.xk-aaa-header{padding-top:12px;padding-bottom:12px;background:#090e10}
+.xk-aaa-header>div{background:#0b1113!important;backdrop-filter:none!important;border:1px solid rgba(220,195,154,.25);border-radius:3px;padding-block:10px;box-shadow:none}
+.xk-aaa-header .xk-broken-logo{font-family:Georgia,'Times New Roman',serif;font-weight:400;letter-spacing:.12em;font-size:23px;color:#dcc39a;background:none;filter:none;text-shadow:none;animation:none;overflow:visible}
+.xk-aaa-header .xk-broken-logo::before,.xk-aaa-header .xk-broken-logo::after{display:none}
+.xk-aaa-header nav{background:none;border:0;border-radius:0;padding:0;font:550 10px/1.5 Inter,system-ui,sans-serif;letter-spacing:.1em;align-items:center}
+.xk-aaa-header nav a,.xk-aaa-header nav button{border-radius:2px;padding:10px 11px;min-height:40px;box-shadow:none;white-space:nowrap}
+.xk-aaa-header nav .xk-game-portal-link{color:#dcc39a;border-bottom:1px solid #827051}
+.xk-aaa-header .xk-header-actions button{border-radius:3px;box-shadow:none;min-height:38px}
+.xk-quick-launcher{border-radius:4px!important;background:#0d1718!important;backdrop-filter:none!important;box-shadow:none!important;border-color:#484736!important;gap:6px!important;padding:6px!important;left:12px!important}
+.xk-quick-launcher a,.xk-quick-launcher button{border-radius:3px!important;box-shadow:none!important;width:40px!important;height:40px!important;font-size:16px!important}
+.xk-mobile-dock{background:#0b1315!important;backdrop-filter:none!important;border-color:#504936!important;box-shadow:none!important;border-radius:4px 4px 0 0!important}
+@media(max-width:760px){.xk-aaa-header{padding:10px 10px}.xk-aaa-header>div{padding:9px 10px;gap:6px}.xk-aaa-header .xk-broken-logo{font-size:18px;letter-spacing:.06em}.xk-aaa-header .xk-header-actions{gap:5px;font-size:9px;letter-spacing:.03em}.xk-aaa-header .xk-header-actions button{padding:8px;min-height:36px}.xk-aaa-header .xk-account-full{display:none}.xk-aaa-header .xk-account-compact{display:inline}}
+@media(prefers-reduced-motion:reduce){.xk-aaa-header *{animation:none!important;transition:none!important}}

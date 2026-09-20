@@ -1,0 +1,11 @@
+/* Shared chrome on the fantasy landing and game portal; behavior stays unchanged. */
+.xk-fantasy-shell .xk-privacy-consent-banner,.xk-fantasy-shell .xk-privacy-consent-dialog{border-radius:6px;border-color:#6f6041;background:#101118;box-shadow:0 10px 34px rgba(0,0,0,.4);backdrop-filter:none}
+.xk-fantasy-shell .xk-privacy-consent-banner h2,.xk-fantasy-shell .xk-privacy-consent-dialog h2{font-family:Georgia,serif;font-weight:400;letter-spacing:0;color:#f0e6d2}
+.xk-fantasy-shell .xk-privacy-consent-actions button{border-radius:3px;border-color:#796a4b;color:#e5d7b8;min-height:44px;font-family:Inter,system-ui,sans-serif;letter-spacing:.02em;background:#16161a}
+.xk-fantasy-shell .xk-privacy-consent-actions button:last-child{background:#262119}
+.xk-fantasy-shell .xk-privacy-consent-actions button:hover{border-color:#d6bc86;color:#fff2d3}
+.xk-fantasy-shell .xk-privacy-consent-actions button:focus-visible{outline:2px solid #d6bc86;outline-offset:3px}
+.xk-fantasy-shell .xk-wisp .xk-wisp-specter,.xk-fantasy-shell .xk-wisp .xk-wisp-energy-cloud,.xk-fantasy-shell .xk-wisp .xk-wisp-energy-arc,.xk-fantasy-shell .xk-wisp .xk-wisp-rune-ring i{animation:none!important}
+.xk-fantasy-shell .xk-wisp .xk-wisp-glitch-slice,.xk-fantasy-shell .xk-wisp .xk-wisp-scanline,.xk-fantasy-shell .xk-wisp .xk-wisp-particles{display:none}
+.xk-fantasy-shell .woxp-art-caption,.xk-fantasy-shell .wox-art-credit{right:124px;max-width:50%}
+@media(max-width:760px){.xk-fantasy-shell .xk-privacy-consent-banner h2{font-size:18px;line-height:1.3}.xk-fantasy-shell .xk-privacy-consent-banner{padding:12px}.xk-fantasy-shell .xk-privacy-consent-actions button{font-size:9px}.xk-fantasy-shell .woxp-art-caption,.xk-fantasy-shell .wox-art-credit{right:100px;max-width:calc(100% - 174px);bottom:27px;font-size:8px;letter-spacing:.06em}}
