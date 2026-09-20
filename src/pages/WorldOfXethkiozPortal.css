@@ -107,3 +107,9 @@
 }
 @media(prefers-reduced-motion: reduce){.wox-portal *,.wox-portal *::before,.wox-portal *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 @media(max-width:359px){.woxp-masthead>div a{font-size:10px}.woxp-game-name strong{font-size:38px}.wox-portal-hero{padding-inline:20px}.woxp-section h2{font-size:31px}}
+
+/* On very narrow screens, keep chapter navigation in flow rather than
+   covering reading and tap targets while the document is scrolled. */
+@media (max-width:360px){
+  .wox-portal-anchor-nav{position:relative;top:auto}
+}

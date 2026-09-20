@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { Navigate, Routes, Route, useLocation } from 'react-router-dom'
 import { LangProvider, useLang } from './lib/LangContext'
 import { HudProvider } from './lib/HudContext'
-import { GREEN_NODE_UNLOCK_KEY, WispProvider } from './providers/WispProvider'
+import { GREEN_NODE_UNLOCK_KEY, WispProvider, useWisp } from './providers/WispProvider'
 import { ProfileProgressProvider } from './lib/ProfileProgressContext'
 import { PrivacyConsentProvider } from './lib/PrivacyConsentContext'
 import { stripEnglishPrefix } from './lib/localizedRoutes'
@@ -33,6 +33,7 @@ const ScienceLab = lazy(() => import('./pages/ScienceLab'))
 const FunPortal = lazy(() => import('./pages/FunPortal'))
 const WebCreation = lazy(() => import('./pages/WebCreation'))
 const GreenNode = lazy(() => import('./pages/GreenNode'))
+const GreenNodeEntry = lazy(() => import('./components/GreenNodeEntry'))
 const ProfileHub = lazy(() => import('./pages/ProfileHub'))
 const NexusPassport = lazy(() => import('./pages/NexusPassport'))
 const NexusRoom = lazy(() => import('./pages/NexusRoom'))
@@ -66,8 +67,12 @@ const Privacy = lazy(() => import('./pages/Privacy'))
 const EditorialPolicy = lazy(() => import('./pages/EditorialPolicy'))
 
 function GreenNodeGate() {
-  const unlocked = typeof window !== 'undefined' && Boolean(window.sessionStorage.getItem(GREEN_NODE_UNLOCK_KEY))
-  return unlocked ? <GreenNode /> : <Navigate to="/" replace />
+  const { triggerGreenPortal } = useWisp()
+  const [entered, setEntered] = useState(() => {
+    try { return Boolean(window.sessionStorage.getItem(GREEN_NODE_UNLOCK_KEY)) } catch { return false }
+  })
+  const enter = () => { triggerGreenPortal(); setEntered(true) }
+  return entered ? <GreenNode /> : <GreenNodeEntry onEnter={enter} />
 }
 
 function RouteFallback() {

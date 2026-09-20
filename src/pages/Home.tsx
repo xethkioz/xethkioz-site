@@ -1,3 +1,4 @@
+import FantasyNavigation from '../components/FantasyNavigation'
 import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
 import './PremiumFantasyShell.css'
@@ -15,8 +16,8 @@ const copy = {
     description: 'Entrá al universo XETHKIOZ. Fantasía, videojuegos, tecnología y un Action RPG independiente en desarrollo.',
     status: 'ACTION RPG INDEPENDIENTE · EN DESARROLLO',
     soul: 'Más allá de lo conocido.',
-    lead: 'Un mundo por descubrir. Un proyecto que crece con cada paso. El viaje comienza acá.',
-    explore: 'EXPLORAR EL JUEGO', follow: 'SEGUIR EN THREADS',
+    lead: 'Fantasía, acción y exploración. Descubrí la primera mirada a un Action RPG independiente en desarrollo.',
+    explore: 'DESCUBRIR WORLD OF XETHKIOZ', follow: 'SEGUIR EN THREADS',
     supportEyebrow: 'PRODUCCIÓN INDEPENDIENTE',
     supportTitle: 'Sé parte de lo que viene.',
     supportText: 'Acompañá el desarrollo, compartí el proyecto o ayudá a hacerlo crecer. El apoyo es voluntario; no es una preventa ni compra ventajas dentro del juego.',
@@ -28,8 +29,8 @@ const copy = {
     description: 'Enter the XETHKIOZ universe. Fantasy, gaming, technology and an independent action RPG in development.',
     status: 'INDEPENDENT ACTION RPG · IN DEVELOPMENT',
     soul: 'Beyond the familiar.',
-    lead: 'A world to discover. A project growing with every step. The journey starts here.',
-    explore: 'EXPLORE THE GAME', follow: 'FOLLOW ON THREADS',
+    lead: 'Fantasy, action and exploration. Discover a first look at an independent action RPG in development.',
+    explore: 'DISCOVER WORLD OF XETHKIOZ', follow: 'FOLLOW ON THREADS',
     supportEyebrow: 'INDEPENDENT PRODUCTION',
     supportTitle: 'Be part of what comes next.',
     supportText: 'Follow development, share the project or help it grow. Support is voluntary; it is not a preorder and buys no gameplay advantages.',
@@ -39,44 +40,14 @@ const copy = {
 } as const
 
 export default function Home() {
-  const { lang, setLang, localizePath } = useLang()
+  const { lang, localizePath } = useLang()
   const t = copy[lang]
   const socials = socialNames.flatMap(name => SOCIAL_LINKS.filter(item => item.name === name))
   return (
     <>
       <SEO title={t.seo} description={t.description} url="/" image="/assets/world-of-xethkioz/world-of-xethkioz-logo.webp" />
       <main className="wox-home" data-public-presentation="fantasy">
-        <header className="wox-topbar">
-          <Link to={localizePath('/')} className="wox-home-brand"><span aria-hidden="true">✦</span> XETHKIOZ</Link>
-          <nav className="wox-ecosystem-nav" aria-label={lang === 'es' ? 'Ecosistema XETHKIOZ' : 'XETHKIOZ ecosystem'}>
-            <Link to={localizePath('/world-of-xethkioz')}>{lang === 'es' ? 'JUEGO' : 'GAME'}</Link>
-            <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ARGENCIENCIA <span>↗</span></a>
-            <Link to={localizePath('/gaming')}>{lang === 'es' ? 'BIBLIOTECA DE JUEGOS' : 'GAME LIBRARY'}</Link>
-            <a href="/mascotas/">{lang === 'es' ? 'MASCOTAS' : 'PETS'}</a>
-            <Link to={localizePath('/nexus-city')}>NEXUS CITY</Link>
-            <Link to={localizePath('/green-node')}>GREEN NODE</Link>
-            <Link to={localizePath('/creacion-web')}>{lang === 'es' ? 'CREACIÓN WEB' : 'WEB CREATION'}</Link>
-            <Link to={localizePath('/support')}>{lang === 'es' ? 'DONACIONES' : 'DONATIONS'}</Link>
-          </nav>
-          <details className="wox-mobile-ecosystem">
-            <summary>XETHKIOZ <span aria-hidden="true">＋</span></summary>
-            <nav aria-label={lang === 'es' ? 'Ecosistema XETHKIOZ móvil' : 'Mobile XETHKIOZ ecosystem'}>
-              <Link to={localizePath('/world-of-xethkioz')}>{lang === 'es' ? 'JUEGO' : 'GAME'}</Link>
-              <a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ARGENCIENCIA <span>↗</span></a>
-              <Link to={localizePath('/gaming')}>{lang === 'es' ? 'BIBLIOTECA DE JUEGOS' : 'GAME LIBRARY'}</Link>
-              <a href="/mascotas/">{lang === 'es' ? 'MASCOTAS' : 'PETS'}</a>
-              <Link to={localizePath('/nexus-city')}>NEXUS CITY</Link>
-              <Link to={localizePath('/green-node')}>GREEN NODE</Link>
-              <Link to={localizePath('/creacion-web')}>{lang === 'es' ? 'CREACIÓN WEB' : 'WEB CREATION'}</Link>
-              <Link to={localizePath('/support')}>{lang === 'es' ? 'DONACIONES' : 'DONATIONS'}</Link>
-            </nav>
-          </details>
-          <div className="wox-tools">
-            <Link to="/news" className="wox-news-link">{lang === 'es' ? 'NOTICIAS' : 'NEWS'}</Link>
-            <button type="button" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} aria-label={lang === 'es' ? 'Cambiar a inglés' : 'Switch to Spanish'}>{lang === 'es' ? 'EN' : 'ES'}</button>
-            <Link to="/login">{lang === 'es' ? 'INICIAR SESIÓN' : 'SIGN IN'}</Link>
-          </div>
-        </header>
+        <FantasyNavigation />
         <section className="wox-hero" aria-labelledby="wox-title">
           <picture className="wox-bg" aria-hidden="true"><img src="/assets/portal-games-world-v3.webp" alt="" width="800" height="800" fetchPriority="high" decoding="async" /></picture>
           <h1 id="wox-title" className="sr-only">World of Xethkioz</h1>

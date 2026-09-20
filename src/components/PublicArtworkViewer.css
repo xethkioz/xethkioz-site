@@ -1,0 +1,24 @@
+/* User-opened public art viewer. No animation loop, backdrop blur or new media. */
+.wox-artwork-toolbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px 8px;color:#c4bccd}
+.wox-artwork-toolbar>span{font:400 12px/1.7 Inter,system-ui,sans-serif}
+.wox-artwork-toolbar button{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:48px;padding:10px 16px;border:1px solid #796744;background:#19181a;color:#ead7af;font:600 12px/1.6 Inter,system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
+.wox-artwork-toolbar button>span{font-size:22px;font-weight:400}
+.wox-artwork-dialog{box-sizing:border-box;width:min(900px,calc(100vw - 32px));max-width:calc(100vw - 32px);max-height:calc(100svh - 32px);margin:auto;padding:0;overflow:auto;overscroll-behavior:contain;border:1px solid #8c7449;border-radius:3px;background:#0c0e14;color:#eee8dc;box-shadow:0 24px 60px #0008;font-family:Inter,system-ui,sans-serif}
+.wox-artwork-dialog::backdrop{background:rgba(3,5,9,.94)}
+.wox-artwork-dialog *{box-sizing:border-box}
+.wox-artwork-header{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 26px 14px;position:sticky;top:0;z-index:1;background:#0c0e14;border-bottom:1px solid #655636}
+.wox-artwork-header>div>span{font-size:10px;letter-spacing:.18em;color:#d6bc86}
+.wox-artwork-header h2{font:400 clamp(23px,3vw,32px)/1.2 Georgia,serif;margin:7px 0 0;color:#f3eddf}
+.wox-artwork-header button{display:inline-flex;align-items:center;justify-content:center;gap:12px;flex:none;min-height:48px;min-width:48px;padding:8px 14px;border:1px solid #a38a57;background:#211e1a;color:#f3dfb7;font:600 12px/1.5 Inter,system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
+.wox-artwork-header button span{font-size:24px;font-weight:400}
+.wox-artwork-dialog button:focus-visible,.wox-artwork-toolbar button:focus-visible{outline:2px solid #f8e3b4;outline-offset:3px}
+.wox-artwork-notice{font-size:12px;line-height:1.8;color:#d2c7b1;margin:0;padding:14px 26px;background:#15141a}
+.wox-artwork-stage{position:relative;min-height:160px;margin:0;background:#080a10;display:grid;place-items:center}
+.wox-artwork-stage img{display:block;width:100%;height:min(62svh,800px);object-fit:contain}
+.wox-artwork-status{padding:24px;max-width:540px;line-height:1.8;color:#efe0c2;font-size:14px;text-align:center}
+.wox-artwork-stage:has(img) .wox-artwork-status{position:absolute;bottom:8px;background:#0c0e14e8;margin:0;padding:8px 18px}
+.wox-artwork-footer{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding:16px 26px;color:#bdb5c5;border-top:1px solid #655636;font-size:12px;line-height:1.8}
+.wox-artwork-footer p{margin:0}.wox-artwork-footer>span{letter-spacing:.06em;color:#d6bc86}
+@media(max-width:480px){.wox-artwork-toolbar{padding:12px 10px 6px;gap:8px}.wox-artwork-toolbar button{width:100%}.wox-artwork-header{padding:14px;gap:12px}.wox-artwork-header h2{font-size:23px}.wox-artwork-header button{padding:8px 10px}.wox-artwork-notice,.wox-artwork-footer{padding:12px 14px}}
+@media(hover:hover) and (pointer:fine){.wox-artwork-toolbar button:hover,.wox-artwork-header button:hover{background:#322a20;border-color:#d6bc86}}
+@media(forced-colors:active){.wox-artwork-dialog,.wox-artwork-header button,.wox-artwork-toolbar button{border:1px solid ButtonText}}

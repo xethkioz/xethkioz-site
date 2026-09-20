@@ -26,6 +26,9 @@ function runNodeAudit(name, scriptPath) {
 }
 
 const pkg = JSON.parse(read('package.json'))
+const lockfile = JSON.parse(read('package-lock.json'))
+const siteConfig = read('src/lib/siteConfig.ts')
+const stampedVersion = siteConfig.match(/^export const SITE_VERSION = ['"]v([^'"]+)['"]/m)?.[1]
 const sql = read('database/migrations/20260628_alpha36_auth_nexus_profiles_rls.sql')
 const supabaseSql = read('supabase/migrations/20260628_alpha36_auth_nexus_profiles_rls.sql')
 const authService = read('src/services/auth/authNexusService.ts')
@@ -40,6 +43,8 @@ const footer = read('src/components/Footer.tsx')
 const mainEntry = read('src/main.tsx')
 const routeCssLoader = read('src/components/RouteCssLoader.tsx')
 const home = read('src/pages/Home.tsx')
+const navigation = read('src/components/FantasyNavigation.tsx')
+const destinations = read('src/lib/publicNavigation.ts')
 const homeCss = read('src/pages/WorldOfXethkiozLanding.css')
 const indexHtml = read('index.html')
 const webManifest = read('public/manifest.webmanifest')
@@ -69,7 +74,13 @@ const nexusDistrict = read('src/components/NexusDistrict.tsx')
 const nexusCity = read('src/pages/NexusCity.tsx')
 const webCreation = read('src/pages/WebCreation.tsx')
 
-check('11.3.1 World of Xethkioz release version stamped', pkg.version === '11.3.1')
+check(
+  'release version matches the public stamp and both lockfile versions',
+  /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(pkg.version)
+    && stampedVersion === pkg.version
+    && lockfile.version === pkg.version
+    && lockfile.packages?.['']?.version === pkg.version,
+)
 check('shared public footer exposes the centralized release version', footer.includes("import { SITE_VERSION, SOCIAL_LINKS }") && footer.includes('XETHKIOZ Web {SITE_VERSION}'))
 check(
   'installable web manifest is linked and versioned',
@@ -134,27 +145,27 @@ check(
 check(
   'Home exposes accessible World navigation with reduced-motion support',
   home.includes('<main className="wox-home"')
-    && home.includes('className="wox-ecosystem-nav"')
-    && home.includes('className="wox-mobile-ecosystem"')
-    && home.includes('aria-label={lang === \'es\' ? \'Ecosistema XETHKIOZ\' : \'XETHKIOZ ecosystem\'}')
+    && (home.includes('<FantasyNavigation />') && navigation.includes('className="xkf-desktop"'))
+    && navigation.includes('className="xkf-mobile"')
+    && navigation.includes('aria-label={lang === \'es\' ? \'Ecosistema XETHKIOZ\' : \'XETHKIOZ ecosystem\'}')
     && !home.includes('<video')
     && homeCss.includes('prefers-reduced-motion: reduce'),
 )
 check(
   'Home preserves the compact XETHKIOZ ecosystem while World stays primary',
-  home.includes("localizePath('/gaming')")
-    && home.includes('https://argenciencia.com/')
-    && home.includes('href="/mascotas/"')
-    && home.includes("localizePath('/nexus-city')")
-    && home.includes("localizePath('/creacion-web')")
+  destinations.includes("href: '/gaming'")
+    && destinations.includes('https://argenciencia.com/')
+    && destinations.includes("href: '/mascotas/'")
+    && destinations.includes("href: '/nexus-city'")
+    && destinations.includes("href: '/creacion-web'")
     && home.includes('className="wox-hero"'),
 )
 check(
   'Home keeps ecosystem services secondary to World of Xethkioz',
-  home.includes('className="wox-ecosystem-nav"')
-    && home.includes('className="wox-mobile-ecosystem"')
+  (home.includes('<FantasyNavigation />') && navigation.includes('className="xkf-desktop"'))
+    && navigation.includes('className="xkf-mobile"')
     && home.includes('className="wox-content"')
-    && home.includes("localizePath('/creacion-web')")
+    && destinations.includes("href: '/creacion-web'")
     && globalWisp.includes("localizePath('/green-node')"),
 )
 check(
@@ -375,4 +386,4 @@ if (failed) {
   process.exit(1)
 }
 
-console.log('XETHKIOZ 11.3.1 production-ready audit PASS')
+console.log(`XETHKIOZ ${pkg.version} production-ready audit PASS`)
