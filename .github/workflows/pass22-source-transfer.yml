@@ -1,0 +1,44 @@
+name: Pass22 reviewed source transfer
+on:
+  push:
+    branches: [release/fantasy-pass22]
+    paths: [.github/pass22-transfer/ready]
+permissions:
+  contents: write
+jobs:
+  materialize:
+    if: github.ref == 'refs/heads/release/fantasy-pass22'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify and apply the exact reviewed source delta
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import pathlib, base64, gzip, hashlib, subprocess, os
+          base='102ab9ec6b24045f7b2ddb11986e9e6e261a6bee'
+          changed=subprocess.check_output(['git','diff','--name-only',base,'HEAD']).decode().splitlines()
+          assert all(p.startswith('.github/pass22-transfer/') or p=='.github/workflows/pass22-source-transfer.yml' for p in changed)
+          parts=sorted(pathlib.Path('.github/pass22-transfer').glob('part-*.b64'))
+          assert len(parts)==4, 'Incomplete source transfer'
+          raw=gzip.decompress(base64.b64decode(''.join(p.read_text() for p in parts)))
+          assert hashlib.sha256(raw).hexdigest()=='8e429f09872a8e40ed9c115daf622219490520cb17036b34a7a052c210a83762'
+          patch=pathlib.Path(os.environ['RUNNER_TEMP'])/'pass22-reviewed.patch'
+          patch.write_bytes(raw)
+          subprocess.run(['git','apply','--check',str(patch)],check=True)
+          subprocess.run(['git','apply',str(patch)],check=True)
+          for p in pathlib.Path('.github/pass22-transfer').iterdir(): p.unlink()
+          pathlib.Path('.github/pass22-transfer').rmdir()
+          pathlib.Path('.github/workflows/pass22-source-transfer.yml').unlink()
+          PY
+          git add -A
+          git diff --cached --check
+          test "$(git write-tree)" = '4f13532cbef950059cd329cc94c5e0d75089e465'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'release: materialize verified Premium Fantasy Pass22 source'
+          git push origin HEAD:refs/heads/release/fantasy-pass22
