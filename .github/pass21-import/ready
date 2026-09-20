@@ -1,5 +1,0 @@
-Verified source transfer complete.
-Patch SHA-256: 56ebdda767558033c50088e380866f1712de8d3ea66f132a50ef6c202c29f730
-Expected final Git tree: 39e3e07f2cf2b2adee8571bb5ef21ba6a3b56b2b
-The one-time import must remove itself and all transport files before committing.
-Production release requires the normal pull request validation.

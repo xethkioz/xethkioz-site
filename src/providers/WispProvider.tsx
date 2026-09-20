@@ -39,7 +39,9 @@ function moodToState(mood: WispMood): WispState {
 
 function unlockGreenNode() {
   if (typeof window === 'undefined') return
-  window.sessionStorage.setItem(GREEN_NODE_UNLOCK_KEY, String(Date.now()))
+  try { window.sessionStorage.setItem(GREEN_NODE_UNLOCK_KEY, String(Date.now())) } catch {
+    // The explicit public entry can remain open in memory when storage is disabled.
+  }
 }
 
 function WispBridge({ children }: { children: ReactNode }) {

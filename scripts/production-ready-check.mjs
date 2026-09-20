@@ -40,6 +40,8 @@ const footer = read('src/components/Footer.tsx')
 const mainEntry = read('src/main.tsx')
 const routeCssLoader = read('src/components/RouteCssLoader.tsx')
 const home = read('src/pages/Home.tsx')
+const navigation = read('src/components/FantasyNavigation.tsx')
+const destinations = read('src/lib/publicNavigation.ts')
 const homeCss = read('src/pages/WorldOfXethkiozLanding.css')
 const indexHtml = read('index.html')
 const webManifest = read('public/manifest.webmanifest')
@@ -134,27 +136,27 @@ check(
 check(
   'Home exposes accessible World navigation with reduced-motion support',
   home.includes('<main className="wox-home"')
-    && home.includes('className="wox-ecosystem-nav"')
-    && home.includes('className="wox-mobile-ecosystem"')
-    && home.includes('aria-label={lang === \'es\' ? \'Ecosistema XETHKIOZ\' : \'XETHKIOZ ecosystem\'}')
+    && (home.includes('<FantasyNavigation />') && navigation.includes('className="xkf-desktop"'))
+    && navigation.includes('className="xkf-mobile"')
+    && navigation.includes('aria-label={lang === \'es\' ? \'Ecosistema XETHKIOZ\' : \'XETHKIOZ ecosystem\'}')
     && !home.includes('<video')
     && homeCss.includes('prefers-reduced-motion: reduce'),
 )
 check(
   'Home preserves the compact XETHKIOZ ecosystem while World stays primary',
-  home.includes("localizePath('/gaming')")
-    && home.includes('https://argenciencia.com/')
-    && home.includes('href="/mascotas/"')
-    && home.includes("localizePath('/nexus-city')")
-    && home.includes("localizePath('/creacion-web')")
+  destinations.includes("href: '/gaming'")
+    && destinations.includes('https://argenciencia.com/')
+    && destinations.includes("href: '/mascotas/'")
+    && destinations.includes("href: '/nexus-city'")
+    && destinations.includes("href: '/creacion-web'")
     && home.includes('className="wox-hero"'),
 )
 check(
   'Home keeps ecosystem services secondary to World of Xethkioz',
-  home.includes('className="wox-ecosystem-nav"')
-    && home.includes('className="wox-mobile-ecosystem"')
+  (home.includes('<FantasyNavigation />') && navigation.includes('className="xkf-desktop"'))
+    && navigation.includes('className="xkf-mobile"')
     && home.includes('className="wox-content"')
-    && home.includes("localizePath('/creacion-web')")
+    && destinations.includes("href: '/creacion-web'")
     && globalWisp.includes("localizePath('/green-node')"),
 )
 check(

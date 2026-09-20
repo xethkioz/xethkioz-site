@@ -1,13 +1,16 @@
+import FantasyNavigation from '../components/FantasyNavigation'
 import { useState, type KeyboardEvent } from 'react'
 import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
+import PublicArtworkViewer from '../components/PublicArtworkViewer'
+import { PUBLIC_ATMOSPHERE_ART } from '../lib/publicArtwork'
 import './PremiumFantasyShell.css'
 import { useLang } from '../lib/LangContext'
 import { SITE_VERSION, SOCIAL_LINKS } from '../lib/siteConfig'
 import './WorldOfXethkiozPortal.css'
 
 // Public promotional material only. Never import game data or internal lore here.
-const atmosphereArt = '/assets/portal-games-world-v3.webp'
+const atmosphereArt = PUBLIC_ATMOSPHERE_ART.src
 const socialNames = ['Threads', 'Instagram', 'TikTok Principal', 'YouTube']
 const copy = {
   es: {
@@ -74,7 +77,7 @@ const copy = {
 const anchors = ['historia', 'mundo', 'convergencia', 'arte-visual', 'preguntas']
 
 export default function WorldOfXethkioz() {
-  const { lang, setLang, localizePath } = useLang()
+  const { lang, localizePath } = useLang()
   const [view, setView] = useState(0)
   const t = copy[lang]
   const socials = socialNames.flatMap(name => SOCIAL_LINKS.filter(item => item.name === name))
@@ -90,11 +93,7 @@ export default function WorldOfXethkioz() {
     <>
       <SEO title="World of Xethkioz" description={t.description} url="/world-of-xethkioz" image="/assets/world-of-xethkioz/world-of-xethkioz-logo.webp" />
       <main className="wox-portal" data-public-presentation="fantasy">
-        <header className="woxp-masthead">
-          <Link to={localizePath('/')} aria-label={t.home} className="woxp-brand"><span aria-hidden="true">✦</span> XETHKIOZ</Link>
-          <span className="woxp-masthead-center">WORLD OF XETHKIOZ</span>
-          <div><button type="button" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} aria-label={t.language}>{lang === 'es' ? 'EN' : 'ES'}</button><Link to="/login">{t.login}</Link></div>
-        </header>
+        <FantasyNavigation />
         <section className="wox-portal-hero" aria-labelledby="wox-portal-title">
           <picture className="woxp-hero-art" aria-hidden="true"><img src={atmosphereArt} alt="" width="800" height="800" fetchPriority="high" decoding="async" /></picture>
           <div className="woxp-hero-shade" aria-hidden="true" />
@@ -121,6 +120,7 @@ export default function WorldOfXethkioz() {
             <div id="atmosphere-panel" role="tabpanel" aria-labelledby={`atmosphere-tab-${view}`} tabIndex={0}>
               <figure><img className={`woxp-atmosphere-image woxp-crop-${view}`} src={atmosphereArt} alt={t.descriptions[view]} width="800" height="800" loading="lazy" decoding="async" /><figcaption><small>{t.caption}</small><p>{t.descriptions[view]}</p></figcaption></figure>
             </div>
+            <PublicArtworkViewer lang={lang} />
           </div>
         </section>
         <section id="convergencia" className="wox-portal-cast woxp-section">

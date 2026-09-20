@@ -1,0 +1,8 @@
+.xk-green-entry{min-height:85svh;padding:170px max(96px,calc((100vw - 1040px)/2)) 160px;color:#e8e8df;background:radial-gradient(ellipse at 70% 25%,#132c22,transparent 60%),#090c10;font-family:Inter,system-ui,sans-serif}
+.xk-green-entry section{max-width:780px;border-block:1px solid #426655;padding:46px 0}
+.xk-green-entry-eyebrow{font-size:12px;letter-spacing:.16em;color:#aacdb4}.xk-green-entry-sigil{display:block;font-size:48px;color:#b3e0bf;margin:18px 0}
+.xk-green-entry h1{font:400 clamp(34px,5vw,62px)/1.13 Georgia,serif;color:#f1ead8;margin:0 0 24px;text-wrap:balance}
+.xk-green-entry p:not(.xk-green-entry-eyebrow){font-size:16px;line-height:1.85;max-width:660px;color:#d0d7d4}
+.xk-green-entry section>div{display:flex;flex-wrap:wrap;gap:18px;margin:30px 0}.xk-green-entry a,.xk-green-entry button{display:inline-flex;align-items:center;justify-content:center;gap:14px;min-height:48px;padding:12px 22px;font-size:14px;line-height:1.5;border:1px solid #789b80;color:#e2e9df;text-decoration:none;cursor:pointer}
+.xk-green-entry button{color:#0b1510;background:#b6d5b7;font-weight:600}.xk-green-entry small{display:block;color:#b4c3bb;font-size:12px;line-height:1.7}.xk-green-entry :is(button,a):focus-visible{outline:2px solid #dbc393;outline-offset:5px}
+@media(max-width:760px){.xk-green-entry{padding:120px 24px 170px}.xk-green-entry section{padding-block:30px}.xk-green-entry section>div{flex-direction:column;align-items:flex-start}.xk-green-entry h1{font-size:36px}}

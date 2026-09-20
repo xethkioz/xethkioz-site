@@ -36,7 +36,7 @@ test('Portal fantasy: tabs accesibles, FAQ y contenido público reservado', asyn
 test('English game portal conserva idioma, rutas y sin duplicar cabecera', async ({ page }) => {
   await page.goto('/en/world-of-xethkioz'); await essentials(page)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Cross the threshold.')
-  await expect(page.locator('.woxp-masthead')).toHaveCount(1)
+  await expect(page.locator('.xkf-header')).toHaveCount(1)
   await expect(page.getByRole('tab', { name: 'Architecture', exact: true })).toBeVisible()
   await page.getByRole('button', { name: 'Switch to Spanish', exact: true }).click()
   await expect(page).toHaveURL(/\/world-of-xethkioz$/)

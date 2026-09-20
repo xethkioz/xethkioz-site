@@ -1,6 +1,6 @@
-export const SITE_VERSION = 'v11.3.1'
-export const SITE_RELEASE = 'World of Xethkioz Public Roadmap'
-export const SITE_BUILD_DATE = '2026-09-14'
+export const SITE_VERSION = 'v11.4.0'
+export const SITE_RELEASE = 'Premium Fantasy - Pass 21'
+export const SITE_BUILD_DATE = '2026-09-20'
 export const SITE_DOMAIN = 'https://xethkioz.com.ar'
 
 export const DONATION_LINKS = {
