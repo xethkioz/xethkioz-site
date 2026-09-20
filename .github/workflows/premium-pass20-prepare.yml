@@ -2,7 +2,6 @@ name: Prepare reviewed Premium Fantasy branch
 on:
   push:
     branches: [design/premium-fantasy-pass20]
-    paths: [scripts/premium-pass20-prepare.mjs]
 permissions:
   contents: write
 jobs:
@@ -15,6 +14,7 @@ jobs:
       - name: Apply reviewed presentation contracts
         run: |
           test "${GITHUB_REF}" = "refs/heads/design/premium-fantasy-pass20"
+          if grep -q 'const isGamePortalRoute' src/App.tsx; then exit 0; fi
           test "$(git hash-object scripts/premium-pass20-prepare.mjs)" = "50211a4e757b64568eadc26d417b9e6de795ba13"
           node scripts/premium-pass20-prepare.mjs
           git add src/App.tsx src/components/Header.tsx scripts/content-design-check.mjs scripts/production-ready-check.mjs scripts/web-services-check.mjs scripts/generate-seo-shells.mjs
