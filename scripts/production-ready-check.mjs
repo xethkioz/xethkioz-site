@@ -26,6 +26,9 @@ function runNodeAudit(name, scriptPath) {
 }
 
 const pkg = JSON.parse(read('package.json'))
+const lockfile = JSON.parse(read('package-lock.json'))
+const siteConfig = read('src/lib/siteConfig.ts')
+const stampedVersion = siteConfig.match(/^export const SITE_VERSION = ['"]v([^'"]+)['"]/m)?.[1]
 const sql = read('database/migrations/20260628_alpha36_auth_nexus_profiles_rls.sql')
 const supabaseSql = read('supabase/migrations/20260628_alpha36_auth_nexus_profiles_rls.sql')
 const authService = read('src/services/auth/authNexusService.ts')
@@ -71,7 +74,13 @@ const nexusDistrict = read('src/components/NexusDistrict.tsx')
 const nexusCity = read('src/pages/NexusCity.tsx')
 const webCreation = read('src/pages/WebCreation.tsx')
 
-check('11.3.1 World of Xethkioz release version stamped', pkg.version === '11.3.1')
+check(
+  'release version matches the public stamp and both lockfile versions',
+  /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(pkg.version)
+    && stampedVersion === pkg.version
+    && lockfile.version === pkg.version
+    && lockfile.packages?.['']?.version === pkg.version,
+)
 check('shared public footer exposes the centralized release version', footer.includes("import { SITE_VERSION, SOCIAL_LINKS }") && footer.includes('XETHKIOZ Web {SITE_VERSION}'))
 check(
   'installable web manifest is linked and versioned',
@@ -377,4 +386,4 @@ if (failed) {
   process.exit(1)
 }
 
-console.log('XETHKIOZ 11.3.1 production-ready audit PASS')
+console.log(`XETHKIOZ ${pkg.version} production-ready audit PASS`)
