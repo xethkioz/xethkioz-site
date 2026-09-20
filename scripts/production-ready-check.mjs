@@ -108,11 +108,10 @@ check(
     && !mainEntry.includes('mountNexusChat'),
 )
 check(
-  'Home ambient video honors motion and data preferences',
-  home.includes("matchMedia('(prefers-reduced-motion: reduce)')")
-    && home.includes('supportsAmbientVideo(graphicsMode)')
-    && read('src/lib/experienceMode.ts').includes('connection?.saveData')
-    && home.includes('videoEnabled &&'),
+  'Home static art avoids motion and video data costs',
+  !home.includes('<video') && !home.includes('autoPlay')
+    && home.includes('/assets/portal-games-world-v3.webp')
+    && homeCss.includes('prefers-reduced-motion: reduce'),
 )
 check(
   'Home exposes official XETHKIOZ web and social signals',
@@ -128,18 +127,18 @@ check(
     && !home.includes('className="xk-rb-wisp"'),
 )
 check(
-  'Home ambient video has a static poster fallback',
-  exists('public/assets/bg-dragon-poster.webp')
-    && home.includes('/assets/bg-dragon-poster.webp'),
+  'Home uses an existing public promotional illustration',
+  exists('public/assets/portal-games-world-v3.webp')
+    && home.includes('/assets/portal-games-world-v3.webp'),
 )
 check(
   'Home exposes accessible World navigation with reduced-motion support',
-  home.includes('<main className="wox-home">')
+  home.includes('<main className="wox-home"')
     && home.includes('className="wox-ecosystem-nav"')
     && home.includes('className="wox-mobile-ecosystem"')
     && home.includes('aria-label={lang === \'es\' ? \'Ecosistema XETHKIOZ\' : \'XETHKIOZ ecosystem\'}')
-    && home.includes('prefers-reduced-motion: reduce')
-    && homeCss.includes('@media(prefers-reduced-motion:reduce)'),
+    && !home.includes('<video')
+    && homeCss.includes('prefers-reduced-motion: reduce'),
 )
 check(
   'Home preserves the compact XETHKIOZ ecosystem while World stays primary',

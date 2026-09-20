@@ -178,7 +178,8 @@ function AppShell() {
   const basePath = stripEnglishPrefix(location.pathname)
   const isCmsRoute = location.pathname === '/cms' || location.pathname.startsWith('/cms/')
   const isHomeRoute = basePath === '/'
-  const hasPublicNavigation = !isCmsRoute && !isHomeRoute
+  const isGamePortalRoute = basePath === '/world-of-xethkioz'
+  const hasPublicNavigation = !isCmsRoute && !isHomeRoute && !isGamePortalRoute
   const isPixelGameRoute = basePath === '/nexus-city/room/xethkioz'
 
   useEffect(() => {
@@ -199,7 +200,7 @@ function AppShell() {
     : { controls: 'Global controls', wisp: 'Global Wisp', routes: 'Routes' }
 
   return (
-    <div className={`${hasPublicNavigation ? 'xk-app-shell xk-has-mobile-dock' : 'xk-app-shell'}${isPixelGameRoute ? ' xk-is-pixel-game' : ''}`}>
+    <div className={`${hasPublicNavigation ? 'xk-app-shell xk-has-mobile-dock' : 'xk-app-shell'}${isPixelGameRoute ? ' xk-is-pixel-game' : ''}${isHomeRoute || isGamePortalRoute ? ' xk-fantasy-shell' : ''}`}>
       <a href="#main-content" className="xk-skip-link">
         {lang === 'es' ? 'Saltar al contenido principal' : 'Skip to main content'}
       </a>

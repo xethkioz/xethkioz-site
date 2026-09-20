@@ -1,3 +1,4 @@
+import './HeaderFantasy.css'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useHud } from '../lib/HudContext'
 import { useLang } from '../lib/LangContext'
@@ -85,7 +86,7 @@ export default function Header() {
 
   return (
     <>
-      <aside className="fixed left-4 top-1/2 z-[72] hidden -translate-y-1/2 flex-col gap-3 rounded-[2rem] border border-white/10 bg-black/45 p-2 shadow-[0_0_34px_rgba(139,92,246,.22)] backdrop-blur-xl md:flex" aria-label={t.launcher}>
+      <aside className="xk-quick-launcher fixed left-4 top-1/2 z-[72] hidden -translate-y-1/2 flex-col gap-3 rounded-[2rem] border border-white/10 bg-black/45 p-2 shadow-[0_0_34px_rgba(139,92,246,.22)] backdrop-blur-xl md:flex" aria-label={t.launcher}>
         {rail.map((item) => (
           'external' in item ? (
             <a key={item.to} href={item.to} target="_blank" rel="noopener noreferrer" aria-label={item.label} className="grid h-12 w-12 place-items-center rounded-2xl border border-white/10 bg-white/[0.035] text-lg text-white transition hover:border-[#22d3ee] hover:shadow-[0_0_18px_rgba(34,211,238,.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300" title={item.label}>
@@ -113,6 +114,7 @@ export default function Header() {
           </Link>
 
           <nav className="hidden justify-self-center rounded-full border border-white/10 bg-black/35 px-2 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-gray-300 lg:flex" aria-label={t.topNav}>
+            <Link className="xk-game-portal-link" to={localizePath('/world-of-xethkioz')}>{lang === 'es' ? 'EL JUEGO' : 'THE GAME'}</Link>
             {nav.map((item) => (
               'external' in item ? (
                 <a key={item.to} href={item.to} target="_blank" rel="noopener noreferrer" className="rounded-full px-4 py-2 transition hover:bg-cyan-400/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300">
