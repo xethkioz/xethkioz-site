@@ -114,7 +114,7 @@ export default function SEO({
               '@type': 'Organization',
               '@id': `${SITE_URL}/#organization`,
               name: SITE,
-              alternateName: 'XETHKIOZ Nexus City',
+              alternateName: 'XETHKIOZ',
               description: resolvedDescription,
               url: SITE_URL,
               logo: absoluteUrl('/favicon.svg'),

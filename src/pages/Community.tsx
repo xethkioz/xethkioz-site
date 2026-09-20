@@ -14,9 +14,9 @@ const copy = {
     profileTitle: 'Perfil y progreso',
     profileText: 'Consultá tu XP, misiones, actividad reciente y accesos personales.',
     profileAction: 'Ver mi perfil',
-    nexusTitle: 'Nexus City',
-    nexusText: 'Explorá la plaza, las cápsulas de usuario y las salas de la comunidad.',
-    nexusAction: 'Entrar a Nexus City',
+    nexusTitle: 'Seguí el proyecto',
+    nexusText: 'Novedades, ideas y conversaciones en nuestros canales oficiales.',
+    nexusAction: 'Seguir en Threads',
     safety: 'La identidad XETHKIOZ está reservada a la cuenta propietaria. El chat conserva sólo las últimas 24 horas y Nexus permite bloquear contactos no deseados.',
   },
   en: {
@@ -28,9 +28,9 @@ const copy = {
     profileTitle: 'Profile and progress',
     profileText: 'Check your XP, missions, recent activity and personal shortcuts.',
     profileAction: 'View my profile',
-    nexusTitle: 'Nexus City',
-    nexusText: 'Explore the plaza, user capsules and community rooms.',
-    nexusAction: 'Enter Nexus City',
+    nexusTitle: 'Follow the project',
+    nexusText: 'Updates, ideas and conversations on our official channels.',
+    nexusAction: 'Follow on Threads',
     safety: 'The XETHKIOZ identity is reserved for the owner account. Chat keeps only the latest 24 hours and Nexus lets you block unwanted contacts.',
   },
 } as const
@@ -68,7 +68,7 @@ export default function Community() {
               <span className="text-2xl" aria-hidden="true">◈</span>
               <h3 className="mt-4 text-xl font-black">{c.nexusTitle}</h3>
               <p className="mt-2 flex-1 text-sm leading-6 text-slate-300">{c.nexusText}</p>
-              <Link to={localizePath('/nexus-city')} className="mt-5 rounded-full border border-cyan-300/45 px-4 py-3 text-center font-mono text-xs font-black uppercase tracking-[0.14em] text-cyan-100 transition hover:bg-cyan-400/10">{c.nexusAction}</Link>
+              <a href="https://www.threads.com/@xethkioz" target="_blank" rel="noopener noreferrer" className="mt-5 rounded-full border border-cyan-300/45 px-4 py-3 text-center font-mono text-xs font-black uppercase tracking-[0.14em] text-cyan-100 transition hover:bg-cyan-400/10">{c.nexusAction}</a>
             </article>
           </div>
           <p className="mt-5 rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 text-xs leading-5 text-slate-400">{c.safety}</p>

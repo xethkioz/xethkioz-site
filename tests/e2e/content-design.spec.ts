@@ -7,20 +7,20 @@ test.describe('orden y navegación de secciones', () => {
     await expect(page.getByRole('heading', { level: 1, name: 'World of Xethkioz' })).toBeAttached()
 
     const mobileEcosystem = page.locator('.xkf-mobile')
-    if (await mobileEcosystem.locator('summary').isVisible()) {
-      await mobileEcosystem.locator('summary').click()
+    if (await mobileEcosystem.isVisible()) {
+      await mobileEcosystem.click()
     }
 
     const ecosystem = page.locator(
       'nav[aria-label="Ecosistema XETHKIOZ"]:visible, nav[aria-label="Ecosistema XETHKIOZ móvil"]:visible',
     )
     await expect(ecosystem).toBeVisible()
-    await expect(ecosystem.getByRole('link')).toHaveCount(9)
+    await expect(ecosystem.getByRole('link')).toHaveCount(8)
     await expect(ecosystem.getByRole('link', { name: 'World of Xethkioz', exact: true })).toHaveAttribute('href', '/world-of-xethkioz')
     await expect(ecosystem.getByRole('link', { name: 'Biblioteca gamer', exact: true })).toHaveAttribute('href', '/gaming')
     await expect(ecosystem.getByRole('link', { name: /ArgenCiencia/ })).toHaveAttribute('href', 'https://argenciencia.com/')
     await expect(ecosystem.getByRole('link', { name: 'Mascotas', exact: true })).toHaveAttribute('href', '/mascotas/')
-    await expect(ecosystem.getByRole('link', { name: 'Nexus City', exact: true })).toHaveAttribute('href', '/nexus-city')
+    await expect(ecosystem.getByRole('link', { name: 'Nexus City', exact: true })).toHaveCount(0)
     await expect(ecosystem.getByRole('link', { name: 'Creación web', exact: true })).toHaveAttribute('href', '/creacion-web')
     await expect(page.locator('.xkf-header a[href="/news"]').first()).toHaveAttribute('href', '/news')
 
@@ -35,7 +35,7 @@ test.describe('orden y navegación de secciones', () => {
     const navigation = page.getByRole('navigation', { name: 'Gaming sections' })
     await expect(navigation).toBeVisible()
     await expect(navigation).toHaveCSS('display', 'grid')
-    await expect(page.getByRole('heading', { name: 'GAMING NEXUS' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Gaming library' })).toBeVisible()
     await expect(page.locator('.xk-gaming-ticker')).toHaveCount(0)
     await expect(page.getByText('98.7%', { exact: true })).toHaveCount(0)
     await expect(page.getByRole('region', { name: /Choose what to do next in Gaming/i })).toHaveCount(0)

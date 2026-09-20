@@ -12,17 +12,20 @@ import type { Stream } from '../lib/types'
 import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import { fetchPublishedNews, formatPublicNewsDate, type PublicNewsArticle } from '../services/news/publicNewsService'
 
+import EditorialCrosslinks from '../components/EditorialCrosslinks'
+import './EditorialFantasy.css'
+
 type GamingSection = 'overview' | 'guides' | 'live' | 'news' | 'community'
 
 const content = {
   es: {
-    title: 'NEXUS GAMING',
-    kicker: 'TEMPORADA 01 // EL PORTAL ESTÁ ABIERTO',
+    title: 'Biblioteca gamer',
+    kicker: 'XETHKIOZ · EXPLORAR Y JUGAR',
     description: 'Noticias, guías, directos y comunidad gamer organizados por ruta para encontrar rápido qué jugar o hacer.',
-    heroAlt: 'Guerrero anime frente a un portal gamer de neón',
+    heroAlt: 'Ilustración editorial de un portal de fantasía',
     switchLanguage: 'Cambiar a inglés',
     switchCode: 'EN',
-    back: 'Salir del nexus',
+    back: 'Volver a XETHKIOZ',
     guides: 'Guías',
     radar: 'Radar gamer',
     community: 'Buscar escuadrón',
@@ -64,7 +67,7 @@ const content = {
       eyebrow: 'PARTY_BOARD // BUILDS & SERVIDORES',
       title: 'Entrá a jugar con la comunidad',
       items: [
-        { code: '4 GUÍAS', title: 'WoW, Diablo IV, FFXIV y Path of Exile', action: 'Abrir biblioteca', to: '/gaming/guides' },
+        { code: 'GUÍAS', title: 'WoW, Diablo IV, FFXIV y Path of Exile', action: 'Abrir biblioteca', to: '/gaming/guides' },
         { code: 'RADAR', title: 'Estrenos y juegos que vienen', action: 'Ver tendencias', to: '/news?category=gaming' },
         { code: 'PARTY', title: 'Compartí tu build y armá grupo', action: 'Entrar a la comunidad', to: '/community' },
       ],
@@ -75,25 +78,25 @@ const content = {
     sectionLabel: 'Secciones de Gaming',
     sections: { overview: 'Inicio', guides: 'Guías', live: 'Directos', news: 'Radar', community: 'Comunidad' },
     start: {
-      eyebrow: 'NEXUS GAMING // ELEGÍ UNA RUTA',
+      eyebrow: 'Biblioteca gamer // ELEGÍ UNA RUTA',
       title: 'Todo Gaming, sin perderte',
       description: 'Abrí solamente la sección que necesitás. El resto permanece fuera del camino.',
       cards: [
         { id: 'guides', code: 'BUILD', title: 'Guías y builds completas', detail: 'WoW, Diablo IV, FFXIV y PoE 2 por clase, equipo y rotación.', action: 'ABRIR GUÍAS', to: '/gaming/guides' },
         { id: 'news', code: 'RADAR', title: 'Noticias y lanzamientos', detail: 'Señales gaming verificadas y ordenadas por fecha.', action: 'VER RADAR', to: '?section=news' },
         { id: 'live', code: 'LIVE', title: 'Directos y videos', detail: 'YouTube y estado de transmisión.', action: 'ABRIR SEÑAL', to: '?section=live' },
-        { id: 'community', code: 'PARTY', title: 'Comunidad y escuadrones', detail: 'Buscá grupo, compartí builds y entrá al Nexus.', action: 'BUSCAR PARTY', to: '?section=community' },
+        { id: 'community', code: 'PARTY', title: 'Comunidad y escuadrones', detail: 'Buscá grupo, compartí builds y conectá con la comunidad.', action: 'BUSCAR PARTY', to: '?section=community' },
       ],
     },
   },
   en: {
-    title: 'GAMING NEXUS',
-    kicker: 'SEASON 01 // THE PORTAL IS OPEN',
+    title: 'Gaming library',
+    kicker: 'XETHKIOZ · EXPLORE AND PLAY',
     description: 'Gaming news, guides, streams and community organized by route so you can quickly find what to play or do.',
-    heroAlt: 'Anime warrior standing before a neon gaming portal',
+    heroAlt: 'Editorial illustration of a fantasy portal',
     switchLanguage: 'Switch to Spanish',
     switchCode: 'ES',
-    back: 'Leave the nexus',
+    back: 'Back to XETHKIOZ',
     guides: 'Guides',
     radar: 'Gaming radar',
     community: 'Find a squad',
@@ -135,7 +138,7 @@ const content = {
       eyebrow: 'PARTY_BOARD // BUILDS & SERVERS',
       title: 'Join the community and play',
       items: [
-        { code: '4 GUIDES', title: 'WoW, Diablo IV, FFXIV and Path of Exile', action: 'Open library', to: '/gaming/guides' },
+        { code: 'GUIDES', title: 'WoW, Diablo IV, FFXIV and Path of Exile', action: 'Open library', to: '/gaming/guides' },
         { code: 'RADAR', title: 'Releases and upcoming games', action: 'View trends', to: '/news?category=gaming' },
         { code: 'PARTY', title: 'Share your build and form a group', action: 'Enter the community', to: '/community' },
       ],
@@ -146,14 +149,14 @@ const content = {
     sectionLabel: 'Gaming sections',
     sections: { overview: 'Start', guides: 'Guides', live: 'Live', news: 'Radar', community: 'Community' },
     start: {
-      eyebrow: 'GAMING NEXUS // CHOOSE A ROUTE',
+      eyebrow: 'Gaming library // CHOOSE A ROUTE',
       title: 'All of Gaming, without getting lost',
       description: 'Open only the section you need. Everything else stays out of the way.',
       cards: [
         { id: 'guides', code: 'BUILD', title: 'Complete guides and builds', detail: 'WoW, Diablo IV, FFXIV and PoE 2 by class, gear and rotation.', action: 'OPEN GUIDES', to: '/gaming/guides' },
         { id: 'news', code: 'RADAR', title: 'News and releases', detail: 'Verified gaming signals ordered by date.', action: 'OPEN RADAR', to: '?section=news' },
         { id: 'live', code: 'LIVE', title: 'Streams and videos', detail: 'YouTube and live status.', action: 'OPEN SIGNAL', to: '?section=live' },
-        { id: 'community', code: 'PARTY', title: 'Community and squads', detail: 'Find a group, share builds and enter the Nexus.', action: 'FIND PARTY', to: '?section=community' },
+        { id: 'community', code: 'PARTY', title: 'Community and squads', detail: 'Find a group, share builds and connect with the community.', action: 'FIND PARTY', to: '?section=community' },
       ],
     },
   },
@@ -215,22 +218,16 @@ export default function GamingHub() {
   return (
     <>
       <SEO title={t.title} description={t.description} url="/gaming" />
-      <main className="xk-page xk-anime-page xk-anime-gaming px-4 py-8 sm:px-6 lg:px-8">
-        <div className="xk-anime-speedlines" aria-hidden="true" />
-        <div className="xk-gaming-ambient" aria-hidden="true"><i /><i /><i /><b /><b /></div>
+      <main className="xke-page xke-gaming xk-page xk-anime-page xk-anime-gaming px-4 py-8 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <section className="xk-anime-hero xk-gaming-hero">
-            <SafeImage src="/assets/identity/gaming-anime-nexus-v1.webp" fallback="/images/articles/gaming.svg" alt={t.heroAlt} className="xk-anime-hero-media" loading="eager" fetchPriority="high" />
+            <SafeImage src="/assets/portal-games-world-v3.webp" fallback="/images/articles/gaming.svg" alt={t.heroAlt} className="xk-anime-hero-media" loading="eager" fetchPriority="high" />
             <div className="xk-anime-hero-shade" aria-hidden="true" />
-            <div className="xk-anime-scanlines" aria-hidden="true" />
-            <span className="xk-energy-slash" aria-hidden="true" />
-            <div className="xk-gaming-runes" aria-hidden="true"><i>01</i><i>界</i><i>XP</i><i>◆</i></div>
             <div className="xk-anime-hero-content">
               <div className="flex items-center justify-between gap-4">
-                <p className="xk-anime-kicker"><span className="xk-live-dot" aria-hidden="true" />{t.kicker}</p>
+                <p className="xk-anime-kicker">{t.kicker}</p>
                 <button type="button" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} className="xk-hud-button" aria-label={t.switchLanguage} title={t.switchLanguage}>{t.switchCode}</button>
               </div>
-              <p className="xk-anime-kanji" aria-hidden="true">異界</p>
               <h1 className="xk-anime-title" data-text={t.title}>{t.title}</h1>
               <p className="mt-5 max-w-xl text-sm leading-relaxed text-gray-200 md:text-base">{t.description}</p>
               <div className="xk-gaming-hero-actions" aria-label={t.heroActionsLabel}>
@@ -238,11 +235,10 @@ export default function GamingHub() {
                 <button type="button" onClick={() => selectSection('news')}><span aria-hidden="true">⌁</span>{t.heroRadar}</button>
               </div>
               <div className="mt-4 flex flex-wrap gap-3">
-                <span className="xk-hud-chip"><span aria-hidden="true">◉</span> {articles.length} {t.signal}</span>
+                <span className="xk-hud-chip">{lang === 'es' ? 'PC · Consolas · Mobile' : 'PC · Consoles · Mobile'}</span>
                 <span className="xk-hud-chip xk-hud-chip-violet">MMORPG / RPG / ESPORTS</span>
               </div>
             </div>
-            <div className="xk-hero-status" aria-label={t.systemStatus}><span>{t.nexusLink}</span><b>{t.routeCount}</b><i aria-hidden="true" /></div>
           </section>
 
           <nav className="xk-gaming-section-nav" aria-label={t.sectionLabel}>
@@ -303,6 +299,7 @@ export default function GamingHub() {
 
           {activeSection === 'news' ? <div className="mt-10"><PublicAdSlot slotId="section-sidebar" fallbackLabel={t.sponsor} /></div> : null}
           <PortalKnowledgeBriefing sector="gaming" lang={lang} />
+          <EditorialCrosslinks />
           <nav className="mt-8 flex flex-wrap gap-3 font-mono text-xs uppercase tracking-[0.18em]" aria-label={lang === 'es' ? 'Navegación de Gaming' : 'Gaming navigation'}>
             <Link to={localizePath('/')} className="xk-hud-button">{t.back}</Link>
             <Link to={localizePath('/gaming/guides')} className="xk-hud-button">{t.guides}</Link>

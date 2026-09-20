@@ -30,15 +30,10 @@ const WorldOfXethkioz = lazy(() => import('./pages/WorldOfXethkioz'))
 const GamingHub = lazy(() => import('./pages/GamingHub'))
 const GamingGuides = lazy(() => import('./pages/GamingGuides'))
 const ScienceLab = lazy(() => import('./pages/ScienceLab'))
-const FunPortal = lazy(() => import('./pages/FunPortal'))
 const WebCreation = lazy(() => import('./pages/WebCreation'))
 const GreenNode = lazy(() => import('./pages/GreenNode'))
 const GreenNodeEntry = lazy(() => import('./components/GreenNodeEntry'))
 const ProfileHub = lazy(() => import('./pages/ProfileHub'))
-const NexusPassport = lazy(() => import('./pages/NexusPassport'))
-const NexusRoom = lazy(() => import('./pages/NexusRoom'))
-const NexusPixelWorld = lazy(() => import('./pages/NexusPixelWorld'))
-const NexusVipRooms = lazy(() => import('./pages/NexusVipRooms'))
 const News = lazy(() => import('./pages/News'))
 const NewsArticle = lazy(() => import('./pages/NewsArticle'))
 const Community = lazy(() => import('./pages/Community'))
@@ -97,14 +92,10 @@ const routeNames = {
     '/gaming': 'Juegos',
     '/gaming/guides': 'Guías de juegos',
     '/science': 'Ciencia y tecnología',
-    '/fun': 'Nexus City',
     '/creacion-web': 'Creación web',
     '/green-node': 'Green Node',
     '/news': 'Noticias',
     '/community': 'Comunidad',
-    '/nexus-city': 'Nexus City',
-    '/nexus-city/room/xethkioz': 'Plaza Nexus',
-    '/nexus-city/vip': 'Salas VIP Nexus',
     '/profile': 'Perfil',
     '/account': 'Cuenta',
     '/login': 'Iniciar sesión',
@@ -121,14 +112,10 @@ const routeNames = {
     '/gaming': 'Gaming',
     '/gaming/guides': 'Gaming guides',
     '/science': 'Science and technology',
-    '/fun': 'Nexus City',
     '/creacion-web': 'Web creation',
     '/green-node': 'Green Node',
     '/news': 'News',
     '/community': 'Community',
-    '/nexus-city': 'Nexus City',
-    '/nexus-city/room/xethkioz': 'Nexus Plaza',
-    '/nexus-city/vip': 'Nexus VIP rooms',
     '/profile': 'Profile',
     '/account': 'Account',
     '/login': 'Sign in',
@@ -141,7 +128,7 @@ const routeNames = {
   },
 } as const
 
-const activityTrackedPortals = new Set(['/world-of-xethkioz', '/gaming', '/science', '/creacion-web', '/green-node', '/nexus-city'])
+const activityTrackedPortals = new Set(['/world-of-xethkioz', '/gaming', '/science', '/creacion-web', '/green-node'])
 
 function RouteAccessibility({ pathname }: { pathname: string }) {
   const { lang } = useLang()
@@ -152,13 +139,7 @@ function RouteAccessibility({ pathname }: { pathname: string }) {
     const basePath = stripEnglishPrefix(pathname)
     const routeName = basePath.startsWith('/news/')
       ? (lang === 'es' ? 'Artículo de noticias' : 'News article')
-      : basePath.startsWith('/nexus-city/u/')
-        ? (lang === 'es' ? 'Pasaporte Nexus' : 'Nexus passport')
-        : basePath === '/nexus-city/room/xethkioz'
-          ? (lang === 'es' ? 'Plaza Nexus' : 'Nexus Plaza')
-          : basePath.startsWith('/nexus-city/room/')
-            ? (lang === 'es' ? 'Cápsula Nexus' : 'Nexus capsule')
-            : basePath.startsWith('/cms/')
+      : basePath.startsWith('/cms/')
               ? (lang === 'es' ? 'Panel editorial' : 'Editorial dashboard')
               : routeNames[lang][basePath as keyof typeof routeNames.es]
                 ?? (lang === 'es' ? 'Sección XETHKIOZ' : 'XETHKIOZ section')
@@ -185,7 +166,6 @@ function AppShell() {
   const isHomeRoute = basePath === '/'
   const isGamePortalRoute = basePath === '/world-of-xethkioz'
   const hasPublicNavigation = !isCmsRoute && !isHomeRoute && !isGamePortalRoute
-  const isPixelGameRoute = basePath === '/nexus-city/room/xethkioz'
 
   useEffect(() => {
     if (!activityTrackedPortals.has(basePath)) return
@@ -205,7 +185,7 @@ function AppShell() {
     : { controls: 'Global controls', wisp: 'Global Wisp', routes: 'Routes' }
 
   return (
-    <div className={`${hasPublicNavigation ? 'xk-app-shell xk-has-mobile-dock' : 'xk-app-shell'}${isPixelGameRoute ? ' xk-is-pixel-game' : ''}${isHomeRoute || isGamePortalRoute ? ' xk-fantasy-shell' : ''}`}>
+    <div className={`${hasPublicNavigation ? 'xk-app-shell xk-has-mobile-dock' : 'xk-app-shell'}${isHomeRoute || isGamePortalRoute ? ' xk-fantasy-shell' : ''}`}>
       <a href="#main-content" className="xk-skip-link">
         {lang === 'es' ? 'Saltar al contenido principal' : 'Skip to main content'}
       </a>
@@ -220,7 +200,7 @@ function AppShell() {
           </Suspense>
         </AppErrorBoundary>
       )}
-      {!isCmsRoute && !isPixelGameRoute && (
+      {!isCmsRoute && (
         <AppErrorBoundary label={errorLabels.wisp} compact>
           <Suspense fallback={null}>
             <FusionGlobalWisp />
@@ -237,7 +217,7 @@ function AppShell() {
               <Route path="/gaming" element={<GamingHub />} />
               <Route path="/gaming/guides" element={<GamingGuides />} />
               <Route path="/science" element={<ScienceLab />} />
-              <Route path="/fun" element={<Navigate to="/nexus-city" replace />} />
+              <Route path="/fun" element={<Navigate to="/community" replace />} />
               <Route path="/creacion-web" element={<WebCreation />} />
               <Route path="/community" element={<Community />} />
               <Route path="/about" element={<About />} />
@@ -251,8 +231,9 @@ function AppShell() {
               <Route path="/en/gaming" element={<GamingHub />} />
               <Route path="/en/gaming/guides" element={<GamingGuides />} />
               <Route path="/en/science" element={<ScienceLab />} />
-              <Route path="/en/fun" element={<Navigate to="/en/nexus-city" replace />} />
-              <Route path="/en/nexus-city" element={<FunPortal />} />
+              <Route path="/en/fun" element={<Navigate to="/en/community" replace />} />
+              <Route path="/en/nexus-city" element={<Navigate to="/en/community" replace />} />
+              <Route path="/en/nexus-city/*" element={<Navigate to="/en/community" replace />} />
               <Route path="/en/creacion-web" element={<WebCreation />} />
               <Route path="/en/green-node" element={<GreenNodeGate />} />
               <Route path="/en/community" element={<Community />} />
@@ -266,11 +247,8 @@ function AppShell() {
               <Route path="/green-node" element={<GreenNodeGate />} />
               <Route path="/news" element={<News />} />
               <Route path="/news/:slug" element={<NewsArticle />} />
-              <Route path="/nexus-city" element={<FunPortal />} />
-              <Route path="/nexus-city/u/:handle" element={<NexusPassport />} />
-              <Route path="/nexus-city/room/xethkioz" element={<NexusPixelWorld />} />
-              <Route path="/nexus-city/vip" element={<NexusVipRooms />} />
-              <Route path="/nexus-city/room/:handle" element={<NexusRoom />} />
+              <Route path="/nexus-city" element={<Navigate to="/community" replace />} />
+              <Route path="/nexus-city/*" element={<Navigate to="/community" replace />} />
               <Route path="/profile" element={<ProfileHub />} />
               <Route path="/login" element={<AccountAccess />} />
               <Route path="/account" element={<AccountAccess />} />
@@ -312,7 +290,7 @@ function AppShell() {
           <Footer />
         </Suspense>
       )}
-      {!isCmsRoute && !isPixelGameRoute && (
+      {!isCmsRoute && (
         <Suspense fallback={null}>
           <NexusChatWidget clearMobileDock={hasPublicNavigation} />
         </Suspense>

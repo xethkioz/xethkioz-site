@@ -16,11 +16,17 @@ const visitLogMigration = read('supabase/migrations/20260724153500_privacy_prese
 
 const redirectMap = new Map((vercel.redirects ?? []).map((item) => [item.source, item]))
 const funRedirect = redirectMap.get('/fun')
-assert(funRedirect?.destination === '/nexus-city' && funRedirect?.permanent === true, 'The legacy Fun route must permanently redirect to Nexus City.')
-assert(redirectMap.get('/en/fun')?.destination === '/en/nexus-city', 'The English legacy Fun route must redirect to English Nexus City.')
+assert(funRedirect?.destination === '/community' && funRedirect?.permanent === true, 'The legacy Fun route must permanently redirect to the active community.')
+assert(redirectMap.get('/en/fun')?.destination === '/en/community', 'The English legacy Fun route must redirect to the English community.')
 assert(redirectMap.get('/web-creation')?.destination === '/creacion-web', 'Legacy web creation path must redirect at the HTTP layer.')
 assert(redirectMap.get('/register')?.destination === '/account', 'Legacy register path must redirect at the HTTP layer.')
 assert(redirectMap.get('/admin')?.destination === '/cms', 'Legacy admin path must redirect at the HTTP layer.')
+
+for (const [source, destination] of [['/nexus-city','/community'], ['/nexus-city/:path*','/community'], ['/en/nexus-city','/en/community'], ['/en/nexus-city/:path*','/en/community']]) {
+  assert(redirectMap.get(source)?.destination === destination && redirectMap.get(source)?.permanent === true, `Retired route ${source} must redirect permanently without reviving the old city.`)
+}
+assert(!sitemap.includes('/nexus-city'), 'The retired city must not be advertised in the sitemap.')
+assert(!seoShells.includes("path: '/nexus-city'") && !seoShells.includes("path: '/en/nexus-city'"), 'Retired routes must not generate indexable city shells.')
 
 const rewrites = vercel.rewrites ?? []
 const rewriteMap = new Map(rewrites.map((item) => [item.source, item.destination]))
@@ -28,19 +34,12 @@ assert(rewriteMap.get('/world-of-xethkioz') === '/seo-shells/world-of-xethkioz.h
 assert(rewriteMap.get('/en/world-of-xethkioz') === '/seo-shells/en-world-of-xethkioz.html', 'English World of Xethkioz must have a localized SEO shell.')
 assert(sitemap.includes("es: '/world-of-xethkioz', en: '/en/world-of-xethkioz'"), 'World of Xethkioz localized routes must remain in the sitemap.')
 assert(seoShells.includes("path: '/world-of-xethkioz'") && seoShells.includes("path: '/en/world-of-xethkioz'"), 'World of Xethkioz must generate standalone localized SEO shells.')
-assert(rewriteMap.get('/nexus-city') === '/seo-shells/fun.html', 'Nexus City must have a first-class indexable SEO shell.')
-assert(rewriteMap.get('/en/nexus-city') === '/seo-shells/en-fun.html', 'English Nexus City must have a localized SEO shell.')
-assert(sitemap.includes("es: '/nexus-city', en: '/en/nexus-city'"), 'Nexus City and its English counterpart must remain in the sitemap.')
-assert(seoShells.includes("path: '/nexus-city'") && seoShells.includes("path: '/en/nexus-city'"), 'Nexus City must generate standalone localized SEO shells.')
 assert(rewriteMap.get('/green-node') === '/index.html', 'Green Node deep links must remain valid without exposing it in navigation.')
 assert(rewriteMap.get('/news/:slug') === '/api/news-page?slug=:slug', 'Article routes must preserve the slug query for the dynamic SEO shell.')
 assert(newsPage.includes("new URL(rawUrl, 'http://localhost').searchParams.get(key)"), 'The article SEO shell must parse its slug with the WHATWG URL API.')
 assert(!newsPage.includes('request.query'), 'The article SEO shell must not access Vercel request.query because legacy runtimes invoke url.parse().')
 assert(newsPage.includes('trustedShellOrigin') && newsPage.includes("origin.endsWith('.vercel.app')"), 'The article shell fetch must reject untrusted Host values and preserve protected previews.')
 assert(newsPage.includes('process.env.VERCEL_URL') && newsPage.includes('AbortSignal.timeout(4500)'), 'The article shell must use the immutable deployment URL and a bounded self-fetch.')
-assert(rewriteMap.get('/nexus-city/u/:handle') === '/index.html', 'Public Nexus passport deep links must remain valid.')
-assert(rewriteMap.get('/nexus-city/room/:handle') === '/index.html', 'Nexus room deep links must remain valid.')
-assert(rewriteMap.get('/nexus-city/vip') === '/private.html', 'VIP Nexus access must use the private noindex shell.')
 assert(rewriteMap.get('/((?!api/).*)') === '/api/not-found', 'Unknown direct requests must resolve through the real 404 function.')
 assert(notFound.includes('response.status(404).send(html)'), 'The not-found endpoint must return HTTP 404.')
 assert(notFound.includes("'X-Robots-Tag', 'noindex, nofollow, noarchive, nosnippet, noimageindex'"), 'The not-found response must prevent indexing.')

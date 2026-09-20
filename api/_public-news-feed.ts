@@ -3,6 +3,7 @@ const PUBLIC_SUPABASE_URL = 'https://pascicauudfyydzknoop.supabase.co'
 const PUBLIC_SUPABASE_KEY = 'sb_publishable_baha-MZOxBr-2pQGaXlcwA_edqFjj-_'
 const PUBLIC_REQUEST_TIMEOUT_MS = 4_500
 const PUBLIC_REQUEST_ATTEMPTS = 2
+const RETIRED_PUBLIC_ARTICLE_SLUGS = new Set(['community-discord-comunidad-segura-moderacion-guia'])
 
 export type FeedArticle = {
   slug: string
@@ -100,11 +101,13 @@ export async function fetchFeedArticles(limit = 1000): Promise<FeedArticle[]> {
     limit: String(Math.min(1000, Math.max(1, limit))),
   })
 
-  return resolvePublicRows<FeedArticle>(query, 'public-news-feed')
+  const rows = await resolvePublicRows<FeedArticle>(query, 'public-news-feed')
+  return rows.filter((article) => !RETIRED_PUBLIC_ARTICLE_SLUGS.has(article.slug))
 }
 
 export async function fetchPublishedArticleMetadata(slug: string): Promise<PublicArticleMetadata | null> {
   const normalizedSlug = slug.trim().toLowerCase()
+  if (RETIRED_PUBLIC_ARTICLE_SLUGS.has(normalizedSlug)) return null
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(normalizedSlug) || normalizedSlug.length > 180) return null
 
   const now = new Date().toISOString()
@@ -117,7 +120,10 @@ export async function fetchPublishedArticleMetadata(slug: string): Promise<Publi
   })
 
   const rows = await resolvePublicRows<PublicArticleMetadata>(query, 'public-news-article')
-  return rows[0] ?? null
+  const article = rows[0] ?? null
+  if (!article) return null
+  if (RETIRED_PUBLIC_ARTICLE_SLUGS.has(article.slug) || article.tags?.some((tag) => tag.toLocaleLowerCase('es') === 'nexus-city') || article.title.toLocaleLowerCase('es').includes('nexus city')) return null
+  return article
 }
 
 export { SITE_URL }

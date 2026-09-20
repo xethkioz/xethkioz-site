@@ -316,6 +316,14 @@ function mapRawArticle(article: RawNewsArticle): PublicNewsArticle {
   }
 }
 
+const RETIRED_PUBLIC_ARTICLE_SLUGS = new Set(['community-discord-comunidad-segura-moderacion-guia'])
+
+function isRetiredPublicArticle(article: Pick<PublicNewsArticle, 'slug' | 'title' | 'tags'>) {
+  return RETIRED_PUBLIC_ARTICLE_SLUGS.has(article.slug)
+    || article.tags.some((tag) => tag.toLocaleLowerCase('es') === 'nexus-city')
+    || article.title.toLocaleLowerCase('es').includes('nexus city')
+}
+
 export const isPublicNewsSupabaseConfigured = isSupabaseConfigured
 
 export function formatPublicNewsDate(value: string, locale: 'es' | 'en' = 'es') {
@@ -346,9 +354,11 @@ export async function fetchPublishedNews(category?: PublicNewsCategory | 'all') 
   const { data, error } = await query
   if (error) throw error
   return [...(data ?? []).map((article) => mapRawArticle(article as RawNewsArticle)), ...getPublicTestArticles()]
+    .filter((article) => !isRetiredPublicArticle(article))
 }
 
 export async function fetchPublishedNewsBySlug(slug: string) {
+  if (RETIRED_PUBLIC_ARTICLE_SLUGS.has(slug.trim().toLowerCase())) return null
   if (!isSupabaseConfigured) return getPublicTestArticles().find((article) => article.slug === slug) ?? null
 
   const { data, error } = await supabase
@@ -360,5 +370,6 @@ export async function fetchPublishedNewsBySlug(slug: string) {
 
   if (error) throw error
   if (!data) return getPublicTestArticles().find((article) => article.slug === slug) ?? null
-  return mapRawArticle(data as RawNewsArticle)
+  const article = mapRawArticle(data as RawNewsArticle)
+  return isRetiredPublicArticle(article) ? null : article
 }

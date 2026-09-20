@@ -680,3 +680,18 @@
     filter:none;
   }
 }
+
+/* Chat owns the foreground on every public route; keep its composer unobstructed. */
+html[data-nexus-chat-open] .xk-wisp{visibility:hidden;pointer-events:none}
+
+/* Public editorial routes: share one unobstructed mobile action row above the dock. */
+@media (max-width:767px){
+  .xk-app-shell.xk-has-mobile-dock .xk-wisp{
+    --wisp-size:50px;
+    position:fixed;
+    top:auto;
+    right:88px;
+    bottom:calc(5.45rem + env(safe-area-inset-bottom));
+    transform:none;
+  }
+}

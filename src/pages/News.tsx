@@ -3,7 +3,8 @@ import { Link, useSearchParams } from 'react-router-dom'
 import SafeImage from '../components/SafeImage'
 import SEO from '../components/SEO'
 import PublicAdSlot from '../components/ads/PublicAdSlot'
-import FusionHero from '../components/fusion/FusionHero'
+import EditorialCrosslinks from '../components/EditorialCrosslinks'
+import './EditorialFantasy.css'
 import FusionShell from '../components/fusion/FusionShell'
 import { useLang } from '../lib/LangContext'
 import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
@@ -26,10 +27,10 @@ const copy = {
   es: {
     seoTitle: 'Noticias · XETHKIOZ',
     seoDescription: 'Radar público de noticias, memes y tecnología curado por XETHKIOZ.',
-    eyebrow: 'NEWS_ENGINE // HYBRID_FEED',
+    eyebrow: 'XETHKIOZ · EDITORIAL',
     heading: 'Radar XETHKIOZ',
     description: 'Noticias propias y señales externas seleccionadas, siempre con fecha, contexto y fuente visible.',
-    statusReady: 'Noticias y fuentes verificadas',
+    statusReady: 'Elegí un tema. Encontrá contexto.',
     statusSetup: 'Selección editorial disponible',
     loading: 'Cargando radar público...',
     emptyTitle: 'Todavía no hay contenido publicado',
@@ -53,10 +54,10 @@ const copy = {
   en: {
     seoTitle: 'News · XETHKIOZ',
     seoDescription: 'XETHKIOZ curated public radar for news, memes and technology.',
-    eyebrow: 'NEWS_ENGINE // HYBRID_FEED',
+    eyebrow: 'XETHKIOZ · EDITORIAL',
     heading: 'XETHKIOZ Radar',
     description: 'Original stories and selected external signals, always with date, context and visible sources.',
-    statusReady: 'News and verified sources',
+    statusReady: 'Choose a topic. Find the context.',
     statusSetup: 'Editorial selection available',
     loading: 'Loading public radar...',
     emptyTitle: 'No published content yet',
@@ -165,7 +166,7 @@ function FeaturedArticleLoading({ label }: { label: string }) {
 }
 
 export default function News() {
-  const { lang } = useLang()
+  const { lang, localizePath } = useLang()
   const ui = copy[lang]
   const labels = publicNewsCategoryLabels[lang]
   const [searchParams, setSearchParams] = useSearchParams()
@@ -173,7 +174,9 @@ export default function News() {
   const filter: Filter = requestedCategory && publicNewsCategories.includes(requestedCategory as PublicNewsCategory)
     ? requestedCategory as PublicNewsCategory
     : 'all'
-  const [query, setQuery] = useState(() => searchParams.get('q') ?? '')
+  const urlQuery = searchParams.get('q') ?? ''
+  const [query, setQuery] = useState(urlQuery)
+  useEffect(() => { setQuery(urlQuery) }, [urlQuery])
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_ARTICLES)
   const [articles, setArticles] = useState<PublicNewsArticle[]>([])
   const [loading, setLoading] = useState(true)
@@ -189,9 +192,9 @@ export default function News() {
       try {
         const nextArticles = await fetchPublishedNews(filter)
         if (active) setArticles(mergeUniqueArticles(nextArticles, curatedArticles))
-      } catch (caughtError) {
+      } catch {
         if (active) {
-          setError(caughtError instanceof Error ? caughtError.message : 'No se pudo cargar Supabase. Mostrando radar externo.')
+          setError(lang === 'es' ? 'No pudimos actualizar el radar. Mostramos la selección editorial disponible.' : 'The feed could not be refreshed. Showing the available editorial selection.')
           setArticles(curatedArticles)
         }
       } finally {
@@ -204,7 +207,7 @@ export default function News() {
     return () => {
       active = false
     }
-  }, [filter])
+  }, [filter, lang])
 
   useEffect(() => {
     setVisibleCount(INITIAL_VISIBLE_ARTICLES)
@@ -253,16 +256,16 @@ export default function News() {
   return (
     <FusionShell tone="science">
       <SEO title={ui.seoTitle} description={ui.seoDescription} url="/news" />
-      <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 md:py-12">
-        <FusionHero tone="science" eyebrow={ui.eyebrow} heading={ui.heading} description={ui.description} />
+      <main className="xke-page xke-news mx-auto max-w-7xl px-4 py-10 sm:px-6 md:py-12">
+        <header className="xke-masthead"><p className="xke-eyebrow">{ui.eyebrow}</p><h1>{ui.heading}</h1><p>{ui.description}</p></header>
 
-        <section className="mt-8 rounded-[2rem] border border-violet-500/20 bg-black/45 p-5 text-white shadow-[0_0_40px_rgba(124,58,237,.14)] md:p-7">
+        <section className="xke-news-tools mt-8 rounded-[2rem] border border-violet-500/20 bg-black/45 p-5 text-white shadow-[0_0_40px_rgba(124,58,237,.14)] md:p-7">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-orange-300">PUBLICATION_STATUS</p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-orange-300">{lang === 'es' ? 'EXPLORAR EL RADAR' : 'EXPLORE THE RADAR'}</p>
               <h2 className="mt-2 text-2xl font-black uppercase tracking-[0.08em]">{isPublicNewsSupabaseConfigured ? ui.statusReady : ui.statusSetup}</h2>
             </div>
-            <Link to="/cms/news" className="rounded-full border border-orange-400/40 px-4 py-3 text-center font-mono text-xs font-black uppercase tracking-[0.18em] text-orange-200 transition hover:bg-orange-500/10">CMS</Link>
+            <Link to={localizePath('/editorial-policy')} className="rounded-full border border-orange-400/40 px-4 py-3 text-center font-mono text-xs font-black uppercase tracking-[0.18em] text-orange-200 transition hover:bg-orange-500/10">{lang === 'es' ? 'Criterio editorial' : 'Editorial policy'}</Link>
           </div>
 
           <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
@@ -285,7 +288,7 @@ export default function News() {
             <p className="font-mono text-[9px] font-black uppercase tracking-[0.22em] text-violet-200/70">{ui.topics}</p>
             {activeTopics.length ? (
               <div className="-mx-5 mt-3 flex snap-x gap-2 overflow-x-auto px-5 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
-                {activeTopics.map(([topic, count]) => <button key={topic} type="button" onClick={() => updateQuery(topic)} className="shrink-0 snap-start rounded-full border border-violet-400/20 bg-violet-500/[0.06] px-3 py-1.5 text-[10px] font-bold text-violet-100 transition hover:border-orange-300/40 hover:text-orange-100">#{topic} <span className="text-white/35">{count}</span></button>)}
+                {activeTopics.map(([topic, count]) => <button key={topic} type="button" onClick={() => updateQuery(topic)} className="shrink-0 snap-start rounded-full border border-violet-400/20 bg-violet-500/[0.06] px-3 py-1.5 text-[10px] font-bold text-violet-100 transition hover:border-orange-300/40 hover:text-orange-100">#{topic} <span className="text-white/60">{count}</span></button>)}
               </div>
             ) : (
               <div className="mt-3 flex gap-2" aria-hidden="true">
@@ -313,11 +316,11 @@ export default function News() {
             <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet-200">NO_RESULTS</p>
             <h2 className="mt-3 text-3xl font-black uppercase">{ui.noResultsTitle}</h2>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-violet-50/75">{ui.noResultsText}</p>
-            <button type="button" onClick={() => { setQuery(''); selectFilter('all') }} className="mt-6 rounded-full border border-orange-300/40 px-5 py-3 font-mono text-xs font-black uppercase tracking-[0.16em] text-orange-100">{labels.all}</button>
+            <button type="button" onClick={() => { const next = new URLSearchParams(searchParams); next.delete('q'); next.delete('category'); setQuery(''); setSearchParams(next, { replace: true }) }} className="mt-6 rounded-full border border-orange-300/40 px-5 py-3 font-mono text-xs font-black uppercase tracking-[0.16em] text-orange-100">{labels.all}</button>
           </article>
         ) : null}
 
-        {featured ? (
+        {!loading && featured ? (
           <article className="group mt-8 min-h-[680px] overflow-hidden rounded-[2rem] border border-orange-400/30 bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,.18),transparent_34%),linear-gradient(135deg,rgba(124,58,237,.16),rgba(0,0,0,.76))] p-5 text-white shadow-[0_0_50px_rgba(249,115,22,.12)] md:min-h-[730px] md:p-8" data-news-featured-article>
             <ArticleThumb article={featured} large />
             <div className="mt-5 flex flex-wrap items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] text-orange-200">
@@ -341,7 +344,7 @@ export default function News() {
         </div>
 
         {remainingArticles.length > 0 ? (
-          <section className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <section className="xke-news-grid mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {remainingArticles.map((article) => (
               <article key={article.id} className="group rounded-[1.5rem] border border-violet-500/20 bg-white/[0.04] p-4 text-white transition hover:-translate-y-1 hover:border-orange-300/40 hover:bg-white/[0.06] md:p-5">
                 <ArticleThumb article={article} />
@@ -365,6 +368,7 @@ export default function News() {
             <button type="button" onClick={() => setVisibleCount((current) => current + 9)} className="rounded-full border border-orange-300/40 bg-orange-500/[0.08] px-6 py-3 font-mono text-xs font-black uppercase tracking-[0.18em] text-orange-100 transition hover:border-orange-200 hover:bg-orange-500/15 hover:shadow-[0_0_28px_rgba(249,115,22,.2)]">{ui.showMore} ↓</button>
           </div>
         ) : null}
+        <EditorialCrosslinks />
       </main>
     </FusionShell>
   )

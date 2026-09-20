@@ -70,7 +70,7 @@ export const translations = {
         profilePreview: 'Tu cuenta reúne actividad, progreso y accesos del ecosistema XETHKIOZ.',
         profileDescription: 'Iniciá sesión para continuar tu recorrido, consultar tu XP y volver a tus espacios de comunidad.',
         newsDescription: 'Centro de contenido dinámico con artículos, estado editorial, fuentes y estructura lista para Supabase.',
-        communityDescription: 'Chat de 24 horas, progreso, misiones y accesos a Nexus City en un mismo espacio.',
+        communityDescription: 'Chat de la comunidad, perfil y progreso en un mismo espacio.',
         cmsDescription: 'Vista previa editorial para cargar, revisar y publicar contenido sin activar todavía el backend definitivo.',
       },
       portals: {
@@ -208,7 +208,7 @@ export const translations = {
         profilePreview: 'Your account brings together activity, progress and access across the XETHKIOZ ecosystem.',
         profileDescription: 'Sign in to continue your journey, check your XP and return to your community spaces.',
         newsDescription: 'Dynamic content center with articles, editorial status, sources and Supabase-ready structure.',
-        communityDescription: '24-hour chat, progress, missions and Nexus City access in one place.',
+        communityDescription: 'Community chat, profile and progress in one place.',
         cmsDescription: 'Editorial preview to load, review and publish content before the definitive backend is enabled.',
       },
       portals: {
@@ -223,7 +223,7 @@ export const translations = {
           sections: [
             ['Videogame news', 'Nintendo, Xbox, PlayStation, PC, and Mobile. One clear entry by platform.'],
             ['Videogame guides', 'Search, admin/moderator guides, and user comments.'],
-            ['Stream videos', 'Embedded links from YouTube, TikTok, Kick, Twitch, and Instagram.'],
+            ['Stream videos', 'Embedded links from YouTube, TikTok, Instagram and Threads.'],
             ['Images · Wallpapers · Screenshots', 'Uploads with verification to keep the content safe +12.'],
           ],
         },
