@@ -1,6 +1,6 @@
-export const SITE_VERSION = 'v11.4.4'
-export const SITE_RELEASE = 'Hero/Header Fusion - Pass 27'
-export const SITE_BUILD_DATE = '2026-09-20'
+export const SITE_VERSION = 'v11.4.5'
+export const SITE_RELEASE = 'Hero/Header Immersion - Pass 28'
+export const SITE_BUILD_DATE = '2026-09-21'
 export const SITE_DOMAIN = 'https://xethkioz.com.ar'
 
 export const DONATION_LINKS = {
