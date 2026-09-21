@@ -1,5 +1,5 @@
-export const SITE_VERSION = 'v11.4.3'
-export const SITE_RELEASE = 'Hero + Public Art - Pass 25'
+export const SITE_VERSION = 'v11.4.4'
+export const SITE_RELEASE = 'Hero/Header Fusion - Pass 27'
 export const SITE_BUILD_DATE = '2026-09-20'
 export const SITE_DOMAIN = 'https://xethkioz.com.ar'
 

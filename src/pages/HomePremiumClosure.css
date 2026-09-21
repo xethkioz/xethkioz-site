@@ -105,3 +105,67 @@
 @media(prefers-reduced-motion:reduce){
   .wox-ecosystem-card,.wox-support-actions a,.wox-footer-premium a{transition:none!important}
 }
+
+
+/* Pass 27 — Hero/header fusion: one continuous AAA scene instead of stacked rectangles. */
+.wox-home .wox-hero{
+  width:100%;max-width:none;margin:0;min-height:min(820px,calc(100svh - 66px));
+  padding:28px max(48px,calc((100% - 1260px)/2)) 108px;align-items:flex-start;
+  overflow:hidden;isolation:isolate;
+}
+.wox-home .wox-bg{
+  inset:-18px -2px -92px -2px;display:block;overflow:hidden;
+}
+.wox-home .wox-bg img{
+  width:100%;height:100%;object-fit:cover;object-position:66% 46%;
+  transform:scale(1.018);transform-origin:center;
+}
+.wox-home .wox-bg::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(90deg,#090b10 0%,rgba(9,11,16,.72) 6%,rgba(9,11,16,.18) 16%,transparent 31%,transparent 84%,rgba(9,11,16,.44) 95%,#090b10 100%),
+    linear-gradient(180deg,rgba(9,11,16,.48) 0%,rgba(9,11,16,.12) 10%,transparent 21%,transparent 72%,rgba(9,11,16,.7) 91%,#090b10 100%);
+}
+.wox-home .wox-hero::before{
+  background:linear-gradient(90deg,#090b10 0%,rgba(9,11,16,.96) 15%,rgba(9,11,16,.78) 27%,rgba(9,11,16,.38) 42%,rgba(9,11,16,.06) 58%,transparent 76%);
+}
+.wox-home .wox-hero-core{width:min(64%,760px);max-width:760px;position:relative;z-index:2}
+.wox-home .wox-logo-wrap{
+  display:block;width:min(680px,100%);max-width:680px;margin:0 0 2px;
+  background:transparent;border:0;box-shadow:none;
+}
+.wox-home .wox-world-logo{
+  display:block;width:100%;height:auto;max-height:none;object-fit:contain;object-position:left center;
+  background:transparent;border:0;filter:drop-shadow(0 8px 24px rgba(18,10,38,.26));
+}
+.wox-home .wox-status{margin:0 0 12px;letter-spacing:.2em}
+.wox-home .wox-fantasy-rule{margin:10px 0 20px}
+.wox-home .wox-art-credit{z-index:3}
+@media(max-width:1279px){
+  .wox-home .wox-hero{min-height:720px;padding-top:24px}
+  .wox-home .wox-hero-core{width:min(72%,700px)}
+  .wox-home .wox-logo-wrap{width:min(620px,100%)}
+}
+@media(max-width:760px){
+  .wox-home .wox-hero{
+    min-height:760px;padding:24px 22px 100px;align-items:flex-start;
+  }
+  .wox-home .wox-bg{inset:-10px -1px -70px}
+  .wox-home .wox-bg img{object-position:58% 22%;transform:scale(1.025)}
+  .wox-home .wox-bg::after{
+    background:
+      linear-gradient(90deg,rgba(9,11,16,.34),transparent 13%,transparent 86%,rgba(9,11,16,.38)),
+      linear-gradient(180deg,rgba(9,11,16,.28) 0%,rgba(9,11,16,.06) 12%,transparent 28%,rgba(9,11,16,.18) 58%,rgba(9,11,16,.86) 84%,#090b10 100%);
+  }
+  .wox-home .wox-hero::before{
+    background:linear-gradient(180deg,rgba(9,11,16,.1) 0%,rgba(9,11,16,.12) 24%,rgba(9,11,16,.72) 54%,#090b10 94%);
+  }
+  .wox-home .wox-hero-core{width:100%;max-width:560px}
+  .wox-home .wox-logo-wrap{width:min(100%,520px);margin-bottom:0}
+  .wox-home .wox-world-logo{filter:drop-shadow(0 7px 18px rgba(18,10,38,.22))}
+  .wox-home .wox-status{font-size:8px;margin-bottom:11px}
+}
+@media(max-width:359px){
+  .wox-home .wox-hero{padding:20px 18px 96px}
+  .wox-home .wox-logo-wrap{width:100%}
+}

@@ -185,7 +185,7 @@ function AppShell() {
     : { controls: 'Global controls', wisp: 'Global Wisp', routes: 'Routes' }
 
   return (
-    <div className={`${hasPublicNavigation ? 'xk-app-shell xk-has-mobile-dock' : 'xk-app-shell'}${isHomeRoute || isGamePortalRoute ? ' xk-fantasy-shell' : ''}`}>
+    <div className={`${hasPublicNavigation ? 'xk-app-shell xk-has-mobile-dock' : 'xk-app-shell'}${isHomeRoute || isGamePortalRoute ? ' xk-fantasy-shell' : ''}${isGamePortalRoute ? ' xk-world-portal-route' : ''}`}>
       <a href="#main-content" className="xk-skip-link">
         {lang === 'es' ? 'Saltar al contenido principal' : 'Skip to main content'}
       </a>

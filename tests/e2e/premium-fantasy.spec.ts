@@ -21,6 +21,40 @@ test('Premium Home conserva rutas, CTA real y canales oficiales sin video', asyn
   const result = await new AxeBuilder({ page }).include('.wox-home').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze()
   expect(result.violations).toEqual([])
 })
+test('Pass27 integra PNG transparente, hero full-bleed y header desktop de una sola fila', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 936 })
+  await page.goto('/'); await essentials(page)
+  const logo = page.locator('.wox-world-logo')
+  await expect(logo).toHaveAttribute('src', '/assets/world-of-xethkioz/world-of-xethkioz-logo.png')
+  expect(await logo.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 1000 && image.naturalHeight > 300)).toBe(true)
+  const geometry = await page.evaluate(() => {
+    const header = document.querySelector('.xkf-header')!.getBoundingClientRect()
+    const brand = document.querySelector('.xkf-brand')!.getBoundingClientRect()
+    const nav = document.querySelector('.xkf-desktop')!.getBoundingClientRect()
+    const actions = document.querySelector('.xkf-actions')!.getBoundingClientRect()
+    const hero = document.querySelector('.wox-hero')!.getBoundingClientRect()
+    const bg = document.querySelector('.wox-bg')!.getBoundingClientRect()
+    const centers = [brand, nav, actions].map(rect => rect.top + rect.height / 2)
+    const fade = getComputedStyle(document.querySelector('.wox-bg')!, '::after').backgroundImage
+    return {
+      headerHeight: header.height,
+      rowSpread: Math.max(...centers) - Math.min(...centers),
+      heroLeft: hero.left,
+      heroRight: hero.right,
+      bgLeft: bg.left,
+      bgRight: bg.right,
+      viewport: innerWidth,
+      fade,
+    }
+  })
+  expect(geometry.headerHeight).toBeLessThan(82)
+  expect(geometry.rowSpread).toBeLessThan(8)
+  expect(geometry.heroLeft).toBeLessThanOrEqual(1)
+  expect(geometry.heroRight).toBeGreaterThanOrEqual(geometry.viewport - 1)
+  expect(geometry.bgLeft).toBeLessThanOrEqual(1)
+  expect(geometry.bgRight).toBeGreaterThanOrEqual(geometry.viewport - 1)
+  expect(geometry.fade).toContain('linear-gradient')
+})
 test('Portal fantasy: tabs accesibles, FAQ y contenido público reservado', async ({ page }) => {
   await page.goto('/world-of-xethkioz'); await essentials(page)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Atravesá el umbral.')
