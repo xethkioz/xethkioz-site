@@ -70,9 +70,10 @@ test('WEB-01/07: shared navigation has no text collision across the audit viewpo
         const controls = Array.from(document.querySelectorAll('.xkf-header a,.xkf-header button,.xkf-header summary')).filter(el => el.getBoundingClientRect().width > 0 && el.getBoundingClientRect().height > 0)
         return { overflow: document.documentElement.scrollWidth > innerWidth + 1, headerOverHero: header.bottom > hero.top + 1, minFont: Math.min(...controls.map(el => parseFloat(getComputedStyle(el).fontSize))), minHeight: Math.min(...controls.map(el => el.getBoundingClientRect().height)) }
       })
-      records.push({ width, route, ...geometry })
+      const intentionalHomeOverlay = width >= 1280 && (route === '/' || route === '/en')
+      records.push({ width, route, intentionalHomeOverlay, ...geometry })
       expect(geometry.overflow, `${width} ${route}`).toBe(false)
-      expect(geometry.headerOverHero, `${width} ${route}`).toBe(false)
+      expect(geometry.headerOverHero, `${width} ${route}`).toBe(intentionalHomeOverlay)
       expect(geometry.minFont).toBeGreaterThanOrEqual(12)
       expect(geometry.minHeight).toBeGreaterThanOrEqual(43)
     }
