@@ -8,6 +8,8 @@ async function essentials(page: import('@playwright/test').Page) {
 test('Premium Home conserva rutas, CTA real y canales oficiales sin video', async ({ page }) => {
   await page.goto('/'); await essentials(page)
   await expect(page.locator('.wox-actions a').first()).toHaveAttribute('href', '/world-of-xethkioz')
+  await expect(page.locator('.wox-logo-wrap')).toBeVisible()
+  await expect(page.locator('.wox-status')).toHaveText('ACTION RPG INDEPENDIENTE')
   await expect(page.locator('video, iframe, canvas')).toHaveCount(0)
   await expect(page.locator('.wox-ecosystem-card')).toHaveCount(4)
   await expect(page.locator('.wox-support-side li')).toHaveCount(3)
@@ -22,6 +24,9 @@ test('Premium Home conserva rutas, CTA real y canales oficiales sin video', asyn
 test('Portal fantasy: tabs accesibles, FAQ y contenido público reservado', async ({ page }) => {
   await page.goto('/world-of-xethkioz'); await essentials(page)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Atravesá el umbral.')
+  await expect(page.locator('.woxp-game-logo')).toBeVisible()
+  await expect(page.locator('.woxp-game-status')).toHaveText('ACTION RPG INDEPENDIENTE')
+  await expect(page.locator('.woxp-concept-gallery figure')).toHaveCount(3)
   await expect(page.locator('video, iframe, canvas')).toHaveCount(0)
   await page.getByRole('tab', { name: 'Panorama', exact: true }).click()
   await page.keyboard.press('ArrowRight')

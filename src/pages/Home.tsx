@@ -16,7 +16,7 @@ const copy = {
   es: {
     seo: 'World of Xethkioz · Action RPG en desarrollo',
     description: 'Entrá al universo XETHKIOZ. Fantasía, videojuegos, tecnología y un Action RPG independiente en desarrollo.',
-    status: 'ACTION RPG INDEPENDIENTE · EN DESARROLLO',
+    status: 'ACTION RPG INDEPENDIENTE',
     soul: 'Más allá de lo conocido.',
     lead: 'Fantasía, acción y exploración. Descubrí la primera mirada a un Action RPG independiente en desarrollo.',
     explore: 'DESCUBRIR WORLD OF XETHKIOZ',
@@ -48,7 +48,7 @@ const copy = {
   en: {
     seo: 'World of Xethkioz · Action RPG in development',
     description: 'Enter the XETHKIOZ universe. Fantasy, gaming, technology and an independent action RPG in development.',
-    status: 'INDEPENDENT ACTION RPG · IN DEVELOPMENT',
+    status: 'INDEPENDENT ACTION RPG',
     soul: 'Beyond the familiar.',
     lead: 'Fantasy, action and exploration. Discover a first look at an independent action RPG in development.',
     explore: 'DISCOVER WORLD OF XETHKIOZ',
@@ -101,7 +101,7 @@ export default function Home() {
           <picture className="wox-bg" aria-hidden="true"><img src="/assets/portal-games-world-v3.webp" alt="" width="800" height="800" fetchPriority="high" decoding="async" /></picture>
           <h1 id="wox-title" className="sr-only">World of Xethkioz</h1>
           <div className="wox-hero-core">
-            <picture className="wox-logo-wrap"><img src="/assets/world-of-xethkioz/world-of-xethkioz-logo.svg" alt="World of Xethkioz" className="wox-world-logo" width="1800" height="560" decoding="async" /></picture>
+            <picture className="wox-logo-wrap"><img src="/assets/world-of-xethkioz/world-of-xethkioz-logo.svg" alt="World of Xethkioz" className="wox-world-logo" width="1800" height="520" decoding="async" /></picture>
             <p className="wox-status">{t.status}</p>
             <div className="wox-fantasy-rule" aria-hidden="true">◆</div>
             <h2>{t.soul}</h2><p className="wox-lead">{t.lead}</p>
