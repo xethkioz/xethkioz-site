@@ -38,9 +38,12 @@ test('Pass27 integra PNG transparente, hero full-bleed y header desktop de una s
     const fade = getComputedStyle(document.querySelector('.wox-bg')!, '::after').backgroundImage
     return {
       headerHeight: header.height,
+      headerLeft: header.left,
+      headerRight: header.right,
       rowSpread: Math.max(...centers) - Math.min(...centers),
       heroLeft: hero.left,
       heroRight: hero.right,
+      heroTop: hero.top,
       bgLeft: bg.left,
       bgRight: bg.right,
       viewport: innerWidth,
@@ -48,7 +51,10 @@ test('Pass27 integra PNG transparente, hero full-bleed y header desktop de una s
     }
   })
   expect(geometry.headerHeight).toBeLessThan(82)
+  expect(geometry.headerLeft).toBeLessThanOrEqual(1)
+  expect(geometry.headerRight).toBeGreaterThanOrEqual(geometry.viewport - 1)
   expect(geometry.rowSpread).toBeLessThan(8)
+  expect(geometry.heroTop).toBeLessThanOrEqual(1)
   expect(geometry.heroLeft).toBeLessThanOrEqual(1)
   expect(geometry.heroRight).toBeGreaterThanOrEqual(geometry.viewport - 1)
   expect(geometry.bgLeft).toBeLessThanOrEqual(1)
