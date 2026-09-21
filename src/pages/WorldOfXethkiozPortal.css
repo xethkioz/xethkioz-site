@@ -113,3 +113,71 @@
 @media (max-width:360px){
   .wox-portal-anchor-nav{position:relative;top:auto}
 }
+
+
+/* Pass 25 — shared premium game lockup + public concept gallery. */
+.wox-portal .wox-portal-hero{align-items:flex-start;padding-top:42px}
+.wox-portal .wox-portal-hero-copy{width:61%;max-width:780px}
+.woxp-game-logo-wrap{display:block;width:100%;max-width:650px;margin:0 0 5px}
+.woxp-game-logo{display:block;width:100%;height:auto;max-height:250px;object-fit:contain;object-position:left center}
+.woxp-game-status{margin:0 0 13px;color:#e1c78e;font-size:10px;letter-spacing:.205em}
+.wox-portal .woxp-ornament{margin:13px 0 20px;max-width:430px}
+.wox-portal-art{display:block}
+.woxp-art-head{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end}
+.woxp-art-head .woxp-body{margin-bottom:16px}
+.woxp-public-showcase{margin-top:52px;padding-top:32px;border-top:1px solid var(--woxp-line)}
+.woxp-public-showcase-title{display:grid;grid-template-columns:.65fr 1.35fr;gap:30px 60px;align-items:end;margin-bottom:24px}
+.woxp-public-showcase-title .woxp-kicker{margin:0}
+.woxp-public-showcase-title h3{margin:0;color:#eee7da;font:400 clamp(28px,3vw,42px)/1.16 Georgia,'Times New Roman',serif;letter-spacing:-.025em}
+.woxp-concept-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.woxp-concept-gallery figure{position:relative;isolation:isolate;min-height:300px;margin:0;overflow:hidden;border:1px solid rgba(214,188,134,.2);background:#10121a;contain:layout paint}
+.woxp-concept-gallery img{display:block;width:100%;height:100%;min-height:300px;object-fit:cover;transition:transform .2s ease}
+.woxp-concept-gallery figcaption{position:absolute;inset:auto 0 0;display:grid;grid-template-columns:28px 1fr;gap:12px;padding:58px 20px 20px;background:linear-gradient(transparent,rgba(7,9,14,.96));color:#eee7dc}
+.woxp-concept-gallery figcaption>small{padding-top:3px;color:#d6bc86;font-size:9px}
+.woxp-concept-gallery figcaption strong{display:block;font:400 21px/1.25 Georgia,serif}
+.woxp-concept-gallery figcaption span{display:block;margin-top:7px;color:#b9b4c2;font-size:11px;line-height:1.55}
+.woxp-showcase-note{margin:14px 0 0;color:#918b9c;font-size:9px;letter-spacing:.12em}
+.wox-portal-art .woxp-development{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:58px;border-top:1px solid var(--woxp-line)}
+.wox-portal-art .woxp-development>div{padding:24px 20px}
+.wox-portal-art .woxp-development>div+div{border-left:1px solid var(--woxp-line)}
+@media(hover:hover) and (pointer:fine){
+  .woxp-concept-gallery figure:hover img{transform:scale(1.025)}
+}
+@media(max-width:1050px){
+  .wox-portal .wox-portal-hero{padding-top:36px}
+  .wox-portal .wox-portal-hero-copy{width:72%}
+  .woxp-game-logo-wrap{max-width:590px}
+  .woxp-art-head{gap:44px}
+}
+@media(max-width:760px){
+  .wox-portal .wox-portal-hero{align-items:flex-start;min-height:760px;padding:28px 24px 104px}
+  .wox-portal .woxp-hero-shade{background:linear-gradient(180deg,rgba(9,11,16,.78) 0%,rgba(9,11,16,.4) 25%,rgba(9,11,16,.76) 58%,#090b10 94%)}
+  .wox-portal .wox-portal-hero-copy{width:100%;max-width:600px}
+  .woxp-game-logo-wrap{max-width:530px;margin-bottom:4px}
+  .woxp-game-logo{max-height:none}
+  .woxp-game-status{max-width:none;margin-bottom:12px;font-size:8px;letter-spacing:.17em}
+  .woxp-art-head,.woxp-public-showcase-title{grid-template-columns:1fr;gap:16px}
+  .woxp-public-showcase{margin-top:34px;padding-top:24px}
+  .woxp-concept-gallery{grid-template-columns:1fr}
+  .woxp-concept-gallery figure,.woxp-concept-gallery img{min-height:235px}
+  .wox-portal-art .woxp-development{grid-template-columns:1fr;margin-top:38px}
+  .wox-portal-art .woxp-development>div{padding-inline:0}
+  .wox-portal-art .woxp-development>div+div{border-left:0}
+}
+@media(max-width:359px){
+  .wox-portal .wox-portal-hero{padding-top:24px}
+  .woxp-game-status{font-size:7px}
+}
+@media(prefers-reduced-motion:reduce){
+  .woxp-concept-gallery img{transition:none!important}
+}
+
+/* Pass 25 QA: keep the first mobile viewport clear of Veyr and the chapter rail. */
+@media(max-width:760px){
+  .wox-portal .wox-portal-hero{min-height:840px}
+  .wox-portal .woxp-art-caption{left:24px;right:auto;max-width:58%;text-align:left}
+}
+@media(max-width:359px){
+  .wox-portal .wox-portal-hero{min-height:820px}
+  .wox-portal .woxp-art-caption{left:20px;max-width:56%}
+}

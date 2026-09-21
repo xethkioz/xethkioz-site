@@ -16,7 +16,7 @@ const copy = {
   es: {
     description: 'El portal oficial de World of Xethkioz. Fantasía, atmósfera y novedades de un Action RPG independiente en desarrollo.',
     home: 'Volver a XETHKIOZ', login: 'Iniciar sesión', language: 'Cambiar a inglés',
-    status: 'ACTION RPG INDEPENDIENTE · EN DESARROLLO', title: 'Atravesá el umbral.',
+    status: 'ACTION RPG INDEPENDIENTE', title: 'Atravesá el umbral.',
     lead: 'Hay mundos que se miran. Y otros que invitan a perderse. World of Xethkioz está tomando forma.',
     explore: 'Descubrí la atmósfera', follow: 'Seguí el desarrollo', caption: 'ILUSTRACIÓN PROMOCIONAL · NO ES GAMEPLAY',
     nav: ['La visión', 'Atmósfera', 'Veyr', 'Desarrollo', 'Preguntas'],
@@ -33,6 +33,8 @@ const copy = {
     devLabel: '04 / EL CAMINO', devTitle: 'Un mundo en construcción.',
     devBody: 'El desarrollo sigue adelante. Los avances que se puedan compartir se publicarán en nuestros canales oficiales, cuando estén listos para presentarse.',
     milestones: [['Dirección artística', 'En desarrollo'], ['Experiencia de juego', 'En desarrollo'], ['Novedades públicas', 'En nuestros canales']],
+    visualLabel: 'ARTE VISUAL PÚBLICO', visualTitle: 'Tres ecos de un mundo más grande.',
+    visualCards: [['Naturaleza viva', 'Una atmósfera orgánica atravesada por energía y cristal.'], ['Horizontes suspendidos', 'Altura, vacío y estructuras flotantes como lenguaje visual.'], ['Umbral nocturno', 'Una lectura más oscura del mismo universo, sin revelar su historia.']],
     support: 'Apoyar el proyecto', supportNote: 'El apoyo es voluntario. No es una preventa ni concede ventajas dentro del juego.',
     faqLabel: 'ANTES DE CRUZAR', faqTitle: 'Lo que podés saber hoy.',
     faq: [
@@ -46,7 +48,7 @@ const copy = {
   en: {
     description: 'The official World of Xethkioz portal. Fantasy, atmosphere and updates from an independent action RPG in development.',
     home: 'Back to XETHKIOZ', login: 'Sign in', language: 'Switch to Spanish',
-    status: 'INDEPENDENT ACTION RPG · IN DEVELOPMENT', title: 'Cross the threshold.',
+    status: 'INDEPENDENT ACTION RPG', title: 'Cross the threshold.',
     lead: 'Some worlds are made to be seen. Others invite you to lose yourself. World of Xethkioz is taking shape.',
     explore: 'Explore the atmosphere', follow: 'Follow development', caption: 'PROMOTIONAL ILLUSTRATION · NOT GAMEPLAY',
     nav: ['The vision', 'Atmosphere', 'Veyr', 'Development', 'Questions'],
@@ -63,6 +65,8 @@ const copy = {
     devLabel: '04 / THE JOURNEY', devTitle: 'A world in the making.',
     devBody: 'Development continues. Updates suitable for sharing will appear on our official channels, when they are ready to be presented.',
     milestones: [['Art direction', 'In development'], ['Game experience', 'In development'], ['Public updates', 'On our channels']],
+    visualLabel: 'PUBLIC VISUAL ART', visualTitle: 'Three echoes of a much larger world.',
+    visualCards: [['Living nature', 'An organic atmosphere crossed by energy and crystal.'], ['Suspended horizons', 'Height, void and floating structures as a visual language.'], ['Night threshold', 'A darker reading of the same universe without revealing its story.']],
     support: 'Support the project', supportNote: 'Support is voluntary. It is not a preorder and grants no gameplay advantages.',
     faqLabel: 'BEFORE YOU CROSS', faqTitle: 'What we can share today.',
     faq: [
@@ -98,8 +102,8 @@ export default function WorldOfXethkioz() {
           <picture className="woxp-hero-art" aria-hidden="true"><img src={atmosphereArt} alt="" width="800" height="800" fetchPriority="high" decoding="async" /></picture>
           <div className="woxp-hero-shade" aria-hidden="true" />
           <div className="wox-portal-hero-copy">
-            <p className="woxp-kicker">{t.status}</p>
-            <p className="woxp-game-name">WORLD OF <strong>XETHKIOZ</strong></p>
+            <picture className="woxp-game-logo-wrap"><img src="/assets/world-of-xethkioz/world-of-xethkioz-logo.svg" alt="World of Xethkioz" className="woxp-game-logo" width="1800" height="520" decoding="async" /></picture>
+            <p className="woxp-kicker woxp-game-status">{t.status}</p>
             <div className="woxp-ornament" aria-hidden="true">◆</div>
             <h1 id="wox-portal-title">{t.title}</h1>
             <p className="woxp-lead">{t.lead}</p>
@@ -128,7 +132,18 @@ export default function WorldOfXethkioz() {
           <div><p className="woxp-kicker">{t.guideLabel}</p><h2>{t.guideTitle}</h2><p className="woxp-body">{t.guideBody}</p><button className="woxp-text-link" type="button" onClick={() => window.dispatchEvent(new CustomEvent('xethkioz:nexus-chat-open', { detail: { room: 'general' } }))}>{t.guideAction} ↗</button><small className="woxp-note">{t.guideNote}</small></div>
         </section>
         <section id="arte-visual" className="wox-portal-art woxp-section">
-          <div><p className="woxp-kicker">{t.devLabel}</p><h2>{t.devTitle}</h2><p className="woxp-body">{t.devBody}</p><a className="woxp-text-link" href="https://www.threads.com/@xethkioz" target="_blank" rel="noopener noreferrer">Threads ↗</a></div>
+          <header className="woxp-art-head"><div><p className="woxp-kicker">{t.devLabel}</p><h2>{t.devTitle}</h2></div><div><p className="woxp-body">{t.devBody}</p><a className="woxp-text-link" href="https://www.threads.com/@xethkioz" target="_blank" rel="noopener noreferrer">Threads ↗</a></div></header>
+          <div className="woxp-public-showcase" aria-labelledby="woxp-visual-title">
+            <div className="woxp-public-showcase-title"><p className="woxp-kicker">{t.visualLabel}</p><h3 id="woxp-visual-title">{t.visualTitle}</h3></div>
+            <div className="woxp-concept-gallery">
+              {[
+                '/assets/world-of-xethkioz/web-art/biome-izrdralar.svg',
+                '/assets/world-of-xethkioz/web-art/biome-xiomalar.svg',
+                '/assets/world-of-xethkioz/web-art/biome-zodnight.svg',
+              ].map((src, index) => <figure key={src}><img src={src} alt={t.visualCards[index][0]} width="1600" height="900" loading="lazy" decoding="async" /><figcaption><small>0{index + 1}</small><div><strong>{t.visualCards[index][0]}</strong><span>{t.visualCards[index][1]}</span></div></figcaption></figure>)}
+            </div>
+            <p className="woxp-showcase-note">{t.caption}</p>
+          </div>
           <div className="woxp-development">{t.milestones.map(([name, state], index) => <div key={name}><span aria-hidden="true">0{index + 1}</span><h3>{name}</h3><small>{state}</small></div>)}</div>
         </section>
         <section id="preguntas" className="woxp-faq woxp-section"><header><p className="woxp-kicker">{t.faqLabel}</p><h2>{t.faqTitle}</h2></header><div>{t.faq.map(([question, answer]) => <details key={question}><summary>{question}<span aria-hidden="true">＋</span></summary><p>{answer}</p></details>)}</div></section>

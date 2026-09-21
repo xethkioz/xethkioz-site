@@ -73,3 +73,43 @@
 .wox-home .wox-support-card>a{background:#dec590;border-color:#ead4a6;color:#1b140b;font-size:13px;font-weight:600;min-height:54px;text-align:left}
 @media(hover:hover){.wox-home .wox-support-card>a:hover{background:#f0ddaf}}
 @media(max-width:760px){.wox-home .wox-support-card{margin-top:28px;padding:30px 22px;gap:24px}.wox-home .wox-support-card>a{justify-self:stretch}.wox-home .wox-support-card h2{font-size:34px}}
+
+
+/* Pass 25 — premium hero lockup. Keep the logo high, readable and static. */
+.wox-home .wox-hero{align-items:flex-start;padding-top:38px}
+.wox-home .wox-hero-core{width:62%;max-width:760px}
+.wox-home .wox-logo-wrap{max-width:650px;margin:0 0 6px}
+.wox-home .wox-world-logo{max-height:250px}
+.wox-home .wox-status{margin:0 0 15px;font-size:10px;letter-spacing:.205em;color:#e2c98f}
+.wox-home .wox-fantasy-rule{margin:13px 0 21px;max-width:430px}
+.wox-home .wox-hero h2{max-width:610px}
+.wox-home .wox-lead{max-width:430px}
+@media(max-width:1100px){
+  .wox-home .wox-hero{padding-top:32px}
+  .wox-home .wox-hero-core{width:72%}
+  .wox-home .wox-logo-wrap{max-width:580px}
+}
+@media(max-width:760px){
+  .wox-home .wox-hero{align-items:flex-start;min-height:760px;padding:30px 24px 92px}
+  .wox-home .wox-bg img{object-position:50% 18%}
+  .wox-home .wox-hero::before{background:linear-gradient(180deg,rgba(9,11,16,.76) 0%,rgba(9,11,16,.42) 26%,rgba(9,11,16,.74) 55%,#090b10 92%),linear-gradient(90deg,rgba(9,11,16,.25),transparent 72%)}
+  .wox-home .wox-hero-core{width:100%;max-width:560px}
+  .wox-home .wox-logo-wrap{max-width:520px;margin:0 0 5px}
+  .wox-home .wox-world-logo{max-height:none}
+  .wox-home .wox-status{max-width:none;margin-bottom:13px;font-size:8px;letter-spacing:.17em}
+  .wox-home .wox-fantasy-rule{margin:12px 0 18px}
+  .wox-home .wox-hero h2{font-size:34px}
+  .wox-home .wox-lead{max-width:370px}
+}
+@media(max-width:359px){
+  .wox-home .wox-hero{padding-top:26px}
+  .wox-home .wox-status{font-size:7px}
+}
+
+/* Pass 25 QA: keep the promotional-art disclosure clear of Veyr/chat on phones. */
+@media(max-width:760px){
+  .wox-home .wox-art-credit{left:24px;right:auto;max-width:58%;text-align:left}
+}
+@media(max-width:359px){
+  .wox-home .wox-art-credit{left:20px;max-width:56%}
+}
