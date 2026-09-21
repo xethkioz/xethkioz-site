@@ -102,7 +102,7 @@ export default function WorldOfXethkioz() {
           <picture className="woxp-hero-art" aria-hidden="true"><img src={atmosphereArt} alt="" width="800" height="800" fetchPriority="high" decoding="async" /></picture>
           <div className="woxp-hero-shade" aria-hidden="true" />
           <div className="wox-portal-hero-copy">
-            <picture className="woxp-game-logo-wrap"><img src="/assets/world-of-xethkioz/world-of-xethkioz-logo.svg" alt="World of Xethkioz" className="woxp-game-logo" width="1800" height="520" decoding="async" /></picture>
+            <picture className="woxp-game-logo-wrap"><img src="/assets/world-of-xethkioz/world-of-xethkioz-logo.png" alt="World of Xethkioz" className="woxp-game-logo" width="1584" height="483" decoding="async" /></picture>
             <p className="woxp-kicker woxp-game-status">{t.status}</p>
             <div className="woxp-ornament" aria-hidden="true">◆</div>
             <h1 id="wox-portal-title">{t.title}</h1>

@@ -101,7 +101,7 @@ export default function Home() {
           <picture className="wox-bg" aria-hidden="true"><img src="/assets/portal-games-world-v3.webp" alt="" width="800" height="800" fetchPriority="high" decoding="async" /></picture>
           <h1 id="wox-title" className="sr-only">World of Xethkioz</h1>
           <div className="wox-hero-core">
-            <picture className="wox-logo-wrap"><img src="/assets/world-of-xethkioz/world-of-xethkioz-logo.svg" alt="World of Xethkioz" className="wox-world-logo" width="1800" height="520" decoding="async" /></picture>
+            <picture className="wox-logo-wrap"><img src="/assets/world-of-xethkioz/world-of-xethkioz-logo.png" alt="World of Xethkioz" className="wox-world-logo" width="1584" height="483" fetchPriority="high" decoding="async" /></picture>
             <p className="wox-status">{t.status}</p>
             <div className="wox-fantasy-rule" aria-hidden="true">◆</div>
             <h2>{t.soul}</h2><p className="wox-lead">{t.lead}</p>

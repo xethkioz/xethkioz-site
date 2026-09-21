@@ -38,3 +38,11 @@ html[data-nexus-chat-open] .xk-fantasy-shell .xk-wisp{visibility:hidden;pointer-
 /* Expanded navigation owns the foreground; retain an open chat close control. */
 html[data-fantasy-menu-open] .xk-fantasy-shell .xk-wisp,
 html[data-fantasy-menu-open] .xk-fantasy-shell button[aria-controls="nexus-chat-panel"][aria-expanded="false"]{visibility:hidden;pointer-events:none}
+
+
+/* Pass 27: the World chapter rail sits at the first viewport edge; keep Veyr above it on desktop. */
+@media(min-width:761px){
+  .xk-world-portal-route .xk-wisp{
+    bottom:max(4.25rem,calc(env(safe-area-inset-bottom) + 3rem));
+  }
+}
