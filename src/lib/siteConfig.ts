@@ -1,5 +1,5 @@
-export const SITE_VERSION = 'v11.4.5'
-export const SITE_RELEASE = 'Hero/Header Immersion - Pass 28'
+export const SITE_VERSION = 'v11.4.6'
+export const SITE_RELEASE = 'Hero/Header Final Blend - Pass 29'
 export const SITE_BUILD_DATE = '2026-09-21'
 export const SITE_DOMAIN = 'https://xethkioz.com.ar'
 

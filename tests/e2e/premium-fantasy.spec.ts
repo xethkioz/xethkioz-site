@@ -21,7 +21,7 @@ test('Premium Home conserva rutas, CTA real y canales oficiales sin video', asyn
   const result = await new AxeBuilder({ page }).include('.wox-home').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze()
   expect(result.violations).toEqual([])
 })
-test('Pass27 integra PNG transparente, hero full-bleed y header desktop de una sola fila', async ({ page }) => {
+test('Pass29 integra PNG transparente, hero full-bleed y header desktop sin barra separada', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 936 })
   await page.goto('/'); await essentials(page)
   const logo = page.locator('.wox-world-logo')
@@ -34,6 +34,10 @@ test('Pass27 integra PNG transparente, hero full-bleed y header desktop de una s
     const actions = document.querySelector('.xkf-actions')!.getBoundingClientRect()
     const hero = document.querySelector('.wox-hero')!.getBoundingClientRect()
     const bg = document.querySelector('.wox-bg')!.getBoundingClientRect()
+    const logo = document.querySelector('.wox-world-logo')!.getBoundingClientRect()
+    const headerElement = document.querySelector('.xkf-header')!
+    const headerStyle = getComputedStyle(headerElement)
+    const headerAfter = getComputedStyle(headerElement, '::after')
     const centers = [brand, nav, actions].map(rect => rect.top + rect.height / 2)
     const fade = getComputedStyle(document.querySelector('.wox-bg')!, '::after').backgroundImage
     return {
@@ -44,8 +48,12 @@ test('Pass27 integra PNG transparente, hero full-bleed y header desktop de una s
       heroLeft: hero.left,
       heroRight: hero.right,
       heroTop: hero.top,
+      bgTop: bg.top,
       bgLeft: bg.left,
       bgRight: bg.right,
+      logoWidth: logo.width,
+      headerBorderBottom: headerStyle.borderBottomWidth,
+      separatorContent: headerAfter.content,
       viewport: innerWidth,
       fade,
     }
@@ -57,8 +65,12 @@ test('Pass27 integra PNG transparente, hero full-bleed y header desktop de una s
   expect(geometry.heroTop).toBeLessThanOrEqual(1)
   expect(geometry.heroLeft).toBeLessThanOrEqual(1)
   expect(geometry.heroRight).toBeGreaterThanOrEqual(geometry.viewport - 1)
+  expect(geometry.bgTop).toBeLessThan(geometry.heroTop)
   expect(geometry.bgLeft).toBeLessThanOrEqual(1)
   expect(geometry.bgRight).toBeGreaterThanOrEqual(geometry.viewport - 1)
+  expect(geometry.logoWidth).toBeGreaterThan(680)
+  expect(geometry.headerBorderBottom).toBe('0px')
+  expect(geometry.separatorContent).toBe('none')
   expect(geometry.fade).toContain('linear-gradient')
 })
 test('Portal fantasy: tabs accesibles, FAQ y contenido público reservado', async ({ page }) => {
