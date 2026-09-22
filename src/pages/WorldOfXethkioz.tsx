@@ -23,7 +23,7 @@ const copy = {
     principles: [['Imaginación', 'Una identidad propia, construida con intención.'], ['Atmósfera', 'Luz, arquitectura y silencio que invitan a mirar más allá.'], ['Descubrimiento', 'Compartir lo esencial. Reservar lo inesperado.']],
     worldLabel: '02 / VISIÓN DEL FUNDADOR', worldTitle: 'La visión detrás de World of Xethkioz.',
     worldBody: 'Una explicación directa sobre el propósito del proyecto, su identidad y la dirección general del universo, contada por su creador.',
-    founderNote: 'VIDEO DEL CREADOR · 00:35 · CON SUBTÍTULOS',
+    founderNote: 'PRESENTACIÓN OFICIAL · 05:04 · CON SUBTÍTULOS',
     guideLabel: '03 / UNA PRESENCIA', guideTitle: 'Veyr.',
     guideBody: 'Entre lo visible y lo desconocido, una presencia acompaña el recorrido. Veyr observa, guía y deja señales en los márgenes del mundo. No revela su origen, pero su huella aparece donde la energía despierta y donde la historia todavía guarda silencio.',
     guideAction: 'Abrir el chat de la comunidad', guideNote: 'La guía de la web. El misterio del juego permanece intacto.',
@@ -54,7 +54,7 @@ const copy = {
     principles: [['Imagination', 'A distinct identity, built with intention.'], ['Atmosphere', 'Light, architecture and silence inviting a closer look.'], ['Discovery', 'Share the essentials. Preserve the unexpected.']],
     worldLabel: '02 / FOUNDER VISION', worldTitle: 'The vision behind World of Xethkioz.',
     worldBody: 'A direct explanation of the project, its identity and the overall direction of the universe, presented by its creator.',
-    founderNote: 'CREATOR VIDEO · 00:35 · CAPTIONS INCLUDED',
+    founderNote: 'OFFICIAL PRESENTATION · 05:04 · CAPTIONS INCLUDED',
     guideLabel: '03 / A PRESENCE', guideTitle: 'Veyr.',
     guideBody: 'Between the visible and the unknown, a presence accompanies the journey. Veyr watches, guides and leaves traces along the edges of the world. Her origin remains unrevealed, but her presence appears wherever energy awakens and where the story still keeps its silence.',
     guideAction: 'Open the community chat', guideNote: 'A guide on the website. The mystery of the game stays intact.',
@@ -107,7 +107,7 @@ export default function WorldOfXethkioz() {
           <header className="woxp-founder-head"><div><p className="woxp-kicker">{t.worldLabel}</p><h2>{t.worldTitle}</h2></div><p className="woxp-body">{t.worldBody}</p></header>
           <div className="woxp-founder-media">
             <video className="woxp-founder-video" controls playsInline preload="metadata" poster="/assets/world-of-xethkioz/founder/founder-vision-poster.webp" aria-label={lang === 'es' ? 'Video: visión del fundador de World of Xethkioz' : 'Video: World of Xethkioz founder vision'}>
-              <source src="/assets/world-of-xethkioz/founder/founder-vision.mp4" type="video/mp4" />
+              <source src="/assets/world-of-xethkioz/promo/xethkioz-beyond-the-game-web.mp4" type="video/mp4" />
             </video>
             <div className="woxp-founder-meta"><span>{t.founderNote}</span><span>WORLD OF XETHKIOZ</span></div>
           </div>

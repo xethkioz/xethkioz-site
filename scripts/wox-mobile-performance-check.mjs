@@ -11,7 +11,7 @@ const checks = [
  ['hero reserves dimensions and gets loading priority', [home,page].every(s => s.includes('fetchPriority="high"') && s.includes('width="800" height="800"'))],
  ['below-fold art is lazy and asynchronously decoded', page.includes('loading="lazy" decoding="async"')],
  ['public media never autoplays or embeds heavyweight remote surfaces', [home,page].every(s => !/autoPlay|<iframe|<canvas/.test(s))],
- ['founder video is user-controlled and metadata-only', page.includes('<video') && page.includes('controls') && page.includes('playsInline') && page.includes('preload="metadata"') && page.includes('founder-vision.mp4')],
+ ['founder video is user-controlled and metadata-only', page.includes('<video') && page.includes('controls') && page.includes('playsInline') && page.includes('preload="metadata"') && page.includes('xethkioz-beyond-the-game-web.mp4')],
  ['page styles have no persistent animation or backdrop filters', [css,homeCss].every(s => !/backdrop-filter\s*:|animation\s*:[^;}]*infinite/.test(s))],
  ['both presentations support phones and reduced motion', [css,homeCss].every(s => s.includes('@media(max-width:760px)') && s.includes('prefers-reduced-motion: reduce'))],
  ['global mobile Veyr remains on the static profile', wispCss.includes('.xk-wisp .xk-wisp-field,') && wispCss.includes('.xk-wisp .xk-wisp-specter-veyr,') && wispCss.includes('.xk-wisp .xk-wisp-particles{')],
