@@ -1,8 +1,6 @@
 import FantasyNavigation from '../components/FantasyNavigation'
-import { useState, type KeyboardEvent } from 'react'
 import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
-import PublicArtworkViewer from '../components/PublicArtworkViewer'
 import { PUBLIC_ATMOSPHERE_ART } from '../lib/publicArtwork'
 import './PremiumFantasyShell.css'
 import { useLang } from '../lib/LangContext'
@@ -18,15 +16,14 @@ const copy = {
     home: 'Volver a XETHKIOZ', login: 'Iniciar sesión', language: 'Cambiar a inglés',
     status: 'ACTION RPG INDEPENDIENTE', title: 'Atravesá el umbral.',
     lead: 'Hay mundos que se miran. Y otros que invitan a perderse. World of Xethkioz está tomando forma.',
-    explore: 'Descubrí la atmósfera', follow: 'Seguí el desarrollo', caption: 'ILUSTRACIÓN PROMOCIONAL · NO ES GAMEPLAY',
-    nav: ['La visión', 'Atmósfera', 'Veyr', 'Desarrollo', 'Preguntas'],
+    explore: 'Conocé la visión', follow: 'Seguí el desarrollo', caption: 'ILUSTRACIÓN PROMOCIONAL · NO ES GAMEPLAY',
+    nav: ['La visión', 'Visión del fundador', 'Veyr', 'Desarrollo', 'Preguntas'],
     visionLabel: '01 / LA VISIÓN', visionTitle: 'La fantasía se vive.\nNo se explica toda de una vez.',
     visionBody: 'Un proyecto independiente que reúne imaginación, arte y tecnología. Este espacio es una primera mirada a su atmósfera; la historia y sus sorpresas se descubren a su debido tiempo.',
     principles: [['Imaginación', 'Una identidad propia, construida con intención.'], ['Atmósfera', 'Luz, arquitectura y silencio que invitan a mirar más allá.'], ['Descubrimiento', 'Compartir lo esencial. Reservar lo inesperado.']],
-    worldLabel: '02 / ESTUDIO DE ATMÓSFERA', worldTitle: 'Detenete. Mirá más cerca.',
-    worldBody: 'Tres miradas sobre una ilustración del ecosistema XETHKIOZ. No representa un mapa ni el aspecto definitivo del juego.',
-    tabs: ['Panorama', 'Arquitectura', 'Luz'],
-    descriptions: ['Una escena para imaginar lo que puede existir más allá.', 'Formas, piedra y profundidad: detalles que construyen una atmósfera.', 'La luz violeta recorre el paisaje y cambia la forma de mirarlo.'],
+    worldLabel: '02 / VISIÓN DEL FUNDADOR', worldTitle: 'La visión detrás de World of Xethkioz.',
+    worldBody: 'Una explicación directa sobre el propósito del proyecto, su identidad y la dirección general del universo, contada por su creador.',
+    founderNote: 'VIDEO DEL CREADOR · 00:35 · CON SUBTÍTULOS',
     guideLabel: '03 / UNA PRESENCIA', guideTitle: 'Veyr.',
     guideBody: 'Entre lo visible y lo desconocido, una presencia acompaña el recorrido. Veyr observa, guía y deja señales en los márgenes del mundo. No revela su origen, pero su huella aparece donde la energía despierta y donde la historia todavía guarda silencio.',
     guideAction: 'Abrir el chat de la comunidad', guideNote: 'La guía de la web. El misterio del juego permanece intacto.',
@@ -50,15 +47,14 @@ const copy = {
     home: 'Back to XETHKIOZ', login: 'Sign in', language: 'Switch to Spanish',
     status: 'INDEPENDENT ACTION RPG', title: 'Cross the threshold.',
     lead: 'Some worlds are made to be seen. Others invite you to lose yourself. World of Xethkioz is taking shape.',
-    explore: 'Explore the atmosphere', follow: 'Follow development', caption: 'PROMOTIONAL ILLUSTRATION · NOT GAMEPLAY',
-    nav: ['The vision', 'Atmosphere', 'Veyr', 'Development', 'Questions'],
+    explore: 'Watch the vision', follow: 'Follow development', caption: 'PROMOTIONAL ILLUSTRATION · NOT GAMEPLAY',
+    nav: ['The vision', 'Founder vision', 'Veyr', 'Development', 'Questions'],
     visionLabel: '01 / THE VISION', visionTitle: 'Fantasy is an experience.\nNot everything is revealed at once.',
     visionBody: 'An independent project bringing imagination, art and technology together. This is a first look at its atmosphere; the story and its surprises will unfold in their own time.',
     principles: [['Imagination', 'A distinct identity, built with intention.'], ['Atmosphere', 'Light, architecture and silence inviting a closer look.'], ['Discovery', 'Share the essentials. Preserve the unexpected.']],
-    worldLabel: '02 / ATMOSPHERE STUDY', worldTitle: 'Pause. Look a little closer.',
-    worldBody: 'Three perspectives on one illustration from the XETHKIOZ ecosystem. It is not a game map or a representation of the final game.',
-    tabs: ['Panorama', 'Architecture', 'Light'],
-    descriptions: ['A scene to imagine what might lie beyond.', 'Form, stone and depth: the details that create an atmosphere.', 'Violet light crosses the landscape and changes how we see it.'],
+    worldLabel: '02 / FOUNDER VISION', worldTitle: 'The vision behind World of Xethkioz.',
+    worldBody: 'A direct explanation of the project, its identity and the overall direction of the universe, presented by its creator.',
+    founderNote: 'CREATOR VIDEO · 00:35 · CAPTIONS INCLUDED',
     guideLabel: '03 / A PRESENCE', guideTitle: 'Veyr.',
     guideBody: 'Between the visible and the unknown, a presence accompanies the journey. Veyr watches, guides and leaves traces along the edges of the world. Her origin remains unrevealed, but her presence appears wherever energy awakens and where the story still keeps its silence.',
     guideAction: 'Open the community chat', guideNote: 'A guide on the website. The mystery of the game stays intact.',
@@ -82,17 +78,8 @@ const anchors = ['historia', 'mundo', 'convergencia', 'arte-visual', 'preguntas'
 
 export default function WorldOfXethkioz() {
   const { lang, localizePath } = useLang()
-  const [view, setView] = useState(0)
   const t = copy[lang]
   const socials = socialNames.flatMap(name => SOCIAL_LINKS.filter(item => item.name === name))
-  function moveTab(event: KeyboardEvent<HTMLButtonElement>, index: number) {
-    const keys: Record<string, number> = { ArrowRight: (index + 1) % 3, ArrowLeft: (index + 2) % 3, Home: 0, End: 2 }
-    if (!(event.key in keys)) return
-    event.preventDefault()
-    const next = keys[event.key]
-    setView(next)
-    document.getElementById(`atmosphere-tab-${next}`)?.focus()
-  }
   return (
     <>
       <SEO title="World of Xethkioz" description={t.description} url="/world-of-xethkioz" image="/assets/world-of-xethkioz/world-of-xethkioz-logo.webp" />
@@ -117,20 +104,19 @@ export default function WorldOfXethkioz() {
           <div><p className="woxp-kicker">{t.visionLabel}</p><h2>{t.visionTitle}</h2></div>
           <div><p className="woxp-body">{t.visionBody}</p><div className="woxp-principles">{t.principles.map(([name, text], index) => <article key={name}><span aria-hidden="true">0{index + 1}</span><div><h3>{name}</h3><p>{text}</p></div></article>)}</div></div>
         </section>
-        <section id="mundo" className="wox-portal-world woxp-section">
-          <header><p className="woxp-kicker">{t.worldLabel}</p><h2>{t.worldTitle}</h2><p className="woxp-body">{t.worldBody}</p></header>
-          <div className="woxp-atmosphere" data-view={view}>
-            <div className="woxp-view-tabs" role="tablist" aria-label={lang === 'es' ? 'Detalle de la ilustración' : 'Illustration details'}>{t.tabs.map((label, index) => <button key={label} id={`atmosphere-tab-${index}`} role="tab" type="button" aria-selected={view === index} aria-controls="atmosphere-panel" tabIndex={view === index ? 0 : -1} onClick={() => setView(index)} onKeyDown={event => moveTab(event, index)}>{label}</button>)}</div>
-            <div id="atmosphere-panel" role="tabpanel" aria-labelledby={`atmosphere-tab-${view}`} tabIndex={0}>
-              <figure><img className={`woxp-atmosphere-image woxp-crop-${view}`} src={atmosphereArt} alt={t.descriptions[view]} width="800" height="800" loading="lazy" decoding="async" /><figcaption><small>{t.caption}</small><p>{t.descriptions[view]}</p></figcaption></figure>
-            </div>
-            <PublicArtworkViewer lang={lang} />
+        <section id="mundo" className="woxp-founder woxp-section">
+          <header className="woxp-founder-head"><div><p className="woxp-kicker">{t.worldLabel}</p><h2>{t.worldTitle}</h2></div><p className="woxp-body">{t.worldBody}</p></header>
+          <div className="woxp-founder-media">
+            <video className="woxp-founder-video" controls playsInline preload="metadata" poster="/assets/world-of-xethkioz/founder/founder-vision-poster.webp" aria-label={lang === 'es' ? 'Video: visión del fundador de World of Xethkioz' : 'Video: World of Xethkioz founder vision'}>
+              <source src="/assets/world-of-xethkioz/founder/founder-vision.mp4" type="video/mp4" />
+            </video>
+            <div className="woxp-founder-meta"><span>{t.founderNote}</span><span>WORLD OF XETHKIOZ</span></div>
           </div>
         </section>
         <section id="convergencia" className="wox-portal-cast woxp-section">
           <picture className="woxp-veyr-atmosphere" aria-hidden="true"><img src={atmosphereArt} alt="" width="800" height="800" loading="lazy" decoding="async" /></picture>
           <div className="woxp-veyr-orbit" aria-hidden="true"><i /><i /><i /></div>
-          <div className="woxp-veyr-seal" aria-hidden="true"><span /><img src="/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg" alt="" width="240" height="240" loading="lazy" decoding="async" /></div>
+          <div className="woxp-veyr-character" aria-hidden="true"><span className="woxp-veyr-aura" /><img src="/assets/world-of-xethkioz/characters/veyr-good.webp" alt="" width="1086" height="1448" loading="lazy" decoding="async" /></div>
           <div className="woxp-veyr-copy"><p className="woxp-kicker">{t.guideLabel}</p><h2>{t.guideTitle}</h2><p className="woxp-body">{t.guideBody}</p><button className="woxp-text-link" type="button" onClick={() => window.dispatchEvent(new CustomEvent('xethkioz:nexus-chat-open', { detail: { room: 'general' } }))}>{t.guideAction} ↗</button><small className="woxp-note">{t.guideNote}</small></div>
         </section>
         <section id="arte-visual" className="wox-portal-art woxp-section">

@@ -54,6 +54,7 @@ export default function FusionGlobalWisp() {
   const normalizedPath = location.pathname.replace(/^\/en(?=\/|$)/, '') || '/'
   const insideGreenNode = normalizedPath === '/green-node'
   const homeEntry = normalizedPath === '/'
+  const worldPortal = normalizedPath === '/world-of-xethkioz'
   const actionLabel = insideGreenNode ? t.helpAction : t.action
 
   useEffect(() => {
@@ -106,7 +107,7 @@ export default function FusionGlobalWisp() {
       />
       <button
         type="button"
-        className={`xk-wisp xk-wisp-${moodClass}${homeEntry ? ' is-home-entry' : ''}${insideGreenNode ? ' is-inside-node' : ''}${portalOpen ? ' is-opening' : ''}`}
+        className={`xk-wisp xk-wisp-${moodClass}${homeEntry ? ' is-home-entry' : ''}${worldPortal ? ' is-world-veyr' : ''}${insideGreenNode ? ' is-inside-node' : ''}${portalOpen ? ' is-opening' : ''}`}
         style={wispStyle}
         onClick={openPortal}
         onMouseEnter={focusWisp}
@@ -141,12 +142,12 @@ export default function FusionGlobalWisp() {
 
           <span className="xk-wisp-specter-wrap">
             <SafeImage
-              src="/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg"
+              src={worldPortal ? '/assets/world-of-xethkioz/characters/veyr-good.webp' : '/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg'}
               fallback="/assets/identity/wisp-digital-specter-v1.webp"
               className="xk-wisp-specter xk-wisp-specter-veyr"
               alt=""
-              loading={location.pathname === '/' ? 'eager' : 'lazy'}
-              fetchPriority={location.pathname === '/' ? 'high' : 'low'}
+              loading={homeEntry || worldPortal ? 'eager' : 'lazy'}
+              fetchPriority={homeEntry || worldPortal ? 'high' : 'low'}
             />
             <span className="xk-wisp-scanline" />
             <span className="xk-wisp-glitch-slice" />
