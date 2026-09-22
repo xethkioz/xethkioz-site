@@ -10,7 +10,7 @@ const add = (name, pass, detail) => checks.push({ name, pass: Boolean(pass), det
 
 add('Reusable portal Wisp guide exists', component.includes('PortalWispVariant') && component.includes('PortalWispGuideProps'), 'Fun and Gaming must share behavior without duplicating guide state.')
 add('Lumina covers both Fun modes', ['play', 'memes-arcade', 'memes-clips', 'memes-wall'].every((destination) => component.includes(`destination: '${destination}'`)), 'Lumina must explain Nexus Plaza and every active Meme Core subsection.')
-add('Elemental Wisp covers every Gaming section', ['overview', 'guides', 'live', 'news', 'community'].every((destination) => component.includes(`destination: '${destination}'`)), 'The guide must explain all sections that Gaming can mount.')
+add('Elemental Wisp covers every active Gaming section', ['overview', 'guides', 'news', 'community'].every((destination) => component.includes(`destination: '${destination}'`)) && !component.includes("destination: 'live'"), 'The guide must match the four active Gaming routes.')
 add('Elemental modes change the visual state', ['fire', 'arcane', 'ice'].every((energy) => component.includes(`energy: '${energy}'`) && css.includes(`[data-energy="${energy}"]`)), 'Fire, Arcane and Ice must be functional guide states.')
 add('Lumina has a distinct identity', component.includes("name: 'LÚMINA'") && component.includes("identity: 'WISP DE LUZ Y RISA'"), 'Fun must not reuse Green Node or Gaming copy.')
 add('Completion stays local and separate', component.includes("'xethkioz.fun.wisp-guide.v1'") && component.includes("'xethkioz.gaming.wisp-guide.v1'") && component.includes('window.localStorage'), 'Each first-visit tour must be remembered only on-device.')

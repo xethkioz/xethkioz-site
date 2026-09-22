@@ -1,5 +1,5 @@
-export const SITE_VERSION = 'v11.4.8'
-export const SITE_RELEASE = 'Founder Vision + Canon Veyr - Pass 31'
+export const SITE_VERSION = 'v11.4.9'
+export const SITE_RELEASE = 'Gaming Harmony + World Polish - Pass 32'
 export const SITE_BUILD_DATE = '2026-09-22'
 export const SITE_DOMAIN = 'https://xethkioz.com.ar'
 

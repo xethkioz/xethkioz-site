@@ -97,7 +97,6 @@ export default function WorldOfXethkioz() {
             <div className="woxp-actions"><a className="woxp-button" href="#mundo">{t.explore}<span aria-hidden="true">↗</span></a><a className="woxp-text-link" href="https://www.threads.com/@xethkioz" target="_blank" rel="noopener noreferrer">{t.follow} ↗</a></div>
           </div>
           <p className="woxp-art-caption">{t.caption}</p>
-          <a className="woxp-scroll-cue" href="#historia" aria-label={t.nav[0]}>↓</a>
         </section>
         <nav className="wox-portal-anchor-nav" aria-label={lang === 'es' ? 'Capítulos del juego' : 'Game chapters'}>{anchors.map((anchor, index) => <a key={anchor} href={`#${anchor}`}><span aria-hidden="true">0{index + 1}</span>{t.nav[index]}</a>)}</nav>
         <section id="historia" className="wox-portal-story woxp-section">

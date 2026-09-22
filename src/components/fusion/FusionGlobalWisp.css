@@ -699,8 +699,75 @@ html[data-nexus-chat-open] .xk-wisp{visibility:hidden;pointer-events:none}
 /* PASS 30 — World portal uses the canonical good Veyr and reserves the chat lane. */
 .xk-wisp.is-world-veyr{--wisp-size:84px;--wisp-accent:#f1ae4d;--wisp-secondary:#8b5cf6;right:1.25rem;bottom:6.35rem}
 .xk-wisp.is-world-veyr .xk-wisp-specter-wrap{inset:6%;overflow:hidden;border:1px solid rgba(241,174,77,.34);border-radius:50%;background:radial-gradient(circle at 50% 44%,rgba(255,180,73,.18),rgba(50,24,75,.2) 55%,rgba(2,6,9,.92) 78%);box-shadow:inset 0 0 20px rgba(0,0,0,.66),0 0 18px rgba(139,92,246,.22)}
-.xk-wisp.is-world-veyr .xk-wisp-specter-veyr{width:100%;height:100%;object-fit:cover;object-position:50% 38%;filter:drop-shadow(0 0 8px rgba(255,183,77,.32)) drop-shadow(0 0 14px rgba(139,92,246,.22))}
+.xk-wisp.is-world-veyr .xk-wisp-specter-veyr{width:100%;height:100%;object-fit:contain;object-position:center;transform:scale(.92);filter:drop-shadow(0 0 8px rgba(255,183,77,.34)) drop-shadow(0 0 14px rgba(139,92,246,.2))}
 .xk-wisp.is-world-veyr .xk-wisp-glitch-slice,.xk-wisp.is-world-veyr .xk-wisp-scanline{display:none}
 .xk-wisp.is-world-veyr .xk-wisp-rune-ring{opacity:.58}
 html[data-nexus-chat-open] .xk-wisp.is-world-veyr{visibility:hidden;opacity:0;pointer-events:none}
 @media(max-width:767px){.xk-app-shell.xk-has-mobile-dock .xk-wisp.is-world-veyr{--wisp-size:56px;right:4.75rem;bottom:calc(5.45rem + env(safe-area-inset-bottom))}.xk-wisp.is-world-veyr .xk-wisp-rune-ring{opacity:.45}}
+
+/* PASS 32 — On World, Veyr is a clean character portrait, not the Green Node Wisp shell. */
+.xk-wisp.is-world-veyr .xk-wisp-home-marker,
+.xk-wisp.is-world-veyr .xk-wisp-terminal,
+.xk-wisp.is-world-veyr .xk-wisp-energy-cloud,
+.xk-wisp.is-world-veyr .xk-wisp-energy-arc,
+.xk-wisp.is-world-veyr .xk-wisp-rune-ring,
+.xk-wisp.is-world-veyr .xk-wisp-particles{display:none!important}
+.xk-wisp.is-world-veyr .xk-wisp-field{inset:0}
+.xk-wisp.is-world-veyr .xk-wisp-specter-wrap{
+  inset:2%;
+  border-color:rgba(241,174,77,.46);
+  background:radial-gradient(circle at 50% 52%,rgba(255,180,73,.2),rgba(43,23,65,.18) 54%,rgba(4,6,10,.96) 78%);
+  box-shadow:inset 0 0 18px rgba(0,0,0,.62),0 0 0 1px rgba(139,92,246,.18),0 0 24px rgba(139,92,246,.2);
+}
+.xk-wisp.is-world-veyr{
+  animation:none!important;
+  transition:opacity .18s ease,visibility .18s ease!important;
+}
+.xk-wisp.is-world-veyr .xk-wisp-field,
+.xk-wisp.is-world-veyr .xk-wisp-specter-wrap,
+.xk-wisp.is-world-veyr .xk-wisp-specter-veyr{
+  animation:none!important;
+}
+
+/* PASS 32 — Gaming uses the same canonical good Veyr, simplified and clear. */
+.xk-wisp.is-gaming-veyr{
+  --wisp-size:72px;
+  --wisp-accent:#f1ae4d;
+  --wisp-secondary:#8b5cf6;
+  right:1.35rem;
+  bottom:6.35rem;
+  animation:none!important;
+}
+.xk-wisp.is-gaming-veyr .xk-wisp-home-marker,
+.xk-wisp.is-gaming-veyr .xk-wisp-terminal,
+.xk-wisp.is-gaming-veyr .xk-wisp-energy-cloud,
+.xk-wisp.is-gaming-veyr .xk-wisp-energy-arc,
+.xk-wisp.is-gaming-veyr .xk-wisp-rune-ring,
+.xk-wisp.is-gaming-veyr .xk-wisp-particles,
+.xk-wisp.is-gaming-veyr .xk-wisp-glitch-slice,
+.xk-wisp.is-gaming-veyr .xk-wisp-scanline{display:none!important}
+.xk-wisp.is-gaming-veyr .xk-wisp-field{inset:0}
+.xk-wisp.is-gaming-veyr .xk-wisp-specter-wrap{
+  inset:2%;
+  overflow:hidden;
+  border:1px solid rgba(241,174,77,.4);
+  border-radius:50%;
+  background:radial-gradient(circle at 50% 54%,rgba(255,181,75,.18),rgba(45,24,70,.16) 52%,rgba(4,6,10,.96) 78%);
+  box-shadow:inset 0 0 18px rgba(0,0,0,.62),0 0 22px rgba(139,92,246,.18);
+}
+.xk-wisp.is-gaming-veyr .xk-wisp-specter-veyr{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center;
+  transform:scale(.9);
+  filter:drop-shadow(0 0 7px rgba(255,183,77,.3));
+  animation:none!important;
+}
+@media(max-width:767px){
+  .xk-app-shell.xk-has-mobile-dock .xk-wisp.is-gaming-veyr{
+    --wisp-size:54px;
+    right:4.7rem;
+    bottom:calc(5.45rem + env(safe-area-inset-bottom));
+  }
+}
