@@ -1,212 +1,100 @@
-import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import SEO from '../components/SEO'
 import SafeImage from '../components/SafeImage'
-import PublicAdSlot from '../components/ads/PublicAdSlot'
 import PortalKnowledgeBriefing from '../components/PortalKnowledgeBriefing'
 import GamingGuideRotation from '../components/gaming/GamingGuideRotation'
-import { useLang } from '../lib/LangContext'
-import { STREAM_LINKS } from '../lib/siteConfig'
-import { supabase } from '../lib/supabase'
-import type { Stream } from '../lib/types'
-import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
-import { fetchPublishedNews, formatPublicNewsDate, type PublicNewsArticle } from '../services/news/publicNewsService'
-
 import EditorialCrosslinks from '../components/EditorialCrosslinks'
+import { useLang } from '../lib/LangContext'
+import { SOCIAL_LINKS } from '../lib/siteConfig'
 import './EditorialFantasy.css'
 
-type GamingSection = 'overview' | 'guides' | 'live' | 'news' | 'community'
+type GamingSection = 'overview' | 'guides' | 'news' | 'community'
 
 const content = {
   es: {
     title: 'Biblioteca gamer',
     kicker: 'XETHKIOZ · EXPLORAR Y JUGAR',
-    description: 'Noticias, guías, directos y comunidad gamer organizados por ruta para encontrar rápido qué jugar o hacer.',
+    description: 'Guías, gaming y comunidad organizados en un espacio simple para encontrar rápido qué jugar, qué leer y dónde seguir XETHKIOZ.',
     heroAlt: 'Ilustración editorial de un portal de fantasía',
-    switchLanguage: 'Cambiar a inglés',
-    switchCode: 'EN',
-    back: 'Volver a XETHKIOZ',
-    guides: 'Guías',
-    radar: 'Radar gamer',
-    community: 'Buscar escuadrón',
-    dispatch: 'RADAR GAMING',
-    read: 'Abrir noticia',
-    signal: 'noticias en radar',
     heroActionsLabel: 'Accesos principales de Gaming',
     heroGuides: 'ABRIR GUÍAS',
-    heroRadar: 'VER RADAR',
-    systemStatus: 'Resumen de Gaming',
-    nexusLink: 'RUTAS DISPONIBLES',
-    routeCount: '5',
-    stream: {
-      label: 'RADAR_STREAM',
-      syncing: 'SINCRONIZANDO',
-      liveCms: 'SEÑAL MARCADA EN VIVO EN EL CMS',
-      standby: 'CANAL EN ESPERA',
-      heading: 'Directos y videos en un solo punto',
-      liveDescription: 'La señal está marcada como activa en el CMS. Podés entrar al canal y seguir la transmisión.',
-      standbyDescription: 'Revisá YouTube para ver transmisiones o continuá con los últimos videos publicados.',
-      openLive: 'ENTRAR AL DIRECTO',
-      latestVod: 'VER ÚLTIMO VOD',
-      openYoutube: 'VER YOUTUBE',
-      live: 'LIVE',
-      offline: 'ESPERA',
-    },
-    utilityLabel: 'Opciones para participar en Gaming',
-    communityInfo: {
-      eyebrow: 'PARTY_READY // ANTES DE ENTRAR',
-      title: 'Prepará tu perfil para encontrar grupo',
-      text: 'Tres datos simples ayudan a conectar con personas que buscan la misma experiencia.',
-      items: [
-        ['PERFIL', 'Usá un nombre reconocible y una presentación breve'],
-        ['JUEGO', 'Indicá servidor, plataforma y horario habitual'],
-        ['CONVIVENCIA', 'Respetá las reglas y evitá compartir datos privados'],
-      ],
-    },
-    party: {
-      eyebrow: 'PARTY_BOARD // BUILDS & SERVIDORES',
-      title: 'Entrá a jugar con la comunidad',
-      items: [
-        { code: 'GUÍAS', title: 'WoW, Diablo IV, FFXIV y Path of Exile', action: 'Abrir biblioteca', to: '/gaming/guides' },
-        { code: 'RADAR', title: 'Estrenos y juegos que vienen', action: 'Ver tendencias', to: '/news?category=gaming' },
-        { code: 'PARTY', title: 'Compartí tu build y armá grupo', action: 'Entrar a la comunidad', to: '/community' },
-      ],
-    },
-    featured: 'NOTICIA DESTACADA',
-    offline: 'NEXUS OFFLINE // Las señales volverán en breve.',
-    sponsor: 'SPONSOR DE XETHKIOZ GAMING',
+    heroRadar: 'VER REDES',
     sectionLabel: 'Secciones de Gaming',
-    sections: { overview: 'Inicio', guides: 'Guías', live: 'Directos', news: 'Radar', community: 'Comunidad' },
+    sections: { overview: 'Inicio', guides: 'Guías', news: 'Radar', community: 'Comunidad' },
     start: {
       eyebrow: 'Biblioteca gamer // ELEGÍ UNA RUTA',
       title: 'Todo Gaming, sin perderte',
       description: 'Abrí solamente la sección que necesitás. El resto permanece fuera del camino.',
       cards: [
         { id: 'guides', code: 'BUILD', title: 'Guías y builds completas', detail: 'WoW, Diablo IV, FFXIV y PoE 2 por clase, equipo y rotación.', action: 'ABRIR GUÍAS', to: '/gaming/guides' },
-        { id: 'news', code: 'RADAR', title: 'Noticias y lanzamientos', detail: 'Señales gaming verificadas y ordenadas por fecha.', action: 'VER RADAR', to: '?section=news' },
-        { id: 'live', code: 'LIVE', title: 'Directos y videos', detail: 'YouTube y estado de transmisión.', action: 'ABRIR SEÑAL', to: '?section=live' },
-        { id: 'community', code: 'PARTY', title: 'Comunidad y escuadrones', detail: 'Buscá grupo, compartí builds y conectá con la comunidad.', action: 'BUSCAR PARTY', to: '?section=community' },
+        { id: 'news', code: 'RADAR', title: 'Radar XETHKIOZ', detail: 'Novedades, opinión y avances que compartimos primero en Threads e Instagram.', action: 'VER REDES', to: '' },
+        { id: 'community', code: 'RED', title: 'Comunidad XETHKIOZ', detail: 'Seguinos, comentá y acompañá el crecimiento del proyecto desde nuestras redes oficiales.', action: 'SUMARME', to: '' },
       ],
+    },
+    socialRadar: {
+      eyebrow: 'RADAR XETHKIOZ // SEÑAL ABIERTA',
+      title: 'Lo nuevo aparece primero en nuestras redes.',
+      text: 'Threads concentra noticias, opinión y avances rápidos. Instagram reúne las piezas visuales, publicaciones destacadas y momentos del universo XETHKIOZ.',
+      note: 'Dos canales reales. Sin feeds duplicados ni secciones vacías.',
+      threads: 'ABRIR THREADS',
+      instagram: 'ABRIR INSTAGRAM',
+    },
+    socialCommunity: {
+      eyebrow: 'COMUNIDAD // SEGUÍ EL PROYECTO',
+      title: 'Acompañá XETHKIOZ mientras crece.',
+      text: 'Si te interesan gaming, tecnología, IA y World of Xethkioz, seguinos y participá desde las redes oficiales. Cada interacción ayuda a que el proyecto llegue a más gente.',
+      note: 'Seguinos, comentá y compartí lo que te interese.',
+      threads: 'SEGUIR EN THREADS',
+      instagram: 'SEGUIR EN INSTAGRAM',
     },
   },
   en: {
     title: 'Gaming library',
     kicker: 'XETHKIOZ · EXPLORE AND PLAY',
-    description: 'Gaming news, guides, streams and community organized by route so you can quickly find what to play or do.',
+    description: 'Guides, gaming and community in a simpler space for finding what to play, what to read and where to follow XETHKIOZ.',
     heroAlt: 'Editorial illustration of a fantasy portal',
-    switchLanguage: 'Switch to Spanish',
-    switchCode: 'ES',
-    back: 'Back to XETHKIOZ',
-    guides: 'Guides',
-    radar: 'Gaming radar',
-    community: 'Find a squad',
-    dispatch: 'GAMING RADAR',
-    read: 'Open story',
-    signal: 'stories in radar',
     heroActionsLabel: 'Primary Gaming shortcuts',
     heroGuides: 'OPEN GUIDES',
-    heroRadar: 'OPEN RADAR',
-    systemStatus: 'Gaming summary',
-    nexusLink: 'AVAILABLE ROUTES',
-    routeCount: '5',
-    stream: {
-      label: 'STREAM_RADAR',
-      syncing: 'SYNCING',
-      liveCms: 'SIGNAL MARKED LIVE IN THE CMS',
-      standby: 'CHANNEL STANDBY',
-      heading: 'Streams and videos in one place',
-      liveDescription: 'The signal is marked active in the CMS. Open the channel to follow the broadcast.',
-      standbyDescription: 'Check YouTube for live broadcasts or continue with the latest published videos.',
-      openLive: 'ENTER LIVE STREAM',
-      latestVod: 'WATCH LATEST VOD',
-      openYoutube: 'OPEN YOUTUBE',
-      live: 'LIVE',
-      offline: 'STANDBY',
-    },
-    utilityLabel: 'Ways to participate in Gaming',
-    communityInfo: {
-      eyebrow: 'PARTY_READY // BEFORE JOINING',
-      title: 'Prepare your profile to find a group',
-      text: 'Three simple details help connect you with people looking for the same experience.',
-      items: [
-        ['PROFILE', 'Use a recognizable name and a short introduction'],
-        ['GAME', 'Add your server, platform and usual schedule'],
-        ['SAFETY', 'Follow the rules and avoid sharing private data'],
-      ],
-    },
-    party: {
-      eyebrow: 'PARTY_BOARD // BUILDS & SERVERS',
-      title: 'Join the community and play',
-      items: [
-        { code: 'GUIDES', title: 'WoW, Diablo IV, FFXIV and Path of Exile', action: 'Open library', to: '/gaming/guides' },
-        { code: 'RADAR', title: 'Releases and upcoming games', action: 'View trends', to: '/news?category=gaming' },
-        { code: 'PARTY', title: 'Share your build and form a group', action: 'Enter the community', to: '/community' },
-      ],
-    },
-    featured: 'FEATURED STORY',
-    offline: 'NEXUS OFFLINE // Signals will return shortly.',
-    sponsor: 'XETHKIOZ GAMING SPONSOR',
+    heroRadar: 'OPEN SOCIALS',
     sectionLabel: 'Gaming sections',
-    sections: { overview: 'Start', guides: 'Guides', live: 'Live', news: 'Radar', community: 'Community' },
+    sections: { overview: 'Start', guides: 'Guides', news: 'Radar', community: 'Community' },
     start: {
       eyebrow: 'Gaming library // CHOOSE A ROUTE',
       title: 'All of Gaming, without getting lost',
       description: 'Open only the section you need. Everything else stays out of the way.',
       cards: [
         { id: 'guides', code: 'BUILD', title: 'Complete guides and builds', detail: 'WoW, Diablo IV, FFXIV and PoE 2 by class, gear and rotation.', action: 'OPEN GUIDES', to: '/gaming/guides' },
-        { id: 'news', code: 'RADAR', title: 'News and releases', detail: 'Verified gaming signals ordered by date.', action: 'OPEN RADAR', to: '?section=news' },
-        { id: 'live', code: 'LIVE', title: 'Streams and videos', detail: 'YouTube and live status.', action: 'OPEN SIGNAL', to: '?section=live' },
-        { id: 'community', code: 'PARTY', title: 'Community and squads', detail: 'Find a group, share builds and connect with the community.', action: 'FIND PARTY', to: '?section=community' },
+        { id: 'news', code: 'RADAR', title: 'XETHKIOZ radar', detail: 'Updates, opinions and project progress shared first on Threads and Instagram.', action: 'OPEN SOCIALS', to: '' },
+        { id: 'community', code: 'NETWORK', title: 'XETHKIOZ community', detail: 'Follow, comment and be part of the project growth through our official channels.', action: 'JOIN IN', to: '' },
       ],
+    },
+    socialRadar: {
+      eyebrow: 'XETHKIOZ RADAR // OPEN SIGNAL',
+      title: 'New updates appear on our social channels first.',
+      text: 'Threads carries fast news, opinions and project progress. Instagram brings together visual pieces, featured posts and moments from the XETHKIOZ universe.',
+      note: 'Two real channels. No duplicate feeds or empty sections.',
+      threads: 'OPEN THREADS',
+      instagram: 'OPEN INSTAGRAM',
+    },
+    socialCommunity: {
+      eyebrow: 'COMMUNITY // FOLLOW THE PROJECT',
+      title: 'Grow with XETHKIOZ.',
+      text: 'If gaming, technology, AI and World of Xethkioz are your thing, follow and join us on the official channels. Every interaction helps the project reach more people.',
+      note: 'Follow, comment and share what matters to you.',
+      threads: 'FOLLOW ON THREADS',
+      instagram: 'FOLLOW ON INSTAGRAM',
     },
   },
 } as const
 
 export default function GamingHub() {
-  const { lang, setLang, localizePath } = useLang()
+  const { lang, localizePath } = useLang()
   const t = content[lang]
-  const [published, setPublished] = useState<PublicNewsArticle[]>([])
-  const [liveStream, setLiveStream] = useState<Stream | null>(null)
-  const [latestVod, setLatestVod] = useState<Stream | null>(null)
-  const [streamRadarReady, setStreamRadarReady] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
   const requestedSection = searchParams.get('section')
-  const activeSection: GamingSection = requestedSection === 'guides' || requestedSection === 'live' || requestedSection === 'news' || requestedSection === 'community' ? requestedSection : 'overview'
-  const seen = new Set<string>()
-  const articles = [...published, ...getCuratedExternalNews('gaming')]
-    .filter((article) => !seen.has(article.slug) && Boolean(seen.add(article.slug)))
-    .slice(0, 7)
-  const streamStatus = streamRadarReady
-    ? (liveStream ? t.stream.liveCms : t.stream.standby)
-    : t.stream.syncing
-  const streamDescription = liveStream ? t.stream.liveDescription : t.stream.standbyDescription
-
-  useEffect(() => {
-    if (activeSection !== 'news') return
-    let alive = true
-    void fetchPublishedNews('gaming').then((next) => { if (alive) setPublished(next) }).catch(() => undefined)
-    return () => { alive = false }
-  }, [activeSection])
-
-  useEffect(() => {
-    if (activeSection !== 'live') return
-    let alive = true
-    setStreamRadarReady(false)
-    void (async () => {
-      try {
-        const { data } = await supabase.from('streams').select('*').order('published_at', { ascending: false }).limit(12)
-        if (!alive) return
-        const streams = ((data ?? []) as Stream[]).filter((stream) => stream.platform === 'youtube')
-        setLiveStream(streams.find((stream) => stream.is_live) ?? null)
-        setLatestVod(streams.find((stream) => !stream.is_live) ?? null)
-      } catch {
-        // Keep the public channel links available when the CMS radar is unreachable.
-      } finally {
-        if (alive) setStreamRadarReady(true)
-      }
-    })()
-    return () => { alive = false }
-  }, [activeSection])
+  const activeSection: GamingSection = requestedSection === 'guides' || requestedSection === 'news' || requestedSection === 'community' ? requestedSection : 'overview'
+  const threadsUrl = SOCIAL_LINKS.find((item) => item.name === 'Threads')?.url ?? 'https://www.threads.com/@xethkioz'
+  const instagramUrl = SOCIAL_LINKS.find((item) => item.name === 'Instagram')?.url ?? 'https://www.instagram.com/xethkioz'
 
   function selectSection(section: GamingSection) {
     const next = new URLSearchParams(searchParams)
@@ -224,10 +112,7 @@ export default function GamingHub() {
             <SafeImage src="/assets/portal-games-world-v3.webp" fallback="/images/articles/gaming.svg" alt={t.heroAlt} className="xk-anime-hero-media" loading="eager" fetchPriority="high" />
             <div className="xk-anime-hero-shade" aria-hidden="true" />
             <div className="xk-anime-hero-content">
-              <div className="flex items-center justify-between gap-4">
-                <p className="xk-anime-kicker">{t.kicker}</p>
-                <button type="button" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} className="xk-hud-button" aria-label={t.switchLanguage} title={t.switchLanguage}>{t.switchCode}</button>
-              </div>
+              <p className="xk-anime-kicker">{t.kicker}</p>
               <h1 className="xk-anime-title" data-text={t.title}>{t.title}</h1>
               <p className="mt-5 max-w-xl text-sm leading-relaxed text-gray-200 md:text-base">{t.description}</p>
               <div className="xk-gaming-hero-actions" aria-label={t.heroActionsLabel}>
@@ -242,70 +127,59 @@ export default function GamingHub() {
           </section>
 
           <nav className="xk-gaming-section-nav" aria-label={t.sectionLabel}>
-            {(Object.keys(t.sections) as GamingSection[]).map((section) => <button key={section} type="button" onClick={() => selectSection(section)} aria-pressed={activeSection === section}><span>{section === 'overview' ? '◈' : section === 'guides' ? '⚔' : section === 'live' ? '●' : section === 'news' ? '⌁' : '◆'}</span><b>{t.sections[section]}</b></button>)}
+            {(Object.keys(t.sections) as GamingSection[]).map((section) => (
+              <button key={section} type="button" onClick={() => selectSection(section)} aria-pressed={activeSection === section}>
+                <span>{section === 'overview' ? '◈' : section === 'guides' ? '⚔' : section === 'news' ? '⌁' : '◆'}</span>
+                <b>{t.sections[section]}</b>
+              </button>
+            ))}
           </nav>
 
-          {activeSection === 'overview' ? <section className="xk-gaming-start" aria-labelledby="gaming-start-title"><header><small>{t.start.eyebrow}</small><h2 id="gaming-start-title">{t.start.title}</h2><p>{t.start.description}</p></header><div>{t.start.cards.map((card) => card.id === 'guides' ? <Link key={card.id} to={localizePath(card.to)}><span>{card.code}</span><b>{card.title}</b><small>{card.detail}</small><strong>{card.action} →</strong></Link> : <button key={card.id} type="button" onClick={() => selectSection(card.id as GamingSection)}><span>{card.code}</span><b>{card.title}</b><small>{card.detail}</small><strong>{card.action} →</strong></button>)}</div></section> : null}
+          {activeSection === 'overview' ? (
+            <section className="xk-gaming-start" aria-labelledby="gaming-start-title">
+              <header><small>{t.start.eyebrow}</small><h2 id="gaming-start-title">{t.start.title}</h2><p>{t.start.description}</p></header>
+              <div>
+                {t.start.cards.map((card) => card.id === 'guides'
+                  ? <Link key={card.id} to={localizePath(card.to)}><span>{card.code}</span><b>{card.title}</b><small>{card.detail}</small><strong>{card.action} →</strong></Link>
+                  : <button key={card.id} type="button" onClick={() => selectSection(card.id as GamingSection)}><span>{card.code}</span><b>{card.title}</b><small>{card.detail}</small><strong>{card.action} →</strong></button>)}
+              </div>
+            </section>
+          ) : null}
+
           {activeSection === 'guides' ? <GamingGuideRotation lang={lang} /> : null}
 
-          {activeSection === 'live' ? <section className="xk-creator-signal" aria-labelledby="creator-signal-title">
-            <div className="xk-creator-signal-copy">
-              <p aria-live="polite"><span className={liveStream ? 'is-live' : ''} aria-hidden="true" /> {t.stream.label} // {streamStatus}</p>
-              <h2 id="creator-signal-title">{t.stream.heading}</h2>
-              <span>{streamDescription}</span>
-              <div>
-                {liveStream ? <a href={liveStream.channel_url} target="_blank" rel="noreferrer noopener">{t.stream.openLive} ↗</a> : null}
-                <a href={latestVod?.channel_url || STREAM_LINKS.youtube} target="_blank" rel="noreferrer noopener">{latestVod ? t.stream.latestVod : t.stream.openYoutube} ↗</a>
+          {activeSection === 'news' ? (
+            <section className="xk-gaming-social-route is-radar" aria-labelledby="gaming-radar-social-title">
+              <div className="xk-gaming-social-copy">
+                <p>{t.socialRadar.eyebrow}</p>
+                <h2 id="gaming-radar-social-title">{t.socialRadar.title}</h2>
+                <span>{t.socialRadar.text}</span>
+                <small>{t.socialRadar.note}</small>
               </div>
-            </div>
-            <div className="xk-stream-orbit" aria-hidden="true"><i /><i /><span>{liveStream ? t.stream.live : t.stream.offline}</span></div>
-          </section> : null}
-
-          {activeSection === 'community' ? <section className="xk-gaming-utility-grid" aria-label={t.utilityLabel}>
-            <article className="xk-armory-panel">
-              <p>{t.communityInfo.eyebrow}</p>
-              <h2>{t.communityInfo.title}</h2>
-              <span>{t.communityInfo.text}</span>
-              <div>
-                {t.communityInfo.items.map(([label, value], index) => <div key={label}><b>0{index + 1}</b><small>{label}</small><strong>{value}</strong></div>)}
+              <div className="xk-gaming-social-links">
+                <a href={threadsUrl} target="_blank" rel="noreferrer noopener"><i aria-hidden="true">TH</i><span><b>Threads</b><small>@xethkioz</small></span><strong>{t.socialRadar.threads} ↗</strong></a>
+                <a href={instagramUrl} target="_blank" rel="noreferrer noopener"><i aria-hidden="true">IG</i><span><b>Instagram</b><small>@xethkioz</small></span><strong>{t.socialRadar.instagram} ↗</strong></a>
               </div>
-            </article>
-            <article className="xk-build-board">
-              <p>{t.party.eyebrow}</p>
-              <h2>{t.party.title}</h2>
-              <div>
-                {t.party.items.map((item) => <Link key={item.code} to={localizePath(item.to)}><span>{item.code}</span><b>{item.title}</b><small>{item.action} →</small></Link>)}
+            </section>
+          ) : null}
+
+          {activeSection === 'community' ? (
+            <section className="xk-gaming-social-route is-community" aria-labelledby="gaming-community-social-title">
+              <div className="xk-gaming-social-copy">
+                <p>{t.socialCommunity.eyebrow}</p>
+                <h2 id="gaming-community-social-title">{t.socialCommunity.title}</h2>
+                <span>{t.socialCommunity.text}</span>
+                <small>{t.socialCommunity.note}</small>
               </div>
-            </article>
-          </section> : null}
+              <div className="xk-gaming-social-links">
+                <a href={threadsUrl} target="_blank" rel="noreferrer noopener"><i aria-hidden="true">TH</i><span><b>Threads</b><small>@xethkioz</small></span><strong>{t.socialCommunity.threads} ↗</strong></a>
+                <a href={instagramUrl} target="_blank" rel="noreferrer noopener"><i aria-hidden="true">IG</i><span><b>Instagram</b><small>@xethkioz</small></span><strong>{t.socialCommunity.instagram} ↗</strong></a>
+              </div>
+            </section>
+          ) : null}
 
-          {activeSection === 'news' ? <section className="mt-10">
-            <div className="xk-anime-section-title"><span>ON AIR</span><h2>{t.dispatch}</h2><i aria-hidden="true" /></div>
-            {articles.length > 0 && <div className="xk-gaming-feed">
-              <article className="xk-gaming-feature group">
-                <SafeImage src={articles[0].cover_image_url} fallback="/images/articles/gaming.svg" alt={articles[0].cover_image_alt || articles[0].title} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
-                <div className="xk-feed-shade" aria-hidden="true" />
-                <span className="xk-feature-rank" aria-hidden="true">S</span>
-                <div className="xk-feature-copy"><span>{t.featured} // {formatPublicNewsDate(articles[0].published_at ?? articles[0].created_at, lang)}</span><h3>{articles[0].title}</h3><p>{articles[0].summary}</p><Link to={`/news/${articles[0].slug}`}>{t.read} →</Link></div>
-              </article>
-              <div className="xk-gaming-rail">{articles.slice(1).map((article, index) => <article key={article.slug} className="xk-gaming-brief">
-                <span className="xk-brief-number" aria-hidden="true">{String(index + 2).padStart(2, '0')}<i>{['A', 'A', 'B', 'B', 'C', 'C'][index]}</i></span>
-                <SafeImage src={article.cover_image_url} fallback="/images/articles/gaming.svg" alt={article.cover_image_alt || article.title} className="xk-brief-image" />
-                <div><small>{formatPublicNewsDate(article.published_at ?? article.created_at, lang)}</small><h3>{article.title}</h3><Link to={`/news/${article.slug}`}>{t.read} →</Link></div>
-              </article>)}</div>
-            </div>}
-            {articles.length === 0 && <p className="xk-empty-signal" role="status">{t.offline}</p>}
-          </section> : null}
-
-          {activeSection === 'news' ? <div className="mt-10"><PublicAdSlot slotId="section-sidebar" fallbackLabel={t.sponsor} /></div> : null}
-          <PortalKnowledgeBriefing sector="gaming" lang={lang} />
-          <EditorialCrosslinks />
-          <nav className="mt-8 flex flex-wrap gap-3 font-mono text-xs uppercase tracking-[0.18em]" aria-label={lang === 'es' ? 'Navegación de Gaming' : 'Gaming navigation'}>
-            <Link to={localizePath('/')} className="xk-hud-button">{t.back}</Link>
-            <Link to={localizePath('/gaming/guides')} className="xk-hud-button">{t.guides}</Link>
-            <Link to="/news?category=gaming" className="xk-hud-button">{t.radar}</Link>
-            <Link to={localizePath('/community')} className="xk-hud-button">{t.community}</Link>
-          </nav>
+          {activeSection === 'overview' || activeSection === 'guides' ? <PortalKnowledgeBriefing sector="gaming" lang={lang} /> : null}
+          {activeSection === 'overview' || activeSection === 'guides' ? <EditorialCrosslinks /> : null}
         </div>
       </main>
     </>

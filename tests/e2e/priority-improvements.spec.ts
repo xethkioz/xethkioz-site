@@ -31,7 +31,7 @@ test.describe('mejoras priorizadas de experiencia', () => {
     await page.goto('/gaming')
 
     await expect(page.getByRole('link', { name: /Abrir guías|Open guides/i }).first()).toHaveAttribute('href', '/gaming/guides')
-    await page.getByRole('button', { name: /Ver radar|Open radar/i }).first().click()
+    await page.getByRole('button', { name: /Ver redes|Open socials/i }).first().click()
     await expect(page).toHaveURL(/\/gaming\?section=news$/)
   })
 

@@ -29,28 +29,49 @@ test.describe('orden y navegación de secciones', () => {
     await expect(page.locator('#origin, #worlds, #characters, #media-3d')).toHaveCount(0)
   })
 
-  test('Gaming muestra una sola navegación antes del contenido y conserva inglés', async ({ page }) => {
+  test('Gaming conserva una sola navegación de cuatro rutas y el idioma queda en el header global', async ({ page }) => {
     await page.goto('/en/gaming')
 
     const navigation = page.getByRole('navigation', { name: 'Gaming sections' })
     await expect(navigation).toBeVisible()
     await expect(navigation).toHaveCSS('display', 'grid')
+    await expect(navigation.getByRole('button')).toHaveCount(4)
     await expect(page.getByRole('heading', { name: 'Gaming library' })).toBeVisible()
     await expect(page.locator('.xk-gaming-ticker')).toHaveCount(0)
-    await expect(page.getByText('98.7%', { exact: true })).toHaveCount(0)
-    await expect(page.getByRole('region', { name: /Choose what to do next in Gaming/i })).toHaveCount(0)
+    await expect(navigation.getByRole('button', { name: /Live|Directos/i })).toHaveCount(0)
+    await expect(page.locator('.xk-gaming-hero').getByRole('button', { name: /Switch to Spanish|Cambiar a inglés/i })).toHaveCount(0)
+    await expect(page.locator('.xk-quick-launcher')).toHaveCount(0)
+    await expect(page.getByRole('button', { name: /Open Green Node through Wisp|Abrir Green Node mediante Wisp/i })).toHaveCount(0)
 
-    await navigation.getByRole('button', { name: /Live$/ }).click()
-    await expect(page).toHaveURL(/\/en\/gaming\?section=live$/)
-    await expect(page.getByRole('heading', { name: 'Streams and videos in one place' })).toBeVisible()
+    const topNav = page.getByRole('navigation', { name: 'Primary navigation' })
+    if ((page.viewportSize()?.width ?? 0) >= 1024) {
+      await expect(topNav).toBeVisible()
+      const labels = await topNav.locator('a').allTextContents()
+      expect(labels.map(label => label.trim().replace(/\s+/g, ' '))).toEqual([
+        'HOME', 'THE GAME', 'Gaming', 'Pets', 'Science & Tech ↗', 'Web creation',
+      ])
+    } else {
+      await expect(topNav).toBeHidden()
+      await expect(page.getByRole('navigation', { name: 'Primary mobile navigation' })).toBeVisible()
+    }
+
+    const veyr = page.locator('.xk-wisp.is-gaming-veyr')
+    await expect(veyr).toBeVisible()
+    await expect(veyr.locator('.xk-wisp-specter-veyr')).toHaveAttribute('src', /veyr-good\.webp$/)
+
+    await navigation.getByRole('button', { name: /Radar$/ }).click()
+    await expect(page).toHaveURL(/\/en\/gaming\?section=news$/)
+    await expect(page.getByRole('heading', { name: 'New updates appear on our social channels first.' })).toBeVisible()
   })
 
-  test('Gaming reemplaza placeholders de hardware por información útil de comunidad', async ({ page }) => {
+  test('Gaming usa Threads e Instagram como Radar y Comunidad reales', async ({ page }) => {
     await page.goto('/gaming?section=community')
 
-    await expect(page.getByRole('heading', { name: 'Prepará tu perfil para encontrar grupo' })).toBeVisible()
+    const socialRoute = page.locator('.xk-gaming-social-route.is-community')
+    await expect(socialRoute.getByRole('heading', { name: 'Acompañá XETHKIOZ mientras crece.' })).toBeVisible()
+    await expect(socialRoute.getByRole('link', { name: /Threads/i })).toHaveAttribute('href', 'https://www.threads.com/@xethkioz')
+    await expect(socialRoute.getByRole('link', { name: /Instagram/i })).toHaveAttribute('href', 'https://www.instagram.com/xethkioz')
     await expect(page.getByText('Especificaciones en verificación', { exact: true })).toHaveCount(0)
-    await expect(page.getByRole('link', { name: /Abrir biblioteca/i })).toHaveAttribute('href', '/gaming/guides')
   })
 
   test('Green Node evita navegación duplicada y conserva sus cuatro secciones', async ({ page }) => {

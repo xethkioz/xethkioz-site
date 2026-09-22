@@ -278,25 +278,27 @@ check(
 )
 check(
   'Gaming and Huellas expose real content without decorative duplication',
-  gamingHub.includes("fetchPublishedNews('gaming')")
-    && gamingHub.includes('/assets/portal-games-world-v3.webp') && gamingHub.includes('xke-gaming')
+  gamingHub.includes('/assets/portal-games-world-v3.webp') && gamingHub.includes('xke-gaming')
     && gamingHub.includes('xk-gaming-start')
     && gamingHub.includes("activeSection === 'news'")
-    && gamingHub.includes('xk-feature-rank')
+    && gamingHub.includes("activeSection === 'community'")
+    && gamingHub.includes('xk-gaming-social-route')
+    && gamingHub.includes("item.name === 'Threads'")
+    && gamingHub.includes("item.name === 'Instagram'")
     && gamingHub.includes('<SafeImage')
     && !gamingHub.includes('xk-gaming-ticker')
+    && !gamingHub.includes("from('streams')")
     && mascotasPortal.includes('PostGrid')
     && mascotasPortal.includes('fauna.map')
     && mascotasPortal.includes('/mascotas/publicar')
     && mascotasPortal.includes('Publicaciones recientes'),
 )
 check(
-  'Gaming live and Huellas contact flows stay honest about their state',
-  gamingHub.includes("from('streams')")
-    && gamingHub.includes('SEÑAL MARCADA EN VIVO EN EL CMS')
-    && gamingHub.includes('Prepará tu perfil para encontrar grupo')
-    && gamingHub.includes('PARTY_BOARD')
-    && !gamingHub.includes('Especificaciones en verificación')
+  'Gaming social routes and Huellas contact flows stay honest about their state',
+  gamingHub.includes('Lo nuevo aparece primero en nuestras redes.')
+    && gamingHub.includes('Acompañá XETHKIOZ mientras crece.')
+    && !gamingHub.includes('SEÑAL MARCADA EN VIVO EN EL CMS')
+    && !gamingHub.includes('Directos')
     && !gamingHub.includes('fallbackStreams')
     && mascotasPortal.includes("window.localStorage.setItem('huellas-puan.posts'")
     && mascotasPortal.includes('En la siguiente etapa se conectará con la base comunitaria.')
@@ -320,7 +322,7 @@ check(
   appShell.includes('xk-has-mobile-dock')
     && appShell.includes('clearMobileDock={hasPublicNavigation}')
     && gamingHub.includes('xk-gaming-section-nav')
-    && gamingHub.includes('aria-live="polite"')
+    && gamingHub.includes('xk-gaming-social-links')
     && mascotasPortal.includes('overflow-x-auto')
     && mascotasPortal.includes('whitespace-nowrap')
     && redesignCss.includes('scrollbar-width:none'),

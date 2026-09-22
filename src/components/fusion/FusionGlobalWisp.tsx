@@ -28,6 +28,7 @@ const labels = {
     helpAction: 'Pedir ayuda al WISP para usar Green Node',
     helpMarker: 'GUÍA WISP',
     helpStatus: 'TOCÁ PARA REABRIR EL RECORRIDO',
+    worldAction: 'Abrir el chat con Veyr',
   },
   en: {
     action: 'Open Green Node with Wisp, Custodian of the Green Node',
@@ -37,6 +38,7 @@ const labels = {
     helpAction: 'Ask WISP how to use Green Node',
     helpMarker: 'WISP GUIDE',
     helpStatus: 'TAP TO REOPEN THE TOUR',
+    worldAction: 'Open the chat with Veyr',
   },
 } as const
 
@@ -55,7 +57,9 @@ export default function FusionGlobalWisp() {
   const insideGreenNode = normalizedPath === '/green-node'
   const homeEntry = normalizedPath === '/'
   const worldPortal = normalizedPath === '/world-of-xethkioz'
-  const actionLabel = insideGreenNode ? t.helpAction : t.action
+  const gamingPortal = normalizedPath === '/gaming'
+  const canonicalVeyr = worldPortal || gamingPortal
+  const actionLabel = canonicalVeyr ? t.worldAction : insideGreenNode ? t.helpAction : t.action
 
   useEffect(() => {
     const nextMood = normalizedPath === '/green-node'
@@ -76,6 +80,11 @@ export default function FusionGlobalWisp() {
   }, [])
 
   const openPortal = (event: MouseEvent<HTMLButtonElement>) => {
+    if (canonicalVeyr) {
+      registerEvent('portal-hover', 'veyr-chat-open', location.pathname)
+      window.dispatchEvent(new CustomEvent('xethkioz:nexus-chat-open', { detail: { room: 'general' } }))
+      return
+    }
     if (insideGreenNode) {
       registerEvent('portal-hover', 'wisp-green-guide-open', localizedGreenNode)
       window.dispatchEvent(new CustomEvent(WISP_GREEN_GUIDE_EVENT))
@@ -107,11 +116,11 @@ export default function FusionGlobalWisp() {
       />
       <button
         type="button"
-        className={`xk-wisp xk-wisp-${moodClass}${homeEntry ? ' is-home-entry' : ''}${worldPortal ? ' is-world-veyr' : ''}${insideGreenNode ? ' is-inside-node' : ''}${portalOpen ? ' is-opening' : ''}`}
+        className={`xk-wisp xk-wisp-${moodClass}${homeEntry ? ' is-home-entry' : ''}${worldPortal ? ' is-world-veyr' : ''}${gamingPortal ? ' is-gaming-veyr' : ''}${insideGreenNode ? ' is-inside-node' : ''}${portalOpen ? ' is-opening' : ''}`}
         style={wispStyle}
         onClick={openPortal}
-        onMouseEnter={focusWisp}
-        onFocus={focusWisp}
+        onMouseEnter={canonicalVeyr ? undefined : focusWisp}
+        onFocus={canonicalVeyr ? undefined : focusWisp}
         aria-label={actionLabel}
         aria-pressed={portalOpen}
         title={actionLabel}
@@ -142,12 +151,12 @@ export default function FusionGlobalWisp() {
 
           <span className="xk-wisp-specter-wrap">
             <SafeImage
-              src={worldPortal ? '/assets/world-of-xethkioz/characters/veyr-good.webp' : '/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg'}
+              src={canonicalVeyr ? '/assets/world-of-xethkioz/characters/veyr-good.webp' : '/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg'}
               fallback="/assets/identity/wisp-digital-specter-v1.webp"
               className="xk-wisp-specter xk-wisp-specter-veyr"
               alt=""
-              loading={homeEntry || worldPortal ? 'eager' : 'lazy'}
-              fetchPriority={homeEntry || worldPortal ? 'high' : 'low'}
+              loading={homeEntry || canonicalVeyr ? 'eager' : 'lazy'}
+              fetchPriority={homeEntry || canonicalVeyr ? 'high' : 'low'}
             />
             <span className="xk-wisp-scanline" />
             <span className="xk-wisp-glitch-slice" />

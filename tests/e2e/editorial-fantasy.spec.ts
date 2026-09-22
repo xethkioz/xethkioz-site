@@ -39,17 +39,21 @@ for (const route of routes) {
     expect(result.violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) }))).toEqual([])
   })
 }
-test('Gaming mantiene pestañas y no consulta streams hasta abrir Directos', async ({ page }) => {
+test('Gaming mantiene cuatro rutas, elimina Directos y no consulta streams', async ({ page }) => {
   let streams = 0
   page.on('request', r => { if (r.url().includes('/rest/v1/streams')) streams++ })
   await page.goto('/en/gaming'); await essentials(page)
   await expect(page.locator('.xke-page h1')).toHaveText('Gaming library')
   expect(streams).toBe(0)
   const nav = page.getByRole('navigation', { name: 'Gaming sections' })
-  await nav.getByRole('button', { name: /Live$/ }).click()
-  await expect(page).toHaveURL(/\/en\/gaming\?section=live$/)
-  await expect(page.getByRole('heading', { name: 'Streams and videos in one place' })).toBeVisible()
-  await expect(page.locator('.xk-gaming-section-nav button').first()).toHaveCSS('min-height', '48px')
+  await expect(nav.getByRole('button')).toHaveCount(4)
+  await expect(nav.getByRole('button', { name: /Live|Directos/i })).toHaveCount(0)
+  await nav.getByRole('button', { name: /Radar$/ }).click()
+  await expect(page).toHaveURL(/\/en\/gaming\?section=news$/)
+  await expect(page.getByRole('heading', { name: 'New updates appear on our social channels first.' })).toBeVisible()
+  expect(streams).toBe(0)
+  const navHeight = await page.locator('.xk-gaming-section-nav button').first().evaluate(el => parseFloat(getComputedStyle(el).minHeight))
+  expect(navHeight).toBeGreaterThanOrEqual(48)
 })
 test('Noticias limpia filtro y búsqueda también en la URL', async ({ page }) => {
   await page.goto('/news?category=gaming&q=__no_match_editorial__'); await essentials(page)
