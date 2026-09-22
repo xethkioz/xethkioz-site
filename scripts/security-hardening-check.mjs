@@ -21,6 +21,8 @@ const adminConsistency = read('supabase/migrations/20260723120000_security_admin
 const articlePolicyConsolidation = read('supabase/migrations/20260723121500_articles_policy_consolidation.sql')
 const mainEntry = read('src/main.tsx')
 const appShell = read('src/App.tsx')
+const authHealth = read('api/auth-health.ts')
+const securityTxt = read('public/.well-known/security.txt')
 
 check('profiles public read removed', !sql.includes('create policy "profiles_public_read"'))
 check('profiles self insert locked to BASIC/GUEST', sql.includes('profiles_self_insert_basic_only') && sql.includes("subscription_tier = 'BASIC'") && sql.includes("role = 'GUEST'"))
@@ -43,6 +45,8 @@ check('legacy articles policy does not expose all rows to signed-in users', arti
 check('legacy articles use one SELECT policy per audience', articlePolicyConsolidation.includes('articles_anon_published_read') && articlePolicyConsolidation.includes('to anon') && articlePolicyConsolidation.includes('to authenticated'))
 check('safe boot renders error details as text', mainEntry.includes('details.textContent = message') && !mainEntry.includes('document.body.innerHTML'))
 check('world runtime integration is mounted', appShell.includes('<WorldRuntimeIntegration />'))
+check('public auth health does not disclose backend readiness', authHealth.includes("response.status(200).json({ ok: true })") && !authHealth.includes('SUPABASE_SERVICE_ROLE_KEY') && !authHealth.includes('serverRecoveryAvailable'))
+check('security.txt publishes a canonical security contact', securityTxt.includes('Contact: https://www.xethkioz.com.ar/contact') && securityTxt.includes('Canonical: https://www.xethkioz.com.ar/.well-known/security.txt'))
 
 let failed = 0
 for (const [name, ok] of checks) {
