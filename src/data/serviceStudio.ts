@@ -51,21 +51,21 @@ export function readStudioSelection(): StudioSelection {
   if (params.has('servicios')) return normalizeSelection({ services: (params.get('servicios') || '').split(','), extras: (params.get('extras') || '').split(',') })
   try { return normalizeSelection(JSON.parse(sessionStorage.getItem(STUDIO_SELECTION_KEY) || '{}')) } catch { return { services: [], extras: [] } }
 }
-export function studioBriefHeader(selection: StudioSelection, lang: StudioLang): string {
+export function studioBriefHeader(selection: StudioSelection, lang: StudioLang, starterPackage = false): string {
   const safe = normalizeSelection(selection)
   const names = STUDIO_SERVICES.filter(s => safe.services.includes(s.id)).map(s => s.title[lang]).join(' + ')
   const extras = STUDIO_EXTRAS.filter(e => safe.extras.includes(e.id)).map(e => e.title[lang]).join(', ')
   return lang === 'es'
-    ? `CONSULTA DE SERVICIOS XETHKIOZ\nServicios: ${names}\nExtras a evaluar: ${extras || 'Sin extras'}\nModalidad: presupuesto a medida, sin compra ni cobro automático.\n\nMi proyecto:\n`
-    : `XETHKIOZ SERVICE INQUIRY\nServices: ${names}\nExtras to assess: ${extras || 'No extras'}\nMode: custom quote, no automatic purchase or charge.\n\nMy project:\n`
+    ? `CONSULTA DE SERVICIOS XETHKIOZ\nServicios: ${names}\nExtras a evaluar: ${extras || 'Sin extras'}\n${starterPackage ? 'Paquete consultado: Landing Esencial (USD 350 de referencia).\n' : ''}Modalidad: presupuesto a medida, sin compra ni cobro automático.\n\nMi proyecto:\n`
+    : `XETHKIOZ SERVICE INQUIRY\nServices: ${names}\nExtras to assess: ${extras || 'No extras'}\n${starterPackage ? 'Package requested: Essential Landing Page (USD 350 reference price).\n' : ''}Mode: custom quote, no automatic purchase or charge.\n\nMy project:\n`
 }
-export function studioDetailsLimit(selection: StudioSelection): number {
-  return 2000 - Math.max(studioBriefHeader(selection, 'es').length, studioBriefHeader(selection, 'en').length)
+export function studioDetailsLimit(selection: StudioSelection, starterPackage = false): number {
+  return 2000 - Math.max(studioBriefHeader(selection, 'es', starterPackage).length, studioBriefHeader(selection, 'en', starterPackage).length)
 }
-export function buildStudioBrief(selection: StudioSelection, lang: StudioLang, details: string): string {
+export function buildStudioBrief(selection: StudioSelection, lang: StudioLang, details: string, starterPackage = false): string {
   const clean = details.trim()
-  if (clean.length > studioDetailsLimit(selection)) throw new Error('BRIEF_TOO_LONG')
-  return studioBriefHeader(selection, lang) + clean
+  if (clean.length > studioDetailsLimit(selection, starterPackage)) throw new Error('BRIEF_TOO_LONG')
+  return studioBriefHeader(selection, lang, starterPackage) + clean
 }
 export function studioSelectionUrl(selection: StudioSelection, lang: StudioLang): string {
   const safe = normalizeSelection(selection)

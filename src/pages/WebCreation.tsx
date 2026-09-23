@@ -328,6 +328,7 @@ export default function WebCreation() {
   const quoteFormRef = useRef<HTMLFormElement>(null)
   const stepHeadingRef = useRef<HTMLHeadingElement>(null)
   const [selection, setSelection] = useState<StudioSelection>(readStudioSelection)
+  const [starterSelected, setStarterSelected] = useState(false)
   const [requestId, setRequestId] = useState('')
   const busyRef = useRef(false)
   const abortRef = useRef<AbortController | null>(null)
@@ -363,6 +364,7 @@ export default function WebCreation() {
 
   function updateSelection(value: StudioSelection) {
     if (busyRef.current) return
+    setStarterSelected(false)
     setSelection(normalizeSelection(value))
     if (submitState.status === 'success') { setRequestId(''); setForm(emptyForm); setQuoteStep(1) }
     setSubmitState({ status: 'idle', message: '' })
@@ -370,7 +372,7 @@ export default function WebCreation() {
 
   const displayOffers = useMemo(() => offers.map((offer) => localizeOffer(offer, lang)), [lang, offers])
   const selectedOffer = useMemo(() => selection.services.includes('web') ? displayOffers.find((offer) => offer.id === form.serviceId) ?? null : null, [displayOffers, form.serviceId, selection.services])
-  const detailsLimit = studioDetailsLimit(selection)
+  const detailsLimit = studioDetailsLimit(selection, starterSelected)
 
   function updateForm<Key extends keyof QuoteForm>(field: Key, value: QuoteForm[Key]) {
     if (busyRef.current) return
@@ -380,10 +382,21 @@ export default function WebCreation() {
 
   function chooseOffer(offer: WebServiceOffer) {
     if (busyRef.current) return
+    setStarterSelected(false)
     updateSelection({ ...selection, services: [...selection.services, 'web'] })
     setForm((current) => ({ ...current, serviceId: offer.id, projectType: projectTypeByOfferSlug[offer.slug] ?? current.projectType }))
     setQuoteStep(1)
     setSubmitState({ status: 'idle', message: '' })
+    scrollTo('presupuesto')
+  }
+
+  function chooseStarterOffer() {
+    if (busyRef.current) return
+    const landing = offers.find((offer) => offer.slug === 'landing-premium')
+    updateSelection({ services: ['web', 'contenido'], extras: [] })
+    setStarterSelected(true)
+    setForm((current) => ({ ...current, serviceId: landing?.id ?? '', projectType: 'landing', budgetRange: 'starter' }))
+    focusStep(1)
     scrollTo('presupuesto')
   }
 
@@ -417,6 +430,7 @@ export default function WebCreation() {
 
   function resetQuote() {
     if (busyRef.current) return
+    setStarterSelected(false)
     setSelection({ services: [], extras: [] })
     setRequestId('')
     setForm({ ...emptyForm, serviceId: offers[0]?.id ?? '' })
@@ -441,7 +455,7 @@ export default function WebCreation() {
           name: form.name, email: form.email, whatsapp: form.whatsapp, businessName: form.businessName,
           projectType: selection.services.includes('web') ? form.projectType : 'other',
           budgetRange: form.budgetRange, contactPreference: form.contactPreference,
-          details: buildStudioBrief(selection, lang, form.details), consent: form.consent,
+          details: buildStudioBrief(selection, lang, form.details, starterSelected), consent: form.consent,
           companyWebsite: form.companyWebsite, source: '/creacion-web',
         }),
       })
@@ -478,7 +492,7 @@ export default function WebCreation() {
         image="/web-services/creacion-web-og.png"
       />
 
-      <ServiceStudio lang={lang} selection={selection} onChange={updateSelection} onQuote={() => { if (!busyRef.current) { focusStep(1); scrollTo('presupuesto') } }} />
+      <ServiceStudio lang={lang} selection={selection} onChange={updateSelection} onQuote={() => { if (!busyRef.current) { focusStep(1); scrollTo('presupuesto') } }} onStarterQuote={chooseStarterOffer} />
       <details className="xks-reference-catalog"><summary>{lang === 'es' ? '¿Buscás una web? Mirá las referencias de estructura.' : 'Need a website? Explore structure references.'}</summary><p>{lang === 'es' ? 'Orientaciones visuales, no trabajos reales de clientes. Alcance, integraciones y plazos sujetos a propuesta.' : 'Visual directions, not actual client work. Scope, integrations and timing are subject to a proposal.'}</p>{catalogLoading ? <p role="status">{t.catalogLoading}</p> : <div className="xks-reference-options">{displayOffers.map(offer => <button type="button" key={offer.id} onClick={() => chooseOffer(offer)}>{offer.title}<small>{lang === 'es' ? 'Agregar creación web y usar esta referencia →' : 'Add web creation and use this reference →'}</small></button>)}</div>}{catalogNotice && <p role="status">{lang === 'es' ? 'Mostramos referencias base; la disponibilidad se confirma al responder tu consulta.' : 'Showing base references; availability is confirmed when we reply to your inquiry.'}</p>}</details>
 
       <section id="proceso" className="scroll-mt-28 border-y border-white/10 bg-white/[0.025] px-5 py-16 md:px-10 lg:px-14" aria-labelledby="web-process-title">
@@ -493,6 +507,7 @@ export default function WebCreation() {
             <div className="border-b border-white/10 pb-6"><p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-white/45">{t.quoteStep} {quoteStep} / 2</p><ol className="mt-4 grid grid-cols-2 gap-3" aria-label={t.requestProgress}>{t.quoteSteps.map((label, index) => { const step = (index + 1) as QuoteStep; const active = quoteStep === step; const completed = quoteStep > step; return <li key={label} aria-current={active ? 'step' : undefined} className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-xs font-black uppercase tracking-[0.12em] ${active ? 'border-orange-300/45 bg-orange-400/10 text-orange-100' : completed ? 'border-purple-300/30 bg-purple-400/10 text-purple-100' : 'border-white/10 bg-black/20 text-white/35'}`}><span className={`grid h-7 w-7 place-items-center rounded-full font-mono text-[10px] ${active ? 'bg-orange-300 text-black' : completed ? 'bg-purple-400 text-black' : 'bg-white/10 text-white/50'}`} aria-hidden={completed}>{completed ? '✓' : step}</span>{label}</li> })}</ol></div>
 
             <StudioSelectionSummary selection={selection} lang={lang} />
+            {starterSelected && <p className="xks-starter-reference">{lang === 'es' ? 'Consultás por Landing Esencial · USD 350 de referencia. Contanos sobre tu negocio para confirmar el presupuesto final en pesos.' : 'Asking about the Essential Landing Page · USD 350 reference price. Tell us about your business to confirm the final quote.'}</p>}
             {submitState.status === 'success' ? <div role="status" aria-live="polite" className="py-10 text-center"><span className="mx-auto grid h-16 w-16 place-items-center rounded-full border border-orange-300/40 bg-orange-400/10 text-2xl text-orange-200" aria-hidden="true">✓</span><h3 className="mt-6 text-3xl font-black tracking-[-0.025em]">{t.successTitle}</h3><p className="mx-auto mt-4 max-w-lg text-sm leading-7 text-white/65">{t.success}</p><p className="xks-reference-id">{lang === 'es' ? 'Referencia: ' : 'Reference: '}{requestId}</p><button type="button" onClick={resetQuote} className="mt-7 rounded-full border border-purple-400/45 bg-purple-500/10 px-6 py-3 font-mono text-xs font-black uppercase tracking-[0.16em] text-purple-100 transition hover:border-orange-300 hover:text-orange-100">{t.newRequest}</button></div> : <>
               <div className="pt-7"><h3 ref={stepHeadingRef} tabIndex={-1} className="text-2xl font-black tracking-[-0.02em] outline-none md:text-3xl">{quoteStep === 1 ? t.projectStepTitle : t.contactStepTitle}</h3><p className="mt-3 text-sm leading-6 text-white/55">{quoteStep === 1 ? t.projectStepText : t.contactStepText}</p></div>
               {quoteStep === 1 ? <div className="mt-7 grid gap-5 md:grid-cols-2">

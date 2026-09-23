@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom'
 import { STUDIO_SERVICES, STUDIO_EXTRAS, STUDIO_BUNDLES, STUDIO_INSTAGRAM, normalizeSelection, studioSelectionUrl, copyStudioText, type StudioSelection, type StudioLang, type ServiceId } from '../../data/serviceStudio'
 import './ServiceStudio.css'
 
-type Props = { lang: StudioLang; selection: StudioSelection; onChange: (value: StudioSelection) => void; onQuote: () => void }
+type Props = { lang: StudioLang; selection: StudioSelection; onChange: (value: StudioSelection) => void; onQuote: () => void; onStarterQuote: () => void }
 export function StudioSelectionSummary({ selection, lang }: { selection: StudioSelection; lang: StudioLang }) {
   const selected = STUDIO_SERVICES.filter(s => selection.services.includes(s.id))
   const extras = STUDIO_EXTRAS.filter(e => selection.extras.includes(e.id))
   return <div className="xks-selection-summary"><strong>{lang === 'es' ? 'Tu selección' : 'Your selection'}</strong><p>{selected.map(s => s.title[lang]).join(' + ') || (lang === 'es' ? 'Elegí al menos un servicio.' : 'Choose at least one service.')}</p>{extras.length > 0 && <small>{lang === 'es' ? 'Extras a evaluar: ' : 'Extras to assess: '}{extras.map(e => e.title[lang]).join(' · ')}</small>}<small>{lang === 'es' ? 'Precio y plazos: a definir en una propuesta. Esta selección no genera un cobro.' : 'Price and timing: defined in a proposal. This selection does not trigger a charge.'}</small></div>
 }
-export default function ServiceStudio({ lang, selection, onChange, onQuote }: Props) {
+export default function ServiceStudio({ lang, selection, onChange, onQuote, onStarterQuote }: Props) {
   const es = lang === 'es'
   const [filter, setFilter] = useState<'all' | ServiceId>('all')
   const [demo, setDemo] = useState<'marca' | 'creador' | 'negocio'>('marca')
@@ -43,6 +43,24 @@ export default function ServiceStudio({ lang, selection, onChange, onQuote }: Pr
         </div>
         <div className="xks-demo-options" role="group" aria-label={es ? 'Cambiar demostración de estructura' : 'Change structure demonstration'}>{(['marca', 'creador', 'negocio'] as const).map(id => <button type="button" key={id} aria-pressed={demo === id} onClick={() => setDemo(id)}>{({ marca: es ? 'Marca' : 'Brand', creador: es ? 'Creador' : 'Creator', negocio: es ? 'Negocio' : 'Business' })[id]}</button>)}</div>
         <p className="xks-demo-note">{es ? 'Demostración de estructura. No es un trabajo de cliente ni una plantilla a la venta.' : 'Structure demonstration. Not client work or a template for sale.'}</p>
+      </div>
+    </section>
+    <section id="landing-esencial" className="xks-launch-offer" aria-labelledby="xks-launch-title">
+      <div className="xks-launch-copy">
+        <p className="xks-launch-kicker">{es ? 'XETHKIOZ STUDIO / PAQUETE INICIAL' : 'XETHKIOZ STUDIO / STARTER PACKAGE'}</p>
+        <h2 id="xks-launch-title">{es ? 'Landing Esencial' : 'Essential Landing Page'}</h2>
+        <p>{es ? 'Una página clara para presentar tu negocio y recibir consultas. Diseño propio, liviano y pensado para el celular.' : 'A clear page to introduce your business and receive inquiries. Original design, lightweight and built for mobile.'}</p>
+        <ul>
+          {(es ? ['Una página de hasta cinco secciones y botón de contacto', 'Textos revisados y tres piezas de lanzamiento para redes', 'SEO básico, dos rondas de cambios y 30 días de corrección de errores'] : ['One page with up to five sections and a contact button', 'Reviewed copy and three launch posts for social media', 'Basic SEO, two revision rounds and 30 days of bug fixes']).map(item => <li key={item}><span aria-hidden="true">✓</span>{item}</li>)}
+        </ul>
+        <p className="xks-launch-limit">{es ? 'Dominio, alojamiento, tienda, turnos, campañas pagas y mantenimiento posterior se acuerdan por separado.' : 'Domain, hosting, store, bookings, paid ads and ongoing maintenance are agreed separately.'}</p>
+      </div>
+      <div className="xks-launch-checkout">
+        <span>{es ? 'Precio base de referencia' : 'Reference starting price'}</span>
+        <strong>USD 350</strong>
+        <p>{es ? 'Presupuesto final en pesos según alcance confirmado. Dos proyectos simultáneos como máximo.' : 'Final quote in local currency after confirming scope. Up to two projects at a time.'}</p>
+        <button type="button" className="xks-button xks-primary" onClick={onStarterQuote}>{es ? 'Consultar por este paquete' : 'Ask about this package'} <span aria-hidden="true">→</span></button>
+        <small>{es ? 'Consulta gratuita · 50 % al aceptar la propuesta y 50 % a la entrega · Plazo estimado: 10 a 15 días hábiles desde que recibimos material y anticipo.' : 'Free inquiry · 50% after accepting the proposal and 50% on delivery · Estimated time: 10–15 business days after materials and deposit arrive.'}</small>
       </div>
     </section>
     <nav className="xks-local-nav" aria-label={es ? 'Explorar servicios' : 'Explore services'}><a href="#propuestas">{es ? 'Servicios' : 'Services'}</a><a href="#mi-proyecto">{es ? 'Mi selección' : 'My selection'} <span>{selected.length}</span></a><a href="#proceso">{es ? 'Cómo contratar' : 'How to hire'}</a><a href="#web-faq-title">{es ? 'Preguntas frecuentes' : 'FAQ'}</a></nav>
