@@ -5,6 +5,7 @@ const page = read('src/pages/WorldOfXethkioz.tsx')
 const css = read('src/pages/WorldOfXethkiozPortal.css')
 const homeCss = read('src/pages/WorldOfXethkiozLanding.css')
 const wispCss = read('src/components/fusion/FusionGlobalWisp.css')
+const footer = read('src/components/Footer.tsx')
 const checks = [
  ['offscreen sections defer rendering with stable placeholders', css.includes('content-visibility:auto') && css.includes('contain-intrinsic-size:auto 680px')],
  ['isolated gallery limits layout and paint work', css.includes('contain:layout paint')],
@@ -18,7 +19,7 @@ const checks = [
  ['public experience never imports internal game data', [home,page].every(s => !/from ['"][^'"]*(?:game-data|bestiary|quest|lore|canon)/i.test(s) && !/\.(?:glb|gltf|fbx|blend|unitypackage)\b/i.test(s))],
  ['presentation avoids production counts and internal map ranges', [home,page].every(s => !/M\d{2}[–-]M\d{2}|\bQuestID\b|\bBoss\d+\b/.test(s))],
  ['illustrations are clearly not gameplay', [home,page].every(s => s.includes('NO ES GAMEPLAY') && s.includes('NOT GAMEPLAY'))],
- ['Threads and web remain official public destinations', [home,page].every(s => s.includes('https://www.threads.com/@xethkioz') && s.includes('https://www.xethkioz.com.ar'))],
+ ['Threads and web remain official public destinations in the shared footer', footer.includes('SOCIAL_LINKS.filter') && read('src/lib/siteConfig.ts').includes('https://www.threads.com/@xethkioz') && footer.includes('https://www.xethkioz.com.ar')],
  ['styles stay compact', Buffer.byteLength(css) < 18000 && Buffer.byteLength(homeCss) < 15000],
 ]
 for (const [name,pass] of checks) console.log(`${pass ? 'PASS' : 'FAIL'} ${name}`)
