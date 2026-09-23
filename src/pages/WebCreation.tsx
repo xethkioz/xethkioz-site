@@ -387,6 +387,15 @@ export default function WebCreation() {
     scrollTo('presupuesto')
   }
 
+  function chooseStarterOffer() {
+    if (busyRef.current) return
+    const landing = offers.find((offer) => offer.slug === 'landing-premium')
+    updateSelection({ services: ['web', 'contenido'], extras: [] })
+    setForm((current) => ({ ...current, serviceId: landing?.id ?? '', projectType: 'landing', budgetRange: 'starter' }))
+    focusStep(1)
+    scrollTo('presupuesto')
+  }
+
   function focusStep(step: QuoteStep) {
     if (busyRef.current) return
     setQuoteStep(step)
@@ -478,7 +487,7 @@ export default function WebCreation() {
         image="/web-services/creacion-web-og.png"
       />
 
-      <ServiceStudio lang={lang} selection={selection} onChange={updateSelection} onQuote={() => { if (!busyRef.current) { focusStep(1); scrollTo('presupuesto') } }} />
+      <ServiceStudio lang={lang} selection={selection} onChange={updateSelection} onQuote={() => { if (!busyRef.current) { focusStep(1); scrollTo('presupuesto') } }} onStarterQuote={chooseStarterOffer} />
       <details className="xks-reference-catalog"><summary>{lang === 'es' ? '¿Buscás una web? Mirá las referencias de estructura.' : 'Need a website? Explore structure references.'}</summary><p>{lang === 'es' ? 'Orientaciones visuales, no trabajos reales de clientes. Alcance, integraciones y plazos sujetos a propuesta.' : 'Visual directions, not actual client work. Scope, integrations and timing are subject to a proposal.'}</p>{catalogLoading ? <p role="status">{t.catalogLoading}</p> : <div className="xks-reference-options">{displayOffers.map(offer => <button type="button" key={offer.id} onClick={() => chooseOffer(offer)}>{offer.title}<small>{lang === 'es' ? 'Agregar creación web y usar esta referencia →' : 'Add web creation and use this reference →'}</small></button>)}</div>}{catalogNotice && <p role="status">{lang === 'es' ? 'Mostramos referencias base; la disponibilidad se confirma al responder tu consulta.' : 'Showing base references; availability is confirmed when we reply to your inquiry.'}</p>}</details>
 
       <section id="proceso" className="scroll-mt-28 border-y border-white/10 bg-white/[0.025] px-5 py-16 md:px-10 lg:px-14" aria-labelledby="web-process-title">
