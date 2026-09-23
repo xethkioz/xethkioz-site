@@ -50,13 +50,13 @@ for (const lang of ['es', 'en'] as const) {
     expect(errors).toEqual([])
   })
 }
-test('Bundles, filters, extras and removing services keep the basket consistent', async ({ page }) => {
+test('Direct service selection, extras and removal keep the basket consistent', async ({ page }) => {
   await boot(page)
-  await page.getByRole('button', { name: /^Lanzar mi marca/ }).click()
+  await page.getByRole('button', { name: 'Agregar Creación web', exact: true }).click()
+  await page.getByRole('button', { name: 'Agregar Contenido y diseño', exact: true }).click()
   await expect(page.locator('.xks-count')).toHaveText('2 servicios seleccionados')
   await page.locator('.xks-extras').getByLabel('Identidad visual', { exact: true }).check()
-  await page.getByRole('group', { name: 'Filtrar servicios' }).getByRole('button', { name: 'Soporte de PC', exact: true }).click()
-  await expect(page.locator('.xks-card')).toHaveCount(1)
+  await expect(page.locator('.xks-card')).toHaveCount(4)
   await expect(page.locator('.xks-count')).toHaveText('2 servicios seleccionados')
   await page.getByRole('button', { name: 'Vaciar selección', exact: true }).click()
   await expect(page.locator('.xks-count')).toHaveText('0 servicios seleccionados')
@@ -115,7 +115,7 @@ for (const status of [200, 202, 503]) {
     await expect(page.locator('.xks-count')).toHaveText('1 servicio seleccionado')
   })
 }
-test('Empty selections and whitespace briefs cannot proceed; demo buttons work with keyboard', async ({ page }) => {
+test('Empty selections and whitespace briefs cannot proceed; offer link works with keyboard', async ({ page }) => {
   await boot(page)
   await expect(page.getByRole('button', { name: /Solicitar mi propuesta/ })).toBeDisabled()
   await page.getByRole('button', { name: /Continuar con mis datos/ }).click()
@@ -124,10 +124,31 @@ test('Empty selections and whitespace briefs cannot proceed; demo buttons work w
   await page.locator('#presupuesto textarea').fill(' '.repeat(25))
   await page.getByRole('button', { name: /Continuar con mis datos/ }).click()
   await expect(page.getByRole('heading', { name: 'Primero, definamos la idea.' })).toBeVisible()
-  const demo = page.getByRole('group', { name: 'Cambiar demostración de estructura' }).getByRole('button', { name: 'Creador', exact: true })
-  await demo.focus(); await page.keyboard.press('Enter')
-  await expect(demo).toHaveAttribute('aria-pressed', 'true')
-  await expect(page.locator('.xks-browser')).toContainText('Ideas que')
+  const starterLink = page.getByRole('link', { name: 'Ver Landing Esencial', exact: true })
+  await starterLink.focus(); await page.keyboard.press('Enter')
+  await expect(page).toHaveURL(/#landing-esencial$/)
+  await expect(page.locator('#landing-esencial')).toBeInViewport()
+})
+test('Landing Esencial quote is distinct from the premium catalog reference', async ({ page }) => {
+  await page.route('**/api/web-quote', async route => {
+    const payload = route.request().postDataJSON()
+    expect(payload.serviceId).toBeNull()
+    expect(payload.serviceSlug).toBe('landing-esencial')
+    expect(payload.details).toContain('Landing Esencial (USD 350 de referencia)')
+    await route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify({ ok: true, requestId: reference }) })
+  })
+  await boot(page)
+  await page.getByRole('button', { name: 'Consultar por este paquete' }).click()
+  await expect(page.locator('.xks-starter-reference')).toContainText('Landing Esencial · USD 350 de referencia')
+  await expect(page.locator('#presupuesto')).not.toContainText('Landing premium')
+  await expect(page.locator('#presupuesto').getByRole('combobox', { name: 'Propuesta de referencia' })).toHaveCount(0)
+  await page.locator('#presupuesto textarea').fill('Necesito una página clara para mi negocio y recibir consultas con un botón de contacto.')
+  await page.getByRole('button', { name: /Continuar con mis datos/ }).click()
+  await page.getByLabel('Nombre y apellido', { exact: true }).fill('Prueba Estudio')
+  await page.getByLabel('Email', { exact: true }).fill('studio@example.invalid')
+  await page.locator('#presupuesto input[type=checkbox]').check()
+  await page.getByRole('button', { name: /Enviar solicitud/ }).click()
+  await expect(page.locator('.xks-reference-id')).toContainText(reference)
 })
 test('Studio navigation reaches every real section without changing the selection', async ({ page }) => {
   await boot(page)

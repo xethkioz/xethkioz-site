@@ -46,7 +46,7 @@
 .xk-world-signature{position:absolute;top:17%;right:max(34px,calc((100% - 1400px)/2));z-index:2;width:clamp(270px,31vw,440px);text-align:right;pointer-events:none}
 .xk-world-signature img{display:block;width:100%;height:auto;filter:drop-shadow(0 8px 24px #080910)}
 .xk-world-signature span{display:block;margin-top:5px;color:#f0dfce;font-size:12px;font-weight:650;letter-spacing:.09em;text-shadow:0 2px 14px #080910}
-.xk-gateway .wox-art-credit{right:32px;bottom:31px;color:#e5dae7;font-size:11px;letter-spacing:.08em}
+.xk-gateway .wox-art-credit{right:200px;bottom:31px;max-width:calc(100% - 280px);color:#e5dae7;font-size:11px;letter-spacing:.08em;text-align:right}
 .xk-gateway .wox-utility-rail{margin-top:2px;border-bottom-color:rgba(183,147,226,.28)}
 .xk-gateway .wox-utility-rail :is(a,button){color:#dec5f9;font-size:13px}
 .xk-gateway .wox-content{width:min(1260px,calc(100% - 80px))}
@@ -149,7 +149,7 @@
   .xk-portal-name em{margin-top:4px}
   .xk-world-signature{position:relative;top:auto;right:auto;width:min(250px,66%);margin:26px 0 0 auto}
   .xk-world-signature span{font-size:10px}
-  .xk-gateway .wox-art-credit{position:static;display:block;margin-top:24px;text-align:left;font-size:10px}
+  .xk-gateway .wox-art-credit{position:static;display:block;max-width:none;margin-top:24px;text-align:left;font-size:10px}
   .xk-gateway .wox-content{width:calc(100% - 36px)}
   .xk-veyr-story{grid-template-columns:1fr;gap:22px;min-height:0;padding:65px 0 60px}
   .xk-veyr-copy h2{font-size:clamp(68px,19vw,110px)}
