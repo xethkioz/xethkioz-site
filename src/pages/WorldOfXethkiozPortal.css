@@ -54,3 +54,6 @@
 .woxp-faq{grid-template-columns:1fr;gap:28px;padding:72px 0}.woxp-faq-aside{margin:24px 0 0}.woxp-faq summary{grid-template-columns:34px 1fr 24px;padding:17px 14px;gap:10px}.woxp-faq details p{padding:0 48px 18px;font-size:13px}.woxp-closing{padding:70px 18px}.woxp-closing .woxp-actions{flex-direction:column;align-items:stretch}.woxp-closing .woxp-button,.woxp-support-button{width:100%}.wox-portal-footer{flex-direction:column;padding-bottom:110px}.wox-portal-footer nav{justify-content:flex-start}}
 @media(max-width:360px){.wox-portal-anchor-nav{position:relative}.woxp-section h2{font-size:31px}}
 @media(prefers-reduced-motion: reduce){.wox-portal *,.wox-portal *::before,.wox-portal *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+.woxp-alpha-demo{display:grid;grid-template-columns:.72fr 1.28fr;gap:30px;align-items:center;margin:50px 0 58px;padding:26px;border:1px solid var(--line);background:linear-gradient(145deg,#0d1018,#080a10)}.woxp-alpha-copy h3{margin:0 0 14px;color:#eee7da;font:400 30px/1.15 Georgia,serif}.woxp-alpha-copy .woxp-body{margin-bottom:12px}.woxp-alpha-demo .woxp-founder-media{width:100%;margin:0}.woxp-alpha-video{max-height:390px}
+@media(max-width:760px){.woxp-alpha-demo{grid-template-columns:1fr;margin:34px 0 42px;padding:18px}}

@@ -28,6 +28,11 @@ const copy = {
     guideAction: 'Abrir el chat de la comunidad', guideNote: 'La guía de la web. El misterio del juego permanece intacto.',
     devLabel: '04 / EL CAMINO', devTitle: 'Un mundo en construcción.',
     devBody: 'El desarrollo sigue adelante. Los avances que se puedan compartir se publicarán en nuestros canales oficiales, cuando estén listos para presentarse.',
+    alphaLabel: 'ALPHA DE DEMOSTRACIÓN · ALPHA 5',
+    alphaTitle: 'Una muestra temprana del juego en movimiento.',
+    alphaBody: 'Este video muestra una versión Alpha temprana de demostración. En esta etapa se prueban movimiento, combate, interfaz, entorno y flujo general; puede incluir assets, animaciones, iluminación, comportamiento, balance e interfaz provisionales.',
+    alphaMeta: 'ALPHA 5 · 02:34 · CAPTURA DE DESARROLLO',
+    alphaNote: 'NO REPRESENTA LA CALIDAD FINAL · NO ES TRAILER · NO ES UNA VERSIÓN PÚBLICA',
     milestones: [['Dirección artística', 'La identidad visual combina fantasía, misterio y una estética oscura con energía etérea. La dirección del proyecto prioriza atmósfera, símbolos y coherencia de mundo antes que la exposición total del contenido.'], ['Experiencia de juego', 'World of Xethkioz apunta a una experiencia Action RPG con exploración, progresión y descubrimiento. El objetivo es construir una aventura que combine combate, mundo vivo y capas narrativas en evolución.'], ['Novedades públicas', 'Los avances que puedan compartirse se publicarán en esta web y en los canales oficiales de XETHKIOZ, con prioridad en Threads e Instagram. Cada publicación mostrará sólo material seguro y preparado para difusión.']],
     visualLabel: 'ARTE VISUAL PÚBLICO', visualTitle: 'Tres ecos de un mundo más grande.',
     visualCards: [['Naturaleza viva', 'Biomas orgánicos, energía latente y cristales que sugieren un territorio en expansión.'], ['Horizontes suspendidos', 'Altura, vacío, plataformas flotantes y una arquitectura visual pensada para el asombro.'], ['Umbral nocturno', 'Una lectura más oscura del mismo universo, con tensión, silencio y resonancias ocultas.']],
@@ -35,7 +40,7 @@ const copy = {
     faqLabel: 'ANTES DE CRUZAR', faqTitle: 'Lo que podés saber hoy.',
     faq: [
       ['¿Ya se puede jugar?', 'Esta página no ofrece una descarga pública. Los accesos, pruebas o lanzamientos se anunciarán por los canales oficiales cuando corresponda.'],
-      ['¿Estas imágenes son capturas del juego?', 'No. Son ilustraciones promocionales del ecosistema XETHKIOZ, no gameplay ni una promesa del aspecto definitivo.'],
+      ['¿Estas imágenes son capturas del juego?', 'Las imágenes de esta página son ilustraciones promocionales. El video “Alpha 5” sí muestra una Alpha temprana de demostración y está rotulado como tal; no representa la calidad, interfaz, animaciones ni aspecto final del juego.'],
       ['¿Dónde se publican los avances?', 'En esta web y en los perfiles oficiales enlazados al pie, con prioridad en Threads e Instagram.'],
       ['¿Por qué no se muestra todo el universo?', 'La historia, los personajes definitivos y los materiales de producción se mantienen reservados para cuidar el proyecto y la experiencia de descubrimiento.'],
     ],
@@ -59,6 +64,11 @@ const copy = {
     guideAction: 'Open the community chat', guideNote: 'A guide on the website. The mystery of the game stays intact.',
     devLabel: '04 / THE JOURNEY', devTitle: 'A world in the making.',
     devBody: 'Development continues. Updates suitable for sharing will appear on our official channels, when they are ready to be presented.',
+    alphaLabel: 'DEMONSTRATION ALPHA · ALPHA 5',
+    alphaTitle: 'An early look at the game in motion.',
+    alphaBody: 'This video shows an early demonstration Alpha. At this stage, movement, combat, interface, environment and the general flow are being tested; assets, animation, lighting, behavior, balance and UI may all be provisional.',
+    alphaMeta: 'ALPHA 5 · 02:34 · DEVELOPMENT CAPTURE',
+    alphaNote: 'NOT FINAL QUALITY · NOT A TRAILER · NOT A PUBLIC BUILD',
     milestones: [['Art direction', 'The visual identity blends fantasy, mystery and a dark aesthetic with ethereal energy. The project prioritizes atmosphere, symbols and world coherence before exposing the full scope of its content.'], ['Game experience', 'World of Xethkioz is being shaped as an Action RPG built around exploration, progression and discovery, combining combat, a living world and evolving narrative layers.'], ['Public updates', 'Shareable progress will be published on this website and XETHKIOZ official channels, primarily Threads and Instagram. Every post will contain only material cleared for public release.']],
     visualLabel: 'PUBLIC VISUAL ART', visualTitle: 'Three echoes of a much larger world.',
     visualCards: [['Living nature', 'Organic biomes, latent energy and crystals suggesting a territory still expanding.'], ['Suspended horizons', 'Height, open voids, floating platforms and visual architecture designed around a sense of wonder.'], ['Night threshold', 'A darker reading of the same universe, shaped by tension, silence and hidden resonances.']],
@@ -66,7 +76,7 @@ const copy = {
     faqLabel: 'BEFORE YOU CROSS', faqTitle: 'What we can share today.',
     faq: [
       ['Is the game available to play?', 'This page does not offer a public download. Access, tests or launches will be announced through official channels when appropriate.'],
-      ['Are these images game screenshots?', 'No. They are promotional illustrations from the XETHKIOZ ecosystem, not gameplay or a promise of the final visual appearance.'],
+      ['Are these images game screenshots?', 'The images on this page are promotional illustrations. The “Alpha 5” video does show an early demonstration Alpha and is labeled accordingly; it does not represent final quality, UI, animation or the final visual appearance of the game.'],
       ['Where are updates published?', 'On this website and the official profiles linked below, primarily Threads and Instagram.'],
       ['Why is the entire universe not shown?', 'The story, final characters and production materials remain private to protect the project and the experience of discovery.'],
     ],
@@ -105,7 +115,7 @@ export default function WorldOfXethkioz() {
           <header className="woxp-founder-head"><div><p className="woxp-kicker">{t.worldLabel}</p><h2>{t.worldTitle}</h2></div><p className="woxp-body">{t.worldBody}</p></header>
           <div className="woxp-founder-media">
             <video className="woxp-founder-video" controls playsInline preload="metadata" poster="/assets/world-of-xethkioz/founder/founder-vision-poster.webp" aria-label={lang === 'es' ? 'Video: visión del fundador de World of Xethkioz' : 'Video: World of Xethkioz founder vision'}>
-              <source src="/assets/world-of-xethkioz/promo/xethkioz-beyond-the-game-web.mp4" type="video/mp4" />
+              <source src="/assets/world-of-xethkioz/founder/founder-vision.mp4" type="video/mp4" />
             </video>
             <div className="woxp-founder-meta"><span>{t.founderNote}</span><span>WORLD OF XETHKIOZ</span></div>
           </div>
@@ -118,6 +128,15 @@ export default function WorldOfXethkioz() {
         </section>
         <section id="arte-visual" className="wox-portal-art woxp-section">
           <header className="woxp-art-head"><div><p className="woxp-kicker">{t.devLabel}</p><h2>{t.devTitle}</h2></div><div><p className="woxp-body">{t.devBody}</p><a className="woxp-text-link" href="https://www.threads.com/@xethkioz" target="_blank" rel="noopener noreferrer">Threads ↗</a></div></header>
+          <div className="woxp-alpha-demo">
+            <div className="woxp-alpha-copy"><p className="woxp-kicker">{t.alphaLabel}</p><h3>{t.alphaTitle}</h3><p className="woxp-body">{t.alphaBody}</p><small className="woxp-note">{t.alphaNote}</small></div>
+            <div className="woxp-founder-media">
+              <video className="woxp-founder-video woxp-alpha-video" controls playsInline preload="metadata" poster="/assets/world-of-xethkioz/development/alpha-5-demo-poster.webp" aria-label={lang === 'es' ? 'Video: Alpha 5 de demostración de World of Xethkioz' : 'Video: World of Xethkioz Alpha 5 demonstration'}>
+                <source src="/assets/world-of-xethkioz/development/alpha-5-demo.mp4" type="video/mp4" />
+              </video>
+              <div className="woxp-founder-meta"><span>{t.alphaMeta}</span><span>DEMO ALPHA</span></div>
+            </div>
+          </div>
           <div className="woxp-public-showcase" aria-labelledby="woxp-visual-title">
             <div className="woxp-public-showcase-title"><p className="woxp-kicker">{t.visualLabel}</p><h3 id="woxp-visual-title">{t.visualTitle}</h3></div>
             <div className="woxp-concept-gallery">
