@@ -53,6 +53,11 @@ const copy = {
     supportPillars: ['Desarrollo independiente', 'Arte y universo original', 'Comunidad y expansión'],
     supportPrimary: 'APOYAR EL PROYECTO',
     supportSecondary: 'SEGUIR NOVEDADES',
+    partnersEyebrow: 'COLABORACIONES / REFERIDOS',
+    partnersTitle: 'Herramientas que impulsan el proyecto.',
+    partnersNote: 'Enlaces promocionales y de referido. Si usás estos accesos, podés apoyar indirectamente a XETHKIOZ sin costo extra para vos.',
+    tripoRole: 'IA 3D para crear modelos y prototipos',
+    starlinkRole: 'Conectividad para crear, subir y trabajar',
     footerBrand: 'Gaming, tecnología, noticias y creación digital con identidad propia.',
     footerBrandDetail: 'Universos en desarrollo, contenido original y proyectos impulsados por creatividad, tecnología e IA.',
     footerWorld: 'WORLD OF XETHKIOZ',
@@ -100,6 +105,11 @@ const copy = {
     supportPillars: ['Independent development', 'Original art and universe', 'Community and expansion'],
     supportPrimary: 'SUPPORT THE PROJECT',
     supportSecondary: 'FOLLOW UPDATES',
+    partnersEyebrow: 'COLLABORATIONS / REFERRALS',
+    partnersTitle: 'Tools helping power the project.',
+    partnersNote: 'Promotional and referral links. Using these links can indirectly support XETHKIOZ at no extra cost to you.',
+    tripoRole: '3D AI for models and prototyping',
+    starlinkRole: 'Connectivity for creating, uploading and working',
     footerBrand: 'Gaming, technology, news and digital creation with an identity of its own.',
     footerBrandDetail: 'Worlds in development, original content and projects powered by creativity, technology and AI.',
     footerWorld: 'WORLD OF XETHKIOZ',
@@ -175,6 +185,20 @@ export default function Home() {
             </div>
             <div className="wox-support-sigil" aria-hidden="true"><span>✦</span></div>
           </section>
+
+          <aside className="xk-partner-corner" aria-labelledby="xk-partner-title">
+            <div className="xk-partner-copy"><p>{t.partnersEyebrow}</p><h2 id="xk-partner-title">{t.partnersTitle}</h2><small>{t.partnersNote}</small></div>
+            <div className="xk-partner-links">
+              <a href="https://www.xethkioz.com.ar/tripo" target="_blank" rel="sponsored noopener noreferrer" aria-label={lang === 'es' ? 'Abrir promoción de Tripo' : 'Open Tripo promotion'}>
+                <span className="xk-partner-brand is-tripo"><img src="/assets/partners/tripo-logo.png" alt="" width="48" height="48" loading="lazy" decoding="async" /><strong>Tripo</strong></span>
+                <small>{t.tripoRole}</small><b aria-hidden="true">↗</b>
+              </a>
+              <a href="https://www.xethkioz.com.ar/starlink" target="_blank" rel="sponsored noopener noreferrer" aria-label={lang === 'es' ? 'Abrir referido de Starlink' : 'Open Starlink referral'}>
+                <span className="xk-partner-brand is-starlink"><img src="/assets/partners/starlink-logo.png" alt="Starlink" width="612" height="101" loading="lazy" decoding="async" /></span>
+                <small>{t.starlinkRole}</small><b aria-hidden="true">↗</b>
+              </a>
+            </div>
+          </aside>
 
         </div>
       </main>

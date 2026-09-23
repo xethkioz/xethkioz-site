@@ -12,6 +12,7 @@ const home = read('src/pages/Home.tsx')
 const navigation = read('src/components/FantasyNavigation.tsx')
 const destinations = read('src/lib/publicNavigation.ts')
 const rootDocument = read('index.html')
+const notFoundApi = read('api/not-found.ts')
 const routeCssLoader = read('src/components/RouteCssLoader.tsx')
 const accessibility = read('src/accessibility.css')
 const browserTest = read('tests/e2e/content-design.spec.ts')
@@ -32,6 +33,8 @@ check('Home does not hide Mascotas behind a legacy override', !rootDocument.incl
 check('Home uses the approved panoramic promotional art without autoplay', !home.includes('<video') && !home.includes('autoPlay') && home.includes('/assets/xethkioz-world-panorama-2026.webp') && fs.existsSync(path.join(root, 'public/assets/xethkioz-world-panorama-2026.webp')) && fs.statSync(path.join(root, 'public/assets/xethkioz-world-panorama-2026.webp')).size < 750000 && landingCss.includes('prefers-reduced-motion: reduce'))
 check('Home avoids fake safety or simulated live claims', !home.includes('SISTEMA SEGURO 24/7') && !home.includes('JUGADORES CONECTADOS') && !home.includes('PRIVACIDAD Y NAVEGACIÓN VERIFICADAS'))
 check('Home exposes the existing Nexus chat launcher', home.includes('xethkioz:nexus-chat-open'))
+check('Home exposes compact Tripo and Starlink collaboration/referral cards', home.includes('xk-partner-corner') && home.includes('href="https://www.xethkioz.com.ar/tripo"') && home.includes('href="https://www.xethkioz.com.ar/starlink"') && home.includes('rel="sponsored noopener noreferrer"') && home.includes('/assets/partners/tripo-logo.png') && home.includes('/assets/partners/starlink-logo.png'))
+check('Short partner links redirect to the approved promotional destinations', notFoundApi.includes("'/tripo'") && notFoundApi.includes('creator_invite') && notFoundApi.includes('VXH2GZ') && notFoundApi.includes("'/starlink'") && notFoundApi.includes('RC-DF-13005453-64032-82') && notFoundApi.includes('status(302)') && notFoundApi.includes("'X-Robots-Tag'"))
 check('Home dedicated landing CSS stays below 32 kB source', Buffer.byteLength(landingCss, 'utf8') <= 32 * 1024)
 check(
   'Home landing CSS excludes retired section and grid selectors',

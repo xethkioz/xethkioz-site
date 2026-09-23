@@ -16,6 +16,19 @@ export default function handler(request: any, response: any) {
     pathname = '/'
   }
 
+  const partnerRedirects: Record<string, string> = {
+    '/tripo': 'https://studio.tripo3d.ai/?utm_source=creator_invite&utm_medium=linkcopy&utm_campaign=VXH2GZ&utm_content=2251799814429939',
+    '/starlink': 'https://starlink.com?referral=RC-DF-13005453-64032-82',
+  }
+  const partnerTarget = partnerRedirects[pathname]
+  if (partnerTarget) {
+    response.setHeader('Cache-Control', 'no-store, max-age=0')
+    response.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive')
+    response.setHeader('Location', partnerTarget)
+    response.status(302).end()
+    return
+  }
+
   const safePath = escapeHtml(pathname.slice(0, 240))
   const html = `<!doctype html>
 <html lang="es-AR">
