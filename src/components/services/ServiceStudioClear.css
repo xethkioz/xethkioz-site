@@ -53,3 +53,66 @@
   .xks-page #propuestas .xks-card{min-height:0}
 }
 @media(prefers-reduced-motion:reduce){.xks-hero-aside *{transition:none!important}}
+
+/* An actual full-width creative scene replaces the narrow decorative card. */
+.xks-page .xks-hero{
+  position:relative;
+  isolation:isolate;
+  display:flex;
+  align-items:center;
+  width:100%;
+  max-width:none;
+  min-height:clamp(610px,74svh,760px);
+  margin:0;
+  overflow:hidden;
+  padding:105px max(42px,calc((100% - 1540px)/2)) 105px;
+  background:#0d0b16;
+}
+.xks-hero-art{position:absolute;z-index:-3;inset:0}
+.xks-hero-art img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 53%;filter:saturate(1.08) contrast(1.04)}
+.xks-hero-shade{
+  position:absolute;
+  z-index:-2;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(9,8,17,.89),rgba(9,8,17,.72) 31%,rgba(9,8,17,.20) 54%,transparent 75%),
+    linear-gradient(180deg,rgba(9,8,17,.32),transparent 24%,transparent 69%,rgba(9,8,17,.39) 93%,#0b0a12);
+}
+.xks-page .xks-hero-copy{position:relative;z-index:2;width:min(52vw,735px);max-width:735px}
+.xks-page .xks-back{color:#eedfe8;font-size:13px;text-shadow:0 2px 16px #080710}
+.xks-page .xks-eyebrow{margin-top:30px;color:#e4c3ff;text-shadow:0 2px 16px #080710}
+.xks-page .xks-hero h1{
+  max-width:740px;
+  margin:0;
+  color:#fff;
+  font:760 clamp(57px,5.2vw,86px)/.99 Inter,system-ui,sans-serif;
+  letter-spacing:-.069em;
+  text-shadow:0 5px 32px #080710;
+}
+.xks-page .xks-hero h1 em{color:#ffaf81}
+.xks-page .xks-lead{max-width:610px;margin:25px 0 0;color:#f1e8f2;font-size:17px;line-height:1.7;text-shadow:0 2px 16px #080710}
+.xks-page .xks-actions{margin:27px 0 0}
+.xks-page .xks-hero .xks-button{min-height:53px;padding:14px 21px}
+.xks-page .xks-trust-line{margin:23px 0 0;color:#f0dfeb;text-shadow:0 2px 16px #080710}
+.xks-hero-caption{position:absolute;right:38px;bottom:25px;color:#e4d3df;font-size:10px;letter-spacing:.13em;text-shadow:0 2px 12px #080710}
+.xks-page .xks-launch-offer{margin-top:42px}
+@media(max-width:950px){
+  .xks-page .xks-hero{display:block;min-height:0;padding:clamp(340px,44vw,475px) 32px 75px}
+  .xks-hero-art{inset:0 0 auto;height:clamp(445px,58vw,640px)}
+  .xks-hero-art img{object-position:75% 45%}
+  .xks-hero-shade{background:linear-gradient(180deg,rgba(9,8,17,.44),transparent 30%,rgba(9,8,17,.34) 54%,#0b0a12 88%)}
+  .xks-page .xks-hero-copy{width:100%;max-width:720px;margin:0 auto}
+  .xks-page .xks-hero h1{font-size:clamp(48px,7vw,70px)}
+  .xks-hero-caption{right:32px;bottom:23px}
+}
+@media(max-width:600px){
+  .xks-page .xks-hero{padding:clamp(285px,76vw,375px) 20px 65px}
+  .xks-hero-art{height:clamp(390px,108vw,540px)}
+  .xks-page .xks-hero h1{font-size:clamp(45px,11.5vw,62px)}
+  .xks-page .xks-lead{font-size:15px;line-height:1.64}
+  .xks-page .xks-hero .xks-actions{gap:10px}
+  .xks-page .xks-hero .xks-button{font-size:13px;padding:12px 16px}
+  .xks-hero-caption{left:20px;right:20px;bottom:18px;font-size:8px}
+  .xks-page .xks-launch-offer{margin-top:20px}
+}

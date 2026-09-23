@@ -8,7 +8,7 @@ const wispCss = read('src/components/fusion/FusionGlobalWisp.css')
 const checks = [
  ['offscreen sections defer rendering with stable placeholders', css.includes('content-visibility:auto') && css.includes('contain-intrinsic-size:auto 680px')],
  ['isolated gallery limits layout and paint work', css.includes('contain:layout paint')],
- ['hero reserves its actual image dimensions and gets loading priority', home.includes('fetchPriority="high"') && home.includes('width="1672" height="941"') && page.includes('fetchPriority="high"') && page.includes('width="800" height="800"')],
+ ['hero reserves its actual image dimensions and gets loading priority', home.includes('fetchPriority="high"') && home.includes('width="1672" height="941"') && page.includes('fetchPriority="high"') && page.includes('width="1672" height="941"')],
  ['below-fold art is lazy and asynchronously decoded', page.includes('loading="lazy" decoding="async"')],
  ['public media never autoplays or embeds heavyweight remote surfaces', [home,page].every(s => !/autoPlay|<iframe|<canvas/.test(s))],
  ['founder video is user-controlled and metadata-only', page.includes('<video') && page.includes('controls') && page.includes('playsInline') && page.includes('preload="metadata"') && page.includes('xethkioz-beyond-the-game-web.mp4')],

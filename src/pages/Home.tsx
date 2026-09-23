@@ -4,7 +4,6 @@ import { useState } from 'react'
 import SEO from '../components/SEO'
 import './PremiumFantasyShell.css'
 import { useLang } from '../lib/LangContext'
-import { SITE_VERSION, SOCIAL_LINKS } from '../lib/siteConfig'
 import './WorldOfXethkiozLanding.css'
 import './HomePremiumClosure.css'
 import './HomeGateway.css'
@@ -14,7 +13,6 @@ function openNexusChat() {
   window.dispatchEvent(new CustomEvent('xethkioz:nexus-chat-open', { detail: { room: 'general' } }))
 }
 
-const socialNames = ['Threads', 'Instagram', 'TikTok Principal', 'YouTube']
 const copy = {
   es: {
     seo: 'XETHKIOZ · Gaming, tecnología y creación',
@@ -116,16 +114,8 @@ export default function Home() {
   const { lang, localizePath } = useLang()
   const [featuredPortal, setFeaturedPortal] = useState<'world' | 'veyr' | 'studio'>('world')
   const t = copy[lang]
-  const socials = socialNames.flatMap(name => SOCIAL_LINKS.filter(item => item.name === name))
   const gamePath = localizePath('/world-of-xethkioz')
   const studioPath = localizePath('/creacion-web')
-  const worldLinks = [
-    [lang === 'es' ? 'La visión' : 'The vision', `${gamePath}#historia`],
-    [lang === 'es' ? 'Atmósfera' : 'Atmosphere', `${gamePath}#mundo`],
-    ['Veyr', `${gamePath}#convergencia`],
-    [lang === 'es' ? 'Desarrollo' : 'Development', `${gamePath}#arte-visual`],
-    [lang === 'es' ? 'Preguntas' : 'Questions', `${gamePath}#preguntas`],
-  ] as const
 
   return (
     <>
@@ -138,23 +128,27 @@ export default function Home() {
             <p className="wox-status">{t.status}</p>
             <h1 id="wox-title"><span>XETHKIOZ</span>{t.soul}</h1><p className="wox-lead">{t.lead}</p>
             <div className="wox-actions"><Link to={gamePath}>{t.explore} <span aria-hidden="true">↗</span></Link></div>
-            <nav className="xk-hero-doors" aria-label={lang === 'es' ? 'Red de portales: elegí un proyecto' : 'Portal network: choose a project'}>
-              <p>{lang === 'es' ? 'RED DE PORTALES / ELEGÍ POR DÓNDE EMPEZAR' : 'PORTAL NETWORK / CHOOSE WHERE TO BEGIN'}</p>
-              <Link className="is-world" to={gamePath} onMouseEnter={() => setFeaturedPortal('world')} onFocus={() => setFeaturedPortal('world')}><span className="xk-portal-face" aria-hidden="true"><i>W</i></span><span className="xk-portal-name"><small>01 / {lang === 'es' ? 'EL JUEGO' : 'THE GAME'}</small>World of Xethkioz<em>{lang === 'es' ? 'Entrar al universo' : 'Enter the world'} <b aria-hidden="true">↗</b></em></span></Link>
-              <a className="is-veyr" href="#veyr" onMouseEnter={() => setFeaturedPortal('veyr')} onFocus={() => setFeaturedPortal('veyr')} onMouseLeave={() => setFeaturedPortal('world')} onBlur={() => setFeaturedPortal('world')}><span className="xk-portal-face" aria-hidden="true"><i>V</i></span><span className="xk-portal-name"><small>02 / {lang === 'es' ? 'IA LOCAL' : 'LOCAL AI'}</small>VEYR<em>{t.veyrLabel} <b aria-hidden="true">↓</b></em></span></a>
-              <Link className="is-studio" to={`${studioPath}#landing-esencial`} onMouseEnter={() => setFeaturedPortal('studio')} onFocus={() => setFeaturedPortal('studio')} onMouseLeave={() => setFeaturedPortal('world')} onBlur={() => setFeaturedPortal('world')}><span className="xk-portal-face" aria-hidden="true"><i>✦</i></span><span className="xk-portal-name"><small>03 / {lang === 'es' ? 'CREACIÓN' : 'CREATION'}</small>XETHKIOZ Studio<em>{t.studioLabel} <b aria-hidden="true">↗</b></em></span></Link>
-            </nav>
           </div>
           <div className="xk-world-signature"><img src="/assets/world-of-xethkioz/world-of-xethkioz-logo.png" alt="World of Xethkioz" width="1584" height="483" decoding="async" /><span>{t.worldNote}</span></div>
           <small className="wox-art-credit">{t.caption}</small>
         </section>
+
+        <nav className="xk-hero-doors" aria-label={lang === 'es' ? 'Red de portales: elegí un proyecto' : 'Portal network: choose a project'}>
+          <header className="xk-doors-heading"><p>{lang === 'es' ? 'TRES RUTAS / UN MISMO UNIVERSO CREATIVO' : 'THREE ROUTES / ONE CREATIVE UNIVERSE'}</p><h2>{lang === 'es' ? 'Elegí por dónde empezar.' : 'Choose where to begin.'}</h2></header>
+          <div className="xk-doors-grid">
+            <Link className="is-world" to={gamePath} onMouseEnter={() => setFeaturedPortal('world')} onFocus={() => setFeaturedPortal('world')}><span className="xk-door-index">01 <small>{lang === 'es' ? 'EL JUEGO' : 'THE GAME'}</small></span><span className="xk-door-copy"><strong>World of Xethkioz</strong><em>{lang === 'es' ? 'Entrar al universo' : 'Enter the world'}</em></span><span className="xk-door-arrow" aria-hidden="true">↗</span></Link>
+            <a className="is-veyr" href="#veyr" onMouseEnter={() => setFeaturedPortal('veyr')} onFocus={() => setFeaturedPortal('veyr')} onMouseLeave={() => setFeaturedPortal('world')} onBlur={() => setFeaturedPortal('world')}><span className="xk-door-index">02 <small>{lang === 'es' ? 'IA LOCAL' : 'LOCAL AI'}</small></span><span className="xk-door-copy"><strong>VEYR</strong><em>{t.veyrLabel}</em></span><span className="xk-door-arrow" aria-hidden="true">↓</span></a>
+            <Link className="is-studio" to={`${studioPath}#landing-esencial`} onMouseEnter={() => setFeaturedPortal('studio')} onFocus={() => setFeaturedPortal('studio')} onMouseLeave={() => setFeaturedPortal('world')} onBlur={() => setFeaturedPortal('world')}><span className="xk-door-index">03 <small>{lang === 'es' ? 'CREACIÓN' : 'CREATION'}</small></span><span className="xk-door-copy"><strong>XETHKIOZ Studio</strong><em>{t.studioLabel}</em></span><span className="xk-door-arrow" aria-hidden="true">↗</span></Link>
+          </div>
+        </nav>
 
         <aside className="wox-utility-rail" aria-label={lang === 'es' ? 'Accesos rápidos' : 'Quick access'}><button type="button" onClick={openNexusChat}><span aria-hidden="true">◉</span><b>CHAT</b></button><Link to={localizePath('/green-node')}><span aria-hidden="true">◇</span><b>GREEN NODE</b></Link></aside>
 
         <div className="wox-content">
           <section id="veyr" className="xk-veyr-story" aria-labelledby="xk-veyr-title">
             <div className="xk-veyr-copy"><p>{t.veyrEyebrow}</p><h2 id="xk-veyr-title">VEYR<span>IA LOCAL</span></h2><h3>{t.veyrTitle}</h3><p>{t.veyrText}</p><details><summary>{t.veyrDetails}<span aria-hidden="true">+</span></summary><ul>{t.veyrPoints.map(point => <li key={point}>{point}</li>)}</ul></details></div>
-            <div className="xk-veyr-visual" aria-hidden="true"><div><small>VEYR / {lang === 'es' ? 'IA LOCAL' : 'LOCAL AI'}</small><strong>{t.veyrPanelTitle}</strong><span>{t.veyrPanelNote}</span></div><i>V</i></div>
+            <picture className="xk-veyr-art" aria-hidden="true"><img src="/assets/xethkioz-veyr-local-atmosphere-2026.webp" alt="" width="1916" height="821" loading="lazy" decoding="async" /></picture>
+            <small className="xk-veyr-caption">{lang === 'es' ? 'VISUALIZACIÓN CONCEPTUAL · IA LOCAL EN DESARROLLO' : 'CONCEPT VISUALIZATION · LOCAL AI IN DEVELOPMENT'}</small>
           </section>
 
           <section className="xk-studio-story" aria-labelledby="xk-studio-title"><div className="xk-studio-copy"><p>{t.studioEyebrow}</p><h2 id="xk-studio-title">{t.studioTitle}</h2><span>{t.studioText}</span><Link to={`${studioPath}#landing-esencial`}>{t.studioAction}<b aria-hidden="true">↗</b></Link></div><div className="xk-studio-aside"><span>LANDING ESENCIAL</span><strong>{t.studioPrice}</strong><small>{t.studioNote}</small></div></section>
@@ -182,13 +176,6 @@ export default function Home() {
             <div className="wox-support-sigil" aria-hidden="true"><span>✦</span></div>
           </section>
 
-          <footer className="wox-footer-premium">
-            <div className="wox-footer-brand"><strong><span aria-hidden="true">✦</span>XETHKIOZ</strong><p>{t.footerBrand}</p><small>{t.footerBrandDetail}</small><div className="wox-footer-tech"><span>© {new Date().getFullYear()} XETHKIOZ · {SITE_VERSION}</span><span>UNITY 6 · URP · 3D/2.5D</span></div></div>
-            <nav aria-label={t.footerWorld}><h2>{t.footerWorld}</h2>{worldLinks.map(([label, href]) => <a key={href} href={href}>{label}</a>)}</nav>
-            <nav aria-label={t.footerEcosystem}><h2>{t.footerEcosystem}</h2><a href="#veyr">VEYR IA</a><Link to={localizePath('/news')}>{lang === 'es' ? 'Noticias' : 'News'}</Link><Link to={localizePath('/gaming')}>{lang === 'es' ? 'Biblioteca gamer' : 'Gaming library'}</Link><a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ArgenCiencia ↗</a><a href="/mascotas/">{lang === 'es' ? 'Mascotas' : 'Pets'}</a><Link to={localizePath('/creacion-web')}>{lang === 'es' ? 'Creación web' : 'Web creation'}</Link><Link to={localizePath('/green-node')}>Green Node</Link></nav>
-            <nav className="wox-footer-social" aria-label={t.footerCommunity}><h2>{t.footerCommunity}</h2><a href="https://www.xethkioz.com.ar">Web</a>{socials.map(item => <a key={item.name} href={item.url} target="_blank" rel="noopener noreferrer">{item.name === 'TikTok Principal' ? 'TikTok' : item.name}</a>)}<Link to={localizePath('/support')}>{lang === 'es' ? 'Apoyar proyecto' : 'Support project'}</Link><Link to={localizePath('/contact')}>{lang === 'es' ? 'Contacto' : 'Contact'}</Link></nav>
-            <div className="wox-footer-bottom"><span>{t.footerRights}</span><span>{t.caption}</span><nav aria-label={lang === 'es' ? 'Enlaces legales' : 'Legal links'}><Link to={localizePath('/privacy')}>{lang === 'es' ? 'Privacidad' : 'Privacy'}</Link><Link to={localizePath('/contact')}>{lang === 'es' ? 'Contacto' : 'Contact'}</Link></nav></div>
-          </footer>
         </div>
       </main>
     </>

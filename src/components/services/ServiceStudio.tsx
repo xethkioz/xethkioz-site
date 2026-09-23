@@ -22,6 +22,8 @@ export default function ServiceStudio({ lang, selection, onChange, onQuote, onSt
   async function share() { const url = studioSelectionUrl(selection, lang); const copied = await copyStudioText(url); setShareFallback(copied ? '' : url); setCopyStatus(copied ? (es ? 'Enlace copiado. No contiene datos de contacto.' : 'Link copied. It contains no contact details.') : (es ? 'Copiá el enlace de selección que aparece debajo.' : 'Copy the selection link shown below.')) }
   return <>
     <section className="xks-hero" aria-labelledby="web-creation-title">
+      <picture className="xks-hero-art" aria-hidden="true"><img src="/assets/xethkioz-studio-atmosphere-2026.webp" alt="" width="1672" height="941" fetchPriority="high" decoding="async" /></picture>
+      <div className="xks-hero-shade" aria-hidden="true" />
       <div className="xks-hero-copy">
         <Link className="xks-back" to={es ? '/' : '/en'}>← {es ? 'Volver a XETHKIOZ' : 'Back to XETHKIOZ'}</Link>
         <p className="xks-eyebrow"><span aria-hidden="true">✦</span> XETHKIOZ / {es ? 'ESTUDIO DIGITAL' : 'DIGITAL STUDIO'}</p>
@@ -30,7 +32,7 @@ export default function ServiceStudio({ lang, selection, onChange, onQuote, onSt
         <div className="xks-actions"><a className="xks-button xks-primary" href="#landing-esencial">{es ? 'Ver Landing Esencial' : 'View Essential Landing Page'} <span aria-hidden="true">↓</span></a><a className="xks-button xks-secondary" href="#propuestas">{es ? 'Otros servicios' : 'Other services'} <span aria-hidden="true">↗</span></a></div>
         <p className="xks-trust-line">{es ? 'Te responde una persona · Acordamos el alcance · Sin cobros automáticos' : 'A person replies · Scope agreed upfront · No automatic charges'}</p>
       </div>
-      <div className="xks-hero-aside" aria-label={es ? 'Cómo empezamos' : 'How we start'}><span>STUDIO / XETHKIOZ</span><strong>{es ? 'Una idea. Una página que la explique bien.' : 'One idea. A page that explains it well.'}</strong><p>{es ? 'Diseño y desarrollo con atención personal, desde la primera charla hasta la entrega.' : 'Personal design and development, from our first conversation to launch.'}</p><i aria-hidden="true">✦</i></div>
+      <small className="xks-hero-caption">{es ? 'VISUALIZACIÓN CONCEPTUAL · DISEÑO WEB XETHKIOZ' : 'CONCEPT VISUALIZATION · XETHKIOZ WEB DESIGN'}</small>
     </section>
     <section id="landing-esencial" className="xks-launch-offer" aria-labelledby="xks-launch-title">
       <div className="xks-launch-copy">

@@ -4,12 +4,11 @@ import SEO from '../components/SEO'
 import { PUBLIC_ATMOSPHERE_ART } from '../lib/publicArtwork'
 import './PremiumFantasyShell.css'
 import { useLang } from '../lib/LangContext'
-import { SITE_VERSION, SOCIAL_LINKS } from '../lib/siteConfig'
 import './WorldOfXethkiozPortal.css'
+import './WorldPortalCinematic.css'
 
 // Public promotional material only. Never import game data or internal lore here.
 const atmosphereArt = PUBLIC_ATMOSPHERE_ART.src
-const socialNames = ['Threads', 'Instagram', 'TikTok Principal', 'YouTube']
 const copy = {
   es: {
     description: 'El portal oficial de World of Xethkioz. Fantasía, atmósfera y novedades de un Action RPG independiente en desarrollo.',
@@ -79,17 +78,16 @@ const anchors = ['historia', 'mundo', 'convergencia', 'arte-visual', 'preguntas'
 export default function WorldOfXethkioz() {
   const { lang, localizePath } = useLang()
   const t = copy[lang]
-  const socials = socialNames.flatMap(name => SOCIAL_LINKS.filter(item => item.name === name))
   return (
     <>
       <SEO title="World of Xethkioz" description={t.description} url="/world-of-xethkioz" image="/assets/world-of-xethkioz/world-of-xethkioz-logo.webp" />
       <main className="wox-portal" data-public-presentation="fantasy">
         <FantasyNavigation />
         <section className="wox-portal-hero" aria-labelledby="wox-portal-title">
-          <picture className="woxp-hero-art" aria-hidden="true"><img src={atmosphereArt} alt="" width="800" height="800" fetchPriority="high" decoding="async" /></picture>
+          <picture className="woxp-hero-art" aria-hidden="true"><img src="/assets/xethkioz-world-panorama-2026.webp" alt="" width="1672" height="941" fetchPriority="high" decoding="async" /></picture>
           <div className="woxp-hero-shade" aria-hidden="true" />
           <div className="wox-portal-hero-copy">
-            <picture className="woxp-game-logo-wrap"><img src="/assets/world-of-xethkioz/world-of-xethkioz-logo.png" alt="World of Xethkioz" className="woxp-game-logo" width="1584" height="483" decoding="async" /></picture>
+            <p className="woxp-world-name">WORLD OF XETHKIOZ <span aria-hidden="true">✦</span></p>
             <p className="woxp-kicker woxp-game-status">{t.status}</p>
             <div className="woxp-ornament" aria-hidden="true">◆</div>
             <h1 id="wox-portal-title">{t.title}</h1>
@@ -131,7 +129,7 @@ export default function WorldOfXethkioz() {
         </section>
         <section id="preguntas" className="woxp-faq woxp-section"><header><p className="woxp-kicker">{t.faqLabel}</p><h2>{t.faqTitle}</h2><p className="woxp-faq-aside">{lang === 'es' ? 'Algunas respuestas también forman parte del viaje.' : 'Some answers are part of the journey too.'}</p></header><div className="woxp-faq-list">{t.faq.map(([question, answer], index) => <details key={question}><summary><span className="woxp-faq-index" aria-hidden="true">0{index + 1}</span><strong>{question}</strong><span className="woxp-faq-toggle" aria-hidden="true">＋</span></summary><p>{answer}</p></details>)}</div></section>
         <section className="woxp-closing woxp-section"><picture className="woxp-closing-art" aria-hidden="true"><img src={atmosphereArt} alt="" width="800" height="800" loading="lazy" decoding="async" /></picture><div className="woxp-closing-shade" aria-hidden="true" /><div className="woxp-closing-copy"><span aria-hidden="true">✦</span><h2>{t.closing}</h2><div className="woxp-actions"><a className="woxp-button" href="https://www.threads.com/@xethkioz" target="_blank" rel="noopener noreferrer">{t.follow} ↗</a><Link className="woxp-support-button" to={localizePath('/support')}>{t.support} ↗</Link></div><p className="woxp-note">{t.supportNote}</p></div></section>
-        <footer className="wox-portal-footer"><div className="woxp-footer-brand"><Link to={localizePath('/')} className="woxp-brand"><span aria-hidden="true">✦</span>XETHKIOZ</Link><p>© {new Date().getFullYear()} XETHKIOZ. {t.rights}</p><small>{SITE_VERSION} · Premium Fantasy</small></div><nav aria-label={lang === 'es' ? 'Redes oficiales y enlaces' : 'Official channels and links'}><a href="https://www.xethkioz.com.ar">WEB</a>{socials.map(item => <a key={item.name} href={item.url} target="_blank" rel="noopener noreferrer">{item.name === 'TikTok Principal' ? 'TikTok' : item.name}</a>)}<Link to={localizePath('/privacy')}>{t.privacy}</Link><Link to={localizePath('/contact')}>{t.contact}</Link></nav></footer>
+
       </main>
     </>
   )

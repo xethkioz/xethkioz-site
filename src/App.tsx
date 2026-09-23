@@ -285,7 +285,7 @@ function AppShell() {
         </AppErrorBoundary>
       </div>
 
-      {hasPublicNavigation && (
+      {!isCmsRoute && (
         <Suspense fallback={null}>
           <Footer />
         </Suspense>

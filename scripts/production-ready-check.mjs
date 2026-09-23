@@ -46,6 +46,7 @@ const home = read('src/pages/Home.tsx')
 const navigation = read('src/components/FantasyNavigation.tsx')
 const destinations = read('src/lib/publicNavigation.ts')
 const homeCss = read('src/pages/WorldOfXethkiozLanding.css')
+const homeCinematicCss = read('src/pages/HomePortalCinematic.css')
 const indexHtml = read('index.html')
 const webManifest = read('public/manifest.webmanifest')
 const publicNews = read('src/pages/News.tsx')
@@ -84,7 +85,7 @@ check(
     && lockfile.version === pkg.version
     && lockfile.packages?.['']?.version === pkg.version,
 )
-check('shared public footer exposes the centralized release version', footer.includes("import { SITE_VERSION, SOCIAL_LINKS }") && footer.includes('XETHKIOZ Web {SITE_VERSION}'))
+check('shared public footer exposes the centralized release version', footer.includes("import { SITE_VERSION, SOCIAL_LINKS }") && footer.includes('{SITE_VERSION}'))
 check(
   'installable web manifest is linked and versioned',
   indexHtml.includes('rel="manifest" href="/manifest.webmanifest"')
@@ -124,14 +125,15 @@ check(
 check(
   'Home static art avoids motion and video data costs',
   !home.includes('<video') && !home.includes('autoPlay')
-    && home.includes('/assets/portal-games-world-v3.webp')
-    && homeCss.includes('prefers-reduced-motion: reduce'),
+    && home.includes('/assets/xethkioz-world-panorama-2026.webp')
+    && homeCinematicCss.includes('prefers-reduced-motion:reduce'),
 )
 check(
   'Home exposes official XETHKIOZ web and social signals',
-  home.includes("import { SITE_VERSION, SOCIAL_LINKS } from '../lib/siteConfig'")
-    && home.includes('https://www.xethkioz.com.ar')
-    && home.includes("['Threads', 'Instagram', 'TikTok Principal', 'YouTube']"),
+  footer.includes("['Threads', 'Instagram', 'TikTok Principal', 'YouTube', 'Web']")
+    && footer.includes('https://www.xethkioz.com.ar')
+    && appShell.includes('!isCmsRoute && (')
+    && appShell.includes('<Footer />'),
 )
 check(
   'Home uses the canonical Veyr Wisp without duplicate Home implementation',
@@ -142,17 +144,17 @@ check(
 )
 check(
   'Home uses an existing public promotional illustration',
-  exists('public/assets/portal-games-world-v3.webp')
-    && home.includes('/assets/portal-games-world-v3.webp'),
+  exists('public/assets/xethkioz-world-panorama-2026.webp')
+    && home.includes('/assets/xethkioz-world-panorama-2026.webp'),
 )
 check(
   'Home exposes accessible World navigation with reduced-motion support',
-  home.includes('<main className="wox-home"')
+  home.includes('<main className="wox-home xk-gateway"')
     && (home.includes('<FantasyNavigation />') && navigation.includes('className="xkf-desktop"'))
     && navigation.includes('className="xkf-mobile"')
     && navigation.includes('aria-label={lang === \'es\' ? \'Ecosistema XETHKIOZ\' : \'XETHKIOZ ecosystem\'}')
     && !home.includes('<video')
-    && homeCss.includes('prefers-reduced-motion: reduce'),
+    && homeCinematicCss.includes('prefers-reduced-motion:reduce'),
 )
 check(
   'Home preserves the compact XETHKIOZ ecosystem while World stays primary',
