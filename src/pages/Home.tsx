@@ -6,6 +6,7 @@ import { useLang } from '../lib/LangContext'
 import { SITE_VERSION, SOCIAL_LINKS } from '../lib/siteConfig'
 import './WorldOfXethkiozLanding.css'
 import './HomePremiumClosure.css'
+import './HomeGateway.css'
 
 function openNexusChat() {
   window.dispatchEvent(new CustomEvent('xethkioz:nexus-chat-open', { detail: { room: 'general' } }))
@@ -14,25 +15,40 @@ function openNexusChat() {
 const socialNames = ['Threads', 'Instagram', 'TikTok Principal', 'YouTube']
 const copy = {
   es: {
-    seo: 'World of Xethkioz · Action RPG en desarrollo',
-    description: 'Entrá al universo XETHKIOZ. Fantasía, videojuegos, tecnología y un Action RPG independiente en desarrollo.',
-    status: 'ACTION RPG INDEPENDIENTE',
-    soul: 'Más allá de lo conocido.',
-    lead: 'Fantasía, acción y exploración. Descubrí la primera mirada a un Action RPG independiente en desarrollo.',
-    explore: 'DESCUBRIR WORLD OF XETHKIOZ',
-    follow: 'SEGUIR EN THREADS',
-    ecosystemEyebrow: 'ECOSISTEMA XETHKIOZ',
-    ecosystemTitle: 'Explorá más allá del juego.',
-    ecosystemText: 'Noticias, guías, creación digital y proyectos que expanden el universo XETHKIOZ.',
+    seo: 'XETHKIOZ · Gaming, tecnología y creación',
+    description: 'Noticias y guías con mirada propia, World of Xethkioz en desarrollo, VEYR IA Local y creación web para proyectos reales.',
+    status: 'GAMING · TECNOLOGÍA · CREACIÓN',
+    soul: 'Historias para jugar. Tecnología para crear.',
+    lead: 'Soy Alexis. En XETHKIOZ comparto gaming y tecnología mientras construyo un juego, una IA local y herramientas digitales para otros proyectos.',
+    explore: 'Explorar el juego',
+    follow: 'Conocer VEYR',
+    worldNote: 'ACTION RPG INDEPENDIENTE · EN DESARROLLO',
+    veyrLabel: 'IA local en desarrollo',
+    studioLabel: 'Crear tu web',
+    veyrEyebrow: '02 / UNA IA PARA TRABAJAR EN LOCAL',
+    veyrTitle: 'Un espacio para pensar y crear.',
+    veyrText: 'VEYR es un asistente local que estamos desarrollando para organizar investigación, proyectos y herramientas en la PC. Hoy es una herramienta de trabajo en evolución, no un servicio público listo para contratar.',
+    veyrDetails: '¿Qué estamos probando?',
+    veyrPoints: ['Investigación con fuentes y revisión de evidencia', 'Continuidad de proyectos y archivos de trabajo', 'Herramientas conectadas bajo control del usuario'],
+    veyrPanelTitle: 'Crear con criterio.',
+    veyrPanelNote: 'Desarrollo local · Acceso público aún no disponible',
+    studioEyebrow: '03 / XETHKIOZ STUDIO',
+    studioTitle: 'Tu negocio también puede tener su lugar en la web.',
+    studioText: 'Landing Esencial: una página clara, pensada para celular y para recibir consultas. Definimos alcance, precio final en pesos y fechas antes de empezar.',
+    studioPrice: 'USD 350 de referencia',
+    studioAction: 'Ver Landing Esencial',
+    studioNote: 'Consulta gratuita. Dominio, alojamiento e integraciones se presupuestan aparte.',
+    ecosystemEyebrow: 'SEGUÍ EXPLORANDO',
+    ecosystemTitle: 'Contenido para entrar a tu ritmo.',
+    ecosystemText: 'Noticias, guías y un espacio para aprender. Cada destino tiene una tarea clara.',
     routes: [
-      { code: '01', kicker: 'UNIVERSO PRINCIPAL', title: 'World of Xethkioz', description: 'La visión central del proyecto: fantasía, exploración, atmósfera y desarrollo independiente.', action: 'Explorar el juego', route: '/world-of-xethkioz', glyph: '✦', tone: 'world' },
-      { code: '02', kicker: 'ACTUALIDAD', title: 'Noticias y miradas', description: 'Gaming, tecnología y cultura digital con contexto, fuentes y una mirada propia.', action: 'Ver noticias', route: '/news', glyph: '⌁', tone: 'news' },
-      { code: '03', kicker: 'RECURSOS', title: 'Biblioteca gamer', description: 'Guías, builds y rutas para encontrar rápido qué jugar, mejorar y descubrir.', action: 'Explorar biblioteca', route: '/gaming', glyph: '◇', tone: 'gaming' },
-      { code: '04', kicker: 'ESTUDIO DIGITAL', title: 'Tu proyecto en la web', description: 'Web, IA aplicada, contenido y soporte digital con identidad y alcance acordado.', action: 'Ver servicios', route: '/creacion-web', glyph: '◈', tone: 'studio' },
+      { code: '01', kicker: 'ACTUALIDAD', title: 'Noticias', description: 'Gaming y tecnología con contexto, fuentes y una mirada propia.', action: 'Leer noticias', route: '/news', glyph: '⌁', tone: 'news' },
+      { code: '02', kicker: 'PARA JUGAR MEJOR', title: 'Biblioteca gamer', description: 'Guías, builds y referencias para elegir y avanzar.', action: 'Abrir biblioteca', route: '/gaming', glyph: '◇', tone: 'gaming' },
+      { code: '03', kicker: 'APRENDER', title: 'Green Node', description: 'Programación, Linux y seguridad digital explicados paso a paso.', action: 'Explorar Green Node', route: '/green-node', glyph: '✦', tone: 'green' },
     ],
     supportEyebrow: 'PRODUCCIÓN INDEPENDIENTE',
-    supportTitle: 'Ayudá a expandir este mundo.',
-    supportText: 'Cada apoyo ayuda a sostener el desarrollo, mejorar la web, crear nuevo arte visual y seguir expandiendo World of Xethkioz.',
+    supportTitle: 'Ayudá a sostener lo que viene.',
+    supportText: 'Tu apoyo voluntario ayuda a seguir creando contenido y desarrollando estos proyectos.',
     supportNote: 'Es un apoyo voluntario al proyecto. No es una compra dentro del juego ni una preventa.',
     supportPillars: ['Desarrollo independiente', 'Arte y universo original', 'Comunidad y expansión'],
     supportPrimary: 'APOYAR EL PROYECTO',
@@ -46,25 +62,40 @@ const copy = {
     caption: 'ILUSTRACIÓN PROMOCIONAL · NO ES GAMEPLAY',
   },
   en: {
-    seo: 'World of Xethkioz · Action RPG in development',
-    description: 'Enter the XETHKIOZ universe. Fantasy, gaming, technology and an independent action RPG in development.',
-    status: 'INDEPENDENT ACTION RPG',
-    soul: 'Beyond the familiar.',
-    lead: 'Fantasy, action and exploration. Discover a first look at an independent action RPG in development.',
-    explore: 'DISCOVER WORLD OF XETHKIOZ',
-    follow: 'FOLLOW ON THREADS',
-    ecosystemEyebrow: 'XETHKIOZ ECOSYSTEM',
-    ecosystemTitle: 'Explore beyond the game.',
-    ecosystemText: 'News, guides, digital creation and projects expanding the XETHKIOZ universe.',
+    seo: 'XETHKIOZ · Gaming, technology and creation',
+    description: 'Gaming news and guides, World of Xethkioz in development, VEYR local AI and web creation for real projects.',
+    status: 'GAMING · TECHNOLOGY · CREATION',
+    soul: 'Stories to play. Technology to create.',
+    lead: 'I’m Alexis. At XETHKIOZ I share gaming and technology while building a game, a local AI and digital tools for other projects.',
+    explore: 'Explore the game',
+    follow: 'Meet VEYR',
+    worldNote: 'INDEPENDENT ACTION RPG · IN DEVELOPMENT',
+    veyrLabel: 'Local AI in development',
+    studioLabel: 'Build your website',
+    veyrEyebrow: '02 / A LOCAL AI WORKSPACE',
+    veyrTitle: 'A place to think and create.',
+    veyrText: 'VEYR is a local assistant we are developing to organize research, projects and tools on a PC. It is currently an evolving work tool, not a public service ready to hire.',
+    veyrDetails: 'What are we testing?',
+    veyrPoints: ['Research with sources and evidence review', 'Continuity for projects and working files', 'Connected tools controlled by the user'],
+    veyrPanelTitle: 'Create with judgment.',
+    veyrPanelNote: 'Local development · Public access not yet available',
+    studioEyebrow: '03 / XETHKIOZ STUDIO',
+    studioTitle: 'Give your business a place of its own online.',
+    studioText: 'Essential Landing Page: a clear page built for mobile and inquiries. We agree scope, the final local-currency quote and dates before starting.',
+    studioPrice: 'USD 350 reference price',
+    studioAction: 'View Essential Landing Page',
+    studioNote: 'Free inquiry. Domain, hosting and integrations are quoted separately.',
+    ecosystemEyebrow: 'KEEP EXPLORING',
+    ecosystemTitle: 'Content at your own pace.',
+    ecosystemText: 'News, guides and a place to learn. Each destination has a clear purpose.',
     routes: [
-      { code: '01', kicker: 'MAIN UNIVERSE', title: 'World of Xethkioz', description: 'The core vision of the project: fantasy, exploration, atmosphere and independent development.', action: 'Explore the game', route: '/world-of-xethkioz', glyph: '✦', tone: 'world' },
-      { code: '02', kicker: 'CURRENT', title: 'News and perspectives', description: 'Gaming, technology and digital culture with context, sources and an independent perspective.', action: 'Open news', route: '/news', glyph: '⌁', tone: 'news' },
-      { code: '03', kicker: 'RESOURCES', title: 'Gaming library', description: 'Guides, builds and routes to quickly find what to play, improve and discover.', action: 'Explore library', route: '/gaming', glyph: '◇', tone: 'gaming' },
-      { code: '04', kicker: 'DIGITAL STUDIO', title: 'Your project, online', description: 'Web, practical AI, content and digital support with identity and an agreed scope.', action: 'View services', route: '/creacion-web', glyph: '◈', tone: 'studio' },
+      { code: '01', kicker: 'CURRENT', title: 'News', description: 'Gaming and technology with context, sources and an independent perspective.', action: 'Read news', route: '/news', glyph: '⌁', tone: 'news' },
+      { code: '02', kicker: 'PLAY BETTER', title: 'Gaming library', description: 'Guides, builds and references to help you choose and progress.', action: 'Open library', route: '/gaming', glyph: '◇', tone: 'gaming' },
+      { code: '03', kicker: 'LEARN', title: 'Green Node', description: 'Programming, Linux and digital security explained step by step.', action: 'Explore Green Node', route: '/green-node', glyph: '✦', tone: 'green' },
     ],
     supportEyebrow: 'INDEPENDENT PRODUCTION',
-    supportTitle: 'Help expand this world.',
-    supportText: 'Every contribution helps sustain development, improve the website, create new visual art and keep expanding World of Xethkioz.',
+    supportTitle: 'Help sustain what comes next.',
+    supportText: 'Your voluntary support helps us keep creating content and developing these projects.',
     supportNote: 'Support is voluntary. It is not an in-game purchase or a preorder.',
     supportPillars: ['Independent development', 'Original art and universe', 'Community and expansion'],
     supportPrimary: 'SUPPORT THE PROJECT',
@@ -84,6 +115,7 @@ export default function Home() {
   const t = copy[lang]
   const socials = socialNames.flatMap(name => SOCIAL_LINKS.filter(item => item.name === name))
   const gamePath = localizePath('/world-of-xethkioz')
+  const studioPath = localizePath('/creacion-web')
   const worldLinks = [
     [lang === 'es' ? 'La visión' : 'The vision', `${gamePath}#historia`],
     [lang === 'es' ? 'Atmósfera' : 'Atmosphere', `${gamePath}#mundo`],
@@ -95,25 +127,35 @@ export default function Home() {
   return (
     <>
       <SEO title={t.seo} description={t.description} url="/" image="/assets/world-of-xethkioz/world-of-xethkioz-logo.webp" />
-      <main className="wox-home" data-public-presentation="fantasy">
+      <main className="wox-home xk-gateway" data-public-presentation="fantasy">
         <FantasyNavigation />
         <section className="wox-hero" aria-labelledby="wox-title">
           <picture className="wox-bg" aria-hidden="true"><img src="/assets/portal-games-world-v3.webp" alt="" width="800" height="800" fetchPriority="high" decoding="async" /></picture>
-          <h1 id="wox-title" className="sr-only">World of Xethkioz</h1>
           <div className="wox-hero-core">
-            <picture className="wox-logo-wrap"><img src="/assets/world-of-xethkioz/world-of-xethkioz-logo.png" alt="World of Xethkioz" className="wox-world-logo" width="1584" height="483" fetchPriority="high" decoding="async" /></picture>
             <p className="wox-status">{t.status}</p>
-            <div className="wox-fantasy-rule" aria-hidden="true">◆</div>
-            <h2>{t.soul}</h2><p className="wox-lead">{t.lead}</p>
-            <div className="wox-actions"><Link to={gamePath}>{t.explore} <span aria-hidden="true">↗</span></Link><a href="https://www.threads.com/@xethkioz" target="_blank" rel="noopener noreferrer">{t.follow} <span aria-hidden="true">↗</span></a></div>
-            <div className="wox-hero-specs" aria-label={lang === 'es' ? 'Presentación del proyecto' : 'Project overview'}><span>ACTION RPG</span><span>{lang === 'es' ? 'FANTASÍA' : 'FANTASY'}</span><span>{lang === 'es' ? 'EN DESARROLLO' : 'IN DEVELOPMENT'}</span></div>
+            <h1 id="wox-title"><span>XETHKIOZ</span>{t.soul}</h1><p className="wox-lead">{t.lead}</p>
+            <div className="wox-actions"><Link to={gamePath}>{t.explore} <span aria-hidden="true">↗</span></Link><a href="#veyr">{t.follow} <span aria-hidden="true">↓</span></a></div>
+            <nav className="xk-hero-doors" aria-label={lang === 'es' ? 'Red de portales: elegí un proyecto' : 'Portal network: choose a project'}>
+              <p>{lang === 'es' ? 'RED DE PORTALES / ELEGÍ POR DÓNDE EMPEZAR' : 'PORTAL NETWORK / CHOOSE WHERE TO BEGIN'}</p>
+              <Link className="is-world" to={gamePath}><span className="xk-portal-face" aria-hidden="true"><i>W</i></span><span className="xk-portal-name"><small>01 / {lang === 'es' ? 'EL JUEGO' : 'THE GAME'}</small>World of Xethkioz<em>{lang === 'es' ? 'Entrar al universo' : 'Enter the world'} <b aria-hidden="true">↗</b></em></span></Link>
+              <a className="is-veyr" href="#veyr"><span className="xk-portal-face" aria-hidden="true"><i>V</i></span><span className="xk-portal-name"><small>02 / {lang === 'es' ? 'IA LOCAL' : 'LOCAL AI'}</small>VEYR<em>{t.veyrLabel} <b aria-hidden="true">↓</b></em></span></a>
+              <Link className="is-studio" to={`${studioPath}#landing-esencial`}><span className="xk-portal-face" aria-hidden="true"><i>✦</i></span><span className="xk-portal-name"><small>03 / {lang === 'es' ? 'CREACIÓN' : 'CREATION'}</small>XETHKIOZ Studio<em>{t.studioLabel} <b aria-hidden="true">↗</b></em></span></Link>
+            </nav>
           </div>
+          <div className="xk-world-signature"><img src="/assets/world-of-xethkioz/world-of-xethkioz-logo.png" alt="World of Xethkioz" width="1584" height="483" decoding="async" /><span>{t.worldNote}</span></div>
           <small className="wox-art-credit">{t.caption}</small>
         </section>
 
         <aside className="wox-utility-rail" aria-label={lang === 'es' ? 'Accesos rápidos' : 'Quick access'}><button type="button" onClick={openNexusChat}><span aria-hidden="true">◉</span><b>CHAT</b></button><Link to={localizePath('/green-node')}><span aria-hidden="true">◇</span><b>GREEN NODE</b></Link></aside>
 
         <div className="wox-content">
+          <section id="veyr" className="xk-veyr-story" aria-labelledby="xk-veyr-title">
+            <div className="xk-veyr-copy"><p>{t.veyrEyebrow}</p><h2 id="xk-veyr-title">VEYR<span>IA LOCAL</span></h2><h3>{t.veyrTitle}</h3><p>{t.veyrText}</p><details><summary>{t.veyrDetails}<span aria-hidden="true">+</span></summary><ul>{t.veyrPoints.map(point => <li key={point}>{point}</li>)}</ul></details></div>
+            <div className="xk-veyr-visual" aria-hidden="true"><div><small>VEYR / {lang === 'es' ? 'IA LOCAL' : 'LOCAL AI'}</small><strong>{t.veyrPanelTitle}</strong><span>{t.veyrPanelNote}</span></div><i>V</i></div>
+          </section>
+
+          <section className="xk-studio-story" aria-labelledby="xk-studio-title"><div className="xk-studio-copy"><p>{t.studioEyebrow}</p><h2 id="xk-studio-title">{t.studioTitle}</h2><span>{t.studioText}</span><Link to={`${studioPath}#landing-esencial`}>{t.studioAction}<b aria-hidden="true">↗</b></Link></div><div className="xk-studio-aside"><span>LANDING ESENCIAL</span><strong>{t.studioPrice}</strong><small>{t.studioNote}</small></div></section>
+
           <section className="wox-ecosystem" aria-labelledby="ecosystem-title">
             <header className="wox-ecosystem-head"><p>{t.ecosystemEyebrow}</p><h2 id="ecosystem-title">{t.ecosystemTitle}</h2><span>{t.ecosystemText}</span></header>
             <nav className="wox-ecosystem-grid" aria-label={lang === 'es' ? 'Explorar el ecosistema XETHKIOZ' : 'Explore the XETHKIOZ ecosystem'}>
@@ -125,6 +167,8 @@ export default function Home() {
               </Link>)}
             </nav>
           </section>
+
+          <nav className="xk-network-links" aria-label={lang === 'es' ? 'Otros destinos de la red' : 'More network destinations'}><span>{lang === 'es' ? 'TAMBIÉN EN LA RED' : 'ALSO IN THE NETWORK'}</span><a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer"><strong>ArgenCiencia</strong><small>{lang === 'es' ? 'Ciencia para explorar' : 'Science to explore'}</small><b aria-hidden="true">↗</b></a><a href="/mascotas/"><strong>{lang === 'es' ? 'Patitas / Mascotas' : 'Pets / Mascotas'}</strong><small>{lang === 'es' ? 'Un espacio para ellos' : 'A place for them'}</small><b aria-hidden="true">↗</b></a></nav>
 
           <section id="support" className="wox-support-premium" aria-labelledby="support-title">
             <div className="wox-support-copy"><p>{t.supportEyebrow}</p><h2 id="support-title">{t.supportTitle}</h2><span>{t.supportText}</span><small>{t.supportNote}</small></div>
@@ -138,7 +182,7 @@ export default function Home() {
           <footer className="wox-footer-premium">
             <div className="wox-footer-brand"><strong><span aria-hidden="true">✦</span>XETHKIOZ</strong><p>{t.footerBrand}</p><small>{t.footerBrandDetail}</small><div className="wox-footer-tech"><span>© {new Date().getFullYear()} XETHKIOZ · {SITE_VERSION}</span><span>UNITY 6 · URP · 3D/2.5D</span></div></div>
             <nav aria-label={t.footerWorld}><h2>{t.footerWorld}</h2>{worldLinks.map(([label, href]) => <a key={href} href={href}>{label}</a>)}</nav>
-            <nav aria-label={t.footerEcosystem}><h2>{t.footerEcosystem}</h2><Link to={localizePath('/news')}>{lang === 'es' ? 'Noticias' : 'News'}</Link><Link to={localizePath('/gaming')}>{lang === 'es' ? 'Biblioteca gamer' : 'Gaming library'}</Link><a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ArgenCiencia ↗</a><a href="/mascotas/">{lang === 'es' ? 'Mascotas' : 'Pets'}</a><Link to={localizePath('/creacion-web')}>{lang === 'es' ? 'Creación web' : 'Web creation'}</Link><Link to={localizePath('/green-node')}>Green Node</Link></nav>
+            <nav aria-label={t.footerEcosystem}><h2>{t.footerEcosystem}</h2><a href="#veyr">VEYR IA</a><Link to={localizePath('/news')}>{lang === 'es' ? 'Noticias' : 'News'}</Link><Link to={localizePath('/gaming')}>{lang === 'es' ? 'Biblioteca gamer' : 'Gaming library'}</Link><a href="https://argenciencia.com/" target="_blank" rel="noopener noreferrer">ArgenCiencia ↗</a><a href="/mascotas/">{lang === 'es' ? 'Mascotas' : 'Pets'}</a><Link to={localizePath('/creacion-web')}>{lang === 'es' ? 'Creación web' : 'Web creation'}</Link><Link to={localizePath('/green-node')}>Green Node</Link></nav>
             <nav className="wox-footer-social" aria-label={t.footerCommunity}><h2>{t.footerCommunity}</h2><a href="https://www.xethkioz.com.ar">Web</a>{socials.map(item => <a key={item.name} href={item.url} target="_blank" rel="noopener noreferrer">{item.name === 'TikTok Principal' ? 'TikTok' : item.name}</a>)}<Link to={localizePath('/support')}>{lang === 'es' ? 'Apoyar proyecto' : 'Support project'}</Link><Link to={localizePath('/contact')}>{lang === 'es' ? 'Contacto' : 'Contact'}</Link></nav>
             <div className="wox-footer-bottom"><span>{t.footerRights}</span><span>{t.caption}</span><nav aria-label={lang === 'es' ? 'Enlaces legales' : 'Legal links'}><Link to={localizePath('/privacy')}>{lang === 'es' ? 'Privacidad' : 'Privacy'}</Link><Link to={localizePath('/contact')}>{lang === 'es' ? 'Contacto' : 'Contact'}</Link></nav></div>
           </footer>

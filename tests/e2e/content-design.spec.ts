@@ -1,10 +1,15 @@
 import { expect, test } from '@playwright/test'
 
 test.describe('orden y navegación de secciones', () => {
-  test('Inicio prioriza World of Xethkioz y conserva el ecosistema', async ({ page }) => {
+  test('Inicio presenta los tres proyectos como portales y conserva el ecosistema', async ({ page }) => {
     await page.goto('/')
 
-    await expect(page.getByRole('heading', { level: 1, name: 'World of Xethkioz' })).toBeAttached()
+    await expect(page.getByRole('heading', { level: 1, name: /XETHKIOZ.*Historias para jugar/ })).toBeAttached()
+    const portals = page.getByRole('navigation', { name: 'Red de portales: elegí un proyecto' })
+    await expect(portals.getByRole('link')).toHaveCount(3)
+    await expect(portals.getByRole('link', { name: /World of Xethkioz/ })).toHaveAttribute('href', '/world-of-xethkioz')
+    await expect(portals.getByRole('link', { name: /VEYR/ })).toHaveAttribute('href', '#veyr')
+    await expect(portals.getByRole('link', { name: /XETHKIOZ Studio/ })).toHaveAttribute('href', '/creacion-web#landing-esencial')
 
     const mobileEcosystem = page.locator('.xkf-mobile')
     if (await mobileEcosystem.isVisible()) {
@@ -22,6 +27,7 @@ test.describe('orden y navegación de secciones', () => {
     await expect(ecosystem.getByRole('link', { name: 'Mascotas', exact: true })).toHaveAttribute('href', '/mascotas/')
     await expect(ecosystem.getByRole('link', { name: 'Nexus City', exact: true })).toHaveCount(0)
     await expect(ecosystem.getByRole('link', { name: 'Creación web', exact: true })).toHaveAttribute('href', '/creacion-web')
+    await expect(ecosystem.getByRole('link', { name: 'VEYR IA', exact: true })).toHaveAttribute('href', '/#veyr')
     await expect(page.locator('.xkf-header a[href="/news"]').first()).toHaveAttribute('href', '/news')
 
     await expect(page.locator('.wox-hero')).toBeVisible()

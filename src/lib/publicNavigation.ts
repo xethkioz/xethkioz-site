@@ -5,7 +5,7 @@ export const PUBLIC_NAVIGATION = [
   { id: 'news', es: 'Noticias', en: 'News', href: '/news' },
   { id: 'science', es: 'ArgenCiencia', en: 'ArgenCiencia', href: 'https://argenciencia.com/', external: true },
   { id: 'pets', es: 'Mascotas', en: 'Pets', href: '/mascotas/', document: true },
-  { id: 'green', es: 'Green Node', en: 'Green Node', href: '/green-node' },
+  { id: 'veyr', es: 'VEYR IA', en: 'VEYR AI', href: '/#veyr' },
   { id: 'services', es: 'Creación web', en: 'Web creation', href: '/creacion-web' },
   { id: 'support', es: 'Apoyar', en: 'Support', href: '/support' },
 ] as const

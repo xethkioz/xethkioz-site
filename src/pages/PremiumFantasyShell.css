@@ -46,3 +46,13 @@ html[data-fantasy-menu-open] .xk-fantasy-shell button[aria-controls="nexus-chat-
     bottom:max(4.25rem,calc(env(safe-area-inset-bottom) + 3rem));
   }
 }
+
+/* Keep the Green Node launcher next to, and clear of, the chat and mobile dock. */
+@media(max-width:760px){
+  .xk-fantasy-shell .xk-wisp.is-home-entry,
+  .xk-fantasy-shell .xk-wisp.is-world-veyr{
+    --wisp-size:50px;
+    right:84px;
+    bottom:calc(5.45rem + env(safe-area-inset-bottom));
+  }
+}

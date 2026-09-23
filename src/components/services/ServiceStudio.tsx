@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { STUDIO_SERVICES, STUDIO_EXTRAS, STUDIO_BUNDLES, STUDIO_INSTAGRAM, normalizeSelection, studioSelectionUrl, copyStudioText, type StudioSelection, type StudioLang, type ServiceId } from '../../data/serviceStudio'
+import { STUDIO_SERVICES, STUDIO_EXTRAS, STUDIO_INSTAGRAM, normalizeSelection, studioSelectionUrl, copyStudioText, type StudioSelection, type StudioLang, type ServiceId } from '../../data/serviceStudio'
 import './ServiceStudio.css'
+import './ServiceStudioClear.css'
 
 type Props = { lang: StudioLang; selection: StudioSelection; onChange: (value: StudioSelection) => void; onQuote: () => void; onStarterQuote: () => void }
 export function StudioSelectionSummary({ selection, lang }: { selection: StudioSelection; lang: StudioLang }) {
@@ -11,39 +12,25 @@ export function StudioSelectionSummary({ selection, lang }: { selection: StudioS
 }
 export default function ServiceStudio({ lang, selection, onChange, onQuote, onStarterQuote }: Props) {
   const es = lang === 'es'
-  const [filter, setFilter] = useState<'all' | ServiceId>('all')
-  const [demo, setDemo] = useState<'marca' | 'creador' | 'negocio'>('marca')
   const [copyStatus, setCopyStatus] = useState('')
   const [shareFallback, setShareFallback] = useState('')
-  const visible = STUDIO_SERVICES.filter(s => filter === 'all' || s.id === filter)
   const selected = STUDIO_SERVICES.filter(s => selection.services.includes(s.id))
   const availableExtras = STUDIO_EXTRAS.filter(extra => extra.for.some(id => selection.services.includes(id)))
   function change(value: StudioSelection) { onChange(normalizeSelection(value)); setCopyStatus(''); setShareFallback('') }
   function toggleService(id: ServiceId) { change({ ...selection, services: selection.services.includes(id) ? selection.services.filter(s => s !== id) : [...selection.services, id] }) }
   function toggleExtra(id: string) { change({ ...selection, extras: selection.extras.includes(id) ? selection.extras.filter(e => e !== id) : [...selection.extras, id] }) }
   async function share() { const url = studioSelectionUrl(selection, lang); const copied = await copyStudioText(url); setShareFallback(copied ? '' : url); setCopyStatus(copied ? (es ? 'Enlace copiado. No contiene datos de contacto.' : 'Link copied. It contains no contact details.') : (es ? 'Copiá el enlace de selección que aparece debajo.' : 'Copy the selection link shown below.')) }
-  const demos = { marca: { es: ['Tu marca.', 'Tu lugar en la web.', 'Identidad propia'], en: ['Your brand.', 'Your place on the web.', 'Your own identity'] }, creador: { es: ['Ideas que', 'merecen verse.', 'Contenido con intención'], en: ['Ideas worth', 'being seen.', 'Purposeful content'] }, negocio: { es: ['Lo que hacés,', 'bien presentado.', 'Una propuesta clara'], en: ['What you do,', 'clearly presented.', 'A clear proposal'] } } as const
-  const preview = demos[demo][lang]
   return <>
     <section className="xks-hero" aria-labelledby="web-creation-title">
       <div className="xks-hero-copy">
         <Link className="xks-back" to={es ? '/' : '/en'}>← {es ? 'Volver a XETHKIOZ' : 'Back to XETHKIOZ'}</Link>
         <p className="xks-eyebrow"><span aria-hidden="true">✦</span> XETHKIOZ / {es ? 'ESTUDIO DIGITAL' : 'DIGITAL STUDIO'}</p>
-        <h1 id="web-creation-title">{es ? 'Tu idea merece' : 'Your idea deserves'}<br /><em>{es ? 'verse diferente.' : 'to look different.'}</em></h1>
-        <p className="xks-lead">{es ? 'Web, contenido e inteligencia artificial con identidad propia. Elegí lo que necesitás y armemos una propuesta para tu proyecto.' : 'Web, content and artificial intelligence with an identity of their own. Choose what you need and let’s shape a proposal for your project.'}</p>
-        <div className="xks-actions"><a className="xks-button xks-primary" href="#propuestas">{es ? 'Armar mi proyecto' : 'Build my project'} <span aria-hidden="true">↗</span></a><a className="xks-button xks-secondary" href={STUDIO_INSTAGRAM} target="_blank" rel="noopener noreferrer">{es ? 'Hablar con Alexis' : 'Talk to Alexis'}</a></div>
-        <p className="xks-trust-line">{es ? 'Atención personal · Alcance acordado · Sin cobros automáticos' : 'Personal attention · Agreed scope · No automatic charges'}</p>
+        <h1 id="web-creation-title">{es ? 'Tu negocio, ' : 'Your business, '}<em>{es ? 'claro en la web.' : 'clear on the web.'}</em></h1>
+        <p className="xks-lead">{es ? 'Una página fácil de usar, con identidad propia y pensada para recibir consultas. Empezá con Landing Esencial o contame qué necesitás.' : 'An easy-to-use page with its own identity, designed to receive inquiries. Start with Essential Landing Page or tell me what you need.'}</p>
+        <div className="xks-actions"><a className="xks-button xks-primary" href="#landing-esencial">{es ? 'Ver Landing Esencial' : 'View Essential Landing Page'} <span aria-hidden="true">↓</span></a><a className="xks-button xks-secondary" href="#propuestas">{es ? 'Otros servicios' : 'Other services'} <span aria-hidden="true">↗</span></a></div>
+        <p className="xks-trust-line">{es ? 'Te responde una persona · Acordamos el alcance · Sin cobros automáticos' : 'A person replies · Scope agreed upfront · No automatic charges'}</p>
       </div>
-      <div className="xks-showcase">
-        <div className="xks-showcase-top"><span>{es ? 'UNA IDEA. DISTINTAS POSIBILIDADES.' : 'ONE IDEA. DIFFERENT POSSIBILITIES.'}</span><span aria-hidden="true">✧</span></div>
-        <div className={`xks-browser xks-demo-${demo}`} role="img" aria-label={es ? `Demostración de estructura: ${preview.join(' ')}` : `Structure demonstration: ${preview.join(' ')}`}>
-          <div className="xks-browser-chrome" aria-hidden="true"><i /><i /><i /><span>{es ? 'tu-marca / inicio' : 'your-brand / home'}</span></div>
-          <div className="xks-demo-scene"><span className="xks-demo-kicker">{preview[2]}</span><strong>{preview[0]}<br /><em>{preview[1]}</em></strong><div className="xks-demo-line" /><div className="xks-demo-line short" /><div className="xks-orb" aria-hidden="true"><i /><b>✦</b></div></div>
-          <div className="xks-demo-tiles" aria-hidden="true"><span>01 <i /></span><span>02 <i /></span><span>03 <i /></span></div>
-        </div>
-        <div className="xks-demo-options" role="group" aria-label={es ? 'Cambiar demostración de estructura' : 'Change structure demonstration'}>{(['marca', 'creador', 'negocio'] as const).map(id => <button type="button" key={id} aria-pressed={demo === id} onClick={() => setDemo(id)}>{({ marca: es ? 'Marca' : 'Brand', creador: es ? 'Creador' : 'Creator', negocio: es ? 'Negocio' : 'Business' })[id]}</button>)}</div>
-        <p className="xks-demo-note">{es ? 'Demostración de estructura. No es un trabajo de cliente ni una plantilla a la venta.' : 'Structure demonstration. Not client work or a template for sale.'}</p>
-      </div>
+      <div className="xks-hero-aside" aria-label={es ? 'Cómo empezamos' : 'How we start'}><span>STUDIO / XETHKIOZ</span><strong>{es ? 'Una idea. Una página que la explique bien.' : 'One idea. A page that explains it well.'}</strong><p>{es ? 'Diseño y desarrollo con atención personal, desde la primera charla hasta la entrega.' : 'Personal design and development, from our first conversation to launch.'}</p><i aria-hidden="true">✦</i></div>
     </section>
     <section id="landing-esencial" className="xks-launch-offer" aria-labelledby="xks-launch-title">
       <div className="xks-launch-copy">
@@ -66,10 +53,8 @@ export default function ServiceStudio({ lang, selection, onChange, onQuote, onSt
     <nav className="xks-local-nav" aria-label={es ? 'Explorar servicios' : 'Explore services'}><a href="#propuestas">{es ? 'Servicios' : 'Services'}</a><a href="#mi-proyecto">{es ? 'Mi selección' : 'My selection'} <span>{selected.length}</span></a><a href="#proceso">{es ? 'Cómo contratar' : 'How to hire'}</a><a href="#web-faq-title">{es ? 'Preguntas frecuentes' : 'FAQ'}</a></nav>
     <section id="propuestas" className="xks-catalog" aria-labelledby="web-catalog-title">
       <header className="xks-section-heading"><p className="xks-eyebrow">{es ? 'DE UNA NECESIDAD A UNA SOLUCIÓN' : 'FROM A NEED TO A SOLUTION'}</p><h2 id="web-catalog-title">{es ? 'Un estudio. Más posibilidades.' : 'One studio. More possibilities.'}</h2><p>{es ? 'Contratá un servicio o combiná varios. El precio, los entregables y los tiempos se acuerdan antes de empezar.' : 'Hire one service or combine several. Price, deliverables and timing are agreed before we start.'}</p></header>
-      <div className="xks-bundles" aria-label={es ? 'Combinaciones sugeridas' : 'Suggested combinations'}>{STUDIO_BUNDLES.map(bundle => <button type="button" key={bundle.id} onClick={() => change({ services: [...selection.services, ...bundle.services], extras: selection.extras })}><span>{bundle.title[lang]}</span><small>{bundle.note[lang]}</small><b aria-hidden="true">＋</b></button>)}</div>
-      <div className="xks-filters" role="group" aria-label={es ? 'Filtrar servicios' : 'Filter services'}><button type="button" aria-pressed={filter === 'all'} onClick={() => setFilter('all')}>{es ? 'Todos' : 'All'}</button>{STUDIO_SERVICES.map(service => <button type="button" key={service.id} aria-pressed={filter === service.id} onClick={() => setFilter(service.id)}>{service.title[lang]}</button>)}</div>
       <div className="xks-shop-layout"><div className="xks-products">
-        <div className="xks-cards">{visible.map(service => { const active = selection.services.includes(service.id); return <article key={service.id} className={`xks-card xks-card-${service.id}${active ? ' is-selected' : ''}`} data-service={service.id}>
+        <div className="xks-cards">{STUDIO_SERVICES.map(service => { const active = selection.services.includes(service.id); return <article key={service.id} className={`xks-card xks-card-${service.id}${active ? ' is-selected' : ''}`} data-service={service.id}>
           <div className="xks-card-top"><span className="xks-service-symbol" aria-hidden="true">{({ web: '⌘', ia: '✦', contenido: '◈', pc: '⊞' })[service.id]}</span><small>{service.code} / XETHKIOZ</small></div>
           <h3>{service.title[lang]}</h3><p>{service.intro[lang]}</p>
           <ul>{service.scope[lang].map(item => <li key={item}><span aria-hidden="true">✓</span>{item}</li>)}</ul>

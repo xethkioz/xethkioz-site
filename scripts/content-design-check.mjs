@@ -24,7 +24,7 @@ const check = (name, ok) => checks.push([name, Boolean(ok)])
 check('Nexus links preserve localized routes', district.includes('const { lang, localizePath } = useLang()') && district.includes('to={localizePath(item.to)}'))
 check('Science district prioritizes sourced news', district.indexOf("title: 'Noticias con fuentes'") < district.indexOf("title: 'Herramientas y respuestas'"))
 check('Home exposes three compact public portals', destinations.includes("href: '/gaming'") && destinations.includes('https://argenciencia.com/') && destinations.includes("href: '/mascotas/'") && !home.includes("id: 'comicon'"))
-check('Home is centered on World of Xethkioz', home.includes('world-of-xethkioz-logo.png') && home.includes('DESCUBRIR WORLD OF XETHKIOZ') && home.includes("localizePath('/world-of-xethkioz')") && !home.includes('EL GAMING ES'))
+check('Home offers clear portals to the game, local VEYR project and Studio', home.includes('xk-hero-doors') && home.includes('world-of-xethkioz-logo.png') && home.includes("localizePath('/world-of-xethkioz')") && home.includes('VEYR<span>IA LOCAL') && home.includes('Landing Esencial') && home.includes("localizePath('/creacion-web')"))
 check('Home content shortcuts avoid duplicated portal destinations', district.includes("title: 'Guías Gaming'") && district.includes("to: '/gaming/guides'") && district.includes("title: 'Noticias'") && district.includes("title: 'Comunidad'"))
 check('Home removes heavyweight portal theatre artwork', !home.includes('xk-rb-portals') && !home.includes('PrimaryPortal'))
 check('Home uses an optimized transparent PNG World logo', home.includes('world-of-xethkioz-logo.png') && fs.existsSync(path.join(root, 'public/assets/world-of-xethkioz/world-of-xethkioz-logo.png')) && fs.statSync(path.join(root, 'public/assets/world-of-xethkioz/world-of-xethkioz-logo.png')).size < 180000)
@@ -47,7 +47,7 @@ check(
     && !landingCss.includes('.is-quiet'),
 )
 check(
-  'Home loads only the dedicated World landing stylesheet',
+  'Home keeps lightweight World presentation styles',
   home.includes("import './WorldOfXethkiozLanding.css'")
     && !home.includes('WorldOfXethkiozHome.css')
     && !home.includes('WorldOfXethkiozAAA.css')

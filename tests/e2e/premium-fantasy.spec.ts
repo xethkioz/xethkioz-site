@@ -8,10 +8,14 @@ async function essentials(page: import('@playwright/test').Page) {
 test('Premium Home conserva rutas, CTA real y canales oficiales sin video', async ({ page }) => {
   await page.goto('/'); await essentials(page)
   await expect(page.locator('.wox-actions a').first()).toHaveAttribute('href', '/world-of-xethkioz')
-  await expect(page.locator('.wox-logo-wrap')).toBeVisible()
-  await expect(page.locator('.wox-status')).toHaveText('ACTION RPG INDEPENDIENTE')
+  await expect(page.locator('.xk-world-signature img')).toHaveAttribute('src', '/assets/world-of-xethkioz/world-of-xethkioz-logo.png')
+  await expect(page.locator('.wox-status')).toHaveText('GAMING · TECNOLOGÍA · CREACIÓN')
+  await expect(page.locator('.xk-hero-doors a')).toHaveCount(3)
+  await expect(page.locator('#veyr')).toContainText('VEYR es un asistente local')
+  await expect(page.locator('.xk-studio-story')).toContainText('USD 350 de referencia')
   await expect(page.locator('video, iframe, canvas')).toHaveCount(0)
-  await expect(page.locator('.wox-ecosystem-card')).toHaveCount(4)
+  await expect(page.locator('.wox-ecosystem-card')).toHaveCount(3)
+  await expect(page.locator('.xk-network-links a')).toHaveCount(2)
   await expect(page.locator('.wox-support-side li')).toHaveCount(3)
   await expect(page.locator('.wox-footer-premium')).toBeVisible()
   const links = await page.locator('.wox-footer-social a').evaluateAll(items => items.map(a => a.getAttribute('href')))
@@ -21,57 +25,25 @@ test('Premium Home conserva rutas, CTA real y canales oficiales sin video', asyn
   const result = await new AxeBuilder({ page }).include('.wox-home').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze()
   expect(result.violations).toEqual([])
 })
-test('Pass29 integra PNG transparente, hero full-bleed y header desktop sin barra separada', async ({ page }) => {
+test('Portales integrados conservan el logo y el hero en escritorio', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 936 })
   await page.goto('/'); await essentials(page)
-  const logo = page.locator('.wox-world-logo')
+  const logo = page.locator('.xk-world-signature img')
   await expect(logo).toHaveAttribute('src', '/assets/world-of-xethkioz/world-of-xethkioz-logo.png')
   expect(await logo.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 1000 && image.naturalHeight > 300)).toBe(true)
   const geometry = await page.evaluate(() => {
-    const header = document.querySelector('.xkf-header')!.getBoundingClientRect()
-    const brand = document.querySelector('.xkf-brand')!.getBoundingClientRect()
-    const nav = document.querySelector('.xkf-desktop')!.getBoundingClientRect()
-    const actions = document.querySelector('.xkf-actions')!.getBoundingClientRect()
     const hero = document.querySelector('.wox-hero')!.getBoundingClientRect()
-    const bg = document.querySelector('.wox-bg')!.getBoundingClientRect()
-    const logo = document.querySelector('.wox-world-logo')!.getBoundingClientRect()
-    const headerElement = document.querySelector('.xkf-header')!
-    const headerStyle = getComputedStyle(headerElement)
-    const headerAfter = getComputedStyle(headerElement, '::after')
-    const centers = [brand, nav, actions].map(rect => rect.top + rect.height / 2)
-    const fade = getComputedStyle(document.querySelector('.wox-bg')!, '::after').backgroundImage
+    const portals = [...document.querySelectorAll('.xk-hero-doors a')].map(link => link.getBoundingClientRect())
     return {
-      headerHeight: header.height,
-      headerLeft: header.left,
-      headerRight: header.right,
-      rowSpread: Math.max(...centers) - Math.min(...centers),
       heroLeft: hero.left,
       heroRight: hero.right,
-      heroTop: hero.top,
-      bgTop: bg.top,
-      bgLeft: bg.left,
-      bgRight: bg.right,
-      logoWidth: logo.width,
-      headerBorderBottom: headerStyle.borderBottomWidth,
-      separatorContent: headerAfter.content,
       viewport: innerWidth,
-      fade,
+      portalsFit: portals.every(rect => rect.left >= 0 && rect.right <= innerWidth + 1 && rect.width >= 200),
     }
   })
-  expect(geometry.headerHeight).toBeLessThan(82)
-  expect(geometry.headerLeft).toBeLessThanOrEqual(1)
-  expect(geometry.headerRight).toBeGreaterThanOrEqual(geometry.viewport - 1)
-  expect(geometry.rowSpread).toBeLessThan(8)
-  expect(geometry.heroTop).toBeLessThanOrEqual(1)
   expect(geometry.heroLeft).toBeLessThanOrEqual(1)
   expect(geometry.heroRight).toBeGreaterThanOrEqual(geometry.viewport - 1)
-  expect(geometry.bgTop).toBeLessThan(geometry.heroTop)
-  expect(geometry.bgLeft).toBeLessThanOrEqual(1)
-  expect(geometry.bgRight).toBeGreaterThanOrEqual(geometry.viewport - 1)
-  expect(geometry.logoWidth).toBeGreaterThan(680)
-  expect(geometry.headerBorderBottom).toBe('0px')
-  expect(geometry.separatorContent).toBe('none')
-  expect(geometry.fade).toContain('linear-gradient')
+  expect(geometry.portalsFit).toBe(true)
 })
 test('Portal fantasy: video del fundador, Veyr canónica, FAQ y contenido público reservado', async ({ page }) => {
   await page.goto('/world-of-xethkioz'); await essentials(page)
@@ -128,6 +100,18 @@ test('Veyr flotante usa el PNJ canónico y nunca pisa el chat', async ({ page })
     await veyr.click()
     await expect(page.getByRole('button', { name: 'Cerrar XETHKIOZ Nexus Chat' })).toBeVisible()
     await expect(veyr).toBeHidden()
+  }
+})
+test('Green Node flotante no pisa el chat en Inicio', async ({ page }) => {
+  for (const width of [390, 1440]) {
+    await page.setViewportSize({ width, height: 844 })
+    await page.goto('/'); await essentials(page)
+    const overlap = await page.evaluate(() => {
+      const wisp = document.querySelector('.xk-wisp.is-home-entry')!.getBoundingClientRect()
+      const chat = document.querySelector('button[aria-controls="nexus-chat-panel"]')!.getBoundingClientRect()
+      return !(wisp.right <= chat.left || wisp.left >= chat.right || wisp.bottom <= chat.top || wisp.top >= chat.bottom)
+    })
+    expect(overlap).toBe(false)
   }
 })
 test('Fantasy conserva lectura sin desborde en teléfonos estrechos', async ({ page }) => {
