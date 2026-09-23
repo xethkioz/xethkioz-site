@@ -1,5 +1,6 @@
 import FantasyNavigation from '../components/FantasyNavigation'
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
 import SEO from '../components/SEO'
 import './PremiumFantasyShell.css'
 import { useLang } from '../lib/LangContext'
@@ -7,6 +8,7 @@ import { SITE_VERSION, SOCIAL_LINKS } from '../lib/siteConfig'
 import './WorldOfXethkiozLanding.css'
 import './HomePremiumClosure.css'
 import './HomeGateway.css'
+import './HomePortalCinematic.css'
 
 function openNexusChat() {
   window.dispatchEvent(new CustomEvent('xethkioz:nexus-chat-open', { detail: { room: 'general' } }))
@@ -18,8 +20,8 @@ const copy = {
     seo: 'XETHKIOZ · Gaming, tecnología y creación',
     description: 'Noticias y guías con mirada propia, World of Xethkioz en desarrollo, VEYR IA Local y creación web para proyectos reales.',
     status: 'GAMING · TECNOLOGÍA · CREACIÓN',
-    soul: 'Historias para jugar. Tecnología para crear.',
-    lead: 'Soy Alexis. En XETHKIOZ comparto gaming y tecnología mientras construyo un juego, una IA local y herramientas digitales para otros proyectos.',
+    soul: 'Más allá del juego.',
+    lead: 'Soy Alexis. Creo un mundo para jugar, una IA local para trabajar y webs para hacer crecer proyectos reales.',
     explore: 'Explorar el juego',
     follow: 'Conocer VEYR',
     worldNote: 'ACTION RPG INDEPENDIENTE · EN DESARROLLO',
@@ -65,8 +67,8 @@ const copy = {
     seo: 'XETHKIOZ · Gaming, technology and creation',
     description: 'Gaming news and guides, World of Xethkioz in development, VEYR local AI and web creation for real projects.',
     status: 'GAMING · TECHNOLOGY · CREATION',
-    soul: 'Stories to play. Technology to create.',
-    lead: 'I’m Alexis. At XETHKIOZ I share gaming and technology while building a game, a local AI and digital tools for other projects.',
+    soul: 'Beyond the game.',
+    lead: 'I’m Alexis. I’m building a world to play, a local AI to work with, and websites that help real projects grow.',
     explore: 'Explore the game',
     follow: 'Meet VEYR',
     worldNote: 'INDEPENDENT ACTION RPG · IN DEVELOPMENT',
@@ -112,6 +114,7 @@ const copy = {
 
 export default function Home() {
   const { lang, localizePath } = useLang()
+  const [featuredPortal, setFeaturedPortal] = useState<'world' | 'veyr' | 'studio'>('world')
   const t = copy[lang]
   const socials = socialNames.flatMap(name => SOCIAL_LINKS.filter(item => item.name === name))
   const gamePath = localizePath('/world-of-xethkioz')
@@ -129,17 +132,17 @@ export default function Home() {
       <SEO title={t.seo} description={t.description} url="/" image="/assets/world-of-xethkioz/world-of-xethkioz-logo.webp" />
       <main className="wox-home xk-gateway" data-public-presentation="fantasy">
         <FantasyNavigation />
-        <section className="wox-hero" aria-labelledby="wox-title">
-          <picture className="wox-bg" aria-hidden="true"><img src="/assets/portal-games-world-v3.webp" alt="" width="800" height="800" fetchPriority="high" decoding="async" /></picture>
+        <section className="wox-hero" aria-labelledby="wox-title" data-featured-portal={featuredPortal}>
+          <picture className="wox-bg" aria-hidden="true"><img src="/assets/xethkioz-world-panorama-2026.webp" alt="" width="1672" height="941" fetchPriority="high" decoding="async" /></picture>
           <div className="wox-hero-core">
             <p className="wox-status">{t.status}</p>
             <h1 id="wox-title"><span>XETHKIOZ</span>{t.soul}</h1><p className="wox-lead">{t.lead}</p>
-            <div className="wox-actions"><Link to={gamePath}>{t.explore} <span aria-hidden="true">↗</span></Link><a href="#veyr">{t.follow} <span aria-hidden="true">↓</span></a></div>
+            <div className="wox-actions"><Link to={gamePath}>{t.explore} <span aria-hidden="true">↗</span></Link></div>
             <nav className="xk-hero-doors" aria-label={lang === 'es' ? 'Red de portales: elegí un proyecto' : 'Portal network: choose a project'}>
               <p>{lang === 'es' ? 'RED DE PORTALES / ELEGÍ POR DÓNDE EMPEZAR' : 'PORTAL NETWORK / CHOOSE WHERE TO BEGIN'}</p>
-              <Link className="is-world" to={gamePath}><span className="xk-portal-face" aria-hidden="true"><i>W</i></span><span className="xk-portal-name"><small>01 / {lang === 'es' ? 'EL JUEGO' : 'THE GAME'}</small>World of Xethkioz<em>{lang === 'es' ? 'Entrar al universo' : 'Enter the world'} <b aria-hidden="true">↗</b></em></span></Link>
-              <a className="is-veyr" href="#veyr"><span className="xk-portal-face" aria-hidden="true"><i>V</i></span><span className="xk-portal-name"><small>02 / {lang === 'es' ? 'IA LOCAL' : 'LOCAL AI'}</small>VEYR<em>{t.veyrLabel} <b aria-hidden="true">↓</b></em></span></a>
-              <Link className="is-studio" to={`${studioPath}#landing-esencial`}><span className="xk-portal-face" aria-hidden="true"><i>✦</i></span><span className="xk-portal-name"><small>03 / {lang === 'es' ? 'CREACIÓN' : 'CREATION'}</small>XETHKIOZ Studio<em>{t.studioLabel} <b aria-hidden="true">↗</b></em></span></Link>
+              <Link className="is-world" to={gamePath} onMouseEnter={() => setFeaturedPortal('world')} onFocus={() => setFeaturedPortal('world')}><span className="xk-portal-face" aria-hidden="true"><i>W</i></span><span className="xk-portal-name"><small>01 / {lang === 'es' ? 'EL JUEGO' : 'THE GAME'}</small>World of Xethkioz<em>{lang === 'es' ? 'Entrar al universo' : 'Enter the world'} <b aria-hidden="true">↗</b></em></span></Link>
+              <a className="is-veyr" href="#veyr" onMouseEnter={() => setFeaturedPortal('veyr')} onFocus={() => setFeaturedPortal('veyr')} onMouseLeave={() => setFeaturedPortal('world')} onBlur={() => setFeaturedPortal('world')}><span className="xk-portal-face" aria-hidden="true"><i>V</i></span><span className="xk-portal-name"><small>02 / {lang === 'es' ? 'IA LOCAL' : 'LOCAL AI'}</small>VEYR<em>{t.veyrLabel} <b aria-hidden="true">↓</b></em></span></a>
+              <Link className="is-studio" to={`${studioPath}#landing-esencial`} onMouseEnter={() => setFeaturedPortal('studio')} onFocus={() => setFeaturedPortal('studio')} onMouseLeave={() => setFeaturedPortal('world')} onBlur={() => setFeaturedPortal('world')}><span className="xk-portal-face" aria-hidden="true"><i>✦</i></span><span className="xk-portal-name"><small>03 / {lang === 'es' ? 'CREACIÓN' : 'CREATION'}</small>XETHKIOZ Studio<em>{t.studioLabel} <b aria-hidden="true">↗</b></em></span></Link>
             </nav>
           </div>
           <div className="xk-world-signature"><img src="/assets/world-of-xethkioz/world-of-xethkioz-logo.png" alt="World of Xethkioz" width="1584" height="483" decoding="async" /><span>{t.worldNote}</span></div>

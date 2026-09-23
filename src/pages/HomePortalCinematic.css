@@ -1,0 +1,234 @@
+/* Panoramic artwork stays visible; the destination controls live on the dark edge. */
+.wox-home.xk-gateway .wox-hero{
+  min-height:min(900px,100svh);
+  align-items:flex-start;
+  padding:clamp(110px,12vh,145px) max(56px,calc((100% - 1680px)/2)) 70px;
+  background:#080910;
+}
+.wox-home.xk-gateway .wox-bg{inset:0}
+.wox-home.xk-gateway .wox-bg img{
+  object-position:50% 38%;
+  transform:scale(1.015);
+  filter:saturate(1.04) contrast(1.04);
+}
+.wox-home.xk-gateway .wox-bg::after{
+  background:
+    linear-gradient(90deg,rgba(5,6,14,.16),transparent 36%,rgba(5,6,14,.15) 54%,rgba(5,6,14,.79) 76%,rgba(5,6,14,.78)),
+    linear-gradient(180deg,rgba(5,6,14,.54),transparent 23%,transparent 58%,rgba(5,6,14,.28) 75%,#080910 100%);
+}
+.wox-home.xk-gateway .wox-hero::before{background:none}
+.wox-home.xk-gateway .wox-hero::after{
+  content:'';
+  position:absolute;
+  z-index:1;
+  inset:0 0 0 49%;
+  pointer-events:none;
+  opacity:0;
+  background:radial-gradient(circle at 75% 63%,rgba(161,111,255,.27),transparent 52%);
+  transition:opacity .35s ease;
+}
+.wox-home.xk-gateway .wox-hero[data-featured-portal='veyr']::after{opacity:1}
+.wox-home.xk-gateway .wox-hero[data-featured-portal='studio']::after{opacity:1;background:radial-gradient(circle at 75% 73%,rgba(255,141,89,.25),transparent 53%)}
+.wox-home.xk-gateway .wox-hero-core{
+  width:min(40vw,620px);
+  max-width:620px;
+  margin-left:auto;
+  position:relative;
+  z-index:3;
+}
+.wox-home.xk-gateway .wox-status{margin:0 0 18px;color:#ffcfaa;font-size:12px;letter-spacing:.19em}
+.wox-home.xk-gateway .wox-hero h1{
+  max-width:630px;
+  margin:0;
+  color:#fff;
+  font:790 clamp(50px,3.8vw,73px)/.99 Inter,system-ui,sans-serif;
+  letter-spacing:-.065em;
+  text-shadow:0 5px 34px #090813;
+}
+.wox-home.xk-gateway .wox-hero h1 span{
+  display:block;
+  margin:0 0 20px;
+  color:#dec5ff;
+  font:750 clamp(16px,1.4vw,20px)/1.2 Inter,system-ui,sans-serif;
+  letter-spacing:.24em;
+}
+.wox-home.xk-gateway .wox-lead{
+  max-width:550px;
+  margin:23px 0 0;
+  color:#efe8f2;
+  font-size:16px;
+  line-height:1.68;
+  text-shadow:0 2px 18px #080910;
+}
+.wox-home.xk-gateway .wox-actions{margin-top:23px}
+.wox-home.xk-gateway .wox-actions a{
+  min-height:49px;
+  padding:12px 19px;
+  border:1px solid #ffb482;
+  background:#ffad77;
+  color:#1d101c;
+  font-size:13px;
+  font-weight:780;
+  letter-spacing:0;
+}
+.wox-home.xk-gateway .xk-world-signature{display:none}
+
+.xk-gateway .xk-hero-doors{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:8px;
+  width:100%;
+  margin-top:29px;
+  isolation:isolate;
+}
+.xk-gateway .xk-hero-doors>p{
+  grid-column:1;
+  margin:0 0 3px;
+  color:#efd2ff;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.18em;
+  text-shadow:0 2px 14px #080910;
+}
+.xk-gateway .xk-hero-doors>a{
+  --portal-light:#bf8bff;
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:17px;
+  width:100%;
+  min-height:98px;
+  margin:0;
+  padding:9px 21px;
+  overflow:hidden;
+  isolation:isolate;
+  clip-path:polygon(0 0,calc(100% - 22px) 0,100% 22px,100% 100%,0 100%);
+  border:1px solid color-mix(in srgb,var(--portal-light) 51%,transparent);
+  background:rgba(9,10,22,.82);
+  color:#fff;
+  box-shadow:inset 3px 0 color-mix(in srgb,var(--portal-light) 66%,transparent),0 13px 32px #05060d6b;
+  transition:transform .3s ease,border-color .3s ease,box-shadow .3s ease;
+}
+.xk-gateway .xk-hero-doors>a.is-veyr{--portal-light:#aa9bff;width:calc(100% - 20px);margin-left:20px}
+.xk-gateway .xk-hero-doors>a.is-studio{--portal-light:#ffa66c;width:calc(100% - 9px);margin-left:9px}
+.xk-gateway .xk-hero-doors>a::before{
+  content:'';
+  position:absolute;
+  z-index:-1;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(90deg,rgba(12,10,24,.83),rgba(17,11,30,.72) 65%,rgba(12,10,23,.55)),url('/assets/xethkioz-world-panorama-2026.webp') 45% 50%/cover;
+}
+.xk-gateway .xk-hero-doors>a.is-veyr::before{
+  background:radial-gradient(circle at 84% 50%,rgba(162,114,255,.47),transparent 37%),repeating-linear-gradient(90deg,transparent 0 27px,rgba(174,135,255,.07) 28px,transparent 29px),linear-gradient(110deg,#0c0d1e,#292048 72%,#111121);
+}
+.xk-gateway .xk-hero-doors>a.is-studio::before{
+  background:radial-gradient(circle at 87% 42%,rgba(255,154,105,.37),transparent 38%),repeating-linear-gradient(0deg,transparent 0 23px,rgba(255,190,146,.05) 24px,transparent 25px),linear-gradient(110deg,#17101b,#4b2534 75%,#201321);
+}
+.xk-gateway .xk-hero-doors>a::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.4;
+  background:linear-gradient(104deg,transparent 40%,color-mix(in srgb,var(--portal-light) 26%,transparent) 92%,transparent);
+  transform:translateX(17%);
+  transition:opacity .35s ease,transform .35s ease;
+}
+.xk-gateway .xk-portal-face{
+  position:relative;
+  display:grid;
+  place-items:center;
+  flex:0 0 64px;
+  width:64px;
+  aspect-ratio:4/5;
+  border-radius:48% 48% 11% 11% / 35% 35% 7% 7%;
+  background:conic-gradient(from -25deg,#201633,var(--portal-light),#f3dfff,var(--portal-light),#24162f);
+  box-shadow:0 0 23px color-mix(in srgb,var(--portal-light) 46%,transparent),inset 0 0 10px #fff4;
+  transition:transform .3s ease,box-shadow .3s ease;
+}
+.xk-gateway .xk-portal-face::before{
+  inset:5px;
+  border-radius:48% 48% 11% 11% / 35% 35% 7% 7%;
+}
+.xk-gateway .xk-portal-face::after{
+  inset:-5px;
+  border-radius:48% 48% 11% 11% / 35% 35% 7% 7%;
+  animation:none;
+}
+.xk-gateway .xk-portal-face i{font-size:26px}
+.xk-gateway .xk-portal-name{
+  display:block;
+  max-width:none;
+  color:#fff;
+  font-size:20px;
+  font-weight:770;
+  line-height:1.14;
+  letter-spacing:-.035em;
+  text-shadow:0 2px 17px #080910;
+}
+.xk-gateway .xk-portal-name small{display:block;margin-bottom:5px;color:#e7d0ff;font-size:10px;font-weight:780;letter-spacing:.14em}
+.xk-gateway .xk-portal-name em{display:block;margin-top:6px;color:#ffdfca;font-size:12px;font-weight:590;letter-spacing:0}
+.xk-gateway .xk-portal-name b{font-size:17px}
+
+@media(hover:hover) and (pointer:fine){
+  .xk-gateway .xk-hero-doors>a:hover,.xk-gateway .xk-hero-doors>a:focus-visible{
+    transform:translateX(-7px);
+    border-color:var(--portal-light);
+    box-shadow:inset 4px 0 var(--portal-light),0 17px 38px #030409ad,0 0 30px color-mix(in srgb,var(--portal-light) 25%,transparent);
+  }
+  .xk-gateway .xk-hero-doors>a:hover::after,.xk-gateway .xk-hero-doors>a:focus-visible::after{opacity:1;transform:translateX(0)}
+  .xk-gateway .xk-hero-doors>a:hover .xk-portal-face,.xk-gateway .xk-hero-doors>a:focus-visible .xk-portal-face{transform:translateY(-3px) scale(1.04)}
+}
+@media(min-width:1280px){
+  .wox-home.xk-gateway>.xkf-header{padding-inline:max(56px,calc((100% - 1680px)/2))}
+  .wox-home.xk-gateway .wox-utility-rail{width:min(1680px,calc(100% - 112px))}
+}
+@media(min-width:761px) and (max-width:1279px){
+  .wox-home.xk-gateway .wox-hero{min-height:800px;padding:100px 36px 70px}
+  .wox-home.xk-gateway .wox-hero-core{width:min(43vw,540px)}
+  .wox-home.xk-gateway .wox-hero h1{font-size:clamp(44px,4vw,54px)}
+  .xk-gateway .xk-hero-doors>a{min-height:91px;padding-inline:13px;gap:12px}
+  .xk-gateway .xk-portal-face{flex-basis:56px;width:56px}
+  .xk-gateway .xk-portal-name{font-size:18px}
+}
+@media(max-width:1100px){
+  .wox-home.xk-gateway .wox-hero{
+    display:block;
+    min-height:0;
+    padding:clamp(315px,36vw,415px) 26px 62px;
+  }
+  .wox-home.xk-gateway .wox-bg{inset:0 0 auto;height:clamp(430px,55vw,610px)}
+  .wox-home.xk-gateway .wox-bg img{object-position:16% 43%;transform:none}
+  .wox-home.xk-gateway .wox-bg::after{
+    background:linear-gradient(180deg,rgba(5,6,14,.60),transparent 20%,transparent 48%,rgba(5,6,14,.52) 69%,#080910 96%);
+  }
+  .wox-home.xk-gateway .wox-hero-core{width:100%;max-width:680px;margin:0 auto}
+  .wox-home.xk-gateway .wox-hero h1{font-size:clamp(48px,7vw,68px)}
+  .wox-home.xk-gateway .xk-hero-doors{max-width:680px}
+  .wox-home.xk-gateway .wox-art-credit{position:static;display:block;max-width:none;margin-top:22px;text-align:left}
+}
+@media(max-width:760px){
+  .wox-home.xk-gateway .wox-hero{padding:clamp(310px,78vw,380px) 20px 55px}
+  .wox-home.xk-gateway .wox-bg{height:clamp(430px,115vw,560px)}
+  .wox-home.xk-gateway .wox-hero h1{font-size:clamp(46px,12vw,63px)}
+  .wox-home.xk-gateway .wox-hero h1 span{font-size:16px;margin-bottom:13px}
+  .wox-home.xk-gateway .wox-lead{font-size:15px;line-height:1.65}
+  .wox-home.xk-gateway .wox-actions{display:block;margin-top:20px}
+  .wox-home.xk-gateway .xk-hero-doors{width:100%;margin-top:29px}
+  .xk-gateway .xk-hero-doors>a,.xk-gateway .xk-hero-doors>a.is-veyr,.xk-gateway .xk-hero-doors>a.is-studio{width:100%;min-height:95px;margin-left:0;padding:8px 14px}
+  .xk-gateway .xk-portal-face{flex-basis:58px;width:58px}
+  .xk-gateway .xk-portal-name{font-size:18px}
+}
+@media(max-width:400px){
+  .wox-home.xk-gateway .wox-hero h1{font-size:45px}
+  .xk-gateway .xk-hero-doors>a{gap:11px}
+  .xk-gateway .xk-portal-name{font-size:17px}
+}
+@media(min-width:761px) and (prefers-reduced-motion:no-preference){
+  @keyframes xk-panorama-breathe{to{transform:scale(1.045)}}
+  .wox-home.xk-gateway .wox-bg img{animation:xk-panorama-breathe 28s ease-in-out alternate infinite}
+}
+@media(prefers-reduced-motion:reduce){
+  .wox-home.xk-gateway .wox-hero::after,.xk-gateway .xk-hero-doors>a,.xk-gateway .xk-hero-doors>a::after,.xk-gateway .xk-portal-face{transition:none!important;animation:none!important}
+}

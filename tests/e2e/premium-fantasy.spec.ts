@@ -8,6 +8,7 @@ async function essentials(page: import('@playwright/test').Page) {
 test('Premium Home conserva rutas, CTA real y canales oficiales sin video', async ({ page }) => {
   await page.goto('/'); await essentials(page)
   await expect(page.locator('.wox-actions a').first()).toHaveAttribute('href', '/world-of-xethkioz')
+  await expect(page.locator('.wox-bg img')).toHaveAttribute('src', '/assets/xethkioz-world-panorama-2026.webp')
   await expect(page.locator('.xk-world-signature img')).toHaveAttribute('src', '/assets/world-of-xethkioz/world-of-xethkioz-logo.png')
   await expect(page.locator('.wox-status')).toHaveText('GAMING · TECNOLOGÍA · CREACIÓN')
   await expect(page.locator('.xk-hero-doors a')).toHaveCount(3)
@@ -25,12 +26,12 @@ test('Premium Home conserva rutas, CTA real y canales oficiales sin video', asyn
   const result = await new AxeBuilder({ page }).include('.wox-home').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze()
   expect(result.violations).toEqual([])
 })
-test('Portales integrados conservan el logo y el hero en escritorio', async ({ page }) => {
+test('El panorama aprobado se ve detrás de tres portales legibles en escritorio', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 936 })
   await page.goto('/'); await essentials(page)
   const logo = page.locator('.xk-world-signature img')
   await expect(logo).toHaveAttribute('src', '/assets/world-of-xethkioz/world-of-xethkioz-logo.png')
-  expect(await logo.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 1000 && image.naturalHeight > 300)).toBe(true)
+  await expect(logo).toBeHidden() // La ilustración ya incorpora la firma visual.
   const geometry = await page.evaluate(() => {
     const hero = document.querySelector('.wox-hero')!.getBoundingClientRect()
     const portals = [...document.querySelectorAll('.xk-hero-doors a')].map(link => link.getBoundingClientRect())
@@ -39,11 +40,13 @@ test('Portales integrados conservan el logo y el hero en escritorio', async ({ p
       heroRight: hero.right,
       viewport: innerWidth,
       portalsFit: portals.every(rect => rect.left >= 0 && rect.right <= innerWidth + 1 && rect.width >= 200),
+      background: document.querySelector('.wox-bg img')?.getAttribute('src'),
     }
   })
   expect(geometry.heroLeft).toBeLessThanOrEqual(1)
   expect(geometry.heroRight).toBeGreaterThanOrEqual(geometry.viewport - 1)
   expect(geometry.portalsFit).toBe(true)
+  expect(geometry.background).toBe('/assets/xethkioz-world-panorama-2026.webp')
 })
 test('Portal fantasy: video del fundador, Veyr canónica, FAQ y contenido público reservado', async ({ page }) => {
   await page.goto('/world-of-xethkioz'); await essentials(page)
