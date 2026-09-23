@@ -82,9 +82,12 @@
 .xk-studio-aside small{max-width:260px;color:#c9bdc8;font-size:13px;line-height:1.65}
 
 .xk-gateway .wox-ecosystem{padding-top:56px}
-.xk-gateway .wox-ecosystem-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-block:1px solid rgba(183,147,226,.27)}
-.xk-gateway .wox-ecosystem-card{min-height:265px;border:0;border-right:1px solid rgba(183,147,226,.27);background:#101018;padding:24px 30px}
-.xk-gateway .wox-ecosystem-card:last-child{border-right:0}
+.xk-gateway .wox-ecosystem-grid{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);grid-template-rows:repeat(2,minmax(195px,auto));gap:0;border-block:1px solid rgba(183,147,226,.27)}
+.xk-gateway .wox-ecosystem-card{min-height:195px;border:0;border-bottom:1px solid rgba(183,147,226,.27);background:#101018;padding:24px 30px}
+.xk-gateway .wox-ecosystem-card:first-child{grid-row:1/3;min-height:390px;border-right:1px solid rgba(183,147,226,.27);border-bottom:0;background:radial-gradient(circle at 85% 30%,#62392744,transparent 35%),#101018;padding:38px 42px}
+.xk-gateway .wox-ecosystem-card:first-child h3{font-size:clamp(36px,4vw,56px);margin-top:auto}
+.xk-gateway .wox-ecosystem-card:first-child>p{max-width:400px;font-size:16px}
+.xk-gateway .wox-ecosystem-card:last-child{border-bottom:0}
 .xk-gateway .wox-ecosystem-card h3{font-size:31px}
 .xk-gateway .wox-ecosystem-card>p{font-size:15px}
 .xk-gateway .wox-ecosystem-card>strong{color:#ffbb8e;font-size:13px}
@@ -123,7 +126,7 @@
   .xk-portal-face{flex-basis:66px;width:66px}
   .xk-portal-face i{font-size:26px}
   .xk-portal-name{font-size:14px}
-  .xk-gateway .wox-ecosystem-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .xk-gateway .wox-ecosystem-grid{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)}
 }
 @media(max-width:760px){
   .xk-gateway .wox-hero{display:block;min-height:0;padding:52px 22px 60px}
@@ -158,7 +161,11 @@
   .xk-studio-copy h2{font-size:38px}
   .xk-studio-aside{padding:18px 0 0;border-left:0;border-top:1px solid rgba(255,152,91,.55)}
   .xk-gateway .wox-ecosystem-grid{grid-template-columns:1fr}
+  .xk-gateway .wox-ecosystem-grid{grid-template-rows:auto}
   .xk-gateway .wox-ecosystem-card{min-height:205px;border-right:0;border-bottom:1px solid rgba(183,147,226,.27)}
+  .xk-gateway .wox-ecosystem-card:first-child{grid-row:auto;min-height:260px;border-right:0;border-bottom:1px solid rgba(183,147,226,.27);padding:27px 25px}
+  .xk-gateway .wox-ecosystem-card:first-child h3{font-size:35px;margin-top:40px}
+  .xk-gateway .wox-ecosystem-card:first-child>p{font-size:15px}
   .xk-gateway .wox-ecosystem-card:last-child{border-bottom:0}
   .xk-network-links{grid-template-columns:1fr 1fr;gap:0;margin-bottom:20px}
   .xk-network-links>span{grid-column:1/-1;padding:0 0 9px}
