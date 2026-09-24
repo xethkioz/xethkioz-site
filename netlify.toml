@@ -18,12 +18,47 @@
 
 [[redirects]]
   from = "/fun"
-  to = "/nexus-city"
+  to = "/community"
   status = 301
 
 [[redirects]]
   from = "/en/fun"
-  to = "/en/nexus-city"
+  to = "/en/community"
+  status = 301
+
+[[redirects]]
+  from = "/nexus-city"
+  to = "/community"
+  status = 301
+
+[[redirects]]
+  from = "/nexus-city/*"
+  to = "/community"
+  status = 301
+
+[[redirects]]
+  from = "/en/nexus-city"
+  to = "/en/community"
+  status = 301
+
+[[redirects]]
+  from = "/en/nexus-city/*"
+  to = "/en/community"
+  status = 301
+
+[[redirects]]
+  from = "/web-creation"
+  to = "/creacion-web"
+  status = 301
+
+[[redirects]]
+  from = "/register"
+  to = "/account"
+  status = 301
+
+[[redirects]]
+  from = "/admin"
+  to = "/cms"
   status = 301
 
 [[redirects]]
@@ -34,11 +69,43 @@
 [[headers]]
   for = "/*"
   [headers.values]
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
+    X-DNS-Prefetch-Control = "off"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
-    Content-Security-Policy = "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self' https://www.paypal.com https://www.paypalobjects.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; media-src 'self' https: blob:; connect-src 'self' https://pascicauudfyydzknoop.supabase.co wss://pascicauudfyydzknoop.supabase.co https://www.paypal.com https://*.paypal.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://player.twitch.tv https://www.twitch.tv https://www.paypal.com https://*.paypal.com; manifest-src 'self'; worker-src 'self' blob:"
+    Cross-Origin-Opener-Policy = "same-origin-allow-popups"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+    Origin-Agent-Cluster = "?1"
+    X-Permitted-Cross-Domain-Policies = "none"
+    Content-Security-Policy = "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self' 'unsafe-inline' https://*.googletagmanager.com https://*.clarity.ms https://connect.facebook.net; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://*.supabase.co wss://*.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://c.bing.com https://www.facebook.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://player.twitch.tv https://www.twitch.tv; worker-src 'self' blob:; manifest-src 'self'; form-action 'self'; upgrade-insecure-requests"
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Cache-Control = "no-store, max-age=0"
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/cms*"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/account"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/login"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/profile"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
 
 [[headers]]
   for = "/assets/*"
