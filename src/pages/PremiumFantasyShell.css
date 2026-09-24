@@ -33,7 +33,7 @@
 .xk-fantasy-shell .wox-status{margin-top:0;margin-bottom:20px}
 .xk-fantasy-shell .xk-wisp.is-home-entry{--wisp-size:54px;position:fixed;top:auto;right:104px;bottom:max(1.25rem,env(safe-area-inset-bottom))}
 html[data-nexus-chat-open] .xk-fantasy-shell .xk-wisp{visibility:hidden;pointer-events:none}
-@media(max-width:760px){.xk-fantasy-shell .xk-wisp.is-home-entry{--wisp-size:50px;right:88px;bottom:max(.85rem,env(safe-area-inset-bottom))}}
+@media(max-width:760px){.xk-fantasy-shell .xk-wisp.is-home-entry{--wisp-size:50px;top:calc(4.75rem + env(safe-area-inset-top));right:.75rem;bottom:auto}}
 
 /* Expanded navigation owns the foreground; retain an open chat close control. */
 html[data-fantasy-menu-open] .xk-fantasy-shell .xk-wisp,
@@ -49,7 +49,6 @@ html[data-fantasy-menu-open] .xk-fantasy-shell button[aria-controls="nexus-chat-
 
 /* Keep the Green Node launcher next to, and clear of, the chat and mobile dock. */
 @media(max-width:760px){
-  .xk-fantasy-shell .xk-wisp.is-home-entry,
   .xk-fantasy-shell .xk-wisp.is-world-veyr{
     --wisp-size:50px;
     right:84px;
