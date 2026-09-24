@@ -1,42 +1,38 @@
 # VERSION POLICY — XETHKIOZ
 
-## Estado actual
+## Línea actual
 
-La versión previa estable fue:
+La línea estable actual es **11.x**.
 
-```txt
-v3.6.4 — Auth + Foundation Cleanup
-```
-
-## Nueva línea
-
-A partir de ahora, trabajar hacia:
+Versión de este pass:
 
 ```txt
-v4.0.0
+11.4.11 — Repository Remediation · Pass 34
 ```
 
-## No usar
+## SemVer
 
-No crear nuevas versiones:
+- `11.4.x`: correcciones, hardening, QA y mejoras compatibles.
+- `11.5.0`: nuevas funciones compatibles dentro de Web 11.
+- `12.0.0`: cambio mayor de arquitectura o experiencia pública.
 
-```txt
-v3.6.x
-```
+No volver a crear releases nuevas bajo las líneas históricas v2, v3, v4 o v7.
 
-## Convención recomendada
+## Fuente de verdad
 
-- `4.0.0-alpha.x`: arquitectura y auditoría.
-- `4.0.0-beta.x`: CMS, comunidad y admin en pruebas.
-- `4.0.0`: release estable.
-- `4.1.x`: mejoras menores.
-- `5.0.0`: cambios mayores futuros.
+La versión debe coincidir en:
 
-## Ramas
+- `package.json`
+- `package-lock.json`
+- `src/lib/siteConfig.ts`
+
+Los documentos históricos pueden conservar su versión original, pero deben vivir bajo `docs/` o quedar claramente marcados como históricos.
+
+## Git
 
 - `main`: producción estable.
-- `release/v4.0`: línea de preparación v4.
-- `feature/v4-audit`: auditoría y refactor.
-- `feature/v4-cms`: CMS.
-- `feature/v4-community`: comunidad.
-- `feature/v4-admin`: administración.
+- `feature/*`, `fix/*`, `audit/*`, `security/*`: ramas temporales.
+- `release/*`: sólo para una release explícita.
+- ramas cerradas/mergeadas deben eliminarse cuando ya no sean necesarias.
+
+Cada release estable debería crear un tag `vMAJOR.MINOR.PATCH` y una GitHub Release con resumen y rollback SHA.
