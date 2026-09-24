@@ -16,6 +16,10 @@
 .xks-support .xks-primary,.xks-support .xks-secondary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;padding:14px 18px;font-size:14px;line-height:1.5;font-weight:600;border:1px solid var(--xks-gold);border-radius:2px}
 .xks-support .xks-primary{background:#dec590;color:#1b140b}
 .xks-support .xks-secondary{color:#ead9b9;background:#121117;margin-top:12px}
+.xks-support .xks-paypal-block{margin:4px 0 12px}
+.xks-support .xks-paypal-hosted{width:100%;min-height:50px}
+.xks-support .xks-paypal-hosted iframe{max-width:100%}
+.xks-support .xks-paypal-fallback{display:inline-flex;align-items:center;min-height:38px;margin-top:6px;color:#d9c6a3;font-size:12px;line-height:1.5;border-bottom:1px solid #786043}
 .xks-support .xks-payment-note{font-size:12px;line-height:1.75;color:#bfb6c5;margin:18px 0 0}
 .xks-support .xks-alias{font-size:13px;color:#cec4d3;margin:20px 0 0;line-height:1.8}
 .xks-support .xks-alias code{font-size:14px;color:#f4e5c3;user-select:all}
