@@ -70,7 +70,7 @@
     "verify": "npm run audit:env && npm run audit:production-ready && npm run build",
     "ci:check": "npm ci && npm run deploy:check",
     "audit:wox-first-visit": "node scripts/wox-first-visit-visual-check.mjs",
-    "audit:wox-functional": "node scripts/wox-home-functional-check.mjs",
+    "audit:wox-functional": "npm run build && playwright test tests/e2e/premium-fantasy.spec.ts --project=chromium-desktop",
     "audit:wox-anchor-nav": "node scripts/wox-anchor-navigation-check.mjs",
     "audit:wox-wisp-clearance": "node scripts/wox-wisp-clearance-check.mjs",
     "audit:wox-edge-accessibility": "node scripts/wox-edge-accessibility-check.mjs",
