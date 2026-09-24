@@ -5,7 +5,7 @@
 Versión actual de la web:
 
 ```text
-v11.4.10
+v11.4.11
 ```
 
 La versión declarada debe coincidir en:
