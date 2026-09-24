@@ -1,6 +1,6 @@
 # XETHKIOZ — Production Readiness
 
-**Versión:** 11.4.10  
+**Versión:** 11.4.11  
 **Revisión:** 2026-09-24  
 **Repositorio canónico:** `xethkioz/xethkioz-site`
 
@@ -34,7 +34,7 @@ Antes de mergear a `main`:
 1. `main` debe estar protegido y exigir checks.
 2. Las ramas temporales deben limpiarse después de mergear.
 3. Los videos grandes deben migrarse progresivamente fuera del historial Git.
-4. Las migraciones históricas duplicadas entre `database/migrations` y `supabase/migrations` deben reconciliarse antes de borrar.
+4. `supabase/migrations` es la fuente canónica; las migraciones históricas únicas que quedan en `database/migrations` deben conservarse hasta completar su inventario.
 5. Factura Salud debe separarse del repositorio web.
 6. `services/nexus` debe formalizarse como workspace o servicio independiente.
 7. La CSP debería reducir gradualmente `'unsafe-inline'` cuando el stack lo permita.
