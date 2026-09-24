@@ -1,0 +1,12 @@
+# Default owner
+* @xethkioz
+
+# Sensitive surfaces
+/.github/ @xethkioz
+/api/ @xethkioz
+/supabase/ @xethkioz
+/services/ @xethkioz
+/vercel.json @xethkioz
+/netlify.toml @xethkioz
+/package.json @xethkioz
+/package-lock.json @xethkioz
