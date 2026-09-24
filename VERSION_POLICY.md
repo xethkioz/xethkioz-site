@@ -1,42 +1,43 @@
 # VERSION POLICY — XETHKIOZ
 
-## Estado actual
+## Línea activa
 
-La versión previa estable fue:
+Versión actual de la web:
 
-```txt
-v3.6.4 — Auth + Foundation Cleanup
+```text
+v11.4.10
 ```
 
-## Nueva línea
+La versión declarada debe coincidir en:
 
-A partir de ahora, trabajar hacia:
+- `package.json`
+- `package-lock.json`
+- `src/lib/siteConfig.ts`
+- documentación operativa de release
 
-```txt
-v4.0.0
-```
+## Convención
 
-## No usar
+Se usa SemVer:
 
-No crear nuevas versiones:
-
-```txt
-v3.6.x
-```
-
-## Convención recomendada
-
-- `4.0.0-alpha.x`: arquitectura y auditoría.
-- `4.0.0-beta.x`: CMS, comunidad y admin en pruebas.
-- `4.0.0`: release estable.
-- `4.1.x`: mejoras menores.
-- `5.0.0`: cambios mayores futuros.
+- `MAJOR`: cambios incompatibles de arquitectura o producto.
+- `MINOR`: nuevas capacidades compatibles.
+- `PATCH`: fixes, hardening, contenido, rendimiento o ajustes visuales compatibles.
+- prereleases: `-alpha.N`, `-beta.N`, `-rc.N` cuando corresponda.
 
 ## Ramas
 
 - `main`: producción estable.
-- `release/v4.0`: línea de preparación v4.
-- `feature/v4-audit`: auditoría y refactor.
-- `feature/v4-cms`: CMS.
-- `feature/v4-community`: comunidad.
-- `feature/v4-admin`: administración.
+- `feature/*`: funcionalidades.
+- `fix/*`: correcciones.
+- `security/*`: hardening.
+- `content/*`: contenido editorial.
+- `release/*`: preparación de release.
+- `audit/*`: auditorías y saneamiento temporal.
+
+Las ramas temporales deben eliminarse después de mergear o cerrarse/archivarse cuando ya no tengan valor de recuperación.
+
+## Releases y tags
+
+Cada versión estable publicada debe tener un tag `vX.Y.Z` y, cuando aporte trazabilidad útil, un GitHub Release con resumen y referencia al commit desplegado.
+
+No reutilizar tags ni mantener políticas históricas v3/v4 como fuente de verdad activa.
