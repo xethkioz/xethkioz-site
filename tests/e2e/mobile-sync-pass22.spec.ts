@@ -43,18 +43,33 @@ for (const language of ['es', 'en'] as const) {
   })
 }
 
-test('Pass22: logo precedes the subtitle and starts near the mobile header', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 }); await page.goto('/')
-  await expect(page.locator('.wox-world-logo')).toBeVisible()
+test('Pass33: current Home identity starts below the mobile header without overflow', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto('/')
+  const consent = page.getByRole('button', { name: /solo esenciales|essential only/i }).first()
+  if (await consent.isVisible()) await consent.click()
+
+  await expect(page.locator('.wox-bg img')).toHaveAttribute('src', '/assets/xethkioz-world-panorama-2026.webp')
+  await expect(page.locator('.wox-status')).toHaveText('GAMING · TECNOLOGÍA · CREACIÓN')
+  await expect(page.getByRole('heading', { level: 1, name: /XETHKIOZ.*Más allá del juego/i })).toBeVisible()
+
   const geometry = await page.evaluate(() => {
-    const logo = document.querySelector('.wox-logo-wrap')!.getBoundingClientRect()
-    const subtitle = document.querySelector('.wox-status')!.getBoundingClientRect()
     const header = document.querySelector('.xkf-header')!.getBoundingClientRect()
-    return { logoBottom: logo.bottom, subtitleTop: subtitle.top, topGap: logo.top - header.bottom }
+    const hero = document.querySelector('.wox-hero')!.getBoundingClientRect()
+    const status = document.querySelector('.wox-status')!.getBoundingClientRect()
+    const title = document.querySelector('#wox-title')!.getBoundingClientRect()
+    return {
+      headerBottom: header.bottom,
+      heroTop: hero.top,
+      statusBottom: status.bottom,
+      titleTop: title.top,
+      overflow: document.documentElement.scrollWidth > innerWidth + 1,
+    }
   })
-  expect(geometry.logoBottom).toBeLessThanOrEqual(geometry.subtitleTop)
-  expect(geometry.topGap).toBeGreaterThanOrEqual(0); expect(geometry.topGap).toBeLessThan(64)
-  await expect(page.locator('.wox-status')).toContainText('ACTION RPG INDEPENDIENTE')
+
+  expect(geometry.headerBottom).toBeLessThanOrEqual(geometry.heroTop + 1)
+  expect(geometry.statusBottom).toBeLessThanOrEqual(geometry.titleTop + 1)
+  expect(geometry.overflow).toBe(false)
 })
 
 test('Pass22: Veyr cannot cover the chat composer and returns after closing', async ({ page }) => {
