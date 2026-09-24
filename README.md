@@ -1,62 +1,51 @@
 # XETHKIOZ Network
 
-**Versión actual:** `v11.0.0`
-**Estado:** producción activa con flujo de revisión controlado.
-**Última revisión operativa:** `2026-08-13`
-**Dominio principal:** `https://xethkioz.com.ar`
+**Versión actual:** `v11.4.10`  
+**Estado:** producción activa  
+**Última revisión operativa:** `2026-09-24`  
+**Repositorio canónico:** `xethkioz/xethkioz-site`  
 **Dominio público:** `https://www.xethkioz.com.ar`
 
-XETHKIOZ Network es el ecosistema web modular de la marca XETHKIOZ. Reúne portal gamer/tech, noticias, comunidad, perfiles, CMS, streaming, Science Lab, Green Node, Wisp, módulos editoriales y futuras automatizaciones con Supabase.
+XETHKIOZ Network es el ecosistema web de XETHKIOZ: World of Xethkioz, noticias, gaming, ciencia/tecnología, comunidad, Green Node, creación web y herramientas editoriales.
 
-## Estado de producción
+## Producción
 
-- Hosting principal actual: Vercel.
-- Framework: React + Vite + TypeScript.
+- Hosting principal: Vercel.
+- Fallback/configuración secundaria: Netlify.
+- Frontend: React 18 + Vite + TypeScript.
 - Backend/API: funciones serverless en `/api`.
-- Base de datos/auth: Supabase.
-- Build esperado: `npm run build`.
-- Verificación completa: `npm run verify`.
-- Deploy hardening: `npm run deploy:check`.
+- Datos y autenticación: Supabase.
+- Runtime de desarrollo/CI: Node 22.
+- Build: `npm run build`.
+- Verificación integral: `npm run verify`.
+- Verificación de deploy: `npm run deploy:check`.
 
-La web debe tratarse como proyecto vivo. Los cambios de infraestructura, auth, CMS, Supabase, rutas públicas o seguridad deben pasar por rama de revisión antes de mergear a `main`.
-
-## Módulos públicos y rutas principales
+## Rutas públicas principales
 
 | Ruta | Módulo | Estado |
 | --- | --- | --- |
-| `/` | Home principal | Activo |
-| `/news` | Noticias / Content OS | Activo |
-| `/gaming` | Gaming & Technology | Activo |
-| `/gaming/guides` | Guías de los juegos principales | Activo |
-| `/science` | Science Lab | Activo |
-| `/fun` | Creator / Fun Portal | Activo |
+| `/` | Home / Portal Network | Activo |
+| `/world-of-xethkioz` | World of Xethkioz | Activo |
+| `/gaming` | Biblioteca gamer | Activo |
+| `/gaming/guides` | Guías | Activo |
+| `/news` | Noticias | Activo |
+| `/science` | Ciencia y tecnología | Activo |
 | `/community` | Comunidad | Activo |
-| `/profile` | Perfil / estado de cuenta | Activo |
-| `/account` | Acceso estable de cuenta | Activo |
-| `/login` | Alias de acceso | Activo |
-| `/confirm-email` | Confirmación de email | Activo |
-| `/cms` | CMS protegido | Activo bajo guard |
-| `/green-node` | Green Node oculto | Activo con gate |
+| `/creacion-web` | XETHKIOZ Studio | Activo |
+| `/support` | Apoyo voluntario | Activo |
+| `/green-node` | Green Node | Activo con entrada especial |
+| `/account` / `/login` | Cuenta | No indexable |
+| `/profile` | Perfil | No indexable |
+| `/cms` | CMS | Protegido / no indexable |
+| `/mascotas/` | Huellas / Mascotas | Portal estático |
 
-## Módulos internos preparados
+Las rutas `/fun` y `/nexus-city` se mantienen únicamente como compatibilidad y redirigen a `/community`.
 
-- Gaming & Technology.
-- Science Lab.
-- Green Node / Green Zone.
-- Asia Gaming.
-- AI Lab.
-- Content OS.
-- Creator Studio.
-- Community OS.
-- Wisp / easter eggs.
-- CMS editorial.
-- Supabase Realtime preparado para chat/comunidad.
-
-## Stack técnico
+## Stack
 
 ```text
 React 18
-Vite
+Vite 8
 TypeScript
 TailwindCSS
 React Router
@@ -64,42 +53,51 @@ React Helmet Async
 Supabase JS
 Vercel Analytics
 Vercel Serverless Functions
+Playwright
+Axe
+Lighthouse CI
 ```
 
-## Scripts principales
+## Comandos
 
 ```bash
+npm ci
 npm run dev
-npm run build
 npm run typecheck
+npm run build
+npm run test:e2e
 npm run verify
 npm run deploy:check
 ```
 
-## Auditorías internas disponibles
+## Calidad y seguridad
 
-```bash
-npm run audit:env
-npm run audit:production-ready
-npm run audit:security-hardening
-npm run audit:runtime
-npm run audit:portal
-npm run audit:news-factory
-npm run audit:auth-nexus
-npm run audit:supabase-hydration
-npm run audit:editorial-depth
-```
+El proyecto incluye auditorías propias para:
 
-## Variables de entorno requeridas
+- rutas y SEO runtime;
+- privacidad y consentimiento;
+- telemetría;
+- sesión/auth;
+- hardening;
+- seguridad de comunidad;
+- integridad editorial;
+- dependencia/vulnerabilidades;
+- accesibilidad;
+- rendimiento y bundle inicial;
+- protección de material privado de World of Xethkioz.
 
-### Frontend público
+GitHub Actions ejecuta CI, Playwright/Axe, Lighthouse y una auditoría nocturna.
+
+## Variables de entorno
+
+Frontend público:
 
 ```env
 VITE_SUPABASE_URL=
 VITE_SUPABASE_ANON_KEY=
 ```
 
-### API/serverless
+Backend/serverless cuando corresponda:
 
 ```env
 SUPABASE_URL=
@@ -107,89 +105,29 @@ SUPABASE_SERVICE_ROLE_KEY=
 XETHKIOZ_ADMIN_RECOVERY_TOKEN=
 ```
 
-Regla: nunca commitear claves reales. Las claves deben vivir en Vercel/Netlify/Supabase según corresponda.
+Nunca commitear valores reales de secretos. Las claves `service_role`, tokens administrativos y credenciales privadas deben existir únicamente en el proveedor de runtime correspondiente.
 
-## Supabase / SQL
+## Base de datos
 
-Las migraciones y baselines están en:
+La ubicación canónica de migraciones nuevas es:
 
 ```text
 supabase/migrations/
-database/migrations/
 ```
 
-Prioridad actual:
+`database/migrations/` contiene material histórico/compatibilidad y debe tratarse como legado hasta terminar la reconciliación.
 
-1. Confirmar auth estable.
-2. Confirmar perfiles/admin roles.
-3. Confirmar CMS protegido.
-4. Revisar tablas editoriales.
-5. Activar Realtime solo después de validar reglas RLS.
+## Flujo de cambios
 
-## Política de cambios
+1. Crear una rama desde `main`.
+2. Ejecutar typecheck/build/auditorías.
+3. Abrir PR hacia `main`.
+4. Exigir CI, Browser Quality y Lighthouse en verde antes de mergear.
+5. Verificar preview.
+6. Recién entonces publicar.
 
-### Permitido directo en rama de revisión
+No borrar migraciones, rutas, assets o ramas de respaldo sin verificar referencias y contar con reversión.
 
-- Documentación.
-- Metadatos de versión.
-- Fixes de build/typecheck.
-- Limpieza de estados obsoletos.
-- Checklists operativos.
+## Repositorios duplicados
 
-### Requiere revisión antes de mergear
-
-- Cambios en auth.
-- Cambios en CMS.
-- Cambios en Supabase/RLS.
-- Cambios en rutas públicas.
-- Cambios en headers/CSP.
-- Cambios visuales grandes.
-- Cambios que toquen funciones serverless.
-
-### No hacer sin respaldo
-
-- Borrar migraciones.
-- Borrar rutas públicas.
-- Modificar claves o secretos.
-- Mover dominio/alias.
-- Cambiar providers globales sin test.
-
-## Deploy checklist
-
-Antes de producción:
-
-```bash
-npm install
-npm run verify
-npm run deploy:check
-```
-
-Después del deploy:
-
-- Revisar `/`.
-- Revisar `/account`.
-- Revisar `/profile`.
-- Revisar `/news`.
-- Revisar `/gaming`.
-- Revisar `/science`.
-- Revisar `/community`.
-- Revisar `/cms` con usuario admin.
-- Revisar consola del navegador.
-- Revisar logs de Vercel.
-
-## Estado operativo al 2026-07-06
-
-- Producción en Vercel: activa.
-- Dominio principal: activo.
-- Alias `www`: activo.
-- Últimos errores detectados: builds fallidos por TypeScript en funciones API que usan `process.env`.
-- Corrección preparada: tipado local mínimo en `api/node-env.d.ts`, sin agregar dependencias nuevas ni tocar `package-lock.json`.
-- Documentación anterior: actualizada desde v4/rc2 hacia v7 live.
-
-## Siguiente etapa recomendada
-
-1. Mergear esta rama solo si el preview/deploy build queda correcto.
-2. Auditar `/api` completo.
-3. Revisar seguridad de `admin-auth-link`.
-4. Consolidar CMS + Supabase con roles reales.
-5. Crear tablero de issues por módulo: Auth, CMS, Content OS, Community, Green Node, SEO, Ads, Streaming.
+`BlackMetalXeth/xethkioz-site` es un fork del repositorio canónico. No debe utilizarse como segunda fuente de producción; debe mantenerse sincronizado o archivarse cuando se confirme que ningún servicio depende de él.
