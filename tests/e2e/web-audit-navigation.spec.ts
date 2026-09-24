@@ -40,12 +40,94 @@ for (const lang of ['es', 'en'] as const) {
     await expect(wisp).toBeVisible()
     await wisp.click()
 
-    await expect(page).toHaveURL(new RegExp(`${prefix}/green-node$`), { timeout: 5_000 })
-    await expect(page.locator('.xk-green-entry')).toBeVisible()
-    await page.getByRole('button', { name: lang === 'es' ? 'Entrar a Green Node' : 'Enter Green Node' }).click()
+    await expect(page).toHaveURL(new RegExp(`${prefix}/green-nodeimport { test, expect, type Page } from '@playwright/test'
+import AxeBuilder from '@axe-core/playwright'
+
+async function essentials(page: Page) {
+  const button = page.getByRole('button', { name: /solo esenciales|essential only/i }).first()
+  if (await button.isVisible()) await button.click()
+}
+
+async function openMenu(page: Page) {
+  await expect(page.locator('.xkf-header')).toBeVisible()
+  const summary = page.locator('button.xkf-mobile')
+  if (await summary.isVisible()) await summary.click()
+}
+
+test('WEB-02: discover the game from English Home, switch language, preserve anchors and canonical', async ({ page }) => {
+  await page.goto('/en')
+  await essentials(page)
+  await page.locator('.wox-actions a').first().click()
+  await expect(page).toHaveURL(/\/en\/world-of-xethkioz$/)
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://www.xethkioz.com.ar/en/world-of-xethkioz')
+  await page.locator('.wox-portal-anchor-nav a[href="#mundo"]').click()
+  await page.getByRole('button', { name: 'Switch to Spanish', exact: true }).click()
+  await expect(page).toHaveURL(/\/world-of-xethkioz#mundo$/)
+  await expect(page.locator('html')).toHaveAttribute('lang', 'es-AR')
+  await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute('href', 'https://www.xethkioz.com.ar/en/world-of-xethkioz')
+  await page.getByRole('button', { name: 'Cambiar a inglés', exact: true }).click()
+  await expect(page).toHaveURL(/\/en\/world-of-xethkioz#mundo$/)
+  await expect.poll(() => page.locator('#mundo').evaluate(el => Math.abs(el.getBoundingClientRect().top))).toBeLessThan(120)
+})
+
+for (const lang of ['es', 'en'] as const) {
+  test(`WEB-03: fresh ${lang} visitor gets a clear Green Node entry`, async ({ page }) => {
+    const prefix = lang === 'en' ? '/en' : ''
+    await page.goto(prefix || '/')
+    await essentials(page)
+
+    const wisp = page.getByRole('button', {
+      name: lang === 'es' ? /Abrir Green Node con Wisp/i : /Open Green Node with Wisp/i,
+    })
+    await expect(wisp).toBeVisible()
+    await wisp.click()
+
+), { timeout: 5_000 })
     await expect(page.locator('.xk-green-entry')).toHaveCount(0)
-    await expect(page.locator('h1')).toContainText(/GREEN NODE/i)
-    await expect(page).toHaveURL(new RegExp(`${prefix}/green-node$`))
+    await expect(page.getByRole('heading', { level: 1 })).toContainText(/GREEN NODE/i)
+    await expect(page).toHaveURL(new RegExp(`${prefix}/green-nodeimport { test, expect, type Page } from '@playwright/test'
+import AxeBuilder from '@axe-core/playwright'
+
+async function essentials(page: Page) {
+  const button = page.getByRole('button', { name: /solo esenciales|essential only/i }).first()
+  if (await button.isVisible()) await button.click()
+}
+
+async function openMenu(page: Page) {
+  await expect(page.locator('.xkf-header')).toBeVisible()
+  const summary = page.locator('button.xkf-mobile')
+  if (await summary.isVisible()) await summary.click()
+}
+
+test('WEB-02: discover the game from English Home, switch language, preserve anchors and canonical', async ({ page }) => {
+  await page.goto('/en')
+  await essentials(page)
+  await page.locator('.wox-actions a').first().click()
+  await expect(page).toHaveURL(/\/en\/world-of-xethkioz$/)
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://www.xethkioz.com.ar/en/world-of-xethkioz')
+  await page.locator('.wox-portal-anchor-nav a[href="#mundo"]').click()
+  await page.getByRole('button', { name: 'Switch to Spanish', exact: true }).click()
+  await expect(page).toHaveURL(/\/world-of-xethkioz#mundo$/)
+  await expect(page.locator('html')).toHaveAttribute('lang', 'es-AR')
+  await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute('href', 'https://www.xethkioz.com.ar/en/world-of-xethkioz')
+  await page.getByRole('button', { name: 'Cambiar a inglés', exact: true }).click()
+  await expect(page).toHaveURL(/\/en\/world-of-xethkioz#mundo$/)
+  await expect.poll(() => page.locator('#mundo').evaluate(el => Math.abs(el.getBoundingClientRect().top))).toBeLessThan(120)
+})
+
+for (const lang of ['es', 'en'] as const) {
+  test(`WEB-03: fresh ${lang} visitor gets a clear Green Node entry`, async ({ page }) => {
+    const prefix = lang === 'en' ? '/en' : ''
+    await page.goto(prefix || '/')
+    await essentials(page)
+
+    const wisp = page.getByRole('button', {
+      name: lang === 'es' ? /Abrir Green Node con Wisp/i : /Open Green Node with Wisp/i,
+    })
+    await expect(wisp).toBeVisible()
+    await wisp.click()
+
+))
   })
 }
 
