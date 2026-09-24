@@ -771,11 +771,3 @@ html[data-nexus-chat-open] .xk-wisp.is-world-veyr{visibility:hidden;opacity:0;po
     bottom:calc(5.45rem + env(safe-area-inset-bottom));
   }
 }
-/* Audit remediation: keep the Home Wisp discoverable without covering the primary mobile CTA. */
-@media(max-width:760px){
-  .xk-fantasy-shell .xk-wisp.is-home-entry{
-    top:calc(4.75rem + env(safe-area-inset-top));
-    right:.75rem;
-    bottom:auto;
-  }
-}
