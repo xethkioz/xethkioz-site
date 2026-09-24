@@ -1,6 +1,6 @@
 # XETHKIOZ Network
 
-**Versión actual:** `v11.4.10`  
+**Versión actual:** `v11.4.11`  
 **Estado:** producción activa  
 **Última revisión operativa:** `2026-09-24`  
 **Repositorio canónico:** `xethkioz/xethkioz-site`  
