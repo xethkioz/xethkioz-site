@@ -21,7 +21,7 @@ function listFiles(dir) {
 }
 
 const sections = targets.map((dir) => ({ dir, files: listFiles(dir) }));
-console.log('# XETHKIOZ Fusion Inventory');
+console.log('# XETHKIOZ Web Repository Inventory');
 console.log(`Generated: ${new Date().toISOString()}\n`);
 for (const section of sections) {
   console.log(`## ${section.dir}`);
