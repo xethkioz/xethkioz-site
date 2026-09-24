@@ -26,16 +26,14 @@ test('WEB-02: discover the game from English Home, switch language, preserve anc
   await expect.poll(() => page.locator('#mundo').evaluate(el => Math.abs(el.getBoundingClientRect().top))).toBeLessThan(120)
 })
 
-for (const lang of ['es', 'en']) test(`WEB-03: fresh ${lang} visitor gets a clear Green Node entry`, async ({ page }) => {
+for (const lang of ['es', 'en']) test(`WEB-03: fresh ${lang} visitor reaches Green Node through Wisp`, async ({ page }) => {
   const prefix = lang === 'en' ? '/en' : ''
-  await page.goto(prefix || '/'); await essentials(page); await openMenu(page)
-  await page.locator(`.xkf-header nav:visible a[href="${prefix}/green-node"]`).click()
+  await page.goto(prefix || '/'); await essentials(page)
+  const wisp = page.locator('.xk-wisp.is-home-entry')
+  await expect(wisp).toBeVisible()
+  await wisp.click()
   await expect(page).toHaveURL(new RegExp(`${prefix}/green-node$`))
-  await expect(page.locator('.xk-green-entry')).toBeVisible()
-  await page.getByRole('button', { name: lang === 'es' ? 'Entrar a Green Node' : 'Enter Green Node' }).click()
-  await expect(page.locator('.xk-green-entry')).toHaveCount(0)
-  await expect(page.locator('h1')).toContainText(/GREEN NODE/i)
-  await expect(page).toHaveURL(new RegExp(`${prefix}/green-node$`))
+  await expect(page.getByRole('heading', { level: 1 })).toContainText(/GREEN NODE/i)
 })
 test('WEB-03: denied session storage cannot crash or silently redirect the public entry', async ({ page }) => {
   await page.addInitScript(() => Object.defineProperty(window, 'sessionStorage', { get() { throw new DOMException('Blocked for test', 'SecurityError') } }))

@@ -43,18 +43,19 @@ for (const language of ['es', 'en'] as const) {
   })
 }
 
-test('Pass22: logo precedes the subtitle and starts near the mobile header', async ({ page }) => {
+test('Pass22: current gateway starts below the mobile header and exposes the three project doors', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 }); await page.goto('/')
-  await expect(page.locator('.wox-world-logo')).toBeVisible()
+  await expect(page.locator('.wox-status')).toHaveText('GAMING · TECNOLOGÍA · CREACIÓN')
+  await expect(page.locator('.xk-doors-grid a')).toHaveCount(3)
   const geometry = await page.evaluate(() => {
-    const logo = document.querySelector('.wox-logo-wrap')!.getBoundingClientRect()
-    const subtitle = document.querySelector('.wox-status')!.getBoundingClientRect()
     const header = document.querySelector('.xkf-header')!.getBoundingClientRect()
-    return { logoBottom: logo.bottom, subtitleTop: subtitle.top, topGap: logo.top - header.bottom }
+    const hero = document.querySelector('.wox-hero')!.getBoundingClientRect()
+    const doors = document.querySelector('.xk-hero-doors')!.getBoundingClientRect()
+    return { headerBottom: header.bottom, heroTop: hero.top, doorsLeft: doors.left, doorsRight: doors.right, viewport: innerWidth }
   })
-  expect(geometry.logoBottom).toBeLessThanOrEqual(geometry.subtitleTop)
-  expect(geometry.topGap).toBeGreaterThanOrEqual(0); expect(geometry.topGap).toBeLessThan(64)
-  await expect(page.locator('.wox-status')).toContainText('ACTION RPG INDEPENDIENTE')
+  expect(geometry.heroTop).toBeGreaterThanOrEqual(geometry.headerBottom - 1)
+  expect(geometry.doorsLeft).toBeGreaterThanOrEqual(0)
+  expect(geometry.doorsRight).toBeLessThanOrEqual(geometry.viewport + 1)
 })
 
 test('Pass22: Veyr cannot cover the chat composer and returns after closing', async ({ page }) => {

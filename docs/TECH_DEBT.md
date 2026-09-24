@@ -1,18 +1,35 @@
-# TECH DEBT — XETHKIOZ v4.0
+# TECH DEBT — XETHKIOZ Web 11
 
-## Deuda técnica inicial
+**Revisión:** 2026-09-24
 
-- `src/lib` concentra demasiadas responsabilidades.
-- Documentación histórica mezclada con documentación actual.
-- Posible presencia de archivos generados en repositorio remoto.
-- Falta estructura preparada para CMS grande.
-- Falta separación admin/community/content.
+## Alta prioridad
 
-## Plan de resolución
+- Proteger `main` y exigir checks de CI antes de merge.
+- Reducir cientos de ramas históricas/mergeadas.
+- Separar Factura Salud del repositorio web.
+- Mantener Browser Quality en verde con el diseño vigente.
+- Definir una única fuente canónica de documentación operativa.
 
-1. Crear `feature/v4-audit`.
-2. Separar carpetas.
-3. Mover archivos por grupos.
-4. Actualizar imports.
-5. Ejecutar build.
-6. Documentar.
+## Media prioridad
+
+- Consolidar migraciones duplicadas entre `database/migrations` y `supabase/migrations` después de reconciliar el historial aplicado.
+- Mover notas históricas de raíz a un archivo documental.
+- Inventariar páginas/componentes sin imports antes de borrarlos.
+- Decidir si `services/nexus` será workspace formal o repositorio separado.
+- Agregar cobertura unitaria para helpers, auth, sanitización y APIs.
+
+## Performance / repositorio
+
+- Mover videos grandes de larga duración a object storage/CDN cuando sea viable.
+- Deduplicar blobs multimedia idénticos.
+- Mantener budgets Lighthouse y bundle contract.
+
+## Seguridad
+
+- Migrar rate limiting sensible a almacenamiento distribuido si aumenta el tráfico.
+- Reducir gradualmente dependencias de CSP que requieran `unsafe-inline`.
+- Mantener revisión de grants/RLS y políticas de privacidad.
+
+## Regla de limpieza
+
+No borrar por nombre o antigüedad. Primero confirmar referencias/imports, historial aplicado y ruta de rollback; luego limpiar por PRs pequeños.

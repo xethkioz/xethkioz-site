@@ -4,7 +4,7 @@ test.describe('orden y navegación de secciones', () => {
   test('Inicio presenta los tres proyectos como portales y conserva el ecosistema', async ({ page }) => {
     await page.goto('/')
 
-    await expect(page.getByRole('heading', { level: 1, name: /XETHKIOZ.*Historias para jugar/ })).toBeAttached()
+    await expect(page.getByRole('heading', { level: 1, name: /XETHKIOZ.*Más allá del juego/i })).toBeAttached()
     const portals = page.getByRole('navigation', { name: 'Red de portales: elegí un proyecto' })
     await expect(portals.getByRole('link')).toHaveCount(3)
     await expect(portals.getByRole('link', { name: /World of Xethkioz/ })).toHaveAttribute('href', '/world-of-xethkioz')
@@ -31,7 +31,7 @@ test.describe('orden y navegación de secciones', () => {
     await expect(page.locator('.xkf-header a[href="/news"]').first()).toHaveAttribute('href', '/news')
 
     await expect(page.locator('.wox-hero')).toBeVisible()
-    await expect(page.getByText('UNITY 6 · URP · 3D/2.5D', { exact: true })).toBeVisible()
+    await expect(page.locator('.xk-global-footer')).toBeVisible()
     await expect(page.locator('#origin, #worlds, #characters, #media-3d')).toHaveCount(0)
   })
 
