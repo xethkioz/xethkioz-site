@@ -1,6 +1,6 @@
-export const SITE_VERSION = 'v11.4.10'
-export const SITE_RELEASE = 'Development Alpha Demo - Pass 33'
-export const SITE_BUILD_DATE = '2026-09-23'
+export const SITE_VERSION = 'v11.4.11'
+export const SITE_RELEASE = 'Repository Remediation - Pass 34'
+export const SITE_BUILD_DATE = '2026-09-24'
 export const SITE_DOMAIN = 'https://xethkioz.com.ar'
 
 export const DONATION_LINKS = {
