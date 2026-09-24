@@ -4,7 +4,7 @@ test.describe('orden y navegación de secciones', () => {
   test('Inicio presenta los tres proyectos como portales y conserva el ecosistema', async ({ page }) => {
     await page.goto('/')
 
-    await expect(page.getByRole('heading', { level: 1, name: /XETHKIOZ.*Historias para jugar/ })).toBeAttached()
+    await expect(page.getByRole('heading', { level: 1, name: /XETHKIOZ.*Más allá del juego/i })).toBeAttached()
     const portals = page.getByRole('navigation', { name: 'Red de portales: elegí un proyecto' })
     await expect(portals.getByRole('link')).toHaveCount(3)
     await expect(portals.getByRole('link', { name: /World of Xethkioz/ })).toHaveAttribute('href', '/world-of-xethkioz')
