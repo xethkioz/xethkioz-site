@@ -6,7 +6,7 @@ const read = (relative) => fs.readFileSync(path.join(root, relative), 'utf8')
 const checks = []
 function check(name, ok) { checks.push([name, Boolean(ok)]) }
 
-const sql = read('database/migrations/20260628_alpha36_auth_nexus_profiles_rls.sql')
+const sql = read('supabase/migrations/20260628_alpha36_auth_nexus_profiles_rls.sql')
 const authService = read('src/services/auth/authNexusService.ts')
 const authSchema = read('src/services/auth/authSchema.ts')
 const bridge = read('src/engines/world/sandbox/RuntimeBridge.ts')
