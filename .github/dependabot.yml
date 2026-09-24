@@ -11,6 +11,18 @@ updates:
     labels:
       - dependencies
 
+  - package-ecosystem: npm
+    directory: /services/nexus
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:15"
+      timezone: America/Argentina/Buenos_Aires
+    open-pull-requests-limit: 3
+    labels:
+      - dependencies
+      - nexus
+
   - package-ecosystem: github-actions
     directory: /
     schedule:
