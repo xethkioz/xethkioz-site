@@ -1,36 +1,60 @@
-# GIT WORKFLOW — XETHKIOZ v4.0
+# GIT WORKFLOW — XETHKIOZ 11.4
 
-## Flujo recomendado
+## Fuente de verdad
 
-```txt
+Repositorio canónico:
+
+```text
+xethkioz/xethkioz-site
+```
+
+`main` representa producción.
+
+## Flujo
+
+```text
 main
-└── release/v4.0
-    ├── feature/v4-audit
-    ├── feature/v4-cms
-    ├── feature/v4-community
-    └── feature/v4-admin
+├── feature/*
+├── fix/*
+├── security/*
+├── content/*
+├── audit/*
+└── release/*
 ```
 
-## Comandos base
+## Reglas
+
+1. Crear ramas desde `main` actualizado.
+2. Evitar pushes directos a `main`.
+3. Abrir PR.
+4. Esperar CI, Browser Quality y Lighthouse.
+5. Resolver fallos antes de mergear.
+6. Verificar preview.
+7. Mergear con historial claro.
+8. Eliminar la rama temporal después de confirmar producción.
+
+## Antes de abrir PR
 
 ```bash
-git status
-git switch release/v4.0
-git switch -c feature/v4-audit
-```
-
-## Antes de commit
-
-```bash
+npm ci
+npm run typecheck
 npm run build
-git status
+npm run audit:dependencies
+npm run test:e2e
 ```
 
-## Mensajes de commit
+## Commits
 
-```txt
-docs: add v4 architecture plan
-refactor: move shared hooks
-feat: add cms articles foundation
-fix: resolve auth redirect issue
+Usar mensajes descriptivos:
+
+```text
+feat: add ...
+fix: correct ...
+security: harden ...
+perf: optimize ...
+test: cover ...
+docs: update ...
+chore: maintain ...
 ```
+
+No mezclar cambios no relacionados en un commit cuando puedan revisarse por separado.
