@@ -17,6 +17,16 @@
   command = "npm run build"
 
 [[redirects]]
+  from = "/tripo"
+  to = "https://studio.tripo3d.ai/?utm_source=creator_invite&utm_medium=linkcopy&utm_campaign=VXH2GZ&utm_content=2251799814429939"
+  status = 302
+
+[[redirects]]
+  from = "/starlink"
+  to = "https://starlink.com?referral=RC-DF-13005453-64032-82"
+  status = 302
+
+[[redirects]]
   from = "/fun"
   to = "/community"
   status = 301

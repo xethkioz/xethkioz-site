@@ -19,6 +19,8 @@
   },
   "trailingSlash": false,
   "redirects": [
+    { "source": "/tripo", "destination": "https://studio.tripo3d.ai/?utm_source=creator_invite&utm_medium=linkcopy&utm_campaign=VXH2GZ&utm_content=2251799814429939", "permanent": false },
+    { "source": "/starlink", "destination": "https://starlink.com?referral=RC-DF-13005453-64032-82", "permanent": false },
     {"source": "/nexus-city", "destination": "/community", "permanent": true},
     {"source": "/nexus-city/:path*", "destination": "/community", "permanent": true},
     {"source": "/en/nexus-city", "destination": "/en/community", "permanent": true},
