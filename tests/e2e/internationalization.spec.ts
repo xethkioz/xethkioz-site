@@ -32,8 +32,8 @@ test.describe('internacionalización indexable', () => {
 
     await expect(page.getByRole('link', { name: 'Gaming', exact: true }).first()).toHaveAttribute('href', '/en/gaming')
     await expect(page.getByRole('link', { name: 'Pets', exact: true }).first()).toHaveAttribute('href', '/mascotas/')
-    await expect(page.getByRole('link', { name: 'About us', exact: true })).toHaveAttribute('href', '/en/about')
-    await expect(page.getByRole('link', { name: 'Editorial policy', exact: true })).toHaveAttribute('href', '/en/editorial-policy')
+    await expect(page.getByRole('link', { name: 'About', exact: true })).toHaveAttribute('href', '/en/about')
+    await expect(page.getByRole('link', { name: 'Editorial', exact: true })).toHaveAttribute('href', '/en/editorial-policy')
   })
 
   test('una preferencia inglesa persistida lleva a la URL inglesa sin usar geolocalización', async ({ page }) => {
