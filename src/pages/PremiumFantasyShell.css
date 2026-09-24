@@ -55,3 +55,18 @@ html[data-fantasy-menu-open] .xk-fantasy-shell button[aria-controls="nexus-chat-
     bottom:calc(5.45rem + env(safe-area-inset-bottom));
   }
 }
+
+/* Pass 34: keep canonical Veyr on the artwork edge, clear of hero CTAs, captions and chapter navigation. */
+.xk-world-portal-route .xk-wisp.is-world-veyr{
+  top:7rem;
+  right:1rem;
+  bottom:auto;
+}
+@media(max-width:760px){
+  .xk-world-portal-route .xk-wisp.is-world-veyr{
+    --wisp-size:50px;
+    top:calc(4.75rem + env(safe-area-inset-top));
+    right:.75rem;
+    bottom:auto;
+  }
+}
