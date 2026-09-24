@@ -1,0 +1,10 @@
+# Default owner for the public XETHKIOZ web repository.
+* @xethkioz
+
+# Security, auth and database changes need explicit owner review.
+/api/ @xethkioz
+/supabase/ @xethkioz
+/database/ @xethkioz
+/.github/ @xethkioz
+/vercel.json @xethkioz
+/netlify.toml @xethkioz
