@@ -1,105 +1,93 @@
 # XETHKIOZ Network
 
-**Versión actual:** `v11.0.0`
-**Estado:** producción activa con flujo de revisión controlado.
-**Última revisión operativa:** `2026-08-13`
-**Dominio principal:** `https://xethkioz.com.ar`
-**Dominio público:** `https://www.xethkioz.com.ar`
+**Versión actual:** `v11.4.11`  
+**Release:** Repository Remediation · Pass 34  
+**Estado:** producción activa  
+**Última revisión operativa:** 2026-09-24  
+**Dominio canónico:** https://www.xethkioz.com.ar  
+**Hosting principal:** Vercel
 
-XETHKIOZ Network es el ecosistema web modular de la marca XETHKIOZ. Reúne portal gamer/tech, noticias, comunidad, perfiles, CMS, streaming, Science Lab, Green Node, Wisp, módulos editoriales y futuras automatizaciones con Supabase.
+XETHKIOZ Network es la plataforma pública de XETHKIOZ: World of Xethkioz, gaming, noticias, ciencia/tecnología, comunidad, Green Node, XETHKIOZ Studio y CMS editorial.
 
-## Estado de producción
+## Repositorio canónico
 
-- Hosting principal actual: Vercel.
-- Framework: React + Vite + TypeScript.
-- Backend/API: funciones serverless en `/api`.
-- Base de datos/auth: Supabase.
-- Build esperado: `npm run build`.
-- Verificación completa: `npm run verify`.
-- Deploy hardening: `npm run deploy:check`.
+La fuente de producción es este repositorio: `xethkioz/xethkioz-site`.
 
-La web debe tratarse como proyecto vivo. Los cambios de infraestructura, auth, CMS, Supabase, rutas públicas o seguridad deben pasar por rama de revisión antes de mergear a `main`.
+Los forks o copias históricas no deben usarse como fuente de deploy ni como base de nuevas ramas sin sincronizarlos primero.
 
-## Módulos públicos y rutas principales
+## Stack
 
-| Ruta | Módulo | Estado |
-| --- | --- | --- |
-| `/` | Home principal | Activo |
-| `/news` | Noticias / Content OS | Activo |
-| `/gaming` | Gaming & Technology | Activo |
-| `/gaming/guides` | Guías de los juegos principales | Activo |
-| `/science` | Science Lab | Activo |
-| `/fun` | Creator / Fun Portal | Activo |
-| `/community` | Comunidad | Activo |
-| `/profile` | Perfil / estado de cuenta | Activo |
-| `/account` | Acceso estable de cuenta | Activo |
-| `/login` | Alias de acceso | Activo |
-| `/confirm-email` | Confirmación de email | Activo |
-| `/cms` | CMS protegido | Activo bajo guard |
-| `/green-node` | Green Node oculto | Activo con gate |
+- React 18 + Vite + TypeScript
+- React Router
+- Tailwind CSS
+- Supabase Auth/Database/Realtime
+- Vercel Serverless Functions
+- Playwright + Axe
+- Lighthouse CI
+- GitHub Actions
 
-## Módulos internos preparados
+Node soportado: **22**.
 
-- Gaming & Technology.
-- Science Lab.
-- Green Node / Green Zone.
-- Asia Gaming.
-- AI Lab.
-- Content OS.
-- Creator Studio.
-- Community OS.
-- Wisp / easter eggs.
-- CMS editorial.
-- Supabase Realtime preparado para chat/comunidad.
+## Rutas públicas principales
 
-## Stack técnico
+| Ruta | Estado |
+| --- | --- |
+| `/` | Home / gateway |
+| `/world-of-xethkioz` | Portal público del juego |
+| `/gaming` | Gaming |
+| `/gaming/guides` | Guías |
+| `/science` | Ciencia y tecnología |
+| `/news` | Noticias |
+| `/community` | Comunidad |
+| `/creacion-web` | XETHKIOZ Studio |
+| `/support` | Apoyo voluntario |
+| `/green-node` | Green Node, acceso mediante Wisp/gate |
+| `/account` | Cuenta |
+| `/profile` | Perfil |
+| `/cms` | CMS protegido |
 
-```text
-React 18
-Vite
-TypeScript
-TailwindCSS
-React Router
-React Helmet Async
-Supabase JS
-Vercel Analytics
-Vercel Serverless Functions
-```
+`/fun` y `/nexus-city` son rutas retiradas y redirigen a `/community`.
 
-## Scripts principales
+Las páginas públicas localizadas compatibles también existen bajo `/en/*`.
+
+## Desarrollo
 
 ```bash
+npm ci
 npm run dev
-npm run build
+```
+
+Validación completa:
+
+```bash
 npm run typecheck
-npm run verify
+npm run build
+npm run test:e2e
 npm run deploy:check
 ```
 
-## Auditorías internas disponibles
+## CI
 
-```bash
-npm run audit:env
-npm run audit:production-ready
-npm run audit:security-hardening
-npm run audit:runtime
-npm run audit:portal
-npm run audit:news-factory
-npm run audit:auth-nexus
-npm run audit:supabase-hydration
-npm run audit:editorial-depth
-```
+GitHub Actions ejecuta:
 
-## Variables de entorno requeridas
+- build + auditoría de producción;
+- política de vulnerabilidades;
+- Playwright + Axe en desktop/mobile;
+- Lighthouse;
+- auditoría nocturna.
 
-### Frontend público
+Un cambio no debe considerarse listo para producción si cualquiera de los checks obligatorios falla.
+
+## Variables de entorno
+
+Frontend público:
 
 ```env
 VITE_SUPABASE_URL=
 VITE_SUPABASE_ANON_KEY=
 ```
 
-### API/serverless
+Backend/serverless, sólo cuando el módulo correspondiente lo necesita:
 
 ```env
 SUPABASE_URL=
@@ -107,89 +95,46 @@ SUPABASE_SERVICE_ROLE_KEY=
 XETHKIOZ_ADMIN_RECOVERY_TOKEN=
 ```
 
-Regla: nunca commitear claves reales. Las claves deben vivir en Vercel/Netlify/Supabase según corresponda.
+Nunca subir `.env`, service-role keys, tokens administrativos ni credenciales privadas.
 
-## Supabase / SQL
+## Seguridad
 
-Las migraciones y baselines están en:
+- RLS habilitado en Supabase.
+- Permisos privilegiados validados del lado servidor/RLS.
+- CSP, HSTS y headers de seguridad en producción.
+- CMS protegido por sesión/rol.
+- Telemetría condicionada a consentimiento.
+- `.gitignore` bloquea secretos, builds, caches y assets privados de World of Xethkioz.
+- `/.well-known/security.txt` publica el canal de reporte.
 
-```text
-supabase/migrations/
-database/migrations/
-```
+Ver `docs/SECURITY.md`.
 
-Prioridad actual:
+## Versionado
 
-1. Confirmar auth estable.
-2. Confirmar perfiles/admin roles.
-3. Confirmar CMS protegido.
-4. Revisar tablas editoriales.
-5. Activar Realtime solo después de validar reglas RLS.
+La versión de producción debe coincidir en:
 
-## Política de cambios
+- `package.json`;
+- `package-lock.json`;
+- `src/lib/siteConfig.ts`.
 
-### Permitido directo en rama de revisión
+Ver `VERSION_POLICY.md`.
 
-- Documentación.
-- Metadatos de versión.
-- Fixes de build/typecheck.
-- Limpieza de estados obsoletos.
-- Checklists operativos.
+## Base de datos
 
-### Requiere revisión antes de mergear
+La fuente activa de migraciones es `supabase/migrations/`.
 
-- Cambios en auth.
-- Cambios en CMS.
-- Cambios en Supabase/RLS.
-- Cambios en rutas públicas.
-- Cambios en headers/CSP.
-- Cambios visuales grandes.
-- Cambios que toquen funciones serverless.
+`database/migrations/` contiene material histórico/compatibilidad y no debe recibir nuevas migraciones. La consolidación final de duplicados requiere reconciliación de historial antes de borrar archivos.
 
-### No hacer sin respaldo
+## Reglas de cambio
 
-- Borrar migraciones.
-- Borrar rutas públicas.
-- Modificar claves o secretos.
-- Mover dominio/alias.
-- Cambiar providers globales sin test.
+1. Crear rama desde `main`.
+2. Cambios pequeños y reversibles.
+3. Ejecutar build, auditorías y navegador.
+4. Abrir PR.
+5. Mergear sólo con checks verdes.
+6. No borrar migraciones ni material histórico sin inventario previo.
+7. No introducir assets privados del juego en este repositorio público.
 
-## Deploy checklist
+## Deuda conocida
 
-Antes de producción:
-
-```bash
-npm install
-npm run verify
-npm run deploy:check
-```
-
-Después del deploy:
-
-- Revisar `/`.
-- Revisar `/account`.
-- Revisar `/profile`.
-- Revisar `/news`.
-- Revisar `/gaming`.
-- Revisar `/science`.
-- Revisar `/community`.
-- Revisar `/cms` con usuario admin.
-- Revisar consola del navegador.
-- Revisar logs de Vercel.
-
-## Estado operativo al 2026-07-06
-
-- Producción en Vercel: activa.
-- Dominio principal: activo.
-- Alias `www`: activo.
-- Últimos errores detectados: builds fallidos por TypeScript en funciones API que usan `process.env`.
-- Corrección preparada: tipado local mínimo en `api/node-env.d.ts`, sin agregar dependencias nuevas ni tocar `package-lock.json`.
-- Documentación anterior: actualizada desde v4/rc2 hacia v7 live.
-
-## Siguiente etapa recomendada
-
-1. Mergear esta rama solo si el preview/deploy build queda correcto.
-2. Auditar `/api` completo.
-3. Revisar seguridad de `admin-auth-link`.
-4. Consolidar CMS + Supabase con roles reales.
-5. Crear tablero de issues por módulo: Auth, CMS, Content OS, Community, Green Node, SEO, Ads, Streaming.
+La deuda vigente está documentada en `docs/TECH_DEBT.md`. Las prioridades inmediatas son limpieza de ramas históricas, consolidación de documentación, separación de Factura Salud y revisión de duplicados multimedia/migraciones.
