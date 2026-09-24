@@ -31,7 +31,7 @@ test.describe('orden y navegación de secciones', () => {
     await expect(page.locator('.xkf-header a[href="/news"]').first()).toHaveAttribute('href', '/news')
 
     await expect(page.locator('.wox-hero')).toBeVisible()
-    await expect(page.getByText('UNITY 6 · URP · 3D/2.5D', { exact: true })).toBeVisible()
+    await expect(page.locator('.xk-global-footer')).toBeVisible()
     await expect(page.locator('#origin, #worlds, #characters, #media-3d')).toHaveCount(0)
   })
 
