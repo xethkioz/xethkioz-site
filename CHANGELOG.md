@@ -1,3 +1,18 @@
+# 11.4.11 — Audit Remediation + Repository Hygiene — Pass 34
+
+- Repositorio canónico documentado y flujo de revisión actualizado.
+- Node 22 unificado entre desarrollo, CI, Netlify, Render y Nexus.
+- GitHub Actions actualizadas; Dependabot, CODEOWNERS y plantilla de PR agregados.
+- README, seguridad, deuda técnica, versionado y production readiness sincronizados.
+- Netlify alineado con redirects y headers actuales de Vercel.
+- Dominio público canónico unificado en `https://www.xethkioz.com.ar`.
+- Tests Playwright/Axe actualizados al Home, footer y navegación vigentes.
+- Wisp móvil reposicionado para no cubrir CTA ni chat.
+- Visor de arte retirado al no tener referencias runtime.
+- Medios duplicados/retirados y QA obsoleta eliminados.
+- `supabase/migrations` consolidado como origen canónico; 13 copias SQL byte-a-byte retiradas de `database/migrations`.
+- Factura Salud, limpieza masiva de ramas, protección administrativa de `main`, webhook huérfano y configuración Auth externa permanecen fuera de los cambios destructivos automáticos hasta contar con el control administrativo correspondiente.
+
 # 11.0.0 — World Gate Harmony Release
 
 - Inicio reorganizado mediante un índice visible para portales, red, contenido, guías, estudio y contacto.
