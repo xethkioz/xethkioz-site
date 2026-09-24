@@ -122,6 +122,10 @@ test('Green Node flotante no pisa el chat en Inicio', async ({ page }) => {
   for (const width of [390, 1440]) {
     await page.setViewportSize({ width, height: 844 })
     await page.goto('/'); await essentials(page)
+    const wisp = page.locator('.xk-wisp.is-home-entry')
+    const chat = page.getByRole('button', { name: 'Abrir XETHKIOZ Nexus Chat' })
+    await expect(wisp).toBeVisible()
+    await expect(chat).toBeVisible()
     const overlap = await page.evaluate(() => {
       const wisp = document.querySelector('.xk-wisp.is-home-entry')!.getBoundingClientRect()
       const chat = document.querySelector('button[aria-controls="nexus-chat-panel"]')!.getBoundingClientRect()
