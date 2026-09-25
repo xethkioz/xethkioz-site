@@ -493,6 +493,32 @@ export default function WebCreation() {
       />
 
       <ServiceStudio lang={lang} selection={selection} onChange={updateSelection} onQuote={() => { if (!busyRef.current) { focusStep(1); scrollTo('presupuesto') } }} onStarterQuote={chooseStarterOffer} />
+
+      <section className="border-y border-white/10 bg-gradient-to-b from-purple-500/[0.045] via-black/20 to-orange-500/[0.035] px-5 py-14 md:px-10 lg:px-14" aria-labelledby="web-showcase-title">
+        <div className="mx-auto grid max-w-[1320px] items-center gap-10 lg:grid-cols-[0.82fr_1.18fr]">
+          <div>
+            <p className="font-mono text-xs font-black uppercase tracking-[0.3em] text-purple-300">{lang === 'es' ? 'XETHKIOZ · DIGITAL' : 'XETHKIOZ · DIGITAL'}</p>
+            <h2 id="web-showcase-title" className="mt-4 text-3xl font-black tracking-[-0.035em] md:text-5xl">{lang === 'es' ? 'Web, IA y contenido para llevar una idea a algo que se pueda usar.' : 'Web, AI and content to turn an idea into something people can actually use.'}</h2>
+            <p className="mt-5 max-w-2xl text-base leading-8 text-white/65">{lang === 'es' ? 'Este video resume el enfoque: presencia web, automatización con inteligencia artificial, contenido digital y acompañamiento para negocios y profesionales que necesitan avanzar sin sumar complejidad innecesaria.' : 'This video sums up the approach: web presence, AI automation, digital content and practical support for businesses and professionals who need to move forward without unnecessary complexity.'}</p>
+            <button type="button" onClick={() => { focusStep(1); scrollTo('presupuesto') }} className="mt-7 inline-flex min-h-12 items-center justify-center rounded-full border border-orange-400/30 bg-orange-400/10 px-6 text-sm font-black text-orange-100 transition hover:border-orange-300/60 hover:bg-orange-400/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-300">
+              {lang === 'es' ? 'Contame tu proyecto →' : 'Tell me about your project →'}
+            </button>
+          </div>
+          <div className="mx-auto w-full max-w-[390px] overflow-hidden rounded-[2rem] border border-white/10 bg-black shadow-[0_30px_100px_rgba(0,0,0,0.45)]">
+            <video
+              className="aspect-[9/16] w-full bg-black object-cover"
+              controls
+              playsInline
+              preload="metadata"
+              poster="/web-services/xethkioz-servicios-digitales-poster.jpg"
+              aria-label={lang === 'es' ? 'Video de presentación de servicios digitales XETHKIOZ' : 'XETHKIOZ digital services presentation video'}
+            >
+              <source src="/web-services/xethkioz-servicios-digitales-2026.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+      </section>
+
       <details className="xks-reference-catalog"><summary>{lang === 'es' ? '¿Buscás una web? Mirá las referencias de estructura.' : 'Need a website? Explore structure references.'}</summary><p>{lang === 'es' ? 'Orientaciones visuales, no trabajos reales de clientes. Alcance, integraciones y plazos sujetos a propuesta.' : 'Visual directions, not actual client work. Scope, integrations and timing are subject to a proposal.'}</p>{catalogLoading ? <p role="status">{t.catalogLoading}</p> : <div className="xks-reference-options">{displayOffers.map(offer => <button type="button" key={offer.id} onClick={() => chooseOffer(offer)}>{offer.title}<small>{lang === 'es' ? 'Agregar creación web y usar esta referencia →' : 'Add web creation and use this reference →'}</small></button>)}</div>}{catalogNotice && <p role="status">{lang === 'es' ? 'Mostramos referencias base; la disponibilidad se confirma al responder tu consulta.' : 'Showing base references; availability is confirmed when we reply to your inquiry.'}</p>}</details>
 
       <section id="proceso" className="scroll-mt-28 border-y border-white/10 bg-white/[0.025] px-5 py-16 md:px-10 lg:px-14" aria-labelledby="web-process-title">
