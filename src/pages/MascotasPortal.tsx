@@ -2,7 +2,7 @@ import { FormEvent, useMemo, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import PortalKnowledgeBriefing from '../components/PortalKnowledgeBriefing'
 
-const localities = ['Puan', 'Darregueira', 'Bordenave', 'Villa Iris', 'Felipe Solá', '17 de Agosto', 'Azopardo', 'Erize', 'San Germán']
+const localities = ['Buenos Aires', 'Ciudad Autónoma de Buenos Aires', 'Catamarca', 'Chaco', 'Chubut', 'Córdoba', 'Corrientes', 'Entre Ríos', 'Formosa', 'Jujuy', 'La Pampa', 'La Rioja', 'Mendoza', 'Misiones', 'Neuquén', 'Río Negro', 'Salta', 'San Juan', 'San Luis', 'Santa Cruz', 'Santa Fe', 'Santiago del Estero', 'Tierra del Fuego', 'Tucumán']
 
 type AnimalPost = {
   id: string
@@ -34,7 +34,7 @@ const fauna = [
 
 function readPosts(): AnimalPost[] {
   try {
-    const value = window.localStorage.getItem('huellas-puan.posts')
+    const value = window.localStorage.getItem('huellas-argentina.posts')
     return value ? JSON.parse(value) : demoPosts
   } catch {
     return demoPosts
@@ -46,7 +46,7 @@ function Logo() {
     <div className="flex items-center gap-3">
       <span className="grid h-12 w-12 place-items-center rounded-2xl bg-emerald-700 text-2xl text-white shadow-sm" aria-hidden="true">🐾</span>
       <div>
-        <p className="text-xl font-black text-emerald-950">Huellas de Puan</p>
+        <p className="text-xl font-black text-emerald-950">Huellas Argentina</p>
         <p className="text-sm text-emerald-800">Red comunitaria animal</p>
       </div>
     </div>
@@ -79,7 +79,7 @@ export default function MascotasPortal() {
     }
     const updated = [next, ...posts.filter((post) => !post.id.startsWith('demo-'))]
     setPosts(updated)
-    window.localStorage.setItem('huellas-puan.posts', JSON.stringify(updated))
+    window.localStorage.setItem('huellas-argentina.posts', JSON.stringify(updated))
     event.currentTarget.reset()
     setNotice('La publicación quedó guardada en este dispositivo. En la siguiente etapa se conectará con la base comunitaria.')
   }
@@ -95,10 +95,10 @@ export default function MascotasPortal() {
     <div className="min-h-screen bg-[#f7f3e8] text-slate-900">
       <header className="sticky top-0 z-30 border-b border-emerald-900/10 bg-[#fffdf7]/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-4 md:px-6">
-          <Link to="/mascotas" aria-label="Ir al inicio de Huellas de Puan"><Logo /></Link>
+          <Link to="/mascotas" aria-label="Ir al inicio de Huellas Argentina"><Logo /></Link>
           <Link to="/" className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50">Volver a XETHKIOZ</Link>
         </div>
-        <nav className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 pb-3 md:px-6" aria-label="Secciones de Huellas de Puan">
+        <nav className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 pb-3 md:px-6" aria-label="Secciones de Huellas Argentina">
           {nav.map(([path, label]) => (
             <Link key={path} to={path === 'inicio' ? '/mascotas' : `/mascotas/${path}`} className={`whitespace-nowrap rounded-full px-4 py-2.5 text-sm font-bold ${section === path ? 'bg-emerald-700 text-white' : 'bg-white text-emerald-900 shadow-sm'}`}>{label}</Link>
           ))}
@@ -109,9 +109,9 @@ export default function MascotasPortal() {
         {section === 'inicio' && (
           <>
             <section className="rounded-[2rem] bg-emerald-900 px-6 py-10 text-white shadow-xl md:px-12 md:py-16">
-              <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-emerald-200">Puan y localidades cercanas</p>
+              <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-emerald-200">De Puan a toda la Argentina</p>
               <h1 className="max-w-4xl text-4xl font-black leading-tight md:text-6xl">Cada publicación puede ayudar a que un animal vuelva a casa.</h1>
-              <p className="mt-5 max-w-2xl text-lg leading-relaxed text-emerald-50">Un espacio simple para encontrar animales, ofrecer adopciones, consultar castraciones y proteger nuestra fauna.</p>
+              <p className="mt-5 max-w-2xl text-lg leading-relaxed text-emerald-50">Una red nacional para encontrar animales, ofrecer adopciones y conectar a personas con recursos verificados en todo el país.</p>
               <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 <Link to="/mascotas/publicar" className="rounded-2xl bg-orange-500 px-5 py-5 text-center text-lg font-black text-white shadow hover:bg-orange-600">Perdí un animal</Link>
                 <Link to="/mascotas/publicar" className="rounded-2xl bg-sky-500 px-5 py-5 text-center text-lg font-black text-white shadow hover:bg-sky-600">Encontré un animal</Link>
@@ -135,7 +135,7 @@ export default function MascotasPortal() {
             <form onSubmit={savePost} className="mt-8 grid gap-5">
               <Field label="Tipo de publicación"><select name="type" required className="input"><option>Perdido</option><option>Encontrado</option><option>Adopción</option></select></Field>
               <div className="grid gap-5 sm:grid-cols-2"><Field label="Nombre"><input name="name" className="input" placeholder="Ej.: Luna o Sin nombre" /></Field><Field label="Especie"><select name="species" required className="input"><option>Perro</option><option>Gato</option><option>Otro</option></select></Field></div>
-              <div className="grid gap-5 sm:grid-cols-2"><Field label="Localidad"><select name="locality" required className="input">{localities.map((place) => <option key={place}>{place}</option>)}</select></Field><Field label="Zona aproximada"><input name="zone" required className="input" placeholder="Ej.: centro, barrio, ruta" /></Field></div>
+              <div className="grid gap-5 sm:grid-cols-2"><Field label="Provincia / CABA"><select name="locality" required className="input">{localities.map((place) => <option key={place}>{place}</option>)}</select></Field><Field label="Zona aproximada"><input name="zone" required className="input" placeholder="Ej.: centro, barrio, ruta" /></Field></div>
               <Field label="Descripción"><textarea name="description" required rows={5} className="input" placeholder="Color, tamaño, collar, comportamiento y cualquier dato útil." /></Field>
               <div className="grid gap-5 sm:grid-cols-2"><Field label="¿Está castrado?"><select name="castrated" className="input"><option>Sí</option><option>No</option><option>Desconocido</option></select></Field><Field label="Teléfono o WhatsApp"><input name="phone" required inputMode="tel" className="input" placeholder="Solo se mostrará en el detalle" /></Field></div>
               <label className="flex items-start gap-3 rounded-xl bg-amber-50 p-4 text-sm text-amber-950"><input type="checkbox" required className="mt-1 h-5 w-5" />Confirmo que la información es real y autorizo mostrar el contacto en esta publicación.</label>
@@ -144,13 +144,13 @@ export default function MascotasPortal() {
           </section>
         )}
 
-        {category && <section><h1 className="text-4xl font-black text-emerald-950">Animales {category === 'Adopción' ? 'en adopción' : category.toLowerCase() + 's'}</h1><p className="mt-2 text-slate-600">Filtrá por localidad y contactá directamente desde cada publicación.</p><div className="my-6"><select value={filter} onChange={(event) => setFilter(event.target.value)} className="min-h-12 rounded-xl border border-slate-300 bg-white px-4 font-semibold"><option>Todas</option>{localities.map((place) => <option key={place}>{place}</option>)}</select></div><PostGrid posts={listedPosts} /></section>}
+        {category && <section><h1 className="text-4xl font-black text-emerald-950">Animales {category === 'Adopción' ? 'en adopción' : category.toLowerCase() + 's'}</h1><p className="mt-2 text-slate-600">Filtrá por provincia y contactá directamente desde cada publicación.</p><div className="my-6"><select value={filter} onChange={(event) => setFilter(event.target.value)} className="min-h-12 rounded-xl border border-slate-300 bg-white px-4 font-semibold"><option>Todas</option>{localities.map((place) => <option key={place}>{place}</option>)}</select></div><PostGrid posts={listedPosts} /></section>}
 
         {section === 'castraciones' && <section><h1 className="text-4xl font-black text-emerald-950">Castraciones y cuidado responsable</h1><p className="mt-2 max-w-3xl leading-relaxed text-slate-600">No publicamos fechas o turnos sin confirmación de la institución responsable. Mientras se completa la agenda local, esta sección ofrece criterios seguros para prepararse y reconocer qué dato debe verificarse.</p><div className="mt-8 grid gap-5 md:grid-cols-2"><InfoCard title="Antes de pedir un turno" text="Consultá edad, estado de salud, ayuno, traslado y cuidados posteriores con la veterinaria o campaña que realizará el procedimiento. No uses indicaciones reenviadas como reemplazo de esa evaluación." /><InfoCard title="Cómo validamos una campaña" text="La publicación debe indicar organismo responsable, lugar, fecha, horario, cupos, requisitos y un canal oficial de contacto. Si falta alguno, se mostrará como dato pendiente y no como turno confirmado." /></div><PortalKnowledgeBriefing sector="pets" light /></section>}
 
         {section === 'fauna-flora' && <section><h1 className="text-4xl font-black text-emerald-950">Fauna y flora de nuestra región</h1><p className="mt-2 max-w-3xl text-slate-600">Conocer las especies locales ayuda a protegerlas y evita acciones que pueden dañarlas.</p><div className="mt-8 grid gap-5 md:grid-cols-2">{fauna.map(([name, text]) => <InfoCard key={name} title={name} text={text} />)}</div><div className="mt-8 rounded-3xl bg-sky-100 p-6 md:p-8"><h2 className="text-2xl font-black text-sky-950">Cómo cuidar el ambiente</h2><p className="mt-3 leading-relaxed text-sky-950">No arrojes residuos en lagunas o caminos, respetá nidos y madrigueras, evitá incendios, no captures fauna silvestre y mantené a tus mascotas controladas cerca de humedales y áreas rurales.</p></div></section>}
       </main>
-      <footer className="mt-12 border-t border-emerald-900/10 bg-white px-4 py-8 text-center text-sm text-slate-600"><p className="font-bold text-emerald-900">Huellas de Puan</p><p className="mt-1">Proyecto comunitario independiente para Puan y la zona.</p></footer>
+      <footer className="mt-12 border-t border-emerald-900/10 bg-white px-4 py-8 text-center text-sm text-slate-600"><p className="font-bold text-emerald-900">Huellas Argentina</p><p className="mt-1">Proyecto comunitario independiente nacido en Puan y abierto a todo el país.</p></footer>
       <style>{`.input{width:100%;min-height:3rem;border:1px solid #cbd5e1;border-radius:.75rem;background:white;padding:.75rem 1rem;font-size:1rem;outline:none}.input:focus{border-color:#047857;box-shadow:0 0 0 3px rgba(16,185,129,.18)}`}</style>
     </div>
   )

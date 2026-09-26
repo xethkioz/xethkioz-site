@@ -8,7 +8,7 @@ const navigation = {
   es: [
     { to: '/', label: 'INICIO' },
     { to: '/gaming', label: 'JUEGOS' },
-    { to: '/mascotas/', label: 'HUELLAS DE PUAN', document: true },
+    { to: '/mascotas/', label: 'HUELLAS ARGENTINA', document: true },
     { to: 'https://argenciencia.com/', label: 'CIENCIA & TECH', external: true },
     { to: '/creacion-web', label: 'CREACIÓN WEB' },
   ],

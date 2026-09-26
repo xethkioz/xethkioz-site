@@ -25,8 +25,8 @@
   block.innerHTML = `
     <div class="community-stats-head">
       <div>
-        <h2 id="community-stats-title">🐾 Nuestra comunidad</h2>
-        <p>El impacto real de Huellas de Puan, actualizado automáticamente.</p>
+        <h2 id="community-stats-title">🐾 Nuestra red nacional</h2>
+        <p>El impacto real de Huellas Argentina, actualizado automáticamente.</p>
       </div>
       <span class="community-stats-live">Datos en vivo</span>
     </div>

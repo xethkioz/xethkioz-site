@@ -27,8 +27,8 @@ export const UNIVERSE_PORTALS: readonly UniversePortal[] = [
   },
   {
     id: 'fun', code: 'XK-03', glyph: '🐾', route: '/mascotas/', tone: '#34d399', image: '/assets/portal-mascotas-huellas.svg',
-    title: { es: 'Huellas de Puan', en: 'Huellas de Puan' },
-    subtitle: { es: 'Perdidos, encontrados, adopciones, rescate y cuidado animal.', en: 'Lost pets, found animals, adoption, rescue and animal care.' },
+    title: { es: 'Huellas Argentina', en: 'Huellas Argentina' },
+    subtitle: { es: 'Red nacional de perdidos, encontrados, adopciones, protectoras y cuidado animal.', en: 'Argentina-wide network for lost pets, found animals, adoption, shelters and animal care.' },
     signal: { es: 'RED COMUNITARIA ANIMAL', en: 'COMMUNITY ANIMAL NETWORK' },
   },
   {

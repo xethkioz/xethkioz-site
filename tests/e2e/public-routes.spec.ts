@@ -80,11 +80,15 @@ test.describe('rutas públicas', () => {
     })
   }
 
-  test('Huellas de Puan carga como portal estático dedicado', async ({ page }) => {
+  test('Huellas Argentina carga como portal estático nacional dedicado', async ({ page }) => {
     const response = await page.goto('/mascotas/', { waitUntil: 'domcontentloaded' })
     expect(response?.status()).toBeLessThan(400)
     await expect(page.getByRole('heading', { level: 1, name: /Huellas/i })).toBeVisible()
-    await expect(page.getByRole('navigation', { name: 'Navegación' })).toBeVisible()
+    await expect(page.getByRole('navigation', { name: 'Navegación de Huellas Argentina' })).toBeVisible()
+    await expect(page.getByText('De Puan a toda la Argentina')).toBeVisible()
+    await expect(page.locator('.province-chip')).toHaveCount(24)
+    await expect(page.getByRole('button', { name: /Directorio/i }).first()).toBeVisible()
+    await expect(page.getByRole('button', { name: /Donaciones/i }).first()).toBeVisible()
     await expect(page.getByRole('link', { name: 'Volver a XETHKIOZ' })).toHaveAttribute('href', '/')
   })
 })

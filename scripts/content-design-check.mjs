@@ -18,6 +18,8 @@ const browserTest = read('tests/e2e/content-design.spec.ts')
 const landingCss = read('src/pages/WorldOfXethkiozLanding.css')
 const globalCss = read('src/index.css')
 const mainEntry = read('src/main.tsx')
+const petsPortal = read('public/mascotas/index.html')
+const petsCore = read('public/mascotas/app-core.js')
 const checks = []
 const check = (name, ok) => checks.push([name, Boolean(ok)])
 
@@ -32,6 +34,9 @@ check('Home does not hide Mascotas behind a legacy override', !rootDocument.incl
 check('Home uses the approved panoramic promotional art without autoplay', !home.includes('<video') && !home.includes('autoPlay') && home.includes('/assets/xethkioz-world-panorama-2026.webp') && fs.existsSync(path.join(root, 'public/assets/xethkioz-world-panorama-2026.webp')) && fs.statSync(path.join(root, 'public/assets/xethkioz-world-panorama-2026.webp')).size < 750000 && landingCss.includes('prefers-reduced-motion: reduce'))
 check('Home avoids fake safety or simulated live claims', !home.includes('SISTEMA SEGURO 24/7') && !home.includes('JUGADORES CONECTADOS') && !home.includes('PRIVACIDAD Y NAVEGACIÓN VERIFICADAS'))
 check('Home exposes the existing Nexus chat launcher', home.includes('xethkioz:nexus-chat-open'))
+check('Huellas is a national Argentina portal, not a Puan-only portal', petsPortal.includes('<title>Huellas Argentina | XETHKIOZ</title>') && petsPortal.includes('De Puan a toda la Argentina') && petsPortal.includes('24 jurisdicciones') && petsPortal.includes('Donaciones para Huellas Argentina'))
+check('Huellas national publishing contract includes province plus locality', petsPortal.includes('name="province" id="province"') && petsPortal.includes('name="locality" id="locality"') && petsCore.includes("'Tierra del Fuego'") && petsCore.includes("province,locality"))
+check('Huellas exposes an expanding verified directory and voluntary support', petsPortal.includes('DIRECTORIO EN EXPANSIÓN') && petsCore.includes('Federación Veterinaria Argentina (FeVA)') && petsCore.includes('Colegio Médico Veterinario de Córdoba') && petsCore.includes('Rosario · Red de Salud Animal') && petsPortal.includes('VT4476UQ76F4S') && petsPortal.includes('data-copy-alias="xethkioz"'))
 check('Home dedicated landing CSS stays below 32 kB source', Buffer.byteLength(landingCss, 'utf8') <= 32 * 1024)
 check(
   'Home landing CSS excludes retired section and grid selectors',
