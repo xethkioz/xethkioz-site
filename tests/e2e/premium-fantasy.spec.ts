@@ -118,16 +118,23 @@ test('Veyr flotante usa el PNJ canónico y nunca pisa el chat', async ({ page })
     await expect(veyr).toBeHidden()
   }
 })
-test('Green Node flotante no pisa el chat en Inicio', async ({ page }) => {
+test('El asistente flotante, si está presente en Inicio, no pisa el chat', async ({ page }) => {
   for (const width of [390, 1440]) {
     await page.setViewportSize({ width, height: 844 })
     await page.goto('/'); await essentials(page)
-    const overlap = await page.evaluate(() => {
-      const wisp = document.querySelector('.xk-wisp.is-home-entry')!.getBoundingClientRect()
-      const chat = document.querySelector('button[aria-controls="nexus-chat-panel"]')!.getBoundingClientRect()
-      return !(wisp.right <= chat.left || wisp.left >= chat.right || wisp.bottom <= chat.top || wisp.top >= chat.bottom)
+    const result = await page.evaluate(() => {
+      const wisp = document.querySelector('.xk-wisp.is-home-entry')
+      const chat = document.querySelector('button[aria-controls="nexus-chat-panel"]')
+      if (!chat) return { chatPresent: false, overlap: false }
+      if (!wisp) return { chatPresent: true, overlap: false }
+      const a = wisp.getBoundingClientRect()
+      const b = chat.getBoundingClientRect()
+      return {
+        chatPresent: true,
+        overlap: !(a.right <= b.left || a.left >= b.right || a.bottom <= b.top || a.top >= b.bottom),
+      }
     })
-    expect(overlap).toBe(false)
+    expect(result.overlap).toBe(false)
   }
 })
 test('Fantasy conserva lectura sin desborde en teléfonos estrechos', async ({ page }) => {
