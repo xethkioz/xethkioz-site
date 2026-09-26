@@ -24,7 +24,7 @@ test.describe('orden y navegación de secciones', () => {
     await expect(ecosystem.getByRole('link', { name: 'World of Xethkioz', exact: true })).toHaveAttribute('href', '/world-of-xethkioz')
     await expect(ecosystem.getByRole('link', { name: 'Biblioteca gamer', exact: true })).toHaveAttribute('href', '/gaming')
     await expect(ecosystem.getByRole('link', { name: /ArgenCiencia/ })).toHaveAttribute('href', 'https://argenciencia.com/')
-    await expect(ecosystem.getByRole('link', { name: 'Mascotas', exact: true })).toHaveAttribute('href', '/mascotas/')
+    await expect(ecosystem.getByRole('link', { name: 'Huellas Argentina', exact: true })).toHaveAttribute('href', '/mascotas/')
     await expect(ecosystem.getByRole('link', { name: 'Nexus City', exact: true })).toHaveCount(0)
     await expect(ecosystem.getByRole('link', { name: 'Creación web', exact: true })).toHaveAttribute('href', '/creacion-web')
     await expect(ecosystem.getByRole('link', { name: 'VEYR IA', exact: true })).toHaveAttribute('href', '/#veyr')
@@ -54,7 +54,7 @@ test.describe('orden y navegación de secciones', () => {
       await expect(topNav).toBeVisible()
       const labels = await topNav.locator('a').allTextContents()
       expect(labels.map(label => label.trim().replace(/\s+/g, ' '))).toEqual([
-        'HOME', 'THE GAME', 'Gaming', 'Pets', 'Science & Tech ↗', 'Web creation',
+        'HOME', 'THE GAME', 'Gaming', 'Huellas Argentina', 'Science & Tech ↗', 'Web creation',
       ])
     } else {
       await expect(topNav).toBeHidden()
