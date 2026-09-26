@@ -1,6 +1,6 @@
-export const SITE_VERSION = 'v11.4.11'
-export const SITE_RELEASE = 'Repository Remediation - Pass 34'
-export const SITE_BUILD_DATE = '2026-09-24'
+export const SITE_VERSION = 'v11.5.0'
+export const SITE_RELEASE = 'Huellas Argentina - Pass 35'
+export const SITE_BUILD_DATE = '2026-09-25'
 export const SITE_DOMAIN = 'https://www.xethkioz.com.ar'
 
 export const DONATION_LINKS = {
