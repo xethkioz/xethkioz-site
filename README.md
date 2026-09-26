@@ -1,9 +1,9 @@
 # XETHKIOZ Network
 
-**Versión actual:** `v11.4.11`  
-**Release:** Repository Remediation · Pass 34  
+**Versión actual:** `v11.5.0`
+**Release:** Huellas Argentina · Pass 35
 **Estado:** producción activa  
-**Última revisión operativa:** 2026-09-24  
+**Última revisión operativa:** 2026-09-25
 **Dominio canónico:** https://www.xethkioz.com.ar  
 **Hosting principal:** Vercel
 
