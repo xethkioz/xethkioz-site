@@ -8,14 +8,14 @@ const navigation = {
   es: [
     { to: '/', label: 'INICIO' },
     { to: '/gaming', label: 'JUEGOS' },
-    { to: '/mascotas/', label: 'HUELLAS DE PUAN', document: true },
+    { to: '/mascotas/', label: 'HUELLAS ARGENTINA', document: true },
     { to: 'https://argenciencia.com/', label: 'CIENCIA & TECH', external: true },
     { to: '/creacion-web', label: 'CREACIÓN WEB' },
   ],
   en: [
     { to: '/', label: 'Home' },
     { to: '/gaming', label: 'Gaming' },
-    { to: '/mascotas/', label: 'Pets', document: true },
+    { to: '/mascotas/', label: 'Huellas Argentina', document: true },
     { to: 'https://argenciencia.com/', label: 'Science & Tech', external: true },
     { to: '/creacion-web', label: 'Web creation' },
   ],
@@ -26,14 +26,14 @@ const launcher = {
     { to: '/', label: 'Inicio', icon: '⌂' },
     { to: '/gaming', label: 'Juegos', icon: '🎮' },
     { to: 'https://argenciencia.com/', label: 'ArgenCiencia', icon: '◈', external: true },
-    { to: '/mascotas/', label: 'Mascotas', icon: '🐾', document: true },
+    { to: '/mascotas/', label: 'Huellas Argentina', icon: '🐾', document: true },
     { to: '/creacion-web', label: 'Creación web', icon: '▣' },
   ],
   en: [
     { to: '/', label: 'Home', icon: '⌂' },
     { to: '/gaming', label: 'Gaming', icon: '🎮' },
     { to: 'https://argenciencia.com/', label: 'ArgenCiencia', icon: '◈', external: true },
-    { to: '/mascotas/', label: 'Pets', icon: '🐾', document: true },
+    { to: '/mascotas/', label: 'Huellas Argentina', icon: '🐾', document: true },
     { to: '/creacion-web', label: 'Web creation', icon: '▣' },
   ],
 } as const

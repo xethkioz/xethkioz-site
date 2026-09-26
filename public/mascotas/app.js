@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = '20260813-1';
+  const VERSION = '20260925-ar-1';
   const BASE_PATH = '/mascotas/';
 
   const stableHeader = document.createElement('style');
@@ -51,7 +51,7 @@
   loadScript('app-core.js')
     .then(() => loadScript('stats.js'))
     .catch((error) => {
-      console.error('No se pudo iniciar Huellas de Puan.', error);
+      console.error('No se pudo iniciar Huellas Argentina.', error);
       const notice = document.createElement('div');
       notice.setAttribute('role', 'alert');
       notice.style.cssText = 'margin:16px auto;padding:14px;width:min(900px,calc(100% - 24px));border-radius:14px;background:#fff0ed;color:#9f2f24;font-weight:800;text-align:center';
