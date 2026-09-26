@@ -31,7 +31,7 @@ test('Huellas Argentina cubre todo el país y expone recursos nacionales', async
 
 test('Huellas Argentina publica provincia + localidad sin domicilio exacto', async ({ page }) => {
   await page.goto('/mascotas/#publicar', { waitUntil: 'networkidle' })
-  await page.getByRole('button', { name: /Publicar/i }).last().click()
+  await expect(page.locator('#publicar')).toHaveClass(/active/)
   await expect(page.locator('select[name="province"]')).toBeVisible()
   await expect(page.locator('input[name="locality"]')).toBeVisible()
   await expect(page.getByText(/No publiques domicilio exacto/i)).toBeVisible()
