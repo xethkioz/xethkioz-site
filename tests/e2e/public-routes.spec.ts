@@ -177,6 +177,7 @@ test.describe('telemetría con consentimiento', () => {
   })
 
   test('reintenta un fallo transitorio con el mismo eventId cuando la telemetría está habilitada', async ({ page }) => {
+    test.skip(process.env.VITE_VISIT_TELEMETRY_ENABLED !== 'true', 'La telemetría de visitas está deshabilitada en este build de prueba.')
     const payloads: Array<{ eventId?: string; route?: string }> = []
 
     await page.addInitScript(() => {
