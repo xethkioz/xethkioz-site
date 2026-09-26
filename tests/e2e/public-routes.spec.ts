@@ -80,7 +80,7 @@ test.describe('rutas públicas', () => {
     })
   }
 
-  test('Huellas de Puan carga como portal estático dedicado', async ({ page }) => {
+  test('Huellas Argentina carga como portal estático dedicado', async ({ page }) => {
     const response = await page.goto('/mascotas/', { waitUntil: 'domcontentloaded' })
     expect(response?.status()).toBeLessThan(400)
     await expect(page.getByRole('heading', { level: 1, name: /Huellas/i })).toBeVisible()
