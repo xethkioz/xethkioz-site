@@ -18,7 +18,7 @@ function walk(relative, acc = []) {
     if (['node_modules', 'dist', '.git', '.netlify', '.vercel', 'coverage', 'playwright-report', 'test-results'].includes(entry.name)) continue
     const child = path.join(relative, entry.name)
     if (entry.isDirectory()) walk(child, acc)
-    else acc.push(child.replaceAll('\\\\', '/'))
+    else acc.push(child.replaceAll('\\', '/'))
   }
   return acc
 }
