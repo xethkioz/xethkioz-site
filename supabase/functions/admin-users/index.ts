@@ -1,4 +1,4 @@
-import { createClient } from 'npm:@supabase/supabase-js@2.110.7'
+import { createClient } from 'npm:@supabase/supabase-js@2.117.2'
 
 type ProfileRole = 'GUEST' | 'USER' | 'CONTRIBUTOR' | 'EDITOR' | 'MODERATOR' | 'ADMIN'
 type SubscriptionTier = 'BASIC' | 'CREATOR' | 'ARCHITECT'
