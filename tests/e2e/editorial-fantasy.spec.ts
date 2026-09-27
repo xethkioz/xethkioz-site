@@ -22,7 +22,17 @@ for (const route of routes) {
       await page.goto(route); await essentials(page)
       await expect(page.locator('.xke-page h1')).toBeVisible()
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(2)
-      await expect(page.locator('.xke-page video, .xke-page iframe, .xke-page canvas')).toHaveCount(0)
+      const isWebCreation = route.endsWith('/creacion-web')
+      await expect(page.locator('.xke-page iframe, .xke-page canvas')).toHaveCount(0)
+      const videos = page.locator('.xke-page video')
+      await expect(videos).toHaveCount(isWebCreation ? 1 : 0)
+      if (isWebCreation) {
+        const video = videos.first()
+        await expect(video).toHaveAttribute('controls', '')
+        await expect(video).toHaveAttribute('preload', 'metadata')
+        await expect(video).not.toHaveAttribute('autoplay', /.*/)
+        await expect(video.locator('source')).toHaveAttribute('src', '/web-services/xethkioz-servicios-digitales-2026.mp4')
+      }
       if (width === 390 || width === 1440) await page.screenshot({ path: info.outputPath(`view-${width}.png`), fullPage: false })
       const links = page.locator('.xke-crosslinks nav a')
       await expect(links.nth(0)).toHaveAttribute('href', 'https://www.xethkioz.com.ar')

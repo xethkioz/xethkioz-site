@@ -20,7 +20,10 @@ test.describe('guías verificadas de los portales', () => {
       await expect(briefing).toBeVisible()
       await briefing.locator('summary').first().click()
       await expect(briefing.locator('ol li').first()).toBeVisible()
-      await expect(briefing.getByRole('link', { name: /Fuente oficial/i }).first()).toHaveAttribute('href', /^https:\/\//)
+      const source = sector === 'pets'
+        ? briefing.getByRole('link', { name: /SENASA|Marco nacional/i }).first()
+        : briefing.getByRole('link', { name: /Fuente oficial/i }).first()
+      await expect(source).toHaveAttribute('href', /^https:\/\//)
       await expect(briefing.locator('img')).toHaveCount(0)
     })
   }

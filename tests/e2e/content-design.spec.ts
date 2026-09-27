@@ -21,7 +21,7 @@ test.describe('orden y navegación de secciones', () => {
     )
     await expect(ecosystem).toBeVisible()
     await expect(ecosystem.getByRole('link')).toHaveCount(8)
-    await expect(ecosystem.getByRole('link', { name: 'World of Xethkioz', exact: true })).toHaveAttribute('href', '/world-of-xethkioz')
+    await expect(ecosystem.getByRole('link', { name: 'World of Xethkioz: Elemental Realms', exact: true })).toHaveAttribute('href', '/world-of-xethkioz')
     await expect(ecosystem.getByRole('link', { name: 'Biblioteca gamer', exact: true })).toHaveAttribute('href', '/gaming')
     await expect(ecosystem.getByRole('link', { name: /ArgenCiencia/ })).toHaveAttribute('href', 'https://argenciencia.com/')
     await expect(ecosystem.getByRole('link', { name: 'Huellas Argentina', exact: true })).toHaveAttribute('href', '/mascotas/')

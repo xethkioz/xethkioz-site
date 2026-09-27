@@ -35,14 +35,20 @@ test('Selection is allowlisted, deduplicated and excludes incompatible extras', 
   expect(studioSelectionUrl(all, 'en')).not.toMatch(/email|name|details|password/)
 })
 for (const lang of ['es', 'en'] as const) {
-  test(`Studio ${lang}: responsive, accessible, no video/3D or hidden controls`, async ({ page }, info) => {
+  test(`Studio ${lang}: responsive, accessible, controlled video and no embedded 3D`, async ({ page }, info) => {
     const errors: string[] = []; page.on('pageerror', error => errors.push(error.message))
     for (const width of [320, 390, 430, 768, 1440]) {
       await page.setViewportSize({ width, height: 900 }); await boot(page, lang)
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(2)
       await expect(page.locator('.xks-page h1')).toHaveCount(1)
       await expect(page.locator('.xks-card')).toHaveCount(4)
-      await expect(page.locator('.xks-page video,.xks-page canvas,.xks-page iframe')).toHaveCount(0)
+      await expect(page.locator('.xks-page canvas,.xks-page iframe')).toHaveCount(0)
+      const video = page.locator('.xks-page video')
+      await expect(video).toHaveCount(1)
+      await expect(video).toHaveAttribute('controls', '')
+      await expect(video).toHaveAttribute('preload', 'metadata')
+      await expect(video).not.toHaveAttribute('autoplay', /.*/)
+      await expect(video.locator('source')).toHaveAttribute('src', '/web-services/xethkioz-servicios-digitales-2026.mp4')
       if (width === 390 || width === 1440) await page.screenshot({ path: info.outputPath(`studio-${lang}-${width}.png`), fullPage: false })
     }
     const audit = await new AxeBuilder({ page }).include('.xks-page').withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()
