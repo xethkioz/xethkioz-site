@@ -8,7 +8,7 @@ const outputPath = outputArgIndex >= 0 && process.argv[outputArgIndex + 1]
   ? path.resolve(root, process.argv[outputArgIndex + 1])
   : path.resolve(root, 'npm-audit.json')
 
-const PATCHED_ROUTER_VERSION = '7.18.2'
+const PATCHED_ROUTER_VERSION = '7.18.4'
 
 function fail(message, details) {
   console.error(`FAIL dependency audit policy: ${message}`)
