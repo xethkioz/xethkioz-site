@@ -11,72 +11,80 @@ import './WorldPortalCinematic.css'
 const atmosphereArt = PUBLIC_ATMOSPHERE_ART.src
 const copy = {
   es: {
-    description: 'El portal oficial de World of Xethkioz. Fantasía, atmósfera y novedades de un Action RPG independiente en desarrollo.',
+    description: 'Portal oficial de World of Xethkioz: Elemental Realms, un Action RPG 3D single player independiente en desarrollo con Unreal Engine 5.8.3.',
     home: 'Volver a XETHKIOZ', login: 'Iniciar sesión', language: 'Cambiar a inglés',
-    status: 'ACTION RPG INDEPENDIENTE', title: 'Atravesá el umbral.',
-    lead: 'Hay mundos que se miran. Y otros que invitan a perderse. World of Xethkioz está tomando forma.',
+    status: 'ACTION RPG 3D · SINGLE PLAYER · UNREAL ENGINE 5.8.3', title: 'Atravesá Elemental Realms.',
+    lead: 'Exploración, combate y descubrimiento en un mundo elemental que ya está tomando forma dentro de Unreal Engine.', elementalTagline: 'DOS FORMAS · UNA ESENCIA · INFINITAS VARIANTES', elements: ['Fuego', 'Hielo', 'Brote', 'Penumbra'],
     explore: 'Conocé la visión', follow: 'Seguí el desarrollo', caption: 'ILUSTRACIÓN PROMOCIONAL · NO ES GAMEPLAY',
-    nav: ['La visión', 'Visión del fundador', 'Veyr', 'Desarrollo', 'Preguntas'],
-    visionLabel: '01 / LA VISIÓN', visionTitle: 'La fantasía se vive.\nNo se explica toda de una vez.',
-    visionBody: 'Un proyecto independiente que reúne imaginación, arte y tecnología. Este espacio es una primera mirada a su atmósfera; la historia y sus sorpresas se descubren a su debido tiempo.',
-    principles: [['Imaginación', 'Una identidad propia, construida con intención.'], ['Atmósfera', 'Luz, arquitectura y silencio que invitan a mirar más allá.'], ['Descubrimiento', 'Compartir lo esencial. Reservar lo inesperado.']],
-    worldLabel: '02 / VISIÓN DEL FUNDADOR', worldTitle: 'La visión detrás de World of Xethkioz.',
+    nav: ['Elemental Realms', 'Visión del fundador', 'Veyr', 'Desarrollo', 'Preguntas'],
+    visionLabel: '01 / ELEMENTAL REALMS', visionTitle: 'Un mundo elemental.\nUna aventura construida paso a paso.',
+    visionBody: 'World of Xethkioz: Elemental Realms es un Action RPG 3D single player independiente. La exploración, el movimiento, el combate y el descubrimiento se construyen sobre un mundo de fantasía elemental cuyo desarrollo avanza mapa por mapa.',
+    principles: [['Exploración', 'Terreno, caminos, agua y zonas de descubrimiento forman parte del recorrido jugable.'], ['Movimiento', 'Caminar, correr, saltar, nadar y bucear ya fueron comprobados dentro del Mapa 1.'], ['Progresión', 'El proyecto avanza por etapas: primero cerrar y validar el Mapa 1; después abrir el camino al Mapa 2.']],
+    worldLabel: '02 / VISIÓN DEL FUNDADOR', worldTitle: 'La visión detrás de World of Xethkioz: Elemental Realms.',
     worldBody: 'Una explicación directa sobre el propósito del proyecto, su identidad y la dirección general del universo, contada por su creador.',
     founderNote: 'PRESENTACIÓN OFICIAL · 05:04 · CON SUBTÍTULOS',
     guideLabel: '03 / UNA PRESENCIA', guideTitle: 'Veyr.',
     guideBody: 'Entre lo visible y lo desconocido, una presencia acompaña el recorrido. Veyr observa, guía y deja señales en los márgenes del mundo. No revela su origen, pero su huella aparece donde la energía despierta y donde la historia todavía guarda silencio.',
     guideAction: 'Abrir el chat de la comunidad', guideNote: 'La guía de la web. El misterio del juego permanece intacto.',
     devLabel: '04 / EL CAMINO', devTitle: 'Un mundo en construcción.',
-    devBody: 'El desarrollo sigue adelante. Los avances que se puedan compartir se publicarán en nuestros canales oficiales, cuando estén listos para presentarse.',
-    alphaLabel: 'ALPHA DE DEMOSTRACIÓN · ALPHA 5',
-    alphaTitle: 'Una muestra temprana del juego en movimiento.',
-    alphaBody: 'Este video muestra una versión Alpha temprana de demostración. En esta etapa se prueban movimiento, combate, interfaz, entorno y flujo general; puede incluir assets, animaciones, iluminación, comportamiento, balance e interfaz provisionales.',
+    devBody: 'El estado público actual corresponde a Elemental Realms. El Mapa 1 continúa en desarrollo dentro de Unreal Engine 5.8.3 y todavía no está certificado al 100 %.',
+    currentLabel: 'ESTADO ACTUAL · ELEMENTAL REALMS',
+    alphaLabel: 'REGISTRO HISTÓRICO · ALPHA 5',
+    alphaTitle: 'Una etapa anterior del desarrollo.',
+    alphaBody: 'Este video conserva una Alpha temprana como registro del proceso. El desarrollo actual de Elemental Realms ya avanzó más allá de esta captura; por eso no representa el estado visual ni técnico vigente del Mapa 1.',
     alphaMeta: 'ALPHA 5 · 02:34 · CAPTURA DE DESARROLLO',
-    alphaNote: 'NO REPRESENTA LA CALIDAD FINAL · NO ES TRAILER · NO ES UNA VERSIÓN PÚBLICA',
-    milestones: [['Dirección artística', 'La identidad visual combina fantasía, misterio y una estética oscura con energía etérea. La dirección del proyecto prioriza atmósfera, símbolos y coherencia de mundo antes que la exposición total del contenido.'], ['Experiencia de juego', 'World of Xethkioz apunta a una experiencia Action RPG con exploración, progresión y descubrimiento. El objetivo es construir una aventura que combine combate, mundo vivo y capas narrativas en evolución.'], ['Novedades públicas', 'Los avances que puedan compartirse se publicarán en esta web y en los canales oficiales de XETHKIOZ, con prioridad en Threads e Instagram. Cada publicación mostrará sólo material seguro y preparado para difusión.']],
+    alphaNote: 'REGISTRO DE DESARROLLO ANTERIOR · NO REPRESENTA EL ESTADO ACTUAL NI LA CALIDAD FINAL',
+    milestones: [['Mapa 1', 'El bosque de Elemental Realms está en desarrollo activo. La locomoción terrestre y acuática ya fue comprobada; todavía faltan pulido, contenido y validación global.'], ['Sistemas jugables', 'Caminar, correr, saltar, nadar y bucear funcionan en las pruebas actuales. Trepar sigue pendiente y las transiciones acuáticas todavía necesitan polish.'], ['Próxima etapa', 'Riberas, vegetación, combate, clima, noche y rendimiento siguen en revisión. El Mapa 2 permanece cerrado hasta completar y validar el Mapa 1.']],
     visualLabel: 'ARTE VISUAL PÚBLICO', visualTitle: 'Tres ecos de un mundo más grande.',
     visualCards: [['Naturaleza viva', 'Biomas orgánicos, energía latente y cristales que sugieren un territorio en expansión.'], ['Horizontes suspendidos', 'Altura, vacío, plataformas flotantes y una arquitectura visual pensada para el asombro.'], ['Umbral nocturno', 'Una lectura más oscura del mismo universo, con tensión, silencio y resonancias ocultas.']],
     support: 'Apoyar el proyecto', supportNote: 'El apoyo es voluntario. No es una preventa ni concede ventajas dentro del juego.',
     faqLabel: 'ANTES DE CRUZAR', faqTitle: 'Lo que podés saber hoy.',
     faq: [
-      ['¿Ya se puede jugar?', 'Esta página no ofrece una descarga pública. Los accesos, pruebas o lanzamientos se anunciarán por los canales oficiales cuando corresponda.'],
-      ['¿Estas imágenes son capturas del juego?', 'Las imágenes de esta página son ilustraciones promocionales. El video “Alpha 5” sí muestra una Alpha temprana de demostración y está rotulado como tal; no representa la calidad, interfaz, animaciones ni aspecto final del juego.'],
+      ['¿Qué es Elemental Realms?', 'Es la identidad actual del proyecto: World of Xethkioz: Elemental Realms, un Action RPG 3D single player independiente en desarrollo.'],
+      ['¿En qué estado está el juego?', 'El Mapa 1 está jugable y en desarrollo activo dentro de Unreal Engine 5.8.3, pero todavía no está certificado al 100 %.'],
+      ['¿Qué movimiento funciona hoy?', 'Caminar, correr, saltar, nadar y bucear fueron comprobados dentro del Mapa 1. Trepar todavía está pendiente.'],
+      ['¿Ya se puede jugar?', 'No existe una descarga pública. Los accesos, pruebas o lanzamientos se anunciarán por los canales oficiales cuando corresponda.'],
+      ['¿Estas imágenes son capturas del juego?', 'Las imágenes son ilustraciones promocionales. El video Alpha 5 es un registro histórico de una etapa anterior y no representa el estado actual de Elemental Realms.'],
       ['¿Dónde se publican los avances?', 'En esta web y en los perfiles oficiales enlazados al pie, con prioridad en Threads e Instagram.'],
       ['¿Por qué no se muestra todo el universo?', 'La historia, los personajes definitivos y los materiales de producción se mantienen reservados para cuidar el proyecto y la experiencia de descubrimiento.'],
     ],
     closing: 'El próximo capítulo empieza acá.', rights: 'Todos los derechos reservados.', privacy: 'Privacidad', contact: 'Contacto',
   },
   en: {
-    description: 'The official World of Xethkioz portal. Fantasy, atmosphere and updates from an independent action RPG in development.',
+    description: 'Official portal for World of Xethkioz: Elemental Realms, an independent 3D single-player action RPG in development with Unreal Engine 5.8.3.',
     home: 'Back to XETHKIOZ', login: 'Sign in', language: 'Switch to Spanish',
-    status: 'INDEPENDENT ACTION RPG', title: 'Cross the threshold.',
-    lead: 'Some worlds are made to be seen. Others invite you to lose yourself. World of Xethkioz is taking shape.',
+    status: '3D ACTION RPG · SINGLE PLAYER · UNREAL ENGINE 5.8.3', title: 'Cross into Elemental Realms.',
+    lead: 'Exploration, combat and discovery inside an elemental world now taking shape in Unreal Engine.', elementalTagline: 'TWO FORMS · ONE ESSENCE · ENDLESS VARIANTS', elements: ['Fire', 'Ice', 'Growth', 'Shadow'],
     explore: 'Watch the vision', follow: 'Follow development', caption: 'PROMOTIONAL ILLUSTRATION · NOT GAMEPLAY',
-    nav: ['The vision', 'Founder vision', 'Veyr', 'Development', 'Questions'],
-    visionLabel: '01 / THE VISION', visionTitle: 'Fantasy is an experience.\nNot everything is revealed at once.',
-    visionBody: 'An independent project bringing imagination, art and technology together. This is a first look at its atmosphere; the story and its surprises will unfold in their own time.',
-    principles: [['Imagination', 'A distinct identity, built with intention.'], ['Atmosphere', 'Light, architecture and silence inviting a closer look.'], ['Discovery', 'Share the essentials. Preserve the unexpected.']],
-    worldLabel: '02 / FOUNDER VISION', worldTitle: 'The vision behind World of Xethkioz.',
+    nav: ['Elemental Realms', 'Founder vision', 'Veyr', 'Development', 'Questions'],
+    visionLabel: '01 / ELEMENTAL REALMS', visionTitle: 'An elemental world.\nAn adventure built step by step.',
+    visionBody: 'World of Xethkioz: Elemental Realms is an independent 3D single-player action RPG. Exploration, movement, combat and discovery are being built across an elemental fantasy world, one map at a time.',
+    principles: [['Exploration', 'Terrain, paths, water and discovery zones are part of the playable journey.'], ['Movement', 'Walking, running, jumping, swimming and diving have already been verified inside Map 1.'], ['Progression', 'Development advances in stages: finish and validate Map 1 first, then open the way to Map 2.']],
+    worldLabel: '02 / FOUNDER VISION', worldTitle: 'The vision behind World of Xethkioz: Elemental Realms.',
     worldBody: 'A direct explanation of the project, its identity and the overall direction of the universe, presented by its creator.',
     founderNote: 'OFFICIAL PRESENTATION · 05:04 · CAPTIONS INCLUDED',
     guideLabel: '03 / A PRESENCE', guideTitle: 'Veyr.',
     guideBody: 'Between the visible and the unknown, a presence accompanies the journey. Veyr watches, guides and leaves traces along the edges of the world. Her origin remains unrevealed, but her presence appears wherever energy awakens and where the story still keeps its silence.',
     guideAction: 'Open the community chat', guideNote: 'A guide on the website. The mystery of the game stays intact.',
     devLabel: '04 / THE JOURNEY', devTitle: 'A world in the making.',
-    devBody: 'Development continues. Updates suitable for sharing will appear on our official channels, when they are ready to be presented.',
-    alphaLabel: 'DEMONSTRATION ALPHA · ALPHA 5',
-    alphaTitle: 'An early look at the game in motion.',
-    alphaBody: 'This video shows an early demonstration Alpha. At this stage, movement, combat, interface, environment and the general flow are being tested; assets, animation, lighting, behavior, balance and UI may all be provisional.',
+    devBody: 'The current public development state corresponds to Elemental Realms. Map 1 remains under active development in Unreal Engine 5.8.3 and is not yet certified as 100% complete.',
+    currentLabel: 'CURRENT STATE · ELEMENTAL REALMS',
+    alphaLabel: 'HISTORICAL RECORD · ALPHA 5',
+    alphaTitle: 'An earlier stage of development.',
+    alphaBody: 'This video preserves an early Alpha as part of the development record. Elemental Realms has progressed beyond this capture, so it does not represent the current visual or technical state of Map 1.',
     alphaMeta: 'ALPHA 5 · 02:34 · DEVELOPMENT CAPTURE',
-    alphaNote: 'NOT FINAL QUALITY · NOT A TRAILER · NOT A PUBLIC BUILD',
-    milestones: [['Art direction', 'The visual identity blends fantasy, mystery and a dark aesthetic with ethereal energy. The project prioritizes atmosphere, symbols and world coherence before exposing the full scope of its content.'], ['Game experience', 'World of Xethkioz is being shaped as an Action RPG built around exploration, progression and discovery, combining combat, a living world and evolving narrative layers.'], ['Public updates', 'Shareable progress will be published on this website and XETHKIOZ official channels, primarily Threads and Instagram. Every post will contain only material cleared for public release.']],
+    alphaNote: 'EARLIER DEVELOPMENT RECORD · NOT THE CURRENT STATE OR FINAL QUALITY',
+    milestones: [['Map 1', 'The Elemental Realms forest is in active development. Land and water locomotion has been verified; polish, content and full-map validation are still ongoing.'], ['Playable systems', 'Walking, running, jumping, swimming and diving work in current tests. Climbing remains pending and water transitions still need polish.'], ['Next stage', 'Shorelines, vegetation, combat, weather, night and performance remain under review. Map 2 stays closed until Map 1 is completed and validated.']],
     visualLabel: 'PUBLIC VISUAL ART', visualTitle: 'Three echoes of a much larger world.',
     visualCards: [['Living nature', 'Organic biomes, latent energy and crystals suggesting a territory still expanding.'], ['Suspended horizons', 'Height, open voids, floating platforms and visual architecture designed around a sense of wonder.'], ['Night threshold', 'A darker reading of the same universe, shaped by tension, silence and hidden resonances.']],
     support: 'Support the project', supportNote: 'Support is voluntary. It is not a preorder and grants no gameplay advantages.',
     faqLabel: 'BEFORE YOU CROSS', faqTitle: 'What we can share today.',
     faq: [
-      ['Is the game available to play?', 'This page does not offer a public download. Access, tests or launches will be announced through official channels when appropriate.'],
-      ['Are these images game screenshots?', 'The images on this page are promotional illustrations. The “Alpha 5” video does show an early demonstration Alpha and is labeled accordingly; it does not represent final quality, UI, animation or the final visual appearance of the game.'],
+      ['What is Elemental Realms?', 'It is the current identity of the project: World of Xethkioz: Elemental Realms, an independent 3D single-player action RPG in development.'],
+      ['What is the current development state?', 'Map 1 is playable and under active development in Unreal Engine 5.8.3, but it is not yet certified as 100% complete.'],
+      ['Which movement systems work today?', 'Walking, running, jumping, swimming and diving have been verified inside Map 1. Climbing remains pending.'],
+      ['Is the game available to play?', 'There is no public download. Access, tests or releases will be announced through official channels when appropriate.'],
+      ['Are these images game screenshots?', 'The images are promotional illustrations. The Alpha 5 video is a historical record from an earlier stage and does not represent the current state of Elemental Realms.'],
       ['Where are updates published?', 'On this website and the official profiles linked below, primarily Threads and Instagram.'],
       ['Why is the entire universe not shown?', 'The story, final characters and production materials remain private to protect the project and the experience of discovery.'],
     ],
@@ -90,18 +98,19 @@ export default function WorldOfXethkioz() {
   const t = copy[lang]
   return (
     <>
-      <SEO title="World of Xethkioz" description={t.description} url="/world-of-xethkioz" image="/assets/world-of-xethkioz/world-of-xethkioz-logo.webp" />
+      <SEO title="World of Xethkioz: Elemental Realms" description={t.description} url="/world-of-xethkioz" image="/assets/world-of-xethkioz/world-of-xethkioz-logo.webp" />
       <main className="wox-portal" data-public-presentation="fantasy">
         <FantasyNavigation />
         <section className="wox-portal-hero" aria-labelledby="wox-portal-title">
           <picture className="woxp-hero-art" aria-hidden="true"><img src="/assets/xethkioz-world-panorama-2026.webp" alt="" width="1672" height="941" fetchPriority="high" decoding="async" /></picture>
           <div className="woxp-hero-shade" aria-hidden="true" />
           <div className="wox-portal-hero-copy">
-            <p className="woxp-world-name">WORLD OF XETHKIOZ <span aria-hidden="true">✦</span></p>
+            <p className="woxp-world-name">WORLD OF XETHKIOZ <strong>ELEMENTAL REALMS</strong><span aria-hidden="true">✦</span></p>
             <p className="woxp-kicker woxp-game-status">{t.status}</p>
             <div className="woxp-ornament" aria-hidden="true">◆</div>
             <h1 id="wox-portal-title">{t.title}</h1>
             <p className="woxp-lead">{t.lead}</p>
+            <div className="woxp-elemental-lockup" aria-label={lang === 'es' ? 'Energías elementales' : 'Elemental energies'}><small>{t.elementalTagline}</small><div>{t.elements.map((element, index) => <span key={element} data-element={['fire','ice','growth','shadow'][index]}>{element}</span>)}</div></div>
             <div className="woxp-actions"><a className="woxp-button" href="#mundo">{t.explore}<span aria-hidden="true">↗</span></a><a className="woxp-text-link" href="https://www.threads.com/@xethkioz" target="_blank" rel="noopener noreferrer">{t.follow} ↗</a></div>
           </div>
           <p className="woxp-art-caption">{t.caption}</p>
@@ -128,6 +137,8 @@ export default function WorldOfXethkioz() {
         </section>
         <section id="arte-visual" className="wox-portal-art woxp-section">
           <header className="woxp-art-head"><div><p className="woxp-kicker">{t.devLabel}</p><h2>{t.devTitle}</h2></div><div><p className="woxp-body">{t.devBody}</p><a className="woxp-text-link" href="https://www.threads.com/@xethkioz" target="_blank" rel="noopener noreferrer">Threads ↗</a></div></header>
+          <p className="woxp-kicker">{t.currentLabel}</p>
+          <div className="woxp-development">{t.milestones.map(([name, text], index) => <article key={name} className="woxp-development-card"><span aria-hidden="true">0{index + 1}</span><i aria-hidden="true" /><div><h3>{name}</h3><p>{text}</p></div></article>)}</div>
           <div className="woxp-alpha-demo">
             <div className="woxp-alpha-copy"><p className="woxp-kicker">{t.alphaLabel}</p><h3>{t.alphaTitle}</h3><p className="woxp-body">{t.alphaBody}</p><small className="woxp-note">{t.alphaNote}</small></div>
             <div className="woxp-founder-media">
@@ -144,7 +155,6 @@ export default function WorldOfXethkioz() {
             </div>
             <p className="woxp-showcase-note">{t.caption}</p>
           </div>
-          <div className="woxp-development">{t.milestones.map(([name, text], index) => <article key={name} className="woxp-development-card"><span aria-hidden="true">0{index + 1}</span><i aria-hidden="true" /><div><h3>{name}</h3><p>{text}</p></div></article>)}</div>
         </section>
         <section id="preguntas" className="woxp-faq woxp-section"><header><p className="woxp-kicker">{t.faqLabel}</p><h2>{t.faqTitle}</h2><p className="woxp-faq-aside">{lang === 'es' ? 'Algunas respuestas también forman parte del viaje.' : 'Some answers are part of the journey too.'}</p></header><div className="woxp-faq-list">{t.faq.map(([question, answer], index) => <details key={question}><summary><span className="woxp-faq-index" aria-hidden="true">0{index + 1}</span><strong>{question}</strong><span className="woxp-faq-toggle" aria-hidden="true">＋</span></summary><p>{answer}</p></details>)}</div></section>
         <section className="woxp-closing woxp-section"><picture className="woxp-closing-art" aria-hidden="true"><img src={atmosphereArt} alt="" width="800" height="800" loading="lazy" decoding="async" /></picture><div className="woxp-closing-shade" aria-hidden="true" /><div className="woxp-closing-copy"><span aria-hidden="true">✦</span><h2>{t.closing}</h2><div className="woxp-actions"><a className="woxp-button" href="https://www.threads.com/@xethkioz" target="_blank" rel="noopener noreferrer">{t.follow} ↗</a><Link className="woxp-support-button" to={localizePath('/support')}>{t.support} ↗</Link></div><p className="woxp-note">{t.supportNote}</p></div></section>

@@ -24,6 +24,7 @@
 }
 .wox-portal .woxp-world-name{
   display:flex;
+  flex-wrap:wrap;
   align-items:center;
   gap:16px;
   width:max-content;
@@ -37,6 +38,7 @@
   letter-spacing:.25em;
 }
 .wox-portal .woxp-world-name span{color:#ffba8d;font-size:20px;font-weight:400}
+.wox-portal .woxp-world-name strong{color:#fff2d9;font-size:11px;font-weight:780;letter-spacing:.16em}
 .wox-portal .woxp-game-status{color:#ffcfaa;font-size:11px;letter-spacing:.2em}
 .wox-portal .woxp-ornament{max-width:360px;margin:11px 0 24px}
 .wox-portal .wox-portal-hero h1{
@@ -63,7 +65,46 @@
   .wox-portal .woxp-hero-art{height:clamp(440px,110vw,570px)}
   .wox-portal .wox-portal-hero-copy{padding:0}
   .wox-portal .woxp-world-name{font-size:11px;letter-spacing:.18em;margin-bottom:19px}
+  .wox-portal .woxp-world-name strong{flex-basis:100%;font-size:9px}
   .wox-portal .wox-portal-hero h1{font-size:clamp(43px,11vw,63px)}
   .wox-portal .woxp-lead{font-size:15px}
   .wox-portal .woxp-art-caption{font-size:8px}
+}
+
+/* Pass 37 — Elemental Realms identity */
+.wox-portal{
+  --element-fire:#ff7b45;--element-ice:#69d8ff;--element-growth:#8cdf69;--element-shadow:#b379ff;
+}
+.wox-portal .woxp-hero-shade{
+  background:
+    radial-gradient(circle at 78% 23%,rgba(105,216,255,.10),transparent 24%),
+    radial-gradient(circle at 88% 66%,rgba(140,223,105,.08),transparent 26%),
+    radial-gradient(circle at 60% 82%,rgba(179,121,255,.12),transparent 24%),
+    linear-gradient(90deg,#080a10 3%,rgba(8,10,16,.96) 27%,rgba(8,10,16,.70) 45%,rgba(8,10,16,.10) 73%),
+    linear-gradient(180deg,rgba(255,123,69,.06),transparent 30%,#080a10 100%);
+}
+.wox-portal .woxp-world-name strong{
+  background:linear-gradient(90deg,var(--element-fire),var(--element-ice) 36%,var(--element-growth) 66%,var(--element-shadow));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.woxp-elemental-lockup{margin:22px 0 6px;max-width:620px}
+.woxp-elemental-lockup>small{display:block;margin-bottom:10px;color:#d4c9da;font-size:9px;font-weight:760;letter-spacing:.17em}
+.woxp-elemental-lockup>div{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.woxp-elemental-lockup span{
+  --element:#d6bc86;display:flex;align-items:center;justify-content:center;gap:7px;min-height:34px;padding:7px 8px;
+  border:1px solid color-mix(in srgb,var(--element) 38%,transparent);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--element) 8%,transparent),rgba(5,7,12,.58));
+  color:#f4eee8;font-size:9px;font-weight:760;letter-spacing:.09em;text-transform:uppercase;
+}
+.woxp-elemental-lockup span::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--element);box-shadow:0 0 12px color-mix(in srgb,var(--element) 75%,transparent)}
+.woxp-elemental-lockup span[data-element='fire']{--element:var(--element-fire)}
+.woxp-elemental-lockup span[data-element='ice']{--element:var(--element-ice)}
+.woxp-elemental-lockup span[data-element='growth']{--element:var(--element-growth)}
+.woxp-elemental-lockup span[data-element='shadow']{--element:var(--element-shadow)}
+.wox-portal .woxp-development-card:nth-child(1){border-top-color:rgba(140,223,105,.58)}
+.wox-portal .woxp-development-card:nth-child(2){border-top-color:rgba(105,216,255,.58)}
+.wox-portal .woxp-development-card:nth-child(3){border-top-color:rgba(255,123,69,.50)}
+@media(max-width:760px){
+  .woxp-elemental-lockup>div{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .woxp-elemental-lockup>small{font-size:8px;line-height:1.55}
 }

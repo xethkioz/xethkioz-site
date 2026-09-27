@@ -88,7 +88,7 @@ function RouteFallback() {
 const routeNames = {
   es: {
     '/': 'Inicio',
-    '/world-of-xethkioz': 'World of Xethkioz',
+    '/world-of-xethkioz': 'World of Xethkioz: Elemental Realms',
     '/gaming': 'Juegos',
     '/gaming/guides': 'Guías de juegos',
     '/science': 'Ciencia y tecnología',
@@ -108,7 +108,7 @@ const routeNames = {
   },
   en: {
     '/': 'Home',
-    '/world-of-xethkioz': 'World of Xethkioz',
+    '/world-of-xethkioz': 'World of Xethkioz: Elemental Realms',
     '/gaming': 'Gaming',
     '/gaming/guides': 'Gaming guides',
     '/science': 'Science and technology',

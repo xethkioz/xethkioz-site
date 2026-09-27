@@ -74,7 +74,19 @@
   font-weight:780;
   letter-spacing:0;
 }
-.wox-home.xk-gateway .xk-world-signature{display:none}
+.wox-home.xk-gateway .xk-world-signature{
+  display:block;position:absolute;z-index:3;top:86px;left:max(34px,calc((100% - 1540px)/2));
+  width:clamp(360px,33vw,610px);text-align:left;pointer-events:none;
+}
+.wox-home.xk-gateway .xk-world-signature img{display:block;width:100%;height:auto;filter:drop-shadow(0 12px 30px rgba(0,0,0,.58))}
+.wox-home.xk-gateway .xk-world-signature>span{display:block;margin-top:8px;color:#f2dfd1;font-size:11px;font-weight:750;letter-spacing:.13em;text-shadow:0 2px 14px #080910}
+.xk-elemental-spectrum{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}
+.xk-elemental-spectrum b{--element:#d3b8ff;display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid color-mix(in srgb,var(--element) 42%,transparent);background:rgba(6,8,15,.54);color:#f8f2ec;font-size:9px;font-weight:760;letter-spacing:.12em;text-transform:uppercase}
+.xk-elemental-spectrum b::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--element);box-shadow:0 0 14px color-mix(in srgb,var(--element) 80%,transparent)}
+.xk-elemental-spectrum b[data-element='fire']{--element:#ff7b45}
+.xk-elemental-spectrum b[data-element='ice']{--element:#69d8ff}
+.xk-elemental-spectrum b[data-element='growth']{--element:#8cdf69}
+.xk-elemental-spectrum b[data-element='shadow']{--element:#b379ff}
 .wox-home.xk-gateway .wox-art-credit{right:48px;bottom:25px;color:#e6d9e9;font-size:10px;letter-spacing:.12em}
 
 /* Three image-led gateways replace the small horizontal bars. */
@@ -309,4 +321,19 @@
 }
 @media(prefers-reduced-motion:reduce){
   .wox-home.xk-gateway .wox-hero::after,.xk-doors-grid>a,.xk-doors-grid>a::before{animation:none!important;transition:none!important}
+}
+
+/* Pass 37 — Elemental Realms hero signature */
+@media(max-width:1100px){
+  .wox-home.xk-gateway .xk-world-signature{top:42px;left:32px;width:min(430px,52vw)}
+}
+@media(max-width:760px){
+  .wox-home.xk-gateway .xk-world-signature{top:34px;left:20px;width:min(390px,calc(100% - 40px))}
+  .wox-home.xk-gateway .xk-world-signature>span{font-size:9px;line-height:1.55;letter-spacing:.1em}
+  .xk-elemental-spectrum{gap:6px;margin-top:11px}
+  .xk-elemental-spectrum b{padding:6px 8px;font-size:8px;letter-spacing:.08em}
+}
+@media(max-width:420px){
+  .wox-home.xk-gateway .xk-world-signature{width:calc(100% - 36px);left:18px}
+  .xk-elemental-spectrum b{flex:1 1 calc(50% - 6px);justify-content:center}
 }
