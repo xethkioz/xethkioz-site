@@ -5,9 +5,9 @@ test.describe('orden y navegación de secciones', () => {
     await page.goto('/')
 
     await expect(page.getByRole('heading', { level: 1, name: /XETHKIOZ.*Más allá del juego/i })).toBeAttached()
-    const portals = page.getByRole('navigation', { name: 'Red de portales: elegí un proyecto' })
+    const portals = page.getByRole('navigation', { name: 'Red de portales: elegí un destino' })
     await expect(portals.getByRole('link')).toHaveCount(3)
-    await expect(portals.getByRole('link', { name: /World of Xethkioz/ })).toHaveAttribute('href', '/world-of-xethkioz')
+    await expect(portals.getByRole('link', { name: /Elemental Realms/ })).toHaveAttribute('href', '/world-of-xethkioz/elemental-realms')
     await expect(portals.getByRole('link', { name: /VEYR/ })).toHaveAttribute('href', '#veyr')
     await expect(portals.getByRole('link', { name: /XETHKIOZ Studio/ })).toHaveAttribute('href', '/creacion-web#landing-esencial')
 
