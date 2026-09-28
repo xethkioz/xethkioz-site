@@ -14,10 +14,9 @@ async function openMenu(page: Page) {
 test('WEB-02: discover the game from English Home, switch language, preserve anchors and canonical', async ({ page }) => {
   await page.goto('/en'); await essentials(page)
   await page.locator('.wox-actions a').first().click()
-  await expect(page).toHaveURL(/\/en\/world-of-xethkioz$/)
-  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://www.xethkioz.com.ar/en/world-of-xethkioz')
-  await page.getByRole('link', { name: /Enter Elemental Realms/i }).first().click()
   await expect(page).toHaveURL(/\/en\/world-of-xethkioz\/elemental-realms$/)
+  await expect(page.locator('.xkf-game-link').first()).toHaveAttribute('href', '/en/world-of-xethkioz/elemental-realms')
+  await expect(page.locator('.xkf-game-link').first()).toHaveAttribute('aria-current', 'page')
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://www.xethkioz.com.ar/en/world-of-xethkioz/elemental-realms')
   await page.locator('.wox-portal-anchor-nav a[href="#mundo"]').click()
   await page.getByRole('button', { name: 'Switch to Spanish', exact: true }).click()
