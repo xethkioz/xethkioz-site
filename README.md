@@ -1,7 +1,7 @@
 # XETHKIOZ Network
 
-**Versión actual:** `v11.5.2`
-**Release:** Elemental Realms Public Update · Pass 37
+**Versión actual:** `v11.6.0`
+**Release:** Elemental Realms Media · Pass 37
 **Estado:** producción activa  
 **Última revisión operativa:** 2026-09-27
 **Dominio canónico:** https://www.xethkioz.com.ar  

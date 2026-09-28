@@ -42,7 +42,7 @@ const content = {
     socialCommunity: {
       eyebrow: 'COMUNIDAD // SEGUÍ EL PROYECTO',
       title: 'Acompañá XETHKIOZ mientras crece.',
-      text: 'Si te interesan gaming, tecnología, IA y World of Xethkioz, seguinos y participá desde las redes oficiales. Cada interacción ayuda a que el proyecto llegue a más gente.',
+      text: 'Si te interesan gaming, tecnología, IA y World of Xethkioz: Elemental Realms, seguinos y participá desde las redes oficiales. Cada interacción ayuda a que el proyecto llegue a más gente.',
       note: 'Seguinos, comentá y compartí lo que te interese.',
       threads: 'SEGUIR EN THREADS',
       instagram: 'SEGUIR EN INSTAGRAM',
@@ -79,7 +79,7 @@ const content = {
     socialCommunity: {
       eyebrow: 'COMMUNITY // FOLLOW THE PROJECT',
       title: 'Grow with XETHKIOZ.',
-      text: 'If gaming, technology, AI and World of Xethkioz are your thing, follow and join us on the official channels. Every interaction helps the project reach more people.',
+      text: 'If gaming, technology, AI and World of Xethkioz: Elemental Realms are your thing, follow and join us on the official channels. Every interaction helps the project reach more people.',
       note: 'Follow, comment and share what matters to you.',
       threads: 'FOLLOW ON THREADS',
       instagram: 'FOLLOW ON INSTAGRAM',
