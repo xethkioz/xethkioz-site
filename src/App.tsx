@@ -110,7 +110,8 @@ const routeNames = {
   },
   en: {
     '/': 'Home',
-    '/world-of-xethkioz': 'World of Xethkioz: Elemental Realms',
+    '/world-of-xethkioz': 'World of Xethkioz',
+    '/world-of-xethkioz/elemental-realms': 'World of Xethkioz: Elemental Realms',
     '/gaming': 'Gaming',
     '/gaming/guides': 'Gaming guides',
     '/science': 'Science and technology',
