@@ -133,7 +133,7 @@ export default function Home() {
           <small className="wox-art-credit">{t.caption}</small>
         </section>
 
-        <nav className="xk-hero-doors" aria-label={lang === 'es' ? 'Red de portales: elegí un proyecto' : 'Portal network: choose a project'}>
+        <nav className="xk-hero-doors" aria-label={lang === 'es' ? 'Red de portales: elegí un destino' : 'Portal network: choose a destination'}>
           <header className="xk-doors-heading"><p>{lang === 'es' ? 'TRES RUTAS / UN MISMO UNIVERSO CREATIVO' : 'THREE ROUTES / ONE CREATIVE UNIVERSE'}</p><h2>{lang === 'es' ? 'Elegí por dónde empezar.' : 'Choose where to begin.'}</h2></header>
           <div className="xk-doors-grid">
             <Link className="is-world" to={gamePath} onMouseEnter={() => setFeaturedPortal('world')} onFocus={() => setFeaturedPortal('world')}><span className="xk-door-index">01 <small>{lang === 'es' ? 'UNIVERSO' : 'UNIVERSE'}</small></span><span className="xk-door-copy"><strong>World of Xethkioz</strong><em>{lang === 'es' ? 'Proyecto actual · Elemental Realms' : 'Current project · Elemental Realms'}</em></span><span className="xk-door-arrow" aria-hidden="true">↗</span></Link>
