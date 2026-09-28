@@ -50,8 +50,16 @@ test('El panorama aprobado se ve detrás de tres portales legibles en escritorio
   expect(geometry.portalsFit).toBe(true)
   expect(geometry.background).toBe('/assets/xethkioz-world-panorama-2026.webp')
 })
-test('Portal Elemental Realms: estado actual, fundador, Alpha 2, Pre-Alpha, Veyr y FAQ', async ({ page }) => {
+test('World of Xethkioz funciona como hub antes de entrar a Elemental Realms', async ({ page }) => {
   await page.goto('/world-of-xethkioz'); await essentials(page)
+  await expect(page.locator('.wox-universe-hub')).toBeVisible()
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Un universo')
+  await expect(page.getByRole('link', { name: /Entrar a Elemental Realms/i }).first()).toHaveAttribute('href', '/world-of-xethkioz/elemental-realms')
+  await expect(page.locator('.woxu-project')).toContainText('Elemental Realms')
+  await expect(page.locator('.woxu-caption')).toContainText('NO ES GAMEPLAY')
+})
+test('Portal Elemental Realms: estado actual, fundador, Alpha 2, Pre-Alpha, Veyr y FAQ', async ({ page }) => {
+  await page.goto('/world-of-xethkioz/elemental-realms'); await essentials(page)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Atravesá Elemental Realms.')
   await expect(page.locator('.woxp-world-name')).toContainText('WORLD OF XETHKIOZ')
   await expect(page.locator('.woxp-world-name')).toContainText('ELEMENTAL REALMS')
@@ -95,7 +103,7 @@ test('Portal Elemental Realms: estado actual, fundador, Alpha 2, Pre-Alpha, Veyr
   expect(result.violations).toEqual([])
 })
 test('English Elemental Realms portal conserva idioma, rutas y sin duplicar cabecera', async ({ page }) => {
-  await page.goto('/en/world-of-xethkioz'); await essentials(page)
+  await page.goto('/en/world-of-xethkioz/elemental-realms'); await essentials(page)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Cross into Elemental Realms.')
   await expect(page.locator('.xkf-header')).toHaveCount(1)
   await expect(page.getByText('02 / FOUNDER VISION', { exact: true })).toBeVisible()
@@ -106,13 +114,13 @@ test('English Elemental Realms portal conserva idioma, rutas y sin duplicar cabe
   await expect(page.getByText('ALPHA 2 · ELEMENTAL REALMS', { exact: true })).toBeVisible()
   await expect(page.getByText('PRE-ALPHA · DEVELOPMENT RECORD', { exact: true })).toBeVisible()
   await page.getByRole('button', { name: 'Switch to Spanish', exact: true }).click()
-  await expect(page).toHaveURL(/\/world-of-xethkioz$/)
+  await expect(page).toHaveURL(/\/world-of-xethkioz\/elemental-realms$/)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Atravesá Elemental Realms.')
 })
 test('Veyr flotante usa el PNJ canónico y nunca pisa el chat', async ({ page }) => {
   for (const width of [390,1440]) {
     await page.setViewportSize({ width, height: width < 600 ? 844 : 1000 })
-    await page.goto('/world-of-xethkioz'); await essentials(page)
+    await page.goto('/world-of-xethkioz/elemental-realms'); await essentials(page)
     const veyr = page.locator('.xk-wisp.is-world-veyr')
     const chat = page.getByRole('button', { name: 'Abrir XETHKIOZ Nexus Chat' })
     await expect(veyr).toBeVisible()
@@ -152,7 +160,7 @@ test('El asistente flotante, si está presente en Inicio, no pisa el chat', asyn
 test('Fantasy conserva lectura sin desborde en teléfonos estrechos', async ({ page }) => {
   for (const width of [320,390,768]) {
     await page.setViewportSize({width,height:844})
-    for(const route of ['/', '/world-of-xethkioz']) {
+    for(const route of ['/', '/world-of-xethkioz', '/world-of-xethkioz/elemental-realms']) {
       await page.goto(route); await essentials(page)
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy()
       await expect(page.locator('main[data-public-presentation="fantasy"]')).toBeVisible()
