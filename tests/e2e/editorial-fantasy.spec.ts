@@ -37,7 +37,7 @@ for (const route of routes) {
       const links = page.locator('.xke-crosslinks nav a')
       await expect(links.nth(0)).toHaveAttribute('href', 'https://www.xethkioz.com.ar')
       await expect(links.nth(1)).toHaveAttribute('href', 'https://www.threads.com/@xethkioz')
-      await expect(links.nth(2)).toHaveAttribute('href', route.startsWith('/en/') ? '/en/world-of-xethkioz' : '/world-of-xethkioz')
+      await expect(links.nth(2)).toHaveAttribute('href', route.startsWith('/en/') ? '/en/world-of-xethkioz/elemental-realms' : '/world-of-xethkioz/elemental-realms')
       expect((await page.locator('.xke-page').innerText())).not.toMatch(/Nexus City|MMORPG en desarrollo|PUBLICATION_STATUS|NEWS_ENGINE/)
     }
     expect(errors).toEqual([])
