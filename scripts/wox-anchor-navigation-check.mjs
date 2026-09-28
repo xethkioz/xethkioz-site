@@ -16,7 +16,7 @@ for (const viewport of viewports) {
   page.on('pageerror', e => errors.push(e.message))
 
   if (protectedEntry) await page.goto(protectedEntry, { waitUntil: 'domcontentloaded' })
-  await page.goto(new URL('/world-of-xethkioz', `${baseOrigin}/`).href, { waitUntil: 'networkidle' })
+  await page.goto(new URL('/world-of-xethkioz/elemental-realms', `${baseOrigin}/`).href, { waitUntil: 'networkidle' })
 
   const links = await page.locator('.wox-portal-anchor-nav a').evaluateAll(nodes => nodes.map(node => node.getAttribute('href')).filter(Boolean))
   if (JSON.stringify(links) !== JSON.stringify(anchors)) throw new Error(`${viewport.width}px portal anchor contract mismatch: ${JSON.stringify(links)}`)

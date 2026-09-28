@@ -53,6 +53,16 @@
   .xkf-mobile-panel a>span{flex-shrink:0}
   .xkf-mobile-panel .xkf-game-link,.xkf-mobile-panel .xkf-support-link{grid-column:1/-1}
 }
+@media(max-width:760px){
+  .xkf-header{grid-template-columns:minmax(0,1fr) auto auto;gap:6px;width:calc(100% - 28px)}
+  .xkf-brand{min-width:0;font-size:14px;letter-spacing:.06em}
+  .xkf-brand>span{font-size:18px}
+  .xkf-mobile{padding-inline:7px}
+  .xkf-actions{gap:4px}
+  .xkf-actions a{display:none}
+  .xkf-actions button{padding-inline:8px}
+  .xkf-mobile-panel .xkf-mobile-auth{display:inline-flex;grid-column:1/-1;justify-content:center;border:1px solid rgba(214,188,134,.32);color:#ecd29e;font-weight:700}
+}
 @media(max-width:359px){
   .xkf-header{width:calc(100% - 24px);gap:4px}
   .xkf-brand{font-size:13px;gap:5px;letter-spacing:.04em}.xkf-brand>span{font-size:16px}

@@ -38,6 +38,8 @@
     { "source": "/news-sitemap.xml", "destination": "/api/news-sitemap" },
     { "source": "/feed.xml", "destination": "/api/feed" },
     { "source": "/", "destination": "/index.html" },
+    { "source": "/world-of-xethkioz/elemental-realms", "destination": "/seo-shells/world-of-xethkioz-elemental-realms.html" },
+    { "source": "/en/world-of-xethkioz/elemental-realms", "destination": "/seo-shells/en-world-of-xethkioz-elemental-realms.html" },
     { "source": "/world-of-xethkioz", "destination": "/seo-shells/world-of-xethkioz.html" },
     { "source": "/en/world-of-xethkioz", "destination": "/seo-shells/en-world-of-xethkioz.html" },
     { "source": "/en", "destination": "/seo-shells/en-home.html" },

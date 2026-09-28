@@ -1,154 +1,165 @@
 import FantasyNavigation from '../components/FantasyNavigation'
 import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
-import { PUBLIC_ATMOSPHERE_ART } from '../lib/publicArtwork'
-import './PremiumFantasyShell.css'
 import { useLang } from '../lib/LangContext'
-import './WorldOfXethkiozPortal.css'
-import './WorldPortalCinematic.css'
+import './PremiumFantasyShell.css'
+import './WorldOfXethkiozHub.css'
 
-// Public promotional material only. Never import game data or internal lore here.
-const atmosphereArt = PUBLIC_ATMOSPHERE_ART.src
 const copy = {
   es: {
-    description: 'El portal oficial de World of Xethkioz. Fantasía, atmósfera y novedades de un Action RPG independiente en desarrollo.',
-    home: 'Volver a XETHKIOZ', login: 'Iniciar sesión', language: 'Cambiar a inglés',
-    status: 'ACTION RPG INDEPENDIENTE', title: 'Atravesá el umbral.',
-    lead: 'Hay mundos que se miran. Y otros que invitan a perderse. World of Xethkioz está tomando forma.',
-    explore: 'Conocé la visión', follow: 'Seguí el desarrollo', caption: 'ILUSTRACIÓN PROMOCIONAL · NO ES GAMEPLAY',
-    nav: ['La visión', 'Visión del fundador', 'Veyr', 'Desarrollo', 'Preguntas'],
-    visionLabel: '01 / LA VISIÓN', visionTitle: 'La fantasía se vive.\nNo se explica toda de una vez.',
-    visionBody: 'Un proyecto independiente que reúne imaginación, arte y tecnología. Este espacio es una primera mirada a su atmósfera; la historia y sus sorpresas se descubren a su debido tiempo.',
-    principles: [['Imaginación', 'Una identidad propia, construida con intención.'], ['Atmósfera', 'Luz, arquitectura y silencio que invitan a mirar más allá.'], ['Descubrimiento', 'Compartir lo esencial. Reservar lo inesperado.']],
-    worldLabel: '02 / VISIÓN DEL FUNDADOR', worldTitle: 'La visión detrás de World of Xethkioz.',
-    worldBody: 'Una explicación directa sobre el propósito del proyecto, su identidad y la dirección general del universo, contada por su creador.',
-    founderNote: 'PRESENTACIÓN OFICIAL · 05:04 · CON SUBTÍTULOS',
-    guideLabel: '03 / UNA PRESENCIA', guideTitle: 'Veyr.',
-    guideBody: 'Entre lo visible y lo desconocido, una presencia acompaña el recorrido. Veyr observa, guía y deja señales en los márgenes del mundo. No revela su origen, pero su huella aparece donde la energía despierta y donde la historia todavía guarda silencio.',
-    guideAction: 'Abrir el chat de la comunidad', guideNote: 'La guía de la web. El misterio del juego permanece intacto.',
-    devLabel: '04 / EL CAMINO', devTitle: 'Un mundo en construcción.',
-    devBody: 'El desarrollo sigue adelante. Los avances que se puedan compartir se publicarán en nuestros canales oficiales, cuando estén listos para presentarse.',
-    alphaLabel: 'ALPHA DE DEMOSTRACIÓN · ALPHA 5',
-    alphaTitle: 'Una muestra temprana del juego en movimiento.',
-    alphaBody: 'Este video muestra una versión Alpha temprana de demostración. En esta etapa se prueban movimiento, combate, interfaz, entorno y flujo general; puede incluir assets, animaciones, iluminación, comportamiento, balance e interfaz provisionales.',
-    alphaMeta: 'ALPHA 5 · 02:34 · CAPTURA DE DESARROLLO',
-    alphaNote: 'NO REPRESENTA LA CALIDAD FINAL · NO ES TRAILER · NO ES UNA VERSIÓN PÚBLICA',
-    milestones: [['Dirección artística', 'La identidad visual combina fantasía, misterio y una estética oscura con energía etérea. La dirección del proyecto prioriza atmósfera, símbolos y coherencia de mundo antes que la exposición total del contenido.'], ['Experiencia de juego', 'World of Xethkioz apunta a una experiencia Action RPG con exploración, progresión y descubrimiento. El objetivo es construir una aventura que combine combate, mundo vivo y capas narrativas en evolución.'], ['Novedades públicas', 'Los avances que puedan compartirse se publicarán en esta web y en los canales oficiales de XETHKIOZ, con prioridad en Threads e Instagram. Cada publicación mostrará sólo material seguro y preparado para difusión.']],
-    visualLabel: 'ARTE VISUAL PÚBLICO', visualTitle: 'Tres ecos de un mundo más grande.',
-    visualCards: [['Naturaleza viva', 'Biomas orgánicos, energía latente y cristales que sugieren un territorio en expansión.'], ['Horizontes suspendidos', 'Altura, vacío, plataformas flotantes y una arquitectura visual pensada para el asombro.'], ['Umbral nocturno', 'Una lectura más oscura del mismo universo, con tensión, silencio y resonancias ocultas.']],
-    support: 'Apoyar el proyecto', supportNote: 'El apoyo es voluntario. No es una preventa ni concede ventajas dentro del juego.',
-    faqLabel: 'ANTES DE CRUZAR', faqTitle: 'Lo que podés saber hoy.',
-    faq: [
-      ['¿Ya se puede jugar?', 'Esta página no ofrece una descarga pública. Los accesos, pruebas o lanzamientos se anunciarán por los canales oficiales cuando corresponda.'],
-      ['¿Estas imágenes son capturas del juego?', 'Las imágenes de esta página son ilustraciones promocionales. El video “Alpha 5” sí muestra una Alpha temprana de demostración y está rotulado como tal; no representa la calidad, interfaz, animaciones ni aspecto final del juego.'],
-      ['¿Dónde se publican los avances?', 'En esta web y en los perfiles oficiales enlazados al pie, con prioridad en Threads e Instagram.'],
-      ['¿Por qué no se muestra todo el universo?', 'La historia, los personajes definitivos y los materiales de producción se mantienen reservados para cuidar el proyecto y la experiencia de descubrimiento.'],
+    description: 'World of Xethkioz es el universo creativo de XETHKIOZ. Elemental Realms es su proyecto jugable actual: un Action RPG 3D single player independiente en desarrollo.',
+    eyebrow: 'UNIVERSO / WORLD OF XETHKIOZ',
+    title: 'Un universo. Distintos mundos por descubrir.',
+    lead: 'World of Xethkioz es el marco principal donde nacen nuestros mundos, personajes y proyectos. Elemental Realms es la primera gran puerta pública de ese universo.',
+    projectLabel: 'PROYECTO ACTUAL',
+    projectTitle: 'Elemental Realms',
+    projectBody: 'Un Action RPG 3D single player centrado en exploración, movimiento, combate y descubrimiento. Su Mapa 1 continúa en desarrollo activo y se muestra públicamente por etapas.',
+    projectMeta: ['ACTION RPG 3D', 'SINGLE PLAYER', 'UNREAL ENGINE 5.8.3', 'EN DESARROLLO'],
+    projectAction: 'Entrar a Elemental Realms',
+    projectStatus: 'ALPHA EN DESARROLLO · MATERIAL PÚBLICO SELECCIONADO',
+    universeLabel: 'EL UNIVERSO',
+    universeTitle: 'World of Xethkioz es más grande que un solo juego.',
+    universeBody: 'Esta sección funciona como puerta de entrada al universo completo. Cada proyecto tendrá su propia identidad, etapa y espacio, sin mezclar información interna con lo que ya puede mostrarse al público.',
+    pillars: [
+      ['Universo', 'La identidad general que conecta los proyectos de World of Xethkioz.'],
+      ['Proyecto', 'Elemental Realms es el desarrollo jugable activo que hoy ocupa el centro de la producción.'],
+      ['Evolución', 'La web se irá ampliando cuando nuevos capítulos, mundos o experiencias estén listos para mostrarse.'],
     ],
-    closing: 'El próximo capítulo empieza acá.', rights: 'Todos los derechos reservados.', privacy: 'Privacidad', contact: 'Contacto',
+    routeLabel: 'ALPHA 2 / RUTA ACTUAL',
+    routeTitle: 'Mirá la Demo Alpha 2 y cruzá a Elemental Realms.',
+    routeBody: 'La Demo Alpha 2 muestra una etapa reciente del desarrollo. Es material de trabajo y no representa la calidad final. Desde acá podés entrar al portal completo del juego, ver su visión, Veyr y el estado actual del proyecto.',
+    alpha2Meta: 'ALPHA 2 · 01:24 · CAPTURA DE DESARROLLO',
+    routeAction: 'Abrir proyecto',
+    back: 'Volver a XETHKIOZ',
+    follow: 'Seguir avances',
+    caption: 'ARTE PROMOCIONAL · NO ES GAMEPLAY',
   },
   en: {
-    description: 'The official World of Xethkioz portal. Fantasy, atmosphere and updates from an independent action RPG in development.',
-    home: 'Back to XETHKIOZ', login: 'Sign in', language: 'Switch to Spanish',
-    status: 'INDEPENDENT ACTION RPG', title: 'Cross the threshold.',
-    lead: 'Some worlds are made to be seen. Others invite you to lose yourself. World of Xethkioz is taking shape.',
-    explore: 'Watch the vision', follow: 'Follow development', caption: 'PROMOTIONAL ILLUSTRATION · NOT GAMEPLAY',
-    nav: ['The vision', 'Founder vision', 'Veyr', 'Development', 'Questions'],
-    visionLabel: '01 / THE VISION', visionTitle: 'Fantasy is an experience.\nNot everything is revealed at once.',
-    visionBody: 'An independent project bringing imagination, art and technology together. This is a first look at its atmosphere; the story and its surprises will unfold in their own time.',
-    principles: [['Imagination', 'A distinct identity, built with intention.'], ['Atmosphere', 'Light, architecture and silence inviting a closer look.'], ['Discovery', 'Share the essentials. Preserve the unexpected.']],
-    worldLabel: '02 / FOUNDER VISION', worldTitle: 'The vision behind World of Xethkioz.',
-    worldBody: 'A direct explanation of the project, its identity and the overall direction of the universe, presented by its creator.',
-    founderNote: 'OFFICIAL PRESENTATION · 05:04 · CAPTIONS INCLUDED',
-    guideLabel: '03 / A PRESENCE', guideTitle: 'Veyr.',
-    guideBody: 'Between the visible and the unknown, a presence accompanies the journey. Veyr watches, guides and leaves traces along the edges of the world. Her origin remains unrevealed, but her presence appears wherever energy awakens and where the story still keeps its silence.',
-    guideAction: 'Open the community chat', guideNote: 'A guide on the website. The mystery of the game stays intact.',
-    devLabel: '04 / THE JOURNEY', devTitle: 'A world in the making.',
-    devBody: 'Development continues. Updates suitable for sharing will appear on our official channels, when they are ready to be presented.',
-    alphaLabel: 'DEMONSTRATION ALPHA · ALPHA 5',
-    alphaTitle: 'An early look at the game in motion.',
-    alphaBody: 'This video shows an early demonstration Alpha. At this stage, movement, combat, interface, environment and the general flow are being tested; assets, animation, lighting, behavior, balance and UI may all be provisional.',
-    alphaMeta: 'ALPHA 5 · 02:34 · DEVELOPMENT CAPTURE',
-    alphaNote: 'NOT FINAL QUALITY · NOT A TRAILER · NOT A PUBLIC BUILD',
-    milestones: [['Art direction', 'The visual identity blends fantasy, mystery and a dark aesthetic with ethereal energy. The project prioritizes atmosphere, symbols and world coherence before exposing the full scope of its content.'], ['Game experience', 'World of Xethkioz is being shaped as an Action RPG built around exploration, progression and discovery, combining combat, a living world and evolving narrative layers.'], ['Public updates', 'Shareable progress will be published on this website and XETHKIOZ official channels, primarily Threads and Instagram. Every post will contain only material cleared for public release.']],
-    visualLabel: 'PUBLIC VISUAL ART', visualTitle: 'Three echoes of a much larger world.',
-    visualCards: [['Living nature', 'Organic biomes, latent energy and crystals suggesting a territory still expanding.'], ['Suspended horizons', 'Height, open voids, floating platforms and visual architecture designed around a sense of wonder.'], ['Night threshold', 'A darker reading of the same universe, shaped by tension, silence and hidden resonances.']],
-    support: 'Support the project', supportNote: 'Support is voluntary. It is not a preorder and grants no gameplay advantages.',
-    faqLabel: 'BEFORE YOU CROSS', faqTitle: 'What we can share today.',
-    faq: [
-      ['Is the game available to play?', 'This page does not offer a public download. Access, tests or launches will be announced through official channels when appropriate.'],
-      ['Are these images game screenshots?', 'The images on this page are promotional illustrations. The “Alpha 5” video does show an early demonstration Alpha and is labeled accordingly; it does not represent final quality, UI, animation or the final visual appearance of the game.'],
-      ['Where are updates published?', 'On this website and the official profiles linked below, primarily Threads and Instagram.'],
-      ['Why is the entire universe not shown?', 'The story, final characters and production materials remain private to protect the project and the experience of discovery.'],
+    description: 'World of Xethkioz is the creative universe of XETHKIOZ. Elemental Realms is its current playable project: an independent 3D single-player action RPG in development.',
+    eyebrow: 'UNIVERSE / WORLD OF XETHKIOZ',
+    title: 'One universe. Different worlds to discover.',
+    lead: 'World of Xethkioz is the main framework where our worlds, characters and projects are created. Elemental Realms is the first major public gateway into that universe.',
+    projectLabel: 'CURRENT PROJECT',
+    projectTitle: 'Elemental Realms',
+    projectBody: 'A 3D single-player action RPG focused on exploration, movement, combat and discovery. Map 1 remains under active development and is shown publicly in selected stages.',
+    projectMeta: ['3D ACTION RPG', 'SINGLE PLAYER', 'UNREAL ENGINE 5.8.3', 'IN DEVELOPMENT'],
+    projectAction: 'Enter Elemental Realms',
+    projectStatus: 'ALPHA IN DEVELOPMENT · SELECTED PUBLIC MATERIAL',
+    universeLabel: 'THE UNIVERSE',
+    universeTitle: 'World of Xethkioz is bigger than a single game.',
+    universeBody: 'This section is the entry point to the wider universe. Each project will have its own identity, development stage and space, without mixing internal production material with what is ready for the public.',
+    pillars: [
+      ['Universe', 'The main identity connecting World of Xethkioz projects.'],
+      ['Project', 'Elemental Realms is the active playable development currently at the center of production.'],
+      ['Evolution', 'The website will expand as new chapters, worlds or experiences become ready to reveal.'],
     ],
-    closing: 'The next chapter starts here.', rights: 'All rights reserved.', privacy: 'Privacy', contact: 'Contact',
+    routeLabel: 'ALPHA 2 / CURRENT ROUTE',
+    routeTitle: 'Watch the Alpha 2 Demo and cross into Elemental Realms.',
+    routeBody: 'The Alpha 2 Demo shows a recent development stage. It is work-in-progress material and does not represent final quality. From here you can enter the full game portal, explore its vision, Veyr and the current project state.',
+    alpha2Meta: 'ALPHA 2 · 01:24 · DEVELOPMENT CAPTURE',
+    routeAction: 'Open project',
+    back: 'Back to XETHKIOZ',
+    follow: 'Follow development',
+    caption: 'PROMOTIONAL ART · NOT GAMEPLAY',
   },
 } as const
-const anchors = ['historia', 'mundo', 'convergencia', 'arte-visual', 'preguntas']
 
 export default function WorldOfXethkioz() {
   const { lang, localizePath } = useLang()
   const t = copy[lang]
+  const elementalPath = localizePath('/world-of-xethkioz/elemental-realms')
+
   return (
     <>
-      <SEO title="World of Xethkioz" description={t.description} url="/world-of-xethkioz" image="/assets/world-of-xethkioz/world-of-xethkioz-logo.webp" />
-      <main className="wox-portal" data-public-presentation="fantasy">
+      <SEO
+        title="World of Xethkioz"
+        description={t.description}
+        url="/world-of-xethkioz"
+        image="/assets/world-of-xethkioz/world-of-xethkioz-logo.webp"
+      />
+      <main className="wox-universe-hub" data-public-presentation="fantasy">
         <FantasyNavigation />
-        <section className="wox-portal-hero" aria-labelledby="wox-portal-title">
-          <picture className="woxp-hero-art" aria-hidden="true"><img src="/assets/xethkioz-world-panorama-2026.webp" alt="" width="1672" height="941" fetchPriority="high" decoding="async" /></picture>
-          <div className="woxp-hero-shade" aria-hidden="true" />
-          <div className="wox-portal-hero-copy">
-            <p className="woxp-world-name">WORLD OF XETHKIOZ <span aria-hidden="true">✦</span></p>
-            <p className="woxp-kicker woxp-game-status">{t.status}</p>
-            <div className="woxp-ornament" aria-hidden="true">◆</div>
-            <h1 id="wox-portal-title">{t.title}</h1>
-            <p className="woxp-lead">{t.lead}</p>
-            <div className="woxp-actions"><a className="woxp-button" href="#mundo">{t.explore}<span aria-hidden="true">↗</span></a><a className="woxp-text-link" href="https://www.threads.com/@xethkioz" target="_blank" rel="noopener noreferrer">{t.follow} ↗</a></div>
-          </div>
-          <p className="woxp-art-caption">{t.caption}</p>
-        </section>
-        <nav className="wox-portal-anchor-nav" aria-label={lang === 'es' ? 'Capítulos del juego' : 'Game chapters'}>{anchors.map((anchor, index) => <a key={anchor} href={`#${anchor}`}><span aria-hidden="true">0{index + 1}</span>{t.nav[index]}</a>)}</nav>
-        <section id="historia" className="wox-portal-story woxp-section">
-          <div><p className="woxp-kicker">{t.visionLabel}</p><h2>{t.visionTitle}</h2></div>
-          <div><p className="woxp-body">{t.visionBody}</p><div className="woxp-principles">{t.principles.map(([name, text], index) => <article key={name}><span aria-hidden="true">0{index + 1}</span><div><h3>{name}</h3><p>{text}</p></div></article>)}</div></div>
-        </section>
-        <section id="mundo" className="woxp-founder woxp-section">
-          <header className="woxp-founder-head"><div><p className="woxp-kicker">{t.worldLabel}</p><h2>{t.worldTitle}</h2></div><p className="woxp-body">{t.worldBody}</p></header>
-          <div className="woxp-founder-media">
-            <video className="woxp-founder-video" controls playsInline preload="metadata" poster="/assets/world-of-xethkioz/founder/founder-vision-poster.webp" aria-label={lang === 'es' ? 'Video: visión del fundador de World of Xethkioz' : 'Video: World of Xethkioz founder vision'}>
-              <source src="/assets/world-of-xethkioz/founder/founder-vision.mp4" type="video/mp4" />
-            </video>
-            <div className="woxp-founder-meta"><span>{t.founderNote}</span><span>WORLD OF XETHKIOZ</span></div>
-          </div>
-        </section>
-        <section id="convergencia" className="wox-portal-cast woxp-section">
-          <picture className="woxp-veyr-atmosphere" aria-hidden="true"><img src={atmosphereArt} alt="" width="800" height="800" loading="lazy" decoding="async" /></picture>
-          <div className="woxp-veyr-orbit" aria-hidden="true"><i /><i /><i /></div>
-          <div className="woxp-veyr-character" aria-hidden="true"><span className="woxp-veyr-aura" /><img src="/assets/world-of-xethkioz/characters/veyr-good.webp" alt="" width="1086" height="1448" loading="lazy" decoding="async" /></div>
-          <div className="woxp-veyr-copy"><p className="woxp-kicker">{t.guideLabel}</p><h2>{t.guideTitle}</h2><p className="woxp-body">{t.guideBody}</p><button className="woxp-text-link" type="button" onClick={() => window.dispatchEvent(new CustomEvent('xethkioz:nexus-chat-open', { detail: { room: 'general' } }))}>{t.guideAction} ↗</button><small className="woxp-note">{t.guideNote}</small></div>
-        </section>
-        <section id="arte-visual" className="wox-portal-art woxp-section">
-          <header className="woxp-art-head"><div><p className="woxp-kicker">{t.devLabel}</p><h2>{t.devTitle}</h2></div><div><p className="woxp-body">{t.devBody}</p><a className="woxp-text-link" href="https://www.threads.com/@xethkioz" target="_blank" rel="noopener noreferrer">Threads ↗</a></div></header>
-          <div className="woxp-alpha-demo">
-            <div className="woxp-alpha-copy"><p className="woxp-kicker">{t.alphaLabel}</p><h3>{t.alphaTitle}</h3><p className="woxp-body">{t.alphaBody}</p><small className="woxp-note">{t.alphaNote}</small></div>
-            <div className="woxp-founder-media">
-              <video className="woxp-founder-video woxp-alpha-video" controls playsInline preload="metadata" poster="/assets/world-of-xethkioz/development/alpha-5-demo-poster.webp" aria-label={lang === 'es' ? 'Video: Alpha 5 de demostración de World of Xethkioz' : 'Video: World of Xethkioz Alpha 5 demonstration'}>
-                <source src="/assets/world-of-xethkioz/development/alpha-5-demo.mp4" type="video/mp4" />
-              </video>
-              <div className="woxp-founder-meta"><span>{t.alphaMeta}</span><span>DEMO ALPHA</span></div>
-            </div>
-          </div>
-          <div className="woxp-public-showcase" aria-labelledby="woxp-visual-title">
-            <div className="woxp-public-showcase-title"><p className="woxp-kicker">{t.visualLabel}</p><h3 id="woxp-visual-title">{t.visualTitle}</h3></div>
-            <div className="woxp-concept-gallery">
-              {[0, 1, 2].map(index => <figure key={index} className={`woxp-concept-card woxp-concept-${index + 1}`}><img src={atmosphereArt} alt={t.visualCards[index][0]} width="800" height="800" loading="lazy" decoding="async" /><figcaption><small>0{index + 1}</small><div><strong>{t.visualCards[index][0]}</strong><span>{t.visualCards[index][1]}</span></div><i aria-hidden="true">↗</i></figcaption></figure>)}
-            </div>
-            <p className="woxp-showcase-note">{t.caption}</p>
-          </div>
-          <div className="woxp-development">{t.milestones.map(([name, text], index) => <article key={name} className="woxp-development-card"><span aria-hidden="true">0{index + 1}</span><i aria-hidden="true" /><div><h3>{name}</h3><p>{text}</p></div></article>)}</div>
-        </section>
-        <section id="preguntas" className="woxp-faq woxp-section"><header><p className="woxp-kicker">{t.faqLabel}</p><h2>{t.faqTitle}</h2><p className="woxp-faq-aside">{lang === 'es' ? 'Algunas respuestas también forman parte del viaje.' : 'Some answers are part of the journey too.'}</p></header><div className="woxp-faq-list">{t.faq.map(([question, answer], index) => <details key={question}><summary><span className="woxp-faq-index" aria-hidden="true">0{index + 1}</span><strong>{question}</strong><span className="woxp-faq-toggle" aria-hidden="true">＋</span></summary><p>{answer}</p></details>)}</div></section>
-        <section className="woxp-closing woxp-section"><picture className="woxp-closing-art" aria-hidden="true"><img src={atmosphereArt} alt="" width="800" height="800" loading="lazy" decoding="async" /></picture><div className="woxp-closing-shade" aria-hidden="true" /><div className="woxp-closing-copy"><span aria-hidden="true">✦</span><h2>{t.closing}</h2><div className="woxp-actions"><a className="woxp-button" href="https://www.threads.com/@xethkioz" target="_blank" rel="noopener noreferrer">{t.follow} ↗</a><Link className="woxp-support-button" to={localizePath('/support')}>{t.support} ↗</Link></div><p className="woxp-note">{t.supportNote}</p></div></section>
 
+        <section className="woxu-hero" aria-labelledby="woxu-title">
+          <picture className="woxu-hero-art" aria-hidden="true">
+            <img src="/assets/xethkioz-world-panorama-2026.webp" alt="" width="1672" height="941" fetchPriority="high" decoding="async" />
+          </picture>
+          <div className="woxu-hero-shade" aria-hidden="true" />
+          <div className="woxu-hero-copy">
+            <p className="woxu-eyebrow">{t.eyebrow}</p>
+            <img className="woxu-logo" src="/assets/world-of-xethkioz/world-of-xethkioz-logo.png" alt="World of Xethkioz" width="1584" height="483" decoding="async" />
+            <h1 id="woxu-title">{t.title}</h1>
+            <p>{t.lead}</p>
+            <div className="woxu-actions">
+              <Link className="woxu-primary" to={elementalPath}>{t.projectAction}<span aria-hidden="true">↗</span></Link>
+              <a className="woxu-secondary" href="#universo">{t.universeLabel}<span aria-hidden="true">↓</span></a>
+            </div>
+          </div>
+          <small className="woxu-caption">{t.caption}</small>
+        </section>
+
+        <nav className="woxu-path" aria-label={lang === 'es' ? 'Ruta del universo' : 'Universe route'}>
+          <Link to={localizePath('/')}>XETHKIOZ</Link>
+          <span aria-hidden="true">/</span>
+          <strong>WORLD OF XETHKIOZ</strong>
+          <span aria-hidden="true">/</span>
+          <Link to={elementalPath}>ELEMENTAL REALMS</Link>
+        </nav>
+
+        <section className="woxu-project" aria-labelledby="woxu-project-title">
+          <div className="woxu-project-art">
+            <img src="/assets/world-of-xethkioz/media/elemental-realms-development.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
+            <span>{t.projectStatus}</span>
+          </div>
+          <div className="woxu-project-copy">
+            <p className="woxu-kicker">{t.projectLabel}</p>
+            <p className="woxu-world-mark">WORLD OF XETHKIOZ <span>→</span></p>
+            <h2 id="woxu-project-title">{t.projectTitle}</h2>
+            <p>{t.projectBody}</p>
+            <div className="woxu-meta">{t.projectMeta.map(item => <span key={item}>{item}</span>)}</div>
+            <Link className="woxu-project-link" to={elementalPath}>{t.projectAction}<span aria-hidden="true">↗</span></Link>
+          </div>
+        </section>
+
+        <section id="universo" className="woxu-universe" aria-labelledby="woxu-universe-title">
+          <header>
+            <p className="woxu-kicker">{t.universeLabel}</p>
+            <h2 id="woxu-universe-title">{t.universeTitle}</h2>
+            <p>{t.universeBody}</p>
+          </header>
+          <div className="woxu-pillars">
+            {t.pillars.map(([title, body], index) => (
+              <article key={title}>
+                <span aria-hidden="true">0{index + 1}</span>
+                <h3>{title}</h3>
+                <p>{body}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="woxu-route" aria-labelledby="woxu-route-title">
+          <div className="woxu-route-media">
+            <video controls playsInline preload="metadata" poster="/assets/world-of-xethkioz/media/elemental-realms-alpha-2-poster.webp" aria-label={lang === 'es' ? 'Video: Demo Alpha 2 de World of Xethkioz: Elemental Realms' : 'Video: World of Xethkioz: Elemental Realms Alpha 2 Demo'}>
+              <source src="/assets/world-of-xethkioz/media/elemental-realms-alpha-2.mp4" type="video/mp4" />
+            </video>
+            <span>{t.alpha2Meta}</span>
+          </div>
+          <div className="woxu-route-copy">
+            <p className="woxu-kicker">{t.routeLabel}</p>
+            <h2 id="woxu-route-title">{t.routeTitle}</h2>
+            <p>{t.routeBody}</p>
+            <div className="woxu-actions">
+              <Link className="woxu-primary" to={elementalPath}>{t.routeAction}<span aria-hidden="true">↗</span></Link>
+              <a className="woxu-secondary" href="https://www.threads.com/@xethkioz" target="_blank" rel="noopener noreferrer">{t.follow}<span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+        </section>
+
+        <footer className="woxu-footer">
+          <Link to={localizePath('/')}>← {t.back}</Link>
+          <span>WORLD OF XETHKIOZ · XETHKIOZ</span>
+        </footer>
       </main>
     </>
   )

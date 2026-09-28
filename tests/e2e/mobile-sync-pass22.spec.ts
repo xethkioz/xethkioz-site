@@ -14,7 +14,8 @@ for (const language of ['es', 'en'] as const) {
       await expect(toggle).toHaveAttribute('aria-expanded', 'true')
       await expect(page.locator('.xk-wisp')).toBeHidden()
       await expect(page.locator('button[aria-controls="nexus-chat-panel"]')).toBeHidden()
-      await expect(page.locator('.xkf-mobile-panel a')).toHaveCount(8)
+      await expect(page.locator('.xkf-mobile-panel a:not(.xkf-mobile-auth)')).toHaveCount(8)
+      await expect(page.locator('.xkf-mobile-panel .xkf-mobile-auth')).toHaveCount(1)
       const result = await page.evaluate(() => {
         const header = document.querySelector('.xkf-header')!.getBoundingClientRect()
         const panel = document.querySelector('.xkf-mobile-panel')!.getBoundingClientRect()

@@ -1,7 +1,7 @@
 {
   "name": "xethkioz",
   "private": true,
-  "version": "11.5.1",
+  "version": "11.6.0",
   "type": "module",
   "scripts": {
     "dev": "npm run generate:css-split && vite",
@@ -81,7 +81,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.5",
-    "react-router-dom": "^7.18.4"
+    "react-router-dom": "7.18.4"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",

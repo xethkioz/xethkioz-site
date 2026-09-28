@@ -10,6 +10,7 @@ const publicHtmlFiles = [
   'seo-shells/gaming-guides.html',
   'seo-shells/science.html',
   'seo-shells/world-of-xethkioz.html',
+  'seo-shells/world-of-xethkioz-elemental-realms.html',
   'seo-shells/news.html',
   'seo-shells/community.html',
   'seo-shells/about.html',

@@ -14,15 +14,17 @@ async function openMenu(page: Page) {
 test('WEB-02: discover the game from English Home, switch language, preserve anchors and canonical', async ({ page }) => {
   await page.goto('/en'); await essentials(page)
   await page.locator('.wox-actions a').first().click()
-  await expect(page).toHaveURL(/\/en\/world-of-xethkioz$/)
-  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://www.xethkioz.com.ar/en/world-of-xethkioz')
+  await expect(page).toHaveURL(/\/en\/world-of-xethkioz\/elemental-realms$/)
+  await expect(page.locator('.xkf-game-link').first()).toHaveAttribute('href', '/en/world-of-xethkioz/elemental-realms')
+  await expect(page.locator('.xkf-game-link').first()).toHaveAttribute('aria-current', 'page')
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://www.xethkioz.com.ar/en/world-of-xethkioz/elemental-realms')
   await page.locator('.wox-portal-anchor-nav a[href="#mundo"]').click()
   await page.getByRole('button', { name: 'Switch to Spanish', exact: true }).click()
-  await expect(page).toHaveURL(/\/world-of-xethkioz#mundo$/)
+  await expect(page).toHaveURL(/\/world-of-xethkioz\/elemental-realms#mundo$/)
   await expect(page.locator('html')).toHaveAttribute('lang', 'es-AR')
-  await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute('href', 'https://www.xethkioz.com.ar/en/world-of-xethkioz')
+  await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute('href', 'https://www.xethkioz.com.ar/en/world-of-xethkioz/elemental-realms')
   await page.getByRole('button', { name: 'Cambiar a inglés', exact: true }).click()
-  await expect(page).toHaveURL(/\/en\/world-of-xethkioz#mundo$/)
+  await expect(page).toHaveURL(/\/en\/world-of-xethkioz\/elemental-realms#mundo$/)
   await expect.poll(() => page.locator('#mundo').evaluate(el => Math.abs(el.getBoundingClientRect().top))).toBeLessThan(120)
 })
 
@@ -59,12 +61,12 @@ test('WEB-01/07: shared navigation has no text collision across the audit viewpo
   await page.addInitScript(() => window.localStorage.removeItem('xethkioz.lang'))
   for (const width of [320,360,390,430,768,1024,1366,1440]) {
     await page.setViewportSize({ width, height: 936 })
-    for (const route of ['/', '/world-of-xethkioz', '/en', '/en/world-of-xethkioz']) {
+    for (const route of ['/', '/world-of-xethkioz', '/world-of-xethkioz/elemental-realms', '/en', '/en/world-of-xethkioz', '/en/world-of-xethkioz/elemental-realms']) {
       await page.goto(route); await essentials(page); await expect(page.locator('.xkf-header')).toBeVisible()
       await expect(page).toHaveURL(new RegExp(route === '/' ? '/$' : route + '$'))
       const geometry = await page.evaluate(() => {
         const header = document.querySelector('.xkf-header')!.getBoundingClientRect()
-        const hero = document.querySelector('.wox-hero,.wox-portal-hero')!.getBoundingClientRect()
+        const hero = document.querySelector('.wox-hero,.woxu-hero,.wox-portal-hero')!.getBoundingClientRect()
         const controls = Array.from(document.querySelectorAll('.xkf-header a,.xkf-header button,.xkf-header summary')).filter(el => el.getBoundingClientRect().width > 0 && el.getBoundingClientRect().height > 0)
         return { overflow: document.documentElement.scrollWidth > innerWidth + 1, headerOverHero: header.bottom > hero.top + 1, minFont: Math.min(...controls.map(el => parseFloat(getComputedStyle(el).fontSize))), minHeight: Math.min(...controls.map(el => el.getBoundingClientRect().height)) }
       })
@@ -79,7 +81,7 @@ test('WEB-01/07: shared navigation has no text collision across the audit viewpo
   await testInfo.attach('navigation-geometry.json', { body: JSON.stringify(records, null, 2), contentType: 'application/json' })
 })
 test('WEB-06: complete fantasy shell passes automated accessibility checks', async ({ page }) => {
-  await page.goto('/world-of-xethkioz'); await essentials(page)
+  await page.goto('/world-of-xethkioz/elemental-realms'); await essentials(page)
   const result = await new AxeBuilder({ page }).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze()
   expect(result.violations).toEqual([])
 })
@@ -87,12 +89,12 @@ test('WEB-06: complete fantasy shell passes automated accessibility checks', asy
 test('WEB-01: idle launchers do not cover the initial hero actions, art caption or chapter menu', async ({ page }) => {
   for (const viewport of [{ width:390,height:844 },{ width:1440,height:936 }]) {
     await page.setViewportSize(viewport)
-    for (const route of ['/', '/world-of-xethkioz']) {
+    for (const route of ['/', '/world-of-xethkioz', '/world-of-xethkioz/elemental-realms']) {
       await page.goto(route); await essentials(page); await expect(page.locator('.xk-wisp')).toBeVisible()
       const hits = await page.evaluate(() => {
         const wisp = document.querySelector('.xk-wisp')!.getBoundingClientRect()
         const intersects = (r: DOMRect) => r.bottom > 0 && r.top < innerHeight && r.left < wisp.right && r.right > wisp.left && r.top < wisp.bottom && r.bottom > wisp.top
-        return Array.from(document.querySelectorAll('.wox-actions a,.woxp-actions a,.wox-art-credit,.woxp-art-caption,.wox-portal-anchor-nav')).filter(el => intersects(el.getBoundingClientRect())).map(el => el.className)
+        return Array.from(document.querySelectorAll('.wox-actions a,.woxu-actions a,.woxp-actions a,.wox-art-credit,.woxu-caption,.woxp-art-caption,.wox-portal-anchor-nav')).filter(el => intersects(el.getBoundingClientRect())).map(el => el.className)
       })
       expect(hits, `${viewport.width} ${route}`).toEqual([])
     }

@@ -56,7 +56,7 @@ export default function FusionGlobalWisp() {
   const normalizedPath = location.pathname.replace(/^\/en(?=\/|$)/, '') || '/'
   const insideGreenNode = normalizedPath === '/green-node'
   const homeEntry = normalizedPath === '/'
-  const worldPortal = normalizedPath === '/world-of-xethkioz'
+  const worldPortal = normalizedPath === '/world-of-xethkioz' || normalizedPath === '/world-of-xethkioz/elemental-realms'
   const gamingPortal = normalizedPath === '/gaming'
   const canonicalVeyr = worldPortal || gamingPortal
   const actionLabel = canonicalVeyr ? t.worldAction : insideGreenNode ? t.helpAction : t.action

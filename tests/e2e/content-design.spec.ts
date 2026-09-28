@@ -5,9 +5,9 @@ test.describe('orden y navegación de secciones', () => {
     await page.goto('/')
 
     await expect(page.getByRole('heading', { level: 1, name: /XETHKIOZ.*Más allá del juego/i })).toBeAttached()
-    const portals = page.getByRole('navigation', { name: 'Red de portales: elegí un proyecto' })
+    const portals = page.getByRole('navigation', { name: 'Red de portales: elegí un destino' })
     await expect(portals.getByRole('link')).toHaveCount(3)
-    await expect(portals.getByRole('link', { name: /World of Xethkioz/ })).toHaveAttribute('href', '/world-of-xethkioz')
+    await expect(portals.getByRole('link', { name: /Elemental Realms/ })).toHaveAttribute('href', '/world-of-xethkioz/elemental-realms')
     await expect(portals.getByRole('link', { name: /VEYR/ })).toHaveAttribute('href', '#veyr')
     await expect(portals.getByRole('link', { name: /XETHKIOZ Studio/ })).toHaveAttribute('href', '/creacion-web#landing-esencial')
 
@@ -20,8 +20,8 @@ test.describe('orden y navegación de secciones', () => {
       'nav[aria-label="Ecosistema XETHKIOZ"]:visible, nav[aria-label="Ecosistema XETHKIOZ móvil"]:visible',
     )
     await expect(ecosystem).toBeVisible()
-    await expect(ecosystem.getByRole('link')).toHaveCount(8)
-    await expect(ecosystem.getByRole('link', { name: 'World of Xethkioz', exact: true })).toHaveAttribute('href', '/world-of-xethkioz')
+    await expect(ecosystem.locator('a:not(.xkf-mobile-auth)')).toHaveCount(8)
+    await expect(ecosystem.getByRole('link', { name: 'World of Xethkioz: Elemental Realms', exact: true })).toHaveAttribute('href', '/world-of-xethkioz/elemental-realms')
     await expect(ecosystem.getByRole('link', { name: 'Biblioteca gamer', exact: true })).toHaveAttribute('href', '/gaming')
     await expect(ecosystem.getByRole('link', { name: /ArgenCiencia/ })).toHaveAttribute('href', 'https://argenciencia.com/')
     await expect(ecosystem.getByRole('link', { name: 'Huellas Argentina', exact: true })).toHaveAttribute('href', '/mascotas/')

@@ -33,7 +33,11 @@ export default function FantasyNavigation() {
     if ('external' in item) return <a key={item.id} href={item.href} target="_blank" rel="noopener noreferrer" className={className}>{label}<span aria-hidden="true">↗</span></a>
     if ('document' in item) return <a key={item.id} href={item.href} className={className}>{label}</a>
     const href = localizePath(item.href)
-    return <Link key={item.id} to={href} className={className} aria-current={location.pathname === href ? 'page' : undefined}>{label}</Link>
+    const gameRoot = localizePath('/world-of-xethkioz')
+    const active = item.id === 'game'
+      ? location.pathname === gameRoot || location.pathname.startsWith(`${gameRoot}/`)
+      : location.pathname === href
+    return <Link key={item.id} to={href} className={className} aria-current={active ? 'page' : undefined}>{label}</Link>
   })
   return (
     <header ref={header} className="xkf-header" onKeyDown={event => {
@@ -49,7 +53,7 @@ export default function FantasyNavigation() {
       <nav className="xkf-desktop" aria-label={lang === 'es' ? 'Ecosistema XETHKIOZ' : 'XETHKIOZ ecosystem'}>{links}</nav>
       <nav id={menuId} className="xkf-mobile-panel" hidden={!menuOpen} aria-label={lang === 'es' ? 'Ecosistema XETHKIOZ móvil' : 'Mobile XETHKIOZ ecosystem'} onClick={event => {
         if ((event.target as HTMLElement).closest('a')) close()
-      }}>{links}</nav>
+      }}>{links}<Link className="xkf-mobile-auth" to="/login">{lang === 'es' ? 'Entrar' : 'Sign in'}</Link></nav>
     </header>
   )
 }

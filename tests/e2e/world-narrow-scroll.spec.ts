@@ -4,7 +4,7 @@ for (const width of [320, 360]) for (const language of ['es', 'en']) {
   test(`World FAQ stays reachable during narrow scroll: ${width} ${language}`, async ({ page }) => {
     await page.setViewportSize({ width, height: 844 })
     await page.addInitScript(() => { try { localStorage.removeItem('xethkioz.lang') } catch {} })
-    await page.goto(language === 'en' ? '/en/world-of-xethkioz' : '/world-of-xethkioz')
+    await page.goto(language === 'en' ? '/en/world-of-xethkioz/elemental-realms' : '/world-of-xethkioz/elemental-realms')
     await expect(page.locator('h1')).toBeVisible()
     const consent = page.getByRole('button', { name: /solo esenciales|essential only/i }).first()
     if (await consent.isVisible()) await consent.click()

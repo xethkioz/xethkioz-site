@@ -63,8 +63,12 @@
   line-height:1.72;
   text-shadow:0 2px 18px #060711;
 }
-.wox-home.xk-gateway .wox-actions{margin-top:27px}
+.wox-home.xk-gateway .wox-actions{display:flex;flex-wrap:wrap;gap:11px;margin-top:27px}
 .wox-home.xk-gateway .wox-actions a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
   min-height:54px;
   padding:14px 23px;
   border:1px solid #ffc094;
@@ -73,8 +77,24 @@
   font-size:14px;
   font-weight:780;
   letter-spacing:0;
+  text-decoration:none;
 }
-.wox-home.xk-gateway .xk-world-signature{display:none}
+.wox-home.xk-gateway .wox-actions a.is-secondary{border-color:rgba(226,203,255,.42);background:rgba(8,9,16,.66);color:#f4ebf9}
+.wox-home.xk-gateway .xk-world-signature{
+  display:block;position:absolute;z-index:3;top:86px;left:max(34px,calc((100% - 1540px)/2));
+  width:clamp(360px,33vw,610px);text-align:left;pointer-events:none;
+}
+.wox-home.xk-gateway .xk-world-signature img{display:block;width:100%;height:auto;filter:drop-shadow(0 12px 30px rgba(0,0,0,.58))}
+.wox-home.xk-gateway .xk-world-signature>span{display:block;margin-top:8px;color:#f2dfd1;font-size:11px;font-weight:750;letter-spacing:.13em;text-shadow:0 2px 14px #080910}
+.xk-alpha2-entry{display:inline-flex;align-items:center;gap:10px;margin-top:14px;padding:9px 12px;border:1px solid rgba(255,176,124,.52);background:rgba(7,8,14,.68);color:#fff3e8;text-decoration:none;pointer-events:auto;box-shadow:0 10px 28px rgba(0,0,0,.22)}
+.xk-alpha2-entry b{color:#ffad78;font-size:9px;letter-spacing:.16em}.xk-alpha2-entry span{font-size:10px;font-weight:760;letter-spacing:.08em;text-transform:uppercase}.xk-alpha2-entry i{font-style:normal;color:#d8b9ff;font-size:10px}
+.xk-elemental-spectrum{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}
+.xk-elemental-spectrum b{--element:#d3b8ff;display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid color-mix(in srgb,var(--element) 42%,transparent);background:rgba(6,8,15,.54);color:#f8f2ec;font-size:9px;font-weight:760;letter-spacing:.12em;text-transform:uppercase}
+.xk-elemental-spectrum b::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--element);box-shadow:0 0 14px color-mix(in srgb,var(--element) 80%,transparent)}
+.xk-elemental-spectrum b[data-element='fire']{--element:#ff7b45}
+.xk-elemental-spectrum b[data-element='ice']{--element:#69d8ff}
+.xk-elemental-spectrum b[data-element='growth']{--element:#8cdf69}
+.xk-elemental-spectrum b[data-element='shadow']{--element:#b379ff}
 .wox-home.xk-gateway .wox-art-credit{right:48px;bottom:25px;color:#e6d9e9;font-size:10px;letter-spacing:.12em}
 
 /* Three image-led gateways replace the small horizontal bars. */
@@ -147,6 +167,7 @@
   background:linear-gradient(180deg,rgba(6,7,13,.48),transparent 37%,rgba(6,7,13,.44) 58%,#080914 100%);
 }
 .xk-doors-grid>a.is-world{min-height:420px}
+.xk-doors-grid>a.is-world::before{background-image:url('/assets/world-of-xethkioz/media/elemental-realms-alpha-2-poster.webp');background-position:50% 54%}
 .xk-doors-grid>a.is-veyr{--door-accent:#a691ff;margin-top:22px}
 .xk-doors-grid>a.is-veyr::before{background-image:url('/assets/xethkioz-veyr-local-atmosphere-2026.webp');background-position:76% center}
 .xk-doors-grid>a.is-studio{--door-accent:#ffb27d;margin-top:48px}
@@ -283,6 +304,8 @@
   .wox-home.xk-gateway .wox-hero h1{font-size:clamp(45px,11.8vw,64px)}
   .wox-home.xk-gateway .wox-hero h1 span{font-size:15px;margin-bottom:12px}
   .wox-home.xk-gateway .wox-lead{font-size:15px;line-height:1.64}
+  .wox-home.xk-gateway .wox-actions{display:grid;grid-template-columns:1fr}
+  .wox-home.xk-gateway .wox-actions a{width:100%}
   .wox-home.xk-gateway .xk-hero-doors{width:calc(100% - 36px);padding:30px 0 38px}
   .xk-doors-heading{display:block;margin-bottom:20px}
   .xk-doors-heading p{font-size:10px;line-height:1.55}
@@ -309,4 +332,21 @@
 }
 @media(prefers-reduced-motion:reduce){
   .wox-home.xk-gateway .wox-hero::after,.xk-doors-grid>a,.xk-doors-grid>a::before{animation:none!important;transition:none!important}
+}
+
+/* Pass 37 — Elemental Realms hero signature */
+@media(max-width:1100px){
+  .wox-home.xk-gateway .xk-world-signature{top:42px;left:32px;width:min(430px,52vw)}
+}
+@media(max-width:760px){
+  .wox-home.xk-gateway .xk-world-signature{top:34px;left:20px;width:min(390px,calc(100% - 40px))}
+  .wox-home.xk-gateway .xk-world-signature>span{font-size:9px;line-height:1.55;letter-spacing:.1em}
+  .xk-alpha2-entry{margin-top:11px;padding:8px 10px}
+  .xk-alpha2-entry span{font-size:9px}
+  .xk-elemental-spectrum{gap:6px;margin-top:11px}
+  .xk-elemental-spectrum b{padding:6px 8px;font-size:8px;letter-spacing:.08em}
+}
+@media(max-width:420px){
+  .wox-home.xk-gateway .xk-world-signature{width:calc(100% - 36px);left:18px}
+  .xk-elemental-spectrum b{flex:1 1 calc(50% - 6px);justify-content:center}
 }

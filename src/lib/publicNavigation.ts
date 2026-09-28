@@ -1,6 +1,6 @@
 // Public destinations only. Keep game data and private production records out of this registry.
 export const PUBLIC_NAVIGATION = [
-  { id: 'game', es: 'World of Xethkioz', en: 'World of Xethkioz', href: '/world-of-xethkioz' },
+  { id: 'game', es: 'World of Xethkioz: Elemental Realms', en: 'World of Xethkioz: Elemental Realms', href: '/world-of-xethkioz/elemental-realms' },
   { id: 'gaming', es: 'Biblioteca gamer', en: 'Gaming library', href: '/gaming' },
   { id: 'news', es: 'Noticias', en: 'News', href: '/news' },
   { id: 'science', es: 'ArgenCiencia', en: 'ArgenCiencia', href: 'https://argenciencia.com/', external: true },
