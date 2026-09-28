@@ -1,13 +1,13 @@
 # XETHKIOZ Network
 
 **Versión actual:** `v11.6.0`
-**Release:** Elemental Realms Media · Pass 37
+**Release:** World Universe Hierarchy · Pass 38
 **Estado:** producción activa  
 **Última revisión operativa:** 2026-09-27
 **Dominio canónico:** https://www.xethkioz.com.ar  
 **Hosting principal:** Vercel
 
-XETHKIOZ Network es la plataforma pública de XETHKIOZ: World of Xethkioz, gaming, noticias, ciencia/tecnología, comunidad, Green Node, XETHKIOZ Studio y CMS editorial.
+XETHKIOZ Network es la plataforma pública de XETHKIOZ. World of Xethkioz funciona como universo creativo y Elemental Realms como su proyecto jugable actual, junto a gaming, noticias, ciencia/tecnología, comunidad, Green Node, XETHKIOZ Studio y CMS editorial.
 
 ## Repositorio canónico
 
@@ -33,7 +33,8 @@ Node soportado: **22**.
 | Ruta | Estado |
 | --- | --- |
 | `/` | Home / gateway |
-| `/world-of-xethkioz` | Portal público del juego |
+| `/world-of-xethkioz` | Hub público del universo World of Xethkioz |
+| `/world-of-xethkioz/elemental-realms` | Proyecto jugable actual: Elemental Realms |
 | `/gaming` | Gaming |
 | `/gaming/guides` | Guías |
 | `/science` | Ciencia y tecnología |
