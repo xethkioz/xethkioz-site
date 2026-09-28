@@ -10,11 +10,20 @@ const spanishRoutes = [
   {
     file: 'world-of-xethkioz.html',
     path: '/world-of-xethkioz',
-    title: 'World of Xethkioz: Elemental Realms | Portal oficial | XETHKIOZ',
+    title: 'World of Xethkioz | Universo oficial | XETHKIOZ',
+    description: 'Portal del universo World of Xethkioz. Descubrí sus proyectos y entrá a Elemental Realms, el Action RPG 3D single player actualmente en desarrollo.',
+    keywords: 'World of Xethkioz, universo, Elemental Realms, videojuegos, fantasy, XETHKIOZ',
+    image: '/assets/world-of-xethkioz/world-of-xethkioz-logo.webp',
+    imageAlt: 'Logo de World of Xethkioz',
+  },
+  {
+    file: 'world-of-xethkioz-elemental-realms.html',
+    path: '/world-of-xethkioz/elemental-realms',
+    title: 'World of Xethkioz: Elemental Realms | Proyecto oficial | XETHKIOZ',
     description: 'Portal oficial de World of Xethkioz: Elemental Realms, un Action RPG 3D single player independiente en desarrollo con Unreal Engine 5.8.3.',
     keywords: 'World of Xethkioz, Elemental Realms, action RPG, Unreal Engine 5, single player, fantasy, independent game, XETHKIOZ',
     image: '/assets/world-of-xethkioz/world-of-xethkioz-logo.webp',
-    imageAlt: 'Logo de World of Xethkioz: Elemental Realms',
+    imageAlt: 'World of Xethkioz: Elemental Realms',
   },
   {
     file: 'gaming.html',
@@ -113,11 +122,20 @@ const englishRoutes = [
   {
     file: 'en-world-of-xethkioz.html',
     path: '/en/world-of-xethkioz',
-    title: 'World of Xethkioz: Elemental Realms | Official Portal | XETHKIOZ',
+    title: 'World of Xethkioz | Official Universe | XETHKIOZ',
+    description: 'Portal for the World of Xethkioz universe. Discover its projects and enter Elemental Realms, the 3D single-player action RPG currently in development.',
+    keywords: 'World of Xethkioz, universe, Elemental Realms, videogames, fantasy, XETHKIOZ',
+    image: '/assets/world-of-xethkioz/world-of-xethkioz-logo.webp',
+    imageAlt: 'World of Xethkioz logo',
+  },
+  {
+    file: 'en-world-of-xethkioz-elemental-realms.html',
+    path: '/en/world-of-xethkioz/elemental-realms',
+    title: 'World of Xethkioz: Elemental Realms | Official Project | XETHKIOZ',
     description: 'Official portal for World of Xethkioz: Elemental Realms, an independent 3D single-player action RPG in development with Unreal Engine 5.8.3.',
     keywords: 'World of Xethkioz, Elemental Realms, action RPG, Unreal Engine 5, single player, fantasy, independent game, XETHKIOZ',
     image: '/assets/world-of-xethkioz/world-of-xethkioz-logo.webp',
-    imageAlt: 'World of Xethkioz: Elemental Realms logo',
+    imageAlt: 'World of Xethkioz: Elemental Realms',
   },
   {
     file: 'en-home.html',
@@ -223,6 +241,7 @@ const englishRoutes = [
 const localizedPairs = new Map([
   ['/', '/en'],
   ['/world-of-xethkioz', '/en/world-of-xethkioz'],
+  ['/world-of-xethkioz/elemental-realms', '/en/world-of-xethkioz/elemental-realms'],
   ['/gaming', '/en/gaming'],
   ['/gaming/guides', '/en/gaming/guides'],
   ['/science', '/en/science'],
