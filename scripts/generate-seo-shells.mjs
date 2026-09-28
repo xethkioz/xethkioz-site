@@ -140,11 +140,11 @@ const englishRoutes = [
   {
     file: 'en-home.html',
     path: '/en',
-    title: 'World of Xethkioz: Elemental Realms · Action RPG | XETHKIOZ',
-    description: 'Official home of XETHKIOZ and World of Xethkioz: Elemental Realms, an independent 3D action RPG in development.',
-    keywords: 'World of Xethkioz, Elemental Realms, action RPG, RPG, Unreal Engine 5, single player, independent game, XETHKIOZ',
+    title: 'XETHKIOZ · Gaming, technology and creation',
+    description: 'Gaming news and guides, the World of Xethkioz universe with Elemental Realms in development, VEYR local AI and digital creation.',
+    keywords: 'XETHKIOZ, gaming, technology, artificial intelligence, World of Xethkioz, Elemental Realms, web creation, news',
     image: '/assets/world-of-xethkioz/world-of-xethkioz-logo.webp',
-    imageAlt: 'World of Xethkioz: Elemental Realms logo',
+    imageAlt: 'XETHKIOZ · World of Xethkioz',
   },
   {
     file: 'en-gaming.html',
