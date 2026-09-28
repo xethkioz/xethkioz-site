@@ -5,9 +5,11 @@ async function essentials(page: import('@playwright/test').Page) {
   const button = page.getByRole('button', { name: /solo esenciales|essential only/i })
   if (await button.first().isVisible()) await button.first().click()
 }
-test('Premium Home conserva rutas, CTA real y canales oficiales sin video', async ({ page }) => {
+test('Premium Home prioriza Elemental Realms, conserva rutas y canales oficiales sin video', async ({ page }) => {
   await page.goto('/'); await essentials(page)
-  await expect(page.locator('.wox-actions a').first()).toHaveAttribute('href', '/world-of-xethkioz')
+  await expect(page.locator('.wox-actions a').first()).toHaveAttribute('href', '/world-of-xethkioz/elemental-realms')
+  await expect(page.locator('.wox-actions a.is-secondary')).toHaveAttribute('href', '/world-of-xethkioz')
+  await expect(page.locator('.xk-alpha2-entry')).toHaveAttribute('href', '/world-of-xethkioz/elemental-realms#arte-visual')
   await expect(page.locator('.wox-bg img')).toHaveAttribute('src', '/assets/xethkioz-world-panorama-2026.webp')
   await expect(page.locator('.xk-world-signature img')).toHaveAttribute('src', '/assets/world-of-xethkioz/world-of-xethkioz-logo.png')
   await expect(page.locator('.wox-status')).toHaveText('GAMING · TECNOLOGÍA · CREACIÓN')
@@ -57,6 +59,12 @@ test('World of Xethkioz funciona como hub antes de entrar a Elemental Realms', a
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Un universo')
   await expect(page.getByRole('link', { name: /Entrar a Elemental Realms/i }).first()).toHaveAttribute('href', '/world-of-xethkioz/elemental-realms')
   await expect(page.locator('.woxu-project')).toContainText('Elemental Realms')
+  const hubAlpha2 = page.locator('.woxu-route-media video')
+  await expect(hubAlpha2).toBeVisible()
+  await expect(hubAlpha2).toHaveAttribute('controls', '')
+  await expect(hubAlpha2).toHaveAttribute('preload', 'metadata')
+  await expect(hubAlpha2.locator('source')).toHaveAttribute('src', /elemental-realms-alpha-2\.mp4$/)
+  expect(await hubAlpha2.getAttribute('autoplay')).toBeNull()
   await expect(page.locator('.woxu-caption')).toContainText('NO ES GAMEPLAY')
 })
 test('Portal Elemental Realms: estado actual, fundador, Alpha 2, Pre-Alpha, Veyr y FAQ', async ({ page }) => {
