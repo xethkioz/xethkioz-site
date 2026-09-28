@@ -25,9 +25,10 @@ const copy = {
       ['Proyecto', 'Elemental Realms es el desarrollo jugable activo que hoy ocupa el centro de la producción.'],
       ['Evolución', 'La web se irá ampliando cuando nuevos capítulos, mundos o experiencias estén listos para mostrarse.'],
     ],
-    routeLabel: 'RUTA ACTUAL',
-    routeTitle: 'La puerta abierta hoy es Elemental Realms.',
-    routeBody: 'Desde acá podés pasar al portal completo del juego, ver su visión, el material Alpha público, Veyr y el estado de desarrollo.',
+    routeLabel: 'ALPHA 2 / RUTA ACTUAL',
+    routeTitle: 'Mirá la Demo Alpha 2 y cruzá a Elemental Realms.',
+    routeBody: 'La Demo Alpha 2 muestra una etapa reciente del desarrollo. Es material de trabajo y no representa la calidad final. Desde acá podés entrar al portal completo del juego, ver su visión, Veyr y el estado actual del proyecto.',
+    alpha2Meta: 'ALPHA 2 · 01:24 · CAPTURA DE DESARROLLO',
     routeAction: 'Abrir proyecto',
     back: 'Volver a XETHKIOZ',
     follow: 'Seguir avances',
@@ -52,9 +53,10 @@ const copy = {
       ['Project', 'Elemental Realms is the active playable development currently at the center of production.'],
       ['Evolution', 'The website will expand as new chapters, worlds or experiences become ready to reveal.'],
     ],
-    routeLabel: 'CURRENT ROUTE',
-    routeTitle: 'The open gateway today is Elemental Realms.',
-    routeBody: 'From here you can enter the full game portal, explore its vision, public Alpha material, Veyr and the current development state.',
+    routeLabel: 'ALPHA 2 / CURRENT ROUTE',
+    routeTitle: 'Watch the Alpha 2 Demo and cross into Elemental Realms.',
+    routeBody: 'The Alpha 2 Demo shows a recent development stage. It is work-in-progress material and does not represent final quality. From here you can enter the full game portal, explore its vision, Veyr and the current project state.',
+    alpha2Meta: 'ALPHA 2 · 01:24 · DEVELOPMENT CAPTURE',
     routeAction: 'Open project',
     back: 'Back to XETHKIOZ',
     follow: 'Follow development',
@@ -137,10 +139,13 @@ export default function WorldOfXethkioz() {
         </section>
 
         <section className="woxu-route" aria-labelledby="woxu-route-title">
-          <picture aria-hidden="true">
-            <img src="/assets/world-of-xethkioz/media/elemental-realms-alpha-2-poster.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
-          </picture>
-          <div>
+          <div className="woxu-route-media">
+            <video controls playsInline preload="metadata" poster="/assets/world-of-xethkioz/media/elemental-realms-alpha-2-poster.webp" aria-label={lang === 'es' ? 'Video: Demo Alpha 2 de World of Xethkioz: Elemental Realms' : 'Video: World of Xethkioz: Elemental Realms Alpha 2 Demo'}>
+              <source src="/assets/world-of-xethkioz/media/elemental-realms-alpha-2.mp4" type="video/mp4" />
+            </video>
+            <span>{t.alpha2Meta}</span>
+          </div>
+          <div className="woxu-route-copy">
             <p className="woxu-kicker">{t.routeLabel}</p>
             <h2 id="woxu-route-title">{t.routeTitle}</h2>
             <p>{t.routeBody}</p>
