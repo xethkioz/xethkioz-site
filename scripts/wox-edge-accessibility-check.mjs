@@ -44,7 +44,7 @@ for (const viewport of edgeViewports) {
     throw new Error(`WOX short Home edge QA failed at ${viewport.width}px: ${JSON.stringify({ home, homeOverflow })}`)
   }
 
-  await openPreview(page, '/world-of-xethkioz')
+  await openPreview(page, '/world-of-xethkioz/elemental-realms')
   const portal = await page.evaluate((selectors) => ({
     width: document.documentElement.scrollWidth,
     client: document.documentElement.clientWidth,
@@ -63,7 +63,7 @@ for (const viewport of edgeViewports) {
   await context.close()
 }
 
-for (const path of ['/', '/world-of-xethkioz']) {
+for (const path of ['/', '/world-of-xethkioz', '/world-of-xethkioz/elemental-realms']) {
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } })
   await context.addInitScript(() => localStorage.setItem('xethkioz.privacy-consent.v1', JSON.stringify({ version: 1, analytics: false, marketing: false, updatedAt: new Date().toISOString() })))
   const page = await context.newPage()
