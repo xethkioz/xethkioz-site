@@ -46,7 +46,7 @@ export default function Support() {
   return (
     <main className="xks-support">
       <SEO title={t.seoTitle} description={t.seoDescription} url={localizePath('/support')} />
-      <Link className="xks-back" to={localizePath('/world-of-xethkioz')}>← {t.back}</Link>
+      <Link className="xks-back" to={localizePath('/world-of-xethkioz/elemental-realms')}>← {t.back}</Link>
       <section className="xks-hero" aria-labelledby="support-title">
         <div className="xks-intro"><p className="xks-eyebrow">{t.eyebrow}</p><h1 id="support-title">{t.title}</h1><p className="xks-lead">{t.intro}</p></div>
         <div className="xks-contribute" aria-labelledby="support-methods-title">
