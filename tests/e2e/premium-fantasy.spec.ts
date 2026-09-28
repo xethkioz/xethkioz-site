@@ -53,6 +53,7 @@ test('El panorama aprobado se ve detrás de tres portales legibles en escritorio
 test('World of Xethkioz funciona como hub antes de entrar a Elemental Realms', async ({ page }) => {
   await page.goto('/world-of-xethkioz'); await essentials(page)
   await expect(page.locator('.wox-universe-hub')).toBeVisible()
+  await expect(page.locator('.xkf-game-link').first()).toHaveAttribute('aria-current', 'page')
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Un universo')
   await expect(page.getByRole('link', { name: /Entrar a Elemental Realms/i }).first()).toHaveAttribute('href', '/world-of-xethkioz/elemental-realms')
   await expect(page.locator('.woxu-project')).toContainText('Elemental Realms')
@@ -61,6 +62,7 @@ test('World of Xethkioz funciona como hub antes de entrar a Elemental Realms', a
 test('Portal Elemental Realms: estado actual, fundador, Alpha 2, Pre-Alpha, Veyr y FAQ', async ({ page }) => {
   await page.goto('/world-of-xethkioz/elemental-realms'); await essentials(page)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Atravesá Elemental Realms.')
+  await expect(page.locator('.xkf-game-link').first()).toHaveAttribute('aria-current', 'page')
   await expect(page.locator('.woxp-world-name')).toContainText('WORLD OF XETHKIOZ')
   await expect(page.locator('.woxp-world-name')).toContainText('ELEMENTAL REALMS')
   await expect(page.locator('.woxp-hero-art img')).toHaveAttribute('src', '/assets/xethkioz-world-panorama-2026.webp')
