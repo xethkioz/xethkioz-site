@@ -64,7 +64,7 @@ Objetivo público: ordenar el recorrido como `XETHKIOZ Home → World of Xethkio
 Cambios vigentes en el candidato:
 - CTA principal del Home entra a Elemental Realms; el universo queda disponible como ruta secundaria.
 - Primer portal visual del Home usa el poster oficial de Alpha 2.
-- El Home incorpora acceso directo `Ver Demo Alpha 2` sin cargar video automático.
+- El Home incorpora acceso directo `Ver Demo Alpha 2` hacia `#alpha-2`, anclado sobre el reproductor, sin cargar video automático.
 - El hub World of Xethkioz reproduce la Demo Alpha 2 bajo control del usuario, con `preload="metadata"` y sin autoplay.
 - El portal Elemental Realms mantiene su sección pública de Alpha 2, arte seleccionado y contexto de desarrollo no final.
 - Navegación identifica `World of Xethkioz: Elemental Realms` y mantiene estado activo tanto en el hub como en la ruta anidada.
@@ -72,7 +72,7 @@ Cambios vigentes en el candidato:
 - El consentimiento de privacidad usa 2+1 acciones en pantallas estrechas para evitar desbordes.
 
 Validación del candidato:
-- Último Preview Vercel validado: `dpl_F7ERK8U6QX6XSk12w5ipCUnPLWBk` — READY.
+- Último Preview Vercel validado: `dpl_8DshJAfSzvxNyevCXCe9FKm86hgG` — READY.
 - Build completo de Vercel: PASS.
 - Emulación DevTools real a 390 px: `scrollWidth = clientWidth = 390` en Home, World of Xethkioz y Elemental Realms.
 - Inspección visual desktop/móvil realizada sobre Preview.
@@ -105,9 +105,9 @@ Antes de cualquier promoción:
 9. Verificar que no se publicaron assets o documentos privados.
 
 ## Estado del candidato actual
-- Rama `design/elemental-realms-pass37` validada en Vercel Preview hasta el commit `a6911e63`.
+- Rama `design/elemental-realms-pass37` validada en Vercel Preview hasta el commit `b828a842`.
 - Home, hub World of Xethkioz y portal Elemental Realms forman un recorrido coherente hacia el proyecto actual.
-- Demo Alpha 2 integrada en hub y portal, con acceso destacado desde Home.
+- Demo Alpha 2 integrada en hub y portal, con acceso destacado desde Home y deep-link directo validado (`#alpha-2`, scroll bajo navegación, controles activos, sin autoplay).
 - Producción continúa intacta hasta aprobación explícita.
 - Lighthouse, Axe completo, teléfono físico, sesiones reales y controles de abuso/retención siguen siendo verificaciones separadas.
 
