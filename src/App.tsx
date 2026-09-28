@@ -27,6 +27,7 @@ const NexusChatWidget = lazy(() => import('./components/nexus/NexusChatWidget'))
 
 const Home = lazy(() => import('./pages/Home'))
 const WorldOfXethkioz = lazy(() => import('./pages/WorldOfXethkioz'))
+const ElementalRealms = lazy(() => import('./pages/ElementalRealms'))
 const GamingHub = lazy(() => import('./pages/GamingHub'))
 const GamingGuides = lazy(() => import('./pages/GamingGuides'))
 const ScienceLab = lazy(() => import('./pages/ScienceLab'))
@@ -88,7 +89,8 @@ function RouteFallback() {
 const routeNames = {
   es: {
     '/': 'Inicio',
-    '/world-of-xethkioz': 'World of Xethkioz: Elemental Realms',
+    '/world-of-xethkioz': 'World of Xethkioz',
+    '/world-of-xethkioz/elemental-realms': 'World of Xethkioz: Elemental Realms',
     '/gaming': 'Juegos',
     '/gaming/guides': 'Guías de juegos',
     '/science': 'Ciencia y tecnología',
@@ -128,7 +130,7 @@ const routeNames = {
   },
 } as const
 
-const activityTrackedPortals = new Set(['/world-of-xethkioz', '/gaming', '/science', '/creacion-web', '/green-node'])
+const activityTrackedPortals = new Set(['/world-of-xethkioz', '/world-of-xethkioz/elemental-realms', '/gaming', '/science', '/creacion-web', '/green-node'])
 
 function RouteAccessibility({ pathname }: { pathname: string }) {
   const { lang } = useLang()
@@ -164,7 +166,7 @@ function AppShell() {
   const basePath = stripEnglishPrefix(location.pathname)
   const isCmsRoute = location.pathname === '/cms' || location.pathname.startsWith('/cms/')
   const isHomeRoute = basePath === '/'
-  const isGamePortalRoute = basePath === '/world-of-xethkioz'
+  const isGamePortalRoute = basePath === '/world-of-xethkioz' || basePath === '/world-of-xethkioz/elemental-realms'
   const hasPublicNavigation = !isCmsRoute && !isHomeRoute && !isGamePortalRoute
 
   useEffect(() => {
@@ -214,6 +216,7 @@ function AppShell() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/world-of-xethkioz" element={<WorldOfXethkioz />} />
+              <Route path="/world-of-xethkioz/elemental-realms" element={<ElementalRealms />} />
               <Route path="/gaming" element={<GamingHub />} />
               <Route path="/gaming/guides" element={<GamingGuides />} />
               <Route path="/science" element={<ScienceLab />} />
@@ -228,6 +231,7 @@ function AppShell() {
 
               <Route path="/en" element={<Home />} />
               <Route path="/en/world-of-xethkioz" element={<WorldOfXethkioz />} />
+              <Route path="/en/world-of-xethkioz/elemental-realms" element={<ElementalRealms />} />
               <Route path="/en/gaming" element={<GamingHub />} />
               <Route path="/en/gaming/guides" element={<GamingGuides />} />
               <Route path="/en/science" element={<ScienceLab />} />
