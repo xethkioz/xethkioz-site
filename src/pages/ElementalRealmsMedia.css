@@ -1,7 +1,7 @@
 /* Pass 37 — Elemental Realms media hierarchy. Static, route-scoped and mobile first. */
 .woxp-build-history{display:grid;grid-template-columns:minmax(0,1.62fr) minmax(280px,.68fr);gap:20px;margin:48px 0 28px;align-items:start;content-visibility:auto;contain-intrinsic-size:auto 760px}
 .woxp-alpha2-feature,.woxp-prealpha-card{position:relative;overflow:hidden;border:1px solid var(--line);background:linear-gradient(145deg,#10131d,#080a10);contain:layout paint}
-.woxp-alpha2-feature{padding:26px;border-top:2px solid #d6bc86;box-shadow:inset 0 1px 0 rgba(255,255,255,.025)}
+.woxp-alpha2-feature{scroll-margin-top:88px;padding:26px;border-top:2px solid #d6bc86;box-shadow:inset 0 1px 0 rgba(255,255,255,.025)}
 .woxp-prealpha-card{padding:20px;opacity:.88;border-color:rgba(214,188,134,.15)}
 .woxp-build-copy{margin-bottom:20px}.woxp-build-copy h3{margin:0 0 14px;color:#f2eadf;font:400 clamp(26px,2.6vw,38px)/1.12 Georgia,serif;letter-spacing:-.025em}
 .woxp-build-copy .woxp-body{margin-bottom:12px;max-width:760px}.woxp-prealpha-card .woxp-build-copy h3{font-size:25px}.woxp-prealpha-card .woxp-body{font-size:12px;line-height:1.75}
