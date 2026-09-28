@@ -103,7 +103,7 @@ check('VIP default grants are replaced by column-level privileges', vipMigration
 check('VIP relationship foreign keys are indexed', vipMigration.includes('nexus_vip_members_inviter_created_idx') && vipMigration.includes('(invited_by, created_at desc)'))
 check('VIP communication is not monetized', vipMigration.includes('never paid communication access') && vipRooms.includes('The ability to talk is not for sale'))
 check('legacy City UI remains archived, not a live page or pet redirect', !app.includes('<FunPortal') && !app.includes('<NexusPixelWorld') && !fun.includes('MascotasRedirect'))
-check('profile shortcuts use active destinations', !profileHub.includes("to: '/nexus-city") && profileHub.includes("to: '/world-of-xethkioz'") && profileHub.includes("to: '/community'"))
+check('profile shortcuts use active destinations', !profileHub.includes("to: '/nexus-city") && profileHub.includes("to: '/world-of-xethkioz/elemental-realms'") && profileHub.includes("to: '/community'"))
 
 for (const item of checks) console.log(`${item.ok ? 'PASS' : 'FAIL'} ${item.name}`)
 const failed = checks.filter((item) => !item.ok)
