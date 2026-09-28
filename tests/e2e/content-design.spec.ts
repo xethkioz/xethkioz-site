@@ -20,8 +20,8 @@ test.describe('orden y navegación de secciones', () => {
       'nav[aria-label="Ecosistema XETHKIOZ"]:visible, nav[aria-label="Ecosistema XETHKIOZ móvil"]:visible',
     )
     await expect(ecosystem).toBeVisible()
-    await expect(ecosystem.getByRole('link')).toHaveCount(8)
-    await expect(ecosystem.getByRole('link', { name: 'World of Xethkioz: Elemental Realms', exact: true })).toHaveAttribute('href', '/world-of-xethkioz')
+    await expect(ecosystem.locator('a:not(.xkf-mobile-auth)')).toHaveCount(8)
+    await expect(ecosystem.getByRole('link', { name: 'World of Xethkioz: Elemental Realms', exact: true })).toHaveAttribute('href', '/world-of-xethkioz/elemental-realms')
     await expect(ecosystem.getByRole('link', { name: 'Biblioteca gamer', exact: true })).toHaveAttribute('href', '/gaming')
     await expect(ecosystem.getByRole('link', { name: /ArgenCiencia/ })).toHaveAttribute('href', 'https://argenciencia.com/')
     await expect(ecosystem.getByRole('link', { name: 'Huellas Argentina', exact: true })).toHaveAttribute('href', '/mascotas/')
