@@ -160,7 +160,7 @@ export default function ElementalRealms() {
           <p className="woxp-kicker">{t.currentLabel}</p>
           <div className="woxp-development">{t.milestones.map(([name, text], index) => <article key={name} className="woxp-development-card"><span aria-hidden="true">0{index + 1}</span><i aria-hidden="true" /><div><h3>{name}</h3><p>{text}</p></div></article>)}</div>
           <div className="woxp-build-history" aria-label={lang === 'es' ? 'Evolución pública del desarrollo' : 'Public development evolution'}>
-            <article className="woxp-alpha2-feature">
+            <article id="alpha-2" className="woxp-alpha2-feature">
               <div className="woxp-build-copy"><p className="woxp-kicker">{t.alpha2Label}</p><h3>{t.alpha2Title}</h3><p className="woxp-body">{t.alpha2Body}</p><small className="woxp-note">{t.alpha2Note}</small></div>
               <div className="woxp-founder-media woxp-alpha2-media">
                 <video className="woxp-founder-video woxp-alpha2-video" controls playsInline preload="metadata" poster="/assets/world-of-xethkioz/media/elemental-realms-alpha-2-poster.webp" aria-label={lang === 'es' ? 'Video: Alpha 2 de World of Xethkioz: Elemental Realms' : 'Video: World of Xethkioz: Elemental Realms Alpha 2'}>
