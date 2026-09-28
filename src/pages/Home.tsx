@@ -16,13 +16,13 @@ function openNexusChat() {
 const copy = {
   es: {
     seo: 'XETHKIOZ · Gaming, tecnología y creación',
-    description: 'Noticias y guías con mirada propia, World of Xethkioz: Elemental Realms en desarrollo, VEYR IA Local y creación web para proyectos reales.',
+    description: 'Noticias y guías con mirada propia, el universo World of Xethkioz con Elemental Realms en desarrollo, VEYR IA Local y creación web para proyectos reales.',
     status: 'GAMING · TECNOLOGÍA · CREACIÓN',
     soul: 'Más allá del juego.',
     lead: 'Soy Alexis. Creo un mundo para jugar, una IA local para trabajar y webs para hacer crecer proyectos reales.',
-    explore: 'Explorar el juego',
+    explore: 'Entrar a World of Xethkioz',
     follow: 'Conocer VEYR',
-    worldNote: 'ELEMENTAL REALMS · ACTION RPG 3D · UNREAL ENGINE 5.8.3',
+    worldNote: 'UNIVERSO EN DESARROLLO · PROYECTO ACTUAL: ELEMENTAL REALMS',
     veyrLabel: 'IA local en desarrollo',
     studioLabel: 'Crear tu web',
     veyrEyebrow: '02 / UNA IA PARA TRABAJAR EN LOCAL',
@@ -63,13 +63,13 @@ const copy = {
   },
   en: {
     seo: 'XETHKIOZ · Gaming, technology and creation',
-    description: 'Gaming news and guides, World of Xethkioz: Elemental Realms in development, VEYR local AI and web creation for real projects.',
+    description: 'Gaming news and guides, the World of Xethkioz universe with Elemental Realms in development, VEYR local AI and web creation for real projects.',
     status: 'GAMING · TECHNOLOGY · CREATION',
     soul: 'Beyond the game.',
     lead: 'I’m Alexis. I’m building a world to play, a local AI to work with, and websites that help real projects grow.',
-    explore: 'Explore the game',
+    explore: 'Enter World of Xethkioz',
     follow: 'Meet VEYR',
-    worldNote: 'ELEMENTAL REALMS · 3D ACTION RPG · UNREAL ENGINE 5.8.3',
+    worldNote: 'UNIVERSE IN DEVELOPMENT · CURRENT PROJECT: ELEMENTAL REALMS',
     veyrLabel: 'Local AI in development',
     studioLabel: 'Build your website',
     veyrEyebrow: '02 / A LOCAL AI WORKSPACE',
@@ -129,14 +129,14 @@ export default function Home() {
             <h1 id="wox-title"><span>XETHKIOZ</span>{t.soul}</h1><p className="wox-lead">{t.lead}</p>
             <div className="wox-actions"><Link to={gamePath}>{t.explore} <span aria-hidden="true">↗</span></Link></div>
           </div>
-          <div className="xk-world-signature"><img src="/assets/world-of-xethkioz/world-of-xethkioz-logo.png" alt="World of Xethkioz: Elemental Realms" width="1584" height="483" decoding="async" /><span>{t.worldNote}</span><div className="xk-elemental-spectrum" aria-label={lang === 'es' ? 'Energías elementales' : 'Elemental energies'}><b data-element="fire">{lang === 'es' ? 'Fuego' : 'Fire'}</b><b data-element="ice">{lang === 'es' ? 'Hielo' : 'Ice'}</b><b data-element="growth">{lang === 'es' ? 'Brote' : 'Growth'}</b><b data-element="shadow">{lang === 'es' ? 'Penumbra' : 'Shadow'}</b></div></div>
+          <div className="xk-world-signature"><img src="/assets/world-of-xethkioz/world-of-xethkioz-logo.png" alt="World of Xethkioz" width="1584" height="483" decoding="async" /><span>{t.worldNote}</span><div className="xk-elemental-spectrum" aria-label={lang === 'es' ? 'Energías elementales' : 'Elemental energies'}><b data-element="fire">{lang === 'es' ? 'Fuego' : 'Fire'}</b><b data-element="ice">{lang === 'es' ? 'Hielo' : 'Ice'}</b><b data-element="growth">{lang === 'es' ? 'Brote' : 'Growth'}</b><b data-element="shadow">{lang === 'es' ? 'Penumbra' : 'Shadow'}</b></div></div>
           <small className="wox-art-credit">{t.caption}</small>
         </section>
 
         <nav className="xk-hero-doors" aria-label={lang === 'es' ? 'Red de portales: elegí un proyecto' : 'Portal network: choose a project'}>
           <header className="xk-doors-heading"><p>{lang === 'es' ? 'TRES RUTAS / UN MISMO UNIVERSO CREATIVO' : 'THREE ROUTES / ONE CREATIVE UNIVERSE'}</p><h2>{lang === 'es' ? 'Elegí por dónde empezar.' : 'Choose where to begin.'}</h2></header>
           <div className="xk-doors-grid">
-            <Link className="is-world" to={gamePath} onMouseEnter={() => setFeaturedPortal('world')} onFocus={() => setFeaturedPortal('world')}><span className="xk-door-index">01 <small>{lang === 'es' ? 'EL JUEGO' : 'THE GAME'}</small></span><span className="xk-door-copy"><strong>World of Xethkioz: Elemental Realms</strong><em>{lang === 'es' ? 'Entrar al universo' : 'Enter the world'}</em></span><span className="xk-door-arrow" aria-hidden="true">↗</span></Link>
+            <Link className="is-world" to={gamePath} onMouseEnter={() => setFeaturedPortal('world')} onFocus={() => setFeaturedPortal('world')}><span className="xk-door-index">01 <small>{lang === 'es' ? 'UNIVERSO' : 'UNIVERSE'}</small></span><span className="xk-door-copy"><strong>World of Xethkioz</strong><em>{lang === 'es' ? 'Proyecto actual · Elemental Realms' : 'Current project · Elemental Realms'}</em></span><span className="xk-door-arrow" aria-hidden="true">↗</span></Link>
             <a className="is-veyr" href="#veyr" onMouseEnter={() => setFeaturedPortal('veyr')} onFocus={() => setFeaturedPortal('veyr')} onMouseLeave={() => setFeaturedPortal('world')} onBlur={() => setFeaturedPortal('world')}><span className="xk-door-index">02 <small>{lang === 'es' ? 'IA LOCAL' : 'LOCAL AI'}</small></span><span className="xk-door-copy"><strong>VEYR</strong><em>{t.veyrLabel}</em></span><span className="xk-door-arrow" aria-hidden="true">↓</span></a>
             <Link className="is-studio" to={`${studioPath}#landing-esencial`} onMouseEnter={() => setFeaturedPortal('studio')} onFocus={() => setFeaturedPortal('studio')} onMouseLeave={() => setFeaturedPortal('world')} onBlur={() => setFeaturedPortal('world')}><span className="xk-door-index">03 <small>{lang === 'es' ? 'CREACIÓN' : 'CREATION'}</small></span><span className="xk-door-copy"><strong>XETHKIOZ Studio</strong><em>{t.studioLabel}</em></span><span className="xk-door-arrow" aria-hidden="true">↗</span></Link>
           </div>
