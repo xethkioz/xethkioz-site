@@ -52,7 +52,7 @@ export default function FantasyNavigation() {
       <nav className="xkf-desktop" aria-label={lang === 'es' ? 'Ecosistema XETHKIOZ' : 'XETHKIOZ ecosystem'}>{links}</nav>
       <nav id={menuId} className="xkf-mobile-panel" hidden={!menuOpen} aria-label={lang === 'es' ? 'Ecosistema XETHKIOZ móvil' : 'Mobile XETHKIOZ ecosystem'} onClick={event => {
         if ((event.target as HTMLElement).closest('a')) close()
-      }}>{links}</nav>
+      }}>{links}<Link className="xkf-mobile-auth" to="/login">{lang === 'es' ? 'Entrar' : 'Sign in'}</Link></nav>
     </header>
   )
 }
