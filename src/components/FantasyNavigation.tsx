@@ -33,8 +33,9 @@ export default function FantasyNavigation() {
     if ('external' in item) return <a key={item.id} href={item.href} target="_blank" rel="noopener noreferrer" className={className}>{label}<span aria-hidden="true">↗</span></a>
     if ('document' in item) return <a key={item.id} href={item.href} className={className}>{label}</a>
     const href = localizePath(item.href)
+    const gameRoot = localizePath('/world-of-xethkioz')
     const active = item.id === 'game'
-      ? location.pathname === href || location.pathname.startsWith(`${href}/`)
+      ? location.pathname === gameRoot || location.pathname.startsWith(`${gameRoot}/`)
       : location.pathname === href
     return <Link key={item.id} to={href} className={className} aria-current={active ? 'page' : undefined}>{label}</Link>
   })
