@@ -56,6 +56,7 @@ test('World of Xethkioz funciona como hub antes de entrar a Elemental Realms', a
   await page.goto('/world-of-xethkioz'); await essentials(page)
   await expect(page.locator('.wox-universe-hub')).toBeVisible()
   await expect(page.locator('.xkf-game-link').first()).toHaveAttribute('aria-current', 'page')
+  await expect(page.locator('.xkf-game-link').first()).toHaveAttribute('href', '/world-of-xethkioz/elemental-realms')
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Un universo')
   await expect(page.getByRole('link', { name: /Entrar a Elemental Realms/i }).first()).toHaveAttribute('href', '/world-of-xethkioz/elemental-realms')
   await expect(page.locator('.woxu-project')).toContainText('Elemental Realms')
