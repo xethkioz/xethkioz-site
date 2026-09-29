@@ -62,7 +62,7 @@ test('Efectos: pausa persistente, partículas limitadas y respeto a movimiento r
   await expect(page.locator('.portal-effects-toggle')).toHaveAttribute('aria-pressed','false')
   await expect(page.locator('.portal-fx').first()).toBeHidden()
   await page.emulateMedia({reducedMotion:'no-preference'})
-  await page.locator('.portal-effects-toggle').click()
+  // A temporary system pause must not overwrite the visitor's saved preference.
   await expect(page.locator('html')).toHaveAttribute('data-portal-effects','on')
   expect(await page.locator('.portal-fx i').count()).toBeLessThanOrEqual(36)
   await page.locator('.portal-effects-toggle').click();await page.reload()

@@ -84,3 +84,21 @@ Los fixtures de estadísticas existen sólo en tests interceptados: nunca enviar
 Build local completo: aprobado. Antes del merge, exigir CI, Browser Quality, Lighthouse y Preview exacto.
 No se modifican pagos, formularios, permisos, canon, imágenes ni el diseño de los portales.
 Mantener los informes/capturas de QA fuera del paquete público. Revisar dominio real después del deploy.
+
+## Pass 42 — Cierre de pulido · 2026-09-29 · v11.7.1 / cierre Pass 42
+Base publicada: main 69806f9f, v11.7.1. Rama aislada fix/portal-final-polish-pass42.
+Se conserva íntegro el diseño de tres portales y la fractura Green Node, sin nuevas secciones.
+El encabezado fijo de Mascotas ahora es opaco: no transparenta texto al desplazarse.
+Los efectos React separan la elección manual de las pausas por movimiento reducido y ahorro de datos.
+Al liberar una pausa del sistema se respeta la elección anterior, sin escribir un apagado permanente.
+Las partículas se pausan también durante pagehide y recuperaciones del historial; no se añade ningún bucle.
+El menú se cierra al salir con teclado sin robar el foco; Escape sólo devuelve el foco si estaba abierto.
+Se conserva la versión 11.7.1 del paquete; esta entrega es el cierre Pass 42 sin cambios de dependencias.
+Revisión inicial en el dominio: seis destinos, 390/1440 px, sin errores JS ni imágenes visibles rotas ni overflow.
+Se reprodujo el fallo de preferencia: on -> reducción de movimiento -> off persistente. La regresión lo corrige.
+Build y audit:production-ready aprobados; 34 ejecuciones de pruebas locales aprobadas (desktop/móvil).
+La nueva suite cubre encabezado 320/390/1440, preferencia, ahorro de datos, lifecycle y navegación con teclado.
+Mantener CI, Browser Quality, Lighthouse y Preview como condiciones de publicación; registrar resultado final en la PR.
+QA conserva capturas/logs fuera de public; las visitas de prueba no incrementan contadores y no envían formularios.
+No se alteran estadísticas, pagos, permisos, canon, imágenes aprobadas ni los worktrees de otros proyectos.
+Esta sección reemplaza los pendientes de encabezado del Pass 41; no volver a aplicarlos desde ramas antiguas.

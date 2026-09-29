@@ -20,7 +20,7 @@ export default function PortalNavigation({ home = false }: { home?: boolean }) {
     document.addEventListener('pointerdown', outside)
     return () => { document.documentElement.removeAttribute('data-fantasy-menu-open'); document.removeEventListener('pointerdown', outside) }
   }, [open])
-  return <header ref={ref} className={`portal-navigation${home ? ' is-home' : ''}`} onKeyDown={event => { if (event.key === 'Escape') { setOpen(false); toggleRef.current?.focus() } }}>
+  return <header onBlur={event => { if (event.relatedTarget instanceof Node && !event.currentTarget.contains(event.relatedTarget)) setOpen(false) }} ref={ref} className={`portal-navigation${home ? ' is-home' : ''}`} onKeyDown={event => { if (event.key === 'Escape' && open) { setOpen(false); toggleRef.current?.focus() } }}>
     {home ? <span className="portal-navigation__signature" aria-hidden="true">✦ <span>{es ? 'UN UNIVERSO SIN LÍMITES' : 'ONE BOUNDLESS UNIVERSE'}</span></span> : <Link className="portal-navigation__back" to={localizePath('/')}><span aria-hidden="true">←</span> {es ? 'Portales' : 'Portals'}</Link>}
     {!home && <nav className="portal-navigation__destinations" aria-label={es ? 'Portales principales' : 'Main portals'}>
       <Link data-tone="fire" aria-current={pathname.includes('elemental-realms') ? 'page' : undefined} to={localizePath('/world-of-xethkioz/elemental-realms')}>Elemental Realms</Link>
@@ -29,7 +29,7 @@ export default function PortalNavigation({ home = false }: { home?: boolean }) {
       <Link data-tone="node" aria-current={pathname.includes('green-node') ? 'page' : undefined} to={localizePath('/green-node')}>Green Node</Link>
     </nav>}
     <div className="portal-navigation__controls">
-      <button type="button" className="portal-effects-toggle" onClick={effects.toggle} aria-pressed={effects.enabled} title={es ? 'Activar o pausar efectos visuales' : 'Enable or pause visual effects'}>{es ? 'Efectos' : 'Effects'} <span aria-hidden="true">{effects.enabled ? '✦' : '○'}</span></button>
+      <button type="button" className="portal-effects-toggle" onClick={effects.toggle} aria-pressed={effects.enabled} aria-disabled={effects.systemPaused} title={effects.systemPaused ? (es ? 'Efectos pausados por movimiento reducido o ahorro de datos' : 'Effects paused by reduced motion or data saver') : es ? 'Activar o pausar efectos visuales' : 'Enable or pause visual effects'}>{es ? 'Efectos' : 'Effects'} <span aria-hidden="true">{effects.enabled ? '✦' : '○'}</span></button>
       <button type="button" aria-label={es ? 'Cambiar a inglés' : 'Switch to Spanish'} onClick={() => setLang(es ? 'en' : 'es')}>{es ? 'EN' : 'ES'}</button>
       <button ref={toggleRef} type="button" aria-expanded={open} aria-controls={menuId} onClick={() => setOpen(value => !value)}>{es ? 'Menú' : 'Menu'} <span aria-hidden="true">{open ? '−' : '+'}</span></button>
     </div>
