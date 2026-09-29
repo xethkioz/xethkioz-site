@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { Navigate, Routes, Route, useLocation } from 'react-router-dom'
 import { LangProvider, useLang } from './lib/LangContext'
 import { HudProvider } from './lib/HudContext'
-import { GREEN_NODE_UNLOCK_KEY, WispProvider, useWisp } from './providers/WispProvider'
+import { WispProvider } from './providers/WispProvider'
 import { ProfileProgressProvider } from './lib/ProfileProgressContext'
 import { PrivacyConsentProvider } from './lib/PrivacyConsentContext'
 import { stripEnglishPrefix } from './lib/localizedRoutes'
@@ -33,7 +33,8 @@ const GamingGuides = lazy(() => import('./pages/GamingGuides'))
 const ScienceLab = lazy(() => import('./pages/ScienceLab'))
 const WebCreation = lazy(() => import('./pages/WebCreation'))
 const GreenNode = lazy(() => import('./pages/GreenNode'))
-const GreenNodeEntry = lazy(() => import('./components/GreenNodeEntry'))
+const DigitalHub = lazy(() => import('./pages/DigitalHub'))
+const PortalSupport = lazy(() => import('./components/portals/PortalSupport'))
 const ProfileHub = lazy(() => import('./pages/ProfileHub'))
 const News = lazy(() => import('./pages/News'))
 const NewsArticle = lazy(() => import('./pages/NewsArticle'))
@@ -62,15 +63,6 @@ const Support = lazy(() => import('./pages/Support'))
 const Privacy = lazy(() => import('./pages/Privacy'))
 const EditorialPolicy = lazy(() => import('./pages/EditorialPolicy'))
 
-function GreenNodeGate() {
-  const { triggerGreenPortal } = useWisp()
-  const [entered, setEntered] = useState(() => {
-    try { return Boolean(window.sessionStorage.getItem(GREEN_NODE_UNLOCK_KEY)) } catch { return false }
-  })
-  const enter = () => { triggerGreenPortal(); setEntered(true) }
-  return entered ? <GreenNode /> : <GreenNodeEntry onEnter={enter} />
-}
-
 function RouteFallback() {
   const { lang } = useLang()
 
@@ -93,6 +85,7 @@ const routeNames = {
     '/world-of-xethkioz/elemental-realms': 'World of Xethkioz: Elemental Realms',
     '/gaming': 'Juegos',
     '/gaming/guides': 'Guías de juegos',
+    '/digital': 'Xethkioz Digital',
     '/science': 'Ciencia y tecnología',
     '/creacion-web': 'Creación web',
     '/green-node': 'Green Node',
@@ -114,6 +107,7 @@ const routeNames = {
     '/world-of-xethkioz/elemental-realms': 'World of Xethkioz: Elemental Realms',
     '/gaming': 'Gaming',
     '/gaming/guides': 'Gaming guides',
+    '/digital': 'Xethkioz Digital',
     '/science': 'Science and technology',
     '/creacion-web': 'Web creation',
     '/green-node': 'Green Node',
@@ -168,7 +162,8 @@ function AppShell() {
   const isCmsRoute = location.pathname === '/cms' || location.pathname.startsWith('/cms/')
   const isHomeRoute = basePath === '/'
   const isGamePortalRoute = basePath === '/world-of-xethkioz' || basePath === '/world-of-xethkioz/elemental-realms'
-  const hasPublicNavigation = !isCmsRoute && !isHomeRoute && !isGamePortalRoute
+  const isThemedPortalRoute = isGamePortalRoute || ['/digital', '/creacion-web', '/green-node'].includes(basePath)
+  const hasPublicNavigation = !isCmsRoute && !isHomeRoute && !isThemedPortalRoute
 
   useEffect(() => {
     if (!activityTrackedPortals.has(basePath)) return
@@ -188,7 +183,7 @@ function AppShell() {
     : { controls: 'Global controls', wisp: 'Global Wisp', routes: 'Routes' }
 
   return (
-    <div className={`${hasPublicNavigation ? 'xk-app-shell xk-has-mobile-dock' : 'xk-app-shell'}${isHomeRoute || isGamePortalRoute ? ' xk-fantasy-shell' : ''}${isGamePortalRoute ? ' xk-world-portal-route' : ''}`}>
+    <div className={`${hasPublicNavigation ? 'xk-app-shell xk-has-mobile-dock' : 'xk-app-shell'}${isHomeRoute || isThemedPortalRoute ? ' xk-fantasy-shell xk-portal-system-shell' : ''}${isGamePortalRoute ? ' xk-world-portal-route' : ''}`}>
       <a href="#main-content" className="xk-skip-link">
         {lang === 'es' ? 'Saltar al contenido principal' : 'Skip to main content'}
       </a>
@@ -220,6 +215,7 @@ function AppShell() {
               <Route path="/world-of-xethkioz/elemental-realms" element={<ElementalRealms />} />
               <Route path="/gaming" element={<GamingHub />} />
               <Route path="/gaming/guides" element={<GamingGuides />} />
+              <Route path="/digital" element={<DigitalHub />} />
               <Route path="/science" element={<ScienceLab />} />
               <Route path="/fun" element={<Navigate to="/community" replace />} />
               <Route path="/creacion-web" element={<WebCreation />} />
@@ -235,12 +231,13 @@ function AppShell() {
               <Route path="/en/world-of-xethkioz/elemental-realms" element={<ElementalRealms />} />
               <Route path="/en/gaming" element={<GamingHub />} />
               <Route path="/en/gaming/guides" element={<GamingGuides />} />
+              <Route path="/en/digital" element={<DigitalHub />} />
               <Route path="/en/science" element={<ScienceLab />} />
               <Route path="/en/fun" element={<Navigate to="/en/community" replace />} />
               <Route path="/en/nexus-city" element={<Navigate to="/en/community" replace />} />
               <Route path="/en/nexus-city/*" element={<Navigate to="/en/community" replace />} />
               <Route path="/en/creacion-web" element={<WebCreation />} />
-              <Route path="/en/green-node" element={<GreenNodeGate />} />
+              <Route path="/en/green-node" element={<GreenNode />} />
               <Route path="/en/community" element={<Community />} />
               <Route path="/en/about" element={<About />} />
               <Route path="/en/contact" element={<Contact />} />
@@ -249,7 +246,7 @@ function AppShell() {
               <Route path="/en/editorial-policy" element={<EditorialPolicy />} />
 
               <Route path="/web-creation" element={<Navigate to="/creacion-web" replace />} />
-              <Route path="/green-node" element={<GreenNodeGate />} />
+              <Route path="/green-node" element={<GreenNode />} />
               <Route path="/news" element={<News />} />
               <Route path="/news/:slug" element={<NewsArticle />} />
               <Route path="/nexus-city" element={<Navigate to="/community" replace />} />
@@ -290,9 +287,9 @@ function AppShell() {
         </AppErrorBoundary>
       </div>
 
-      {!isCmsRoute && (
+      {!isCmsRoute && !isHomeRoute && (
         <Suspense fallback={null}>
-          <Footer />
+          {isThemedPortalRoute ? <PortalSupport /> : <Footer />}
         </Suspense>
       )}
       {!isCmsRoute && (

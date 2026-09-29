@@ -1,33 +1,25 @@
 import fs from 'node:fs'
 const read = path => fs.readFileSync(new URL(`../${path}`, import.meta.url), 'utf8')
-const home = read('src/pages/Home.tsx')
-const hub = read('src/pages/WorldOfXethkioz.tsx')
-const page = read('src/pages/ElementalRealms.tsx')
-const css = read('src/pages/WorldOfXethkiozPortal.css')
-const homeCss = read('src/pages/WorldOfXethkiozLanding.css')
-const elementalCss = read('src/pages/ElementalRealmsMedia.css')
-const hubCss = read('src/pages/WorldOfXethkiozHub.css')
-const wispCss = read('src/components/fusion/FusionGlobalWisp.css')
-const footer = read('src/components/Footer.tsx')
-const checks = [
- ['Home enters the World universe before the current project', home.includes("localizePath('/world-of-xethkioz')") && hub.includes("localizePath('/world-of-xethkioz/elemental-realms')")],
- ['offscreen sections defer rendering with stable placeholders', css.includes('content-visibility:auto') && css.includes('contain-intrinsic-size:auto 680px')],
- ['isolated gallery limits layout and paint work', css.includes('contain:layout paint')],
- ['hero reserves its actual image dimensions and gets loading priority', home.includes('fetchPriority="high"') && home.includes('width="1672" height="941"') && hub.includes('fetchPriority="high"') && hub.includes('width="1672" height="941"') && page.includes('fetchPriority="high"') && page.includes('width="1672" height="941"')],
- ['below-fold art is lazy and asynchronously decoded', page.includes('loading="lazy" decoding="async"')],
- ['public media never autoplays or embeds heavyweight remote surfaces', [home,hub,page].every(s => !/autoPlay|<iframe|<canvas/.test(s))],
- ['Founder Vision, Alpha 2 and Pre-Alpha videos are user-controlled and metadata-only', page.includes('founder-vision.mp4') && page.includes('elemental-realms-alpha-2.mp4') && page.includes('alpha-5-demo.mp4') && (page.match(/controls/g) ?? []).length >= 3 && (page.match(/playsInline/g) ?? []).length >= 3 && (page.match(/preload="metadata"/g) ?? []).length >= 3],
- ['Elemental Realms development stages are explicitly framed as non-final builds', page.includes('ALPHA 2 · ELEMENTAL REALMS') && page.includes('PRE-ALPHA · REGISTRO DE DESARROLLO') && page.includes('NOT A PUBLIC BUILD')],
- ['Elemental Realms exposes current engine and verified movement without internal canon', page.includes('Elemental Realms') && page.includes('Unreal Engine 5.8.3') && page.includes('Caminar, correr, saltar, nadar y bucear') && page.includes('Trepar sigue pendiente')],
- ['page styles have no persistent animation or backdrop filters', [css,homeCss,elementalCss,hubCss].every(s => !/backdrop-filter\s*:|animation\s*:[^;}]*infinite/.test(s))],
- ['both presentations support phones and reduced motion', [css,homeCss,elementalCss,hubCss].every(s => s.includes('@media(max-width:760px)') && /prefers-reduced-motion:\s*reduce/.test(s))],
- ['global mobile Veyr remains on the static profile', wispCss.includes('.xk-wisp .xk-wisp-field,') && wispCss.includes('.xk-wisp .xk-wisp-specter-veyr,') && wispCss.includes('.xk-wisp .xk-wisp-particles{')],
- ['public experience never imports internal game data', [home,hub,page].every(s => !/from ['"][^'"]*(?:game-data|bestiary|quest|lore|canon)/i.test(s) && !/\.(?:glb|gltf|fbx|blend|unitypackage)\b/i.test(s))],
- ['presentation avoids production counts and internal map ranges', [home,hub,page].every(s => !/M\d{2}[–-]M\d{2}|\bQuestID\b|\bBoss\d+\b/.test(s))],
- ['illustrations are clearly not gameplay', [home,hub,page].every(s => s.includes('NO ES GAMEPLAY') && s.includes('NOT GAMEPLAY'))],
- ['Threads and web remain official public destinations in the shared footer', footer.includes('SOCIAL_LINKS.filter') && read('src/lib/siteConfig.ts').includes('https://www.threads.com/@xethkioz') && footer.includes('https://www.xethkioz.com.ar')],
- ['styles stay compact', Buffer.byteLength(css) < 18000 && Buffer.byteLength(homeCss) < 15000 && Buffer.byteLength(elementalCss) < 8000 && Buffer.byteLength(hubCss) < 18000],
+const home=read('src/pages/Home.tsx'), game=read('src/pages/ElementalRealms.tsx'), legacy=read('src/pages/WorldOfXethkioz.tsx'), digital=read('src/pages/DigitalHub.tsx')
+const fx=read('src/components/portals/PortalEffects.tsx'), css=read('src/components/portals/PortalSystem.css'), homeCss=read('src/pages/HomePortals.css'), inside=read('src/pages/PortalInteriors.css')
+const surfaces=[home,game,digital]
+const checks=[
+ ['Direct game route; legacy hub is only a compatible redirect', home.includes("localizePath('/world-of-xethkioz/elemental-realms')") && legacy.includes('<Navigate') && !legacy.includes('<section')],
+ ['Three large sibling portals and a separate full-width Green Node rift', home.includes('portal-triad') && home.includes('portal-node-rift') && home.indexOf('portal-triad') < home.indexOf('portal-node-rift')],
+ ['Home has no videos, remote players, canvas or raw 3D downloads', !/<video|<iframe|<canvas|\.glb|\.fbx/.test(home)],
+ ['All public game media is controlled, never autoplay', !/autoPlay|<iframe|<canvas/.test(game) && (game.match(/controls playsInline/g)||[]).length===3],
+ ['Alpha 2 is the initial video; archives mount only after user intent', game.includes('id="alpha-2"') && game.includes('elemental-realms-alpha-2.mp4') && game.includes('historyOpen &&') && (game.match(/preload="none"/g)||[]).length===2 && (game.match(/preload="metadata"/g)||[]).length===1],
+ ['Optional particles are bounded and paused offscreen and in hidden tabs', fx.includes('Math.min(count, 12)') && fx.includes('IntersectionObserver') && fx.includes('visibilitychange') && fx.includes('!document.hidden') && css.includes('animation-play-state:paused')],
+ ['Effects have an explicit user pause and reduced-motion support', fx.includes('prefers-reduced-motion: reduce') && fx.includes('portal-effects') && css.includes('prefers-reduced-motion:reduce') && css.includes('html[data-portal-effects="off"]')],
+ ['Decorations do not block clicks and mobile limits particle count', css.includes('pointer-events:none') && css.includes('nth-child(n+5)')],
+ ['Dedicated page CSS avoids blur animations and heavy background filters', [css,homeCss,inside].every(s=>!/@keyframes[^}]*backdrop-filter/.test(s)) && !homeCss.includes('backdrop-filter')],
+ ['Home and interiors use responsive media with reserved dimensions', home.includes('portal-mobile.webp') && home.includes('width="600" height="420"') && game.includes('width="520" height="520"')],
+ ['Veyr and B-Rabbit have separate current public identities', game.includes('veyr-companion.webp') && game.includes('b-rabbit-counterpart.webp') && game.includes('EL «BUENO»') && game.includes('EL «MALO»') && !game.includes('veyr-good.webp')],
+ ['Raw models and internal lore stay outside public page imports', surfaces.every(s=>!/from ['"][^'"]*(?:game-data|bestiary|quest|lore|canon)|\.(?:glb|gltf|fbx|blend|unitypackage)\b/i.test(s))],
+ ['Public illustrations and unfinished Alpha are clearly labeled', home.includes('NO ES GAMEPLAY') && game.includes('NOT A PUBLIC BUILD') && game.includes('NOT GAMEPLAY')],
+ ['Route-specific stylesheet size remains bounded', Buffer.byteLength(homeCss)<16000 && Buffer.byteLength(inside)<16000 && Buffer.byteLength(css)<16000],
+ ['All portal scenery stays below a 650 kB source budget', fs.readdirSync(new URL('../public/assets/portals/',import.meta.url)).filter(f=>f.endsWith('.webp')).reduce((sum,f)=>sum+fs.statSync(new URL(`../public/assets/portals/${f}`,import.meta.url)).size,0)<650000],
 ]
-for (const [name,pass] of checks) console.log(`${pass ? 'PASS' : 'FAIL'} ${name}`)
-if (checks.some(([,pass]) => !pass)) process.exit(1)
-console.log('Premium Fantasy mobile and public-surface contract passed.')
+for(const [name,ok] of checks) console.log(`${ok?'PASS':'FAIL'} ${name}`)
+if(checks.some(([,ok])=>!ok))process.exit(1)
+console.log('PASS portal convergence: direct routing, media intent, bounded VFX, current characters and IP boundary')

@@ -1,3 +1,6 @@
+import PortalNavigation from '../components/portals/PortalNavigation'
+import PortalEffects from '../components/portals/PortalEffects'
+import './PortalAdapters.css'
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import SafeImage from '../components/SafeImage'
@@ -484,7 +487,9 @@ export default function WebCreation() {
   }
 
   return (
-    <main className="xke-page xke-services xks-page min-h-screen overflow-hidden bg-[#07070c] text-white">
+    <main className="xke-page xke-services xks-page portal-service-ice min-h-screen overflow-hidden text-white" data-portal-theme="ice">
+      <PortalNavigation/>
+      <div className="portal-service-ice__atmosphere" aria-hidden="true"><PortalEffects tone="ice" count={7}/></div>
       <SEO
         title={lang === 'es' ? 'Creación Web y Servicios Digitales' : 'Web Creation & Digital Services'}
         description={lang === 'es' ? 'Creación web, acompañamiento con IA, contenido para redes y soporte básico de PC. Elegí servicios y solicitá una propuesta a medida.' : 'Web creation, practical AI guidance, social content and basic PC support. Choose services and request a custom proposal.'}

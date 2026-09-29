@@ -30,13 +30,13 @@ assert(!seoShells.includes("path: '/nexus-city'") && !seoShells.includes("path: 
 
 const rewrites = vercel.rewrites ?? []
 const rewriteMap = new Map(rewrites.map((item) => [item.source, item.destination]))
-assert(rewriteMap.get('/world-of-xethkioz') === '/seo-shells/world-of-xethkioz.html', 'World of Xethkioz must have a first-class indexable SEO shell.')
-assert(rewriteMap.get('/en/world-of-xethkioz') === '/seo-shells/en-world-of-xethkioz.html', 'English World of Xethkioz must have a localized SEO shell.')
+assert(redirectMap.get('/world-of-xethkioz')?.destination === '/world-of-xethkioz/elemental-realms' && redirectMap.get('/world-of-xethkioz')?.permanent, 'Legacy World URL redirects directly to Elemental Realms.')
+assert(redirectMap.get('/en/world-of-xethkioz')?.destination === '/en/world-of-xethkioz/elemental-realms', 'English legacy World URL keeps the correct language.')
 assert(rewriteMap.get('/world-of-xethkioz/elemental-realms') === '/seo-shells/world-of-xethkioz-elemental-realms.html', 'Elemental Realms must have a dedicated indexable SEO shell.')
 assert(rewriteMap.get('/en/world-of-xethkioz/elemental-realms') === '/seo-shells/en-world-of-xethkioz-elemental-realms.html', 'English Elemental Realms must have a localized SEO shell.')
-assert(sitemap.includes("es: '/world-of-xethkioz', en: '/en/world-of-xethkioz'"), 'World of Xethkioz localized routes must remain in the sitemap.')
+assert(sitemap.includes("es: '/digital', en: '/en/digital'") && !sitemap.includes("es: '/world-of-xethkioz',"), 'Sitemap contains Digital and excludes redundant redirected hub.')
 assert(sitemap.includes("es: '/world-of-xethkioz/elemental-realms', en: '/en/world-of-xethkioz/elemental-realms'"), 'Elemental Realms localized routes must remain in the sitemap.')
-assert(seoShells.includes("path: '/world-of-xethkioz'") && seoShells.includes("path: '/en/world-of-xethkioz'"), 'World of Xethkioz must generate standalone localized SEO shells.')
+assert(seoShells.includes("path: '/digital'") && seoShells.includes("path: '/en/digital'") && rewriteMap.get('/digital') === '/seo-shells/digital.html', 'Digital has localized indexable route-owned SEO shells.')
 assert(seoShells.includes("path: '/world-of-xethkioz/elemental-realms'") && seoShells.includes("path: '/en/world-of-xethkioz/elemental-realms'"), 'Elemental Realms must generate standalone localized SEO shells.')
 assert(rewriteMap.get('/green-node') === '/index.html', 'Green Node deep links must remain valid without exposing it in navigation.')
 assert(rewriteMap.get('/news/:slug') === '/api/news-page?slug=:slug', 'Article routes must preserve the slug query for the dynamic SEO shell.')

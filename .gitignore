@@ -57,3 +57,8 @@ Packages/
 game/
 World of Xethkioz/
 world-of-xethkioz-private/
+
+# Local visual/browser QA evidence; reports remain outside production.
+/artifacts/
+/test-results/
+/playwright-report/

@@ -1,38 +1,17 @@
 import { expect, test } from '@playwright/test'
 
 test.describe('orden y navegación de secciones', () => {
-  test('Inicio presenta los tres proyectos como portales y conserva el ecosistema', async ({ page }) => {
+  test('Inicio presenta el trío elemental y Green Node sin otra capa de accesos', async ({ page }) => {
     await page.goto('/')
-
-    await expect(page.getByRole('heading', { level: 1, name: /XETHKIOZ.*Más allá del juego/i })).toBeAttached()
-    const portals = page.getByRole('navigation', { name: 'Red de portales: elegí un destino' })
-    await expect(portals.getByRole('link')).toHaveCount(3)
-    await expect(portals.getByRole('link', { name: /Elemental Realms/ })).toHaveAttribute('href', '/world-of-xethkioz/elemental-realms')
-    await expect(portals.getByRole('link', { name: /VEYR/ })).toHaveAttribute('href', '#veyr')
-    await expect(portals.getByRole('link', { name: /XETHKIOZ Studio/ })).toHaveAttribute('href', '/creacion-web#landing-esencial')
-
-    const mobileEcosystem = page.locator('.xkf-mobile')
-    if (await mobileEcosystem.isVisible()) {
-      await mobileEcosystem.click()
-    }
-
-    const ecosystem = page.locator(
-      'nav[aria-label="Ecosistema XETHKIOZ"]:visible, nav[aria-label="Ecosistema XETHKIOZ móvil"]:visible',
-    )
-    await expect(ecosystem).toBeVisible()
-    await expect(ecosystem.locator('a:not(.xkf-mobile-auth)')).toHaveCount(8)
-    await expect(ecosystem.getByRole('link', { name: 'World of Xethkioz: Elemental Realms', exact: true })).toHaveAttribute('href', '/world-of-xethkioz/elemental-realms')
-    await expect(ecosystem.getByRole('link', { name: 'Biblioteca gamer', exact: true })).toHaveAttribute('href', '/gaming')
-    await expect(ecosystem.getByRole('link', { name: /ArgenCiencia/ })).toHaveAttribute('href', 'https://argenciencia.com/')
-    await expect(ecosystem.getByRole('link', { name: 'Huellas Argentina', exact: true })).toHaveAttribute('href', '/mascotas/')
-    await expect(ecosystem.getByRole('link', { name: 'Nexus City', exact: true })).toHaveCount(0)
-    await expect(ecosystem.getByRole('link', { name: 'Creación web', exact: true })).toHaveAttribute('href', '/creacion-web')
-    await expect(ecosystem.getByRole('link', { name: 'VEYR IA', exact: true })).toHaveAttribute('href', '/#veyr')
-    await expect(page.locator('.xkf-header a[href="/news"]').first()).toHaveAttribute('href', '/news')
-
-    await expect(page.locator('.wox-hero')).toBeVisible()
-    await expect(page.locator('.xk-global-footer')).toBeVisible()
-    await expect(page.locator('#origin, #worlds, #characters, #media-3d')).toHaveCount(0)
+    await expect(page.getByRole('heading', { level: 1 })).toHaveAccessibleName('World of Xethkioz')
+    const portals = page.getByRole('navigation', { name: 'Elegí tu portal' })
+    await expect(portals.getByRole('link')).toHaveCount(4)
+    await expect(portals.locator('[data-tone="fire"]')).toHaveAttribute('href', '/world-of-xethkioz/elemental-realms')
+    await expect(portals.locator('[data-tone="nature"]')).toHaveAttribute('href', '/mascotas/')
+    await expect(portals.locator('[data-tone="ice"]')).toHaveAttribute('href', '/digital')
+    await expect(page.locator('.portal-node-rift')).toHaveAttribute('href', '/green-node')
+    await expect(page.locator('.portal-footer')).toBeVisible()
+    await expect(page.locator('#origin, #worlds, #media-3d, .xk-studio-story, .xk-veyr-story')).toHaveCount(0)
   })
 
   test('Gaming conserva una sola navegación de cuatro rutas y el idioma queda en el header global', async ({ page }) => {
@@ -63,7 +42,7 @@ test.describe('orden y navegación de secciones', () => {
 
     const veyr = page.locator('.xk-wisp.is-gaming-veyr')
     await expect(veyr).toBeVisible()
-    await expect(veyr.locator('.xk-wisp-specter-veyr')).toHaveAttribute('src', /veyr-good\.webp$/)
+    await expect(veyr.locator('.xk-wisp-specter-veyr')).toHaveAttribute('src', /veyr-companion\.webp$/)
 
     await navigation.getByRole('button', { name: /Radar$/ }).click()
     await expect(page).toHaveURL(/\/en\/gaming\?section=news$/)

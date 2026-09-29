@@ -85,7 +85,7 @@ test.describe('rutas públicas', () => {
     expect(response?.status()).toBeLessThan(400)
     await expect(page.getByRole('heading', { level: 1, name: /Huellas/i })).toBeVisible()
     await expect(page.getByRole('navigation', { name: 'Navegación' })).toBeVisible()
-    await expect(page.getByRole('link', { name: 'Volver a XETHKIOZ' })).toHaveAttribute('href', '/')
+    await expect(page.getByRole('link', { name: /Volver a los portales/ })).toHaveAttribute('href', '/')
   })
 })
 

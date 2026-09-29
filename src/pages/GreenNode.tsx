@@ -1,3 +1,6 @@
+import PortalNavigation from '../components/portals/PortalNavigation'
+import PortalEffects from '../components/portals/PortalEffects'
+import './PortalAdapters.css'
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import SafeImage from '../components/SafeImage'
@@ -138,7 +141,7 @@ const content: Record<'es' | 'en', GreenCopy> = {
   es: {
     title: 'Green Node',
     description: 'Archivo clandestino donde código, ocultismo digital y teorías imposibles se examinan sin confundir evidencia con ficción.',
-    heroAlt: 'Wisp, Custodio del Green Node, manifestÃ¡ndose entre raÃ­ces, seÃ±ales y servidores',
+    heroAlt: 'Wisp, Custodio del Green Node, manifestándose entre raÃ­ces, seÃ±ales y servidores',
     switchLanguage: 'Cambiar a inglés',
     switchCode: 'EN',
     close: 'Cerrar portal',
@@ -344,7 +347,7 @@ function readGreenIntroState() {
 }
 
 export default function GreenNode() {
-  const { lang, setLang } = useLang()
+  const { lang } = useLang()
   const t = content[lang]
   const location = useLocation()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -538,7 +541,9 @@ export default function GreenNode() {
         <code>0x66 :: W1SP :: SAFE_SIMULATION</code>
       </div> : null}
 
-      <main className={`xk-green-shell px-4 py-12 sm:px-6 lg:pl-24 lg:pr-8${deepMode ? ' xk-deep-mode' : ''}`}>
+      <main className={`xk-green-shell portal-node-interior${deepMode ? ' xk-deep-mode' : ''}`} data-portal-theme="node">
+        <PortalNavigation/>
+        <div className="portal-node-interior__ambience" aria-hidden="true"><PortalEffects tone="node" count={7}/></div>
         <div className="xk-green-matrix" aria-hidden="true" />
         <div className="mx-auto max-w-7xl">
           <section className="xk-green-frame xk-occult-frame rounded-[2rem] bg-black/78 p-6 md:p-10" aria-labelledby="green-title">
@@ -549,7 +554,7 @@ export default function GreenNode() {
             <div className="xk-green-content">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <p className="font-mono text-[11px] uppercase tracking-[0.34em] text-[#32FF8A]/70">BLACK_ARCHIVE // WISP_INFECTION_ACCEPTED</p>
-                <button type="button" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} className="rounded-full border border-[#32FF8A]/50 px-4 py-2 font-mono text-xs font-black uppercase tracking-[0.18em] text-[#D8FFE8] transition hover:bg-[#32FF8A]/10" aria-label={t.switchLanguage} title={t.switchLanguage}>{t.switchCode}</button>
+
               </div>
               <div className="mt-6">
                 <div className="xk-occult-copy">
