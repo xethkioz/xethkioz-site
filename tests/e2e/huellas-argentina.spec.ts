@@ -37,3 +37,49 @@ test('Huellas Argentina publica provincia + localidad sin domicilio exacto', asy
   await expect(page.getByText(/No publiques domicilio exacto/i)).toBeVisible()
   await expect(page.locator('select[name="province"] option')).toHaveCount(24)
 })
+
+test('Huellas mantiene Publicar visible y la cabecera sin solapamientos en escritorio', async ({ page }) => {
+  for (const width of [1180, 1440, 1918]) {
+    await page.setViewportSize({ width, height: 900 })
+    await page.goto('/mascotas/', { waitUntil: 'networkidle' })
+    const publish = page.locator('.header-publish')
+    const back = page.locator('.back')
+    await expect(publish).toBeVisible()
+    await expect(back).toBeVisible()
+    const geometry = await page.evaluate(() => {
+      const rect = (selector: string) => document.querySelector(selector)!.getBoundingClientRect()
+      const a = rect('.header-publish')
+      const b = rect('.back')
+      const overlap = !(a.right <= b.left || a.left >= b.right || a.bottom <= b.top || a.top >= b.bottom)
+      return {
+        overlap,
+        overflow: document.documentElement.scrollWidth > innerWidth + 1,
+        publishRight: a.right,
+        viewport: innerWidth,
+      }
+    })
+    expect(geometry.overlap, `header overlap at ${width}px`).toBe(false)
+    expect(geometry.overflow, `horizontal overflow at ${width}px`).toBe(false)
+    expect(geometry.publishRight).toBeLessThanOrEqual(geometry.viewport + 1)
+  }
+})
+
+test('Huellas usa naturaleza luminosa y mantiene mascotas visibles en el hero', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto('/mascotas/', { waitUntil: 'networkidle' })
+  const petArt = page.locator('.hero-photo')
+  await expect(petArt).toBeVisible()
+  await expect(petArt).toHaveAttribute('src', '/assets/huellas-portal-pets.svg')
+  const visual = await page.evaluate(() => {
+    const hero = document.querySelector('.hero')!
+    const pet = document.querySelector('.hero-photo')!
+    return {
+      petOpacity: Number.parseFloat(getComputedStyle(pet).opacity),
+      portalBackground: getComputedStyle(hero, '::before').backgroundImage,
+      actionBackground: getComputedStyle(document.querySelector('.action-card')!).backgroundImage,
+    }
+  })
+  expect(visual.petOpacity).toBeGreaterThanOrEqual(.3)
+  expect(visual.portalBackground).toContain('nature-portal.webp')
+  expect(visual.actionBackground).toContain('linear-gradient')
+})
