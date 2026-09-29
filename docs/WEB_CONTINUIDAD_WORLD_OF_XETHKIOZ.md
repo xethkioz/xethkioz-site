@@ -102,3 +102,13 @@ Mantener CI, Browser Quality, Lighthouse y Preview como condiciones de publicaci
 QA conserva capturas/logs fuera de public; las visitas de prueba no incrementan contadores y no envían formularios.
 No se alteran estadísticas, pagos, permisos, canon, imágenes aprobadas ni los worktrees de otros proyectos.
 Esta sección reemplaza los pendientes de encabezado del Pass 41; no volver a aplicarlos desde ramas antiguas.
+
+
+## Pass 43 — Huellas naturaleza luminosa
+- Se corrigió el acceso `Publicar`: queda fuera del carrusel horizontal y permanece visible en escritorio junto a `Volver a los portales`.
+- La regla de pre-render de `public/mascotas/app.js` quedó alineada con el header de cuatro columnas; ya no fuerza el layout heredado de 1480 px / tres columnas.
+- Mascotas conserva el fondo bosque y el portal natural, pero reduce el verde musgo: superficies marfil/salvia, bordes verdes y mayor claridad central.
+- Se reemplazó el asset roto `huellas-portal-pets.svg` por `huellas-hero-real.svg`, integrado de forma atmosférica para mostrar perro y gato sin convertir el hero en un collage.
+- `Nuestra comunidad` usa salvia clara con contraste verde, evitando tanto el bloque blanco anterior como el panel excesivamente oscuro.
+- Publicaciones, estadísticas, directorios, formularios, pagos y efectos de naturaleza no cambian funcionalmente.
+- QA agregado para visibilidad de Publicar, ausencia de solapamientos/overflow, fila única en escritorio ancho y presencia real del arte de mascotas.
