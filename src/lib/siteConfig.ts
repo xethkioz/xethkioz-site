@@ -1,4 +1,4 @@
-export const SITE_VERSION = 'v11.7.0'
+export const SITE_VERSION = 'v11.7.1'
 export const SITE_RELEASE = 'Portal Convergence - Pass 40'
 export const SITE_BUILD_DATE = '2026-09-29'
 export const SITE_DOMAIN = 'https://www.xethkioz.com.ar'

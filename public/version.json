@@ -1,17 +1,9 @@
 {
-  "version": "11.2.0",
-  "label": "Three Portal Network",
+  "version": "11.7.1",
+  "label": "Portal Convergence · Huellas polish",
   "stage": "stable",
   "channel": "v11",
-  "codename": "XETHKIOZ Web 11.2.0",
-  "buildDate": "2026-09-14",
-  "sourcePackage": "xethkioz-site",
-  "validation": {
-    "localDeployCheck": "PASS",
-    "productionReadyAudit": "PASS",
-    "viteBuild": "PASS",
-    "npmAudit": "0 vulnerabilities",
-    "modulesTransformed": 272,
-    "vercelPreview": "READY"
-  }
+  "codename": "XETHKIOZ Web 11.7.1",
+  "buildDate": "2026-09-29",
+  "sourcePackage": "xethkioz-site"
 }

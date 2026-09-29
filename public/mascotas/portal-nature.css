@@ -20,3 +20,24 @@ body.portal-nature{--green:#84c997;--green2:#a7eab4;--orange:#e5b47a;--paper:#10
 @keyframes nature-firefly{0%{transform:translate3d(0,0,0);opacity:0}25%{opacity:.7}75%{opacity:.3}100%{transform:translate3d(27px,-90px,0);opacity:0}}
 @media(max-width:760px){.nature-fireflies i:nth-child(n+4){display:none}.pet-portal-effects{margin-left:0;margin-top:7px}}
 @media(prefers-reduced-motion:reduce){.nature-fireflies{display:none}}
+
+/* Pass 41: stats.js mounts after this stylesheet; scoped selectors beat its legacy light theme. */
+.portal-nature .community-stats{background:linear-gradient(135deg,#142d20,#0e2018 64%,#14251a);color:#eef5e9;border-color:#416348;box-shadow:0 12px 36px #0003}
+.portal-nature .community-stats-head h2{color:#e3f5d5;line-height:1.16}
+.portal-nature :is(.community-stats-head p,.community-stats-note){color:#bdd3bf}
+.portal-nature .community-stats-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.portal-nature .community-stat{min-width:0;background:#12261c;border-color:#395c42}
+.portal-nature .community-stat>div{min-width:0;overflow-wrap:break-word}
+.portal-nature .community-stat strong{color:#e8f8da}
+.portal-nature .community-stat span:last-child{color:#bdd3bf}
+.portal-nature .community-stat-icon{background:#274631;box-shadow:inset 0 0 0 1px #50754955}
+.portal-nature .community-stats-live{max-width:100%;white-space:normal;background:#213e29;color:#d0edba;line-height:1.5}
+.portal-nature .community-stats-live::before{flex-shrink:0;background:#a8e579;box-shadow:0 0 0 4px #89c2601f}
+/* Transitions affect only the compositor-friendly transform, never all properties on a touch tap. */
+.portal-nature .action-card{transition:transform .2s ease}
+.portal-nature .action-card:hover{transform:none}
+@media(hover:hover) and (pointer:fine){.portal-nature .action-card:hover{transform:translateY(-4px)}}
+/* Keep decorative lights behind the hero copy, including its interactive controls. */
+.portal-nature .nature-fireflies{z-index:1}
+@media(max-width:800px){.portal-nature .community-stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}.portal-nature *{transition:none!important}}
