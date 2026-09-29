@@ -61,6 +61,14 @@ test('Huellas mantiene Publicar visible y la cabecera sin solapamientos en escri
     expect(geometry.overlap, `header overlap at ${width}px`).toBe(false)
     expect(geometry.overflow, `horizontal overflow at ${width}px`).toBe(false)
     expect(geometry.publishRight).toBeLessThanOrEqual(geometry.viewport + 1)
+    if (width >= 1800) {
+      const aligned = await page.evaluate(() => {
+        const publish = document.querySelector('.header-publish')!.getBoundingClientRect()
+        const back = document.querySelector('.back')!.getBoundingClientRect()
+        return Math.abs(publish.y - back.y) < 8
+      })
+      expect(aligned, 'wide desktop actions should share one row').toBe(true)
+    }
   }
 })
 
@@ -69,7 +77,7 @@ test('Huellas usa naturaleza luminosa y mantiene mascotas visibles en el hero', 
   await page.goto('/mascotas/', { waitUntil: 'networkidle' })
   const petArt = page.locator('.hero-photo')
   await expect(petArt).toBeVisible()
-  await expect(petArt).toHaveAttribute('src', '/assets/huellas-portal-pets.svg')
+  await expect(petArt).toHaveAttribute('src', '/assets/huellas-hero-real.svg')
   const visual = await page.evaluate(() => {
     const hero = document.querySelector('.hero')!
     const pet = document.querySelector('.hero-photo')!
