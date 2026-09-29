@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = '20260925-ar-1';
+  const VERSION = '20260929-polish-41';
   const BASE_PATH = '/mascotas/';
 
   const stableHeader = document.createElement('style');

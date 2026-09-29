@@ -67,3 +67,20 @@ Los informes y capturas de QA quedan fuera de producción y se conservan para co
 Esta estructura sustituye al Home y al hub de las pasadas anteriores.
 El historial de Git conserva las versiones previas; no tratarlas como instrucciones vigentes.
 No modificar worktrees de otros chats ni el proyecto de juego durante esta edición web.
+
+## Pass 41 — Pulido de Huellas · 2026-09-29 · v11.7.1
+Esta revisión parte de main 636f6ecc (Pass 40 publicado) y conserva su arquitectura y arte aprobados.
+Alcance: eliminar el panel blanco de Nuestra comunidad, pulir interacción/movimiento y corregir versión pública.
+Causa: stats.js inyecta estilos claros después del tema; las reglas .portal-nature .community-* ahora mantienen contraste incluso con carga tardía.
+Tarjetas, iconos, cifras, estado y mensajes de error respetan el verde oscuro; no se cambian ni simulan datos reales.
+Las luciérnagas permanecen detrás del texto, sin añadir partículas ni bucles JS.
+Se pausan fuera de vista, con pestaña oculta, pagehide, ahorro de datos y preferencia de movimiento reducido.
+La preferencia manual no se borra por cambios del sistema; el botón comunica si los efectos están pausados.
+En táctil se elimina la elevación hover pegada; en escritorio se mantiene una respuesta ligera de 4 px.
+La navegación de Mascotas respeta movimiento reducido también en el scroll programático.
+Se actualiza public/version.json (antes 11.2.0) junto a package, lockfile y SITE_VERSION; se retiran afirmaciones de validación históricas de ese JSON.
+Prueba nueva: tests/e2e/huellas-polish.spec.ts; ocho ejecuciones locales aprobadas (desktop/móvil), cinco anchos de 320 a 1440 px, contraste Axe, carga tardía, error de datos, pausa y versión.
+Los fixtures de estadísticas existen sólo en tests interceptados: nunca enviarlos a Supabase ni contarlos como visitas.
+Build local completo: aprobado. Antes del merge, exigir CI, Browser Quality, Lighthouse y Preview exacto.
+No se modifican pagos, formularios, permisos, canon, imágenes ni el diseño de los portales.
+Mantener los informes/capturas de QA fuera del paquete público. Revisar dominio real después del deploy.
