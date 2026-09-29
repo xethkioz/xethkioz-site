@@ -28,7 +28,7 @@ const labels = {
     helpAction: 'Pedir ayuda al WISP para usar Green Node',
     helpMarker: 'GUÍA WISP',
     helpStatus: 'TOCÁ PARA REABRIR EL RECORRIDO',
-    worldAction: 'Abrir el chat con Veyr',
+    worldAction: 'Veyr: abrir el chat de la comunidad',
   },
   en: {
     action: 'Open Green Node with Wisp, Custodian of the Green Node',
@@ -38,7 +38,7 @@ const labels = {
     helpAction: 'Ask WISP how to use Green Node',
     helpMarker: 'WISP GUIDE',
     helpStatus: 'TAP TO REOPEN THE TOUR',
-    worldAction: 'Open the chat with Veyr',
+    worldAction: 'Veyr: open community chat',
   },
 } as const
 
@@ -151,7 +151,7 @@ export default function FusionGlobalWisp() {
 
           <span className="xk-wisp-specter-wrap">
             <SafeImage
-              src={canonicalVeyr ? '/assets/world-of-xethkioz/characters/veyr-good.webp' : '/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg'}
+              src={canonicalVeyr ? '/assets/portals/veyr-companion.webp' : '/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg'}
               fallback="/assets/identity/wisp-digital-specter-v1.webp"
               className="xk-wisp-specter xk-wisp-specter-veyr"
               alt=""

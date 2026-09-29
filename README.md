@@ -1,6 +1,11 @@
+## Portal Convergence — v11.7.0
+Three elemental portals (fire, nature, ice) plus a Matrix-green/violet Green Node rift.
+Direct routes, controlled Alpha 2 media, optional effects with pause/reduced-motion support,
+and a compact support footer. The legacy universe route redirects to the active game.
+
 # XETHKIOZ Network
 
-**Versión actual:** `v11.6.0`
+**Versión actual:** `v11.7.0`
 **Release:** World Universe Hierarchy · Pass 38
 **Estado:** producción activa  
 **Última revisión operativa:** 2026-09-27

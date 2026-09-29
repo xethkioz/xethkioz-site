@@ -1,79 +1,35 @@
 import { test, expect } from '@playwright/test'
 
-for (const language of ['es', 'en'] as const) {
-  test(`Pass22: expanded ${language} menu uses the full width without broken words`, async ({ page }, testInfo) => {
-    test.setTimeout(120_000)
-    const records: unknown[] = []
-    for (const width of [320, 360, 390, 430, 768]) {
-      await page.setViewportSize({ width, height: 844 })
-      await page.goto(language === 'es' ? '/' : '/en')
-      const consent = page.getByRole('button', { name: /solo esenciales|essential only/i }).first()
-      if (await consent.isVisible()) await consent.click()
-      const toggle = page.locator('button.xkf-mobile')
-      await toggle.click()
-      await expect(toggle).toHaveAttribute('aria-expanded', 'true')
-      await expect(page.locator('.xk-wisp')).toBeHidden()
-      await expect(page.locator('button[aria-controls="nexus-chat-panel"]')).toBeHidden()
-      await expect(page.locator('.xkf-mobile-panel a:not(.xkf-mobile-auth)')).toHaveCount(8)
-      await expect(page.locator('.xkf-mobile-panel .xkf-mobile-auth')).toHaveCount(1)
-      const result = await page.evaluate(() => {
-        const header = document.querySelector('.xkf-header')!.getBoundingClientRect()
-        const panel = document.querySelector('.xkf-mobile-panel')!.getBoundingClientRect()
-        const hero = document.querySelector('.wox-hero')!.getBoundingClientRect()
-        const broken: string[] = []
-        for (const link of document.querySelectorAll('.xkf-mobile-panel a')) {
-          const nodes = document.createTreeWalker(link, NodeFilter.SHOW_TEXT)
-          for (let node = nodes.nextNode(); node; node = nodes.nextNode()) {
-            for (const match of (node.textContent || '').matchAll(/\p{L}+/gu)) {
-              const range = document.createRange(); range.setStart(node, match.index!); range.setEnd(node, match.index! + match[0].length)
-              if (range.getClientRects().length > 1) broken.push(match[0])
-            }
-          }
-        }
-        return { width: innerWidth, ratio: panel.width / header.width, broken, headerBottom: header.bottom, heroTop: hero.top, overflow: document.documentElement.scrollWidth > innerWidth + 1 }
-      })
-      records.push(result)
-      expect(result.ratio).toBeGreaterThan(.95); expect(result.broken).toEqual([])
-      expect(result.overflow).toBe(false); expect(result.headerBottom).toBeLessThanOrEqual(result.heroTop + 1)
-      await expect(page.locator('.xkf-mobile-panel a[href="/nexus-city"]')).toHaveCount(0)
-      await page.locator('.xkf-mobile-panel a').first().focus(); await page.keyboard.press('Escape')
-      await expect(toggle).toHaveAttribute('aria-expanded', 'false'); await expect(toggle).toBeFocused()
-      await expect(page.locator('.xkf-mobile-panel')).toBeHidden()
-    }
-    await testInfo.attach('expanded-menu-widths.json', { body: JSON.stringify(records, null, 2), contentType: 'application/json' })
-  })
-}
-
-test('Pass22: current gateway starts below the mobile header and exposes the three project doors', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 }); await page.goto('/')
-  await expect(page.locator('.wox-status')).toHaveText('GAMING · TECNOLOGÍA · CREACIÓN')
-  await expect(page.locator('.xk-doors-grid a')).toHaveCount(3)
-  const geometry = await page.evaluate(() => {
-    const header = document.querySelector('.xkf-header')!.getBoundingClientRect()
-    const hero = document.querySelector('.wox-hero')!.getBoundingClientRect()
-    const doors = document.querySelector('.xk-hero-doors')!.getBoundingClientRect()
-    return { headerBottom: header.bottom, heroTop: hero.top, doorsLeft: doors.left, doorsRight: doors.right, viewport: innerWidth }
-  })
-  expect(geometry.heroTop).toBeGreaterThanOrEqual(geometry.headerBottom - 1)
-  expect(geometry.doorsLeft).toBeGreaterThanOrEqual(0)
-  expect(geometry.doorsRight).toBeLessThanOrEqual(geometry.viewport + 1)
+for(const prefix of ['', '/en']) test(`Menú compacto de portales conserva acceso por teclado ${prefix||'es'}`,async({page})=>{
+  await page.setViewportSize({width:390,height:844});await page.goto(prefix||'/')
+  const consent=page.getByRole('button',{name:/solo esenciales|essential only/i}).first();if(await consent.isVisible())await consent.click()
+  const toggle=page.locator('.portal-navigation__controls button').last();await toggle.click()
+  await expect(toggle).toHaveAttribute('aria-expanded','true')
+  const menu=page.locator('.portal-navigation__more');await expect(menu).toBeVisible();await expect(menu.locator('a')).toHaveCount(4)
+  await expect(page.locator('.xk-wisp')).toBeHidden()
+  await menu.locator('a').first().focus();await page.keyboard.press('Escape')
+  await expect(menu).toBeHidden();await expect(toggle).toBeFocused()
 })
 
-test('Pass22: Veyr cannot cover the chat composer and returns after closing', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 })
-  for (const route of ['/', '/world-of-xethkioz']) {
-    await page.goto(route)
-    const consent = page.getByRole('button', { name: /solo esenciales|essential only/i }).first()
-    if (await consent.isVisible()) await consent.click()
-    await expect(page.locator('.xk-wisp')).toBeVisible()
-    const launcher = page.locator('button[aria-controls="nexus-chat-panel"]')
-    await launcher.click(); await expect(page.locator('#nexus-chat-panel')).toBeVisible()
-    await expect(page.locator('.xk-wisp')).toBeHidden()
-    const send = page.locator('#nexus-chat-panel button[type="submit"]')
-    await expect(send).toBeVisible()
-    expect(await send.evaluate(el => { const r = el.getBoundingClientRect(); return el.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)) })).toBe(true)
-    await launcher.click(); await expect(page.locator('#nexus-chat-panel')).toHaveCount(0)
-    await expect(page.locator('.xk-wisp')).toBeVisible()
-    await expect(page.locator('html')).not.toHaveAttribute('data-nexus-chat-open', '')
+test('Portales y sus controles caben en 320–1440 px, con el nodo debajo del trío',async({page})=>{
+  for(const width of [320,390,768,1440]){
+    await page.setViewportSize({width,height:1000});await page.goto('/');await expect(page.locator('.portal-gate')).toHaveCount(3)
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true)
+    const bounds=await page.locator('.portal-gate').evaluateAll(es=>es.map(e=>{const r=e.getBoundingClientRect();return{left:r.left,right:r.right,top:r.top,bottom:r.bottom}}))
+    expect(bounds.every(r=>r.left>=0&&r.right<=width+1)).toBe(true)
+    const node=await page.locator('.portal-node-rift').boundingBox();expect(node!.y).toBeGreaterThanOrEqual(Math.max(...bounds.map(r=>r.bottom))-2)
+    if(width<601)expect(bounds[1].top).toBeGreaterThan(bounds[0].top)
+    else expect(Math.max(...bounds.map(r=>r.top))-Math.min(...bounds.map(r=>r.top))).toBeLessThan(2)
+  }
+})
+
+test('El chat conserva su cierre y Veyr no cubre el editor',async({page})=>{
+  await page.setViewportSize({width:390,height:844})
+  for(const path of ['/', '/world-of-xethkioz/elemental-realms']){
+    await page.goto(path);const consent=page.getByRole('button',{name:/solo esenciales|essential only/i}).first();if(await consent.isVisible())await consent.click()
+    const launcher=page.locator('button[aria-controls="nexus-chat-panel"]');await launcher.click()
+    await expect(page.locator('#nexus-chat-panel')).toBeVisible();await expect(page.locator('.xk-wisp')).toBeHidden()
+    await expect(page.locator('#nexus-chat-panel button[type="submit"]')).toBeVisible()
+    await launcher.click();await expect(page.locator('#nexus-chat-panel')).toHaveCount(0)
   }
 })

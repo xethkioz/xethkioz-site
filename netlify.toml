@@ -1,3 +1,23 @@
+# Pass 40: one direct game destination; legacy universe URLs remain compatible.
+[[redirects]]
+from = "/world-of-xethkioz"
+to = "/world-of-xethkioz/elemental-realms"
+status = 301
+force = true
+[[redirects]]
+from = "/en/world-of-xethkioz"
+to = "/en/world-of-xethkioz/elemental-realms"
+status = 301
+force = true
+[[redirects]]
+from = "/digital"
+to = "/seo-shells/digital.html"
+status = 200
+[[redirects]]
+from = "/en/digital"
+to = "/seo-shells/en-digital.html"
+status = 200
+
 [build]
   command = "npm run build"
   publish = "dist"

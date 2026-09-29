@@ -1,6 +1,6 @@
-export const SITE_VERSION = 'v11.6.0'
-export const SITE_RELEASE = 'World Universe Hierarchy - Pass 38'
-export const SITE_BUILD_DATE = '2026-09-27'
+export const SITE_VERSION = 'v11.7.0'
+export const SITE_RELEASE = 'Portal Convergence - Pass 40'
+export const SITE_BUILD_DATE = '2026-09-29'
 export const SITE_DOMAIN = 'https://www.xethkioz.com.ar'
 
 export const DONATION_LINKS = {
@@ -14,6 +14,7 @@ export const SOCIAL_LINKS = [
   { name: 'Threads', handle: '@xethkioz', url: 'https://www.threads.com/@xethkioz', icon: '🧵', verified: true },
   { name: 'TikTok Principal', handle: '@xethkioz0', url: 'https://www.tiktok.com/@xethkioz0', icon: '🎵', verified: true },
   { name: 'TikTok Asia', handle: '@xethkioz.asia', url: 'https://www.tiktok.com/@xethkioz.asia', icon: '🌏', verified: true },
+  { name: 'Facebook', handle: 'Xethkioz', url: 'https://www.facebook.com/1200879536437785', icon: 'f', verified: true },
   { name: 'YouTube', handle: '@XETHKIOZ', url: 'https://www.youtube.com/@XETHKIOZ', icon: '▶️', verified: false },
 ]
 

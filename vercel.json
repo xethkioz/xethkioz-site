@@ -19,6 +19,8 @@
   },
   "trailingSlash": false,
   "redirects": [
+    { "source": "/world-of-xethkioz", "destination": "/world-of-xethkioz/elemental-realms", "permanent": true },
+    { "source": "/en/world-of-xethkioz", "destination": "/en/world-of-xethkioz/elemental-realms", "permanent": true },
     { "source": "/tripo", "destination": "https://studio.tripo3d.ai/?utm_source=creator_invite&utm_medium=linkcopy&utm_campaign=VXH2GZ&utm_content=2251799814429939", "permanent": false },
     { "source": "/starlink", "destination": "https://starlink.com?referral=RC-DF-13005453-64032-82", "permanent": false },
     {"source": "/nexus-city", "destination": "/community", "permanent": true},
@@ -32,6 +34,8 @@
     { "source": "/admin", "destination": "/cms", "permanent": true }
   ],
   "rewrites": [
+    { "source": "/digital", "destination": "/seo-shells/digital.html" },
+    { "source": "/en/digital", "destination": "/seo-shells/en-digital.html" },
     { "source": "/mascotas", "destination": "/mascotas/index.html" },
     { "source": "/mascotas/", "destination": "/mascotas/index.html" },
     { "source": "/sitemap.xml", "destination": "/api/sitemap" },
@@ -40,8 +44,6 @@
     { "source": "/", "destination": "/index.html" },
     { "source": "/world-of-xethkioz/elemental-realms", "destination": "/seo-shells/world-of-xethkioz-elemental-realms.html" },
     { "source": "/en/world-of-xethkioz/elemental-realms", "destination": "/seo-shells/en-world-of-xethkioz-elemental-realms.html" },
-    { "source": "/world-of-xethkioz", "destination": "/seo-shells/world-of-xethkioz.html" },
-    { "source": "/en/world-of-xethkioz", "destination": "/seo-shells/en-world-of-xethkioz.html" },
     { "source": "/en", "destination": "/seo-shells/en-home.html" },
     { "source": "/en/gaming/guides", "destination": "/seo-shells/en-gaming-guides.html" },
     { "source": "/en/gaming", "destination": "/seo-shells/en-gaming.html" },

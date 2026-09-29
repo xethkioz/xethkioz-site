@@ -28,7 +28,7 @@ for (const lang of ['es', 'en'] as const) {
     await dismissConsent(page)
     await page.getByRole('button', { name: lang === 'es' ? 'Agregar IA aplicada' : 'Add Practical AI', exact: true }).click()
     const studioBefore = await styleSnapshot(page, '.xks-page .xks-hero')
-    await page.locator(`.xk-global-footer a[href="${prefix}/support"]:visible`).first().click()
+    await page.locator(`.portal-footer a[href="${prefix}/support"]`).click() // SPA navigation must preserve styles and the saved service selection.
     await expect(page.locator('.xks-support .xks-hero')).toBeVisible()
     await expect(page.locator('.xks-support')).toContainText(lang === 'es' ? 'El aporte es voluntario' : 'Support is voluntary')
     const supportBefore = await styleSnapshot(page, '.xks-support .xks-hero')

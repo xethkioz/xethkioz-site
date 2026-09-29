@@ -15,7 +15,7 @@ const rootDocument = read('index.html')
 const routeCssLoader = read('src/components/RouteCssLoader.tsx')
 const accessibility = read('src/accessibility.css')
 const browserTest = read('tests/e2e/content-design.spec.ts')
-const landingCss = read('src/pages/WorldOfXethkiozLanding.css')
+const landingCss = read('src/pages/HomePortals.css')
 const globalCss = read('src/index.css')
 const mainEntry = read('src/main.tsx')
 const checks = []
@@ -24,14 +24,14 @@ const check = (name, ok) => checks.push([name, Boolean(ok)])
 check('Nexus links preserve localized routes', district.includes('const { lang, localizePath } = useLang()') && district.includes('to={localizePath(item.to)}'))
 check('Science district prioritizes sourced news', district.indexOf("title: 'Noticias con fuentes'") < district.indexOf("title: 'Herramientas y respuestas'"))
 check('Home exposes three compact public portals', destinations.includes("href: '/gaming'") && destinations.includes('https://argenciencia.com/') && destinations.includes("href: '/mascotas/'") && !home.includes("id: 'comicon'"))
-check('Home offers clear portals to the game, local VEYR project and Studio', home.includes('xk-hero-doors') && home.includes('world-of-xethkioz-logo.png') && home.includes("localizePath('/world-of-xethkioz')") && home.includes('VEYR<span>IA LOCAL') && home.includes('Landing Esencial') && home.includes("localizePath('/creacion-web')"))
+check('Home has a three-column portal trio plus a separate Green Node rift', home.includes('portal-triad') && home.includes('portal-node-rift') && home.includes("localizePath('/world-of-xethkioz/elemental-realms')") && home.includes("href: '/mascotas/'") && home.includes("localizePath('/digital')") && home.includes("localizePath('/green-node')"))
 check('Home content shortcuts avoid duplicated portal destinations', district.includes("title: 'Guías Gaming'") && district.includes("to: '/gaming/guides'") && district.includes("title: 'Noticias'") && district.includes("title: 'Comunidad'"))
 check('Home removes heavyweight portal theatre artwork', !home.includes('xk-rb-portals') && !home.includes('PrimaryPortal'))
 check('Home uses an optimized transparent PNG World logo', home.includes('world-of-xethkioz-logo.png') && fs.existsSync(path.join(root, 'public/assets/world-of-xethkioz/world-of-xethkioz-logo.png')) && fs.statSync(path.join(root, 'public/assets/world-of-xethkioz/world-of-xethkioz-logo.png')).size < 180000)
 check('Home does not hide Mascotas behind a legacy override', !rootDocument.includes('huellas-portal-inline.css') && !fs.existsSync(path.join(root, 'public/huellas-portal-inline.css')) && !fs.existsSync(path.join(root, 'public/huellas-portal-image.js')))
-check('Home uses the approved panoramic promotional art without autoplay', !home.includes('<video') && !home.includes('autoPlay') && home.includes('/assets/xethkioz-world-panorama-2026.webp') && fs.existsSync(path.join(root, 'public/assets/xethkioz-world-panorama-2026.webp')) && fs.statSync(path.join(root, 'public/assets/xethkioz-world-panorama-2026.webp')).size < 750000 && landingCss.includes('prefers-reduced-motion: reduce'))
+check('Home uses approved optimized portal crops, responsive media and no autoplay', !home.includes('<video') && !home.includes('autoPlay') && home.includes('portal-mobile.webp') && ['fire','nature','ice'].every(t => fs.statSync(path.join(root,`public/assets/portals/${t}-portal.webp`)).size < 120000) && /prefers-reduced-motion:\s*reduce/.test(landingCss))
 check('Home avoids fake safety or simulated live claims', !home.includes('SISTEMA SEGURO 24/7') && !home.includes('JUGADORES CONECTADOS') && !home.includes('PRIVACIDAD Y NAVEGACIÓN VERIFICADAS'))
-check('Home exposes the existing Nexus chat launcher', home.includes('xethkioz:nexus-chat-open'))
+check('Home keeps a single global community chat launcher rather than a duplicate hero button', read('src/App.tsx').includes('<NexusChatWidget') && !home.includes('<NexusChatWidget'))
 check('Home dedicated landing CSS stays below 32 kB source', Buffer.byteLength(landingCss, 'utf8') <= 32 * 1024)
 check(
   'Home landing CSS excludes retired section and grid selectors',
@@ -48,7 +48,7 @@ check(
 )
 check(
   'Home keeps lightweight World presentation styles',
-  home.includes("import './WorldOfXethkiozLanding.css'")
+  home.includes("import './HomePortals.css'")
     && !home.includes('WorldOfXethkiozHome.css')
     && !home.includes('WorldOfXethkiozAAA.css')
     && !home.includes('WorldOfXethkiozBackgroundTuning.css'),
@@ -68,9 +68,9 @@ check(
     && globalCss.includes('.portal-runes {')
     && globalCss.includes('.portal-title {'),
 )
-check('Home loads only three recent articles through a deferred import', district.includes("import('../services/news/publicNewsService')") && district.includes("fetchPublishedNews('all')") && district.includes('articles.slice(0, 3)'))
-check('Home identifies Spanish-only editorial content in English', district.includes('LATEST FROM THE SPANISH NEWSROOM') && district.includes('Open Spanish news'))
-check('Home reserves the editorial radar before data arrives', district.includes('data-home-recent-radar') && district.includes('min-h-[210px]'))
+check('Editorial district loads only three recent articles through a deferred import', district.includes("import('../services/news/publicNewsService')") && district.includes("fetchPublishedNews('all')") && district.includes('articles.slice(0, 3)'))
+check('Editorial district identifies Spanish-only content in English', district.includes('LATEST FROM THE SPANISH NEWSROOM') && district.includes('Open Spanish news'))
+check('Editorial district reserves its radar before data arrives', district.includes('data-home-recent-radar') && district.includes('min-h-[210px]'))
 check('Decorative transit rail is removed', !district.includes('UniverseTransitRail') && !district.includes('xk-nexus-transit'))
 check('Simulated live status language is removed', !/JUGADORES CONECTADOS|PLAYERS CONNECTED|INVESTIGACIÓN ACTIVA|RESEARCH ACTIVE/.test(district))
 check('Section headings describe a concrete user action', district.includes('Fuentes, herramientas y proyectos'))
@@ -90,7 +90,7 @@ check('Gaming mobile hero keeps a stable minimum height', accessibility.includes
 check('Localized English portals load their route-owned visual styles', routeCssLoader.includes("pathname.startsWith('/en/')") && routeCssLoader.includes('pathname.slice(3)'))
 
 check('Green Node keeps one primary section navigator instead of a duplicate district', !green.includes('NexusDistrict') && green.includes('xk-green-view-nav'))
-check('Green Node clears the desktop launcher without changing mobile spacing', green.includes('lg:pl-24 lg:pr-8'))
+check('Green Node uses its own compact portal navigation without the legacy mobile dock', green.includes('<PortalNavigation/>') && green.includes('portal-node-interior') && read('src/App.tsx').includes('!isThemedPortalRoute'))
 check('Science primary content precedes external network and learning modules', science.indexOf('data-science-primary-content') < science.indexOf('xk-argenciencia-link') && science.indexOf('data-science-primary-content') < science.indexOf('xk-learning-routes'))
 check('Science gives each learning card a concrete destination', science.includes("title: 'Explorar con chicos'") && science.includes("to: '/news?category=science'") && science.includes("to: '#tech-stack'") && science.includes("to: '#lab-assistant'") && science.includes("to: '/news?category=tech'"))
 check('Science localizes translated assistant and home links', science.includes('localizePath(assistant.link)') && science.includes("localizePath('/')"))
