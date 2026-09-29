@@ -296,6 +296,7 @@ body.portal-nature{
   -webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.26) 16%,#000 44%,rgba(0,0,0,.88) 78%,transparent 100%);
   mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.26) 16%,#000 44%,rgba(0,0,0,.88) 78%,transparent 100%);
   pointer-events:none;
+  clip-path:inset(18% 0 0 0);
 }
 .portal-nature .hero-content{z-index:4}
 .portal-nature .nature-fireflies{z-index:3}
