@@ -1,6 +1,14 @@
 # WEB CONTINUIDAD — WORLD OF XETHKIOZ
 
-Actualizado: 2026-09-29 · Pass 40 · candidato v11.7.0
+Actualizado: 2026-09-30 · Pass 43 integrado en main · despliegue de producción pendiente de verificación específica
+
+## Estado vigente sincronizado
+Estado vigente: main 3be9484070492b60a37ab69ab1bc00149d2f9165. PR #293 fusionada el 29/09/2026 a las 16:43:41 UTC. Pass 43 mantiene Publicar visible en el encabezado de escritorio y actualiza Huellas con superficies salvia/marfil y arte existente de perro/gato, conservando datos y controles de movimiento.
+Verificación documental: GitHub main y PR #293 releídos el 30/09/2026. No constituye una nueva prueba de producción.
+Fuentes: https://github.com/xethkioz/xethkioz-site/pull/293 y https://github.com/xethkioz/xethkioz-site/commit/3be9484070492b60a37ab69ab1bc00149d2f9165
+
+## Historial conservado — Pass 40 a Pass 42
+Las referencias siguientes a bases, ramas y candidatos Pass 40–42 se conservan como historial y no sustituyen el estado vigente indicado arriba.
 
 ## Estado y alcance
 Esta hoja es operativa de la web pública, no una biblia del juego.
@@ -103,12 +111,14 @@ QA conserva capturas/logs fuera de public; las visitas de prueba no incrementan 
 No se alteran estadísticas, pagos, permisos, canon, imágenes aprobadas ni los worktrees de otros proyectos.
 Esta sección reemplaza los pendientes de encabezado del Pass 41; no volver a aplicarlos desde ramas antiguas.
 
-
-## Pass 43 — Huellas naturaleza luminosa
-- Se corrigió el acceso `Publicar`: queda fuera del carrusel horizontal y permanece visible en escritorio junto a `Volver a los portales`.
-- La regla de pre-render de `public/mascotas/app.js` quedó alineada con el header de cuatro columnas; ya no fuerza el layout heredado de 1480 px / tres columnas.
-- Mascotas conserva el fondo bosque y el portal natural, pero reduce el verde musgo: superficies marfil/salvia, bordes verdes y mayor claridad central.
-- Se reemplazó el asset roto `huellas-portal-pets.svg` por `huellas-hero-real.svg`, integrado de forma atmosférica para mostrar perro y gato sin convertir el hero en un collage.
-- `Nuestra comunidad` usa salvia clara con contraste verde, evitando tanto el bloque blanco anterior como el panel excesivamente oscuro.
-- Publicaciones, estadísticas, directorios, formularios, pagos y efectos de naturaleza no cambian funcionalmente.
-- QA agregado para visibilidad de Publicar, ausencia de solapamientos/overflow, fila única en escritorio ancho y presencia real del arte de mascotas.
+## Pass 44 — Cursos digitales · 2026-09-30
+Base: main 3be9484070492b60a37ab69ab1bc00149d2f9165 (Pass 43).
+Rama: feat/digital-courses-pass44. Cambio preparado; producción pendiente de aprobación final del usuario.
+Digital conserva Creación web, VEYR y ArgenCiencia y agrega Cursos digitales como cuarta tarjeta.
+Desktop: cuatro tarjetas en fila; tablet: dos columnas; móvil: una columna.
+Nueva página /digital/cursos y /en/digital/cursos con dos secciones: IA — Inteligencia Artificial (Cursos), USD 15; Proyectos Base (Proyectos prearmados), USD 50.
+El contenido está en preparación: no se inventan temarios, archivos descargables, certificaciones ni cobros.
+Se mantienen navegación del portal de hielo, enlaces de regreso, idioma, canonical/alternates, sitemap y rutas de Netlify/Vercel.
+Verificación local: build completo y audit:production-ready aprobados; cuatro pruebas Playwright desktop/móvil aprobadas, anchos 320/390/1000/1440, navegación ida/vuelta, idioma, canonicals, cero errores JS y cero violaciones Axe en la nueva página.
+Capturas visuales inspeccionadas en desktop/móvil. Las evidencias QA quedan fuera del paquete público.
+Antes de producción: aprobar el cambio final y comprobar CI, Browser Quality, Lighthouse y despliegue exacto.

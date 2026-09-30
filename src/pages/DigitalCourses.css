@@ -1,0 +1,14 @@
+.portal-courses{padding-bottom:3rem}
+.digital-courses__back{display:inline-flex;align-items:center;min-height:44px;margin-top:1.25rem;color:#afe9ff;font-size:.875rem;text-underline-offset:4px}
+.digital-courses__heading{padding:1.5rem 0 2rem;max-width:700px}
+.digital-courses__heading h1{font-size:clamp(2.5rem,4.5vw,4.125rem);line-height:1.06;letter-spacing:-.035em;margin:1rem 0}
+.digital-courses__heading>p:last-child{font-size:1rem;color:#c2d0dc}
+.digital-courses__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem}
+.digital-course{min-width:0;padding:2rem;border:1px solid rgba(110,191,240,.3);border-top:2px solid #83c8f3;background:linear-gradient(150deg,rgba(27,54,83,.55),#080e19)}
+.digital-course .portal-eyebrow{font-size:.875rem;letter-spacing:.12em;margin:0 0 1rem}
+.digital-course h2{font-size:clamp(1.75rem,2.5vw,2.25rem);line-height:1.2;margin:0 0 .75rem;overflow-wrap:anywhere}
+.digital-course__type{font-size:1rem;color:#c2d0dc;margin:0}
+.digital-course .digital-course__price{font-size:3.5rem;line-height:1.2;font-weight:650;font-variant-numeric:tabular-nums;color:#e0f5ff;margin:1.75rem 0}
+.digital-course__price span{font-size:1rem;letter-spacing:.06em;color:#9be5ff}
+.digital-course__status{padding-top:1rem;border-top:1px solid #30445a;color:#b9cbd9;font-size:.875rem;margin:0}
+@media(max-width:760px){.digital-courses__grid{grid-template-columns:1fr;gap:1rem}.digital-courses__heading{padding:1rem 0 1.5rem}.digital-course{padding:1.5rem}}

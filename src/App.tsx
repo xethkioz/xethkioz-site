@@ -34,6 +34,7 @@ const ScienceLab = lazy(() => import('./pages/ScienceLab'))
 const WebCreation = lazy(() => import('./pages/WebCreation'))
 const GreenNode = lazy(() => import('./pages/GreenNode'))
 const DigitalHub = lazy(() => import('./pages/DigitalHub'))
+const DigitalCourses = lazy(() => import('./pages/DigitalCourses'))
 const PortalSupport = lazy(() => import('./components/portals/PortalSupport'))
 const ProfileHub = lazy(() => import('./pages/ProfileHub'))
 const News = lazy(() => import('./pages/News'))
@@ -86,6 +87,7 @@ const routeNames = {
     '/gaming': 'Juegos',
     '/gaming/guides': 'Guías de juegos',
     '/digital': 'Xethkioz Digital',
+    '/digital/cursos': 'Cursos digitales',
     '/science': 'Ciencia y tecnología',
     '/creacion-web': 'Creación web',
     '/green-node': 'Green Node',
@@ -108,6 +110,7 @@ const routeNames = {
     '/gaming': 'Gaming',
     '/gaming/guides': 'Gaming guides',
     '/digital': 'Xethkioz Digital',
+    '/digital/cursos': 'Digital courses',
     '/science': 'Science and technology',
     '/creacion-web': 'Web creation',
     '/green-node': 'Green Node',
@@ -162,7 +165,7 @@ function AppShell() {
   const isCmsRoute = location.pathname === '/cms' || location.pathname.startsWith('/cms/')
   const isHomeRoute = basePath === '/'
   const isGamePortalRoute = basePath === '/world-of-xethkioz' || basePath === '/world-of-xethkioz/elemental-realms'
-  const isThemedPortalRoute = isGamePortalRoute || ['/digital', '/creacion-web', '/green-node'].includes(basePath)
+  const isThemedPortalRoute = isGamePortalRoute || ['/digital', '/digital/cursos', '/creacion-web', '/green-node'].includes(basePath)
   const hasPublicNavigation = !isCmsRoute && !isHomeRoute && !isThemedPortalRoute
 
   useEffect(() => {
@@ -216,6 +219,7 @@ function AppShell() {
               <Route path="/gaming" element={<GamingHub />} />
               <Route path="/gaming/guides" element={<GamingGuides />} />
               <Route path="/digital" element={<DigitalHub />} />
+              <Route path="/digital/cursos" element={<DigitalCourses />} />
               <Route path="/science" element={<ScienceLab />} />
               <Route path="/fun" element={<Navigate to="/community" replace />} />
               <Route path="/creacion-web" element={<WebCreation />} />
@@ -232,6 +236,7 @@ function AppShell() {
               <Route path="/en/gaming" element={<GamingHub />} />
               <Route path="/en/gaming/guides" element={<GamingGuides />} />
               <Route path="/en/digital" element={<DigitalHub />} />
+              <Route path="/en/digital/cursos" element={<DigitalCourses />} />
               <Route path="/en/science" element={<ScienceLab />} />
               <Route path="/en/fun" element={<Navigate to="/en/community" replace />} />
               <Route path="/en/nexus-city" element={<Navigate to="/en/community" replace />} />
