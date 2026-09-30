@@ -22,10 +22,11 @@ test('Green Node no falla cuando el almacenamiento de sesión está bloqueado',a
   await page.goto('/green-node');await expect(page.locator('#green-title')).toBeVisible();await expect(page).toHaveURL(/\/green-node$/)
 })
 
-test('Digital diferencia servicios, IA local y ArgenCiencia sin multiplicar subportales',async({page})=>{
+test('Digital diferencia servicios, IA local, ArgenCiencia y cursos digitales',async({page})=>{
   await page.goto('/digital');await expect(page.locator('.portal-digital')).toHaveAttribute('data-portal-theme','ice')
-  await expect(page.locator('.portal-digital__services>article')).toHaveCount(3)
+  await expect(page.locator('.portal-digital__services>article')).toHaveCount(4)
   await expect(page.locator('.portal-digital__services a[href="/creacion-web"]')).toHaveCount(1)
+  await expect(page.locator('.portal-digital__services a[href="/digital/cursos"]')).toHaveCount(1)
   await expect(page.locator('.portal-digital__services a[href="https://argenciencia.com/"]')).toHaveAttribute('target','_blank')
   await expect(page.locator('#veyr')).toContainText('VEYR')
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true)

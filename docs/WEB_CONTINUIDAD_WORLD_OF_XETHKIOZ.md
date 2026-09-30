@@ -1,6 +1,14 @@
 # WEB CONTINUIDAD — WORLD OF XETHKIOZ
 
-Actualizado: 2026-09-29 · Pass 40 · candidato v11.7.0
+Actualizado: 2026-09-30 · Pass 43 integrado en main · despliegue de producción pendiente de verificación específica
+
+## Estado vigente sincronizado
+Estado vigente: main 3be9484070492b60a37ab69ab1bc00149d2f9165. PR #293 fusionada el 29/09/2026 a las 16:43:41 UTC. Pass 43 mantiene Publicar visible en el encabezado de escritorio y actualiza Huellas con superficies salvia/marfil y arte existente de perro/gato, conservando datos y controles de movimiento.
+Verificación documental: GitHub main y PR #293 releídos el 30/09/2026. No constituye una nueva prueba de producción.
+Fuentes: https://github.com/xethkioz/xethkioz-site/pull/293 y https://github.com/xethkioz/xethkioz-site/commit/3be9484070492b60a37ab69ab1bc00149d2f9165
+
+## Historial conservado — Pass 40 a Pass 42
+Las referencias siguientes a bases, ramas y candidatos Pass 40–42 se conservan como historial y no sustituyen el estado vigente indicado arriba.
 
 ## Estado y alcance
 Esta hoja es operativa de la web pública, no una biblia del juego.
@@ -103,12 +111,21 @@ QA conserva capturas/logs fuera de public; las visitas de prueba no incrementan 
 No se alteran estadísticas, pagos, permisos, canon, imágenes aprobadas ni los worktrees de otros proyectos.
 Esta sección reemplaza los pendientes de encabezado del Pass 41; no volver a aplicarlos desde ramas antiguas.
 
-
-## Pass 43 — Huellas naturaleza luminosa
-- Se corrigió el acceso `Publicar`: queda fuera del carrusel horizontal y permanece visible en escritorio junto a `Volver a los portales`.
-- La regla de pre-render de `public/mascotas/app.js` quedó alineada con el header de cuatro columnas; ya no fuerza el layout heredado de 1480 px / tres columnas.
-- Mascotas conserva el fondo bosque y el portal natural, pero reduce el verde musgo: superficies marfil/salvia, bordes verdes y mayor claridad central.
-- Se reemplazó el asset roto `huellas-portal-pets.svg` por `huellas-hero-real.svg`, integrado de forma atmosférica para mostrar perro y gato sin convertir el hero en un collage.
-- `Nuestra comunidad` usa salvia clara con contraste verde, evitando tanto el bloque blanco anterior como el panel excesivamente oscuro.
-- Publicaciones, estadísticas, directorios, formularios, pagos y efectos de naturaleza no cambian funcionalmente.
-- QA agregado para visibilidad de Publicar, ausencia de solapamientos/overflow, fila única en escritorio ancho y presencia real del arte de mascotas.
+## Pass 44 — Cursos digitales · 2026-09-30
+Base: main 3be9484070492b60a37ab69ab1bc00149d2f9165 (Pass 43).
+Rama: feat/digital-courses-pass44. Publicación autorizada por el usuario el 30/09/2026; comprobar CI y despliegue exacto antes de declararla completa.
+Digital conserva Creación web, VEYR y ArgenCiencia y agrega Cursos digitales como cuarta tarjeta.
+Desktop: cuatro tarjetas en fila; tablet: dos columnas; móvil: una columna.
+Nueva página /digital/cursos y /en/digital/cursos con dos secciones: IA — Inteligencia Artificial (Cursos), USD 15; Proyectos Base (Proyectos prearmados), USD 50.
+La sección IA incluye cuatro cursos de nivel básico a intermedio: ChatGPT para el día a día, ChatGPT para automatizar tareas, Creá tu web con ChatGPT y Multi-IA: herramientas que trabajan juntas.
+Proyectos Base incluye PyME en Argentina: base para empezar, Tu proyecto a medida: base esencial y Huerta en casa: del plan a la práctica.
+Los siete títulos tienen descripciones breves en ES/EN conforme a la ampliación solicitada por el usuario. No se inventan lecciones, archivos descargables ni certificaciones.
+Entrega solicitada por el usuario: cursos dentro de 24 horas y proyectos dentro de 48 horas, después de confirmar el pago y el contacto por correo.
+Pedido por correo a xethkioz@gmail.com: selección de producto, email, WhatsApp, notas y referencia opcional del pago. El proyecto personalizado requiere un resumen y su enfoque.
+El formulario prepara un mailto para revisar y enviar desde la app del cliente; no transmite datos al backend ni confirma pagos. El comprobante se adjunta en ese correo.
+Cobros y notificaciones automáticas no están conectados. La web sólo tenía enlaces de aportes y solicitudes de presupuesto en Supabase, sin pasarela comercial ni servicio de emails. No reutilizar los aportes como checkout.
+Plan de integración y requisitos pendientes: docs/OPERATIONS/DIGITAL_ORDERS_PAYMENTS.md. Faltan conectar las cuentas de cobro, el servicio de envío y definir el importe en ARS antes de activar Mercado Pago. No pedir claves por chat.
+Se mantienen navegación del portal de hielo, enlaces de regreso, idioma, canonical/alternates, sitemap y rutas de Netlify/Vercel.
+Verificación local: build completo y audit:production-ready aprobados; cuatro pruebas Playwright desktop/móvil aprobadas, anchos 320/390/1000/1440, navegación ida/vuelta, idioma, canonicals, cero errores JS y cero violaciones Axe en la nueva página.
+Capturas visuales inspeccionadas en desktop/móvil. Las evidencias QA quedan fuera del paquete público.
+Antes de producción: comprobar CI, Browser Quality, Lighthouse y despliegue exacto. La aprobación de publicación ya está concedida.

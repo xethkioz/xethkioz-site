@@ -8,10 +8,19 @@ const siteUrl = 'https://www.xethkioz.com.ar'
 
 const spanishRoutes = [
   {
+    file: 'digital-cursos.html',
+    path: '/digital/cursos',
+    title: 'Cursos digitales | XETHKIOZ',
+    description: 'Cuatro cursos de IA por USD 15 y tres Proyectos Base por USD 50. Pedidos por correo y entrega después del pago confirmado.',
+    keywords: 'cursos digitales, inteligencia artificial, proyectos prearmados, XETHKIOZ',
+    image: '/assets/portals/ice-portal.webp',
+    imageAlt: 'Xethkioz Digital',
+  },
+  {
     file: 'digital.html',
     path: '/digital',
     title: 'Xethkioz Digital | Tecnología y creación',
-    description: 'Creación web, VEYR Local / Remote y ArgenCiencia. Un portal de tecnología con identidad propia.',
+    description: 'Creación web, VEYR Local / Remote, ArgenCiencia y cursos digitales. Tecnología con identidad propia.',
     keywords: 'Xethkioz Digital, VEYR, ArgenCiencia, web',
     image: '/assets/portals/ice-portal.webp',
     imageAlt: 'Xethkioz Digital',
@@ -120,10 +129,19 @@ const spanishRoutes = [
 
 const englishRoutes = [
   {
+    file: 'en-digital-cursos.html',
+    path: '/en/digital/cursos',
+    title: 'Digital courses | XETHKIOZ',
+    description: 'Four AI courses for USD 15 and three Base Projects for USD 50. Email orders and delivery after confirmed payment.',
+    keywords: 'digital courses, artificial intelligence, ready-made projects, XETHKIOZ',
+    image: '/assets/portals/ice-portal.webp',
+    imageAlt: 'Xethkioz Digital',
+  },
+  {
     file: 'en-digital.html',
     path: '/en/digital',
     title: 'Xethkioz Digital | Technology and creation',
-    description: 'Web creation, VEYR Local / Remote and ArgenCiencia. Technology with its own identity.',
+    description: 'Web creation, VEYR Local / Remote, ArgenCiencia and digital courses. Technology with its own identity.',
     keywords: 'Xethkioz Digital, VEYR, ArgenCiencia, web',
     image: '/assets/portals/ice-portal.webp',
     imageAlt: 'Xethkioz Digital',
@@ -239,6 +257,7 @@ const englishRoutes = [
 ]
 
 const localizedPairs = new Map([
+  ['/digital/cursos', '/en/digital/cursos'],
   ['/', '/en'],
   ['/world-of-xethkioz', '/en/world-of-xethkioz'],
   ['/world-of-xethkioz/elemental-realms', '/en/world-of-xethkioz/elemental-realms'],

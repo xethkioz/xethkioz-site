@@ -34,6 +34,8 @@
     { "source": "/admin", "destination": "/cms", "permanent": true }
   ],
   "rewrites": [
+    { "source": "/digital/cursos", "destination": "/seo-shells/digital-cursos.html" },
+    { "source": "/en/digital/cursos", "destination": "/seo-shells/en-digital-cursos.html" },
     { "source": "/digital", "destination": "/seo-shells/digital.html" },
     { "source": "/en/digital", "destination": "/seo-shells/en-digital.html" },
     { "source": "/mascotas", "destination": "/mascotas/index.html" },

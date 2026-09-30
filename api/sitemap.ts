@@ -10,6 +10,7 @@ type LocalizedRoute = {
 const localizedRoutes: LocalizedRoute[] = [
   { es: '/', en: '/en', changefreq: 'daily', priority: '1.0' },
   { es: '/digital', en: '/en/digital', changefreq: 'weekly', priority: '0.8' },
+  { es: '/digital/cursos', en: '/en/digital/cursos', changefreq: 'weekly', priority: '0.7' },
   { es: '/world-of-xethkioz/elemental-realms', en: '/en/world-of-xethkioz/elemental-realms', changefreq: 'weekly', priority: '0.9' },
   { es: '/gaming', en: '/en/gaming', changefreq: 'weekly', priority: '0.8' },
   { es: '/gaming/guides', en: '/en/gaming/guides', changefreq: 'weekly', priority: '0.8' },

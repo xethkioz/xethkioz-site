@@ -1,0 +1,92 @@
+import { expect, test } from '@playwright/test'
+import AxeBuilder from '@axe-core/playwright'
+
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('xethkioz.privacy-consent.v1', JSON.stringify({ version: 1, analytics: false, marketing: false, updatedAt: new Date().toISOString() })))
+})
+
+test('Digital: four aligned desktop cards, responsive layout and course navigation', async ({ page }) => {
+  const errors: string[] = []
+  page.on('pageerror', error => errors.push(error.message))
+  for (const width of [1440, 1000, 390, 320]) {
+    await page.setViewportSize({ width, height: 1000 })
+    await page.goto('/digital')
+    const cards = page.locator('.digital-service')
+    await expect(cards).toHaveCount(4)
+    if (width === 1440) {
+      const tops = await cards.evaluateAll(elements => elements.map(element => element.getBoundingClientRect().top))
+      expect(Math.max(...tops) - Math.min(...tops)).toBeLessThan(2)
+    }
+    await page.getByRole('link', { name: 'Explorar cursos digitales', exact: true }).click()
+    await expect(page).toHaveURL(/\/digital\/cursos$/)
+    await expect(page.getByRole('heading', { level: 1, name: 'Cursos digitales' })).toBeVisible()
+    await expect(page.getByRole('region', { name: 'IA — Inteligencia Artificial' })).toContainText('USD 15')
+    await expect(page.getByRole('region', { name: 'Proyectos Base' })).toContainText('USD 50')
+    await expect(page.getByRole('region', { name: 'IA — Inteligencia Artificial' }).getByRole('listitem')).toHaveCount(4)
+    await expect(page.getByRole('region', { name: 'Proyectos Base' }).getByRole('listitem')).toHaveCount(3)
+    await expect(page.getByRole('region', { name: 'IA — Inteligencia Artificial' })).toContainText('24 horas')
+    await expect(page.getByRole('region', { name: 'Proyectos Base' })).toContainText('48 horas')
+    await expect(page.locator('.portal-navigation')).toHaveCount(1)
+    await expect(page.locator('.portal-footer')).toHaveCount(1)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
+    await page.getByRole('link', { name: 'Volver a Xethkioz Digital', exact: true }).click()
+    await expect(page).toHaveURL(/\/digital$/)
+  }
+  expect(errors).toEqual([])
+})
+
+test('Orders: required contact and custom brief, honest email handoff and no stale project details', async ({ page }) => {
+  await page.goto('/digital/cursos')
+  await page.getByLabel('Curso o proyecto', { exact: true }).selectOption('project-2')
+  await page.getByLabel('Tu correo electrónico', { exact: true }).fill('buyer@example.com')
+  await page.getByLabel('WhatsApp', { exact: true }).fill('+54 9 11 1234 5678')
+  await page.getByRole('checkbox', { name: /Autorizo usar mi email y WhatsApp/ }).check()
+  await page.getByRole('button', { name: 'Preparar correo del pedido', exact: true }).click()
+  await expect(page.getByRole('link', { name: 'Abrir en mi correo', exact: true })).toHaveCount(0)
+  await page.getByLabel('¿De qué trata tu proyecto? (breve)', { exact: true }).fill('Una base para organizar un pequeño comercio.')
+  await page.getByLabel('¿A qué está enfocado?', { exact: true }).fill('Ventas y organización de tareas')
+  await page.getByRole('button', { name: 'Preparar correo del pedido', exact: true }).click()
+  const link = page.getByRole('link', { name: 'Abrir en mi correo', exact: true })
+  await expect(link).toBeVisible()
+  const projectEmail = new URL((await link.getAttribute('href'))!)
+  expect(projectEmail.pathname).toBe('xethkioz@gmail.com')
+  expect(projectEmail.searchParams.get('body')).toContain('buyer@example.com')
+  expect(projectEmail.searchParams.get('body')).toContain('+54 9 11 1234 5678')
+  expect(projectEmail.searchParams.get('body')).toContain('Una base para organizar un pequeño comercio.')
+  expect(projectEmail.searchParams.get('body')).toContain('Ventas y organización de tareas')
+  expect(projectEmail.searchParams.get('body')).toContain('48 horas después de confirmar el pago')
+  await page.getByLabel('Curso o proyecto', { exact: true }).selectOption('course-3')
+  await expect(link).toHaveCount(0)
+  await expect(page.locator('#digital-order-brief')).toHaveCount(0)
+  await page.getByRole('button', { name: 'Preparar correo del pedido', exact: true }).click()
+  const courseEmail = new URL((await link.getAttribute('href'))!)
+  expect(courseEmail.searchParams.get('body')).toContain('24 horas después de confirmar el pago')
+  expect(courseEmail.searchParams.get('body')).not.toContain('Una base para organizar un pequeño comercio.')
+  expect(courseEmail.searchParams.get('body')).toContain('Referencia de pago (a verificar): Pendiente de coordinar')
+})
+
+test('Courses: direct links, reciprocal language metadata, language switch and accessible sections', async ({ page }) => {
+  await page.goto('/digital/cursos')
+  for (const name of ['ChatGPT para el día a día', 'ChatGPT para automatizar tareas', 'Creá tu web con ChatGPT', 'Multi-IA: herramientas que trabajan juntas', 'PyME en Argentina: base para empezar', 'Tu proyecto a medida: base esencial', 'Huerta en casa: del plan a la práctica']) {
+    await expect(page.getByRole('heading', { level: 3, name, exact: true })).toBeVisible()
+  }
+  await expect(page.getByRole('region', { name: 'IA — Inteligencia Artificial' })).toContainText('Nivel básico a intermedio')
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://www.xethkioz.com.ar/digital/cursos')
+  const result = await new AxeBuilder({ page }).include('#main-content').withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()
+  expect(result.violations.map(violation => ({ id: violation.id, nodes: violation.nodes.map(node => node.target) }))).toEqual([])
+  await page.getByRole('button', { name: 'Cambiar a inglés' }).click()
+  await expect(page).toHaveURL(/\/en\/digital\/cursos$/)
+  await page.reload()
+  await expect(page.getByRole('heading', { level: 1, name: 'Digital courses' })).toBeVisible()
+  await expect(page.getByRole('region', { name: 'AI — Artificial Intelligence' }).getByRole('listitem')).toHaveCount(4)
+  await expect(page.getByRole('region', { name: 'Base Projects' }).getByRole('listitem')).toHaveCount(3)
+  await expect(page.getByRole('heading', { name: 'Multi-AI: tools working together', exact: true })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'A home garden: from plan to practice', exact: true })).toBeVisible()
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en')
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://www.xethkioz.com.ar/en/digital/cursos')
+  await expect(page.locator('link[hreflang="es-AR"]')).toHaveAttribute('href', 'https://www.xethkioz.com.ar/digital/cursos')
+  await page.getByRole('link', { name: 'Back to Xethkioz Digital', exact: true }).click()
+  await expect(page).toHaveURL(/\/en\/digital$/)
+  await page.getByRole('link', { name: 'Explore digital courses', exact: true }).click()
+  await expect(page).toHaveURL(/\/en\/digital\/cursos$/)
+})
