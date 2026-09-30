@@ -22,6 +22,8 @@ test('Digital: four aligned desktop cards, responsive layout and course navigati
     await expect(page.getByRole('heading', { level: 1, name: 'Cursos digitales' })).toBeVisible()
     await expect(page.getByRole('region', { name: 'IA — Inteligencia Artificial' })).toContainText('USD 15')
     await expect(page.getByRole('region', { name: 'Proyectos Base' })).toContainText('USD 50')
+    await expect(page.getByRole('region', { name: 'IA — Inteligencia Artificial' }).getByRole('listitem')).toHaveCount(4)
+    await expect(page.getByRole('region', { name: 'Proyectos Base' }).getByRole('listitem')).toHaveCount(3)
     await expect(page.locator('.portal-navigation')).toHaveCount(1)
     await expect(page.locator('.portal-footer')).toHaveCount(1)
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
@@ -33,6 +35,10 @@ test('Digital: four aligned desktop cards, responsive layout and course navigati
 
 test('Courses: direct links, reciprocal language metadata, language switch and accessible sections', async ({ page }) => {
   await page.goto('/digital/cursos')
+  for (const name of ['ChatGPT para el día a día', 'ChatGPT para automatizar tareas', 'Creá tu web con ChatGPT', 'Multi-IA: herramientas que trabajan juntas', 'PyME en Argentina: base para empezar', 'Tu proyecto a medida: base esencial', 'Huerta en casa: del plan a la práctica']) {
+    await expect(page.getByRole('heading', { level: 3, name, exact: true })).toBeVisible()
+  }
+  await expect(page.getByRole('region', { name: 'IA — Inteligencia Artificial' })).toContainText('Nivel básico a intermedio')
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://www.xethkioz.com.ar/digital/cursos')
   const result = await new AxeBuilder({ page }).include('#main-content').withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()
   expect(result.violations.map(violation => ({ id: violation.id, nodes: violation.nodes.map(node => node.target) }))).toEqual([])
@@ -40,6 +46,10 @@ test('Courses: direct links, reciprocal language metadata, language switch and a
   await expect(page).toHaveURL(/\/en\/digital\/cursos$/)
   await page.reload()
   await expect(page.getByRole('heading', { level: 1, name: 'Digital courses' })).toBeVisible()
+  await expect(page.getByRole('region', { name: 'AI — Artificial Intelligence' }).getByRole('listitem')).toHaveCount(4)
+  await expect(page.getByRole('region', { name: 'Base Projects' }).getByRole('listitem')).toHaveCount(3)
+  await expect(page.getByRole('heading', { name: 'Multi-AI: tools working together', exact: true })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'A home garden: from plan to practice', exact: true })).toBeVisible()
   await expect(page.locator('html')).toHaveAttribute('lang', 'en')
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://www.xethkioz.com.ar/en/digital/cursos')
   await expect(page.locator('link[hreflang="es-AR"]')).toHaveAttribute('href', 'https://www.xethkioz.com.ar/digital/cursos')

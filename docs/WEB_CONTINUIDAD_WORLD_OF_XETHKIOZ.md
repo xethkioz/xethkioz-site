@@ -113,12 +113,14 @@ Esta sección reemplaza los pendientes de encabezado del Pass 41; no volver a ap
 
 ## Pass 44 — Cursos digitales · 2026-09-30
 Base: main 3be9484070492b60a37ab69ab1bc00149d2f9165 (Pass 43).
-Rama: feat/digital-courses-pass44. Cambio preparado; producción pendiente de aprobación final del usuario.
+Rama: feat/digital-courses-pass44. Publicación autorizada por el usuario el 30/09/2026; comprobar CI y despliegue exacto antes de declararla completa.
 Digital conserva Creación web, VEYR y ArgenCiencia y agrega Cursos digitales como cuarta tarjeta.
 Desktop: cuatro tarjetas en fila; tablet: dos columnas; móvil: una columna.
 Nueva página /digital/cursos y /en/digital/cursos con dos secciones: IA — Inteligencia Artificial (Cursos), USD 15; Proyectos Base (Proyectos prearmados), USD 50.
-El contenido está en preparación: no se inventan temarios, archivos descargables, certificaciones ni cobros.
+La sección IA incluye cuatro cursos de nivel básico a intermedio: ChatGPT para el día a día, ChatGPT para automatizar tareas, Creá tu web con ChatGPT y Multi-IA: herramientas que trabajan juntas.
+Proyectos Base incluye PyME en Argentina: base para empezar, Tu proyecto a medida: base esencial y Huerta en casa: del plan a la práctica.
+Los siete títulos tienen descripciones breves en ES/EN conforme a la ampliación solicitada por el usuario. Los materiales siguen en preparación: no se inventan lecciones, archivos descargables, certificaciones ni cobros.
 Se mantienen navegación del portal de hielo, enlaces de regreso, idioma, canonical/alternates, sitemap y rutas de Netlify/Vercel.
 Verificación local: build completo y audit:production-ready aprobados; cuatro pruebas Playwright desktop/móvil aprobadas, anchos 320/390/1000/1440, navegación ida/vuelta, idioma, canonicals, cero errores JS y cero violaciones Axe en la nueva página.
 Capturas visuales inspeccionadas en desktop/móvil. Las evidencias QA quedan fuera del paquete público.
-Antes de producción: aprobar el cambio final y comprobar CI, Browser Quality, Lighthouse y despliegue exacto.
+Antes de producción: comprobar CI, Browser Quality, Lighthouse y despliegue exacto. La aprobación de publicación ya está concedida.

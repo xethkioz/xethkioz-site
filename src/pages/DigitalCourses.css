@@ -10,5 +10,11 @@
 .digital-course__type{font-size:1rem;color:#c2d0dc;margin:0}
 .digital-course .digital-course__price{font-size:3.5rem;line-height:1.2;font-weight:650;font-variant-numeric:tabular-nums;color:#e0f5ff;margin:1.75rem 0}
 .digital-course__price span{font-size:1rem;letter-spacing:.06em;color:#9be5ff}
+.digital-course__intro{color:#c2d0dc;font-size:.9375rem;line-height:1.6;margin:0 0 1.25rem}
+.digital-course__list{margin:0 0 1.5rem;padding-left:1.5rem}
+.digital-course__list li{padding:.875rem 0 .875rem .5rem;border-top:1px solid #30445a}
+.digital-course__list li::marker{color:#9be5ff;font-weight:650}
+.digital-course__list h3{font-size:1.125rem;line-height:1.4;margin:0 0 .5rem;color:#e0f5ff;overflow-wrap:anywhere}
+.digital-course__list p{font-size:.9375rem;line-height:1.6;color:#c2d0dc;margin:0}
 .digital-course__status{padding-top:1rem;border-top:1px solid #30445a;color:#b9cbd9;font-size:.875rem;margin:0}
 @media(max-width:760px){.digital-courses__grid{grid-template-columns:1fr;gap:1rem}.digital-courses__heading{padding:1rem 0 1.5rem}.digital-course{padding:1.5rem}}
