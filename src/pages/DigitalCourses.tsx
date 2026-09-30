@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
 import { useLang } from '../lib/LangContext'
 import PortalNavigation from '../components/portals/PortalNavigation'
+import DigitalCourseOrder, { type DigitalOrderItem } from '../components/services/DigitalCourseOrder'
 import './PortalInteriors.css'
 import './DigitalCourses.css'
 
@@ -28,11 +29,15 @@ export default function DigitalCourses() {
     { title: 'Your custom project: the essentials', description: 'A basic starting point tailored to your idea, with goals, stages and tasks to help you make steady progress.' },
     { title: 'A home garden: from plan to practice', description: 'A foundation for organizing your home vegetable garden: available space, materials and care tasks.' },
   ]
+  const orderItems: DigitalOrderItem[] = [
+    ...aiCourses.map((course, index) => ({ id: `course-${index + 1}`, title: course.title, kind: 'course' as const })),
+    ...baseProjects.map((project, index) => ({ id: `project-${index + 1}`, title: project.title, kind: 'project' as const, custom: index === 1 })),
+  ]
 
   return <main className="portal-page portal-digital portal-courses" data-portal-theme="ice">
     <SEO
       title={es ? 'Cursos digitales' : 'Digital courses'}
-      description={es ? 'Cursos de inteligencia artificial por USD 15 y Proyectos Base prearmados por USD 50. Contenido en preparación.' : 'Artificial intelligence courses for USD 15 and ready-made Base Projects for USD 50. Content in preparation.'}
+      description={es ? 'Cuatro cursos de IA por USD 15 y tres Proyectos Base por USD 50. Pedidos por correo y entrega después del pago confirmado.' : 'Four AI courses for USD 15 and three Base Projects for USD 50. Email orders and delivery after confirmed payment.'}
       url="/digital/cursos"
       image="/assets/portals/ice-portal.webp"
     />
@@ -57,7 +62,8 @@ export default function DigitalCourses() {
               <p>{course.description}</p>
             </li>)}
           </ol>
-          <p className="digital-course__status">{es ? 'Contenido en preparación' : 'Content in preparation'}</p>
+          <p className="digital-course__status">{es ? 'Entrega dentro de las 24 horas, después de confirmar el pago y el contacto por correo electrónico.' : 'Delivery within 24 hours after payment and email contact are confirmed.'}</p>
+          <a className="portal-button digital-course__request" href="#course-order">{es ? 'Solicitar un curso' : 'Request a course'}</a>
         </section>
         <section className="digital-course" aria-labelledby="base-projects-title">
           <p className="portal-eyebrow">02 / {es ? 'PROYECTOS' : 'PROJECTS'}</p>
@@ -71,9 +77,11 @@ export default function DigitalCourses() {
               <p>{project.description}</p>
             </li>)}
           </ol>
-          <p className="digital-course__status">{es ? 'Contenido en preparación' : 'Content in preparation'}</p>
+          <p className="digital-course__status">{es ? 'Entrega dentro de las 48 horas, después de confirmar el pago y el contacto por correo electrónico.' : 'Delivery within 48 hours after payment and email contact are confirmed.'}</p>
+          <a className="portal-button digital-course__request" href="#course-order">{es ? 'Solicitar un proyecto' : 'Request a project'}</a>
         </section>
       </div>
+      <DigitalCourseOrder items={orderItems} />
     </div>
   </main>
 }

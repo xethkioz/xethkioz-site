@@ -119,7 +119,12 @@ Desktop: cuatro tarjetas en fila; tablet: dos columnas; móvil: una columna.
 Nueva página /digital/cursos y /en/digital/cursos con dos secciones: IA — Inteligencia Artificial (Cursos), USD 15; Proyectos Base (Proyectos prearmados), USD 50.
 La sección IA incluye cuatro cursos de nivel básico a intermedio: ChatGPT para el día a día, ChatGPT para automatizar tareas, Creá tu web con ChatGPT y Multi-IA: herramientas que trabajan juntas.
 Proyectos Base incluye PyME en Argentina: base para empezar, Tu proyecto a medida: base esencial y Huerta en casa: del plan a la práctica.
-Los siete títulos tienen descripciones breves en ES/EN conforme a la ampliación solicitada por el usuario. Los materiales siguen en preparación: no se inventan lecciones, archivos descargables, certificaciones ni cobros.
+Los siete títulos tienen descripciones breves en ES/EN conforme a la ampliación solicitada por el usuario. No se inventan lecciones, archivos descargables ni certificaciones.
+Entrega solicitada por el usuario: cursos dentro de 24 horas y proyectos dentro de 48 horas, después de confirmar el pago y el contacto por correo.
+Pedido por correo a xethkioz@gmail.com: selección de producto, email, WhatsApp, notas y referencia opcional del pago. El proyecto personalizado requiere un resumen y su enfoque.
+El formulario prepara un mailto para revisar y enviar desde la app del cliente; no transmite datos al backend ni confirma pagos. El comprobante se adjunta en ese correo.
+Cobros y notificaciones automáticas no están conectados. La web sólo tenía enlaces de aportes y solicitudes de presupuesto en Supabase, sin pasarela comercial ni servicio de emails. No reutilizar los aportes como checkout.
+Plan de integración y requisitos pendientes: docs/OPERATIONS/DIGITAL_ORDERS_PAYMENTS.md. Faltan conectar las cuentas de cobro, el servicio de envío y definir el importe en ARS antes de activar Mercado Pago. No pedir claves por chat.
 Se mantienen navegación del portal de hielo, enlaces de regreso, idioma, canonical/alternates, sitemap y rutas de Netlify/Vercel.
 Verificación local: build completo y audit:production-ready aprobados; cuatro pruebas Playwright desktop/móvil aprobadas, anchos 320/390/1000/1440, navegación ida/vuelta, idioma, canonicals, cero errores JS y cero violaciones Axe en la nueva página.
 Capturas visuales inspeccionadas en desktop/móvil. Las evidencias QA quedan fuera del paquete público.
