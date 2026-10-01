@@ -3,6 +3,7 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
+  "functions": { "api/digital-orders.ts": { "maxDuration": 180 } },
   "git": {
     "deploymentEnabled": {
       "game/**": false,

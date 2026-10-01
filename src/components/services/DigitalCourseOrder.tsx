@@ -1,9 +1,10 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { useLang } from '../../lib/LangContext'
 
 export type DigitalOrderItem = { id: string; title: string; kind: 'course' | 'project'; custom?: boolean }
 const CONTACT_EMAIL = 'aidss1991@gmail.com'
+type CheckoutConfig = { enabled: boolean; mode: 'sandbox' | 'live'; prices: Record<'mercadopago' | 'paypal', { course: string; project: string; currency: string }> }
 
 export default function DigitalCourseOrder({ items }: { items: DigitalOrderItem[] }) {
   const { lang, localizePath } = useLang()
@@ -16,9 +17,23 @@ export default function DigitalCourseOrder({ items }: { items: DigitalOrderItem[
   const [notes, setNotes] = useState('')
   const [reference, setReference] = useState('')
   const [mailHref, setMailHref] = useState('')
+  const [checkout, setCheckout] = useState<CheckoutConfig | null>(null)
+  const [paymentMethod, setPaymentMethod] = useState('email')
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  const requestKey = useRef('')
   const item = items.find(product => product.id === selectedId)
 
-  function prepareOrder(event: FormEvent<HTMLFormElement>) {
+  useEffect(() => {
+    const controller = new AbortController()
+    fetch('/api/digital-orders', { signal: controller.signal, cache: 'no-store' })
+      .then(response => response.ok ? response.json() : null)
+      .then(config => { if (config?.enabled === true && config.prices?.mercadopago && config.prices?.paypal) setCheckout(config) })
+      .catch(() => {})
+    return () => controller.abort()
+  }, [])
+
+  async function prepareOrder(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (!item) return
     const phoneInput = event.currentTarget.elements.namedItem('digital-order-whatsapp') as HTMLInputElement
@@ -26,6 +41,27 @@ export default function DigitalCourseOrder({ items }: { items: DigitalOrderItem[
     if (phoneDigits < 7 || phoneDigits > 15) {
       phoneInput.setCustomValidity(es ? 'Ingresá un número de WhatsApp válido con código de país.' : 'Enter a valid WhatsApp number with country code.')
       phoneInput.reportValidity()
+      return
+    }
+    if (checkout && paymentMethod !== 'email') {
+      setBusy(true); setError('')
+      try {
+        requestKey.current ||= crypto.randomUUID()
+        const response = await fetch('/api/digital-orders?action=checkout', {
+          method: 'POST', headers: { 'Content-Type': 'application/json', 'Idempotency-Key': requestKey.current },
+          signal: AbortSignal.timeout(30_000),
+          body: JSON.stringify({ productId: item.id, provider: paymentMethod, email: email.trim(), whatsapp: whatsapp.trim(),
+            brief: item.custom ? brief.trim() : '', focus: item.custom ? focus.trim() : '', notes: notes.trim(), consent: true }),
+        })
+        const result = await response.json()
+        if (!response.ok || typeof result.checkoutUrl !== 'string') throw new Error('CHECKOUT_UNAVAILABLE')
+        const url = new URL(result.checkoutUrl)
+        if (url.protocol !== 'https:' || url.username || url.password || url.port || !['www.mercadopago.com.ar', 'www.paypal.com', 'www.sandbox.paypal.com'].includes(url.hostname)) throw new Error('INVALID_CHECKOUT')
+        window.location.assign(url.href)
+      } catch {
+        setError(es ? 'No pudimos abrir el pago. Podés reintentar o elegir coordinar por correo.' : 'We could not open checkout. Retry or choose to arrange payment by email.')
+        setBusy(false)
+      }
       return
     }
     const price = item.kind === 'course' ? 15 : 50
@@ -60,9 +96,10 @@ export default function DigitalCourseOrder({ items }: { items: DigitalOrderItem[
   return <section id="course-order" className="digital-order" aria-labelledby="digital-order-title">
     <p className="portal-eyebrow">{es ? 'TU PRÓXIMO PASO' : 'YOUR NEXT STEP'}</p>
     <h2 id="digital-order-title">{es ? 'Prepará tu pedido' : 'Prepare your order'}</h2>
-    <p>{es ? 'Elegí una propuesta y dejá tus datos de contacto. Te confirmaremos el medio de pago por correo.' : 'Choose an option and provide your contact details. We will confirm the payment method by email.'}</p>
+    <p>{checkout ? (es ? 'Elegí una propuesta, completá tus datos y seleccioná el medio de pago. También podés coordinar por correo.' : 'Choose an option, provide your details and select a payment method. You can also arrange payment by email.') : (es ? 'Elegí una propuesta y dejá tus datos de contacto. Te confirmaremos el medio de pago por correo.' : 'Choose an option and provide your contact details. We will confirm the payment method by email.')}</p>
     <p>{es ? 'Correo de atención:' : 'Contact email:'} <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
-    <form onSubmit={prepareOrder} onChange={() => setMailHref('')}>
+    <form onSubmit={prepareOrder} onChange={() => { setMailHref(''); setError(''); requestKey.current = '' }}>
+      <fieldset disabled={busy} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
       <div className="digital-order__fields">
         <label className="digital-order__wide" htmlFor="digital-order-product"><span id="digital-order-product-label">{es ? 'Curso o proyecto' : 'Course or project'}</span>
           <select id="digital-order-product" aria-labelledby="digital-order-product-label" required value={selectedId} onChange={event => setSelectedId(event.target.value)}>
@@ -78,11 +115,18 @@ export default function DigitalCourseOrder({ items }: { items: DigitalOrderItem[
           <label className="digital-order__wide" htmlFor="digital-order-focus">{es ? '¿A qué está enfocado?' : 'What is its focus?'}<input id="digital-order-focus" required minLength={3} maxLength={160} value={focus} onChange={event => setFocus(event.target.value)} /></label>
         </>}
         <label className="digital-order__wide" htmlFor="digital-order-notes">{es ? 'Comentarios o lo que necesitás (opcional)' : 'Comments or what you need (optional)'}<textarea id="digital-order-notes" maxLength={800} rows={3} value={notes} onChange={event => setNotes(event.target.value)} /></label>
-        <label className="digital-order__wide" htmlFor="digital-order-reference">{es ? 'Referencia del pago, si ya abonaste (opcional)' : 'Payment reference, if already paid (optional)'}<input id="digital-order-reference" maxLength={100} value={reference} onChange={event => setReference(event.target.value)} /></label>
+        {checkout && <label className="digital-order__wide" htmlFor="digital-order-payment"><span id="digital-order-payment-label">{es ? 'Medio de pago' : 'Payment method'}</span><select id="digital-order-payment" aria-labelledby="digital-order-payment-label" value={paymentMethod} onChange={event => setPaymentMethod(event.target.value)}>
+          <option value="email">{es ? 'Coordinar por correo' : 'Arrange by email'}</option>
+          {(['mercadopago', 'paypal'] as const).map(provider => <option key={provider} value={provider}>{provider === 'paypal' ? 'PayPal' : 'Mercado Pago'}{item ? ` · ${checkout.prices[provider].currency} ${checkout.prices[provider][item.kind]}` : ''}</option>)}
+        </select></label>}
+        {paymentMethod === 'email' && <label className="digital-order__wide" htmlFor="digital-order-reference">{es ? 'Referencia del pago, si ya abonaste (opcional)' : 'Payment reference, if already paid (optional)'}<input id="digital-order-reference" maxLength={100} value={reference} onChange={event => setReference(event.target.value)} /></label>}
       </div>
       <label className="digital-order__consent"><input type="checkbox" required /> <span>{es ? 'Autorizo usar mi email y WhatsApp para responder y gestionar este pedido.' : 'I authorize use of my email and WhatsApp to reply to and manage this order.'} <Link to={localizePath('/privacy')}>{es ? 'Privacidad' : 'Privacy'}</Link></span></label>
-      <button className="portal-button" type="submit">{es ? 'Preparar correo del pedido' : 'Prepare order email'}</button>
-      <p className="digital-order__help">{es ? 'El pedido se envía desde tu app de correo. Adjuntá allí el comprobante si ya abonaste y enviá el mensaje. Prepararlo no confirma un pago.' : 'Send the order from your email app. Attach the receipt there if you have paid, then send the message. Preparing an order does not confirm payment.'}</p>
+      <button className="portal-button" type="submit">{busy ? (es ? 'Abriendo el pago…' : 'Opening checkout…') : paymentMethod !== 'email' ? (es ? 'Continuar al pago' : 'Continue to checkout') : (es ? 'Preparar correo del pedido' : 'Prepare order email')}</button>
+      </fieldset>
+      <p className="digital-order__help">{paymentMethod !== 'email' ? (es ? 'Tus datos se guardan para gestionar el pedido. La confirmación se enviará por correo después de verificar el pago. Escribí al correo de atención para coordinar la entrega.' : 'Your details are saved to manage the order. Confirmation is emailed after payment verification. Contact our email address to arrange delivery.') : (es ? 'El pedido se envía desde tu app de correo. Adjuntá allí el comprobante si ya abonaste y enviá el mensaje. Prepararlo no confirma un pago.' : 'Send the order from your email app. Attach the receipt there if you have paid, then send the message. Preparing an order does not confirm payment.')}</p>
+      {checkout?.mode === 'sandbox' && paymentMethod !== 'email' && <p role="status">{es ? 'Modo de prueba: usá únicamente cuentas y pagos ficticios.' : 'Test mode: use only fictitious accounts and payments.'}</p>}
+      {error && <p role="alert">{error}</p>}
       {mailHref && <div className="digital-order__ready" role="status">
         <p>{es ? 'Tu correo está preparado. Abrilo, revisá los datos y enviá el pedido.' : 'Your email is prepared. Open it, review the details and send your order.'}</p>
         <a className="portal-button" href={mailHref}>{es ? 'Abrir en mi correo' : 'Open in my email app'}</a>
