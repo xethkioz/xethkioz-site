@@ -10,6 +10,8 @@
 .digital-course__type{font-size:1rem;color:#c2d0dc;margin:0}
 .digital-course .digital-course__price{font-size:3.5rem;line-height:1.2;font-weight:650;font-variant-numeric:tabular-nums;color:#e0f5ff;margin:1.75rem 0}
 .digital-course__price span{font-size:1rem;letter-spacing:.06em;color:#9be5ff}
+.digital-course__local-price{color:#e0f5ff;font-size:1rem;line-height:1.6;margin:-1rem 0 1.25rem;font-variant-numeric:tabular-nums}
+.digital-courses__conversion{color:#c2d0dc;font-size:.875rem;line-height:1.6;margin:1.25rem 0 0}
 .digital-course__intro{color:#c2d0dc;font-size:.9375rem;line-height:1.6;margin:0 0 1.25rem}
 .digital-course__list{list-style:decimal;margin:0 0 1.5rem;padding-left:1.5rem}
 .digital-course__list li{padding:.875rem 0 .875rem .5rem;border-top:1px solid #30445a}

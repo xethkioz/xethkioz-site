@@ -1,10 +1,10 @@
 # Pedidos y pagos de Cursos digitales
 
-Estado al 30/09/2026: catálogo y pedido por correo implementados. Cobro y notificación automática pendientes de conectar las cuentas comerciales y el servicio de envío. No anunciar un checkout activo.
+Estado al 01/10/2026 (Argentina): catálogo y pedido por correo implementados. Cobro y notificación automática pendientes de conectar las cuentas comerciales y el servicio de envío. No anunciar un checkout activo.
 
 ## Funcionamiento publicado
 
-`/digital/cursos` y `/en/digital/cursos` contienen cuatro cursos y tres proyectos. El titular confirmó USD 15 por cada curso y USD 50 por cada proyecto básico. Mercado Pago tendrá dos importes fijos en ARS, todavía pendientes de indicar; PayPal utilizará USD. Confirmar por correo cualquier alcance adicional y el importe final antes del pago.
+`/digital/cursos` y `/en/digital/cursos` contienen cuatro cursos y tres proyectos. El titular confirmó USD 12 por cada curso y USD 35 por cada proyecto base para presentar, con conversión fija de ARS 1.900 por USD: ARS 22.800 por curso y ARS 66.500 por proyecto. La página, los grupos del selector y el correo preparado usan estos precios por unidad. La conversión es una regla comercial indicada por el titular, no una cotización actual ni un cálculo tributario. Confirmar por correo cualquier alcance adicional y el importe final antes del pago.
 
 Cursos: entrega dentro de 24 horas. Proyectos: entrega dentro de 48 horas. Los plazos comienzan después de confirmar el pago y el contacto por correo electrónico, conforme a lo solicitado por el titular.
 
@@ -28,7 +28,7 @@ Configurar en el servidor, fuera de variables `VITE`, chats, repositorio y regis
 |---|---|
 | `DIGITAL_PAYMENTS_ENABLED` | `false` hasta completar las pruebas; activación explícita con `true` |
 | `DIGITAL_PAYMENTS_MODE` | `sandbox` en preview o `live` en producción; no se mezclan |
-| `DIGITAL_COURSE_PRICE_ARS`, `DIGITAL_PROJECT_PRICE_ARS` | Dos importes fijos por producto, confirmados por el titular, con punto decimal |
+| `DIGITAL_COURSE_PRICE_ARS`, `DIGITAL_PROJECT_PRICE_ARS` | En live: `22800.00` por curso y `66500.00` por proyecto; cualquier desajuste con el catálogo bloquea el checkout. Sandbox admite precios ficticios explícitos |
 | `DIGITAL_PAYMENTS_RETURN_URL` | URL HTTPS de la página de cursos de ese entorno; sin parámetros ni credenciales |
 | `MERCADOPAGO_ACCESS_TOKEN`, `MERCADOPAGO_WEBHOOK_SECRET`, `MERCADOPAGO_SELLER_ID` | Aplicación comercial de la cuenta confirmada y su vendedor; para pruebas, usuario de prueba de Argentina |
 | `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_WEBHOOK_ID`, `PAYPAL_MERCHANT_ID` | Aplicación comercial, webhook y comerciante del entorno correspondiente |
@@ -62,7 +62,7 @@ Los datos de pedidos deben estar protegidos por RLS y accesibles sólo a persona
 - Proveedores confirmados: Mercado Pago (`aidss1991@gmail.com`) y PayPal (`dreanor666@gmail.com`). Todos los pedidos y avisos al titular deben llegar a `aidss1991@gmail.com`. Los correos identifican las cuentas, pero no sustituyen credenciales comerciales ni acreditan que una aplicación pertenece a ellas.
 - Conectar las aplicaciones comerciales y verificar sus IDs de vendedor. PayPal requiere credenciales sandbox y live separadas y un webhook registrado. La Orders API de Mercado Pago requiere las credenciales del usuario de prueba para probar; no aceptar una compra real como prueba. Configurar secretos únicamente en el servidor.
 - Servicio de email transaccional y remitente verificado. La configuración actual de solicitudes de presupuesto guarda datos en Supabase, pero no envía correos comerciales.
-- El titular eligió importes fijos ARS por producto; faltan el importe de cada curso y el importe de cada proyecto básico. Los precios USD de la página permanecen como referencia hasta confirmar el pedido.
+- Precios confirmados: PayPal USD 12 por curso y USD 35 por proyecto base; Mercado Pago ARS 22.800 y ARS 66.500, respectivamente. La constante compartida `src/lib/digitalPrices.ts` registra USD y su conversión fija de ARS 1.900. No actualizar la cotización automáticamente.
 - Prueba completa con compradores ficticios: pago aprobado, pendiente y rechazado; firma inválida; importe incorrecto; webhook duplicado; fallo y reintento de email. No realizar cobros reales de prueba.
 
 ## Documentación oficial consultada

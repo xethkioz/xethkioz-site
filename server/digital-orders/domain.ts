@@ -1,5 +1,6 @@
 // Server-only payment logic. Disabled until explicitly configured.
 import { randomUUID } from 'node:crypto'
+import { DIGITAL_PRICES } from '../../src/lib/digitalPrices'
 
 export const ORDER_INBOX = 'aidss1991@gmail.com'
 export const ACCOUNT_EMAILS = { mercadopago: 'aidss1991@gmail.com', paypal: 'dreanor666@gmail.com' } as const
@@ -88,10 +89,12 @@ export function readConfig(env: Record<string, string | undefined>): PaymentConf
   const emailFrom = email(secret('DIGITAL_ORDERS_EMAIL_FROM'))
   // Gmail is the recipient. Sending requires a separately verified domain.
   requireValue(!emailFrom.endsWith('@gmail.com') && !emailFrom.endsWith('@resend.dev'), 'VERIFIED_SENDER_REQUIRED')
+  const arsCourse = money(secret('DIGITAL_COURSE_PRICE_ARS'))
+  const arsProject = money(secret('DIGITAL_PROJECT_PRICE_ARS'))
+  requireValue(mode !== 'live' || (arsCourse === DIGITAL_PRICES.course.ars.toFixed(2) && arsProject === DIGITAL_PRICES.project.ars.toFixed(2)), 'CONFIG_PRICE_MISMATCH')
   return {
     mode, returnUrl,
-    arsCourse: money(secret('DIGITAL_COURSE_PRICE_ARS')),
-    arsProject: money(secret('DIGITAL_PROJECT_PRICE_ARS')),
+    arsCourse, arsProject,
     mpAccessToken: secret('MERCADOPAGO_ACCESS_TOKEN'),
     mpWebhookSecret: secret('MERCADOPAGO_WEBHOOK_SECRET'),
     mpSellerId: identifier(secret('MERCADOPAGO_SELLER_ID')),
@@ -128,7 +131,7 @@ export function createOrder(input: unknown, config: PaymentConfig): Order {
   const digits = whatsapp.replace(/\D/g, '').length
   requireValue(/^[+0-9 ]+$/.test(whatsapp) && digits >= 7 && digits <= 15, 'INVALID_WHATSAPP')
   const custom = productId === 'project-2'
-  const amount = data.provider === 'paypal' ? (product.kind === 'course' ? '15.00' : '50.00')
+  const amount = data.provider === 'paypal' ? DIGITAL_PRICES[product.kind].usd.toFixed(2)
     : money(product.kind === 'course' ? config.arsCourse : config.arsProject)
   return {
     id: randomUUID(), productId, ...product, provider: data.provider, mode: config.mode,

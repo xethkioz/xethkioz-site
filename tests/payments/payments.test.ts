@@ -83,13 +83,29 @@ test('Payment configuration is disabled by default and cannot silently activate 
   assert.throws(() => readConfig({ DIGITAL_PAYMENTS_ENABLED: 'true', DIGITAL_PAYMENTS_MODE: 'live', VERCEL_ENV: 'preview' }), /LIVE_REQUIRES_PRODUCTION/)
   assert.throws(() => readConfig({ DIGITAL_PAYMENTS_ENABLED: 'true', DIGITAL_PAYMENTS_MODE: 'sandbox', VERCEL_ENV: 'production' }), /SANDBOX_REQUIRES_PREVIEW/)
 })
+test('Live configuration requires the agreed ARS 1900 conversion and per-item prices', () => {
+  const env = {
+    DIGITAL_PAYMENTS_ENABLED: 'true', DIGITAL_PAYMENTS_MODE: 'live', VERCEL_ENV: 'production',
+    DIGITAL_PAYMENTS_RETURN_URL: 'https://www.xethkioz.com.ar/digital/cursos',
+    DIGITAL_ORDERS_EMAIL_FROM: 'orders@example.test', DIGITAL_COURSE_PRICE_ARS: '22800', DIGITAL_PROJECT_PRICE_ARS: '66500',
+    MERCADOPAGO_ACCESS_TOKEN: 'fictitious', MERCADOPAGO_WEBHOOK_SECRET: 'fictitious', MERCADOPAGO_SELLER_ID: '123456',
+    PAYPAL_CLIENT_ID: 'fictitious', PAYPAL_CLIENT_SECRET: 'fictitious', PAYPAL_WEBHOOK_ID: 'WH-TEST', PAYPAL_MERCHANT_ID: 'TESTSELLER',
+    RESEND_API_KEY: 'fictitious', SUPABASE_URL: 'https://test.supabase.co', DIGITAL_ORDERS_SUPABASE_KEY: 'fictitious',
+    DIGITAL_ORDERS_WORKER_SECRET: 'fictitious-worker-secret-long-enough',
+  }
+  const live = readConfig(env)!
+  assert.equal(createOrder({ ...input, provider: 'mercadopago' }, live).amount, '22800.00')
+  assert.equal(createOrder({ ...input, provider: 'mercadopago', productId: 'project-1' }, live).amount, '66500.00')
+  assert.throws(() => readConfig({ ...env, DIGITAL_COURSE_PRICE_ARS: '10000' }), /CONFIG_PRICE_MISMATCH/)
+  assert.throws(() => readConfig({ ...env, DIGITAL_PROJECT_PRICE_ARS: '35000' }), /CONFIG_PRICE_MISMATCH/)
+})
 test('Amount handling rejects zero, negatives, exponents, excess precision and invalid prices', () => {
   assert.equal(money('15'), '15.00'); assert.equal(money('50.1'), '50.10')
   for (const value of ['0', '-10', '1e3', '15.999', '01.00', 'NaN', 15, undefined]) assert.throws(() => money(value), /INVALID_AMOUNT/)
   assert.throws(() => createOrder({ ...input, provider: 'mercadopago' }, { ...config, arsCourse: '' }), /INVALID_AMOUNT/)
 })
 test('Server determines a per-product USD/ARS price and rejects client price overrides', () => {
-  assert.equal(order().amount, '15.00'); assert.equal(order('paypal', 'project-1').amount, '50.00')
+  assert.equal(order().amount, '12.00'); assert.equal(order('paypal', 'project-1').amount, '35.00')
   assert.equal(order('mercadopago').amount, '10000.00'); assert.equal(order('mercadopago', 'project-1').amount, '35000.00')
   assert.throws(() => createOrder({ ...input, amount: '0.01' }, config), /INVALID_REQUEST/)
   assert.throws(() => createOrder({ ...input, productId: 'toString' }, config), /INVALID_PRODUCT/)
@@ -165,7 +181,7 @@ test('PayPal creation requests USD per item, intended merchant, no shipping and 
   assert.equal((await pp.create(o)).id, o.providerOrderId)
   const call = calls.at(-1)!, body = JSON.parse(call.init.body as string)
   assert.equal(new Headers(call.init.headers).get('paypal-request-id'), o.id)
-  assert.equal(body.purchase_units[0].amount.value, '15.00'); assert.equal(body.purchase_units[0].amount.currency_code, 'USD')
+  assert.equal(body.purchase_units[0].amount.value, '12.00'); assert.equal(body.purchase_units[0].amount.currency_code, 'USD')
   assert.equal(body.purchase_units[0].payee.merchant_id, config.paypalMerchantId)
   assert.equal(body.payment_source.paypal.experience_context.shipping_preference, 'NO_SHIPPING')
 })

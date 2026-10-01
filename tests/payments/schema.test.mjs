@@ -15,11 +15,11 @@ after(async () => db?.close())
 async function rpc(name, params) {
   return (await db.query(`select public.${name}(${params.map((_, i) => `$${i+1}`).join(',')}) as result`, params)).rows[0].result
 }
-function snapshot(id=randomUUID()) { return { id, provider:'paypal', mode:'sandbox', productId:'course-1', title:'Curso ficticio', kind:'course', hours:24, currency:'USD', amount:'15.00', email:`${id}@example.test`, whatsapp:'+5491112345678', brief:'', focus:'', notes:'', createdAt:new Date().toISOString() } }
+function snapshot(id=randomUUID()) { return { id, provider:'paypal', mode:'sandbox', productId:'course-1', title:'Curso ficticio', kind:'course', hours:24, currency:'USD', amount:'12.00', email:`${id}@example.test`, whatsapp:'+5491112345678', brief:'', focus:'', notes:'', createdAt:new Date().toISOString() } }
 async function saved(s=snapshot()) {
   await rpc('digital_order_create',[s,randomUUID(),hash,randomUUID().replaceAll('-','').repeat(2)])
   await rpc('digital_order_bind',[s.id,`PP-${s.id}`,'https://www.sandbox.paypal.com/checkoutnow?token=TEST'])
-  const receipt={orderId:s.id,providerOrderId:`PP-${s.id}`,provider:'paypal',paymentId:`CAP-${s.id}`,currency:'USD',amount:'15.00',verifiedAt:new Date().toISOString()}
+  const receipt={orderId:s.id,providerOrderId:`PP-${s.id}`,provider:'paypal',paymentId:`CAP-${s.id}`,currency:'USD',amount:'12.00',verifiedAt:new Date().toISOString()}
   const messages=[['owner','aidss1991@gmail.com'],['buyer',s.email]].map(([who,to])=>({key:`digital-order/${s.id}/${who}-paid-v1`,from:'orders@example.test',to,replyTo:'aidss1991@gmail.com',subject:'Test',text:'Test'}))
   return {s,receipt,messages}
 }

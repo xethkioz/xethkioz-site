@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { useLang } from '../../lib/LangContext'
+import { DIGITAL_PRICES, DIGITAL_USD_TO_ARS, digitalArsLabel } from '../../lib/digitalPrices'
 
 export type DigitalOrderItem = { id: string; title: string; kind: 'course' | 'project'; custom?: boolean }
 const CONTACT_EMAIL = 'aidss1991@gmail.com'
@@ -64,11 +65,12 @@ export default function DigitalCourseOrder({ items }: { items: DigitalOrderItem[
       }
       return
     }
-    const price = item.kind === 'course' ? 15 : 50
+    const price = DIGITAL_PRICES[item.kind]
     const hours = item.kind === 'course' ? 24 : 48
     const lines = es ? [
       `Pedido: ${item.title}`,
-      `Precio de referencia: USD ${price}`,
+      `Precio por unidad: USD ${price.usd} / ${digitalArsLabel(price.ars, lang)}`,
+      `Conversión fija del catálogo: ${digitalArsLabel(DIGITAL_USD_TO_ARS, lang)} por USD`,
       `Email de contacto: ${email.trim()}`,
       `WhatsApp: ${whatsapp.trim()}`,
       ...(item.custom ? [`De qué trata el proyecto: ${brief.trim()}`, `Enfoque: ${focus.trim()}`] : []),
@@ -79,7 +81,8 @@ export default function DigitalCourseOrder({ items }: { items: DigitalOrderItem[
       'Comprobante: adjuntar a este correo si el pago ya fue realizado.',
     ] : [
       `Order: ${item.title}`,
-      `Reference price: USD ${price}`,
+      `Price per item: USD ${price.usd} / ${digitalArsLabel(price.ars, lang)}`,
+      `Fixed catalog conversion: ${digitalArsLabel(DIGITAL_USD_TO_ARS, lang)} per USD`,
       `Contact email: ${email.trim()}`,
       `WhatsApp: ${whatsapp.trim()}`,
       ...(item.custom ? [`Project summary: ${brief.trim()}`, `Focus: ${focus.trim()}`] : []),
@@ -104,8 +107,8 @@ export default function DigitalCourseOrder({ items }: { items: DigitalOrderItem[
         <label className="digital-order__wide" htmlFor="digital-order-product"><span id="digital-order-product-label">{es ? 'Curso o proyecto' : 'Course or project'}</span>
           <select id="digital-order-product" aria-labelledby="digital-order-product-label" required value={selectedId} onChange={event => setSelectedId(event.target.value)}>
             <option value="">{es ? 'Elegí una propuesta' : 'Choose an option'}</option>
-            <optgroup label={es ? 'Cursos de IA · USD 15' : 'AI courses · USD 15'}>{items.filter(product => product.kind === 'course').map(product => <option key={product.id} value={product.id}>{product.title}</option>)}</optgroup>
-            <optgroup label={es ? 'Proyectos Base · USD 50' : 'Base Projects · USD 50'}>{items.filter(product => product.kind === 'project').map(product => <option key={product.id} value={product.id}>{product.title}</option>)}</optgroup>
+            <optgroup label={`${es ? 'Cursos de IA' : 'AI courses'} · USD ${DIGITAL_PRICES.course.usd} / ${digitalArsLabel(DIGITAL_PRICES.course.ars, lang)}`}>{items.filter(product => product.kind === 'course').map(product => <option key={product.id} value={product.id}>{product.title}</option>)}</optgroup>
+            <optgroup label={`${es ? 'Proyectos Base' : 'Base Projects'} · USD ${DIGITAL_PRICES.project.usd} / ${digitalArsLabel(DIGITAL_PRICES.project.ars, lang)}`}>{items.filter(product => product.kind === 'project').map(product => <option key={product.id} value={product.id}>{product.title}</option>)}</optgroup>
           </select>
         </label>
         <label htmlFor="digital-order-email">{es ? 'Tu correo electrónico' : 'Your email'}<input id="digital-order-email" type="email" required maxLength={254} autoComplete="email" value={email} onChange={event => setEmail(event.target.value)} /></label>

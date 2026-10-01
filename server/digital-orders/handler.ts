@@ -6,6 +6,7 @@ import { MercadoPago, PayPal } from './providers'
 import type { Transport } from './providers'
 import { confirmMercadoPago, confirmPayPal } from './confirmation'
 import { deliverMessage } from './notifications'
+import { DIGITAL_PRICES } from '../../src/lib/digitalPrices'
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 export type StoreContract = Pick<DatabaseStore, 'healthy' | 'create' | 'bind' | 'findByProviderId' | 'markPaidAndEnqueue' | 'keys' | 'claim' | 'accepted' | 'retry' | 'review'>
@@ -27,7 +28,7 @@ export function createHandler(deps: Dependencies = defaults) {
       if (action === 'config') {
         await store.healthy()
         return reply(200, { enabled: true, mode: config.mode, inbox: ORDER_INBOX,
-          prices: { mercadopago: { course: config.arsCourse, project: config.arsProject, currency: 'ARS' }, paypal: { course: '15.00', project: '50.00', currency: 'USD' } } })
+          prices: { mercadopago: { course: config.arsCourse, project: config.arsProject, currency: 'ARS' }, paypal: { course: DIGITAL_PRICES.course.usd.toFixed(2), project: DIGITAL_PRICES.project.usd.toFixed(2), currency: 'USD' } } })
       }
       if (action === 'worker') {
         const header = req.headers?.authorization

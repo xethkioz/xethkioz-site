@@ -20,8 +20,11 @@ test('Digital: four aligned desktop cards, responsive layout and course navigati
     await page.getByRole('link', { name: 'Explorar cursos digitales', exact: true }).click()
     await expect(page).toHaveURL(/\/digital\/cursos$/)
     await expect(page.getByRole('heading', { level: 1, name: 'Cursos digitales' })).toBeVisible()
-    await expect(page.getByRole('region', { name: 'IA — Inteligencia Artificial' })).toContainText('USD 15')
-    await expect(page.getByRole('region', { name: 'Proyectos Base' })).toContainText('USD 50')
+    await expect(page.getByRole('region', { name: 'IA — Inteligencia Artificial' })).toContainText('USD 12')
+    await expect(page.getByRole('region', { name: 'IA — Inteligencia Artificial' })).toContainText('ARS 22.800 · por cada curso')
+    await expect(page.getByRole('region', { name: 'Proyectos Base' })).toContainText('USD 35')
+    await expect(page.getByRole('region', { name: 'Proyectos Base' })).toContainText('ARS 66.500 · por cada proyecto base')
+    await expect(page.locator('.digital-courses__conversion')).toContainText('ARS 1.900')
     await expect(page.getByRole('region', { name: 'IA — Inteligencia Artificial' }).getByRole('listitem')).toHaveCount(4)
     await expect(page.getByRole('region', { name: 'Proyectos Base' }).getByRole('listitem')).toHaveCount(3)
     await expect(page.getByRole('region', { name: 'IA — Inteligencia Artificial' })).toContainText('24 horas')
@@ -50,6 +53,7 @@ test('Orders: required contact and custom brief, honest email handoff and no sta
   await expect(link).toBeVisible()
   const projectEmail = new URL((await link.getAttribute('href'))!)
   expect(projectEmail.pathname).toBe('aidss1991@gmail.com')
+  expect(projectEmail.searchParams.get('body')).toContain('Precio por unidad: USD 35 / ARS 66.500')
   expect(projectEmail.searchParams.get('body')).toContain('buyer@example.com')
   expect(projectEmail.searchParams.get('body')).toContain('+54 9 11 1234 5678')
   expect(projectEmail.searchParams.get('body')).toContain('Una base para organizar un pequeño comercio.')
@@ -60,6 +64,7 @@ test('Orders: required contact and custom brief, honest email handoff and no sta
   await expect(page.locator('#digital-order-brief')).toHaveCount(0)
   await page.getByRole('button', { name: 'Preparar correo del pedido', exact: true }).click()
   const courseEmail = new URL((await link.getAttribute('href'))!)
+  expect(courseEmail.searchParams.get('body')).toContain('Precio por unidad: USD 12 / ARS 22.800')
   expect(courseEmail.searchParams.get('body')).toContain('24 horas después de confirmar el pago')
   expect(courseEmail.searchParams.get('body')).not.toContain('Una base para organizar un pequeño comercio.')
   expect(courseEmail.searchParams.get('body')).toContain('Referencia de pago (a verificar): Pendiente de coordinar')
@@ -78,6 +83,8 @@ test('Courses: direct links, reciprocal language metadata, language switch and a
   await expect(page).toHaveURL(/\/en\/digital\/cursos$/)
   await page.reload()
   await expect(page.getByRole('heading', { level: 1, name: 'Digital courses' })).toBeVisible()
+  await expect(page.getByRole('region', { name: 'AI — Artificial Intelligence' })).toContainText('ARS 22,800 · per course')
+  await expect(page.getByRole('region', { name: 'Base Projects' })).toContainText('ARS 66,500 · per base project')
   await expect(page.getByRole('region', { name: 'AI — Artificial Intelligence' }).getByRole('listitem')).toHaveCount(4)
   await expect(page.getByRole('region', { name: 'Base Projects' }).getByRole('listitem')).toHaveCount(3)
   await expect(page.getByRole('heading', { name: 'Multi-AI: tools working together', exact: true })).toBeVisible()
@@ -92,7 +99,7 @@ test('Courses: direct links, reciprocal language metadata, language switch and a
 })
 
 test('Checkout: configured providers show exact prices and submit contact/custom details before redirect', async ({ page }) => {
-  const prices = { mercadopago: { course: '10000.00', project: '35000.00', currency: 'ARS' }, paypal: { course: '15.00', project: '50.00', currency: 'USD' } }
+  const prices = { mercadopago: { course: '10000.00', project: '35000.00', currency: 'ARS' }, paypal: { course: '12.00', project: '35.00', currency: 'USD' } }
   await page.route('**/api/digital-orders', route => route.fulfill({ json: { enabled: true, mode: 'sandbox', prices } }))
   let sent: any
   await page.route('**/api/digital-orders?action=checkout', async route => {
@@ -117,7 +124,7 @@ test('Checkout: configured providers show exact prices and submit contact/custom
 })
 
 test('Checkout: failed provider requests keep the order editable and offer email handoff', async ({ page }) => {
-  await page.route('**/api/digital-orders', route => route.fulfill({ json: { enabled: true, mode: 'sandbox', prices: { mercadopago: { course: '10000.00', project: '35000.00', currency: 'ARS' }, paypal: { course: '15.00', project: '50.00', currency: 'USD' } } } }))
+  await page.route('**/api/digital-orders', route => route.fulfill({ json: { enabled: true, mode: 'sandbox', prices: { mercadopago: { course: '10000.00', project: '35000.00', currency: 'ARS' }, paypal: { course: '12.00', project: '35.00', currency: 'USD' } } } }))
   await page.route('**/api/digital-orders?action=checkout', route => route.fulfill({ status: 503, json: { error: 'SERVICE_UNAVAILABLE' } }))
   await page.goto('/digital/cursos')
   await page.getByLabel('Curso o proyecto', { exact: true }).selectOption('course-1')
