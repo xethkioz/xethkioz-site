@@ -3,6 +3,7 @@ import SEO from '../components/SEO'
 import { useLang } from '../lib/LangContext'
 import PortalNavigation from '../components/portals/PortalNavigation'
 import DigitalCourseOrder, { type DigitalOrderItem } from '../components/services/DigitalCourseOrder'
+import { DIGITAL_PRICES, DIGITAL_USD_TO_ARS, digitalArsLabel } from '../lib/digitalPrices'
 import './PortalInteriors.css'
 import './DigitalCourses.css'
 
@@ -37,7 +38,7 @@ export default function DigitalCourses() {
   return <main className="portal-page portal-digital portal-courses" data-portal-theme="ice">
     <SEO
       title={es ? 'Cursos digitales' : 'Digital courses'}
-      description={es ? 'Cuatro cursos de IA por USD 15 y tres Proyectos Base por USD 50. Pedidos por correo y entrega después del pago confirmado.' : 'Four AI courses for USD 15 and three Base Projects for USD 50. Email orders and delivery after confirmed payment.'}
+      description={es ? `Cursos de IA: USD ${DIGITAL_PRICES.course.usd} por curso. Proyectos base para presentar: USD ${DIGITAL_PRICES.project.usd} por proyecto. Entrega después del pago y contacto por correo.` : `AI courses: USD ${DIGITAL_PRICES.course.usd} per course. Project foundations to present: USD ${DIGITAL_PRICES.project.usd} per project. Delivery after payment and email contact.`}
       url="/digital/cursos"
       image="/assets/portals/ice-portal.webp"
     />
@@ -54,7 +55,8 @@ export default function DigitalCourses() {
           <p className="portal-eyebrow">01 / {es ? 'CURSOS' : 'COURSES'}</p>
           <h2 id="ai-course-title">{es ? 'IA — Inteligencia Artificial' : 'AI — Artificial Intelligence'}</h2>
           <p className="digital-course__type">{es ? 'Cursos' : 'Courses'}</p>
-          <p className="digital-course__price"><span>USD</span> 15</p>
+          <p className="digital-course__price"><span>USD</span> {DIGITAL_PRICES.course.usd}</p>
+          <p className="digital-course__local-price">{digitalArsLabel(DIGITAL_PRICES.course.ars, lang)} · {es ? 'por cada curso' : 'per course'}</p>
           <p className="digital-course__intro">{es ? 'Nivel básico a intermedio. Cuatro propuestas para llevar la IA a la práctica.' : 'Beginner to intermediate level. Four courses to put AI into practice.'}</p>
           <ol className="digital-course__list">
             {aiCourses.map(course => <li key={course.title}>
@@ -68,9 +70,10 @@ export default function DigitalCourses() {
         <section className="digital-course" aria-labelledby="base-projects-title">
           <p className="portal-eyebrow">02 / {es ? 'PROYECTOS' : 'PROJECTS'}</p>
           <h2 id="base-projects-title">{es ? 'Proyectos Base' : 'Base Projects'}</h2>
-          <p className="digital-course__type">{es ? 'Proyectos prearmados' : 'Ready-made projects'}</p>
-          <p className="digital-course__price"><span>USD</span> 50</p>
-          <p className="digital-course__intro">{es ? 'Tres puntos de partida para organizar una idea y dar los primeros pasos.' : 'Three starting points to organize an idea and take the first steps.'}</p>
+          <p className="digital-course__type">{es ? 'Proyectos base para presentar' : 'Project foundations to present'}</p>
+          <p className="digital-course__price"><span>USD</span> {DIGITAL_PRICES.project.usd}</p>
+          <p className="digital-course__local-price">{digitalArsLabel(DIGITAL_PRICES.project.ars, lang)} · {es ? 'por cada proyecto base' : 'per base project'}</p>
+          <p className="digital-course__intro">{es ? 'Tres bases listas para presentar, organizar tu idea y dar los primeros pasos.' : 'Three foundations to present, organize your idea and take the first steps.'}</p>
           <ol className="digital-course__list">
             {baseProjects.map(project => <li key={project.title}>
               <h3>{project.title}</h3>
@@ -81,6 +84,7 @@ export default function DigitalCourses() {
           <a className="portal-button digital-course__request" href="#course-order">{es ? 'Solicitar un proyecto' : 'Request a project'}</a>
         </section>
       </div>
+      <p className="digital-courses__conversion">{es ? `Precios en pesos calculados con un dólar fijo de ${digitalArsLabel(DIGITAL_USD_TO_ARS, lang)}, acordado para este catálogo.` : `Peso prices use the fixed conversion of ${digitalArsLabel(DIGITAL_USD_TO_ARS, lang)} per USD agreed for this catalog.`}</p>
       <DigitalCourseOrder items={orderItems} />
     </div>
   </main>
