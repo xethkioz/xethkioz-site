@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useLang } from '../../lib/LangContext'
 
 export type DigitalOrderItem = { id: string; title: string; kind: 'course' | 'project'; custom?: boolean }
-const CONTACT_EMAIL = 'xethkioz@gmail.com'
+const CONTACT_EMAIL = 'aidss1991@gmail.com'
 
 export default function DigitalCourseOrder({ items }: { items: DigitalOrderItem[] }) {
   const { lang, localizePath } = useLang()
