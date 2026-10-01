@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.api.json",
+  "include": ["server/digital-orders/**/*.ts", "tests/payments/**/*.ts"]
+}

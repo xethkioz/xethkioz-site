@@ -61,6 +61,9 @@ jobs:
           set -o pipefail
           npm run build 2>&1 | tee build.log
 
+      - name: Digital payment contracts and private database tests (offline)
+        run: npm run test:digital-payments
+
       - name: Upload build evidence
         if: always()
         uses: actions/upload-artifact@v4
