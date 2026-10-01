@@ -49,7 +49,7 @@ test('Orders: required contact and custom brief, honest email handoff and no sta
   const link = page.getByRole('link', { name: 'Abrir en mi correo', exact: true })
   await expect(link).toBeVisible()
   const projectEmail = new URL((await link.getAttribute('href'))!)
-  expect(projectEmail.pathname).toBe('xethkioz@gmail.com')
+  expect(projectEmail.pathname).toBe('aidss1991@gmail.com')
   expect(projectEmail.searchParams.get('body')).toContain('buyer@example.com')
   expect(projectEmail.searchParams.get('body')).toContain('+54 9 11 1234 5678')
   expect(projectEmail.searchParams.get('body')).toContain('Una base para organizar un pequeño comercio.')
