@@ -39,6 +39,6 @@ export default function PortalSupport() {
         {channels.map(item => <a key={item.name} href={item.url} target="_blank" rel="noopener noreferrer" title={item.handle}><span><SocialIcon name={item.name}/></span><small>{item.name === 'TikTok Principal' ? 'TikTok' : item.name}</small></a>)}
       </nav>
     </div>
-    <div className="portal-footer__rights"><span>WORLD OF XETHKIOZ © {new Date().getFullYear()} · XETHKIOZ · {es ? 'Todos los derechos reservados.' : 'All rights reserved.'}</span><nav aria-label={es ? 'Información legal' : 'Legal information'}><a href="https://www.xethkioz.com.ar">xethkioz.com.ar</a><Link to={localizePath('/privacy')}>{es ? 'Privacidad' : 'Privacy'}</Link><button type="button" onClick={openSettings}>Cookies</button><small>{SITE_VERSION}</small></nav></div>
+    <div className="portal-footer__rights"><span>XETHKIOZ © {new Date().getFullYear()} · InnerCircle Community · {es ? 'Todos los derechos reservados.' : 'All rights reserved.'}</span><nav aria-label={es ? 'Información legal' : 'Legal information'}><a href="https://www.xethkioz.com.ar">xethkioz.com.ar</a><Link to={localizePath('/privacy')}>{es ? 'Privacidad' : 'Privacy'}</Link><button type="button" onClick={openSettings}>Cookies</button><small>{SITE_VERSION}</small></nav></div>
   </footer>
 }
