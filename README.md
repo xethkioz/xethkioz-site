@@ -12,7 +12,7 @@ and a compact support footer. The legacy universe route redirects to the active 
 **Dominio canónico:** https://www.xethkioz.com.ar  
 **Hosting principal:** Vercel
 
-XETHKIOZ Network es la plataforma pública de XETHKIOZ. World of Xethkioz funciona como universo creativo y Elemental Realms como su proyecto jugable actual, junto a gaming, noticias, ciencia/tecnología, comunidad, Green Node, XETHKIOZ Studio y CMS editorial.
+XETHKIOZ Network es la plataforma pública de XETHKIOZ. Reúne gaming, AION 2 · InnerCircle, noticias, ciencia/tecnología, comunidad, Green Node, XETHKIOZ Studio y CMS editorial.
 
 ## Repositorio canónico
 
@@ -38,8 +38,7 @@ Node soportado: **22**.
 | Ruta | Estado |
 | --- | --- |
 | `/` | Home / gateway |
-| `/world-of-xethkioz` | Hub público del universo World of Xethkioz |
-| `/world-of-xethkioz/elemental-realms` | Proyecto jugable actual: Elemental Realms |
+| `/aion2/innercircle` | Portal de la legión Elyos AION 2 · InnerCircle |
 | `/gaming` | Gaming |
 | `/gaming/guides` | Guías |
 | `/science` | Ciencia y tecnología |
@@ -110,7 +109,7 @@ Nunca subir `.env`, service-role keys, tokens administrativos ni credenciales pr
 - CSP, HSTS y headers de seguridad en producción.
 - CMS protegido por sesión/rol.
 - Telemetría condicionada a consentimiento.
-- `.gitignore` bloquea secretos, builds, caches y assets privados de World of Xethkioz.
+- `.gitignore` bloquea secretos, builds, caches y assets privados de proyectos de producción.
 - `/.well-known/security.txt` publica el canal de reporte.
 
 Ver `docs/SECURITY.md`.

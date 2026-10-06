@@ -8,10 +8,10 @@ import './SupportFantasy.css'
 const copy = {
   es: {
     seoTitle: 'Apoyá el proyecto | XETHKIOZ',
-    seoDescription: 'Formas voluntarias de acompañar World of Xethkioz: Elemental Realms, la web y su contenido independiente.',
+    seoDescription: 'Formas voluntarias de acompañar XETHKIOZ, la web y sus proyectos independientes.',
     eyebrow: 'PRODUCCIÓN INDEPENDIENTE', title: 'Un mundo por crear. Un impulso compartido.',
-    intro: 'Detrás de World of Xethkioz: Elemental Realms hay un proyecto independiente que crece con trabajo, creatividad y comunidad. Tu apoyo acompaña el desarrollo y ayuda a sostener la web y sus contenidos.',
-    back: 'Descubrir World of Xethkioz: Elemental Realms', contribute: 'Elegí cómo acompañar',
+    intro: 'Detrás de XETHKIOZ hay una red independiente de gaming, tecnología, comunidad y proyectos digitales. Tu apoyo ayuda a sostener la web y sus contenidos.',
+    back: 'Descubrir AION 2 · InnerCircle', contribute: 'Elegí cómo acompañar',
     voluntary: 'El aporte es voluntario. No es una preventa, una inversión ni una compra de ventajas dentro del juego.',
     paypal: 'Aportar con PayPal', paypalFallback: 'Abrir PayPal directamente', mercadoPago: 'Aportar con Mercado Pago',
     payments: 'PayPal puede completarse desde el botón integrado; Mercado Pago se abre en el sitio del proveedor. Revisá siempre el importe antes de confirmar.',
@@ -24,10 +24,10 @@ const copy = {
   },
   en: {
     seoTitle: 'Support the project | XETHKIOZ',
-    seoDescription: 'Voluntary ways to support World of Xethkioz: Elemental Realms, the website and independent content.',
+    seoDescription: 'Voluntary ways to support XETHKIOZ, the website and its independent projects.',
     eyebrow: 'INDEPENDENT PRODUCTION', title: 'A world to create. A shared beginning.',
-    intro: 'World of Xethkioz: Elemental Realms is an independent project built through work, creativity and community. Your support helps its development and sustains the website and its content.',
-    back: 'Discover World of Xethkioz: Elemental Realms', contribute: 'Choose how to contribute',
+    intro: 'XETHKIOZ is an independent network built through work, creativity and community. Your support helps sustain the website and its projects.',
+    back: 'Discover AION 2 · InnerCircle', contribute: 'Choose how to contribute',
     voluntary: 'Support is voluntary. It is not a preorder, an investment or a purchase of gameplay advantages.',
     paypal: 'Contribute with PayPal', paypalFallback: 'Open PayPal directly', mercadoPago: 'Contribute with Mercado Pago',
     payments: 'PayPal can be completed from the embedded button; Mercado Pago opens on the provider’s website. Always review the amount before confirming.',
@@ -46,7 +46,7 @@ export default function Support() {
   return (
     <main className="xks-support">
       <SEO title={t.seoTitle} description={t.seoDescription} url={localizePath('/support')} />
-      <Link className="xks-back" to={localizePath('/world-of-xethkioz/elemental-realms')}>← {t.back}</Link>
+      <Link className="xks-back" to={localizePath('/aion2/innercircle')}>← {t.back}</Link>
       <section className="xks-hero" aria-labelledby="support-title">
         <div className="xks-intro"><p className="xks-eyebrow">{t.eyebrow}</p><h1 id="support-title">{t.title}</h1><p className="xks-lead">{t.intro}</p></div>
         <div className="xks-contribute" aria-labelledby="support-methods-title">

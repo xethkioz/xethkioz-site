@@ -1,12 +1,22 @@
-# Pass 40: one direct game destination; legacy universe URLs remain compatible.
+# InnerCircle is the active gaming portal. Legacy World URLs redirect here.
 [[redirects]]
 from = "/world-of-xethkioz"
-to = "/world-of-xethkioz/elemental-realms"
+to = "/aion2/innercircle"
+status = 301
+force = true
+[[redirects]]
+from = "/world-of-xethkioz/elemental-realms"
+to = "/aion2/innercircle"
 status = 301
 force = true
 [[redirects]]
 from = "/en/world-of-xethkioz"
-to = "/en/world-of-xethkioz/elemental-realms"
+to = "/en/aion2/innercircle"
+status = 301
+force = true
+[[redirects]]
+from = "/en/world-of-xethkioz/elemental-realms"
+to = "/en/aion2/innercircle"
 status = 301
 force = true
 [[redirects]]
