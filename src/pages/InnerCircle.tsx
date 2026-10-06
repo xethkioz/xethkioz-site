@@ -11,9 +11,9 @@ export default function InnerCircle() {
     <main className="portal-page innercircle-page" data-public-presentation="gaming" data-portal-theme="innercircle">
       <SEO
         title="AION 2 · Clan · InnerCircle | Legión Elyos"
-        description={es ? 'AION 2 · Clan · InnerCircle. Legión Elyos Reclutamiento abierto, PvPvE, asedios y espíritu Black Metal.' : 'InnerCircle · AION 2 Elyos Legion. Open recruitment, PvPvE, sieges and a Black Metal spirit.'}
+        description={es ? 'AION 2 · Clan · InnerCircle. Legión Elyos · Reclutamiento abierto, PvPvE, asedios y espíritu Black Metal.' : 'InnerCircle · AION 2 Elyos Legion. Open recruitment, PvPvE, sieges and a Black Metal spirit.'}
         url="/aion2/innercircle"
-        image="/images/articles/mmorpg-asia.svg"
+        image="/assets/portals/fire-portal.webp"
       />
       <PortalNavigation/>
       <section className="innercircle-hero portal-content" aria-labelledby="innercircle-title">
@@ -33,7 +33,7 @@ export default function InnerCircle() {
         </div>
         <figure className="innercircle-hero__art">
           <div className="innercircle-hero__halo" aria-hidden="true"/>
-          <img src="/images/articles/mmorpg-asia.svg" alt={es ? 'Arte atmosférico de AION 2 para InnerCircle' : 'Atmospheric AION 2 artwork for InnerCircle'} width="900" height="506" fetchPriority="high" decoding="async"/>
+          <img src="/assets/portals/fire-portal.webp" alt={es ? 'Arte atmosférico de AION 2 para InnerCircle' : 'Atmospheric AION 2 artwork for InnerCircle'} width="900" height="506" fetchPriority="high" decoding="async"/>
           <figcaption>{es ? 'AION 2 · ATREIA · LEGIÓN ELYOS' : 'AION 2 · ATREIA · ELYOS LEGION'}</figcaption>
         </figure>
       </section>
