@@ -10,8 +10,8 @@ export default function InnerCircle() {
   return (
     <main className="portal-page innercircle-page" data-public-presentation="gaming" data-portal-theme="innercircle">
       <SEO
-        title="AION 2 · InnerCircle | Legión Elyos"
-        description={es ? 'InnerCircle · Legión Elyos de AION 2. Reclutamiento abierto, PvPvE, asedios y espíritu Black Metal.' : 'InnerCircle · AION 2 Elyos Legion. Open recruitment, PvPvE, sieges and a Black Metal spirit.'}
+        title="AION 2 · Clan · InnerCircle | Legión Elyos"
+        description={es ? 'AION 2 · Clan · InnerCircle. Legión Elyos Reclutamiento abierto, PvPvE, asedios y espíritu Black Metal.' : 'InnerCircle · AION 2 Elyos Legion. Open recruitment, PvPvE, sieges and a Black Metal spirit.'}
         url="/aion2/innercircle"
         image="/images/articles/mmorpg-asia.svg"
       />
