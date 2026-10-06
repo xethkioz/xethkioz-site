@@ -27,7 +27,7 @@ export default function PortalSupport() {
   return <footer className="portal-footer" aria-label={es ? 'Colaboración, redes y derechos' : 'Support, social channels and rights'}>
     <div className="portal-footer__community">
       <section className="portal-donations" aria-labelledby="portal-support-title">
-        <h2 id="portal-support-title">{es ? 'Colaborá con World of Xethkioz' : 'Support World of Xethkioz'}</h2>
+        <h2 id="portal-support-title">{es ? 'Colaborá con XETHKIOZ' : 'Support XETHKIOZ'}</h2>
         <div className="portal-donations__buttons">
           <a className="portal-paypal" href={DONATION_LINKS.paypal} target="_blank" rel="noopener noreferrer" aria-label={es ? 'Aportar con PayPal, abre un sitio externo' : 'Support with PayPal, opens an external website'}><b aria-hidden="true">P</b><span>PayPal</span><small aria-hidden="true">↗</small></a>
           <a className="portal-mercadopago" href={DONATION_LINKS.mercadoPago} target="_blank" rel="noopener noreferrer" aria-label={es ? 'Aportar con Mercado Pago, abre un sitio externo' : 'Support with Mercado Pago, opens an external website'}><svg viewBox="0 0 32 24" width="30" height="24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true"><ellipse cx="16" cy="12" rx="14" ry="10"/><path d="m3 12 7-4 6 2 5-2 8 4M10 8l-3 8 5 3 4-3 4 2 4-5-7-4-4 4-3-1"/></svg><span>mercado pago</span><small aria-hidden="true">↗</small></a>
