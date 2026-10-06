@@ -79,7 +79,7 @@ const content = {
     socialCommunity: {
       eyebrow: 'COMMUNITY // FOLLOW THE PROJECT',
       title: 'Grow with XETHKIOZ.',
-      text: 'If gaming, technology, AI and World of Xethkioz: Elemental Realms are your thing, follow and join us on the official channels. Every interaction helps the project reach more people.',
+      text: 'If gaming, technology, AI and AION 2 · Clan · InnerCircle are your thing, follow and join us on the official channels. Every interaction helps the project reach more people.',
       note: 'Follow, comment and share what matters to you.',
       threads: 'FOLLOW ON THREADS',
       instagram: 'FOLLOW ON INSTAGRAM',
