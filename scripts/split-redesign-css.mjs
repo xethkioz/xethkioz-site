@@ -166,6 +166,11 @@ function partitionResidualRouteRules(coreCss, routeCssByOwner) {
 
   const extras = Object.fromEntries(Object.keys(routeCssByOwner).map((owner) => [owner, postcss.root()]))
   coreRoot.walkRules((rule) => {
+    let ancestor = rule.parent
+    while (ancestor) {
+      if (ancestor.type === 'atrule' && ancestor.name.toLowerCase() === 'keyframes') return
+      ancestor = ancestor.parent
+    }
     const retainedSelectors = []
     const routeSelectors = new Map()
     for (const selector of splitSelectorList(rule.selector)) {
