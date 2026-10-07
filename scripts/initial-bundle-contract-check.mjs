@@ -11,7 +11,7 @@ const publicHtmlFiles = [
   'seo-shells/science.html',
   'seo-shells/digital.html',
   'seo-shells/en-digital.html',
-  'seo-shells/world-of-xethkioz-elemental-realms.html',
+  'seo-shells/aion2-innercircle.html',
   'seo-shells/news.html',
   'seo-shells/community.html',
   'seo-shells/about.html',
