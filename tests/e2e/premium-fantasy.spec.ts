@@ -1,6 +1,7 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
+import AxeBuilder from '@axe-core/playwright'
 
-async function essentials(page: import('@playwright/test').Page) {
+async function essentials(page: Page) {
   const banner = page.locator('.xk-privacy-consent-banner')
   if (await banner.isVisible()) await banner.getByRole('button', { name: /solo esenciales|essential only/i }).click()
 }
@@ -47,6 +48,6 @@ test('Efectos: pausa persistente, partículas limitadas y respeto a movimiento r
 
 for(const route of ['/', '/aion2/innercircle','/digital'])test(`Portal accesible sin violaciones WCAG: ${route}`,async({page})=>{
   await page.goto(route);await essentials(page)
-  const result=await new (await import('@axe-core/playwright')).default({page}).include('#main-content').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze()
+  const result=await new AxeBuilder({page}).include('#main-content').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze()
   expect(result.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)}))).toEqual([])
 })
