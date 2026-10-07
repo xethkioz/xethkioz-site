@@ -13,7 +13,7 @@ export default function Home() {
   const es = lang === 'es'
   const innerCirclePath = localizePath('/aion2/innercircle')
   const portals = [
-    { tone: 'innercircle', title: 'Aion 2 · Clan · InnerCircle', image: '/assets/portals/fire-portal.webp', sub: es ? 'Legión Elyos · Black Metal' : 'Elyos Legion · Black Metal', action: es ? 'Entrar a InnerCircle' : 'Enter InnerCircle', href: innerCirclePath, image: undefined },
+    { tone: 'innercircle', title: 'Aion 2 · Clan · InnerCircle', image: '/assets/portals/fire-portal.webp', sub: es ? 'Legión Elyos · Black Metal' : 'Elyos Legion · Black Metal', action: es ? 'Entrar a InnerCircle' : 'Enter InnerCircle', href: innerCirclePath },
     { tone: 'nature', title: es ? 'Mascotas' : 'Pets', sub: 'Huellas Argentina', action: es ? 'Entrar a Mascotas' : 'Enter Pets', href: '/mascotas/', image: undefined },
     { tone: 'ice', title: 'Xethkioz Digital', sub: es ? 'Creación web · VEYR · ArgenCiencia' : 'Web creation · VEYR · ArgenCiencia', action: es ? 'Explorar tecnología' : 'Explore technology', href: localizePath('/digital'), image: undefined },
   ] as const
