@@ -4,6 +4,8 @@ import PortalNavigation from '../components/portals/PortalNavigation'
 import PortalEffects from '../components/portals/PortalEffects'
 import './InnerCircle.css'
 
+const communityUrl = 'https://chat.whatsapp.com/Cxa2IPrbk4r22VadmTMj9T'
+
 export default function InnerCircle() {
   const { lang } = useLang()
   const es = lang === 'es'
@@ -67,9 +69,11 @@ export default function InnerCircle() {
           </div>
           <aside>
             <p className="portal-eyebrow">🕯 {es ? 'CÓMO UNIRTE' : 'HOW TO JOIN'}</p>
-            <p>{es ? 'Mandame un privado a @Xethkioz con:' : 'Send a private message to @Xethkioz with:'}</p>
+            <p>{es ? 'Entrá a la comunidad y dejá tus datos de personaje para coordinar el ingreso a InnerCircle:' : 'Join the community and leave your character details to coordinate your InnerCircle recruitment:'}</p>
             <ol><li>{es ? 'Nombre de personaje y clase.' : 'Character name and class.'}</li><li>{es ? 'Nivel actual y disponibilidad horaria.' : 'Current level and availability.'}</li><li>{es ? 'Experiencia previa en Aion u otros MMORPGs (opcional).' : 'Previous Aion or MMORPG experience (optional).'}</li></ol>
-            <div className="innercircle-discord">{es ? 'DISCORD · ENLACE DE INVITACIÓN PRÓXIMAMENTE' : 'DISCORD · INVITE LINK COMING SOON'}</div>
+            <a className="innercircle-discord innercircle-community-link" href={communityUrl} target="_blank" rel="noreferrer noopener">
+              {es ? 'UNIRME A LA COMUNIDAD AION 2 · WHATSAPP ↗' : 'JOIN THE AION 2 · WHATSAPP COMMUNITY ↗'}
+            </a>
           </aside>
         </section>
 
