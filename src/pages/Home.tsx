@@ -18,7 +18,12 @@ export default function Home() {
     { tone: 'ice', title: 'Xethkioz Digital', sub: es ? 'Creación web · VEYR · ArgenCiencia' : 'Web creation · VEYR · ArgenCiencia', action: es ? 'Explorar tecnología' : 'Explore technology', href: localizePath('/digital'), image: undefined },
   ] as const
   return <>
-    <SEO title="XETHKIOZ" description={es ? 'Cuatro portales. Una misma identidad. AION 2 · InnerCircle, Mascotas, Xethkioz Digital y Green Node.' : 'Four portals. One universe. AION 2 InnerCircle, Pets, Xethkioz Digital and Green Node.'} url="/" image="/assets/portal-games-clean-v1.webp"/>
+    <SEO
+      title="XETHKIOZ"
+      description={es ? 'XETHKIOZ · Gaming, tecnología y comunidad. AION 2 · Clan · InnerCircle, Mascotas, Xethkioz Digital y Green Node.' : 'XETHKIOZ · Gaming, technology and community. AION 2 · Clan · InnerCircle, Pets, Xethkioz Digital and Green Node.'}
+      url="/"
+      image="/assets/portal-games-clean-v1.webp"
+    />
     <main className="xk-home portal-home" data-public-presentation="fantasy" data-portal-theme="convergence">
       <PortalNavigation home/>
       <header className="portal-home__brand">
