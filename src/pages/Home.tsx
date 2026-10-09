@@ -6,6 +6,7 @@ import PortalNavigation from '../components/portals/PortalNavigation'
 import PortalEffects from '../components/portals/PortalEffects'
 import PortalSupport from '../components/portals/PortalSupport'
 import { useWisp } from '../providers/WispProvider'
+import UniverseIntel from '../components/gaming/UniverseIntel'
 import './HomePortals.css'
 
 type Universe = 'aion2' | 'wow'
@@ -61,8 +62,9 @@ export default function Home() {
             <div className="xk-launcher-hero__foot"><span>WX / {aion ? '001' : '002'}</span><span><i />{es ? 'PORTAL DISPONIBLE' : 'PORTAL AVAILABLE'}</span></div>
           </div>
         </section>
+        <UniverseIntel game={universe} key={universe} />
         <section className="xk-launcher-secondary" aria-label={es ? 'Otros portales' : 'Other portals'}>
-          <Link to="/mascotas/" className="xk-launcher-mini xk-launcher-mini--pets"><span className="xk-launcher-mini__icon" aria-hidden="true">✣</span><span className="xk-launcher-mini__copy"><small>COMPANION COLLECTION</small><b>{es ? 'Mascotas' : 'Pets'}</b><i>{es ? 'Compañeros para cada aventura.' : 'Companions for every adventure.'}</i></span><span className="xk-launcher-mini__arrow" aria-hidden="true">↗</span></Link>
+          <a href="/mascotas/" className="xk-launcher-mini xk-launcher-mini--pets"><span className="xk-launcher-mini__icon" aria-hidden="true">✣</span><span className="xk-launcher-mini__copy"><small>COMPANION COLLECTION</small><b>{es ? 'Mascotas' : 'Pets'}</b><i>{es ? 'Compañeros para cada aventura.' : 'Companions for every adventure.'}</i></span><span className="xk-launcher-mini__arrow" aria-hidden="true">↗</span></a>
           <Link to={localizePath('/digital')} className="xk-launcher-mini xk-launcher-mini--digital"><span className="xk-launcher-mini__icon" aria-hidden="true">⌘</span><span className="xk-launcher-mini__copy"><small>CREATIVE TECHNOLOGY</small><b>Xethkioz Digital</b><i>{es ? 'IA, desarrollo e innovación digital.' : 'AI, development and digital innovation.'}</i></span><span className="xk-launcher-mini__arrow" aria-hidden="true">↗</span></Link>
         </section>
         <Link className="xk-launcher-green" to={localizePath('/green-node')} onClick={triggerGreenPortal}><img src="/assets/portals/node-rift.webp" alt="" width="1500" height="190" loading="lazy" decoding="async" /><span className="xk-launcher-green__grid" aria-hidden="true" /><span className="xk-launcher-green__mark" aria-hidden="true">⌖</span><span className="xk-launcher-green__copy"><small>NETWORK // SYSTEMS // INTELLIGENCE</small><b>GREEN NODE</b><i>{es ? 'Tecnología, sistemas y conexiones inteligentes.' : 'Technology, systems and intelligent connections.'}</i></span><span className="xk-launcher-green__action">{es ? 'EXPLORAR SISTEMA' : 'EXPLORE SYSTEM'} <b aria-hidden="true">↗</b></span></Link>
