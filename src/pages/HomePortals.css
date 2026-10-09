@@ -55,3 +55,31 @@
 @media(max-width:760px){.portal-navigation.is-home.xk-launcher-nav{top:12px;width:calc(100% - 24px)}.portal-navigation.is-home .portal-navigation__controls button:last-child{width:43px;height:43px;border-radius:13px}.xk-launcher-brand{width:min(360px,76%);padding-top:57px;margin-bottom:12px}.xk-launcher-brand img{max-height:91px}.xk-launcher-brand p{font-size:12px;letter-spacing:.07em}.xk-launcher-main{width:calc(100% - 24px)}.xk-launcher-intro{margin:10px 0 15px}.xk-launcher-overline{font-size:7px;letter-spacing:.19em}.xk-universe-tabs{margin-bottom:12px;gap:5px;padding:4px}.xk-universe-tabs button{grid-template-columns:22px 1fr;column-gap:5px;padding:10px 7px}.xk-universe-tabs button>span:first-child{width:22px;height:22px;font-size:17px}.xk-universe-tabs button>span:nth-child(2){font-size:9px;letter-spacing:.04em}.xk-universe-tabs button small{font-size:6px;letter-spacing:.08em}.xk-launcher-hero{grid-template-columns:minmax(0,1fr);min-height:0;border-radius:21px}.xk-launcher-hero__art{position:absolute;z-index:-1;inset:0 0 auto;height:280px;min-height:0;opacity:.68}.xk-launcher-hero__art>img{mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.85) 48%,transparent 100%)}.xk-launcher-hero__art-vignette{background:linear-gradient(180deg,rgba(5,6,9,.02),rgba(5,6,9,.25) 35%,#0b0b13 98%)}.xk-launcher-hero__content{padding:185px 17px 17px}.xk-launcher-hero__code{font-size:7px}.xk-launcher-hero h2{margin:14px 0 8px;font-size:clamp(40px,12vw,57px)}.xk-launcher-hero.is-wow h2{font-size:clamp(34px,9vw,48px)}.xk-launcher-hero__subtitle{font-size:16px}.xk-launcher-hero__description{margin-top:8px;font-size:11px;line-height:1.75}.xk-launcher-hero__actions{margin-top:16px}.xk-launcher-primary,.xk-launcher-secondary{min-height:42px;padding:10px 11px;font-size:8px}.xk-launcher-divider{margin:19px 0 15px}.xk-launcher-guides>p{font-size:7px;letter-spacing:.15em}.xk-launcher-guide-grid{grid-template-columns:minmax(0,1fr)}.xk-launcher-guide{padding:10px}.xk-launcher-hero__foot{margin-top:15px;font-size:6px}.xk-launcher-secondary{grid-template-columns:minmax(0,1fr);gap:9px;margin-top:10px}.xk-launcher-mini{padding:14px}.xk-launcher-green{display:grid;grid-template-columns:42px minmax(0,1fr);gap:12px;min-height:0;margin-top:10px;padding:16px 14px}.xk-launcher-green__mark{width:42px;height:42px}.xk-launcher-green__copy small{font-size:6px;letter-spacing:.12em}.xk-launcher-green__copy b{font-size:17px;letter-spacing:.12em}.xk-launcher-green__copy i{font-size:9px;line-height:1.5}.xk-launcher-green__action{grid-column:2;justify-self:start;margin:0}.xk-launcher-home .portal-footer{width:calc(100% - 24px);margin-top:20px}}
 @media(max-width:390px){.xk-launcher-hero__content{padding-right:13px;padding-left:13px}.xk-launcher-primary,.xk-launcher-secondary{gap:6px;font-size:7px}.xk-launcher-mini__copy i{font-size:9px}}
 @media(prefers-reduced-motion:reduce){.xk-launcher-hero,.xk-launcher-hero__art>img,.xk-launcher-mini,.xk-launcher-guide,.xk-launcher-primary,.xk-launcher-secondary,.xk-launcher-green{animation:none!important;transition:none!important}}
+
+
+/* Keep the universe switcher focused on the single hero. The lore archive is opt-in. */
+.xk-universe-archive-toggle { position: relative; margin: 1.15rem 0 2rem; }
+.xk-universe-archive-toggle__button {
+  display: grid; grid-template-columns: 2.6rem minmax(0,1fr) 2rem; align-items: center; gap: .85rem;
+  width: 100%; min-height: 4.8rem; padding: .9rem 1rem; text-align: left;
+  border: 1px solid rgba(196,162,237,.23); border-radius: 1rem;
+  background: linear-gradient(110deg,rgba(22,20,34,.94),rgba(8,10,17,.94));
+  color: #f6f0e5; cursor: pointer; transition: border-color .2s ease, background .2s ease, transform .2s ease;
+}
+.xk-universe-archive-toggle__button:hover { border-color: rgba(196,162,237,.52); background: linear-gradient(110deg,rgba(34,28,49,.96),rgba(8,10,17,.96)); }
+.xk-universe-archive-toggle__button:focus-visible { outline: 2px solid #d9c3ff; outline-offset: 3px; }
+.xk-universe-archive-toggle__sigil { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border: 1px solid rgba(196,162,237,.3); border-radius: .75rem; color: #d5b7ff; font-size: 1.2rem; }
+.xk-launcher-home[data-portal-theme="wow"] .xk-universe-archive-toggle__sigil { border-color: rgba(245,184,76,.32); color: #f5c879; }
+.xk-universe-archive-toggle__copy { display: grid; gap: .3rem; min-width: 0; }
+.xk-universe-archive-toggle__copy small { color: #9d9bab; font: 800 .62rem/1.4 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing: .14em; }
+.xk-universe-archive-toggle__copy b { color: #f8f5ff; font-size: clamp(.84rem,1.6vw,1rem); line-height: 1.4; }
+.xk-universe-archive-toggle__arrow { display: grid; place-items: center; width: 1.8rem; height: 1.8rem; border: 1px solid rgba(255,255,255,.13); border-radius: 50%; color: #e9ddff; font-size: 1.25rem; }
+.xk-universe-archive-toggle__content { animation: xk-archive-reveal .24s ease both; }
+.xk-universe-archive-toggle__content .xk-universe-intel { margin-top: .65rem; }
+@keyframes xk-archive-reveal { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .xk-universe-archive-toggle__content { animation: none; } .xk-universe-archive-toggle__button { transition: none; } }
+@media (max-width: 620px) {
+  .xk-universe-archive-toggle { margin: .85rem 0 1.5rem; }
+  .xk-universe-archive-toggle__button { grid-template-columns: 2.2rem minmax(0,1fr) 1.8rem; gap: .65rem; min-height: 4.5rem; padding: .8rem; }
+  .xk-universe-archive-toggle__sigil { width: 2.15rem; height: 2.15rem; }
+}
