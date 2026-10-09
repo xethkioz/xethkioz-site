@@ -1,4 +1,5 @@
 import SEO from '../components/SEO'
+import AionClassAcademy from '../components/gaming/AionClassAcademy'
 import { useLang } from '../lib/LangContext'
 import PortalNavigation from '../components/portals/PortalNavigation'
 import PortalEffects from '../components/portals/PortalEffects'
@@ -55,6 +56,8 @@ export default function InnerCircle() {
             ).map((item,index)=><article key={item}><span>0{index+1}</span><p>{item}</p></article>)}
           </div>
         </section>
+
+        <AionClassAcademy es={es} />
 
         <section id="reclutamiento" className="portal-section innercircle-recruit" aria-labelledby="requirements-title">
           <div>
