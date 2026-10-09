@@ -78,9 +78,9 @@ const sources = {
     { es: 'Roster Global y funciones de clase · referencia comunitaria', en: 'Global roster and class roles · community reference', href: 'https://www.aion2game.wiki/classes/class-list/' },
   ],
   wow: [
-    { es: 'Blizzard · razas y combinaciones de clase de WoW: Forever', en: 'Blizzard · WoW: Forever races and class combinations', href: 'https://worldofwarcraft.blizzard.com/es-es/news/24304075/create-the-hero-you-want-to-be-in-world-of-warcraft-forever' },
-    { es: 'Blizzard · nueva raza célica', en: 'Blizzard · new Skyborne/Celestial race', href: 'https://worldofwarcraft.blizzard.com/es-es/news/24302071/' },
-    { es: 'Blizzard · requisitos de sistema de World of Warcraft', en: 'Blizzard · World of Warcraft system requirements', href: 'https://eu.support.blizzard.com/en/help/article/000353553' },
+    { es: 'Blizzard · razas y combinaciones de clase de WoW: Forever', en: 'Blizzard · WoW: Forever races and class combinations', href: 'https://worldofwarcraft.blizzard.com/en-us/news/24304075/erschafft-den-helden-der-ihr-sein-wollt-in-world-of-warcraft-forever' },
+    { es: 'Blizzard · nueva raza célica', en: 'Blizzard · new Skyborne/Celestial race', href: 'https://worldofwarcraft.blizzard.com/en-us/news/24304075/erschafft-den-helden-der-ihr-sein-wollt-in-world-of-warcraft-forever' },
+    { es: 'Blizzard · requisitos de sistema de World of Warcraft', en: 'Blizzard · World of Warcraft system requirements', href: 'https://eu.shop.battle.net/en-us/product/world-of-warcraft-subscription' },
     { es: 'Blizzard · cambios de GPU de WoW: Forever', en: 'Blizzard · WoW: Forever GPU requirements', href: 'https://worldofwarcraft.blizzard.com/es-es/news/24301512/requisitos-de-gpu-para-world-of-warcraft-forever' },
   ],
 }
@@ -99,7 +99,7 @@ const copy = {
       { id: 'requirements' as const, label: 'Requisitos PC' },
     ],
     sourceLabel: 'Fuentes y verificación',
-    sourceNote: 'Los requisitos oficiales se separan de la configuración alta sugerida por XETHKIOZ. Las combinaciones de raza y clase pueden cambiar con las actualizaciones.',
+    sourceNote: 'Los perfiles publicados se separan del objetivo alto sugerido por XETHKIOZ. WoW: Forever tiene condiciones específicas de compatibilidad de GPU; revisá la nota de Blizzard antes de comprar hardware. Las combinaciones de raza y clase pueden cambiar con las actualizaciones.',
     factionLabel: 'Facción',
     availableClasses: 'Clases disponibles',
     weapon: 'Arma principal',
@@ -156,14 +156,14 @@ const copy = {
       req: [
         { label: 'Mínimo para entrar', badge: '720p · calidad baja', status: 'official' as const, lines: [
           { es: 'Windows 10 de 64 bits (actualización de mayo de 2019 o posterior)', en: '' },
-          { es: 'CPU: 6 núcleos, 4,0 GHz boost; Intel Coffee Lake / AMD Ryzen Zen 2', en: '' },
-          { es: 'RAM: 8 GB · GPU DirectX 12 de 4 GB compatible (familia GTX 10 / AMD RDNA 1 / Intel Xe2-LPG)', en: '' },
+          { es: 'CPU: 4 núcleos, 3,0 GHz; Intel Core Haswell (4.ª gen.) / AMD Ryzen Zen', en: '' },
+          { es: 'RAM: 8 GB · GPU DirectX 12 compatible. Verificá el modelo en la nota oficial de GPU de WoW: Forever', en: '' },
           { es: 'SSD con 128 GB libres y conexión de banda ancha.', en: '' },
         ]},
         { label: 'Medio · recomendado oficial', badge: 'Recomendado por Blizzard', status: 'official' as const, lines: [
           { es: 'Windows 11 de 64 bits', en: '' },
-          { es: 'CPU: 8 núcleos de rendimiento y hasta 5,2 GHz boost; Intel Core Ultra Series 2 / AMD Ryzen Zen 5', en: '' },
-          { es: 'RAM: 16 GB · GPU DX12 de 8 GB: RTX serie 40 / AMD RDNA 3 / Intel Arc B', en: '' },
+          { es: 'CPU: 6 núcleos, 3,5 GHz; Intel Core Coffee Lake (8.ª gen.) / AMD Ryzen Zen 2', en: '' },
+          { es: 'RAM: 16 GB · GPU DX12 de 8 GB: NVIDIA GeForce RTX / AMD RDNA 2 / Intel Arc 7', en: '' },
           { es: 'SSD con 128 GB libres y conexión de banda ancha.', en: '' },
         ]},
         { label: 'Alto · objetivo XETHKIOZ', badge: '1440p · alto/ultra como objetivo', status: 'estimate' as const, lines: [
@@ -188,7 +188,7 @@ const copy = {
       { id: 'requirements' as const, label: 'PC requirements' },
     ],
     sourceLabel: 'Sources and verification',
-    sourceNote: 'Official requirements are kept separate from XETHKIOZ’s suggested high-end target. Race and class combinations may change with updates.',
+    sourceNote: 'Published profiles are separated from XETHKIOZ’s suggested high-end target. WoW: Forever has specific GPU compatibility conditions; review Blizzard’s note before buying hardware. Race and class combinations may change with updates.',
     factionLabel: 'Faction',
     availableClasses: 'Available classes',
     weapon: 'Main weapon',
@@ -245,14 +245,14 @@ const copy = {
       req: [
         { label: 'Minimum to enter', badge: '720p · low settings', status: 'official' as const, lines: [
           { es: 'Windows 10 64-bit (May 2019 update or newer)', en: 'Windows 10 64-bit (May 2019 update or newer)' },
-          { es: 'CPU: 6 cores, 4.0 GHz boost; Intel Coffee Lake / AMD Ryzen Zen 2', en: 'CPU: 6 cores, 4.0 GHz boost; Intel Coffee Lake / AMD Ryzen Zen 2' },
-          { es: 'RAM: 8 GB · compatible 4 GB DirectX 12 GPU (GTX 10 family / AMD RDNA 1 / Intel Xe2-LPG)', en: 'RAM: 8 GB · compatible 4 GB DirectX 12 GPU (GTX 10 family / AMD RDNA 1 / Intel Xe2-LPG)' },
+          { es: 'CPU: 4 cores, 3.0 GHz; Intel Core Haswell (4th gen.) / AMD Ryzen Zen', en: 'CPU: 6 cores, 4.0 GHz boost; Intel Coffee Lake / AMD Ryzen Zen 2' },
+          { es: 'RAM: 8 GB · DirectX 12-compatible GPU. Verify the exact model in Blizzard's WoW: Forever GPU note', en: 'RAM: 8 GB · compatible 4 GB DirectX 12 GPU (GTX 10 family / AMD RDNA 1 / Intel Xe2-LPG)' },
           { es: 'SSD with 128 GB free and broadband internet.', en: 'SSD with 128 GB free and broadband internet.' },
         ]},
         { label: 'Medium · official recommended', badge: 'Blizzard recommended', status: 'official' as const, lines: [
           { es: 'Windows 11 64-bit', en: 'Windows 11 64-bit' },
-          { es: 'CPU: 8 performance cores up to 5.2 GHz boost; Intel Core Ultra Series 2 / AMD Ryzen Zen 5', en: 'CPU: 8 performance cores up to 5.2 GHz boost; Intel Core Ultra Series 2 / AMD Ryzen Zen 5' },
-          { es: 'RAM: 16 GB · 8 GB DX12 GPU: RTX 40 series / AMD RDNA 3 / Intel Arc B', en: 'RAM: 16 GB · 8 GB DX12 GPU: RTX 40 series / AMD RDNA 3 / Intel Arc B' },
+          { es: 'CPU: 6 cores, 3.5 GHz; Intel Core Coffee Lake (8th gen.) / AMD Ryzen Zen 2', en: 'CPU: 8 performance cores up to 5.2 GHz boost; Intel Core Ultra Series 2 / AMD Ryzen Zen 5' },
+          { es: 'RAM: 16 GB · 8 GB DX12 GPU: NVIDIA GeForce RTX / AMD RDNA 2 / Intel Arc 7', en: 'RAM: 16 GB · 8 GB DX12 GPU: RTX 40 series / AMD RDNA 3 / Intel Arc B' },
           { es: 'SSD with 128 GB free and broadband internet.', en: 'SSD with 128 GB free and broadband internet.' },
         ]},
         { label: 'High · XETHKIOZ target', badge: '1440p · high/ultra target', status: 'estimate' as const, lines: [
@@ -282,11 +282,11 @@ export default function UniverseIntel({ game }: { game: Universe }) {
         { name: { es: 'La Horda', en: 'The Horde' }, eyebrow: { es: 'FACTION // 01', en: 'FACTION // 01' }, description: { es: 'Una alianza de pueblos que valora la libertad, la fuerza y el honor. Sus decisiones y rivalidades moldean Azeroth.', en: 'An alliance of peoples that values freedom, strength and honor. Its choices and rivalries shape Azeroth.' }, races: wowHorde },
         { name: { es: 'La Alianza', en: 'The Alliance' }, eyebrow: { es: 'FACTION // 02', en: 'FACTION // 02' }, description: { es: 'Pueblos unidos por sus tradiciones, su sentido del deber y la defensa de sus reinos ante amenazas comunes.', en: 'Peoples united by tradition, duty and the defense of their kingdoms against common threats.' }, races: wowAlliance },
       ]
-  const requirements: RequirementEntry[] = world.req.map((entry, index) => ({
-    label: entry.label,
-    badge: entry.badge,
+  const requirements: RequirementEntry[] = world.req.map((entry) => ({
+    label: { es: entry.label, en: entry.label },
+    badge: { es: entry.badge, en: entry.badge },
     status: entry.status,
-    lines: entry.lines.map((line) => ({ es: line.es, en: line.en || line.es })).map((line) => ({ es: line.es, en: line.en })),
+    lines: entry.lines.map((line) => ({ es: line.es, en: line.en || line.es })),
   }))
 
   return (
