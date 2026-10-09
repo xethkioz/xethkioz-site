@@ -161,7 +161,7 @@ const copy = {
           { es: 'SSD con 128 GB libres y conexión de banda ancha.', en: '' },
         ]},
         { label: 'Medio · recomendado oficial', badge: 'Recomendado por Blizzard', status: 'official' as const, lines: [
-          { es: 'Windows 11 de 64 bits', en: '' },
+          { es: 'Windows 10 de 64 bits', en: '' },
           { es: 'CPU: 6 núcleos, 3,5 GHz; Intel Core Coffee Lake (8.ª gen.) / AMD Ryzen Zen 2', en: '' },
           { es: 'RAM: 16 GB · GPU DX12 de 8 GB: NVIDIA GeForce RTX / AMD RDNA 2 / Intel Arc 7', en: '' },
           { es: 'SSD con 128 GB libres y conexión de banda ancha.', en: '' },
@@ -245,14 +245,14 @@ const copy = {
       req: [
         { label: 'Minimum to enter', badge: '720p · low settings', status: 'official' as const, lines: [
           { es: 'Windows 10 64-bit (May 2019 update or newer)', en: 'Windows 10 64-bit (May 2019 update or newer)' },
-          { es: 'CPU: 4 cores, 3.0 GHz; Intel Core Haswell (4th gen.) / AMD Ryzen Zen', en: 'CPU: 6 cores, 4.0 GHz boost; Intel Coffee Lake / AMD Ryzen Zen 2' },
-          { es: 'RAM: 8 GB · DirectX 12-compatible GPU. Verify the exact model in Blizzard's WoW: Forever GPU note', en: 'RAM: 8 GB · compatible 4 GB DirectX 12 GPU (GTX 10 family / AMD RDNA 1 / Intel Xe2-LPG)' },
+          { es: 'CPU: 4 cores, 3.0 GHz; Intel Core Haswell (4th gen.) / AMD Ryzen Zen', en: 'CPU: 4 cores, 3.0 GHz; Intel Core Haswell (4th gen.) / AMD Ryzen Zen' },
+          { es: 'RAM: 8 GB · DirectX 12-compatible GPU. Check Blizzard’s WoW: Forever GPU note for the exact model; compatibility alone does not guarantee good performance.', en: 'RAM: 8 GB · DirectX 12-compatible GPU. Check Blizzard’s WoW: Forever GPU note for the exact model; compatibility alone does not guarantee good performance.' },
           { es: 'SSD with 128 GB free and broadband internet.', en: 'SSD with 128 GB free and broadband internet.' },
         ]},
         { label: 'Medium · official recommended', badge: 'Blizzard recommended', status: 'official' as const, lines: [
-          { es: 'Windows 11 64-bit', en: 'Windows 11 64-bit' },
-          { es: 'CPU: 6 cores, 3.5 GHz; Intel Core Coffee Lake (8th gen.) / AMD Ryzen Zen 2', en: 'CPU: 8 performance cores up to 5.2 GHz boost; Intel Core Ultra Series 2 / AMD Ryzen Zen 5' },
-          { es: 'RAM: 16 GB · 8 GB DX12 GPU: NVIDIA GeForce RTX / AMD RDNA 2 / Intel Arc 7', en: 'RAM: 16 GB · 8 GB DX12 GPU: RTX 40 series / AMD RDNA 3 / Intel Arc B' },
+          { es: 'Windows 10 64-bit', en: 'Windows 10 64-bit' },
+          { es: 'CPU: 6 cores, 3.5 GHz; Intel Core Coffee Lake (8th gen.) / AMD Ryzen Zen 2', en: 'CPU: 6 cores, 3.5 GHz; Intel Core Coffee Lake (8th gen.) / AMD Ryzen Zen 2' },
+          { es: 'RAM: 16 GB · 8 GB DX12 GPU: NVIDIA GeForce RTX / AMD RDNA 2 / Intel Arc 7', en: 'RAM: 16 GB · 8 GB DX12 GPU: NVIDIA GeForce RTX / AMD RDNA 2 / Intel Arc 7' },
           { es: 'SSD with 128 GB free and broadband internet.', en: 'SSD with 128 GB free and broadband internet.' },
         ]},
         { label: 'High · XETHKIOZ target', badge: '1440p · high/ultra target', status: 'estimate' as const, lines: [
