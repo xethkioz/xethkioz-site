@@ -15,6 +15,7 @@ export default function Home() {
   const { lang, localizePath } = useLang()
   const { triggerGreenPortal } = useWisp()
   const [universe, setUniverse] = useState<Universe>('aion2')
+  const [showIntel, setShowIntel] = useState(false)
   const es = lang === 'es'
   const aion = universe === 'aion2'
   const c = aion ? {
@@ -62,7 +63,27 @@ export default function Home() {
             <div className="xk-launcher-hero__foot"><span>WX / {aion ? '001' : '002'}</span><span><i />{es ? 'PORTAL DISPONIBLE' : 'PORTAL AVAILABLE'}</span></div>
           </div>
         </section>
-        <UniverseIntel game={universe} key={universe} />
+        <section className="xk-universe-archive-toggle" aria-label={es ? 'Enciclopedia del universo' : 'Universe encyclopedia'}>
+          <button
+            type="button"
+            className="xk-universe-archive-toggle__button"
+            aria-expanded={showIntel}
+            aria-controls="xk-universe-archive-content"
+            onClick={() => setShowIntel(open => !open)}
+          >
+            <span className="xk-universe-archive-toggle__sigil" aria-hidden="true">{aion ? '✧' : 'ᛟ'}</span>
+            <span className="xk-universe-archive-toggle__copy">
+              <small>{es ? 'ARCHIVO DEL UNIVERSO' : 'UNIVERSE ARCHIVE'}</small>
+              <b>{showIntel ? (es ? 'Ocultar enciclopedia' : 'Hide encyclopedia') : (es ? 'Explorar historia, razas, clases y requisitos' : 'Explore story, races, classes and requirements')}</b>
+            </span>
+            <span className="xk-universe-archive-toggle__arrow" aria-hidden="true">{showIntel ? '−' : '+'}</span>
+          </button>
+          {showIntel && (
+            <div id="xk-universe-archive-content" className="xk-universe-archive-toggle__content">
+              <UniverseIntel game={universe} key={universe} />
+            </div>
+          )}
+        </section>
         <section className="xk-launcher-secondary" aria-label={es ? 'Otros portales' : 'Other portals'}>
           <a href="/mascotas/" className="xk-launcher-mini xk-launcher-mini--pets"><span className="xk-launcher-mini__icon" aria-hidden="true">✣</span><span className="xk-launcher-mini__copy"><small>COMPANION COLLECTION</small><b>{es ? 'Mascotas' : 'Pets'}</b><i>{es ? 'Compañeros para cada aventura.' : 'Companions for every adventure.'}</i></span><span className="xk-launcher-mini__arrow" aria-hidden="true">↗</span></a>
           <Link to={localizePath('/digital')} className="xk-launcher-mini xk-launcher-mini--digital"><span className="xk-launcher-mini__icon" aria-hidden="true">⌘</span><span className="xk-launcher-mini__copy"><small>CREATIVE TECHNOLOGY</small><b>Xethkioz Digital</b><i>{es ? 'IA, desarrollo e innovación digital.' : 'AI, development and digital innovation.'}</i></span><span className="xk-launcher-mini__arrow" aria-hidden="true">↗</span></Link>
