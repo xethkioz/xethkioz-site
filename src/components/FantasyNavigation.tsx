@@ -29,12 +29,12 @@ export default function FantasyNavigation() {
   }, [menuOpen])
   const links = PUBLIC_NAVIGATION.map(item => {
     const label = item[lang]
-    const className = item.id === 'game' ? 'xkf-game-link' : item.id === 'support' ? 'xkf-support-link' : undefined
+    const className = item.id === 'innercircle' ? 'xkf-game-link' : item.id === 'support' ? 'xkf-support-link' : undefined
     if ('external' in item) return <a key={item.id} href={item.href} target="_blank" rel="noopener noreferrer" className={className}>{label}<span aria-hidden="true">↗</span></a>
     if ('document' in item) return <a key={item.id} href={item.href} className={className}>{label}</a>
     const href = localizePath(item.href)
-    const gameRoot = localizePath('/world-of-xethkioz')
-    const active = item.id === 'game'
+    const gameRoot = localizePath('/aion2/innercircle')
+    const active = item.id === 'innercircle'
       ? location.pathname === gameRoot || location.pathname.startsWith(`${gameRoot}/`)
       : location.pathname === href
     return <Link key={item.id} to={href} className={className} aria-current={active ? 'page' : undefined}>{label}</Link>

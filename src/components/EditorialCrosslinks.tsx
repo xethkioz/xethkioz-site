@@ -14,7 +14,7 @@ export default function EditorialCrosslinks() {
       <nav aria-label={es ? 'Web, Threads y nuestro juego' : 'Website, Threads and our game'}>
         <a href="https://www.xethkioz.com.ar">Web</a>
         <a href="https://www.threads.com/@xethkioz" target="_blank" rel="noopener noreferrer">Threads <span aria-hidden="true">↗</span></a>
-        <Link to={localizePath('/world-of-xethkioz/elemental-realms')}>World of Xethkioz: Elemental Realms <span aria-hidden="true">→</span></Link>
+        <Link to={localizePath('/aion2/innercircle')}>AION 2 · InnerCircle <span aria-hidden="true">→</span></Link>
       </nav>
     </section>
   )

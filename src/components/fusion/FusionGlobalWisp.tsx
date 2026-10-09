@@ -56,7 +56,7 @@ export default function FusionGlobalWisp() {
   const normalizedPath = location.pathname.replace(/^\/en(?=\/|$)/, '') || '/'
   const insideGreenNode = normalizedPath === '/green-node'
   const homeEntry = normalizedPath === '/'
-  const worldPortal = normalizedPath === '/world-of-xethkioz' || normalizedPath === '/world-of-xethkioz/elemental-realms'
+  const worldPortal = normalizedPath === '/aion2/innercircle'
   const gamingPortal = normalizedPath === '/gaming'
   const canonicalVeyr = worldPortal || gamingPortal
   const actionLabel = canonicalVeyr ? t.worldAction : insideGreenNode ? t.helpAction : t.action
@@ -151,7 +151,7 @@ export default function FusionGlobalWisp() {
 
           <span className="xk-wisp-specter-wrap">
             <SafeImage
-              src={canonicalVeyr ? '/assets/portals/veyr-companion.webp' : '/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg'}
+              src={canonicalVeyr ? '/assets/identity/wisp-digital-specter-v1.webp' : '/assets/identity/wisp-digital-specter-v1.webp'}
               fallback="/assets/identity/wisp-digital-specter-v1.webp"
               className="xk-wisp-specter xk-wisp-specter-veyr"
               alt=""

@@ -90,7 +90,7 @@ export default function Header() {
             <NavLink to={localizePath('/')} className={({ isActive }) => `rounded-full px-4 py-2 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 ${isActive ? 'bg-[#8B5CF6]/20 text-white shadow-[0_0_14px_rgba(139,92,246,.35)]' : 'hover:bg-[#8B5CF6]/15 hover:text-white'}`}>
               {lang === 'es' ? 'INICIO' : 'HOME'}
             </NavLink>
-            <Link className="xk-game-portal-link" to={localizePath('/world-of-xethkioz')}>{lang === 'es' ? 'EL JUEGO' : 'THE GAME'}</Link>
+            <Link className="xk-game-portal-link" to={localizePath('/aion2/innercircle')}>{lang === 'es' ? 'INNER CIRCLE' : 'INNER CIRCLE'}</Link>
             {nav.slice(1).map((item) => (
               'external' in item ? (
                 <a key={item.to} href={item.to} target="_blank" rel="noopener noreferrer" className="rounded-full px-4 py-2 transition hover:bg-cyan-400/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300">

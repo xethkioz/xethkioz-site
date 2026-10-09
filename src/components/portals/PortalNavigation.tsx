@@ -23,7 +23,7 @@ export default function PortalNavigation({ home = false }: { home?: boolean }) {
   return <header onBlur={event => { if (event.relatedTarget instanceof Node && !event.currentTarget.contains(event.relatedTarget)) setOpen(false) }} ref={ref} className={`portal-navigation${home ? ' is-home' : ''}`} onKeyDown={event => { if (event.key === 'Escape' && open) { setOpen(false); toggleRef.current?.focus() } }}>
     {home ? <span className="portal-navigation__signature" aria-hidden="true">✦ <span>{es ? 'UN UNIVERSO SIN LÍMITES' : 'ONE BOUNDLESS UNIVERSE'}</span></span> : <Link className="portal-navigation__back" to={localizePath('/')}><span aria-hidden="true">←</span> {es ? 'Portales' : 'Portals'}</Link>}
     {!home && <nav className="portal-navigation__destinations" aria-label={es ? 'Portales principales' : 'Main portals'}>
-      <Link data-tone="fire" aria-current={pathname.includes('elemental-realms') ? 'page' : undefined} to={localizePath('/world-of-xethkioz/elemental-realms')}>Elemental Realms</Link>
+      <Link data-tone="innercircle" aria-current={pathname.includes('aion2/innercircle') ? 'page' : undefined} to={localizePath('/aion2/innercircle')}>InnerCircle</Link>
       <a data-tone="nature" href="/mascotas/">{es ? 'Mascotas' : 'Pets'}</a>
       <Link data-tone="ice" aria-current={pathname.includes('digital') || pathname.includes('creacion-web') ? 'page' : undefined} to={localizePath('/digital')}>Digital</Link>
       <Link data-tone="node" aria-current={pathname.includes('green-node') ? 'page' : undefined} to={localizePath('/green-node')}>Green Node</Link>

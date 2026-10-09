@@ -4,8 +4,7 @@ export const ENGLISH_PREFIX = '/en'
 
 export const LOCALIZED_PUBLIC_PATHS = new Set([
   '/',
-  '/world-of-xethkioz',
-  '/world-of-xethkioz/elemental-realms',
+  '/aion2/innercircle',
   '/gaming',
   '/gaming/guides',
   '/science',

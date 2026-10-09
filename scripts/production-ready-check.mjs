@@ -45,8 +45,6 @@ const routeCssLoader = read('src/components/RouteCssLoader.tsx')
 const home = read('src/pages/Home.tsx')
 const navigation = read('src/components/FantasyNavigation.tsx')
 const destinations = read('src/lib/publicNavigation.ts')
-const homeCss = read('src/pages/WorldOfXethkiozLanding.css')
-const homeCinematicCss = read('src/pages/HomePortalCinematic.css')
 const indexHtml = read('index.html')
 const webManifest = read('public/manifest.webmanifest')
 const publicNews = read('src/pages/News.tsx')
@@ -132,14 +130,14 @@ check(
 )
 check(
   'Home uses the canonical Veyr Wisp without duplicate Home implementation',
-  globalWisp.includes('/assets/world-of-xethkioz/web-art/veyr-green-sigil.svg')
+  globalWisp.includes('/assets/identity/wisp-digital-specter-v1.webp')
     && globalWisp.includes("localizePath('/green-node')")
     && globalWisp.includes("homeEntry ? ' is-home-entry'")
     && !home.includes('className="xk-rb-wisp"'),
 )
 check('Home uses approved public portal scenery without production geometry', ['fire','nature','ice'].every(tone => exists(`public/assets/portals/${tone}-portal.webp`)) && !/\.(glb|gltf|fbx|blend)/.test(home))
 check('Home exposes accessible portal navigation with pause and reduced motion support', home.includes('<PortalNavigation home/>') && read('src/components/portals/PortalNavigation.tsx').includes('aria-expanded={open}') && read('src/components/portals/PortalNavigation.tsx').includes('aria-pressed={effects.enabled}') && read('src/components/portals/PortalSystem.css').includes('prefers-reduced-motion'))
-check('Home preserves three direct destinations plus the Green Node rift', home.includes('portal-triad') && home.includes('portal-node-rift') && home.includes("href: '/mascotas/'") && home.includes("localizePath('/digital')") && home.includes("localizePath('/world-of-xethkioz/elemental-realms')"))
+check('Home preserves three direct destinations plus the Green Node rift', home.includes('portal-triad') && home.includes('portal-node-rift') && home.includes("href: '/mascotas/'") && home.includes("localizePath('/digital')") && home.includes("localizePath('/aion2/innercircle')"))
 check('Home keeps service catalog and local AI details in Digital instead of expanding Home', !home.includes('xk-veyr-story') && !home.includes('xk-studio-story') && read('src/pages/DigitalHub.tsx').includes('VEYR') && read('src/pages/DigitalHub.tsx').includes('https://argenciencia.com/'))
 check(
   'Retired Nexus City editorial material stays out of public feeds and article metadata',
@@ -356,7 +354,6 @@ runNodeAudit('news factory audit', 'scripts/news-factory-check.mjs')
 runNodeAudit('web services audit', 'scripts/web-services-check.mjs')
 runNodeAudit('Green, Games and Guides depth audit', 'scripts/green-games-guides-check.mjs')
 runNodeAudit('content design audit', 'scripts/content-design-check.mjs')
-runNodeAudit('World IP protection audit', 'scripts/wox-ip-protection-check.mjs')
 
 let failed = 0
 for (const item of checks) {

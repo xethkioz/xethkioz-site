@@ -16,7 +16,7 @@ export default function Footer() {
   const { lang, localizePath } = useLang()
   const { openSettings } = usePrivacyConsent()
   const pathname = stripEnglishPrefix(useLocation().pathname)
-  const theme = pathname.startsWith('/world-of-xethkioz') ? 'world' : pathname === '/green-node' ? 'green' : pathname === '/creacion-web' ? 'studio' : pathname === '/science' ? 'science' : 'core'
+  const theme = pathname.startsWith('/aion2/innercircle') ? 'world' : pathname === '/green-node' ? 'green' : pathname === '/creacion-web' ? 'studio' : pathname === '/science' ? 'science' : 'core'
   const t = copy[lang]
   const channels = SOCIAL_LINKS.filter((item) => ['Threads', 'Instagram', 'TikTok Principal', 'YouTube', 'Web'].includes(item.name))
 

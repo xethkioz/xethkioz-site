@@ -54,7 +54,7 @@ const copy = {
     shortcutsEyebrow: 'ACCESOS EN VIVO',
     shortcutsTitle: 'Volvé al multiverso',
     shortcuts: [
-      { to: '/world-of-xethkioz/elemental-realms', label: 'World of Xethkioz: Elemental Realms', detail: 'Descubrí el proyecto del juego', glyph: '▶' },
+      { to: '/aion2/innercircle', label: 'AION 2 · InnerCircle', detail: 'Conocé la legión Elyos', glyph: '▶' },
       { to: '/news', label: 'Últimas noticias', detail: 'Gaming, tecnología e inteligencia artificial', glyph: '◆' },
       { to: '/community', label: 'Canal comunitario', detail: 'Chat, contactos y señales', glyph: '⌁' },
     ],
@@ -128,7 +128,7 @@ const copy = {
     shortcutsEyebrow: 'LIVE SHORTCUTS',
     shortcutsTitle: 'Return to the multiverse',
     shortcuts: [
-      { to: '/world-of-xethkioz/elemental-realms', label: 'World of Xethkioz: Elemental Realms', detail: 'Discover the game project', glyph: '▶' },
+      { to: '/aion2/innercircle', label: 'AION 2 · InnerCircle', detail: 'Discover the Elyos legion', glyph: '▶' },
       { to: '/news', label: 'Latest news', detail: 'Gaming, technology and artificial intelligence', glyph: '◆' },
       { to: '/community', label: 'Community channel', detail: 'Chat, contacts and signals', glyph: '⌁' },
     ],

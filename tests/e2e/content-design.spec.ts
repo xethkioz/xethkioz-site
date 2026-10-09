@@ -1,16 +1,18 @@
 import { expect, test } from '@playwright/test'
 
 test.describe('orden y navegación de secciones', () => {
-  test('Inicio presenta el trío elemental y Green Node sin otra capa de accesos', async ({ page }) => {
+  test('Inicio presenta XETHKIOZ y el portal InnerCircle sin recuperar la identidad anterior', async ({ page }) => {
     await page.goto('/')
-    await expect(page.getByRole('heading', { level: 1 })).toHaveAccessibleName('World of Xethkioz')
+    await expect(page.getByRole('heading', { level: 1 })).toHaveAccessibleName('XETHKIOZ')
     const portals = page.getByRole('navigation', { name: 'Elegí tu portal' })
     await expect(portals.getByRole('link')).toHaveCount(4)
-    await expect(portals.locator('[data-tone="fire"]')).toHaveAttribute('href', '/world-of-xethkioz/elemental-realms')
+    await expect(portals.locator('[data-tone="innercircle"]')).toHaveAttribute('href', '/aion2/innercircle')
     await expect(portals.locator('[data-tone="nature"]')).toHaveAttribute('href', '/mascotas/')
     await expect(portals.locator('[data-tone="ice"]')).toHaveAttribute('href', '/digital')
     await expect(page.locator('.portal-node-rift')).toHaveAttribute('href', '/green-node')
     await expect(page.locator('.portal-footer')).toBeVisible()
+    await expect(page.getByText('AION 2 · Clan · InnerCircle')).toBeVisible()
+    await expect(page.getByText('World of Xethkioz', { exact: false })).toHaveCount(0)
     await expect(page.locator('#origin, #worlds, #media-3d, .xk-studio-story, .xk-veyr-story')).toHaveCount(0)
   })
 

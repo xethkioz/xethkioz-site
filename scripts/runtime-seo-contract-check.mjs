@@ -30,14 +30,14 @@ assert(!seoShells.includes("path: '/nexus-city'") && !seoShells.includes("path: 
 
 const rewrites = vercel.rewrites ?? []
 const rewriteMap = new Map(rewrites.map((item) => [item.source, item.destination]))
-assert(redirectMap.get('/world-of-xethkioz')?.destination === '/world-of-xethkioz/elemental-realms' && redirectMap.get('/world-of-xethkioz')?.permanent, 'Legacy World URL redirects directly to Elemental Realms.')
-assert(redirectMap.get('/en/world-of-xethkioz')?.destination === '/en/world-of-xethkioz/elemental-realms', 'English legacy World URL keeps the correct language.')
-assert(rewriteMap.get('/world-of-xethkioz/elemental-realms') === '/seo-shells/world-of-xethkioz-elemental-realms.html', 'Elemental Realms must have a dedicated indexable SEO shell.')
-assert(rewriteMap.get('/en/world-of-xethkioz/elemental-realms') === '/seo-shells/en-world-of-xethkioz-elemental-realms.html', 'English Elemental Realms must have a localized SEO shell.')
+assert(redirectMap.get('/world-of-xethkioz')?.destination === '/aion2/innercircle' && redirectMap.get('/world-of-xethkioz')?.permanent, 'Legacy World URL redirects directly to AION 2 InnerCircle.')
+assert(redirectMap.get('/en/world-of-xethkioz')?.destination === '/en/aion2/innercircle', 'English legacy World URL keeps the correct language.')
+assert(rewriteMap.get('/aion2/innercircle') === '/seo-shells/aion2-innercircle.html', 'AION 2 InnerCircle must have a dedicated indexable SEO shell.')
+assert(rewriteMap.get('/en/aion2/innercircle') === '/seo-shells/en-aion2-innercircle.html', 'English AION 2 InnerCircle must have a localized SEO shell.')
 assert(sitemap.includes("es: '/digital', en: '/en/digital'") && !sitemap.includes("es: '/world-of-xethkioz',"), 'Sitemap contains Digital and excludes redundant redirected hub.')
-assert(sitemap.includes("es: '/world-of-xethkioz/elemental-realms', en: '/en/world-of-xethkioz/elemental-realms'"), 'Elemental Realms localized routes must remain in the sitemap.')
+assert(sitemap.includes("es: '/aion2/innercircle', en: '/en/aion2/innercircle'"), 'AION 2 InnerCircle localized routes must remain in the sitemap.')
 assert(seoShells.includes("path: '/digital'") && seoShells.includes("path: '/en/digital'") && rewriteMap.get('/digital') === '/seo-shells/digital.html', 'Digital has localized indexable route-owned SEO shells.')
-assert(seoShells.includes("path: '/world-of-xethkioz/elemental-realms'") && seoShells.includes("path: '/en/world-of-xethkioz/elemental-realms'"), 'Elemental Realms must generate standalone localized SEO shells.')
+assert(seoShells.includes("path: '/aion2/innercircle'") && seoShells.includes("path: '/en/aion2/innercircle'"), 'AION 2 InnerCircle must generate standalone localized SEO shells.')
 assert(rewriteMap.get('/green-node') === '/index.html', 'Green Node deep links must remain valid without exposing it in navigation.')
 assert(rewriteMap.get('/news/:slug') === '/api/news-page?slug=:slug', 'Article routes must preserve the slug query for the dynamic SEO shell.')
 assert(newsPage.includes("new URL(rawUrl, 'http://localhost').searchParams.get(key)"), 'The article SEO shell must parse its slug with the WHATWG URL API.')
@@ -87,4 +87,4 @@ if (issues.length) {
   process.exit(1)
 }
 
-console.log('PASS runtime/SEO contracts: World universe and Elemental Realms shells, real 404, article WHATWG query parsing, deep links, redirects, passport privacy, enforced CSP, streams RLS/indexes and telemetry hygiene.')
+console.log('PASS runtime/SEO contracts: AION 2 portal and AION 2 InnerCircle shells, real 404, article WHATWG query parsing, deep links, redirects, passport privacy, enforced CSP, streams RLS/indexes and telemetry hygiene.')

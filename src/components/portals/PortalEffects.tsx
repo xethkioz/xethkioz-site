@@ -43,7 +43,7 @@ export function usePortalEffects() {
 }
 
 // Small compositor-only particles. No render loop, WebGL, canvas, audio or video.
-export default function PortalEffects({ tone, count = 9 }: { tone: 'fire' | 'nature' | 'ice' | 'node'; count?: number }) {
+export default function PortalEffects({ tone, count = 9 }: { tone: 'fire' | 'nature' | 'ice' | 'node' | 'innercircle'; count?: number }) {
   const ref = useRef<HTMLSpanElement>(null)
   useEffect(() => {
     const element = ref.current
