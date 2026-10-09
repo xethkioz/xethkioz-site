@@ -1,16 +1,18 @@
 import { expect, test } from '@playwright/test'
 
 test.describe('orden y navegación de secciones', () => {
-  test('Inicio presenta el trío elemental y Green Node sin otra capa de accesos', async ({ page }) => {
+  test('Inicio presenta el launcher inmersivo con Aion 2, WoWForever y portales secundarios', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByRole('heading', { level: 1 })).toHaveAccessibleName('World of Xethkioz')
-    const portals = page.getByRole('navigation', { name: 'Elegí tu portal' })
-    await expect(portals.getByRole('link')).toHaveCount(4)
-    await expect(portals.locator('[data-tone="fire"]')).toHaveAttribute('href', '/world-of-xethkioz/elemental-realms')
-    await expect(portals.locator('[data-tone="nature"]')).toHaveAttribute('href', '/mascotas/')
-    await expect(portals.locator('[data-tone="ice"]')).toHaveAttribute('href', '/digital')
-    await expect(page.locator('.portal-node-rift')).toHaveAttribute('href', '/green-node')
+    await expect(page.getByRole('tab', { name: /AION 2/i })).toHaveAttribute('aria-selected', 'true')
+    await expect(page.locator('.xk-launcher-hero')).toContainText('Guía de Bardo')
+    await expect(page.locator('.xk-launcher-hero')).toContainText('Guía de Brujo')
+    await expect(page.locator('.xk-launcher-secondary a')).toHaveCount(2)
+    await expect(page.locator('.xk-launcher-green')).toHaveAttribute('href', '/green-node')
     await expect(page.locator('.portal-footer')).toBeVisible()
+    await page.getByRole('tab', { name: /WOWFOREVER/i }).click()
+    await expect(page.getByRole('tab', { name: /WOWFOREVER/i })).toHaveAttribute('aria-selected', 'true')
+    await expect(page.locator('.xk-launcher-hero')).toHaveClass(/is-wow/)
     await expect(page.locator('#origin, #worlds, #media-3d, .xk-studio-story, .xk-veyr-story')).toHaveCount(0)
   })
 
