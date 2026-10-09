@@ -20,7 +20,7 @@ export default function PortalNavigation({ home = false }: { home?: boolean }) {
     document.addEventListener('pointerdown', outside)
     return () => { document.documentElement.removeAttribute('data-fantasy-menu-open'); document.removeEventListener('pointerdown', outside) }
   }, [open])
-  return <header onBlur={event => { if (event.relatedTarget instanceof Node && !event.currentTarget.contains(event.relatedTarget)) setOpen(false) }} ref={ref} className={`portal-navigation${home ? ' is-home' : ''}`} onKeyDown={event => { if (event.key === 'Escape' && open) { setOpen(false); toggleRef.current?.focus() } }}>
+  return <header onBlur={event => { if (event.relatedTarget instanceof Node && !event.currentTarget.contains(event.relatedTarget)) setOpen(false) }} ref={ref} className={`portal-navigation${home ? ' is-home xk-launcher-nav' : ''}`} onKeyDown={event => { if (event.key === 'Escape' && open) { setOpen(false); toggleRef.current?.focus() } }}>
     {home ? <span className="portal-navigation__signature" aria-hidden="true">✦ <span>{es ? 'UN UNIVERSO SIN LÍMITES' : 'ONE BOUNDLESS UNIVERSE'}</span></span> : <Link className="portal-navigation__back" to={localizePath('/')}><span aria-hidden="true">←</span> {es ? 'Portales' : 'Portals'}</Link>}
     {!home && <nav className="portal-navigation__destinations" aria-label={es ? 'Portales principales' : 'Main portals'}>
       <Link data-tone="fire" aria-current={pathname.includes('elemental-realms') ? 'page' : undefined} to={localizePath('/world-of-xethkioz/elemental-realms')}>Elemental Realms</Link>
@@ -31,10 +31,10 @@ export default function PortalNavigation({ home = false }: { home?: boolean }) {
     <div className="portal-navigation__controls">
       <button type="button" className="portal-effects-toggle" onClick={effects.toggle} aria-pressed={effects.enabled} aria-disabled={effects.systemPaused} title={effects.systemPaused ? (es ? 'Efectos pausados por movimiento reducido o ahorro de datos' : 'Effects paused by reduced motion or data saver') : es ? 'Activar o pausar efectos visuales' : 'Enable or pause visual effects'}>{es ? 'Efectos' : 'Effects'} <span aria-hidden="true">{effects.enabled ? '✦' : '○'}</span></button>
       <button type="button" aria-label={es ? 'Cambiar a inglés' : 'Switch to Spanish'} onClick={() => setLang(es ? 'en' : 'es')}>{es ? 'EN' : 'ES'}</button>
-      <button ref={toggleRef} type="button" aria-expanded={open} aria-controls={menuId} onClick={() => setOpen(value => !value)}>{es ? 'Menú' : 'Menu'} <span aria-hidden="true">{open ? '−' : '+'}</span></button>
+      <button ref={toggleRef} type="button" aria-expanded={open} aria-controls={menuId} onClick={() => setOpen(value => !value)}>{home ? <><span aria-hidden="true">{open ? '×' : '☰'}</span><span className="sr-only">{es ? 'Menú' : 'Menu'}</span></> : <>{es ? 'Menú' : 'Menu'} <span aria-hidden="true">{open ? '−' : '+'}</span></>}</button>
     </div>
-    <nav id={menuId} className="portal-navigation__more" hidden={!open} aria-label={es ? 'Más de XETHKIOZ' : 'More from XETHKIOZ'} onClick={() => setOpen(false)}>
-      <Link to="/news">{es ? 'Noticias' : 'News (ES)'}</Link><Link to={localizePath('/gaming')}>{es ? 'Biblioteca gamer' : 'Gaming library'}</Link><Link to={localizePath('/community')}>{es ? 'Comunidad' : 'Community'}</Link><Link to="/account">{es ? 'Mi cuenta' : 'My account'}</Link>
+    <nav id={menuId} className="portal-navigation__more" aria-hidden={!open} aria-label={es ? 'Más de XETHKIOZ' : 'More from XETHKIOZ'} onClick={() => setOpen(false)}>
+      <Link tabIndex={open ? 0 : -1} to="/news">{es ? 'Noticias' : 'News (ES)'}</Link><Link tabIndex={open ? 0 : -1} to={localizePath('/gaming')}>{es ? 'Biblioteca gamer' : 'Gaming library'}</Link><Link tabIndex={open ? 0 : -1} to={localizePath('/community')}>{es ? 'Comunidad' : 'Community'}</Link><Link tabIndex={open ? 0 : -1} to="/account">{es ? 'Mi cuenta' : 'My account'}</Link>
     </nav>
   </header>
 }
