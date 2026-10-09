@@ -11,6 +11,8 @@ test.describe('orden y navegación de secciones', () => {
     await expect(petsEntry).toHaveAttribute('href', '/mascotas/')
     expect(await petsEntry.evaluate(node => node.tagName)).toBe('A')
 
+    await expect(page.locator('.xk-universe-intel')).toHaveCount(0)
+    await page.getByRole('button', { name: /Explorar historia, razas, clases y requisitos/i }).click()
     const intel = page.locator('.xk-universe-intel')
     await expect(intel).toHaveAttribute('data-game', 'aion2')
     await intel.getByRole('tab', { name: 'Clases', exact: true }).click()
@@ -26,6 +28,7 @@ test.describe('orden y navegación de secciones', () => {
     await expect(page.getByRole('tab', { name: /WOWFOREVER/i })).toHaveAttribute('aria-selected', 'true')
     await expect(page.locator('.xk-launcher-hero')).toHaveClass(/is-wow/)
     await expect(page.locator('.xk-universe-intel')).toHaveAttribute('data-game', 'wow')
+    await expect(page.locator('.xk-universe-intel')).toHaveCount(1)
     const wowIntel = page.locator('.xk-universe-intel')
     await wowIntel.getByRole('tab', { name: 'Razas', exact: true }).click()
     await expect(wowIntel).toContainText('Célico Formaviento')
