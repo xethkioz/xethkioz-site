@@ -19,12 +19,12 @@ export default function Home() {
   const es = lang === 'es'
   const aion = universe === 'aion2'
   const c = aion ? {
-    accent: 'aion', code: 'PORTAL CELESTIAL // 001', image: '/assets/portals/fire-portal.webp', gate: '/assets/portals/aion2-rune-gate.webp',
+    accent: 'aion', code: 'PORTAL CELESTIAL // 001', image: '/assets/portals/fire-portal.webp', gate: '/assets/portals/aion2-rune-gate.svg',
     subtitle: es ? 'El cielo y la oscuridad vuelven a enfrentarse.' : 'Heaven and darkness face each other once more.',
     description: es ? 'Atravesá el umbral de Atreia. Prepará tu clase, descubrí estrategias y encontrá tu lugar entre Elyos y Asmodians.' : 'Cross the threshold to Atreia. Prepare your class, discover strategies and find your place among Elyos and Asmodians.',
     quick: es ? 'ACCESOS RÁPIDOS · GUÍAS DE CLASE' : 'QUICK ACCESS · CLASS GUIDES',
   } : {
-    accent: 'wow', code: 'PORTAL LEGENDARIO // 002', image: '/assets/portal-games-world-v3.webp', gate: '/assets/portals/wowforever-rune-gate.webp',
+    accent: 'wow', code: 'PORTAL LEGENDARIO // 002', image: '/assets/portal-games-world-v3.webp', gate: '/assets/portals/wowforever-rune-gate.svg',
     subtitle: es ? 'Azeroth te está esperando.' : 'Azeroth is waiting for you.',
     description: es ? 'Volvé a vivir la aventura. Explorá builds, prepará tu personaje y descubrí nuevas rutas para tu próxima expedición.' : 'Return to the adventure. Explore builds, prepare your character and discover new routes for your next expedition.',
     quick: es ? 'ACCESOS RÁPIDOS · BIBLIOTECA GAMER' : 'QUICK ACCESS · GAMING LIBRARY',
@@ -88,7 +88,7 @@ export default function Home() {
           <a href="/mascotas/" className="xk-launcher-mini xk-launcher-mini--pets"><span className="xk-launcher-mini__icon" aria-hidden="true">✣</span><span className="xk-launcher-mini__copy"><small>COMPANION COLLECTION</small><b>{es ? 'Mascotas' : 'Pets'}</b><i>{es ? 'Compañeros para cada aventura.' : 'Companions for every adventure.'}</i></span><span className="xk-launcher-mini__arrow" aria-hidden="true">↗</span></a>
           <Link to={localizePath('/digital')} className="xk-launcher-mini xk-launcher-mini--digital"><span className="xk-launcher-mini__icon" aria-hidden="true">⌘</span><span className="xk-launcher-mini__copy"><small>CREATIVE TECHNOLOGY</small><b>Xethkioz Digital</b><i>{es ? 'IA, desarrollo e innovación digital.' : 'AI, development and digital innovation.'}</i></span><span className="xk-launcher-mini__arrow" aria-hidden="true">↗</span></Link>
         </section>
-        <Link className="xk-launcher-green" to={localizePath('/green-node')} onClick={triggerGreenPortal}><video className="xk-launcher-green__motion" autoPlay muted loop playsInline preload="none" poster="/assets/portals/node-rift.webp" aria-hidden="true"><source src="/assets/portals/green-node-intro.mp4" type="video/mp4" /></video><img src="/assets/portals/node-rift.webp" alt="" width="1500" height="190" loading="lazy" decoding="async" /><span className="xk-launcher-green__grid" aria-hidden="true" /><span className="xk-launcher-green__mark" aria-hidden="true">⌖</span><span className="xk-launcher-green__copy"><small>NETWORK // SYSTEMS // INTELLIGENCE</small><b>GREEN NODE</b><i>{es ? 'Tecnología, sistemas y conexiones inteligentes.' : 'Technology, systems and intelligent connections.'}</i></span><span className="xk-launcher-green__action">{es ? 'EXPLORAR SISTEMA' : 'EXPLORE SYSTEM'} <b aria-hidden="true">↗</b></span></Link>
+        <Link className="xk-launcher-green" to={localizePath('/green-node')} onClick={triggerGreenPortal}><span className="xk-launcher-green__motion" aria-hidden="true" /><img src="/assets/portals/node-rift.webp" alt="" width="1500" height="190" loading="lazy" decoding="async" /><span className="xk-launcher-green__grid" aria-hidden="true" /><span className="xk-launcher-green__mark" aria-hidden="true">⌖</span><span className="xk-launcher-green__copy"><small>NETWORK // SYSTEMS // INTELLIGENCE</small><b>GREEN NODE</b><i>{es ? 'Tecnología, sistemas y conexiones inteligentes.' : 'Technology, systems and intelligent connections.'}</i></span><span className="xk-launcher-green__action">{es ? 'EXPLORAR SISTEMA' : 'EXPLORE SYSTEM'} <b aria-hidden="true">↗</b></span></Link>
       </section>
       <p className="portal-home__disclaimer">{es ? 'ARTE PROMOCIONAL · EXPERIENCIA DE PORTAL' : 'PROMOTIONAL ART · PORTAL EXPERIENCE'}</p><PortalSupport />
     </main>
