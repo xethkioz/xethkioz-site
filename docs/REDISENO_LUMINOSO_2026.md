@@ -49,3 +49,12 @@ Verificar compilación de preview, enlaces y contraste; recursos multimedia orig
 - Mantener pendiente la activación de leaked-password protection en Supabase Auth hasta contar con sesión administrativa autorizada.
 - Advertencias no bloqueantes de Vercel: dos videos públicos pesados y migraciones históricas espejadas; no eliminar sin auditoría.
 - Preparar revisión del propietario antes de merge. No publicar automáticamente.
+
+## QA consolidado de esta etapa (11/10/2026)
+- Confirmado build completo local con `npm ci` y `npm run build` sobre commit `091dada434bf3dee57a9092e0f5db9519bf2dec0`; salida exit 0.
+- Home verificada con Chrome/Playwright a 390×844, 768×1024 y 1440×900: cuatro portales y sus WebP cargados, cero overflow, cero excepciones JS. Selector WoWForever pasa `aria-selected=true` al accionarse.
+- Axe WCAG A/AA/2.1 AA en Home móvil/escritorio: 0 violaciones detectadas.
+- Interior en 390px: Elemental Realms, Digital, Green Node, Huellas, Servicios y /en retornan 200, cargan imágenes, 0 overflow y 0 errores JS. Axe: Elemental Realms y Digital sin violaciones.
+- Se detectaron dos contrastes insuficientes en el footer de Huellas (`.footer-social-label`, `.rights strong`), corregidos en `public/mascotas/portal-nature-luminous.css`. Nueva ejecución Axe en Huellas: **0 violaciones detectadas**.
+- Despliegue Vercel último commit `091dada...`: `dpl_BUMepB2ev4ZKr4BgqbRa7YLkiktD`, estado READY. Preview protegido puede pedir inicio de sesión.
+- Estas son pruebas automáticas locales: la revisión visual humana del propietario y autorización explícita para producción continúan pendientes.
