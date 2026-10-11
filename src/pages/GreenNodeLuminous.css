@@ -1,0 +1,56 @@
+/* Green Node 2026: living digital ecology outside the optional Deep Mode.
+   The terminal, dossiers, investigations and interactions retain their original mechanics. */
+.portal-node-interior:not(.xk-deep-mode){
+  --portal-accent:#55b88d;--portal-secondary:#92bddd;
+  background:radial-gradient(ellipse at 81% 0,rgba(255,235,178,.7),transparent 36%),
+    radial-gradient(ellipse at 5% 30%,rgba(142,220,183,.66),transparent 50%),
+    linear-gradient(180deg,#e6f7f1 0%,#d9eee9 45%,#eff7e9 100%)!important;
+  color:#234e42;
+}
+.portal-node-interior:not(.xk-deep-mode) .portal-navigation{
+  color:#245a48;border-color:rgba(32,100,73,.22)
+}
+.portal-node-interior:not(.xk-deep-mode) .portal-navigation a{color:#245b49}
+.portal-node-interior:not(.xk-deep-mode) .portal-navigation a[data-tone='node']{color:#176b50}
+.portal-node-interior:not(.xk-deep-mode) .portal-navigation__more{
+  background:rgba(244,255,248,.96);border-color:#b4d6c2;
+  box-shadow:0 20px 48px rgba(23,91,63,.12)
+}
+.portal-node-interior:not(.xk-deep-mode) .portal-node-interior__ambience{
+  background:radial-gradient(ellipse at 80% 0,rgba(169,242,181,.52),transparent 55%),url('/assets/portals/node-rift.webp') center top/cover no-repeat;
+  opacity:.14;filter:brightness(1.8) saturate(.92)
+}
+.portal-node-interior:not(.xk-deep-mode) .xk-green-matrix{opacity:.07;animation:none!important}
+.portal-node-interior:not(.xk-deep-mode) .xk-occult-frame{
+  border:1px solid rgba(117,216,173,.38)!important;border-radius:29px!important;
+  background:linear-gradient(135deg,rgba(19,75,61,.98),rgba(17,60,61,.97) 70%,rgba(31,74,76,.97))!important;
+  box-shadow:0 24px 70px rgba(32,104,79,.19),inset 0 1px rgba(223,255,237,.26);
+}
+.portal-node-interior:not(.xk-deep-mode) .xk-occult-hero-image{
+  opacity:.26;filter:brightness(1.35) saturate(.96);mix-blend-mode:screen
+}
+.portal-node-interior:not(.xk-deep-mode) .xk-occult-veil{
+  background:linear-gradient(90deg,rgba(18,66,56,.98),rgba(18,70,61,.87) 58%,rgba(20,76,72,.6))
+}
+.portal-node-interior:not(.xk-deep-mode) .xk-occult-title{
+  color:#e1ffeb;text-shadow:0 5px 30px rgba(140,237,178,.2);letter-spacing:.05em;
+}
+.portal-node-interior:not(.xk-deep-mode) .xk-green-view-nav{border-color:rgba(182,242,201,.4)}
+.portal-node-interior:not(.xk-deep-mode) .xk-green-view-nav button{
+  border:1px solid rgba(163,230,189,.26);
+  border-radius:13px;background:rgba(16,58,55,.82);min-height:68px;
+}
+.portal-node-interior:not(.xk-deep-mode) .xk-green-view-nav button[aria-pressed='true']{
+  background:linear-gradient(135deg,rgba(45,118,91,.94),rgba(35,94,86,.95));
+  border-color:#9bdeb5;color:#ebfff0;
+}
+.portal-node-interior:not(.xk-deep-mode) :is(.xk-green-view-nav button,.portal-navigation a,.portal-navigation button):focus-visible{
+  outline:3px solid #d4ffc5;outline-offset:3px;
+}
+@media(max-width:760px){
+  .portal-node-interior:not(.xk-deep-mode) .xk-occult-frame{border-radius:19px!important}
+  .portal-node-interior:not(.xk-deep-mode) .portal-node-interior__ambience{opacity:.1}
+}
+@media(prefers-reduced-motion:reduce){
+  .portal-node-interior:not(.xk-deep-mode) *{animation:none!important;transition:none!important}
+}

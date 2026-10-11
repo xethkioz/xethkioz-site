@@ -59,7 +59,7 @@ export default function SafeImage({
       className={className}
       loading={resolvedLoading}
       decoding="async"
-      fetchPriority={fetchPriority}
+      {...{ fetchpriority: fetchPriority }}
       style={style}
       onError={handleError}
     />

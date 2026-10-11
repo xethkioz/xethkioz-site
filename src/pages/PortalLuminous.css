@@ -1,0 +1,106 @@
+/* XETHKIOZ 2026 / public portal interiors.
+   Scope: Elemental Realms and Digital only. Core components and business logic are untouched. */
+.portal-page.portal-game{
+  --portal-accent:#ad632e;--portal-secondary:#5c8d73;
+  background:radial-gradient(ellipse at 87% 5%,rgba(255,210,126,.62),transparent 44%),linear-gradient(180deg,#e6f6fd 0%,#f5f5e7 50%,#e6f3e8 100%)!important;
+  color:#193b40;
+}
+.portal-page.portal-digital{
+  --portal-accent:#226f95;--portal-secondary:#568ba1;
+  background:radial-gradient(ellipse at 91% 7%,rgba(166,230,255,.72),transparent 46%),linear-gradient(180deg,#e5f7ff 0%,#f4fbff 52%,#e8f4eb 100%)!important;
+  color:#173b51;
+}
+.portal-page.portal-game .portal-navigation,
+.portal-page.portal-digital .portal-navigation{color:#214954;border-color:rgba(35,99,100,.22)}
+.portal-page.portal-game .portal-navigation__more,
+.portal-page.portal-digital .portal-navigation__more{
+  background:rgba(246,253,248,.96);border-color:rgba(35,99,100,.25);box-shadow:0 16px 40px rgba(24,70,69,.12)
+}
+.portal-page.portal-game .portal-navigation button:hover,
+.portal-page.portal-digital .portal-navigation button:hover{border-color:#559b94}
+.portal-page.portal-game :is(a,button,summary):focus-visible,
+.portal-page.portal-digital :is(a,button,summary):focus-visible{outline:3px solid #166a83;outline-offset:3px}
+.portal-page.portal-game .portal-eyebrow,
+.portal-page.portal-digital .portal-eyebrow{color:#306f69;letter-spacing:.15em}
+.portal-page.portal-game .portal-game__hero::before{
+  inset:-38px -65px -30px;
+  background:linear-gradient(90deg,rgba(234,248,249,.88),rgba(237,247,234,.56) 46%,rgba(247,246,226,.3)),url('/assets/portals/fire-portal.webp') right center/auto 105% no-repeat;
+  opacity:.64;mask-image:linear-gradient(#000 68%,transparent);
+}
+.portal-page.portal-game .portal-game__intro h1{
+  color:#18434a;text-shadow:0 2px 18px rgba(255,255,255,.74)
+}
+.portal-page.portal-game .portal-game__intro h1 span{color:#c17c3d}
+.portal-page.portal-game .portal-game__intro>p:not(.portal-eyebrow){color:#365b59}
+.portal-page.portal-game .portal-game__tags span{
+  color:#425f4a;border-color:rgba(120,164,107,.48);background:rgba(255,255,255,.68);border-radius:999px;
+}
+.portal-page.portal-game .portal-game__follow{color:#176b63;font-weight:750}
+.portal-page.portal-game .portal-game__demo{
+  overflow:hidden;border:1px solid rgba(74,126,120,.32);border-radius:21px;
+  background:#13282d;box-shadow:0 24px 58px rgba(57,104,100,.19);
+}
+.portal-page.portal-game .portal-game__demo-heading{
+  color:#e7fff0;background:linear-gradient(90deg,#28564a,#365764);
+}
+.portal-page.portal-game .portal-game__demo figcaption{color:#e1f2e8}
+.portal-page.portal-game :is(.portal-game__vision,.portal-game__progress,.portal-game__faq){
+  border-color:rgba(56,114,105,.16)
+}
+.portal-page.portal-game :is(.portal-game__vision,.portal-game__progress,.portal-game__faq,.portal-game__characters) h2{color:#174851}
+.portal-page.portal-game .portal-game__characters h2 span{color:#bb8c4c}
+.portal-page.portal-game :is(.portal-game__vision p,.portal-game__progress p,.portal-game__faq details p){color:#3f5e5d}
+.portal-page.portal-game .portal-character{
+  border:1px solid rgba(55,120,100,.18);border-radius:22px;
+  background:linear-gradient(135deg,rgba(254,255,253,.9),rgba(221,242,232,.63));
+  box-shadow:0 12px 34px rgba(33,87,77,.08);
+}
+.portal-page.portal-game .portal-character.is-rabbit{
+  background:linear-gradient(135deg,rgba(255,248,235,.93),rgba(235,228,243,.76))
+}
+.portal-page.portal-game .portal-character__copy h3{color:#22555b}
+.portal-page.portal-game .portal-character__copy p{color:#3b5b5e}
+.portal-page.portal-game .portal-character__copy small{color:#6e5e96}
+.portal-page.portal-game .portal-character.is-rabbit .portal-character__copy small{color:#935331}
+.portal-page.portal-game .portal-art-note{color:#557277}
+.portal-page.portal-game .portal-game__history{
+  background:rgba(255,255,255,.7);border-color:rgba(54,117,104,.23);border-radius:13px
+}
+.portal-page.portal-game :is(.portal-game__history summary,.portal-game__faq summary){color:#1a4e50}
+.portal-page.portal-game .portal-game__faq details{border-color:rgba(39,109,93,.22)}
+.portal-page.portal-game .portal-game__history summary span,
+.portal-page.portal-game .portal-game__faq summary span{color:#277968}
+.portal-page.portal-digital .portal-digital__hero h1{color:#153f59;text-wrap:balance}
+.portal-page.portal-digital .portal-digital__hero p:not(.portal-eyebrow){color:#426579}
+.portal-page.portal-digital .portal-digital__art img{
+  filter:brightness(1.18) saturate(.96) drop-shadow(0 14px 28px rgba(78,153,186,.13))
+}
+.portal-page.portal-digital .digital-service{
+  border:1px solid rgba(89,160,179,.25);border-top:3px solid #85c8c5;
+  border-radius:22px;background:linear-gradient(145deg,rgba(255,255,255,.94),rgba(218,241,249,.7));
+  box-shadow:0 14px 38px rgba(61,125,148,.10);color:#1a4359;
+}
+.portal-page.portal-digital .digital-service h2{color:#194c60}
+.portal-page.portal-digital .digital-service p:not(.portal-eyebrow){color:#416577}
+.portal-page.portal-digital .digital-service__symbol{color:#4b9da9;opacity:.9}
+.portal-page.portal-digital .digital-service details{border-color:rgba(73,139,152,.24)}
+.portal-page.portal-digital .digital-service summary{color:#235d77}
+.portal-page.portal-digital .digital-service details small,
+.portal-page.portal-digital .digital-service>small{color:#4b6e78}
+.portal-page.portal-digital .digital-service .portal-button{
+  display:inline-flex;align-items:center;justify-content:space-between;gap:6px;min-height:46px;
+  background:#215e71;border:1px solid #215e71;color:#f7fffd;border-radius:12px;
+}
+.portal-page.portal-digital .digital-service .portal-button:hover{background:#147985}
+@media(hover:hover) and (pointer:fine){
+  .portal-page.portal-digital .digital-service{transition:transform .22s ease,box-shadow .22s ease}
+  .portal-page.portal-digital .digital-service:hover{transform:translateY(-4px);box-shadow:0 20px 48px rgba(61,125,148,.17)}
+}
+@media(max-width:760px){
+  .portal-page.portal-game .portal-game__hero::before{inset:-28px -20px 0;background-position:center center;background-size:auto 90%;opacity:.31}
+  .portal-page.portal-game .portal-game__intro h1{font-size:clamp(44px,12vw,58px)}
+  .portal-page.portal-digital .portal-digital__art{opacity:.82}
+}
+@media(prefers-reduced-motion:reduce){
+  .portal-page.portal-digital .digital-service{transition:none!important;transform:none!important}
+}

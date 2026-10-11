@@ -4,6 +4,7 @@ import { useLang } from '../lib/LangContext'
 import PortalNavigation from '../components/portals/PortalNavigation'
 import PortalEffects from '../components/portals/PortalEffects'
 import './PortalInteriors.css'
+import './PortalLuminous.css'
 
 export default function DigitalHub() {
   const { lang, localizePath } = useLang()

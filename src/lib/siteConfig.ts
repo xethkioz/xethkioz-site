@@ -14,7 +14,6 @@ export const SOCIAL_LINKS = [
   { name: 'Threads', handle: '@xethkioz', url: 'https://www.threads.com/@xethkioz', icon: '🧵', verified: true },
   { name: 'TikTok Principal', handle: '@xethkioz0', url: 'https://www.tiktok.com/@xethkioz0', icon: '🎵', verified: true },
   { name: 'TikTok Asia', handle: '@xethkioz.asia', url: 'https://www.tiktok.com/@xethkioz.asia', icon: '🌏', verified: true },
-  { name: 'Facebook', handle: 'Xethkioz', url: 'https://www.facebook.com/1200879536437785', icon: 'f', verified: true },
   { name: 'YouTube', handle: '@XETHKIOZ', url: 'https://www.youtube.com/@XETHKIOZ', icon: '▶️', verified: false },
 ]
 

@@ -1,4 +1,4 @@
-import { SOCIAL_LINKS, XETHKIOZ_STATS } from '../lib/siteConfig'
+import { SOCIAL_LINKS } from '../lib/siteConfig'
 import { communityRooms, starterChatMessages } from '../lib/mockData'
 
 export default function ChatOverlay({ compact = false, obsMode = false }: { compact?: boolean; obsMode?: boolean }) {
@@ -48,7 +48,7 @@ export default function ChatOverlay({ compact = false, obsMode = false }: { comp
           {!obsMode && (
             <aside className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
               <h3 className="font-display text-lg font-bold text-white mb-3">Seguí el proyecto</h3>
-              <p className="text-sm text-gray-400 mb-4">Threads ya superó {XETHKIOZ_STATS.threadsViews} visualizaciones. Sumate al ecosistema.</p>
+              <p className="text-sm text-gray-400 mb-4">Seguí las novedades y avances en Threads. Sumate al ecosistema.</p>
               <div className="grid grid-cols-2 gap-2 mb-4">
                 {mainSocials.map((social) => (
                   <a key={social.name} href={social.url} target="_blank" rel="noopener noreferrer" className="rounded-xl border border-white/10 bg-black/20 px-3 py-2 hover:border-orange/60 transition-all">

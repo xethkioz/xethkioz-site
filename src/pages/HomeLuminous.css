@@ -1,0 +1,162 @@
+/* XETHKIOZ 2026 — luminous, adult premium direction. Stage 1 is intentionally scoped to Home. */
+.xk-launcher-home{--xk-ink:#173a3f;--xk-sky:#e8f7ff;--xk-gold:#c18b38;--xk-leaf:#347c63;background:radial-gradient(ellipse at 50% 4%,#fff8dd 0%,#d5eef6 30%,#b9e5dc 62%,#e9f4eb 100%)!important;color:var(--xk-ink)!important}
+.xk-launcher-home::before{background:radial-gradient(ellipse at 75% 4%,rgba(255,220,145,.62),transparent 38%),linear-gradient(180deg,rgba(255,255,255,.15),rgba(224,247,235,.84))!important}
+.xk-launcher-home .xk-launcher-brand p{color:#285c5d;text-shadow:0 1px 12px #fff}
+.xk-light-intro{position:relative;z-index:2;width:min(1200px,calc(100% - 36px));margin:20px auto 40px;text-align:center}
+.xk-light-intro__eyebrow{display:inline-block;color:#426d64;font:800 11px/1.5 ui-monospace,monospace;letter-spacing:.24em}
+.xk-light-intro h2{max-width:850px;margin:15px auto 12px;font:700 clamp(29px,4.6vw,59px)/1.12 Inter,system-ui,sans-serif;letter-spacing:-.045em;color:#16434d;text-wrap:balance}
+.xk-light-intro>p{max-width:650px;margin:0 auto 28px;color:#345c61;font-size:clamp(14px,1.4vw,18px);line-height:1.7}
+.xk-light-worlds{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;text-align:left}
+.xk-light-world{position:relative;display:flex;flex-direction:column;align-items:flex-start;isolation:isolate;min-height:310px;min-width:0;overflow:hidden;padding:26px 23px;border:1px solid rgba(255,255,255,.8);border-radius:26px;background:linear-gradient(155deg,rgba(255,255,255,.9),rgba(255,255,255,.43));box-shadow:0 18px 46px rgba(28,92,93,.12),inset 0 1px rgba(255,255,255,.9);backdrop-filter:blur(14px);text-decoration:none!important;color:#16434d!important;transition:transform .3s ease,box-shadow .3s ease}
+.xk-light-world::before{content:'';position:absolute;z-index:-1;inset:0;background:radial-gradient(circle at 85% 18%,var(--xk-glow),transparent 56%);opacity:.8}
+.xk-light-world--realms{--xk-glow:rgba(255,196,103,.72)}.xk-light-world--pets{--xk-glow:rgba(116,219,145,.65)}.xk-light-world--digital{--xk-glow:rgba(115,188,250,.65)}.xk-light-world--node{--xk-glow:rgba(134,222,175,.72)}
+.xk-light-world__symbol{display:grid;place-items:center;width:62px;height:62px;margin-bottom:30px;border:1px solid rgba(255,255,255,.85);border-radius:19px;background:rgba(255,255,255,.64);box-shadow:0 7px 25px rgba(47,112,98,.1);font-size:34px;color:#326e68}
+.xk-light-world small{font:800 10px/1.4 ui-monospace,monospace;letter-spacing:.12em;color:#416a68}
+.xk-light-world strong{margin:9px 0 10px;font-size:clamp(18px,1.7vw,24px);line-height:1.15;letter-spacing:-.02em}
+.xk-light-world>span:not(.xk-light-world__symbol){color:#426468;font-size:13px;line-height:1.55}
+.xk-light-world b{margin-top:auto;padding-top:25px;color:#206e64;font:800 11px/1.4 Inter,system-ui,sans-serif;letter-spacing:.08em}
+.xk-light-world:hover{transform:translateY(-6px);box-shadow:0 26px 60px rgba(28,92,93,.18)}
+.xk-light-world:focus-visible{outline:3px solid #146b82;outline-offset:4px}
+.xk-launcher-home .xk-launcher-intro p,.xk-launcher-home .xk-launcher-overline{color:#255b5b}
+.xk-launcher-home .xk-universe-tabs{background:rgba(244,253,252,.78);border-color:rgba(43,120,116,.18);box-shadow:0 12px 32px rgba(23,93,92,.08)}
+.xk-launcher-home .xk-universe-tabs button:not(.is-active){color:#24515a}
+.xk-launcher-home .xk-universe-archive-toggle__button{background:linear-gradient(110deg,rgba(255,255,255,.94),rgba(224,246,240,.92));border-color:rgba(43,120,116,.25);color:#18464c}
+.xk-launcher-home .xk-universe-archive-toggle__copy b{color:#18464c}.xk-launcher-home .xk-universe-archive-toggle__copy small{color:#48696a}
+.xk-launcher-home .xk-universe-archive-toggle__arrow{color:#21595d;border-color:rgba(43,120,116,.25)}
+.xk-launcher-home .portal-home__disclaimer{color:#376467}
+@media(max-width:1000px){.xk-light-worlds{grid-template-columns:repeat(2,minmax(0,1fr))}.xk-light-world{min-height:255px}}
+@media(max-width:600px){.xk-light-intro{width:calc(100% - 24px);margin:12px auto 25px}.xk-light-intro h2{font-size:clamp(27px,8vw,39px)}.xk-light-worlds{gap:10px}.xk-light-world{min-height:226px;padding:16px 13px;border-radius:19px}.xk-light-world__symbol{width:45px;height:45px;margin-bottom:19px;font-size:24px}.xk-light-world small{font-size:8px;letter-spacing:.04em}.xk-light-world strong{font-size:15px}.xk-light-world>span:not(.xk-light-world__symbol){font-size:11px}.xk-light-world b{font-size:9px;padding-top:15px}}
+@media(max-width:350px){.xk-light-worlds{grid-template-columns:1fr}.xk-light-world{min-height:190px}}
+@media(prefers-reduced-motion:reduce){.xk-light-world{transition:none}.xk-light-world:hover{transform:none}}
+
+
+/* LUMINOUS_SCENIC_STAGE_2 — existing public artwork, no new heavy libraries. */
+.xk-launcher-home {
+  background:
+    radial-gradient(ellipse at 78% 4%,rgba(255,221,156,.82),transparent 40%),
+    linear-gradient(180deg,rgba(235,250,255,.84) 0%,rgba(232,250,243,.95) 32%,#e8f3eb 100%),
+    url('/assets/xethkioz-world-panorama-2026.webp') center top/cover no-repeat !important;
+}
+.xk-light-intro{margin-top:clamp(22px,4vw,52px);margin-bottom:clamp(28px,4vw,52px)}
+.xk-light-intro__eyebrow{padding:8px 16px;border:1px solid rgba(57,124,99,.2);border-radius:999px;background:rgba(255,255,255,.58)}
+.xk-light-world{
+  min-height:350px;
+  border:1px solid rgba(255,255,255,.86);
+  background-position:center;background-size:cover;
+  box-shadow:0 15px 40px rgba(26,82,77,.14),inset 0 1px rgba(255,255,255,.85);
+}
+.xk-light-world--realms{
+  background-image:linear-gradient(180deg,rgba(255,251,225,.20) 0%,rgba(255,250,226,.78) 48%,#fff9e9 94%),url('/assets/xethkioz-world-panorama-2026.webp');
+}
+.xk-light-world--pets{
+  background-image:linear-gradient(180deg,rgba(233,255,223,.12) 0%,rgba(240,255,234,.78) 48%,#effbef 94%),url('/assets/portal-mascotas-nature-v11-r2.webp');
+}
+.xk-light-world--digital{
+  background-image:linear-gradient(180deg,rgba(221,247,255,.13) 0%,rgba(227,250,255,.83) 50%,#e6f6ff 95%),url('/assets/portal-science-world-v3.webp');
+}
+.xk-light-world--node{
+  background-image:linear-gradient(180deg,rgba(221,255,225,.18) 0%,rgba(221,252,235,.86) 48%,#ecf9e9 94%),url('/assets/portals/node-rift.webp');
+}
+.xk-light-world::before{opacity:.45;pointer-events:none}
+.xk-light-world__symbol{backdrop-filter:blur(8px);background:rgba(255,255,255,.79)}
+.xk-light-world strong{text-wrap:balance;font-size:clamp(18px,1.85vw,26px);max-width:13ch}
+.xk-light-world>span:not(.xk-light-world__symbol){font-size:13px;font-weight:550}
+.xk-light-world b{display:inline-flex;align-items:center;min-height:44px;max-width:100%;text-wrap:balance;color:#185c53}
+.xk-light-world:focus-visible{outline:3px solid #145d78;outline-offset:5px}
+.xk-launcher-home .xk-universe-tabs button.is-active{background:rgba(255,255,255,.82);border-color:rgba(29,117,103,.34);color:#24444f;box-shadow:0 4px 24px rgba(31,84,91,.08)}
+.xk-launcher-home .xk-universe-tabs button.is-active small{color:#456565}
+.xk-launcher-home .xk-universe-archive-toggle__button:hover{background:rgba(255,255,255,.98)}
+.xk-launcher-home .xk-launcher-mini{background:rgba(12,37,46,.9);border-color:rgba(119,195,185,.35)}
+.xk-launcher-home .xk-launcher-green{border-color:rgba(70,185,115,.4);box-shadow:0 15px 38px rgba(20,91,62,.12)}
+.xk-launcher-home .portal-navigation.is-home .portal-navigation__controls button:last-child{
+  background:rgba(255,255,255,.89);border-color:rgba(39,115,100,.25);color:#214b51;
+}
+.xk-launcher-home .portal-navigation.is-home .portal-navigation__controls button:nth-child(2){
+  background:rgba(255,255,255,.83);border-color:rgba(39,115,100,.22);color:#214b51;
+}
+@media(max-width:1000px){.xk-light-world{min-height:295px}}
+@media(max-width:600px){
+  .xk-launcher-home{background-size:auto,auto,auto 780px!important;background-position:center,center,center top!important}
+  .xk-light-world{min-height:245px;padding:17px 14px}
+  .xk-light-world strong{max-width:100%;font-size:clamp(15px,4.4vw,19px)}
+  .xk-light-world b{font-size:9px;line-height:1.5}
+  .xk-light-intro{margin-bottom:24px}
+}
+@media(max-width:370px){.xk-light-worlds{grid-template-columns:1fr}.xk-light-world{min-height:210px}}
+@media(prefers-reduced-motion:reduce){.xk-light-world,.xk-light-world__symbol{transition:none!important;animation:none!important}}
+
+/* 2026 stage 2: true visual destinations with original portal artwork and a daylight treatment. */
+.xk-light-world{
+  min-height:clamp(330px,32vw,410px);justify-content:flex-end;
+  background:#e9f5ed;box-shadow:0 20px 50px rgba(35,90,87,.14),inset 0 1px #fff;
+}
+.xk-light-world__scenery{position:absolute;z-index:-2;inset:0;overflow:hidden;pointer-events:none;}
+.xk-light-world__scenery img{
+  display:block;width:100%;height:100%;object-fit:cover;object-position:center 38%;
+  filter:saturate(1.06) brightness(1.13);transform:scale(1.015);
+  transition:transform .65s cubic-bezier(.2,.7,.2,1),filter .5s ease;
+}
+.xk-light-world--node .xk-light-world__scenery img{object-position:50% center}
+.xk-light-world::before{
+  z-index:-1;opacity:1;
+  background:linear-gradient(180deg,rgba(239,251,247,.04) 0%,rgba(233,250,247,.2) 30%,rgba(246,253,246,.83) 56%,rgba(246,253,245,.98) 85%),radial-gradient(circle at 80% 15%,var(--xk-glow),transparent 55%);
+}
+.xk-light-world__symbol{
+  margin:0 0 auto;width:51px;height:51px;border-radius:15px;
+  background:rgba(255,255,255,.8);backdrop-filter:blur(12px);
+}
+.xk-light-world small{margin-top:18px}
+.xk-light-world strong{max-width:100%;font-size:clamp(19px,1.9vw,25px);text-wrap:balance}
+.xk-light-world>span:not(.xk-light-world__symbol):not(.xk-light-world__scenery){font-size:13px}
+.xk-light-world b{margin-top:16px;padding-top:0}
+@media(hover:hover) and (pointer:fine){
+  .xk-light-world:hover .xk-light-world__scenery img{transform:scale(1.075);filter:saturate(1.13) brightness(1.2)}
+}
+@media(max-width:600px){
+  .xk-light-world{min-height:280px;padding:16px;border-radius:20px}
+  .xk-light-world__symbol{width:43px;height:43px}
+  .xk-light-world small{margin-top:12px}
+  .xk-light-world strong{font-size:clamp(16px,4.1vw,21px)}
+  .xk-light-world>span:not(.xk-light-world__symbol):not(.xk-light-world__scenery){font-size:11px}
+}
+@media(max-width:350px){.xk-light-world{min-height:240px}}
+@media(prefers-reduced-motion:reduce){.xk-light-world__scenery img{transition:none!important;transform:none!important}}
+
+
+/* Branding/contrast corrections for the daylight Home. */
+.xk-launcher-home .portal-home__brand{width:min(750px,calc(100% - 34px));margin:0 auto 6px;padding-top:64px}
+.xk-launcher-home .portal-home__brand h1.xk-light-wordmark{
+  display:flex;align-items:center;justify-content:center;gap:.13em;margin:0;
+  color:#154752;font:950 clamp(39px,8.6vw,102px)/1 Inter,system-ui,sans-serif;
+  letter-spacing:-.075em;text-shadow:0 4px 30px rgba(255,255,255,.72);
+}
+.xk-launcher-home .xk-light-wordmark span{align-self:flex-start;margin-top:.08em;color:#ba8b46;font-size:.24em}
+.xk-launcher-home .xk-launcher-brand p{color:#2e6064;font-family:Inter,system-ui,sans-serif;font-size:clamp(10px,1.25vw,14px);font-weight:700;letter-spacing:.1em}
+.xk-launcher-home .xk-launcher-hero{background:linear-gradient(115deg,rgba(220,240,238,.96),rgba(250,255,249,.98) 65%);border-color:rgba(44,113,104,.25);box-shadow:0 20px 55px rgba(26,90,84,.12)}
+.xk-launcher-home .xk-launcher-hero__art-vignette{background:linear-gradient(90deg,rgba(247,252,249,.02),rgba(245,252,246,.35) 50%,#f6fbf7 99%),linear-gradient(0deg,#f6fbf7,transparent 28%)}
+.xk-launcher-home .xk-launcher-hero h2{color:#164750;text-shadow:none}
+.xk-launcher-home .xk-launcher-hero h2 em{color:#a47b39}
+.xk-launcher-home .xk-launcher-hero__subtitle{color:#245c62}
+.xk-launcher-home .xk-launcher-hero__description{color:#47666b;opacity:1}
+.xk-launcher-home .xk-launcher-hero__code{color:#26696a;border-color:rgba(38,103,100,.25);background:#edf8f2}
+.xk-launcher-home .xk-launcher-hero__foot{color:#477171}
+.xk-launcher-home .xk-launcher-guide{background:rgba(255,255,255,.65);border-color:rgba(44,122,105,.2)}
+.xk-launcher-home .xk-launcher-guide :is(b,small){color:#295d62}
+.xk-launcher-home .xk-launcher-guides>p{color:#406b70}
+.xk-launcher-home .xk-launcher-divider{border-color:rgba(45,121,101,.18)}
+.xk-launcher-home .portal-navigation.is-home .portal-navigation__more{background:rgba(248,255,249,.98);border-color:rgba(40,117,99,.2)}
+.xk-launcher-home .portal-navigation.is-home .portal-navigation__more::before{color:#225c54}
+.xk-launcher-home .portal-navigation.is-home .portal-navigation__more a{color:#245963}
+.xk-launcher-home .portal-navigation.is-home .portal-navigation__more a:hover{background:#e5f4e9;color:#174a4b}
+@media(max-width:650px){
+  .xk-light-worlds{grid-template-columns:minmax(0,1fr);gap:13px}
+  .xk-light-world{min-height:300px}
+  .xk-launcher-home .xk-launcher-hero__art-vignette{background:linear-gradient(180deg,rgba(244,251,247,.04) 0%,rgba(244,251,247,.5) 55%,#f6fbf7 98%)}
+  .xk-launcher-home .xk-launcher-hero__content{padding-top:180px}
+}
+@media(max-width:375px){
+  .xk-launcher-home .portal-home__brand h1.xk-light-wordmark{font-size:clamp(33px,10vw,40px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .xk-launcher-home .xk-light-world__scenery img{animation:none!important;transition:none!important;transform:none!important}
+}
