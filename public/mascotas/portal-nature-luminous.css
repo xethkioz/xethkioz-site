@@ -84,3 +84,7 @@ body.portal-nature{
 @media(prefers-reduced-motion:reduce){
   .portal-nature .action-card{transition:none!important;transform:none!important}
 }
+
+/* Accessibility: footer on light mint background requires dark foregrounds. */
+.portal-nature footer .footer-social-label{color:#2b5942!important}
+.portal-nature footer .rights strong{color:#25523f}
