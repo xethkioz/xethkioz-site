@@ -1,0 +1,86 @@
+/* Huellas Argentina · renovacion luminosa 2026.
+   Styles only: search, reports, adoption, directory, forms, donations and scripts remain intact. */
+body.portal-nature{
+  --green:#2e7659;--green2:#6ba887;--orange:#c77c37;
+  --paper:#ffffff;--ink:#23453b;--muted:#516e60;--line:#d6e7d9;--cream:#fcfcf3;
+  color:var(--ink);
+  background:radial-gradient(ellipse at 80% 0,rgba(255,225,166,.38),transparent 40%),linear-gradient(180deg,#f4fcfa,#fdfbf1 50%,#edf8ed);
+}
+.portal-nature .top{
+  background:rgba(252,255,249,.94);border-color:#cddfcb;box-shadow:0 4px 22px rgba(34,90,61,.08);backdrop-filter:blur(16px)
+}
+.portal-nature .brand-mark{background:#e5f5de;border-color:#b8d7ae}
+.portal-nature .brand-text small{color:#427e58}
+.portal-nature .nav button{color:#35654e}
+.portal-nature .nav button.active,.portal-nature .nav button:hover{background:#d8efdc;color:#24583d}
+.portal-nature .back{background:#fff;color:#275d45;border-color:#b9d6c1}
+.portal-nature .hero{
+  background:linear-gradient(115deg,#e9f9ee,#d7f1d8 65%,#f4eac9);border-color:#c4ddc4
+}
+.portal-nature .hero-photo{opacity:.52;mix-blend-mode:normal;filter:saturate(1.05) brightness(1.17)}
+.portal-nature .hero::before{
+  background:url('/assets/portals/nature-portal.webp') 95% center/auto 118% no-repeat;opacity:.45
+}
+.portal-nature .hero::after{
+  background:linear-gradient(90deg,rgba(244,253,244,.98) 0%,rgba(239,251,238,.91) 40%,rgba(230,250,233,.34) 82%),linear-gradient(0deg,rgba(234,249,236,.35),transparent 35%)
+}
+.portal-nature .hero-content{color:#214e3f;text-shadow:none}
+.portal-nature .hero h1{color:#214d3c}
+.portal-nature .hero h1 span{color:#618c47}
+.portal-nature .hero p{color:#375b49}
+.portal-nature .eyebrow{color:#2e6145;background:rgba(255,255,255,.75);border-color:#b7dbc0}
+.portal-nature :is(.hero-cta,.btn.primary,.publish-top){background:#2f7754!important;border-color:#2f7754!important;color:#fff!important}
+.portal-nature .action-card{
+  border-color:#d2e5d3;background:linear-gradient(155deg,#fff,#e8f7e9);
+  box-shadow:0 16px 39px rgba(45,107,65,.12);color:#25503f;
+}
+.portal-nature .action-card .icon{background:#edf8eb}
+.portal-nature .action-card small{color:#526f60}
+.portal-nature .action-card strong{color:#2e6749}
+.portal-nature .action-lost strong{color:#aa4936}
+.portal-nature .action-adopt strong{color:#8351a2}
+.portal-nature .action-help strong{color:#2d6887}
+.portal-nature .action-card span:last-child{color:#fff}
+.portal-nature :is(.card,.info,.form,.directory-card,.donation-card,.news-card,.resource-card,.stats,.empty){
+  background:#fffefb;color:#264b40;border-color:#d3e4d5;box-shadow:0 12px 30px rgba(42,98,67,.07)
+}
+.portal-nature :is(.section-heading,.info-title,.card-body h3){color:#225143}
+.portal-nature .card .meta{color:#2d7656}
+.portal-nature .gallery{background:#e6f1e4}
+.portal-nature :is(input,select,textarea){
+  background:#fff!important;color:#22483b!important;border-color:#b9d7c2!important;
+}
+.portal-nature :is(input,textarea)::placeholder{color:#5c786c}
+.portal-nature option{background:#fff;color:#22483b}
+.portal-nature :is(.filters,.toolbar,.notice,.callout,.help-panel,.detail-panel){
+  background:#f5fbf4;color:#285444;border-color:#d0e4cf
+}
+.portal-nature :is(.tag,.badge,.pill){background:#e6f4e4;color:#295d43;border-color:#bdd8bd}
+.portal-nature .section-header p,.portal-nature .lead{color:#4f7160}
+.portal-nature .muted{color:#5c7769}
+.portal-nature .btn{background:#e3f3e7;color:#22563e;border-color:#9ec5a9}
+.portal-nature .btn:hover{background:#d2ebd8}
+.portal-nature :is(.national-strip,.help-banner,.donation-note,.guide-limit){
+  background:#e9f6ea;color:#315b45;border-color:#b9d7ba;
+}
+.portal-nature .national-strip h2{color:#24533d}
+.portal-nature .national-strip p{color:#466a51}
+.portal-nature .province-chip{background:#e1f2e4;color:#2b6346;border-color:#b6d6b9}
+.portal-nature .province-chip:hover{background:#d1ead7}
+.portal-nature :is(.control,.share,.directory-link){background:#eef9f0;color:#275941;border-color:#a9ceb1}
+.portal-nature :is(.contact,.submit,.donate-btn:not(.paypal):not(.mp)){
+  background:#2c7652;color:#fff;border-color:#2c7652
+}
+.portal-nature .warn{background:#fff2ce;color:#775a21}
+.portal-nature .danger{background:#fce8e5;color:#913f35}
+.portal-nature footer{background:#e9f5e7;color:#385d47;border-color:#c5ddc5}
+.portal-nature footer a{color:#265941}
+.portal-nature footer p{color:#537364}
+.portal-nature :is(a,button,input,select,textarea):focus-visible{outline:3px solid #176e82;outline-offset:3px}
+@media(max-width:760px){
+  .portal-nature .hero::before{background-position:90% top;background-size:auto 96%;opacity:.2}
+  .portal-nature .hero::after{background:linear-gradient(0deg,rgba(244,252,241,.97) 1%,rgba(241,252,240,.9) 58%,rgba(241,252,240,.58))}
+}
+@media(prefers-reduced-motion:reduce){
+  .portal-nature .action-card{transition:none!important;transform:none!important}
+}
