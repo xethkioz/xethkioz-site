@@ -17,3 +17,6 @@ No alterar World of Xethkioz 2D, lore reservado, datos, donaciones, redes ni fun
 
 ## Pendientes
 Verificar compilación de preview, enlaces y contraste; recursos multimedia originales de otra rama no incorporados; Supabase Auth advierte protección de contraseñas filtradas desactivada y requiere acceso autorizado al panel.
+
+## Stage 2 · interior de portales (rama aislada)
+Se prepara `feat/luminous-portal-interiors-stage2` a partir de la rama luminosa (base e34b4569): estilos claros y reutilización de paisajes públicos para Elemental Realms y Digital; Green Node obtiene un exterior verde más luminoso sin tocar terminal, expedientes, datos ni Deep Mode. En la Home ya existen recursos originales de fondo conservados por otra iteración. La ruta de Huellas es `/mascotas/` y queda intacta; no modificar su aplicación independiente en esta etapa. No modificar precios, cobros ni bases de datos. Verificar compilación de Vercel, responsive y accesibilidad antes de fusionar. Producción requiere aprobación final.

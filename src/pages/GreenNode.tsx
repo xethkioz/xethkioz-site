@@ -14,6 +14,7 @@ import { useLang } from '../lib/LangContext'
 import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import { fetchPublishedNews, formatPublicNewsDate, type PublicNewsArticle, type PublicNewsCategory } from '../services/news/publicNewsService'
 import './GreenNodeDossiers.css'
+import './PortalLuminous.css'
 
 type NodeBlock = {
   id: string
@@ -140,7 +141,7 @@ type GreenCopy = {
 const content: Record<'es' | 'en', GreenCopy> = {
   es: {
     title: 'Green Node',
-    description: 'Archivo clandestino donde código, ocultismo digital y teorías imposibles se examinan sin confundir evidencia con ficción.',
+    description: 'Explorá el encuentro entre tecnología, naturaleza digital e investigación. Separá siempre las pruebas de las hipótesis y la ficción.',
     heroAlt: 'Wisp, Custodio del Green Node, manifestándose entre raÃ­ces, seÃ±ales y servidores',
     switchLanguage: 'Cambiar a inglés',
     switchCode: 'EN',
@@ -223,7 +224,7 @@ const content: Record<'es' | 'en', GreenCopy> = {
   },
   en: {
     title: 'Green Node',
-    description: 'A clandestine archive where code, digital occultism and impossible theories are examined without confusing evidence with fiction.',
+    description: 'Explore where technology, digital nature and research converge. Always separate evidence from hypotheses and fiction.',
     heroAlt: 'Wisp, Custodian of the Green Node, manifesting among roots, signals and servers',
     switchLanguage: 'Switch to Spanish',
     switchCode: 'ES',
@@ -553,7 +554,7 @@ export default function GreenNode() {
             <div className="xk-classified-stamp" aria-hidden="true">CLASSIFIED // LEVEL ∆</div>
             <div className="xk-green-content">
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <p className="font-mono text-[11px] uppercase tracking-[0.34em] text-[#32FF8A]/70">BLACK_ARCHIVE // WISP_INFECTION_ACCEPTED</p>
+                <p className="font-mono text-[11px] uppercase tracking-[0.34em] text-[#32FF8A]/70">GREEN_NODE // DIGITAL_NATURE</p>
 
               </div>
               <div className="mt-6">
