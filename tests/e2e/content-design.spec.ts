@@ -27,6 +27,9 @@ test.describe('orden y navegación de secciones', () => {
     await page.getByRole('tab', { name: /WOWFOREVER/i }).click()
     await expect(page.getByRole('tab', { name: /WOWFOREVER/i })).toHaveAttribute('aria-selected', 'true')
     await expect(page.locator('.xk-launcher-hero')).toHaveClass(/is-wow/)
+    // Changing universes closes the open archive instead of leaving a second-looking content panel below the hero.
+    await expect(page.locator('.xk-universe-intel')).toHaveCount(0)
+    await page.getByRole('button', { name: /Explorar historia, razas, clases y requisitos/i }).click()
     await expect(page.locator('.xk-universe-intel')).toHaveAttribute('data-game', 'wow')
     await expect(page.locator('.xk-universe-intel')).toHaveCount(1)
     const wowIntel = page.locator('.xk-universe-intel')
