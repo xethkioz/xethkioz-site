@@ -24,3 +24,28 @@ Verificar compilación de preview, enlaces y contraste; recursos multimedia orig
 - Se retiró Facebook del listado público y el texto con métricas históricas de Threads en ChatOverlay.
 - Sin modificaciones a World of Xethkioz 2D, migraciones ni base de datos. Producción sigue sin publicar.
 - Pendiente: inspección visual de 390/768/1440, validar enlaces de Huellas y comprobar accesos bajo protección del preview antes de aprobación final.
+
+
+## Avance verificado: paisajes y portales (11/10/2026)
+- Home: los cuatro destinos reutilizan archivos WebP ya existentes en public/assets/portals; no se subieron imágenes de terceros ni se reemplazó arte privado del juego. La superposición luminosa mantiene el texto en HTML y respeta reduced motion.
+- Elemental Realms: PortalLuminous.css aclara hero, textos y módulos; la demo Alpha 2 y las advertencias de proyecto en desarrollo permanecen.
+- Digital: tarjetas claras para servicios web, VEYR, ArgenCiencia y cursos; los enlaces y componentes originales no fueron reemplazados.
+- Huellas Argentina: portal-nature-luminous.css se aplica después del tema anterior en public/mascotas/index.html; formularios, informes y archivos JS continúan sin modificaciones.
+- Green Node: GreenNodeLuminous.css aclara el exterior y conserva expedientes, terminal, interacciones y Deep Mode.
+- SafeImage y Home: atributo HTML fetchpriority en minúsculas para compatibilidad con React 18. La prueba de diseño de contenido admite el logotipo original WebP (conservado) o el wordmark accesible.
+- No se cambiaron datos de Supabase, hosting, las rutas publicadas ni proyectos de videojuegos. Producción no modificada.
+
+## QA de navegador
+- Vercel: deployment 5bc161036… READY; verificación de 62 rutas y auditorías de SEO, seguridad y bundle inicial aprobadas. Revalidar el deployment que contenga los últimos commits al continuar.
+- En copia aislada del repositorio, Chrome local con Vite, viewports 390 x 844, 768 x 1024 y 1440 x 900.
+- **17/17 controles aprobados, 0 errores en consola** tras corregir fetchpriority. Revisados enlaces de los cuatro destinos, carga real de cuatro imágenes, ausencia de scroll horizontal y cabeceras de las cuatro páginas interiores.
+- El micrositio Huellas se validó en local con /mascotas/index.html porque el servidor Vite no aplica las reescrituras de Vercel. La URL pública es /mascotas/ y sigue definida por la configuración de despliegue.
+- Evidencias locales (no publicadas): E:\\WEB XETHKIOZ\\03_EXPORTS_QA\\Luminous-QA-20261011\\qa-results.json y capturas qa-home-390.png, qa-home-768.png, qa-home-1440.png.
+- Las comprobaciones automáticas y las capturas no sustituyen la aprobación visual del propietario.
+
+## Trabajo restante antes de producción
+- Revisar personalmente las capturas, contrastes y experiencia de las cuatro secciones completas; evitar aplicar un esquema claro a texto o paneles que necesitan contraste intencional.
+- Acordar consolidación con otras ramas activas de rediseño para no pisar trabajo concurrente.
+- Mantener pendiente la activación de leaked-password protection en Supabase Auth hasta contar con sesión administrativa autorizada.
+- Advertencias no bloqueantes de Vercel: dos videos públicos pesados y migraciones históricas espejadas; no eliminar sin auditoría.
+- Preparar revisión del propietario antes de merge. No publicar automáticamente.
