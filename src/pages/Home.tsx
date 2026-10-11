@@ -63,7 +63,7 @@ export default function Home() {
           <button type="button" role="tab" id="tab-wowforever" aria-selected={!aion} aria-controls="universe-panel" onClick={() => setUniverse('wow')} className={!aion ? 'is-active is-wow' : 'is-wow'}><span aria-hidden="true">ᛟ</span><span>WOWFOREVER</span><small>{es ? 'PORTAL LEGENDARIO' : 'LEGENDARY PORTAL'}</small></button>
         </div>
         <section id="universe-panel" role="tabpanel" aria-labelledby={aion ? 'tab-aion2' : 'tab-wowforever'} key={universe} className={'xk-launcher-hero is-' + c.accent}>
-          <div className="xk-launcher-hero__art" aria-hidden="true"><img src={c.image} alt="" fetchPriority="high" /><span className="xk-launcher-hero__art-vignette" /><span className="xk-launcher-hero__rune xk-launcher-hero__rune--one">ᚷ</span><span className="xk-launcher-hero__rune xk-launcher-hero__rune--two">✧</span><PortalEffects tone={aion ? 'fire' : 'ice'} count={7} /></div>
+          <div className="xk-launcher-hero__art" aria-hidden="true"><img src={c.image} alt="" {...{ fetchpriority: "high" }} /><span className="xk-launcher-hero__art-vignette" /><span className="xk-launcher-hero__rune xk-launcher-hero__rune--one">ᚷ</span><span className="xk-launcher-hero__rune xk-launcher-hero__rune--two">✧</span><PortalEffects tone={aion ? 'fire' : 'ice'} count={7} /></div>
           <div className="xk-launcher-hero__content">
             <span className="xk-launcher-hero__code">{c.code}</span><h2>{aion ? <>AION <em>2</em></> : <>WOW<em>FOREVER</em></>}</h2>
             <p className="xk-launcher-hero__subtitle">{c.subtitle}</p><p className="xk-launcher-hero__description">{c.description}</p>
