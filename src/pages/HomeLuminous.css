@@ -28,3 +28,59 @@
 @media(max-width:600px){.xk-light-intro{width:calc(100% - 24px);margin:12px auto 25px}.xk-light-intro h2{font-size:clamp(27px,8vw,39px)}.xk-light-worlds{gap:10px}.xk-light-world{min-height:226px;padding:16px 13px;border-radius:19px}.xk-light-world__symbol{width:45px;height:45px;margin-bottom:19px;font-size:24px}.xk-light-world small{font-size:8px;letter-spacing:.04em}.xk-light-world strong{font-size:15px}.xk-light-world>span:not(.xk-light-world__symbol){font-size:11px}.xk-light-world b{font-size:9px;padding-top:15px}}
 @media(max-width:350px){.xk-light-worlds{grid-template-columns:1fr}.xk-light-world{min-height:190px}}
 @media(prefers-reduced-motion:reduce){.xk-light-world{transition:none}.xk-light-world:hover{transform:none}}
+
+
+/* LUMINOUS_SCENIC_STAGE_2 — existing public artwork, no new heavy libraries. */
+.xk-launcher-home {
+  background:
+    radial-gradient(ellipse at 78% 4%,rgba(255,221,156,.82),transparent 40%),
+    linear-gradient(180deg,rgba(235,250,255,.84) 0%,rgba(232,250,243,.95) 32%,#e8f3eb 100%),
+    url('/assets/xethkioz-world-panorama-2026.webp') center top/cover no-repeat !important;
+}
+.xk-light-intro{margin-top:clamp(22px,4vw,52px);margin-bottom:clamp(28px,4vw,52px)}
+.xk-light-intro__eyebrow{padding:8px 16px;border:1px solid rgba(57,124,99,.2);border-radius:999px;background:rgba(255,255,255,.58)}
+.xk-light-world{
+  min-height:350px;
+  border:1px solid rgba(255,255,255,.86);
+  background-position:center;background-size:cover;
+  box-shadow:0 15px 40px rgba(26,82,77,.14),inset 0 1px rgba(255,255,255,.85);
+}
+.xk-light-world--realms{
+  background-image:linear-gradient(180deg,rgba(255,251,225,.20) 0%,rgba(255,250,226,.78) 48%,#fff9e9 94%),url('/assets/xethkioz-world-panorama-2026.webp');
+}
+.xk-light-world--pets{
+  background-image:linear-gradient(180deg,rgba(233,255,223,.12) 0%,rgba(240,255,234,.78) 48%,#effbef 94%),url('/assets/portal-mascotas-nature-v11-r2.webp');
+}
+.xk-light-world--digital{
+  background-image:linear-gradient(180deg,rgba(221,247,255,.13) 0%,rgba(227,250,255,.83) 50%,#e6f6ff 95%),url('/assets/portal-science-world-v3.webp');
+}
+.xk-light-world--node{
+  background-image:linear-gradient(180deg,rgba(221,255,225,.18) 0%,rgba(221,252,235,.86) 48%,#ecf9e9 94%),url('/assets/portals/node-rift.webp');
+}
+.xk-light-world::before{opacity:.45;pointer-events:none}
+.xk-light-world__symbol{backdrop-filter:blur(8px);background:rgba(255,255,255,.79)}
+.xk-light-world strong{text-wrap:balance;font-size:clamp(18px,1.85vw,26px);max-width:13ch}
+.xk-light-world>span:not(.xk-light-world__symbol){font-size:13px;font-weight:550}
+.xk-light-world b{display:inline-flex;align-items:center;min-height:44px;max-width:100%;text-wrap:balance;color:#185c53}
+.xk-light-world:focus-visible{outline:3px solid #145d78;outline-offset:5px}
+.xk-launcher-home .xk-universe-tabs button.is-active{background:rgba(255,255,255,.82);border-color:rgba(29,117,103,.34);color:#24444f;box-shadow:0 4px 24px rgba(31,84,91,.08)}
+.xk-launcher-home .xk-universe-tabs button.is-active small{color:#456565}
+.xk-launcher-home .xk-universe-archive-toggle__button:hover{background:rgba(255,255,255,.98)}
+.xk-launcher-home .xk-launcher-mini{background:rgba(12,37,46,.9);border-color:rgba(119,195,185,.35)}
+.xk-launcher-home .xk-launcher-green{border-color:rgba(70,185,115,.4);box-shadow:0 15px 38px rgba(20,91,62,.12)}
+.xk-launcher-home .portal-navigation.is-home .portal-navigation__controls button:last-child{
+  background:rgba(255,255,255,.89);border-color:rgba(39,115,100,.25);color:#214b51;
+}
+.xk-launcher-home .portal-navigation.is-home .portal-navigation__controls button:nth-child(2){
+  background:rgba(255,255,255,.83);border-color:rgba(39,115,100,.22);color:#214b51;
+}
+@media(max-width:1000px){.xk-light-world{min-height:295px}}
+@media(max-width:600px){
+  .xk-launcher-home{background-size:auto,auto,auto 780px!important;background-position:center,center,center top!important}
+  .xk-light-world{min-height:245px;padding:17px 14px}
+  .xk-light-world strong{max-width:100%;font-size:clamp(15px,4.4vw,19px)}
+  .xk-light-world b{font-size:9px;line-height:1.5}
+  .xk-light-intro{margin-bottom:24px}
+}
+@media(max-width:370px){.xk-light-worlds{grid-template-columns:1fr}.xk-light-world{min-height:210px}}
+@media(prefers-reduced-motion:reduce){.xk-light-world,.xk-light-world__symbol{transition:none!important;animation:none!important}}
