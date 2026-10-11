@@ -1,0 +1,108 @@
+/* XETHKIOZ 2026: light, natural visual continuity for existing portals.
+   Scoped styles, no changes to routes, data, controls or reserved game content. */
+.portal-page.portal-game[data-portal-theme="fire"]{
+  --portal-accent:#96602f;--portal-secondary:#6c86b1;
+  color:#1b4248;
+  background:radial-gradient(ellipse at 75% 1%,rgba(255,220,152,.77),transparent 45%),
+    radial-gradient(ellipse at 5% 32%,rgba(154,228,174,.48),transparent 45%),
+    linear-gradient(180deg,#eff9fa 0%,#f9fcf3 52%,#e9f4ed 100%);
+}
+.portal-game .portal-navigation,.portal-digital .portal-navigation{
+  color:#285b5e;border-bottom-color:rgba(44,108,102,.2)
+}
+.portal-game .portal-navigation a[aria-current],.portal-digital .portal-navigation a[aria-current]{color:#246d61}
+.portal-game .portal-game__hero::before{
+  inset:-25px -42px -32px;
+  background:linear-gradient(90deg,rgba(244,251,245,.94) 0%,rgba(244,251,245,.77) 35%,rgba(245,251,245,.37) 68%),
+    url('/assets/world-of-xethkioz/media/elemental-realms-alpha-2-poster.webp') right center/auto 100% no-repeat;
+  opacity:.8;mask-image:linear-gradient(#000 68%,transparent 100%);
+}
+.portal-game .portal-game__intro h1{color:#1c4e55;text-shadow:0 4px 26px rgba(255,255,255,.62)}
+.portal-game .portal-game__intro h1 span{color:#b68343}
+.portal-game .portal-game__intro>p:not(.portal-eyebrow){color:#436767}
+.portal-game .portal-game__tags span{
+  color:#325f58;border-color:rgba(71,130,100,.29);
+  background:rgba(252,255,249,.81);border-radius:999px;
+}
+.portal-game .portal-game__follow{color:#22685f;font-weight:750}
+.portal-game .portal-section{border-color:rgba(43,118,99,.22)}
+.portal-game .portal-game__vision,.portal-game .portal-game__progress,.portal-game .portal-game__faq{color:#1d4d54}
+.portal-game .portal-game__vision p,.portal-game .portal-game__progress p,.portal-game .portal-game__faq details p{color:#42676d}
+.portal-game .portal-game__demo{border-radius:20px;overflow:hidden;border-color:rgba(37,106,92,.3);box-shadow:0 22px 58px rgba(38,98,89,.15)}
+.portal-game .portal-game__demo-heading{color:#215755;background:#e4f4ed}
+.portal-game .portal-game__demo figcaption{color:#4a6268;background:#f2f9f5}
+.portal-game .portal-character{
+  border:1px solid rgba(71,129,111,.24);border-radius:22px;
+  background:linear-gradient(115deg,rgba(255,255,255,.8),rgba(227,244,230,.6));
+  box-shadow:0 15px 36px rgba(34,93,87,.07)
+}
+.portal-game .portal-character.is-rabbit{background:linear-gradient(125deg,#f9f4f3,#f6f4e9)}
+.portal-game .portal-character__copy h3{color:#1e4952}
+.portal-game .portal-character__copy p{color:#486466}
+.portal-game .portal-character__copy small{color:#6e5797}
+.portal-game .is-rabbit .portal-character__copy small{color:#9e654a}
+.portal-game .portal-art-note{color:#496c6c}
+.portal-game .portal-game__history{border-color:rgba(43,119,105,.24);background:rgba(255,255,255,.7);border-radius:14px}
+.portal-game .portal-game__history summary,.portal-game .portal-game__faq summary{color:#254f52}
+.portal-game .portal-game__faq details{border-color:rgba(44,110,107,.22)}
+.portal-game .portal-game__history summary span,.portal-game .portal-game__faq summary span{color:#347a68}
+
+/* Digital: sunlight through an airy glass laboratory, while real tools and links stay unchanged. */
+.portal-page.portal-digital[data-portal-theme="ice"]{
+  --portal-accent:#216b85;--portal-secondary:#397e92;
+  color:#194952;
+  background:radial-gradient(ellipse at 86% 7%,rgba(156,219,250,.7),transparent 42%),
+    radial-gradient(ellipse at 9% 65%,rgba(173,226,204,.5),transparent 43%),
+    linear-gradient(180deg,#f3fcff,#e5f6f5 62%,#f5fcf8);
+}
+.portal-digital .portal-digital__hero{position:relative}
+.portal-digital .portal-digital__hero h1{color:#174d60;font-weight:700;letter-spacing:-.045em}
+.portal-digital .portal-digital__hero p:not(.portal-eyebrow){color:#4d6973}
+.portal-digital .portal-digital__art img{filter:saturate(1.05) brightness(1.19);opacity:.88}
+.portal-digital .digital-service{
+  border:1px solid rgba(40,118,130,.24);border-top:3px solid #81c9d7;
+  border-radius:20px;background:linear-gradient(145deg,rgba(255,255,255,.93),rgba(226,246,247,.8));
+  box-shadow:0 16px 44px rgba(24,94,115,.09);color:#194c58;
+}
+.portal-digital .digital-service h2{color:#1b5361}
+.portal-digital .digital-service p:not(.portal-eyebrow){color:#466772}
+.portal-digital .digital-service__symbol{color:#3c92a1;opacity:.8}
+.portal-digital .digital-service .portal-button{
+  border-radius:11px;border-color:#2a7d91;
+  background:#226f80;color:#fff;min-height:46px;
+}
+.portal-digital .digital-service .portal-button:hover{background:#175667}
+.portal-digital .digital-service details{border-top-color:#b3d6da}
+.portal-digital .digital-service summary{color:#26677b}
+.portal-digital .digital-service details small,.portal-digital .digital-service>small{color:#446a75}
+
+/* Green Node: bright outer ecosystem, keeping its investigation terminal dark for contrast. */
+.portal-node-interior{
+  background:radial-gradient(ellipse at 90% 1%,rgba(187,241,184,.8),transparent 40%),
+    radial-gradient(ellipse at 8% 20%,rgba(137,224,178,.56),transparent 48%),
+    linear-gradient(180deg,#effcf0,#dcf3e8 55%,#e9f7ed)!important;
+}
+.portal-node-interior .portal-navigation{
+  color:#205a4c;border-bottom-color:rgba(31,104,67,.24)
+}
+.portal-node-interior .portal-navigation a{color:#215e50}
+.portal-node-interior .portal-navigation a[data-tone="node"]{color:#186c49}
+.portal-node-interior__ambience{opacity:.13;filter:saturate(1.4);mask-image:linear-gradient(#000,transparent 76%)}
+.portal-node-interior .xk-occult-frame{
+  border-color:rgba(40,139,90,.46);border-radius:24px;
+  box-shadow:0 26px 70px rgba(15,83,56,.17),inset 0 0 75px rgba(75,185,99,.04);
+}
+.portal-node-interior .xk-occult-title{text-shadow:0 0 18px rgba(135,247,175,.25)}
+.portal-node-interior .xk-green-view-nav button{border-radius:12px}
+.portal-node-interior .xk-green-view-nav button:focus-visible{outline:2px solid #b4f5c2;outline-offset:3px}
+
+/* Never make reduced-motion users watch decorative animations. */
+@media(max-width:760px){
+  .portal-game .portal-game__hero::before{inset:-14px -18px -12px;background-position:center,right 35% top;background-size:auto,auto 66%;opacity:.52}
+  .portal-game .portal-game__intro h1{font-size:clamp(43px,10vw,58px)}
+  .portal-digital .digital-service{border-radius:16px}
+  .portal-node-interior .xk-occult-frame{border-radius:18px}
+}
+@media(prefers-reduced-motion:reduce){
+  .portal-game .portal-character,.portal-digital .digital-service,.portal-node-interior .xk-occult-frame{animation:none!important;transition:none!important}
+}
