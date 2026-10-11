@@ -15,7 +15,6 @@ import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import { fetchPublishedNews, formatPublicNewsDate, type PublicNewsArticle, type PublicNewsCategory } from '../services/news/publicNewsService'
 import './GreenNodeDossiers.css'
 import './GreenNodeLuminous.css'
-import './PortalLuminousInteriors.css'
 
 type NodeBlock = {
   id: string

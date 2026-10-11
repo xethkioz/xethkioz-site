@@ -5,7 +5,6 @@ import { useLang } from '../lib/LangContext'
 import PortalNavigation from '../components/portals/PortalNavigation'
 import PortalEffects from '../components/portals/PortalEffects'
 import './PortalInteriors.css'
-import './PortalLuminousInteriors.css'
 import './PortalLuminous.css'
 
 // Public presentation only. The game repository and internal documents stay private.

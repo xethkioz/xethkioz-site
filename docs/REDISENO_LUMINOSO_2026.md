@@ -17,3 +17,10 @@ No alterar World of Xethkioz 2D, lore reservado, datos, donaciones, redes ni fun
 
 ## Pendientes
 Verificar compilación de preview, enlaces y contraste; recursos multimedia originales de otra rama no incorporados; Supabase Auth advierte protección de contraseñas filtradas desactivada y requiere acceso autorizado al panel.
+
+## Verificación de etapa 2 (11/10/2026)
+- Vercel preview dpl_Bxb3vym1JJqpjHWF5ksLtL6K9E2J: READY; auditoría de rutas 62/173 módulos y bundle inicial 38.2 kB gzip, sin errores de compilación.
+- Se mantiene HomeLuminous.css para la Home, PortalLuminous.css para Elemental Realms y Digital, GreenNodeLuminous.css para la experiencia pública de Green Node. Se retira la hoja duplicada PortalLuminousInteriors.css creada durante trabajo concurrente, sin perder comportamiento.
+- Se retiró Facebook del listado público y el texto con métricas históricas de Threads en ChatOverlay.
+- Sin modificaciones a World of Xethkioz 2D, migraciones ni base de datos. Producción sigue sin publicar.
+- Pendiente: inspección visual de 390/768/1440, validar enlaces de Huellas y comprobar accesos bajo protección del preview antes de aprobación final.
