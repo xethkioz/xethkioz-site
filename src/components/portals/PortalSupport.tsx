@@ -9,7 +9,6 @@ function SocialIcon({ name }: { name: string }) {
   if (name === 'Instagram') return <svg {...common}><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg>
   if (name === 'Threads') return <svg {...common}><path d="M19 7c-1-4-12-7-14 3-2 10 9 15 14 8 4-6-6-12-10-6-3 5 9 6 6-4-1-3-5-3-6-1"/></svg>
   if (name === 'TikTok Principal') return <svg {...common}><path d="M14 3v13a4 4 0 1 1-4-4M14 3c.4 3.8 2.8 5.5 6 5.5" strokeWidth="2.2"/></svg>
-  if (name === 'Facebook') return <svg {...common}><path d="M14 21v-9h3l.7-4H14V6.5c0-1.7 1.3-1.8 3.7-1.7V1.5C12 1 9.5 2.8 9.5 7.3V8H7v4h2.5v9" fill="currentColor" stroke="none"/></svg>
   return <svg {...common}><rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9 6 3-6 3Z" fill="currentColor" stroke="none"/></svg>
 }
 
@@ -19,7 +18,7 @@ export default function PortalSupport() {
   const [copied, setCopied] = useState(false)
   const [copyError, setCopyError] = useState(false)
   const es = lang === 'es'
-  const channels = SOCIAL_LINKS.filter(item => ['Instagram', 'Threads', 'TikTok Principal', 'Facebook', 'YouTube'].includes(item.name))
+  const channels = SOCIAL_LINKS.filter(item => ['Instagram', 'Threads', 'TikTok Principal', 'YouTube'].includes(item.name))
   async function copyAlias() {
     try { await navigator.clipboard.writeText('xethkioz'); setCopied(true); setCopyError(false) }
     catch { setCopyError(true) }
