@@ -94,3 +94,8 @@
 @keyframes xk-gate-breathe{from{transform:translate(-50%,-50%) scale(.975)}to{transform:translate(-50%,-50%) scale(1.025)}}
 @media(max-width:700px){.xk-launcher-hero__art .xk-launcher-hero__gate{width:min(90%,380px)}.xk-launcher-green__motion{opacity:.38}}
 @media(prefers-reduced-motion:reduce){.xk-launcher-hero__art .xk-launcher-hero__gate{animation:none}.xk-launcher-green__motion{display:none}}
+
+/* Green Node kinetic scan: no external video request, low bandwidth. */
+.xk-launcher-green__motion{z-index:0;background:repeating-linear-gradient(90deg,transparent 0 36px,rgba(92,255,139,.08) 37px,transparent 39px),repeating-linear-gradient(0deg,transparent 0 32px,rgba(164,87,247,.07) 33px,transparent 35px);background-size:120% 120%;mix-blend-mode:screen;animation:xk-node-scan 9s linear infinite}
+@keyframes xk-node-scan{to{background-position:180px 110px}}
+@media(prefers-reduced-motion:reduce){.xk-launcher-green__motion{animation:none}}
