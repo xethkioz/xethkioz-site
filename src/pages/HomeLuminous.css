@@ -121,3 +121,42 @@
 }
 @media(max-width:350px){.xk-light-world{min-height:240px}}
 @media(prefers-reduced-motion:reduce){.xk-light-world__scenery img{transition:none!important;transform:none!important}}
+
+
+/* Branding/contrast corrections for the daylight Home. */
+.xk-launcher-home .portal-home__brand{width:min(750px,calc(100% - 34px));margin:0 auto 6px;padding-top:64px}
+.xk-launcher-home .portal-home__brand h1.xk-light-wordmark{
+  display:flex;align-items:center;justify-content:center;gap:.13em;margin:0;
+  color:#154752;font:950 clamp(39px,8.6vw,102px)/1 Inter,system-ui,sans-serif;
+  letter-spacing:-.075em;text-shadow:0 4px 30px rgba(255,255,255,.72);
+}
+.xk-launcher-home .xk-light-wordmark span{align-self:flex-start;margin-top:.08em;color:#ba8b46;font-size:.24em}
+.xk-launcher-home .xk-launcher-brand p{color:#2e6064;font-family:Inter,system-ui,sans-serif;font-size:clamp(10px,1.25vw,14px);font-weight:700;letter-spacing:.1em}
+.xk-launcher-home .xk-launcher-hero{background:linear-gradient(115deg,rgba(220,240,238,.96),rgba(250,255,249,.98) 65%);border-color:rgba(44,113,104,.25);box-shadow:0 20px 55px rgba(26,90,84,.12)}
+.xk-launcher-home .xk-launcher-hero__art-vignette{background:linear-gradient(90deg,rgba(247,252,249,.02),rgba(245,252,246,.35) 50%,#f6fbf7 99%),linear-gradient(0deg,#f6fbf7,transparent 28%)}
+.xk-launcher-home .xk-launcher-hero h2{color:#164750;text-shadow:none}
+.xk-launcher-home .xk-launcher-hero h2 em{color:#a47b39}
+.xk-launcher-home .xk-launcher-hero__subtitle{color:#245c62}
+.xk-launcher-home .xk-launcher-hero__description{color:#47666b;opacity:1}
+.xk-launcher-home .xk-launcher-hero__code{color:#26696a;border-color:rgba(38,103,100,.25);background:#edf8f2}
+.xk-launcher-home .xk-launcher-hero__foot{color:#477171}
+.xk-launcher-home .xk-launcher-guide{background:rgba(255,255,255,.65);border-color:rgba(44,122,105,.2)}
+.xk-launcher-home .xk-launcher-guide :is(b,small){color:#295d62}
+.xk-launcher-home .xk-launcher-guides>p{color:#406b70}
+.xk-launcher-home .xk-launcher-divider{border-color:rgba(45,121,101,.18)}
+.xk-launcher-home .portal-navigation.is-home .portal-navigation__more{background:rgba(248,255,249,.98);border-color:rgba(40,117,99,.2)}
+.xk-launcher-home .portal-navigation.is-home .portal-navigation__more::before{color:#225c54}
+.xk-launcher-home .portal-navigation.is-home .portal-navigation__more a{color:#245963}
+.xk-launcher-home .portal-navigation.is-home .portal-navigation__more a:hover{background:#e5f4e9;color:#174a4b}
+@media(max-width:650px){
+  .xk-light-worlds{grid-template-columns:minmax(0,1fr);gap:13px}
+  .xk-light-world{min-height:300px}
+  .xk-launcher-home .xk-launcher-hero__art-vignette{background:linear-gradient(180deg,rgba(244,251,247,.04) 0%,rgba(244,251,247,.5) 55%,#f6fbf7 98%)}
+  .xk-launcher-home .xk-launcher-hero__content{padding-top:180px}
+}
+@media(max-width:375px){
+  .xk-launcher-home .portal-home__brand h1.xk-light-wordmark{font-size:clamp(33px,10vw,40px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .xk-launcher-home .xk-light-world__scenery img{animation:none!important;transition:none!important;transform:none!important}
+}
