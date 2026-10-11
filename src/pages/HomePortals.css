@@ -99,3 +99,10 @@
 .xk-launcher-green__motion{z-index:0;background:repeating-linear-gradient(90deg,transparent 0 36px,rgba(92,255,139,.08) 37px,transparent 39px),repeating-linear-gradient(0deg,transparent 0 32px,rgba(164,87,247,.07) 33px,transparent 35px);background-size:120% 120%;mix-blend-mode:screen;animation:xk-node-scan 9s linear infinite}
 @keyframes xk-node-scan{to{background-position:180px 110px}}
 @media(prefers-reduced-motion:reduce){.xk-launcher-green__motion{animation:none}}
+
+/* Mobile hardening: prevent horizontal overflow and preserve tappable portal actions. */
+.xk-launcher-main,.xk-launcher-hero,.xk-launcher-hero__content,.xk-launcher-green,.xk-launcher-mini{min-width:0}
+.xk-launcher-hero__content,.xk-launcher-green__copy,.xk-launcher-mini__copy{overflow-wrap:anywhere}
+.xk-universe-tabs button,.xk-launcher-primary,.xk-launcher-secondary,.xk-launcher-green__action{touch-action:manipulation}
+@media(max-width:390px){.xk-launcher-hero__actions{display:flex;flex-wrap:wrap}.xk-launcher-primary,.xk-launcher-secondary{flex:1 1 145px;justify-content:center}.xk-launcher-green__action{max-width:100%;white-space:normal}}
+@media(prefers-reduced-motion:reduce){.xk-launcher-green__motion,.xk-launcher-hero__art .xk-launcher-hero__gate{animation:none!important}}
