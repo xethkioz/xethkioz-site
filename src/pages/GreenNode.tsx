@@ -14,6 +14,7 @@ import { useLang } from '../lib/LangContext'
 import { getCuratedExternalNews } from '../services/news/curatedExternalNews'
 import { fetchPublishedNews, formatPublicNewsDate, type PublicNewsArticle, type PublicNewsCategory } from '../services/news/publicNewsService'
 import './GreenNodeDossiers.css'
+import './PortalLuminousInteriors.css'
 
 type NodeBlock = {
   id: string
