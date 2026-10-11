@@ -83,3 +83,26 @@
   .xk-universe-archive-toggle__button { grid-template-columns: 2.2rem minmax(0,1fr) 1.8rem; gap: .65rem; min-height: 4.5rem; padding: .8rem; }
   .xk-universe-archive-toggle__sigil { width: 2.15rem; height: 2.15rem; }
 }
+
+
+/* New circular portal artwork: independent foreground layer with cinematic motion. */
+.xk-launcher-hero__art .xk-launcher-hero__background{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.xk-launcher-hero__art .xk-launcher-hero__gate{position:absolute;z-index:2;left:50%;top:50%;width:min(82%,560px);height:auto;aspect-ratio:1;object-fit:contain;transform:translate(-50%,-50%);filter:drop-shadow(0 0 34px rgba(162,100,255,.35));pointer-events:none;animation:xk-gate-breathe 7s ease-in-out infinite alternate}
+.xk-launcher-hero.is-aion .xk-launcher-hero__gate{filter:drop-shadow(0 0 35px rgba(255,118,37,.35))}
+.xk-launcher-green__motion{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.58;pointer-events:none}
+.xk-launcher-green__motion+img{opacity:.44}
+@keyframes xk-gate-breathe{from{transform:translate(-50%,-50%) scale(.975)}to{transform:translate(-50%,-50%) scale(1.025)}}
+@media(max-width:700px){.xk-launcher-hero__art .xk-launcher-hero__gate{width:min(90%,380px)}.xk-launcher-green__motion{opacity:.38}}
+@media(prefers-reduced-motion:reduce){.xk-launcher-hero__art .xk-launcher-hero__gate{animation:none}.xk-launcher-green__motion{display:none}}
+
+/* Green Node kinetic scan: no external video request, low bandwidth. */
+.xk-launcher-green__motion{z-index:0;background:repeating-linear-gradient(90deg,transparent 0 36px,rgba(92,255,139,.08) 37px,transparent 39px),repeating-linear-gradient(0deg,transparent 0 32px,rgba(164,87,247,.07) 33px,transparent 35px);background-size:120% 120%;mix-blend-mode:screen;animation:xk-node-scan 9s linear infinite}
+@keyframes xk-node-scan{to{background-position:180px 110px}}
+@media(prefers-reduced-motion:reduce){.xk-launcher-green__motion{animation:none}}
+
+/* Mobile hardening: prevent horizontal overflow and preserve tappable portal actions. */
+.xk-launcher-main,.xk-launcher-hero,.xk-launcher-hero__content,.xk-launcher-green,.xk-launcher-mini{min-width:0}
+.xk-launcher-hero__content,.xk-launcher-green__copy,.xk-launcher-mini__copy{overflow-wrap:anywhere}
+.xk-universe-tabs button,.xk-launcher-primary,.xk-launcher-secondary,.xk-launcher-green__action{touch-action:manipulation}
+@media(max-width:390px){.xk-launcher-hero__actions{display:flex;flex-wrap:wrap}.xk-launcher-primary,.xk-launcher-secondary{flex:1 1 145px;justify-content:center}.xk-launcher-green__action{max-width:100%;white-space:normal}}
+@media(prefers-reduced-motion:reduce){.xk-launcher-green__motion,.xk-launcher-hero__art .xk-launcher-hero__gate{animation:none!important}}
