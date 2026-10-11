@@ -23,3 +23,6 @@ Se prepara `feat/luminous-portal-interiors-stage2` a partir de la rama luminosa 
 
 ## QA local etapa 2 · 11/10/2026
 En un worktree aislado del commit 02d73bd se ejecutaron `npm run build` (PASS luego de actualizar contrato de wordmark), `npm audit --omit=dev --audit-level=high` (0 vulnerabilidades) y `playwright test --project=chromium-mobile tests/e2e/luminous-stage2.qa.spec.ts --workers=2` (6/6 PASS; viewport móvil 390 px y control escritorio 1440 px). La auditoría anterior exigía un logo WebP; el nuevo Home incluye wordmark HTML XETHKIOZ liviano, por lo que el contrato ahora acepta ambos conservando rechazo de PNG pesado. Falta validar Vercel READY y revisión visual. La rama se mantiene en PR draft; no fusionar a producción.
+
+## Accesibilidad · corrección validada
+Playwright + axe-core detectó 4 enlaces del menú interior oculto a lectores de pantalla pero todavía visibles en la interfaz de Elemental Realms y Digital (contraste insuficiente). Se corrigió el estado visual cerrado en `PortalSystem.css` con un selector limitado a navegación no-Home. Recompilación PASS y repetición de 4 rutas con auditoría Axe WCAG 2.x (0 incumplimientos graves o críticos; 4/4 tests PASS, viewport 390 px). El menú abierto conserva sus enlaces y controles. Pendiente: revisión humana final en varias dimensiones.
