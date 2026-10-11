@@ -19,12 +19,12 @@ export default function Home() {
   const es = lang === 'es'
   const aion = universe === 'aion2'
   const c = aion ? {
-    accent: 'aion', code: 'PORTAL CELESTIAL // 001', image: '/assets/portals/fire-portal.webp',
+    accent: 'aion', code: 'PORTAL CELESTIAL // 001', image: '/assets/portals/fire-portal.webp', gate: '/assets/portals/aion2-rune-gate.webp',
     subtitle: es ? 'El cielo y la oscuridad vuelven a enfrentarse.' : 'Heaven and darkness face each other once more.',
     description: es ? 'Atravesá el umbral de Atreia. Prepará tu clase, descubrí estrategias y encontrá tu lugar entre Elyos y Asmodians.' : 'Cross the threshold to Atreia. Prepare your class, discover strategies and find your place among Elyos and Asmodians.',
     quick: es ? 'ACCESOS RÁPIDOS · GUÍAS DE CLASE' : 'QUICK ACCESS · CLASS GUIDES',
   } : {
-    accent: 'wow', code: 'PORTAL LEGENDARIO // 002', image: '/assets/portal-games-world-v3.webp',
+    accent: 'wow', code: 'PORTAL LEGENDARIO // 002', image: '/assets/portal-games-world-v3.webp', gate: '/assets/portals/wowforever-rune-gate.webp',
     subtitle: es ? 'Azeroth te está esperando.' : 'Azeroth is waiting for you.',
     description: es ? 'Volvé a vivir la aventura. Explorá builds, prepará tu personaje y descubrí nuevas rutas para tu próxima expedición.' : 'Return to the adventure. Explore builds, prepare your character and discover new routes for your next expedition.',
     quick: es ? 'ACCESOS RÁPIDOS · BIBLIOTECA GAMER' : 'QUICK ACCESS · GAMING LIBRARY',
@@ -52,7 +52,7 @@ export default function Home() {
           <button type="button" role="tab" id="tab-wowforever" aria-selected={!aion} aria-controls="universe-panel" onClick={() => setUniverse('wow')} className={!aion ? 'is-active is-wow' : 'is-wow'}><span aria-hidden="true">ᛟ</span><span>WOWFOREVER</span><small>{es ? 'PORTAL LEGENDARIO' : 'LEGENDARY PORTAL'}</small></button>
         </div>
         <section id="universe-panel" role="tabpanel" aria-labelledby={aion ? 'tab-aion2' : 'tab-wowforever'} key={universe} className={'xk-launcher-hero is-' + c.accent}>
-          <div className="xk-launcher-hero__art" aria-hidden="true"><img src={c.image} alt="" fetchPriority="high" /><span className="xk-launcher-hero__art-vignette" /><span className="xk-launcher-hero__rune xk-launcher-hero__rune--one">ᚷ</span><span className="xk-launcher-hero__rune xk-launcher-hero__rune--two">✧</span><PortalEffects tone={aion ? 'fire' : 'ice'} count={7} /></div>
+          <div className="xk-launcher-hero__art" aria-hidden="true"><img className="xk-launcher-hero__background" src={c.image} alt="" fetchPriority="high" /><img className="xk-launcher-hero__gate" src={c.gate} alt="" loading="eager" onError={event => { event.currentTarget.style.display = "none" }} /><span className="xk-launcher-hero__art-vignette" /><span className="xk-launcher-hero__rune xk-launcher-hero__rune--one">ᚷ</span><span className="xk-launcher-hero__rune xk-launcher-hero__rune--two">✧</span><PortalEffects tone={aion ? 'fire' : 'ice'} count={7} /></div>
           <div className="xk-launcher-hero__content">
             <span className="xk-launcher-hero__code">{c.code}</span><h2>{aion ? <>AION <em>2</em></> : <>WOW<em>FOREVER</em></>}</h2>
             <p className="xk-launcher-hero__subtitle">{c.subtitle}</p><p className="xk-launcher-hero__description">{c.description}</p>
@@ -88,7 +88,7 @@ export default function Home() {
           <a href="/mascotas/" className="xk-launcher-mini xk-launcher-mini--pets"><span className="xk-launcher-mini__icon" aria-hidden="true">✣</span><span className="xk-launcher-mini__copy"><small>COMPANION COLLECTION</small><b>{es ? 'Mascotas' : 'Pets'}</b><i>{es ? 'Compañeros para cada aventura.' : 'Companions for every adventure.'}</i></span><span className="xk-launcher-mini__arrow" aria-hidden="true">↗</span></a>
           <Link to={localizePath('/digital')} className="xk-launcher-mini xk-launcher-mini--digital"><span className="xk-launcher-mini__icon" aria-hidden="true">⌘</span><span className="xk-launcher-mini__copy"><small>CREATIVE TECHNOLOGY</small><b>Xethkioz Digital</b><i>{es ? 'IA, desarrollo e innovación digital.' : 'AI, development and digital innovation.'}</i></span><span className="xk-launcher-mini__arrow" aria-hidden="true">↗</span></Link>
         </section>
-        <Link className="xk-launcher-green" to={localizePath('/green-node')} onClick={triggerGreenPortal}><img src="/assets/portals/node-rift.webp" alt="" width="1500" height="190" loading="lazy" decoding="async" /><span className="xk-launcher-green__grid" aria-hidden="true" /><span className="xk-launcher-green__mark" aria-hidden="true">⌖</span><span className="xk-launcher-green__copy"><small>NETWORK // SYSTEMS // INTELLIGENCE</small><b>GREEN NODE</b><i>{es ? 'Tecnología, sistemas y conexiones inteligentes.' : 'Technology, systems and intelligent connections.'}</i></span><span className="xk-launcher-green__action">{es ? 'EXPLORAR SISTEMA' : 'EXPLORE SYSTEM'} <b aria-hidden="true">↗</b></span></Link>
+        <Link className="xk-launcher-green" to={localizePath('/green-node')} onClick={triggerGreenPortal}><video className="xk-launcher-green__motion" autoPlay muted loop playsInline preload="none" poster="/assets/portals/node-rift.webp" aria-hidden="true"><source src="/assets/portals/green-node-intro.mp4" type="video/mp4" /></video><img src="/assets/portals/node-rift.webp" alt="" width="1500" height="190" loading="lazy" decoding="async" /><span className="xk-launcher-green__grid" aria-hidden="true" /><span className="xk-launcher-green__mark" aria-hidden="true">⌖</span><span className="xk-launcher-green__copy"><small>NETWORK // SYSTEMS // INTELLIGENCE</small><b>GREEN NODE</b><i>{es ? 'Tecnología, sistemas y conexiones inteligentes.' : 'Technology, systems and intelligent connections.'}</i></span><span className="xk-launcher-green__action">{es ? 'EXPLORAR SISTEMA' : 'EXPLORE SYSTEM'} <b aria-hidden="true">↗</b></span></Link>
       </section>
       <p className="portal-home__disclaimer">{es ? 'ARTE PROMOCIONAL · EXPERIENCIA DE PORTAL' : 'PROMOTIONAL ART · PORTAL EXPERIENCE'}</p><PortalSupport />
     </main>
