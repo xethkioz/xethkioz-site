@@ -4,7 +4,7 @@ const home=read('src/pages/Home.tsx'), game=read('src/pages/ElementalRealms.tsx'
 const fx=read('src/components/portals/PortalEffects.tsx'), css=read('src/components/portals/PortalSystem.css'), homeCss=read('src/pages/HomePortals.css'), inside=read('src/pages/PortalInteriors.css')
 const surfaces=[home,game,digital]
 const checks=[
- ['Launcher links to real gaming destinations; legacy game hub remains a compatible redirect', home.includes("aion ? '/gaming' : '/gaming/guides'") && legacy.includes('<Navigate') && !legacy.includes('<section')],
+ ['Launcher links to real gaming destinations; legacy game hub remains a compatible redirect', home.includes('href="#xk-universe-spotlight"') && home.includes('UniverseSpotlight') && home.includes("localizePath('/gaming/guides')") && legacy.includes('<Navigate') && !legacy.includes('<section')],
  ['Four luminous portals precede the Aion/WoW launcher, without duplicate Green Node', home.includes('xk-light-worlds') && home.includes('xk-light-world--realms') && home.includes('xk-light-world--pets') && home.includes('xk-light-world--digital') && home.includes('xk-light-world--node') && home.includes('green-node-celestial-2026.svg') && home.includes('xk-universe-tabs') && home.includes('xk-launcher-hero') && home.includes('xk-launcher-secondary') && !home.includes('xk-launcher-green') && home.indexOf('xk-light-worlds') < home.indexOf('xk-universe-tabs') && home.indexOf('xk-launcher-hero') < home.indexOf('xk-launcher-secondary')],
  ['Home has no videos, remote players, canvas or raw 3D downloads', !/<video|<iframe|<canvas|\.glb|\.fbx/.test(home)],
  ['All public game media is controlled, never autoplay', !/autoPlay|<iframe|<canvas/.test(game) && (game.match(/controls playsInline/g)||[]).length===3],

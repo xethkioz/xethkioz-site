@@ -78,8 +78,8 @@ const sources = {
     { es: 'Roster Global y funciones de clase · referencia comunitaria', en: 'Global roster and class roles · community reference', href: 'https://www.aion2game.wiki/classes/class-list/' },
   ],
   wow: [
-    { es: 'Blizzard · razas y combinaciones de clase de WoW: Forever', en: 'Blizzard · WoW: Forever races and class combinations', href: 'https://worldofwarcraft.blizzard.com/en-us/news/24304075/erschafft-den-helden-der-ihr-sein-wollt-in-world-of-warcraft-forever' },
-    { es: 'Blizzard · nueva raza célica', en: 'Blizzard · new Skyborne/Celestial race', href: 'https://worldofwarcraft.blizzard.com/en-us/news/24304075/erschafft-den-helden-der-ihr-sein-wollt-in-world-of-warcraft-forever' },
+    { es: 'Blizzard · razas y combinaciones de clase de WoW: Forever', en: 'Blizzard · WoW: Forever races and class combinations', href: 'https://news.blizzard.com/es-es/article/24304075/crea-un-heroe-a-tu-imagen-y-semejanza-en-world-of-warcraft-forever' },
+    { es: 'Blizzard · nueva raza célica', en: 'Blizzard · new Skyborne/Celestial race', href: 'https://news.blizzard.com/es-es/article/24302093/traza-un-nuevo-camino-con-world-of-warcraft-forever' },
     { es: 'Blizzard · requisitos de sistema de World of Warcraft', en: 'Blizzard · World of Warcraft system requirements', href: 'https://eu.shop.battle.net/en-us/product/world-of-warcraft-subscription' },
     { es: 'Blizzard · cambios de GPU de WoW: Forever', en: 'Blizzard · WoW: Forever GPU requirements', href: 'https://worldofwarcraft.blizzard.com/es-es/news/24301512/requisitos-de-gpu-para-world-of-warcraft-forever' },
   ],

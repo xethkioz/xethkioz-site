@@ -1,0 +1,22 @@
+/* Huellas Argentina — 3D pet companions illustrated artwork on luminous XETHKIOZ Home. */
+.xk-launcher-home .xk-light-world--pets {
+  background:linear-gradient(180deg,#c8e9d8,#eef9e7);
+  box-shadow:0 20px 50px rgba(39,124,80,.18),inset 0 1px #fff;
+}
+.xk-launcher-home .xk-light-world--pets .xk-light-world__scenery img{
+  object-position:41% 49%;
+  filter:saturate(1.03) brightness(1.06);
+}
+.xk-launcher-home .xk-light-world--pets::before{
+  background:linear-gradient(180deg,rgba(250,255,239,.04) 0%,rgba(240,255,234,.16) 30%,rgba(248,255,242,.85) 56%,rgba(247,255,238,.98) 88%);
+}
+.xk-launcher-home .xk-light-world--pets .xk-light-world__symbol{
+  background:linear-gradient(135deg,rgba(255,255,255,.98),rgba(231,255,224,.93));
+  box-shadow:0 6px 23px rgba(48,134,77,.15);
+}
+.xk-launcher-home .xk-light-world--pets small,
+.xk-launcher-home .xk-light-world--pets strong,
+.xk-launcher-home .xk-light-world--pets b{
+  color:#225d43;
+  text-shadow:0 2px 14px rgba(255,255,255,.6);
+}

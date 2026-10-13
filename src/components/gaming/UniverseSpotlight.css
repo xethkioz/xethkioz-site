@@ -1,0 +1,52 @@
+/* XETHKIOZ 2026 · Encyclopedia spotlight. Accessible, lightweight and scoped to the launcher. */
+.xk-launcher-home .xk-game-dossier {
+  --dossier-accent:#267d8d; --dossier-deep:#155569; --dossier-edge:#acd8d9;
+  width:100%; max-width:1140px; margin:18px auto 24px; padding:clamp(20px,3.4vw,39px);
+  color:#224c55; border:1px solid #a8d5d5; border-radius:26px;
+  background:linear-gradient(145deg,rgba(253,255,255,.97),rgba(226,247,246,.94));
+  box-shadow:0 21px 44px rgba(24,110,109,.13);
+  scroll-margin-top:25px; overflow:hidden;
+}
+.xk-launcher-home .xk-game-dossier.is-wow{
+  --dossier-accent:#9a6a24;--dossier-deep:#73501c;--dossier-edge:#e8cda1;
+  color:#55462c; border-color:#ecd3b2;
+  background:linear-gradient(145deg,rgba(255,254,249,.98),rgba(252,241,221,.96));
+  box-shadow:0 21px 44px rgba(139,105,62,.12);
+}
+.xk-game-dossier *{box-sizing:border-box}
+.xk-game-dossier__heading{display:flex;flex-wrap:wrap;align-items:center;gap:10px 15px}
+.xk-game-dossier__eyebrow{font:850 10px/1.6 ui-monospace,Consolas,monospace;letter-spacing:.15em;color:var(--dossier-accent)}
+.xk-game-dossier__status{display:inline-flex;align-items:center;gap:8px;margin-left:auto;padding:7px 12px;border:1px solid var(--dossier-edge);border-radius:99px;background:rgba(255,255,255,.82);color:var(--dossier-deep);font:800 9px/1.3 ui-monospace,Consolas,monospace;letter-spacing:.075em}
+.xk-game-dossier__status i{width:7px;height:7px;background:#3bba86;border-radius:50%}
+.xk-game-dossier__heading h3{flex-basis:100%;margin:3px 0 0;color:var(--dossier-deep);font:750 clamp(26px,3vw,40px)/1.1 Georgia,serif;letter-spacing:-.025em;text-wrap:balance}
+.xk-game-dossier__heading>p{flex-basis:100%;margin:0;max-width:900px;color:inherit;font:500 clamp(13px,1.3vw,16px)/1.7 system-ui,sans-serif}
+.xk-game-dossier__stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:26px 0}
+.xk-game-dossier__stat{min-height:88px;display:flex;flex-direction:column;justify-content:center;gap:3px;padding:13px 16px;border-radius:17px;border:1px solid var(--dossier-edge);background:rgba(255,255,255,.74)}
+.xk-game-dossier__stat strong{color:var(--dossier-deep);font:800 clamp(19px,2.3vw,27px)/1.25 Georgia,serif}
+.xk-game-dossier__stat span{font:650 11px/1.4 system-ui,sans-serif;color:inherit}
+.xk-game-dossier__cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.xk-game-dossier__card{padding:19px 17px;border:1px solid var(--dossier-edge);border-radius:17px;background:rgba(255,255,255,.82);box-shadow:0 7px 22px rgba(44,110,105,.045)}
+.xk-game-dossier__card small{color:var(--dossier-accent);font:900 10px/1.5 ui-monospace,monospace;letter-spacing:.11em}
+.xk-game-dossier__card h4{margin:10px 0;color:var(--dossier-deep);font:750 clamp(17px,1.7vw,21px)/1.2 Georgia,serif}
+.xk-game-dossier__card p{margin:0;color:inherit;font:500 12.5px/1.7 system-ui,sans-serif}
+.xk-game-dossier__lower{display:grid;grid-template-columns:1.05fr .95fr;gap:16px;margin-top:18px}
+.xk-game-dossier__lower>section{border:1px solid var(--dossier-edge);border-radius:17px;background:rgba(255,255,255,.66);padding:21px}
+.xk-game-dossier__lower h4{margin:0 0 15px;color:var(--dossier-deep);font:850 11px/1.4 ui-monospace,monospace;letter-spacing:.12em}
+.xk-game-dossier__route ol{list-style:none;margin:0;padding:0;display:grid;gap:13px}
+.xk-game-dossier__route li{display:flex;align-items:flex-start;gap:12px;font:500 12.5px/1.65 system-ui,sans-serif}
+.xk-game-dossier__route li b{flex:none;min-width:26px;color:var(--dossier-accent);font:800 13px/1.6 ui-monospace,monospace}
+.xk-game-dossier__roles>p{margin:0 0 13px;font:500 12.5px/1.6 system-ui,sans-serif}
+.xk-game-dossier__tags{display:flex;flex-wrap:wrap;gap:7px}
+.xk-game-dossier__tags span{padding:7px 11px;border-radius:99px;border:1px solid var(--dossier-edge);background:rgba(255,255,255,.83);font:700 11px/1.3 system-ui,sans-serif;color:var(--dossier-deep)}
+.xk-game-dossier__roles>.xk-game-dossier__community{margin-top:20px;color:var(--dossier-deep)}
+.xk-game-dossier__community a{font-weight:800;color:#136f6a;text-underline-offset:3px}
+.xk-game-dossier__sources{display:grid;grid-template-columns:1.1fr .9fr;gap:15px;padding-top:19px;margin-top:22px;border-top:1px solid var(--dossier-edge)}
+.xk-game-dossier__sources strong{color:var(--dossier-deep);font:850 10px/1.6 ui-monospace,monospace;letter-spacing:.13em}
+.xk-game-dossier__sources p{font:500 11px/1.65 system-ui,sans-serif;margin:9px 0 0;color:inherit}
+.xk-game-dossier__source-links{display:grid;gap:7px;align-content:start}
+.xk-game-dossier__source-links a{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:41px;padding:9px 13px;border:1px solid var(--dossier-edge);border-radius:11px;background:rgba(255,255,255,.86);text-decoration:none;color:var(--dossier-deep);font:750 11px/1.5 system-ui,sans-serif;transition:background .2s}
+.xk-game-dossier__source-links a:hover{background:#fff}
+.xk-game-dossier a:focus-visible{outline:3px solid var(--dossier-accent);outline-offset:2px}
+@media(max-width:780px){.xk-game-dossier__cards{grid-template-columns:1fr}.xk-game-dossier__lower{grid-template-columns:1fr}.xk-game-dossier__stats{grid-template-columns:repeat(2,minmax(0,1fr))}.xk-game-dossier__sources{grid-template-columns:1fr}}
+@media(max-width:440px){.xk-launcher-home .xk-game-dossier{border-radius:22px;padding:19px 15px}.xk-game-dossier__status{margin-left:0;max-width:100%;white-space:normal}.xk-game-dossier__stats{gap:8px;margin:18px 0}.xk-game-dossier__stat{padding:12px 10px}.xk-game-dossier__lower>section{padding:18px 13px}}
+@media(prefers-reduced-motion:reduce){.xk-game-dossier__source-links a{transition:none}}

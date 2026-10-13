@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 800" width="1440" height="800" role="img" aria-label="Portal celestial al mundo de los Daevas, con alas de luz y ciudades flotantes">
+<defs>
+<linearGradient id="sky" x2="0.2" y2="1"><stop stop-color="#5b9bc8"/><stop offset=".48" stop-color="#b7e4f8"/><stop offset="1" stop-color="#fff5ce"/></linearGradient>
+<radialGradient id="light"><stop stop-color="#fffef4" stop-opacity=".98"/><stop offset=".38" stop-color="#d1f6ff" stop-opacity=".85"/><stop offset="1" stop-color="#83daf4" stop-opacity="0"/></radialGradient>
+<linearGradient id="stone" x2=".9" y2=".95"><stop stop-color="#fffef8"/><stop offset=".48" stop-color="#bdd8ec"/><stop offset="1" stop-color="#5e91bd"/></linearGradient>
+<linearGradient id="gold" x2="1" y2="1"><stop stop-color="#fff8d2"/><stop offset=".52" stop-color="#e1b874"/><stop offset="1" stop-color="#fff5cd"/></linearGradient>
+<linearGradient id="sea" x2=".1" y2="1"><stop stop-color="#92d6ee"/><stop offset="1" stop-color="#346e9e"/></linearGradient>
+<filter id="blur"><feGaussianBlur stdDeviation="12"/></filter>
+<path id="wing" d="M0 0Q-84 -80 -220 -68Q-103 13 0 0Z"/>
+<path id="spire" d="M0 0L20 -65 40 0 40 180 0 180Z"/>
+</defs>
+<rect width="1440" height="800" fill="url(#sky)"/>
+<ellipse cx="925" cy="265" rx="460" ry="395" fill="url(#light)"/>
+<g fill="#fff" opacity=".68" filter="url(#blur)"><ellipse cx="130" cy="220" rx="300" ry="60"/><ellipse cx="1190" cy="235" rx="350" ry="60"/><ellipse cx="870" cy="570" rx="620" ry="65"/></g>
+<path d="M0 610 104 550 205 602 330 522 460 615 605 560 730 620 860 550 990 630 1165 510 1330 606 1440 565V800H0Z" fill="#75bdd4" opacity=".55"/>
+<path d="M0 671 115 610 230 643 350 590 490 670 600 626 720 680 860 628 1030 702 1188 599 1344 687 1440 640V800H0Z" fill="#75b5c9" opacity=".48"/>
+<g opacity=".6" fill="url(#stone)" stroke="url(#gold)" stroke-width="3">
+<path d="M110 540h225l-24 38H130Z"/><use href="#spire" transform="translate(164 390) scale(1.6 1)"/><use href="#spire" transform="translate(248 415) scale(.9 .85)"/>
+<path d="M1100 551h243l-30 46h-188Z"/><use href="#spire" transform="translate(1150 385) scale(1.5 1)"/><use href="#spire" transform="translate(1261 401) scale(.95 1.03)"/>
+</g>
+<g fill="none" stroke="url(#gold)" stroke-width="7" opacity=".9"><circle cx="892" cy="290" r="236"/><circle cx="892" cy="290" r="215" stroke-width="2" stroke-dasharray="12 15"/><path d="M679 157Q892 26 1105 157M677 423Q892 564 1107 423" stroke-width="4"/></g>
+<g transform="translate(892 291)" stroke="url(#gold)" stroke-width="2">
+<use href="#wing" transform="rotate(-8) translate(-90 0)" fill="#f9ffff" opacity=".93"/>
+<use href="#wing" transform="rotate(11) translate(-95 55) scale(.78 .9)" fill="#d9f4ff" opacity=".93"/>
+<use href="#wing" transform="scale(-1 1) rotate(-8) translate(-90 0)" fill="#f9ffff" opacity=".93"/>
+<use href="#wing" transform="scale(-1 1) rotate(11) translate(-95 55) scale(.78 .9)" fill="#d9f4ff" opacity=".93"/>
+</g>
+<g transform="translate(892 290)">
+<circle r="175" fill="#c0efff" opacity=".45"/><circle r="167" fill="none" stroke="#fef7dc" stroke-width="16"/><circle r="151" fill="none" stroke="#3d9bbd" stroke-width="4"/>
+<circle r="128" fill="url(#light)"/><path d="M0-129 27-25 125 0 27 25 0 129 -27 25 -125 0 -27-25Z" fill="#f7fffb" stroke="url(#gold)" stroke-width="6"/>
+<circle r="38" fill="#fcf6d9" stroke="#65b5d2" stroke-width="5"/><circle r="14" fill="#fff"/>
+</g>
+<g fill="url(#stone)" stroke="url(#gold)" stroke-width="5">
+<path d="M600 630V288l23-65 23 65v342Z"/><path d="M1139 630V288l23-65 23 65v342Z"/>
+<path d="M645 640V342l25-61 25 61v298Z"/><path d="M1088 640V342l25-61 25 61v298Z"/>
+<path d="M739 675V483l24-60 24 60v192Z"/><path d="M995 675V483l24-60 24 60v192Z"/>
+</g>
+<g stroke="#7baac2" stroke-width="5"><path d="M622 332v225M1161 332v225M665 385v220M1111 385v220" /></g>
+<path d="M840 515h103l335 285H487Z" fill="url(#sea)" stroke="url(#gold)" stroke-width="8"/>
+<path d="M856 519 655 800M927 519 1130 800" stroke="#f7edd6" stroke-width="5" opacity=".78"/>
+<path d="M0 770Q430 721 680 764T1440 742V800H0Z" fill="#effaff" opacity=".55"/>
+<g fill="#fffdf2" opacity=".8"><circle cx="148" cy="95" r="4"/><circle cx="314" cy="165" r="6"/><circle cx="1378" cy="123" r="5"/><circle cx="1203" cy="300" r="3"/></g>
+</svg>
