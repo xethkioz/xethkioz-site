@@ -65,7 +65,7 @@ export default function Home() {
           <button type="button" role="tab" id="tab-aion2" aria-selected={aion} aria-controls="universe-panel" onClick={() => { setUniverse('aion2'); setShowIntel(false) }} className={aion ? 'is-active is-aion' : 'is-aion'}><span aria-hidden="true">✧</span><span>AION 2</span><small>{es ? 'PORTAL CELESTIAL' : 'CELESTIAL PORTAL'}</small></button>
           <button type="button" role="tab" id="tab-wowforever" aria-selected={!aion} aria-controls="universe-panel" onClick={() => { setUniverse('wow'); setShowIntel(false) }} className={!aion ? 'is-active is-wow' : 'is-wow'}><span aria-hidden="true">ᛟ</span><span>WOWFOREVER</span><small>{es ? 'PORTAL LEGENDARIO' : 'LEGENDARY PORTAL'}</small></button>
         </div>
-        <section id="universe-panel" role="tabpanel" aria-labelledby={aion ? 'tab-aion2' : 'tab-wowforever'} key={universe} className={'xk-launcher-hero is-' + c.accent}>
+        <section id="universe-panel" role="tabpanel" aria-labelledby={aion ? 'tab-aion2' : 'tab-wowforever'} className={'xk-launcher-hero is-' + c.accent}>
           <div className="xk-launcher-hero__art" aria-hidden="true"><img src={c.image} alt="" {...{ fetchpriority: "high" }} /><span className="xk-launcher-hero__art-vignette" /><span className="xk-launcher-hero__rune xk-launcher-hero__rune--one">ᚷ</span><span className="xk-launcher-hero__rune xk-launcher-hero__rune--two">✧</span><PortalEffects tone={aion ? 'fire' : 'ice'} count={7} /></div>
           <div className="xk-launcher-hero__content">
             <span className="xk-launcher-hero__code">{c.code}</span><h2>{aion ? <>AION <em>2</em></> : <>WOW<em>FOREVER</em></>}</h2>
