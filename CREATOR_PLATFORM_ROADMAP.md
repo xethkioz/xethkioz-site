@@ -27,5 +27,5 @@ D. Conector Drive en modo prueba con OAuth seguro y aprobación del usuario ante
 E. Pruebas unitarias/e2e de autorización, publicación, reportes, móviles y regresiones de los tres módulos conservados.
 F. Preview Vercel y validación; producción solo tras build verde y revisión.
 
-## Estado
-Rama creada; especificación inicial registrada. Implementación de interfaz, backend, OAuth y migraciones: pendientes. Producción sin cambios.
+## Estado (2026-10-21)
+Frontend MVP en rama: nueva Home, catálogo, detalle de proyectos, fichas desde enlace HTTPS de nube externa, panel de borradores, filtro de categorías y reportes. La pantalla de registro existente se reutiliza. Migración SQL con RLS preparada en `database/migrations/20261021_creator_platform_mvp.sql` (NO aplicada). Los tres módulos conservados mantienen sus archivos y rutas. El OAuth Drive Picker, carga de archivo directa a Drive, moderación administrativa, validación de enlaces del lado del servidor, pruebas E2E y preview siguen pendientes. No prometer publicación automática. Producción sin cambios.
