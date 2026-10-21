@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import SEO from '../components/SEO'
 import { isSupabaseConfigured, supabase } from '../services/supabaseClient'
+import { usePrivacyConsent } from '../lib/PrivacyConsentContext'
 import './creator-platform.css'
 
 type Kind = 'programa' | 'videojuego' | 'video' | 'arte' | 'herramienta_ia' | 'otro'
@@ -51,6 +52,7 @@ function creatorLogin(redirect: string) {
   return '/account?mode=signin&redirect=' + encodeURIComponent(redirect)
 }
 function PlatformFrame({ children }: { children: ReactNode }) {
+  const { openSettings } = usePrivacyConsent()
   return (
     <div className="xk-creator-app">
       <header className="xk-creator-nav">
@@ -69,7 +71,7 @@ function PlatformFrame({ children }: { children: ReactNode }) {
       {children}
       <footer className="xk-creator-footer">
         <span>© {new Date().getFullYear()} XETHKIOZ · Creá, compartí, descubrí.</span>
-        <nav aria-label="Información"><Link to="/privacy">Privacidad</Link><Link to="/editorial-policy">Reglas de publicación</Link><Link to="/account">Mi cuenta</Link></nav>
+        <nav aria-label="Información"><Link to="/privacy">Privacidad</Link><Link to="/editorial-policy">Reglas de publicación</Link><Link to="/account">Mi cuenta</Link><button type="button" onClick={openSettings}>Cookies</button></nav>
       </footer>
     </div>
   )
