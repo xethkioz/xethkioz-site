@@ -20,6 +20,7 @@ type Project = {
   tags: string[]
   status: Status
   created_at: string
+  rejection_reason?: string | null
 }
 type FormValues = Pick<Project, 'title' | 'summary' | 'category' | 'external_url' | 'license'> & { tags: string }
 const categories: { id: Kind | 'todos'; label: string; icon: string }[] = [
@@ -224,6 +225,7 @@ export function CreatorPublish() {
   const [authorName, setAuthorName] = useState('')
   const [userId, setUserId] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  const [rejection, setRejection] = useState('')
   const [ready, setReady] = useState(false)
   const [message, setMessage] = useState('')
   useEffect(() => {
@@ -241,6 +243,7 @@ export function CreatorPublish() {
           navigate('/mis-proyectos', { replace: true }); return
         }
         setForm({ title: project.title, summary: project.summary, category: project.category, external_url: project.external_url, license: project.license, tags: (project.tags || []).join(', ') })
+        setRejection(typeof project.rejection_reason === 'string' ? project.rejection_reason : '')
       }
       setReady(true)
     }
@@ -254,12 +257,13 @@ export function CreatorPublish() {
     setMessage('')
     const tags = [...new Set(form.tags.split(',').map((tag) => tag.trim().slice(0, 24)).filter(Boolean))].slice(0, 8)
     if (!userId) { setMessage('Tu sesión expiró. Volvé a iniciar sesión.'); return }
-    if (form.title.trim().length < 4 || form.title.trim().length > 100 || form.summary.trim().length < 20 || form.summary.trim().length > 1200) {
+    if ((status === 'pending_review' && (form.title.trim().length < 4 || form.summary.trim().length < 20)) || form.title.trim().length > 100 || form.summary.trim().length > 1200) {
       setMessage('Título: 4–100 caracteres. Descripción: 20–1200 caracteres.'); return
     }
-    if (!safeCloudLink(form.external_url)) { setMessage('Ingresá un enlace HTTPS público y válido de tu nube.'); return }
+    if (status === 'pending_review' && !safeCloudLink(form.external_url)) { setMessage('Ingresá un enlace HTTPS público y válido de tu nube.'); return }
+    if (status === 'draft' && form.external_url.trim() && !safeCloudLink(form.external_url)) { setMessage('El enlace de nube no es seguro. Dejalo en blanco o ingresá un enlace HTTPS válido.'); return }
     setBusy(true)
-    const payload = { title: form.title.trim(), summary: form.summary.trim(), category: form.category, external_url: form.external_url.trim(), license: form.license.trim().slice(0, 80), tags, author_id: userId, author_name: authorName, status, published_at: null }
+    const payload = { title: form.title.trim(), summary: form.summary.trim(), category: form.category, external_url: form.external_url.trim(), license: form.license.trim().slice(0, 80), tags, author_id: userId, author_name: authorName, status }
     const result = id
       ? await supabase.from('creator_projects').update(payload).eq('id', id).eq('author_id', userId)
       : await supabase.from('creator_projects').insert(payload)
@@ -271,12 +275,13 @@ export function CreatorPublish() {
     <SEO title="Publicar una creación · XETHKIOZ" url="/publicar" />
     <main className="xk-creator-inner xk-creator-form-page"><Link className="xk-creator-back" to="/mis-proyectos">← Mi espacio</Link><p className="xk-creator-eyebrow">ESTUDIO DE CREACIÓN</p><h1>{id ? 'Editar mi proyecto' : 'Compartí tu creación.'}</h1>
       <p className="xk-creator-lead">Tu archivo sigue guardado en Google Drive, Dropbox, OneDrive o tu nube. XETHKIOZ muestra la ficha y el enlace después de una revisión.</p>
+      {rejection && <p className="xk-creator-message" role="status"><strong>Corrección solicitada:</strong> {rejection}</p>}
       {!ready ? <p className="xk-creator-state">Verificando tu cuenta…</p> : <form className="xk-creator-form" onSubmit={(event) => { event.preventDefault(); void submit('pending_review') }}>
-        <label>Título<input required maxLength={100} minLength={4} value={form.title} onChange={(e) => set('title', e.target.value)} placeholder="Ej.: Mi videojuego de aventuras" /></label>
+        <label>Título<input maxLength={100} minLength={4} value={form.title} onChange={(e) => set('title', e.target.value)} placeholder="Ej.: Mi videojuego de aventuras" /></label>
         <label>Tipo de creación<select value={form.category} onChange={(e) => set('category', e.target.value as Kind)}>{categories.filter((item) => item.id !== 'todos').map((item) => <option value={item.id} key={item.id}>{item.label}</option>)}</select></label>
-        <label>Contá de qué se trata<textarea required maxLength={1200} minLength={20} rows={6} value={form.summary} onChange={(e) => set('summary', e.target.value)} placeholder="¿Qué creaste? ¿Cómo funciona? ¿Usaste inteligencia artificial?" /></label>
+        <label>Contá de qué se trata<textarea maxLength={1200} minLength={20} rows={6} value={form.summary} onChange={(e) => set('summary', e.target.value)} placeholder="¿Qué creaste? ¿Cómo funciona? ¿Usaste inteligencia artificial?" /></label>
         <div className="xk-creator-cloud-instructions"><strong>01. Guardá el archivo en tu propia nube</strong><p>Elegí un proveedor, subí allí tu programa, juego, video o proyecto y generá un enlace compartido de solo lectura.</p><div><a target="_blank" rel="noopener noreferrer" href="https://drive.google.com/drive/u/0/my-drive">Abrir Google Drive ↗</a><a target="_blank" rel="noopener noreferrer" href="https://onedrive.live.com/">Abrir OneDrive ↗</a><a target="_blank" rel="noopener noreferrer" href="https://www.dropbox.com/home">Abrir Dropbox ↗</a></div></div>
-        <label>02. Pegá el enlace público de solo lectura<input required type="url" value={form.external_url} onChange={(e) => set('external_url', e.target.value)} placeholder="https://drive.google.com/file/d/…" /><small>No pegues enlaces privados, contraseñas, tokens ni archivos que no tengas derecho a distribuir. XETHKIOZ no puede cambiar los permisos de tu nube.</small></label>
+        <label>02. Pegá el enlace público de solo lectura<input type="url" value={form.external_url} onChange={(e) => set('external_url', e.target.value)} placeholder="https://drive.google.com/file/d/…" /><small>No pegues enlaces privados, contraseñas, tokens ni archivos que no tengas derecho a distribuir. XETHKIOZ no puede cambiar los permisos de tu nube.</small></label>
         <label>Etiquetas (separadas por comas, máximo 8)<input maxLength={255} value={form.tags} onChange={(e) => set('tags', e.target.value)} placeholder="unity, arte, IA, comunidad" /></label>
         <label>Licencia o permisos de uso<input maxLength={80} required value={form.license} onChange={(e) => set('license', e.target.value)} /></label>
         <p className="xk-creator-form-policy">No se permiten malware, contenido robado, engaños, piratería ni enlaces peligrosos. Una solicitud de publicación no aparece automáticamente en el sitio.</p>
@@ -318,7 +323,7 @@ export function CreatorMyProjects() {
     <SEO title="Mi espacio creativo · XETHKIOZ" url="/mis-proyectos" />
     <main className="xk-creator-inner"><p className="xk-creator-eyebrow">TU BIBLIOTECA PERSONAL</p><h1>Mi espacio creativo.</h1><p className="xk-creator-lead">Administrá tus fichas, borradores y solicitudes. Los archivos siguen bajo tu control en tu nube.</p>
       <Link className="xk-creator-primary" to="/publicar">+ Nueva publicación</Link>
-      {loading ? <p className="xk-creator-state">Cargando tu biblioteca…</p> : error ? <p className="xk-creator-state" role="alert">{error}</p> : !projects.length ? <p className="xk-creator-state">Todavía no creaste ninguna publicación. Empezá compartiendo tu primer proyecto.</p> : <div className="xk-creator-drafts">{projects.map((project) => <article key={project.id}><div><small>{kindLabel(project.category)} · {project.status === 'draft' ? 'Borrador' : project.status === 'pending_review' ? 'En revisión' : project.status === 'published' ? 'Publicado' : 'Requiere correcciones'}</small><h2>{project.title}</h2><p>{project.summary}</p></div><div className="xk-creator-draft-actions">{project.status === 'published' ? <Link to={'/proyecto/' + project.id}>Ver publicación ↗</Link> : <Link to={'/publicar/' + project.id}>Editar →</Link>}{(project.status === 'draft' || project.status === 'rejected') && <button type="button" onClick={() => void removeDraft(project)}>Eliminar borrador</button>}</div></article>)}</div>}
+      {loading ? <p className="xk-creator-state">Cargando tu biblioteca…</p> : error ? <p className="xk-creator-state" role="alert">{error}</p> : !projects.length ? <p className="xk-creator-state">Todavía no creaste ninguna publicación. Empezá compartiendo tu primer proyecto.</p> : <div className="xk-creator-drafts">{projects.map((project) => <article key={project.id}><div><small>{kindLabel(project.category)} · {project.status === 'draft' ? 'Borrador' : project.status === 'pending_review' ? 'En revisión' : project.status === 'published' ? 'Publicado' : 'Requiere correcciones'}</small><h2>{project.title || 'Borrador sin título'}</h2><p>{project.summary || 'Completá los detalles cuando tengas lista tu idea.'}</p>{project.status === 'rejected' && project.rejection_reason && <p className="xk-creator-message">Motivo: {project.rejection_reason}</p>}</div><div className="xk-creator-draft-actions">{project.status === 'published' ? <Link to={'/proyecto/' + project.id}>Ver publicación ↗</Link> : <Link to={'/publicar/' + project.id}>Editar →</Link>}{(project.status === 'draft' || project.status === 'rejected') && <button type="button" onClick={() => void removeDraft(project)}>Eliminar borrador</button>}</div></article>)}</div>}
     </main>
   </PlatformFrame>
 }
