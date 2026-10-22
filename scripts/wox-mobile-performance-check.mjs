@@ -2,6 +2,26 @@ import fs from 'node:fs'
 const read = path => fs.readFileSync(new URL(`../${path}`, import.meta.url), 'utf8')
 const home=read('src/pages/Home.tsx'), game=read('src/pages/ElementalRealms.tsx'), legacy=read('src/pages/WorldOfXethkioz.tsx'), digital=read('src/pages/DigitalHub.tsx')
 const fx=read('src/components/portals/PortalEffects.tsx'), css=read('src/components/portals/PortalSystem.css'), homeCss=read('src/pages/HomePortals.css'), inside=read('src/pages/PortalInteriors.css')
+
+if (home.includes('CreatorHome as default')) {
+  const creator = read('src/creator/CreatorPlatform.tsx')
+  const creatorCss = read('src/creator/creator-platform.css')
+  const checks = [
+    ['Creator home has no autoplay players, canvas or raw 3D downloads', !/<video|<iframe|<canvas|\.glb|\.fbx/.test(creator)],
+    ['Creator app is separated from preserved Green Node and Science portals', creator.includes('to="/green-node"') && creator.includes('to="/science"') && !creator.includes('PortalEffects')],
+    ['Creator grid and mobile actions collapse to a single column', creatorCss.includes('@media(max-width:760px)') && creatorCss.includes('.xk-creator-grid,.xk-creator-verticals{grid-template-columns:1fr}')],
+    ['Motion can be disabled', creatorCss.includes('@media(prefers-reduced-motion:reduce)')],
+    ['Creator visual artwork uses CSS rather than oversized remote media', creator.includes('xk-creator-sphere') && !creator.includes('<img')],
+    ['Legacy game media retains explicit playback consent', !/autoPlay|<iframe|<canvas/.test(game) && (game.match(/controls playsInline/g)||[]).length===3],
+    ['Existing portal assets and private game IP are not modified', game.includes('elemental-realms-alpha-2.mp4') && !/(?:\.glb|\.gltf|\.fbx|\.blend)/.test(creator)],
+    ['Creator CSS source bounded', Buffer.byteLength(creatorCss) < 40000],
+  ]
+  for (const [name,ok] of checks) console.log((ok ? 'PASS ' : 'FAIL ') + name)
+  if (checks.some(([,ok]) => !ok)) process.exit(1)
+  console.log('PASS creator platform mobile performance contract')
+  process.exit(0)
+}
+
 const surfaces=[home,game,digital]
 const checks=[
  ['Launcher links to real gaming destinations; legacy game hub remains a compatible redirect', home.includes('href="#xk-universe-spotlight"') && home.includes('UniverseSpotlight') && home.includes("localizePath('/gaming/guides')") && legacy.includes('<Navigate') && !legacy.includes('<section')],

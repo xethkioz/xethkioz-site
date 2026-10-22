@@ -26,6 +26,10 @@ const FusionGlobalWisp = lazy(() => import('./components/fusion/FusionGlobalWisp
 const NexusChatWidget = lazy(() => import('./components/nexus/NexusChatWidget'))
 
 const Home = lazy(() => import('./pages/Home'))
+const CreatorExplore = lazy(() => import('./creator/CreatorPlatform').then(m => ({ default: m.CreatorExplore })))
+const CreatorPublish = lazy(() => import('./creator/CreatorPlatform').then(m => ({ default: m.CreatorPublish })))
+const CreatorMyProjects = lazy(() => import('./creator/CreatorPlatform').then(m => ({ default: m.CreatorMyProjects })))
+const CreatorProjectDetail = lazy(() => import('./creator/CreatorPlatform').then(m => ({ default: m.CreatorProjectDetail })))
 const WorldOfXethkioz = lazy(() => import('./pages/WorldOfXethkioz'))
 const ElementalRealms = lazy(() => import('./pages/ElementalRealms'))
 const GamingHub = lazy(() => import('./pages/GamingHub'))
@@ -47,6 +51,7 @@ const CmsGenerate = lazy(() => import('./cms/routes/CmsGenerate'))
 const CmsNewsEditor = lazy(() => import('./cms/routes/CmsNewsEditor'))
 const CmsNewsList = lazy(() => import('./cms/routes/CmsNewsList'))
 const CmsReviewQueue = lazy(() => import('./cms/routes/CmsReviewQueue'))
+const CreatorModeration = lazy(() => import('./cms/routes/CreatorModeration'))
 const CmsSchedule = lazy(() => import('./cms/routes/CmsSchedule'))
 const CmsMediaLibrary = lazy(() => import('./cms/routes/CmsMediaLibrary'))
 const CmsUsersPanel = lazy(() => import('./cms/routes/CmsUsersPanel'))
@@ -164,9 +169,10 @@ function AppShell() {
   const basePath = stripEnglishPrefix(location.pathname)
   const isCmsRoute = location.pathname === '/cms' || location.pathname.startsWith('/cms/')
   const isHomeRoute = basePath === '/'
+  const isCreatorRoute = ['/', '/explorar', '/publicar', '/mis-proyectos'].includes(basePath) || basePath.startsWith('/proyecto/') || basePath.startsWith('/publicar/')
   const isGamePortalRoute = basePath === '/world-of-xethkioz' || basePath === '/world-of-xethkioz/elemental-realms'
   const isThemedPortalRoute = isGamePortalRoute || ['/digital', '/digital/cursos', '/creacion-web', '/green-node'].includes(basePath)
-  const hasPublicNavigation = !isCmsRoute && !isHomeRoute && !isThemedPortalRoute
+  const hasPublicNavigation = !isCmsRoute && !isCreatorRoute && !isThemedPortalRoute
 
   useEffect(() => {
     if (!activityTrackedPortals.has(basePath)) return
@@ -201,7 +207,7 @@ function AppShell() {
           </Suspense>
         </AppErrorBoundary>
       )}
-      {!isCmsRoute && (
+      {!isCmsRoute && !isCreatorRoute && (
         <AppErrorBoundary label={errorLabels.wisp} compact>
           <Suspense fallback={null}>
             <FusionGlobalWisp />
@@ -209,21 +215,26 @@ function AppShell() {
         </AppErrorBoundary>
       )}
 
-      <div id="main-content" tabIndex={-1} className="min-h-screen bg-[#0A0A0F] outline-none">
+      <div id="main-content" tabIndex={-1} className={isCreatorRoute ? "min-h-screen outline-none" : "min-h-screen bg-[#0A0A0F] outline-none"}>
         <AppErrorBoundary label={errorLabels.routes}>
           <Suspense fallback={<RouteFallback />}>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/world-of-xethkioz" element={<WorldOfXethkioz />} />
-              <Route path="/world-of-xethkioz/elemental-realms" element={<ElementalRealms />} />
-              <Route path="/gaming" element={<GamingHub />} />
-              <Route path="/gaming/guides" element={<GamingGuides />} />
-              <Route path="/digital" element={<DigitalHub />} />
-              <Route path="/digital/cursos" element={<DigitalCourses />} />
+              <Route path="/explorar" element={<CreatorExplore />} />
+              <Route path="/publicar" element={<CreatorPublish />} />
+              <Route path="/publicar/:id" element={<CreatorPublish />} />
+              <Route path="/mis-proyectos" element={<CreatorMyProjects />} />
+              <Route path="/proyecto/:id" element={<CreatorProjectDetail />} />
+              <Route path="/world-of-xethkioz" element={<Navigate to="/explorar" replace />} />
+              <Route path="/world-of-xethkioz/elemental-realms" element={<Navigate to="/explorar" replace />} />
+              <Route path="/gaming" element={<Navigate to="/explorar" replace />} />
+              <Route path="/gaming/guides" element={<Navigate to="/explorar" replace />} />
+              <Route path="/digital" element={<Navigate to="/explorar" replace />} />
+              <Route path="/digital/cursos" element={<Navigate to="/explorar" replace />} />
               <Route path="/science" element={<ScienceLab />} />
               <Route path="/fun" element={<Navigate to="/community" replace />} />
-              <Route path="/creacion-web" element={<WebCreation />} />
-              <Route path="/community" element={<Community />} />
+              <Route path="/creacion-web" element={<Navigate to="/explorar" replace />} />
+              <Route path="/community" element={<Navigate to="/explorar" replace />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/support" element={<Support />} />
@@ -231,19 +242,24 @@ function AppShell() {
               <Route path="/editorial-policy" element={<EditorialPolicy />} />
 
               <Route path="/en" element={<Home />} />
-              <Route path="/en/world-of-xethkioz" element={<WorldOfXethkioz />} />
-              <Route path="/en/world-of-xethkioz/elemental-realms" element={<ElementalRealms />} />
-              <Route path="/en/gaming" element={<GamingHub />} />
-              <Route path="/en/gaming/guides" element={<GamingGuides />} />
-              <Route path="/en/digital" element={<DigitalHub />} />
-              <Route path="/en/digital/cursos" element={<DigitalCourses />} />
+              <Route path="/en/explorar" element={<CreatorExplore />} />
+              <Route path="/en/publicar" element={<CreatorPublish />} />
+              <Route path="/en/publicar/:id" element={<CreatorPublish />} />
+              <Route path="/en/mis-proyectos" element={<CreatorMyProjects />} />
+              <Route path="/en/proyecto/:id" element={<CreatorProjectDetail />} />
+              <Route path="/en/world-of-xethkioz" element={<Navigate to="/en/explorar" replace />} />
+              <Route path="/en/world-of-xethkioz/elemental-realms" element={<Navigate to="/en/explorar" replace />} />
+              <Route path="/en/gaming" element={<Navigate to="/en/explorar" replace />} />
+              <Route path="/en/gaming/guides" element={<Navigate to="/en/explorar" replace />} />
+              <Route path="/en/digital" element={<Navigate to="/en/explorar" replace />} />
+              <Route path="/en/digital/cursos" element={<Navigate to="/en/explorar" replace />} />
               <Route path="/en/science" element={<ScienceLab />} />
               <Route path="/en/fun" element={<Navigate to="/en/community" replace />} />
               <Route path="/en/nexus-city" element={<Navigate to="/en/community" replace />} />
               <Route path="/en/nexus-city/*" element={<Navigate to="/en/community" replace />} />
-              <Route path="/en/creacion-web" element={<WebCreation />} />
+              <Route path="/en/creacion-web" element={<Navigate to="/en/explorar" replace />} />
               <Route path="/en/green-node" element={<GreenNode />} />
-              <Route path="/en/community" element={<Community />} />
+              <Route path="/en/community" element={<Navigate to="/en/explorar" replace />} />
               <Route path="/en/about" element={<About />} />
               <Route path="/en/contact" element={<Contact />} />
               <Route path="/en/support" element={<Support />} />
@@ -275,6 +291,7 @@ function AppShell() {
                 <Route path="news/new" element={<CmsNewsEditor />} />
                 <Route path="news/:id" element={<CmsNewsEditor />} />
                 <Route path="review" element={<CmsReviewQueue />} />
+                <Route path="creator-moderation" element={<CreatorModeration />} />
                 <Route path="schedule" element={<CmsSchedule />} />
                 <Route path="media" element={<CmsMediaLibrary />} />
                 <Route path="users" element={<CmsUsersPanel />} />
@@ -292,14 +309,14 @@ function AppShell() {
         </AppErrorBoundary>
       </div>
 
-      {!isCmsRoute && !isHomeRoute && (
+      {!isCmsRoute && !isCreatorRoute && (
         <Suspense fallback={null}>
           {isThemedPortalRoute ? <PortalSupport /> : <Footer />}
         </Suspense>
       )}
       {!isCmsRoute && (
         <Suspense fallback={null}>
-          <NexusChatWidget clearMobileDock={hasPublicNavigation} />
+          {!isCreatorRoute ? <NexusChatWidget clearMobileDock={hasPublicNavigation} /> : null}
         </Suspense>
       )}
       {!isCmsRoute ? <PrivacyConsentPanel /> : null}
