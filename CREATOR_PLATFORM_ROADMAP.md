@@ -29,3 +29,10 @@ F. Preview Vercel y validación; producción solo tras build verde y revisión.
 
 ## Estado (2026-10-21)
 Frontend MVP en rama: nueva Home, catálogo, detalle de proyectos, fichas desde enlace HTTPS de nube externa, panel de borradores, filtro de categorías y reportes. La pantalla de registro existente se reutiliza. Migración SQL con RLS preparada en `supabase/migrations/20261021111400_creator_platform_mvp.sql` (NO aplicada). Los tres módulos conservados mantienen sus archivos y rutas. El OAuth Drive Picker, carga de archivo directa a Drive, moderación administrativa, validación de enlaces del lado del servidor, pruebas E2E y preview siguen pendientes. No prometer publicación automática. Producción sin cambios.
+
+## Bloque de continuidad — 2026-10-22
+- Rewrites HTTP de catálogo, fichas y rutas privadas para corregir acceso directo; `main` sigue sin cambios.
+- Panel de moderación en CMS, función Edge `creator-moderation` autenticada por rol `app_metadata` de Supabase, aprobación manual y reportes.
+- Migración preparada con auditoría, motivos de rechazo, campos de borradores incompletos y resolución de reportes. **NO ejecutada** en base de datos productiva.
+- Pendiente: validar función desplegada, aplicar migración con pruebas reales, filtrado/reputación de URL y Google Picker OAuth (no autorizar ni almacenar claves de Google automáticamente).
+- Validar preview y e2e antes de autorizar producción.

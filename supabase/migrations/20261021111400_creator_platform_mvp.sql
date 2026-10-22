@@ -21,7 +21,10 @@ create index if not exists creator_projects_author_recent_idx on public.creator_
 alter table public.creator_projects enable row level security;
 -- Grant access explicitly due to the 2026 Data API exposure change; row access is still controlled by RLS.
 grant select on public.creator_projects to anon, authenticated;
-grant insert, update, delete on public.creator_projects to authenticated;
+-- Browser users may change only creator-owned fields, never review metadata.
+grant insert (author_id, author_name, title, summary, category, external_url, cover_url, license, tags, status) on public.creator_projects to authenticated;
+grant update (author_name, title, summary, category, external_url, cover_url, license, tags, status) on public.creator_projects to authenticated;
+grant delete on public.creator_projects to authenticated;
 create policy creator_projects_public_read on public.creator_projects
   for select to anon, authenticated using (status = 'published');
 create policy creator_projects_owner_read on public.creator_projects
