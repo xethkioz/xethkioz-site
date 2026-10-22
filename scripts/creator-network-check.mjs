@@ -22,6 +22,7 @@ assert.ok(edge.includes('admin.auth.getUser(token)') && edge.includes('caller.ap
 assert.ok(edge.includes('SELF_REVIEW_DENIED') && edge.includes('safeExternalUrl'), 'Moderator safety checks missing')
 assert.ok(read('supabase/config.toml').includes('[functions.creator-moderation]\nverify_jwt = true'), 'JWT verification not enabled')
 assert.ok(sql.includes('creator_projects_owner_insert') && sql.includes('creator_projects_owner_update'), 'RLS missing')
+assert.ok(sql.includes('revoke all on public.creator_projects from anon, authenticated') && sql.includes('revoke all on public.creator_project_reports from anon, authenticated'), 'Default privileges were not revoked')
 assert.ok(sql.includes('grant update (author_name') && !sql.includes('grant insert, update, delete on public.creator_projects'), 'Moderation metadata writable by users')
 assert.ok(sql.includes('creator_moderation_events') && sql.includes('creator_publish_timestamp'), 'Audit/timestamps missing')
 assert.ok(!frontend.includes('SUPABASE_SERVICE_ROLE_KEY'), 'Browser contains server-only key')
