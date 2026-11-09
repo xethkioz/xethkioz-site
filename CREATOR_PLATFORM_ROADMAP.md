@@ -45,3 +45,6 @@ Frontend MVP en rama: nueva Home, catálogo, detalle de proyectos, fichas desde 
 - Nuevas rutas directas /creador/:id y /en/creador/:id, búsqueda inicial con ?q=, noindex para borradores, biblioteca y fichas no aprobadas.
 - IMPORTANTE: migración aún NO aplicada y función Edge NO desplegada; no hay CRUD real ni aprobación funcional hasta pruebas de RLS.
 - Pendiente: resolver protección del preview para E2E y revisar SEO legacy, internacionalización, Drive Picker y cuotas.
+
+## Consolidación de SEO — 2026-11-09
+Se prepararon redirects permanentes en la rama de prueba de 23 rutas retiradas hacia /explorar o /en/explorar; sin borrar páginas históricas. El sitemap principal publicita únicamente el catálogo, Green Node, Ciencia, Inicio y páginas de confianza. /news y el sitemap histórico de noticias siguen accesibles como archivo; no se publican novedades nuevas desde aquí. Pendiente validar la traducción del contenido /en antes de promoverlo.

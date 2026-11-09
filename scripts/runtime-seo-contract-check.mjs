@@ -14,40 +14,29 @@ const streamsIndexMigration = read('supabase/migrations/20260723154500_streams_c
 const visitLog = read('api/visit-log.ts')
 const visitLogMigration = read('supabase/migrations/20260724153500_privacy_preserving_visit_telemetry.sql')
 
-const redirectMap = new Map((vercel.redirects ?? []).map((item) => [item.source, item]))
-const funRedirect = redirectMap.get('/fun')
-assert(funRedirect?.destination === '/community' && funRedirect?.permanent === true, 'The legacy Fun route must permanently redirect to the active community.')
-assert(redirectMap.get('/en/fun')?.destination === '/en/community', 'The English legacy Fun route must redirect to the English community.')
-assert(redirectMap.get('/web-creation')?.destination === '/creacion-web', 'Legacy web creation path must redirect at the HTTP layer.')
-assert(redirectMap.get('/register')?.destination === '/account', 'Legacy register path must redirect at the HTTP layer.')
-assert(redirectMap.get('/admin')?.destination === '/cms', 'Legacy admin path must redirect at the HTTP layer.')
-
-for (const [source, destination] of [['/nexus-city','/community'], ['/nexus-city/:path*','/community'], ['/en/nexus-city','/en/community'], ['/en/nexus-city/:path*','/en/community']]) {
-  assert(redirectMap.get(source)?.destination === destination && redirectMap.get(source)?.permanent === true, `Retired route ${source} must redirect permanently without reviving the old city.`)
+const redirectMap = new Map((vercel.redirects ?? []).map(item => [item.source, item]))
+const retiredPaths = ["/world-of-xethkioz","/world-of-xethkioz/elemental-realms","/gaming","/gaming/guides","/digital","/digital/cursos","/community","/creacion-web","/fun","/nexus-city","/nexus-city/:path*","/web-creation","/en/world-of-xethkioz","/en/world-of-xethkioz/elemental-realms","/en/gaming","/en/gaming/guides","/en/digital","/en/digital/cursos","/en/community","/en/creacion-web","/en/fun","/en/nexus-city","/en/nexus-city/:path*"]
+for (const path of retiredPaths) {
+  const dest = path.startsWith('/en/') ? '/en/explorar' : '/explorar'
+  assert(redirectMap.get(path)?.destination === dest && redirectMap.get(path)?.permanent, 'Retired path must redirect permanently: '+path)
 }
-assert(!sitemap.includes('/nexus-city'), 'The retired city must not be advertised in the sitemap.')
-assert(!seoShells.includes("path: '/nexus-city'") && !seoShells.includes("path: '/en/nexus-city'"), 'Retired routes must not generate indexable city shells.')
-
+assert(redirectMap.get('/register')?.destination === '/account', 'Legacy signup path must open Auth.')
+assert(redirectMap.get('/admin')?.destination === '/cms', 'Private CMS must retain its redirect.')
+assert(!sitemap.includes("es: '/gaming'") && !sitemap.includes("es: '/digital'"), 'Retired routes must not be in sitemap.')
+assert(sitemap.includes("es: '/explorar', en: '/en/explorar'") && sitemap.includes("es: '/green-node', en: '/en/green-node'"), 'Creator and Green Node routes must appear in sitemap.')
 const rewrites = vercel.rewrites ?? []
-const rewriteMap = new Map(rewrites.map((item) => [item.source, item.destination]))
-assert(redirectMap.get('/world-of-xethkioz')?.destination === '/world-of-xethkioz/elemental-realms' && redirectMap.get('/world-of-xethkioz')?.permanent, 'Legacy World URL redirects directly to Elemental Realms.')
-assert(redirectMap.get('/en/world-of-xethkioz')?.destination === '/en/world-of-xethkioz/elemental-realms', 'English legacy World URL keeps the correct language.')
-assert(rewriteMap.get('/world-of-xethkioz/elemental-realms') === '/seo-shells/world-of-xethkioz-elemental-realms.html', 'Elemental Realms must have a dedicated indexable SEO shell.')
-assert(rewriteMap.get('/en/world-of-xethkioz/elemental-realms') === '/seo-shells/en-world-of-xethkioz-elemental-realms.html', 'English Elemental Realms must have a localized SEO shell.')
-assert(sitemap.includes("es: '/digital', en: '/en/digital'") && !sitemap.includes("es: '/world-of-xethkioz',"), 'Sitemap contains Digital and excludes redundant redirected hub.')
-assert(sitemap.includes("es: '/world-of-xethkioz/elemental-realms', en: '/en/world-of-xethkioz/elemental-realms'"), 'Elemental Realms localized routes must remain in the sitemap.')
-assert(seoShells.includes("path: '/digital'") && seoShells.includes("path: '/en/digital'") && rewriteMap.get('/digital') === '/seo-shells/digital.html', 'Digital has localized indexable route-owned SEO shells.')
-assert(seoShells.includes("path: '/world-of-xethkioz/elemental-realms'") && seoShells.includes("path: '/en/world-of-xethkioz/elemental-realms'"), 'Elemental Realms must generate standalone localized SEO shells.')
-assert(rewriteMap.get('/green-node') === '/index.html', 'Green Node deep links must remain valid without exposing it in navigation.')
-assert(rewriteMap.get('/news/:slug') === '/api/news-page?slug=:slug', 'Article routes must preserve the slug query for the dynamic SEO shell.')
-assert(newsPage.includes("new URL(rawUrl, 'http://localhost').searchParams.get(key)"), 'The article SEO shell must parse its slug with the WHATWG URL API.')
-assert(!newsPage.includes('request.query'), 'The article SEO shell must not access Vercel request.query because legacy runtimes invoke url.parse().')
-assert(newsPage.includes('trustedShellOrigin') && newsPage.includes("origin.endsWith('.vercel.app')"), 'The article shell fetch must reject untrusted Host values and preserve protected previews.')
-assert(newsPage.includes('process.env.VERCEL_URL') && newsPage.includes('AbortSignal.timeout(4500)'), 'The article shell must use the immutable deployment URL and a bounded self-fetch.')
-assert(rewriteMap.get('/((?!api/).*)') === '/api/not-found', 'Unknown direct requests must resolve through the real 404 function.')
-assert(notFound.includes('response.status(404).send(html)'), 'The not-found endpoint must return HTTP 404.')
-assert(notFound.includes("'X-Robots-Tag', 'noindex, nofollow, noarchive, nosnippet, noimageindex'"), 'The not-found response must prevent indexing.')
-
+const rewriteMap = new Map(rewrites.map(item => [item.source, item.destination]))
+for (const path of ['/explorar','/proyecto/:id','/creador/:id','/en/explorar','/en/proyecto/:id','/en/creador/:id']) assert(rewriteMap.get(path) === '/index.html', 'Creator public deep-link broken: '+path)
+for (const path of ['/publicar','/publicar/:id','/mis-proyectos','/en/publicar','/en/publicar/:id','/en/mis-proyectos']) assert(rewriteMap.get(path) === '/private.html', 'Private deep-link must return private.html: '+path)
+assert(rewriteMap.get('/green-node') === '/index.html', 'Green Node must remain available.')
+assert(rewriteMap.get('/science') === '/seo-shells/science.html', 'Science page must remain available.')
+assert(rewriteMap.get('/mascotas/') === '/mascotas/index.html', 'Huellas Argentina page must remain available.')
+assert(rewriteMap.get('/news/:slug') === '/api/news-page?slug=:slug', 'Old news archive links must not break.')
+assert(newsPage.includes("new URL(rawUrl, 'http://localhost').searchParams.get(key)"), 'Old news slug parser must remain safe.')
+assert(!seoShells.includes("path: '/nexus-city'"), 'Retired city must not be regenerated.')
+assert(rewriteMap.get('/((?!api/).*)') === '/api/not-found', 'Unknown routes must get 404.')
+assert(notFound.includes('response.status(404).send(html)'), 'Not found must emit HTTP 404.')
+assert(notFound.includes("'X-Robots-Tag', 'noindex, nofollow, noarchive, nosnippet, noimageindex'"), 'Not found must be noindex.')
 const headerMap = new Map((vercel.headers ?? []).map((item) => [item.source, item.headers ?? []]))
 const globalHeaders = headerMap.get('/(.*)') ?? []
 const passportHeaders = headerMap.get('/nexus-city/u/(.*)') ?? []

@@ -21,12 +21,12 @@
   "redirects": [
     {
       "source": "/world-of-xethkioz",
-      "destination": "/world-of-xethkioz/elemental-realms",
+      "destination": "/explorar",
       "permanent": true
     },
     {
       "source": "/en/world-of-xethkioz",
-      "destination": "/en/world-of-xethkioz/elemental-realms",
+      "destination": "/en/explorar",
       "permanent": true
     },
     {
@@ -41,37 +41,37 @@
     },
     {
       "source": "/nexus-city",
-      "destination": "/community",
+      "destination": "/explorar",
       "permanent": true
     },
     {
       "source": "/nexus-city/:path*",
-      "destination": "/community",
+      "destination": "/explorar",
       "permanent": true
     },
     {
       "source": "/en/nexus-city",
-      "destination": "/en/community",
+      "destination": "/en/explorar",
       "permanent": true
     },
     {
       "source": "/en/nexus-city/:path*",
-      "destination": "/en/community",
+      "destination": "/en/explorar",
       "permanent": true
     },
     {
       "source": "/fun",
-      "destination": "/community",
+      "destination": "/explorar",
       "permanent": true
     },
     {
       "source": "/en/fun",
-      "destination": "/en/community",
+      "destination": "/en/explorar",
       "permanent": true
     },
     {
       "source": "/web-creation",
-      "destination": "/creacion-web",
+      "destination": "/explorar",
       "permanent": true
     },
     {
@@ -82,6 +82,76 @@
     {
       "source": "/admin",
       "destination": "/cms",
+      "permanent": true
+    },
+    {
+      "source": "/world-of-xethkioz/elemental-realms",
+      "destination": "/explorar",
+      "permanent": true
+    },
+    {
+      "source": "/gaming",
+      "destination": "/explorar",
+      "permanent": true
+    },
+    {
+      "source": "/gaming/guides",
+      "destination": "/explorar",
+      "permanent": true
+    },
+    {
+      "source": "/digital",
+      "destination": "/explorar",
+      "permanent": true
+    },
+    {
+      "source": "/digital/cursos",
+      "destination": "/explorar",
+      "permanent": true
+    },
+    {
+      "source": "/community",
+      "destination": "/explorar",
+      "permanent": true
+    },
+    {
+      "source": "/creacion-web",
+      "destination": "/explorar",
+      "permanent": true
+    },
+    {
+      "source": "/en/world-of-xethkioz/elemental-realms",
+      "destination": "/en/explorar",
+      "permanent": true
+    },
+    {
+      "source": "/en/gaming",
+      "destination": "/en/explorar",
+      "permanent": true
+    },
+    {
+      "source": "/en/gaming/guides",
+      "destination": "/en/explorar",
+      "permanent": true
+    },
+    {
+      "source": "/en/digital",
+      "destination": "/en/explorar",
+      "permanent": true
+    },
+    {
+      "source": "/en/digital/cursos",
+      "destination": "/en/explorar",
+      "permanent": true
+    },
+    {
+      "source": "/en/community",
+      "destination": "/en/explorar",
+      "permanent": true
+    },
+    {
+      "source": "/en/creacion-web",
+      "destination": "/en/explorar",
       "permanent": true
     }
   ],
