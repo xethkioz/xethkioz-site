@@ -126,25 +126,11 @@ Deno.serve(async (req: Request) => {
       if (projectError || !project || project.status !== 'pending_review') return json(req, 409, { ok: false, error: 'PROJECT_CHANGED' })
       if (project.author_id === caller.id) return json(req, 403, { ok: false, error: 'SELF_REVIEW_DENIED' })
       if (decision === 'approve' && !safeExternalUrl(project.external_url)) return json(req, 400, { ok: false, error: 'UNSAFE_EXTERNAL_URL' })
-      const next = decision === 'approve' ? 'published' : 'rejected'
-      const patch = {
-        status: next,
-        published_at: decision === 'approve' ? new Date().toISOString() : null,
-        reviewed_at: new Date().toISOString(),
-        reviewed_by: caller.id,
-        rejection_reason: decision === 'reject' ? reason : null,
-        updated_at: new Date().toISOString(),
-      }
-      const { data: changed, error: updateError } = await admin.from('creator_projects').update(patch)
-        .eq('id', id).eq('status', 'pending_review').select('id').maybeSingle()
-      if (updateError || !changed) return json(req, 409, { ok: false, error: 'PROJECT_CHANGED' })
-      const { error: auditError } = await admin.from('creator_moderation_events').insert({
-        project_id: id, reviewer_id: caller.id, action: decision === 'approve' ? 'approved' : 'rejected', note: reason,
+      // Atomic RPC: status change and audit event commit or roll back together.
+      const { data: next, error: transactionError } = await admin.rpc('creator_review_project', {
+        p_actor: caller.id, p_project: id, p_decision: decision, p_note: reason,
       })
-      if (auditError) {
-        console.error('[creator-moderation] Audit write failed')
-        return json(req, 503, { ok: false, error: 'AUDIT_WRITE_FAILED' })
-      }
+      if (transactionError || !next) return json(req, 409, { ok: false, error: 'REVIEW_NOT_SAVED' })
       return json(req, 200, { ok: true, projectId: id, status: next })
     }
 
@@ -155,28 +141,11 @@ Deno.serve(async (req: Request) => {
       if (!validUuid(id) || !['remove', 'dismiss'].includes(decision) || reason.length < 10)
         return json(req, 400, { ok: false, error: 'INVALID_RESOLUTION' })
       if (decision === 'remove' && body.reviewed !== true) return json(req, 400, { ok: false, error: 'MANUAL_REVIEW_REQUIRED' })
-      const { data: report, error: reportError } = await admin.from('creator_project_reports')
-        .select('id,project_id,resolved_at').eq('id', id).maybeSingle()
-      if (reportError || !report || report.resolved_at) return json(req, 409, { ok: false, error: 'REPORT_CHANGED' })
-      if (decision === 'remove') {
-        const { data: project } = await admin.from('creator_projects').select('id,author_id,status').eq('id', report.project_id).maybeSingle()
-        if (!project || project.status !== 'published') return json(req, 409, { ok: false, error: 'PROJECT_NOT_PUBLIC' })
-        if (project.author_id === caller.id) return json(req, 403, { ok: false, error: 'SELF_REVIEW_DENIED' })
-        const { data: removed, error: removalError } = await admin.from('creator_projects').update({
-          status: 'rejected', published_at: null, rejection_reason: reason,
-          reviewed_by: caller.id, reviewed_at: new Date().toISOString(), updated_at: new Date().toISOString(),
-        }).eq('id', report.project_id).eq('status', 'published').select('id').maybeSingle()
-        if (removalError || !removed) return json(req, 409, { ok: false, error: 'PROJECT_CHANGED' })
-      }
-      const { error: resolvedError } = await admin.from('creator_project_reports').update({
-        resolved_at: new Date().toISOString(), resolved_by: caller.id, resolution: decision === 'remove' ? 'removed' : 'dismissed',
-      }).eq('id', id).is('resolved_at', null)
-      if (resolvedError) return json(req, 503, { ok: false, error: 'REPORT_RESOLUTION_FAILED' })
-      const { error: auditError } = await admin.from('creator_moderation_events').insert({
-        project_id: report.project_id, reviewer_id: caller.id,
-        action: decision === 'remove' ? 'unpublished' : 'report_dismissed', note: reason,
+      // Report resolution and any necessary unpublication are one transaction.
+      const { data: resolution, error: transactionError } = await admin.rpc('creator_resolve_report', {
+        p_actor: caller.id, p_report: id, p_decision: decision, p_note: reason,
       })
-      if (auditError) return json(req, 503, { ok: false, error: 'AUDIT_WRITE_FAILED' })
+      if (transactionError || !resolution) return json(req, 409, { ok: false, error: 'REPORT_RESOLUTION_NOT_SAVED' })
       return json(req, 200, { ok: true, reportId: id })
     }
 

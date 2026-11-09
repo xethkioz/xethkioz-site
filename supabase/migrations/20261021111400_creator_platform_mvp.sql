@@ -94,3 +94,115 @@ alter table public.creator_project_reports add column if not exists resolution t
 -- No authenticated user can set status='published' through the Data API under these policies.
 -- Server-side URL validation, reputation scanning, rate limits, copyright workflow, and OAuth
 -- are required before opening public submissions at scale.
+
+
+-- Two atomic server-only workflows. The caller is always the service_role from the
+-- authenticated Edge Function. SECURITY INVOKER avoids a superuser bypass.
+create or replace function public.creator_review_project(
+  p_actor uuid, p_project uuid, p_decision text, p_note text default ''
+) returns text
+language plpgsql
+security invoker
+set search_path = ''
+as $function$
+declare
+  v_project public.creator_projects%rowtype;
+  v_status text;
+begin
+  -- The Edge Function verifies the user with auth.getUser and app_metadata
+  -- before calling this RPC with its private service-role credential.
+  if p_decision not in ('approve','reject')
+     or char_length(coalesce(p_note, '')) > 500
+     or (p_decision = 'reject' and char_length(trim(coalesce(p_note, ''))) < 10) then
+    raise exception 'Invalid moderation decision' using errcode = '22023';
+  end if;
+
+  select * into v_project from public.creator_projects where id = p_project for update;
+  if not found or v_project.status <> 'pending_review' then
+    raise exception 'Project status changed' using errcode = '22023';
+  end if;
+  if v_project.author_id = p_actor then
+    raise exception 'Self approval denied' using errcode = '42501';
+  end if;
+  -- Browser links need manual domain/content review in Edge before approval.
+  if p_decision = 'approve' and v_project.external_url !~* '^https://[^ ]+' then
+    raise exception 'Invalid external project link' using errcode = '22023';
+  end if;
+  v_status := case when p_decision = 'approve' then 'published' else 'rejected' end;
+  update public.creator_projects
+  set status = v_status,
+      published_at = case when p_decision = 'approve' then now() else null end,
+      reviewed_by = p_actor,
+      reviewed_at = now(),
+      rejection_reason = case when p_decision = 'reject' then trim(p_note) else null end,
+      updated_at = now()
+  where id = p_project;
+  insert into public.creator_moderation_events(project_id, reviewer_id, action, note)
+    values (p_project, p_actor, case when p_decision = 'approve' then 'approved' else 'rejected' end, coalesce(p_note, ''));
+  return v_status;
+end;
+$function$;
+
+create or replace function public.creator_resolve_report(
+  p_actor uuid, p_report uuid, p_decision text, p_note text
+) returns text
+language plpgsql
+security invoker
+set search_path = ''
+as $function$
+declare
+  v_report public.creator_project_reports%rowtype;
+  v_project public.creator_projects%rowtype;
+  v_resolution text;
+begin
+  -- Only the service_role has EXECUTE. The Edge Function verifies app_metadata.
+  if p_decision not in ('remove', 'dismiss')
+     or char_length(trim(coalesce(p_note, ''))) not between 10 and 500 then
+    raise exception 'Invalid report resolution' using errcode = '22023';
+  end if;
+  select * into v_report from public.creator_project_reports where id = p_report for update;
+  if not found or v_report.resolved_at is not null then
+    raise exception 'Report already resolved' using errcode = '22023';
+  end if;
+  select * into v_project from public.creator_projects where id = v_report.project_id for update;
+  if not found or v_project.author_id = p_actor then
+    raise exception 'Self moderation denied' using errcode = '42501';
+  end if;
+  if p_decision = 'remove' then
+    if v_project.status <> 'published' then
+      raise exception 'Project is no longer published' using errcode = '22023';
+    end if;
+    update public.creator_projects
+    set status = 'rejected',
+        published_at = null,
+        reviewed_by = p_actor,
+        reviewed_at = now(),
+        rejection_reason = trim(p_note),
+        updated_at = now()
+    where id = v_report.project_id;
+  end if;
+  v_resolution := case when p_decision = 'remove' then 'removed' else 'dismissed' end;
+  update public.creator_project_reports
+  set resolved_at = now(), resolved_by = p_actor, resolution = v_resolution
+  where id = p_report;
+  insert into public.creator_moderation_events(project_id, reviewer_id, action, note)
+    values (v_report.project_id, p_actor,
+            case when p_decision = 'remove' then 'unpublished' else 'report_dismissed' end,
+            trim(p_note));
+  return v_resolution;
+end;
+$function$;
+
+-- PostgreSQL grants EXECUTE on new functions to PUBLIC by default.
+-- Both functions must be inaccessible to anon and regular authenticated users.
+revoke execute on function public.creator_review_project(uuid, uuid, text, text)
+  from public, anon, authenticated;
+revoke execute on function public.creator_resolve_report(uuid, uuid, text, text)
+  from public, anon, authenticated;
+grant execute on function public.creator_review_project(uuid, uuid, text, text)
+  to service_role;
+grant execute on function public.creator_resolve_report(uuid, uuid, text, text)
+  to service_role;
+grant select, update on public.creator_projects to service_role;
+grant select, update on public.creator_project_reports to service_role;
+grant insert on public.creator_moderation_events to service_role;
