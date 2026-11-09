@@ -36,3 +36,12 @@ Frontend MVP en rama: nueva Home, catálogo, detalle de proyectos, fichas desde 
 - Migración preparada con auditoría, motivos de rechazo, campos de borradores incompletos y resolución de reportes. **NO ejecutada** en base de datos productiva.
 - Pendiente: validar función desplegada, aplicar migración con pruebas reales, filtrado/reputación de URL y Google Picker OAuth (no autorizar ni almacenar claves de Google automáticamente).
 - Validar preview y e2e antes de autorizar producción.
+
+## Bloque de continuación — 2026-11-09
+- Comprobación remota: los previews READY de Vercel exigen login de Vercel (HTTP 200 de la pantalla Login - Vercel), por lo que no equivalen a una verificación E2E accesible desde un navegador anónimo.
+- Moderación robustecida: decisiones y eventos en una única transacción mediante funciones PostgreSQL SECURITY INVOKER, con EXECUTE exclusivo de service_role. Autorización real de `app_metadata` se valida en Edge con auth.getUser; ninguna clave privada llega al navegador.
+- SEO base corregido: home y meta de buscador apuntan a la comunidad creadora.
+- Perfil público de creadores disponible únicamente a partir de fichas ya aprobadas, sin acceder a cuentas privadas ni correos.
+- Nuevas rutas directas /creador/:id y /en/creador/:id, búsqueda inicial con ?q=, noindex para borradores, biblioteca y fichas no aprobadas.
+- IMPORTANTE: migración aún NO aplicada y función Edge NO desplegada; no hay CRUD real ni aprobación funcional hasta pruebas de RLS.
+- Pendiente: resolver protección del preview para E2E y revisar SEO legacy, internacionalización, Drive Picker y cuotas.

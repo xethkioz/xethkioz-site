@@ -30,6 +30,7 @@ const CreatorExplore = lazy(() => import('./creator/CreatorPlatform').then(m => 
 const CreatorPublish = lazy(() => import('./creator/CreatorPlatform').then(m => ({ default: m.CreatorPublish })))
 const CreatorMyProjects = lazy(() => import('./creator/CreatorPlatform').then(m => ({ default: m.CreatorMyProjects })))
 const CreatorProjectDetail = lazy(() => import('./creator/CreatorPlatform').then(m => ({ default: m.CreatorProjectDetail })))
+const CreatorPublicProfile = lazy(() => import('./creator/CreatorPlatform').then(m => ({ default: m.CreatorPublicProfile })))
 const WorldOfXethkioz = lazy(() => import('./pages/WorldOfXethkioz'))
 const ElementalRealms = lazy(() => import('./pages/ElementalRealms'))
 const GamingHub = lazy(() => import('./pages/GamingHub'))
@@ -225,6 +226,7 @@ function AppShell() {
               <Route path="/publicar/:id" element={<CreatorPublish />} />
               <Route path="/mis-proyectos" element={<CreatorMyProjects />} />
               <Route path="/proyecto/:id" element={<CreatorProjectDetail />} />
+              <Route path="/creador/:id" element={<CreatorPublicProfile />} />
               <Route path="/world-of-xethkioz" element={<Navigate to="/explorar" replace />} />
               <Route path="/world-of-xethkioz/elemental-realms" element={<Navigate to="/explorar" replace />} />
               <Route path="/gaming" element={<Navigate to="/explorar" replace />} />
@@ -247,6 +249,7 @@ function AppShell() {
               <Route path="/en/publicar/:id" element={<CreatorPublish />} />
               <Route path="/en/mis-proyectos" element={<CreatorMyProjects />} />
               <Route path="/en/proyecto/:id" element={<CreatorProjectDetail />} />
+              <Route path="/en/creador/:id" element={<CreatorPublicProfile />} />
               <Route path="/en/world-of-xethkioz" element={<Navigate to="/en/explorar" replace />} />
               <Route path="/en/world-of-xethkioz/elemental-realms" element={<Navigate to="/en/explorar" replace />} />
               <Route path="/en/gaming" element={<Navigate to="/en/explorar" replace />} />

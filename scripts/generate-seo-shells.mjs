@@ -158,11 +158,11 @@ const englishRoutes = [
   {
     file: 'en-home.html',
     path: '/en',
-    title: 'World of Xethkioz | Four portals. One universe.',
-    description: 'Gaming news and guides, the World of Xethkioz universe with Elemental Realms in development, VEYR local AI and digital creation.',
-    keywords: 'XETHKIOZ, gaming, technology, artificial intelligence, World of Xethkioz, Elemental Realms, web creation, news',
+    title: 'XETHKIOZ | Create, share and discover',
+    description: 'A creative network for games, software, videos, art and AI projects. Your files stay in your own cloud storage.',
+    keywords: 'XETHKIOZ, creators, games, software, artificial intelligence, community, digital art, cloud storage',
     image: '/assets/world-of-xethkioz/world-of-xethkioz-logo.webp',
-    imageAlt: 'XETHKIOZ · World of Xethkioz',
+    imageAlt: 'XETHKIOZ creator community',
   },
   {
     file: 'en-gaming.html',

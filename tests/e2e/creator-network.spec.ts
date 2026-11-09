@@ -28,3 +28,14 @@ test('Secciones preservadas',async ({page})=>{
   const response=await page.goto('/mascotas/')
   expect(response?.status()).toBeLessThan(400)
 })
+
+test('Perfil público inválido no expone cuentas ni datos privados',async({page})=>{
+  await page.goto('/creador/no-es-uuid')
+  await expect(page.getByRole('heading',{name:'Creador XETHKIOZ'})).toBeVisible()
+  await expect(page.getByRole('alert')).toContainText('Perfil no disponible.')
+  await expect(page.locator('meta[name="robots"][content*="noindex"]').first()).toHaveCount(1)
+})
+test('Búsqueda inicial puede abrirse desde un enlace compartido',async({page})=>{
+  await page.goto('/explorar?q=aventura')
+  await expect(page.getByPlaceholder(/Buscar juegos/)).toHaveValue('aventura')
+})

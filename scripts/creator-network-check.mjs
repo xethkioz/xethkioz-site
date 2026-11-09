@@ -8,7 +8,7 @@ const frontend = read('src/creator/CreatorPlatform.tsx')
 const edge = read('supabase/functions/creator-moderation/index.ts')
 const sql = read('supabase/migrations/20261021111400_creator_platform_mvp.sql')
 const routes = new Map(vercel.rewrites.map(r => [r.source, r.destination]))
-const paths = ['/explorar','/publicar','/publicar/:id','/mis-proyectos','/proyecto/:id']
+const paths = ['/explorar','/publicar','/publicar/:id','/mis-proyectos','/proyecto/:id','/creador/:id']
 for (const path of paths.flatMap(p => [p,'/en'+p])) {
   assert.ok(routes.has(path), 'Vercel direct access unavailable: '+path)
   assert.ok(app.includes('path="'+path+'"'), 'React route missing: '+path)
@@ -16,6 +16,9 @@ for (const path of paths.flatMap(p => [p,'/en'+p])) {
 for(const path of ['/green-node','/science']) assert.ok(app.includes('path="'+path+'"'), 'Section removed: '+path)
 assert.ok(fs.existsSync('public/mascotas/index.html'), 'Mascotas removed')
 assert.ok(frontend.includes('creator_project_reports'), 'Report button missing')
+assert.ok(frontend.includes('CreatorPublicProfile') && frontend.includes('noIndex={!project}') && frontend.includes('get(\'q\')'), 'Public creator profiles, search query or private metadata missing')
+assert.ok(read('index.html').includes('Creá, compartí y descubrí'), 'Home must advertise the creator network in crawl metadata')
+assert.ok(read('src/components/SEO.tsx').includes('noIndex = false') && read('src/components/SEO.tsx').includes('/explorar?q='), 'Search metadata or privacy controls not migrated')
 assert.ok(frontend.includes("status === 'draft'") && frontend.includes("status === 'pending_review'"), 'Draft/pending forms not guarded')
 assert.ok(app.includes('creator-moderation') && read('src/cms/layout/CmsSidebar.tsx').includes('creator-moderation'), 'CMS moderation not connected')
 assert.ok(edge.includes('admin.auth.getUser(token)') && edge.includes('caller.app_metadata?.role'), 'Untrusted moderator roles')

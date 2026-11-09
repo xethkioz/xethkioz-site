@@ -166,7 +166,7 @@ export function CreatorExplore() {
   const { items, loading, error } = usePublishedProjects()
   const initialCategory = new URLSearchParams(window.location.search).get('categoria') || 'todos'
   const [category, setCategory] = useState(initialCategory)
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState(() => new URLSearchParams(window.location.search).get('q') || '')
   const filtered = items.filter((item) => (category === 'todos' || item.category === category)
     && (item.title + ' ' + item.summary + ' ' + item.tags.join(' ')).toLocaleLowerCase('es').includes(search.trim().toLocaleLowerCase('es')))
   return <PlatformFrame>
@@ -203,11 +203,11 @@ export function CreatorProjectDetail() {
     setReportMessage(reportError ? 'No fue posible registrar el reporte; puede que ya lo hayas reportado.' : 'Reporte recibido para revisión.')
   }
   return <PlatformFrame>
-    <SEO title={project ? project.title + ' · XETHKIOZ' : 'Proyecto · XETHKIOZ'} url={id ? '/proyecto/' + id : '/explorar'} />
+    <SEO title={project ? project.title + ' · XETHKIOZ' : 'Proyecto · XETHKIOZ'} url={id ? '/proyecto/' + id : '/explorar'} noIndex={!project} />
     <main className="xk-creator-inner"><Link to="/explorar" className="xk-creator-back">← Volver al catálogo</Link>
       {error && <p className="xk-creator-state" role="alert">{error}</p>}
       {!error && !project && <p className="xk-creator-state">Cargando proyecto…</p>}
-      {project && <article className="xk-creator-detail"><span className="xk-creator-eyebrow">{kindLabel(project.category)} · POR {project.author_name}</span><h1>{project.title}</h1><p className="xk-creator-lead">{project.summary}</p>
+      {project && <article className="xk-creator-detail"><span className="xk-creator-eyebrow">{kindLabel(project.category)} · POR <Link className="xk-creator-author-link" to={"/creador/" + project.author_id}>{project.author_name}</Link></span><h1>{project.title}</h1><p className="xk-creator-lead">{project.summary}</p>
         <div className="xk-creator-pills">{project.tags.map((tag) => <span key={tag}>#{tag}</span>)}</div>
         <p><strong>Licencia:</strong> {project.license}</p>
         <p>El archivo está alojado fuera de XETHKIOZ, en la nube del creador. Revisá los permisos y la procedencia del archivo antes de descargarlo o ejecutarlo.</p>
@@ -272,7 +272,7 @@ export function CreatorPublish() {
     navigate('/mis-proyectos?guardado=1')
   }
   return <PlatformFrame>
-    <SEO title="Publicar una creación · XETHKIOZ" url="/publicar" />
+    <SEO title="Publicar una creación · XETHKIOZ" url="/publicar" noIndex />
     <main className="xk-creator-inner xk-creator-form-page"><Link className="xk-creator-back" to="/mis-proyectos">← Mi espacio</Link><p className="xk-creator-eyebrow">ESTUDIO DE CREACIÓN</p><h1>{id ? 'Editar mi proyecto' : 'Compartí tu creación.'}</h1>
       <p className="xk-creator-lead">Tu archivo sigue guardado en Google Drive, Dropbox, OneDrive o tu nube. XETHKIOZ muestra la ficha y el enlace después de una revisión.</p>
       {rejection && <p className="xk-creator-message" role="status"><strong>Corrección solicitada:</strong> {rejection}</p>}
@@ -320,10 +320,63 @@ export function CreatorMyProjects() {
     setProjects((items) => items.filter((item) => item.id !== project.id))
   }
   return <PlatformFrame>
-    <SEO title="Mi espacio creativo · XETHKIOZ" url="/mis-proyectos" />
+    <SEO title="Mi espacio creativo · XETHKIOZ" url="/mis-proyectos" noIndex />
     <main className="xk-creator-inner"><p className="xk-creator-eyebrow">TU BIBLIOTECA PERSONAL</p><h1>Mi espacio creativo.</h1><p className="xk-creator-lead">Administrá tus fichas, borradores y solicitudes. Los archivos siguen bajo tu control en tu nube.</p>
       <Link className="xk-creator-primary" to="/publicar">+ Nueva publicación</Link>
       {loading ? <p className="xk-creator-state">Cargando tu biblioteca…</p> : error ? <p className="xk-creator-state" role="alert">{error}</p> : !projects.length ? <p className="xk-creator-state">Todavía no creaste ninguna publicación. Empezá compartiendo tu primer proyecto.</p> : <div className="xk-creator-drafts">{projects.map((project) => <article key={project.id}><div><small>{kindLabel(project.category)} · {project.status === 'draft' ? 'Borrador' : project.status === 'pending_review' ? 'En revisión' : project.status === 'published' ? 'Publicado' : 'Requiere correcciones'}</small><h2>{project.title || 'Borrador sin título'}</h2><p>{project.summary || 'Completá los detalles cuando tengas lista tu idea.'}</p>{project.status === 'rejected' && project.rejection_reason && <p className="xk-creator-message">Motivo: {project.rejection_reason}</p>}</div><div className="xk-creator-draft-actions">{project.status === 'published' ? <Link to={'/proyecto/' + project.id}>Ver publicación ↗</Link> : <Link to={'/publicar/' + project.id}>Editar →</Link>}{(project.status === 'draft' || project.status === 'rejected') && <button type="button" onClick={() => void removeDraft(project)}>Eliminar borrador</button>}</div></article>)}</div>}
+    </main>
+  </PlatformFrame>
+}
+
+
+/** Public profiles deliberately derive identity only from approved project metadata.
+ * A visitor cannot enumerate private accounts, drafts or email addresses. */
+export function CreatorPublicProfile() {
+  const { id } = useParams()
+  const [projects, setProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  useEffect(() => {
+    let active = true
+    const valid = Boolean(id && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id))
+    if (!valid) {
+      setError('Perfil no disponible.')
+      setLoading(false)
+      return
+    }
+    if (!isSupabaseConfigured) {
+      setError('Los perfiles todavía están en preparación.')
+      setLoading(false)
+      return
+    }
+    void supabase.from('creator_projects')
+      .select('id, author_id, author_name, title, summary, category, external_url, cover_url, license, tags, status, created_at')
+      .eq('author_id', id!)
+      .eq('status', 'published')
+      .order('created_at', { ascending: false }).limit(48)
+      .then(({ data, error: queryError }) => {
+        if (!active) return
+        if (queryError) setError('No pudimos cargar este perfil.')
+        else setProjects((data ?? []) as Project[])
+        setLoading(false)
+      })
+    return () => { active = false }
+  }, [id])
+  const name = projects[0]?.author_name || 'Creador XETHKIOZ'
+  return <PlatformFrame>
+    <SEO title={name + ' · Perfil de creador'} description={'Creaciones públicas de ' + name + ' en XETHKIOZ.'} url={id ? '/creador/' + id : '/explorar'} noIndex={loading || Boolean(error) || projects.length === 0} />
+    <main className="xk-creator-inner">
+      <Link className="xk-creator-back" to="/explorar">← Volver al catálogo</Link>
+      <section className="xk-creator-profile-hero">
+        <div className="xk-creator-profile-avatar" aria-hidden="true">✦</div>
+        <div><p className="xk-creator-eyebrow">PERFIL PÚBLICO · XETHKIOZ</p><h1>{name}</h1>
+          <p className="xk-creator-lead">{projects.length ? projects.length + ' creaciones publicadas y aprobadas.' : 'Descubrí los trabajos que este creador comparte con la comunidad.'}</p>
+        </div>
+      </section>
+      {loading ? <p role="status" className="xk-creator-state">Cargando perfil…</p> :
+        error ? <p role="alert" className="xk-creator-state">{error}</p> :
+        !projects.length ? <p className="xk-creator-state">No hay publicaciones públicas de este creador.</p> :
+        <ProjectGrid items={projects} loading={false} error="" />}
     </main>
   </PlatformFrame>
 }

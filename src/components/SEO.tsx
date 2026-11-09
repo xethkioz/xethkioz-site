@@ -11,17 +11,18 @@ interface SEOProps {
   publishedTime?: string
   author?: string
   tags?: string[]
+  noIndex?: boolean
 }
 
 const SITE = 'XETHKIOZ'
 const SITE_URL = 'https://www.xethkioz.com.ar'
 const DESCRIPTIONS = {
-  es: 'Portal gamer y tecnológico con noticias, comunidad, streaming, IA, ciencia y cultura digital.',
-  en: 'Gaming and technology portal covering news, community, streaming, AI, science and digital culture.',
+  es: 'Comunidad de creadores para compartir videojuegos, programas, videos, arte y proyectos con inteligencia artificial. Los archivos permanecen en la nube de cada autor.',
+  en: 'A creator network for sharing games, software, videos, art and AI projects. Creators keep their own cloud storage.',
 } as const
 const DEFAULT_TITLES = {
-  es: `${SITE} - Gaming, Tecnología y Streaming`,
-  en: `${SITE} - Gaming, Tech & Streaming`,
+  es: `${SITE} - Creá, compartí y descubrí`,
+  en: `${SITE} - Create, share and discover`,
 } as const
 const SEARCH_TITLES = {
   es: 'Buscar en XETHKIOZ',
@@ -60,6 +61,7 @@ export default function SEO({
   publishedTime,
   author,
   tags,
+  noIndex = false,
 }: SEOProps) {
   const { lang } = useLang()
   const resolvedDescription = description ?? DESCRIPTIONS[lang]
@@ -73,13 +75,14 @@ export default function SEO({
   const alternateLocale = lang === 'es' ? 'en_US' : 'es_AR'
   const language = lang === 'es' ? 'es-AR' : 'en'
   const audienceType = lang === 'es'
-    ? 'Comunidad de gaming, tecnología y cultura digital'
-    : 'Gaming, technology and digital culture community'
+    ? 'Comunidad de creadores digitales'
+    : 'Digital creator community'
 
   return (
     <Helmet>
       <title>{fullTitle}</title>
       <meta name="description" content={resolvedDescription} />
+      {noIndex && <meta name="robots" content="noindex, nofollow, noarchive" />}
       <meta httpEquiv="content-language" content={language} />
       <link rel="canonical" href={canonical} />
       {alternates ? <link rel="alternate" hrefLang="es-AR" href={absoluteUrl(alternates.es)} /> : null}
@@ -126,14 +129,14 @@ export default function SEO({
               '@type': 'WebSite',
               '@id': `${SITE_URL}/#website`,
               name: SITE,
-              alternateName: 'XETHKIOZ Web 11.0 · World Gate',
+              alternateName: 'XETHKIOZ Creator Network',
               url: SITE_URL,
               inLanguage: ['es-AR', 'en'],
               audience: { '@type': 'PeopleAudience', audienceType },
               publisher: { '@id': `${SITE_URL}/#organization` },
               potentialAction: {
                 '@type': 'SearchAction',
-                target: `${SITE_URL}/news?q={search_term_string}`,
+                target: `${SITE_URL}/explorar?q={search_term_string}`,
                 'query-input': 'required name=search_term_string',
               },
             },

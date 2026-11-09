@@ -303,6 +303,14 @@
       "destination": "/index.html"
     },
     {
+      "source": "/creador/:id",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/en/creador/:id",
+      "destination": "/index.html"
+    },
+    {
       "source": "/((?!api/).*)",
       "destination": "/api/not-found"
     }
