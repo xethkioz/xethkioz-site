@@ -169,8 +169,7 @@ function AppShell() {
   const { lang } = useLang()
   const basePath = stripEnglishPrefix(location.pathname)
   const isCmsRoute = location.pathname === '/cms' || location.pathname.startsWith('/cms/')
-  const isHomeRoute = basePath === '/'
-  const isCreatorRoute = ['/', '/explorar', '/publicar', '/mis-proyectos'].includes(basePath) || basePath.startsWith('/proyecto/') || basePath.startsWith('/publicar/')
+  const isCreatorRoute = ['/', '/explorar', '/publicar', '/mis-proyectos'].includes(basePath) || basePath.startsWith('/proyecto/') || basePath.startsWith('/publicar/') || basePath.startsWith('/creador/')
   const isGamePortalRoute = basePath === '/world-of-xethkioz' || basePath === '/world-of-xethkioz/elemental-realms'
   const isThemedPortalRoute = isGamePortalRoute || ['/digital', '/digital/cursos', '/creacion-web', '/green-node'].includes(basePath)
   const hasPublicNavigation = !isCmsRoute && !isCreatorRoute && !isThemedPortalRoute
@@ -193,7 +192,7 @@ function AppShell() {
     : { controls: 'Global controls', wisp: 'Global Wisp', routes: 'Routes' }
 
   return (
-    <div className={`${hasPublicNavigation ? 'xk-app-shell xk-has-mobile-dock' : 'xk-app-shell'}${isHomeRoute || isThemedPortalRoute ? ' xk-fantasy-shell xk-portal-system-shell' : ''}${isGamePortalRoute ? ' xk-world-portal-route' : ''}`}>
+    <div className={`${hasPublicNavigation ? 'xk-app-shell xk-has-mobile-dock' : 'xk-app-shell'}${isThemedPortalRoute ? ' xk-fantasy-shell xk-portal-system-shell' : ''}${isGamePortalRoute ? ' xk-world-portal-route' : ''}`}>
       <a href="#main-content" className="xk-skip-link">
         {lang === 'es' ? 'Saltar al contenido principal' : 'Skip to main content'}
       </a>

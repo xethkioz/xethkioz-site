@@ -16,6 +16,7 @@ for (const path of paths.flatMap(p => [p,'/en'+p])) {
 for(const path of ['/green-node','/science']) assert.ok(app.includes('path="'+path+'"'), 'Section removed: '+path)
 assert.ok(fs.existsSync('public/mascotas/index.html'), 'Mascotas removed')
 assert.ok(frontend.includes('creator_project_reports'), 'Report button missing')
+assert.ok(app.includes("basePath.startsWith('/creador/')") && !app.includes('isHomeRoute || isThemedPortalRoute'), 'Creator profile must not inherit the old global navigation or fantasy shell')
 assert.ok(frontend.includes('CreatorPublicProfile') && frontend.includes('noIndex={!project}') && frontend.includes('get(\'q\')'), 'Public creator profiles, search query or private metadata missing')
 assert.ok(read('index.html').includes('Creá, compartí y descubrí'), 'Home must advertise the creator network in crawl metadata')
 assert.ok(read('src/components/SEO.tsx').includes('noIndex = false') && read('src/components/SEO.tsx').includes('/explorar?q='), 'Search metadata or privacy controls not migrated')
