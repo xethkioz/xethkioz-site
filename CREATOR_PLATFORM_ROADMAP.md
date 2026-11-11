@@ -1,11 +1,11 @@
 # XETHKIOZ WEB — HOJA DE RUTA MAESTRA
 **Fecha de corte:** 11 de noviembre de 2026  
 **Estado:** planificación y validación del rediseño en rama de pruebas; no es una constancia de puesta en producción.  
-**Documento único de seguimiento:** \`CREATOR_PLATFORM_ROADMAP.md\`  
-**Repositorio:** \`xethkioz/xethkioz-site\`  
-**Rama:** \`redesign/creator-cloud-platform\`  
+**Documento único de seguimiento:** `CREATOR_PLATFORM_ROADMAP.md`  
+**Repositorio:** `xethkioz/xethkioz-site`  
+**Rama:** `redesign/creator-cloud-platform`  
 **Pull request:** https://github.com/xethkioz/xethkioz-site/pull/313  
-**Último commit comprobado antes de actualizar esta hoja:** \`4618a6f60d4be5b91fc1e8e8c6ee7b44e5104fdf\`  
+**Último commit comprobado antes de actualizar esta hoja:** `4618a6f60d4be5b91fc1e8e8c6ee7b44e5104fdf`  
 **Preview Vercel READY:** https://xethkioz-site-3ef30vjzn-xethkioz-site.vercel.app/ (acceso protegido por Vercel).
 
 ---
@@ -42,7 +42,7 @@ React + Vite + Vercel + Supabase Auth/Postgres + CMS existente. **No iniciar una
 | Formulario /publicar | **Frontend preparado** | Hoy requiere pegar enlace HTTPS de una nube; no sube archivos automáticamente |
 | Guardar borrador / enviar a revisión | **Frontend + SQL preparados** | Sin prueba real end-to-end ni migración aplicada |
 | Panel CMS /cms/creator-moderation | **Código preparado** | Cola, aprobación, rechazo, reportes; función Edge no desplegada |
-| Migración de proyectos, reportes y auditoría | **Preparada, NO aplicada** | \`supabase/migrations/20261021111400_creator_platform_mvp.sql\` |
+| Migración de proyectos, reportes y auditoría | **Preparada, NO aplicada** | `supabase/migrations/20261021111400_creator_platform_mvp.sql` |
 | Seguridad de base de datos | **Diseñada, sin test de RLS real** | Políticas por propietario, grants por columna, RPC transaccionales de moderación |
 | Google Drive OAuth/Picker | **Pendiente** | Solo enlace compartido manual |
 | Dropbox y OneDrive | **Enlaces externos manuales** | No hay conexión de cuentas ni gestor de archivos |
@@ -52,7 +52,7 @@ React + Vite + Vercel + Supabase Auth/Postgres + CMS existente. **No iniciar una
 | Mascotas/Huellas Argentina | **Conservado** | Sitio estático propio; falta regresión completa y mejora gráfica |
 | Vercel preview | **READY** | Build y auditorías estáticas correctas; la vista solicita Login de Vercel a externos |
 | Pruebas Playwright reales | **Especificaciones añadidas, pendientes de ejecutar** | No confundir compilación con prueba visual o autenticada |
-| Producción \`main\` | **Sin cambios** | Último SHA comprobado: \`e544bf558dab3305d91b4a8d1333180a899445f3\` |
+| Producción `main` | **Sin cambios** | Último SHA comprobado: `e544bf558dab3305d91b4a8d1333180a899445f3` |
 | Supabase de creadores | **Sin activar** | Verificación SQL de 11/11/2026: las tres tablas no existen |
 
 **Interpretación:** tenemos un MVP visual y su arquitectura de seguridad en código, **no** una red de creadores utilizable públicamente de punta a punta.
@@ -90,7 +90,7 @@ Usar los códigos WEB-* en commits, pruebas y seguimiento. Los estados son **LIS
 ### FASE 2 — Moderación y defensa contra abuso (P0)
 **Meta:** impedir la publicación automática de software o enlaces maliciosos.
 
-- [ ] **WEB-020** Revisar y desplegar Edge Function \`creator-moderation\` en staging; comprobar origen permitido, validación de JWT por servidor y rol confiable (\`app_metadata\`).
+- [ ] **WEB-020** Revisar y desplegar Edge Function `creator-moderation` en staging; comprobar origen permitido, validación de JWT por servidor y rol confiable (`app_metadata`).
 - [ ] **WEB-021** Probar aprobación, devolución con motivo, despublicación por denuncia, actualización de estados y trazabilidad.
 - [ ] **WEB-022** Incorporar limitación de frecuencia **persistente** en API/base (el contador en memoria de una función serverless no basta como límite global) y controles anti-bot.
 - [ ] **WEB-023** Implementar validación del enlace en el servidor: HTTPS, dominio, credenciales embebidas, redirecciones, hosts privados, URLs firmadas que expiran, enlaces inaccesibles y posible phishing.
@@ -268,15 +268,15 @@ No promover este PR hasta verificar **todos** los puntos siguientes:
 - [ ] Privacidad, copyright, condiciones de uso y noindex de páginas privadas revisados.
 - [ ] SEO, canonical, redirects y feeds verificados en el despliegue.
 - [ ] Respaldo + recuperación probados y límites de costos aceptados.
-- [ ] **Aprobación final del propietario para publicar, migrar y fusionar \`main\`.**
+- [ ] **Aprobación final del propietario para publicar, migrar y fusionar `main`.**
 
 ---
 
 ## 8. Reglas permanentes del proyecto
 
-- Trabajar en \`redesign/creator-cloud-platform\` y PR #313 hasta nueva aprobación; no publicar automáticamente.
+- Trabajar en `redesign/creator-cloud-platform` y PR #313 hasta nueva aprobación; no publicar automáticamente.
 - Una build READY no implica pruebas E2E completadas ni moderación real funcionando.
-- No borrar \`World of Xethkioz 2D\`, \`Elemental Realms\`, juegos, cliente/servidor de World of Warcraft, modelos 3D, archivos privados o proyectos de otras carpetas.
+- No borrar `World of Xethkioz 2D`, `Elemental Realms`, juegos, cliente/servidor de World of Warcraft, modelos 3D, archivos privados o proyectos de otras carpetas.
 - No sobreescribir clones locales ni crear múltiples backups completos sin necesidad. Minimizar uso de disco y preservar fuentes.
 - No guardar contraseñas, tokens OAuth o claves privilegiadas en frontend/repo.
 - No subir contenido a plataformas externas ni consumir dinero o créditos de generación sin autorización específica.
@@ -289,11 +289,11 @@ No promover este PR hasta verificar **todos** los puntos siguientes:
 ## 9. Registro de avance al corte
 
 **Verificado el 11/11/2026:**
-- Rama de trabajo: \`4618a6f60d4be5b91fc1e8e8c6ee7b44e5104fdf\`, antes de la actualización de este documento.
+- Rama de trabajo: `4618a6f60d4be5b91fc1e8e8c6ee7b44e5104fdf`, antes de la actualización de este documento.
 - PR #313: abierto, en borrador, no fusionado.
 - Vercel: preview del commit anterior READY.
-- Producción: último deploy READY desde \`main\`, SHA \`e544bf558dab3305d91b4a8d1333180a899445f3\`.
-- Supabase sitio: \`creator_projects\`, \`creator_project_reports\` y \`creator_moderation_events\` ausentes. Solo se ejecutaron consultas de lectura.
+- Producción: último deploy READY desde `main`, SHA `e544bf558dab3305d91b4a8d1333180a899445f3`.
+- Supabase sitio: `creator_projects`, `creator_project_reports` y `creator_moderation_events` ausentes. Solo se ejecutaron consultas de lectura.
 - No se aplicaron migraciones ni se desplegó la nueva Edge Function desde esta hoja de ruta.
 - No se ejecutaron nuevos tests Playwright reales desde esta actualización.
 - No hubo fusión, limpieza destructiva, gastos ni cambios en la PC derivados de este documento.
