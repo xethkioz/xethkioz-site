@@ -46,7 +46,7 @@ create policy creator_projects_owner_insert on public.creator_projects
   );
 create policy creator_projects_owner_update on public.creator_projects
   for update to authenticated using (
-    (select auth.uid()) = author_id and status in ('draft','pending_review','rejected')
+    (select auth.uid()) = author_id and status in ('draft','rejected')
   ) with check (
     (select auth.uid()) = author_id and status in ('draft','pending_review') and published_at is null
   );
@@ -65,7 +65,9 @@ create table if not exists public.creator_project_reports (
 );
 alter table public.creator_project_reports enable row level security;
 revoke all on public.creator_project_reports from anon, authenticated;
-grant insert, select on public.creator_project_reports to authenticated;
+grant select on public.creator_project_reports to authenticated;
+-- Browser reporters can set only reporter/project/reason; resolution is server-owned.
+grant insert (project_id, reporter_id, reason) on public.creator_project_reports to authenticated;
 create policy creator_reports_insert on public.creator_project_reports
   for insert to authenticated with check (
     reporter_id = (select auth.uid()) and exists (

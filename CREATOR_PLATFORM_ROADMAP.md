@@ -302,3 +302,13 @@ No promover este PR hasta verificar **todos** los puntos siguientes:
 
 ---
 _Actualizar esta única hoja tras cada bloque de ejecución, sin multiplicar planes contradictorios._
+
+
+## Registro de trabajo — 11/11/2026 · WEB-010/WEB-014 (seguridad previa a la beta)
+- [x] **Preparado en rama:** el dueño no puede editar una ficha en estado pendiente de revisión. La política RLS de UPDATE solo permite modificar fichas draft o rejected, con CHECK de destino draft/pending_review. Esto impide modificar el contenido entre la lectura del moderador y la aprobación, salvo actores del servidor privilegiado.
+- [x] **Preparado en rama:** frontend sin posibilidad de editar pendientes; biblioteca muestra el bloqueo. Edición ahora omite author_id (que tiene permiso de INSERT pero NO UPDATE) y comprueba que se haya modificado realmente una fila draft/rejected.
+- [x] **Preparado en rama:** reportes tienen GRANT INSERT por columna (project_id/reporter_id/reason) para que el usuario no pueda declarar resuelta una denuncia por sí mismo.
+- [x] **Preparado en rama:** panel de moderación obtiene las fichas exactas a las que se refieren los reportes, incluso publicaciones antiguas, en lugar de limitarse a 150 publicaciones arbitrarias.
+- [x] **Preparado en rama:** nombre de autor ya no usa automáticamente la parte local del correo como nombre público.
+- [ ] **PENDIENTE:** ejecutar pruebas RLS contra staging con usuarios reales, E2E autenticados, revisar grants y RPC transaccionales antes de publicar.
+- **Entorno de pruebas PC:** conexión VEYR Remote inactiva en este bloque; no se han ejecutado comandos ni modificado archivos de la PC.

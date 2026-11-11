@@ -235,11 +235,11 @@ export function CreatorPublish() {
       if (!active) return
       if (!data.user) { navigate(creatorLogin(id ? '/publicar/' + id : '/publicar'), { replace: true }); return }
       setUserId(data.user.id)
-      setAuthorName(String(data.user.user_metadata?.display_name || data.user.email?.split('@')[0] || 'Creador').slice(0, 70))
+      setAuthorName(String(data.user.user_metadata?.display_name || 'Creador XETHKIOZ').slice(0, 70))
       if (id) {
         const { data: project } = await supabase.from('creator_projects').select('*').eq('id', id).eq('author_id', data.user.id).maybeSingle()
         if (!active) return
-        if (!project || !['draft', 'pending_review', 'rejected'].includes(project.status)) {
+        if (!project || !['draft', 'rejected'].includes(project.status)) {
           navigate('/mis-proyectos', { replace: true }); return
         }
         setForm({ title: project.title, summary: project.summary, category: project.category, external_url: project.external_url, license: project.license, tags: (project.tags || []).join(', ') })
@@ -263,12 +263,14 @@ export function CreatorPublish() {
     if (status === 'pending_review' && !safeCloudLink(form.external_url)) { setMessage('Ingresá un enlace HTTPS público y válido de tu nube.'); return }
     if (status === 'draft' && form.external_url.trim() && !safeCloudLink(form.external_url)) { setMessage('El enlace de nube no es seguro. Dejalo en blanco o ingresá un enlace HTTPS válido.'); return }
     setBusy(true)
-    const payload = { title: form.title.trim(), summary: form.summary.trim(), category: form.category, external_url: form.external_url.trim(), license: form.license.trim().slice(0, 80), tags, author_id: userId, author_name: authorName, status }
+    const payload = { title: form.title.trim(), summary: form.summary.trim(), category: form.category, external_url: form.external_url.trim(), license: form.license.trim().slice(0, 80), tags, author_name: authorName, status }
+    // Author identity is immutable. The browser cannot update author_id or a pending project.
     const result = id
       ? await supabase.from('creator_projects').update(payload).eq('id', id).eq('author_id', userId)
-      : await supabase.from('creator_projects').insert(payload)
+          .in('status', ['draft', 'rejected']).select('id').maybeSingle()
+      : await supabase.from('creator_projects').insert({ ...payload, author_id: userId }).select('id').single()
     setBusy(false)
-    if (result.error) { setMessage('No pudimos guardar la publicación. Revisá la conexión o la configuración del catálogo.'); return }
+    if (result.error || !result.data) { setMessage('No pudimos guardar. La ficha pudo haber cambiado de estado; revisá tu biblioteca y volvé a intentarlo.'); return }
     navigate('/mis-proyectos?guardado=1')
   }
   return <PlatformFrame>
@@ -323,7 +325,7 @@ export function CreatorMyProjects() {
     <SEO title="Mi espacio creativo · XETHKIOZ" url="/mis-proyectos" noIndex />
     <main className="xk-creator-inner"><p className="xk-creator-eyebrow">TU BIBLIOTECA PERSONAL</p><h1>Mi espacio creativo.</h1><p className="xk-creator-lead">Administrá tus fichas, borradores y solicitudes. Los archivos siguen bajo tu control en tu nube.</p>
       <Link className="xk-creator-primary" to="/publicar">+ Nueva publicación</Link>
-      {loading ? <p className="xk-creator-state">Cargando tu biblioteca…</p> : error ? <p className="xk-creator-state" role="alert">{error}</p> : !projects.length ? <p className="xk-creator-state">Todavía no creaste ninguna publicación. Empezá compartiendo tu primer proyecto.</p> : <div className="xk-creator-drafts">{projects.map((project) => <article key={project.id}><div><small>{kindLabel(project.category)} · {project.status === 'draft' ? 'Borrador' : project.status === 'pending_review' ? 'En revisión' : project.status === 'published' ? 'Publicado' : 'Requiere correcciones'}</small><h2>{project.title || 'Borrador sin título'}</h2><p>{project.summary || 'Completá los detalles cuando tengas lista tu idea.'}</p>{project.status === 'rejected' && project.rejection_reason && <p className="xk-creator-message">Motivo: {project.rejection_reason}</p>}</div><div className="xk-creator-draft-actions">{project.status === 'published' ? <Link to={'/proyecto/' + project.id}>Ver publicación ↗</Link> : <Link to={'/publicar/' + project.id}>Editar →</Link>}{(project.status === 'draft' || project.status === 'rejected') && <button type="button" onClick={() => void removeDraft(project)}>Eliminar borrador</button>}</div></article>)}</div>}
+      {loading ? <p className="xk-creator-state">Cargando tu biblioteca…</p> : error ? <p className="xk-creator-state" role="alert">{error}</p> : !projects.length ? <p className="xk-creator-state">Todavía no creaste ninguna publicación. Empezá compartiendo tu primer proyecto.</p> : <div className="xk-creator-drafts">{projects.map((project) => <article key={project.id}><div><small>{kindLabel(project.category)} · {project.status === 'draft' ? 'Borrador' : project.status === 'pending_review' ? 'En revisión' : project.status === 'published' ? 'Publicado' : 'Requiere correcciones'}</small><h2>{project.title || 'Borrador sin título'}</h2><p>{project.summary || 'Completá los detalles cuando tengas lista tu idea.'}</p>{project.status === 'rejected' && project.rejection_reason && <p className="xk-creator-message">Motivo: {project.rejection_reason}</p>}</div><div className="xk-creator-draft-actions">{project.status === 'published' ? <Link to={'/proyecto/' + project.id}>Ver publicación ↗</Link> : project.status === 'pending_review' ? <span className="xk-creator-pending-label">En revisión · edición bloqueada</span> : <Link to={'/publicar/' + project.id}>Editar →</Link>}{(project.status === 'draft' || project.status === 'rejected') && <button type="button" onClick={() => void removeDraft(project)}>Eliminar borrador</button>}</div></article>)}</div>}
     </main>
   </PlatformFrame>
 }

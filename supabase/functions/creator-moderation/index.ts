@@ -103,15 +103,21 @@ Deno.serve(async (req: Request) => {
 
   try {
     if (body.action === 'list') {
-      const [projects, reports, allReported] = await Promise.all([
+      const [projects, reports] = await Promise.all([
         admin.from('creator_projects').select('id,author_id,author_name,title,summary,external_url,category,license,status,created_at,rejection_reason')
           .eq('status', 'pending_review').order('created_at', { ascending: true }).limit(50),
         admin.from('creator_project_reports').select('id,project_id,reason,created_at')
           .is('resolved_at', null).order('created_at', { ascending: true }).limit(50),
-        admin.from('creator_projects').select('id,title,external_url,status').eq('status', 'published').limit(150),
       ])
-      if (projects.error || reports.error || allReported.error) return json(req, 503, { ok: false, error: 'DATABASE_UNAVAILABLE' })
-      return json(req, 200, { ok: true, queue: projects.data, reports: reports.data, reportedProjects: allReported.data })
+      if (projects.error || reports.error) return json(req, 503, { ok: false, error: 'DATABASE_UNAVAILABLE' })
+      // Resolve the exact project IDs referenced by open reports, not an unrelated
+      // first page of published content (which hid older reported projects).
+      const reportedIds = [...new Set((reports.data || []).map((item) => item.project_id))]
+      const linked = reportedIds.length
+        ? await admin.from('creator_projects').select('id,title,external_url,status').in('id', reportedIds)
+        : { data: [], error: null }
+      if (linked.error) return json(req, 503, { ok: false, error: 'DATABASE_UNAVAILABLE' })
+      return json(req, 200, { ok: true, queue: projects.data, reports: reports.data, reportedProjects: linked.data })
     }
 
     if (body.action === 'review') {
