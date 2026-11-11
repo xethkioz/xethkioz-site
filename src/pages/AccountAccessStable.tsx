@@ -66,7 +66,7 @@ export default function AccountAccessStable() {
       : isUpdate
         ? passwordAssessment.valid && match
         : isSignup
-          ? emailOk && passwordAssessment.valid && match
+          ? name.trim().length >= 3 && name.trim().length <= 70 && emailOk && passwordAssessment.valid && match
           : emailOk && loginPasswordOk
   )
 
@@ -124,6 +124,10 @@ export default function AccountAccessStable() {
       setError('Ingresá tu contraseña.')
       return
     }
+    if (isSignup && (name.trim().length < 3 || name.trim().length > 70)) {
+      setError('Elegí un nombre público entre 3 y 70 caracteres. No uses tu email como nombre visible.')
+      return
+    }
     if (isSignup || isUpdate) {
       const policyError = passwordPolicyError(password)
       if (policyError) {
@@ -139,12 +143,12 @@ export default function AccountAccessStable() {
     setLoading(true)
     try {
       if (isSignup) {
-        const displayName = name.trim() || email.split('@')[0] || 'XETHKIOZ User'
+        const displayName = name.trim()
         const { data, error: signUpError } = await supabase.auth.signUp({
           email: email.trim(),
           password,
           options: {
-            emailRedirectTo: redirectUrl('/account?mode=signin'),
+            emailRedirectTo: redirectUrl('/account?mode=signin&redirect=' + encodeURIComponent(target)),
             data: { display_name: displayName, username: displayName, role: 'user', source: 'xethkioz-web' },
           },
         })
@@ -153,8 +157,8 @@ export default function AccountAccessStable() {
           await refreshAccount()
           navigate(target, { replace: true })
         } else {
-          setMessage('Cuenta creada. Revisá el correo de confirmación. Si no llega, usá reenviar confirmación.')
           changeMode('signin')
+          setMessage('Cuenta creada. Revisá el correo de confirmación. Si no llega, usá reenviar confirmación.')
         }
         return
       }
@@ -172,8 +176,8 @@ export default function AccountAccessStable() {
         const { error: updateError } = await supabase.auth.updateUser({ password })
         if (updateError) throw updateError
         await refreshAccount()
-        setMessage('Contraseña actualizada. Ya podés ingresar.')
         changeMode('signin')
+        setMessage('Contraseña actualizada. Ya podés ingresar.')
         return
       }
 
@@ -211,7 +215,7 @@ export default function AccountAccessStable() {
               <button type="button" onClick={() => changeMode('signin')} className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.18em] ${isSignin ? 'bg-violet-700 text-white' : 'text-slate-500 hover:text-violet-950'}`}>Ingresar</button>
             </div>
 
-            {isSignup ? <input value={name} onChange={(event) => setName(event.target.value)} className="rounded-xl border border-violet-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-violet-500" placeholder="Nombre visible" autoComplete="nickname" /> : null}
+            {isSignup ? <input value={name} onChange={(event) => setName(event.target.value)} className="rounded-xl border border-violet-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-violet-500" placeholder="Nombre visible (mínimo 3 caracteres)" autoComplete="nickname" minLength={3} maxLength={70} required /> : null}
             {!isUpdate ? <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} className="rounded-xl border border-violet-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-violet-500" placeholder="tu@email.com" autoComplete="email" required /> : null}
             {!isReset ? <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} className="rounded-xl border border-violet-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-violet-500" placeholder={isUpdate ? 'Nueva contraseña' : 'Contraseña'} autoComplete={isSignin ? 'current-password' : 'new-password'} minLength={showStrongPasswordPolicy ? PASSWORD_MIN_LENGTH : 1} aria-describedby={showStrongPasswordPolicy ? 'password-policy' : undefined} aria-invalid={showStrongPasswordPolicy && password.length > 0 && !passwordAssessment.valid} required /> : null}
             {(isSignup || isUpdate) ? <input type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} className="rounded-xl border border-violet-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-violet-500" placeholder="Repetir contraseña" autoComplete="new-password" minLength={PASSWORD_MIN_LENGTH} required /> : null}

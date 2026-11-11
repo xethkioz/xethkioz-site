@@ -325,3 +325,10 @@ _Actualizar esta única hoja tras cada bloque de ejecución, sin multiplicar pla
 - [x] Preparado en rama: registro, acceso y recuperación utilizan la misma estructura de navegación de Creator Network, estética luminosa y metadatos noindex, evitando el contraste con la antigua página de cuenta cyber.
 - [x] La navegación de acceso vuelve a la biblioteca de creadores; el flujo conserva el parámetro redirect cuando se cambia entre registro e inicio de sesión.
 - [ ] Queda pendiente comprobar visualmente pantallas completas y validación real de Auth, así como la integración de la migración nueva en Supabase.
+
+
+## WEB-030 — 11/11/2026 · Registro fiable
+- [x] Registro: nombre público obligatorio (3–70 caracteres); ya no se publica accidentalmente la parte anterior al @ del correo como alias visible.
+- [x] Confirmación de registro y actualización de contraseña conserva el mensaje en pantalla al cambiar a modo ingresar.
+- [x] Enlace del email de confirmación conserva el destino interno seguro, para regresar a /publicar si se inició desde allí.
+- [ ] Falta prueba end-to-end de formulario con backend simulado y después contra Supabase real; no se automatizan altas reales de personas ni se envían mensajes a correo de terceros.
