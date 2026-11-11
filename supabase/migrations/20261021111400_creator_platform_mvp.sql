@@ -8,9 +8,9 @@ create table if not exists public.creator_projects (
   summary text not null default '' check (char_length(summary) <= 1200),
   category text not null check (category in ('programa','videojuego','video','arte','herramienta_ia','otro')),
   external_url text not null default '' check (char_length(external_url) <= 2048),
-  cover_url text,
+  cover_url text check (cover_url is null or char_length(cover_url) <= 2048),
   license text not null default 'Todos los derechos reservados' check (char_length(license) between 1 and 80),
-  tags text[] not null default '{}'::text[] check (cardinality(tags) <= 8),
+  tags text[] not null default '{}'::text[] check (cardinality(tags) <= 8 and char_length(array_to_string(tags, ',')) <= 255),
   status text not null default 'draft' check (status in ('draft','pending_review','published','rejected')),
   created_at timestamptz not null default now(),
   published_at timestamptz,
@@ -33,8 +33,8 @@ alter table public.creator_projects enable row level security;
 revoke all on public.creator_projects from anon, authenticated;
 grant select on public.creator_projects to anon, authenticated;
 -- Browser users may change only creator-owned fields, never review metadata.
-grant insert (author_id, author_name, title, summary, category, external_url, cover_url, license, tags, status) on public.creator_projects to authenticated;
-grant update (author_name, title, summary, category, external_url, cover_url, license, tags, status) on public.creator_projects to authenticated;
+grant insert (author_id, author_name, title, summary, category, external_url, license, tags, status) on public.creator_projects to authenticated;
+grant update (author_name, title, summary, category, external_url, license, tags, status) on public.creator_projects to authenticated;
 grant delete on public.creator_projects to authenticated;
 create policy creator_projects_public_read on public.creator_projects
   for select to anon, authenticated using (status = 'published');
@@ -80,7 +80,9 @@ create policy creator_reports_owner_read on public.creator_project_reports
 -- Audit and report resolution are accessible only through the privileged server workflow.
 create table if not exists public.creator_moderation_events (
   id uuid primary key default gen_random_uuid(),
-  project_id uuid not null references public.creator_projects(id) on delete cascade,
+  -- Keep the project identifier as an audit reference after a rejected project is deleted.
+  -- Retention and user-erasure requirements must be explicitly resolved before launch.
+  project_id uuid not null,
   reviewer_id uuid references auth.users(id) on delete set null,
   action text not null check (action in ('approved','rejected','unpublished','report_dismissed')),
   note text not null default '' check (char_length(note) <= 500),

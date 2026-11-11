@@ -312,3 +312,10 @@ _Actualizar esta única hoja tras cada bloque de ejecución, sin multiplicar pla
 - [x] **Preparado en rama:** nombre de autor ya no usa automáticamente la parte local del correo como nombre público.
 - [ ] **PENDIENTE:** ejecutar pruebas RLS contra staging con usuarios reales, E2E autenticados, revisar grants y RPC transaccionales antes de publicar.
 - **Entorno de pruebas PC:** conexión VEYR Remote inactiva en este bloque; no se han ejecutado comandos ni modificado archivos de la PC.
+
+
+## Actualización de seguridad adicional — 11/11/2026
+- [x] **Preparado en rama:** longitud combinada de etiquetas limitada a 255 caracteres, 8 etiquetas como máximo; cover_url limitado a 2048 caracteres y reservado a flujos del servidor (no editable desde navegador durante MVP).
+- [x] **Preparado en rama:** eventos de moderación ya no se eliminan silenciosamente mediante borrado en cascada cuando el autor elimina un proyecto rechazado. Pendiente revisión de retención/privacidad antes de abrir el servicio.
+- [x] **Preparado en rama:** los visitantes registrados pueden indicar el tipo de denuncia (malware, copyright, spam, otros, revisión general) desde la ficha de la creación; la revisión humana sigue siendo obligatoria.
+- [ ] **Pendiente:** comprobar en staging políticas de retención, denuncias y auditoría con cuentas reales, no dar por validada la seguridad solo por build.

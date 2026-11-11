@@ -184,6 +184,7 @@ export function CreatorProjectDetail() {
   const [project, setProject] = useState<Project | null>(null)
   const [error, setError] = useState('')
   const [reportMessage, setReportMessage] = useState('')
+  const [reportReason, setReportReason] = useState<'needs_review' | 'malware' | 'copyright' | 'spam' | 'other'>('needs_review')
   useEffect(() => {
     let active = true
     if (!id || !isSupabaseConfigured) { setError('Proyecto no disponible.'); return }
@@ -199,7 +200,7 @@ export function CreatorProjectDetail() {
     if (!project) return
     const { data } = await supabase.auth.getUser()
     if (!data.user) { setReportMessage('Iniciá sesión para reportar este proyecto.'); return }
-    const { error: reportError } = await supabase.from('creator_project_reports').insert({ project_id: project.id, reporter_id: data.user.id, reason: 'needs_review' })
+    const { error: reportError } = await supabase.from('creator_project_reports').insert({ project_id: project.id, reporter_id: data.user.id, reason: reportReason })
     setReportMessage(reportError ? 'No fue posible registrar el reporte; puede que ya lo hayas reportado.' : 'Reporte recibido para revisión.')
   }
   return <PlatformFrame>
@@ -212,7 +213,7 @@ export function CreatorProjectDetail() {
         <p><strong>Licencia:</strong> {project.license}</p>
         <p>El archivo está alojado fuera de XETHKIOZ, en la nube del creador. Revisá los permisos y la procedencia del archivo antes de descargarlo o ejecutarlo.</p>
         <a className="xk-creator-primary" href={safeCloudLink(project.external_url) ? project.external_url : undefined} target="_blank" rel="noopener noreferrer nofollow" aria-disabled={!safeCloudLink(project.external_url)}>Abrir en la nube del creador ↗</a>
-        <div className="xk-creator-report"><button type="button" onClick={() => void reportProject()}>Reportar publicación</button><span role="status">{reportMessage}</span></div>
+        <div className="xk-creator-report"><label htmlFor="creator-report-reason">¿Por qué querés reportar esta creación?</label><select id="creator-report-reason" value={reportReason} onChange={(event) => setReportReason(event.target.value as typeof reportReason)}><option value="needs_review">Solicitar revisión</option><option value="malware">Posible malware o enlace peligroso</option><option value="copyright">Derechos de autor</option><option value="spam">Spam o engaño</option><option value="other">Otro problema</option></select><button type="button" onClick={() => void reportProject()}>Enviar reporte</button><span role="status">{reportMessage}</span></div>
       </article>}
     </main>
   </PlatformFrame>

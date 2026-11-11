@@ -7,3 +7,8 @@
 .xk-creator-profile-hero p:last-child{margin:0}
 .xk-creator-author-link{color:#7451bd!important;text-decoration:underline!important;text-underline-offset:3px}
 @media(max-width:600px){.xk-creator-profile-hero{flex-direction:column;align-items:start;padding:23px}.xk-creator-profile-avatar{width:70px;height:70px;font-size:35px}}
+
+.xk-creator-report{display:flex;align-items:flex-start;flex-direction:column;gap:9px;margin-top:26px}
+.xk-creator-report label{font-size:13px;font-weight:850;color:#5f517b}
+.xk-creator-report select{max-width:100%;min-width:min(360px,100%);border:1px solid #d4cde2;border-radius:12px;padding:11px 13px;background:#fff;color:#3b3154;font-size:13px}
+.xk-creator-report button{min-height:42px}
