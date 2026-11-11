@@ -99,7 +99,7 @@ const PUBLISHED_COLUMNS = 'id,author_id,author_name,title,summary,category,exter
 function safeCatalogSearch(value: string) {
   // PostgREST .or() accepts a filter expression. Strip operator syntax and
   // wildcard characters from untrusted search input before interpolating it.
-  return value.trim().slice(0, 80).replace(/[%,()."\\_*]/g, ' ').replace(/\\s+/g, ' ').trim()
+  return value.trim().slice(0, 80).replace(/[%,()."\\_*]/g, ' ').replace(/\s+/g, ' ').trim()
 }
 function publishedQuery(category: Kind | 'todos', search: string) {
   let query = supabase.from('creator_projects').select(PUBLISHED_COLUMNS)
