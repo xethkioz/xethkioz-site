@@ -36,14 +36,18 @@ const kindLabel = (key: Kind) => categories.find((category) => category.id === k
 const emptyForm: FormValues = { title: '', summary: '', category: 'programa', external_url: '', license: 'Todos los derechos reservados', tags: '' }
 
 function safeCloudLink(value: string): boolean {
+  if (value.length > 2048 || /[\u0000-\u001f]/.test(value)) return false
   try {
     const url = new URL(value)
-    if (url.protocol !== 'https:' || url.username || url.password || url.port || value.length > 2048) return false
+    if (url.protocol !== 'https:' || url.username || url.password || url.port) return false
     const host = url.hostname.toLowerCase()
     return host.includes('.') && host !== 'localhost'
       && !host.endsWith('.localhost') && !host.endsWith('.local') && !host.endsWith('.internal')
       && !/^(127|10|0|169\.254|192\.168)\./.test(host)
       && !/^172\.(1[6-9]|2\d|3[01])\./.test(host)
+      // Keep browser submission checks aligned with moderation: raw IPs,
+      // encoded addresses and local targets cannot be approved as cloud links.
+      && !/^(?:\d+\.){3}\d+$/.test(host) && !host.startsWith('0x')
       && host !== '::1' && !host.startsWith('[')
   } catch {
     return false

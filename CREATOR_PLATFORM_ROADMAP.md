@@ -360,3 +360,9 @@ _Actualizar esta única hoja tras cada bloque de ejecución, sin multiplicar pla
 - [x] Se incorpora paginación con botón «Mostrar más creaciones»: página de 24 resultados, lectura de 25 para comprobar si quedan más. La portada carga solo seis novedades.
 - [x] Búsquedas debounced de 350 ms, criterio de orden estable por fecha/ID y aislamiento de respuestas antiguas cuando cambian los filtros; sin novedades inventadas ni archivos alojados en XETHKIOZ.
 - [ ] Pendiente probar consultas contra un backend staging de Supabase y publicar con autorización final; este cambio permanece en PR de desarrollo.
+
+
+### WEB-052 — Validación de enlaces externos (11/11/2026)
+- [x] El formulario de publicaciones ya no acepta destinos HTTPS con IP pública literal, además de bloquear IP privadas, host locales, usuarios/contraseñas embebidos y puertos arbitrarios; armonizado con las restricciones previas del moderador Edge.
+- [x] Se incorpora una prueba de navegador con un enlace HTTPS a IP literal que debe rechazarse antes de enviar datos al backend ficticio.
+- [ ] La plataforma no puede garantizar que un enlace remoto sea benigno; se mantiene revisión humana y advertencia antes de descargar o ejecutar archivos.

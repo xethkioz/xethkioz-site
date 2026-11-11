@@ -233,6 +233,19 @@ test.describe('Creator network with simulated Supabase Auth and REST', () => {
     expect(review?.decision).toBe('approve')
     expect(review?.reviewed).toBe(true)
   })
+  test('Unsafe raw-IP cloud links cannot be submitted for review', async ({ page }) => {
+    let submitted = false
+    await seedSession(page)
+    await mockSupabase(page, { projectPost: () => { submitted = true } })
+    await page.goto('/publicar')
+    await page.getByPlaceholder('Ej.: Mi videojuego de aventuras').fill('Archivo de prueba')
+    await page.getByPlaceholder(/Qué creaste/).fill('Este archivo comprueba que no se aceptan servidores IP arbitrarios como enlaces públicos.')
+    await page.locator('input[type="url"]').fill('https://8.8.8.8/archivo')
+    await page.getByRole('button', { name: /Enviar a revisión/ }).click()
+    await expect(page.getByText('Ingresá un enlace HTTPS público y válido de tu nube.')).toBeVisible()
+    expect(submitted).toBe(false)
+  })
+
   test('Catalog searches beyond page one and filters in database', async ({ page }) => {
     const projects = Array.from({ length: 31 }, (_, i) => ({
       id: '00000000-0000-4000-8000-' + (i + 1).toString(16).padStart(12, '0'),
