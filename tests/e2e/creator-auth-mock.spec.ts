@@ -79,9 +79,23 @@ test.describe('Creator network with simulated Supabase Auth and REST', () => {
         }
         if (method === 'GET') {
           const rowId = url.searchParams.get('id')
-          const filtered = rowId ? projects.filter(x => 'eq.' + x.id === rowId) : projects
+          const status = url.searchParams.get('status')
+          const category = url.searchParams.get('category')
+          const expression = url.searchParams.get('or') || ''
+          const search = /title\\.ilike\\.%([^%]+)%/.exec(expression)?.[1]?.toLocaleLowerCase('es') || ''
+          const filtered = projects
+            .filter(x => !rowId || rowId === 'eq.' + x.id)
+            .filter(x => !status || status === 'eq.' + x.status)
+            .filter(x => !category || category === 'eq.' + x.category)
+            .filter(x => !search || [x.title, x.summary, x.author_name]
+              .some(value => String(value || '').toLocaleLowerCase('es').includes(search)))
+            .sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || ''))
+              || String(b.id).localeCompare(String(a.id)))
+          const offset = Math.max(0, Number(url.searchParams.get('offset') || 0))
+          const limit = Number(url.searchParams.get('limit') || filtered.length)
+          const result = filtered.slice(offset, offset + limit)
           const single = (request.headers()['accept'] || '').includes('application/vnd.pgrst.object+json')
-          return respond(single ? filtered[0] || null : filtered)
+          return respond(single ? result[0] || null : result)
         }
       }
       if (url.pathname.startsWith('/rest/v1/') && method === 'GET') return respond([])
@@ -219,4 +233,30 @@ test.describe('Creator network with simulated Supabase Auth and REST', () => {
     expect(review?.decision).toBe('approve')
     expect(review?.reviewed).toBe(true)
   })
+  test('Catalog searches beyond page one and filters in database', async ({ page }) => {
+    const projects = Array.from({ length: 31 }, (_, i) => ({
+      id: '00000000-0000-4000-8000-' + (i + 1).toString(16).padStart(12, '0'),
+      author_id: userId,
+      author_name: i === 0 ? 'Taller Zafiro' : 'Comunidad',
+      title: i === 0 ? 'Juego Zafiro Antiguo' : 'Proyecto de prueba ' + String(i + 1),
+      summary: i === 0 ? 'Creación para buscar fuera de la primera página' : 'Proyecto creativo de pruebas',
+      category: i % 2 === 0 ? 'videojuego' : 'programa',
+      external_url: 'https://drive.google.com/file/d/test-' + String(i),
+      license: 'MIT', tags: [],
+      status: 'published',
+      created_at: new Date(Date.UTC(2026, 0, i + 1)).toISOString(),
+    }))
+    await mockSupabase(page, { initialProjects: projects })
+    await page.goto('/explorar')
+    await expect(page.locator('.xk-creator-card')).toHaveCount(24)
+    await page.getByRole('button', { name: 'Mostrar más creaciones' }).click()
+    await expect(page.locator('.xk-creator-card')).toHaveCount(31)
+    await expect(page.getByRole('button', { name: 'Mostrar más creaciones' })).toHaveCount(0)
+    await page.getByRole('button', { name: /Videojuegos/ }).click()
+    await expect(page.locator('.xk-creator-card')).toHaveCount(16)
+    await page.getByPlaceholder(/Buscar juegos/).fill('Zafiro')
+    await expect(page.locator('.xk-creator-card')).toHaveCount(1)
+    await expect(page.getByRole('heading', { name: 'Juego Zafiro Antiguo' })).toBeVisible()
+  })
+
 })
