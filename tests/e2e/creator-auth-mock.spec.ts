@@ -82,7 +82,7 @@ test.describe('Creator network with simulated Supabase Auth and REST', () => {
           const status = url.searchParams.get('status')
           const category = url.searchParams.get('category')
           const expression = url.searchParams.get('or') || ''
-          const search = /title\\.ilike\\.%([^%]+)%/.exec(expression)?.[1]?.toLocaleLowerCase('es') || ''
+          const search = /title\.ilike\.%([^%]+)%/.exec(expression)?.[1]?.toLocaleLowerCase('es') || ''
           const filtered = projects
             .filter(x => !rowId || rowId === 'eq.' + x.id)
             .filter(x => !status || status === 'eq.' + x.status)
