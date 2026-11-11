@@ -24,8 +24,17 @@ function redirectUrl(path: string) {
 }
 
 function safeRedirect(value: string | null) {
-  if (!value || !value.startsWith('/') || value.startsWith('//')) return '/profile'
-  return value
+  // Preserve only same-origin application paths. Browsers normalize backslashes
+  // into slashes in URLs, which can otherwise turn a crafted path into an external redirect.
+  if (!value || !value.startsWith('/') || value.startsWith('//') || /[\\\u0000-\u001f]/.test(value)) return '/profile'
+  try {
+    const origin = 'https://xethkioz.local'
+    const target = new URL(value, origin)
+    if (target.origin !== origin || /^\/%(?:2f|5c)/i.test(target.pathname)) return '/profile'
+    return target.pathname + target.search + target.hash
+  } catch {
+    return '/profile'
+  }
 }
 
 function friendlyError(error: unknown) {

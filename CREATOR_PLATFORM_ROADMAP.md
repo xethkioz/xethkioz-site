@@ -346,3 +346,11 @@ _Actualizar esta única hoja tras cada bloque de ejecución, sin multiplicar pla
 ### WEB-061 — Regresión visual a 320 px (11/11/2026)
 - [x] Prueba Playwright de pantalla angosta (320 × 740) ejecutada en Chromium desktop y móvil: 2/2 aprobadas; portada, catálogo, cuenta y perfil público inválido sin desbordamiento horizontal y con enlaces de navegación dentro del ancho.
 - [ ] Pendiente: auditoría visual manual de contraste, enfoque de teclado y captura de pantallas en dispositivos reales.
+
+## WEB-020 / WEB-030 — Auditoría de moderación y redirecciones (11/11/2026)
+- [x] Alineación de permisos del CMS y servidor: `canModerate` solo se concede por `auth.users.app_metadata.role = admin|moderator`; un perfil con rol MODERATOR sin autorización del servidor puede acceder a otros menús legacy, pero no activar revisión de creadores.
+- [x] `scripts/test-creator-edge.mjs`: 14 pruebas locales con el handler Edge real ejecutado en contexto aislado y Supabase simulado. Comprueban origen y CORS, token, rol, cola de denuncias, autoaprobación, enlaces prohibidos, confirmación humana, RPC atómicos y ausencia de credenciales del servidor.
+- [x] Las pruebas Edge se incorporan al comando de compilación (`npm run test:creator-edge`); ninguna llamada de prueba llega al Supabase real.
+- [x] `tests/e2e/creator-auth-mock.spec.ts`: 10/10 en escritorio/móvil, incluyendo caso de rol solo en perfil denegado y aprobación autorizada con rol `app_metadata` en el panel de control.
+- [x] `src/pages/AccountAccessStable.tsx`: destino de registro validado como ruta local, rechazando barras inversas, rutas protocol-relative y slash codificado para evitar redirección a sitios externos.
+- [ ] Mantenemos pendientes pruebas reales en Supabase independiente, configuración de límites de peticiones persistente y liberación autorizada de producción.

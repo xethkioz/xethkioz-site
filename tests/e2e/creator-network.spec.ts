@@ -75,3 +75,14 @@ test('Interfaz compacta de 320 px sin desplazamiento horizontal', async ({ page 
     }
   }
 })
+
+test('Registro rechaza destinos externos disfrazados', async ({ page }) => {
+  const unsafe = ['//evil.example', '/\\evil.example', '/%2Fevil.example', '/%5Cevil.example']
+  for (const target of unsafe) {
+    await page.goto('/account?mode=signup&redirect=' + encodeURIComponent(target))
+    await page.getByRole('button', { name: 'Ingresar', exact: true }).first().click()
+    const destination = new URL(page.url())
+    expect(destination.pathname).toBe('/account')
+    expect(destination.searchParams.get('redirect')).toBe('/profile')
+  }
+})

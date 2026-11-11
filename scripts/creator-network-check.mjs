@@ -25,6 +25,8 @@ assert.ok(read('src/components/SEO.tsx').includes('noIndex = false') && read('sr
 assert.ok(frontend.includes("status === 'draft'") && frontend.includes("status === 'pending_review'"), 'Draft/pending forms not guarded')
 assert.ok(app.includes('creator-moderation') && read('src/cms/layout/CmsSidebar.tsx').includes('creator-moderation'), 'CMS moderation not connected')
 assert.ok(edge.includes('admin.auth.getUser(token)') && edge.includes('caller.app_metadata?.role'), 'Untrusted moderator roles')
+const cmsAuth = read('src/cms/hooks/useAdminSession.ts')
+assert.ok(cmsAuth.includes("const canModerate = trustedAppRole(user) !== null") && cmsAuth.includes("if (trustedRole === 'moderator')"), 'CMS client must require the same trusted app_metadata moderator role as the Edge Function')
 assert.ok(edge.includes('SELF_REVIEW_DENIED') && edge.includes('safeExternalUrl'), 'Moderator safety checks missing')
 assert.ok(edge.includes("admin.rpc('creator_review_project'") && edge.includes("admin.rpc('creator_resolve_report'"), 'Moderation must use atomic database transactions')
 assert.ok(sql.includes('security invoker') && sql.includes('revoke execute on function public.creator_review_project') && sql.includes('revoke execute on function public.creator_resolve_report'), 'Moderator RPC execute grants not restricted')

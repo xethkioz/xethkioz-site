@@ -31,6 +31,9 @@ test.describe('Creator network with simulated Supabase Auth and REST', () => {
     projectPost?: (data: Record<string, unknown>) => void,
     projectPatch?: (url: URL, data: Record<string, unknown>) => void,
     initialProjects?: Array<Record<string, unknown>>,
+    profileRole?: string,
+    userAppRole?: string,
+    moderation?: (data: Record<string, unknown>) => unknown,
   } = {}) {
     const projects = [...(options.initialProjects || [])]
     await page.route('https://mock-creator.supabase.co/**', async route => {
@@ -45,7 +48,14 @@ test.describe('Creator network with simulated Supabase Auth and REST', () => {
         options.signup?.(url, data)
         return respond({ user: { ...user, email: String(data.email) }, session: null })
       }
-      if (url.pathname === '/auth/v1/user' && method === 'GET') return respond(user)
+      if (url.pathname === '/auth/v1/user' && method === 'GET') return respond(options.userAppRole ? { ...user, app_metadata: { ...user.app_metadata, role: options.userAppRole } } : user)
+      if (url.pathname === '/rest/v1/profiles' && method === 'GET') {
+        return respond({ role: options.profileRole || 'GUEST', subscription_tier: 'BASIC' })
+      }
+      if (url.pathname === '/functions/v1/creator-moderation' && method === 'POST') {
+        const data = request.postDataJSON() as Record<string, unknown>
+        return respond(options.moderation?.(data) || { ok: true, queue: [], reports: [], reportedProjects: [] })
+      }
       if (url.pathname === '/rest/v1/creator_projects') {
         if (method === 'POST') {
           const data = request.postDataJSON() as Record<string, unknown>
@@ -79,7 +89,8 @@ test.describe('Creator network with simulated Supabase Auth and REST', () => {
     })
   }
 
-  async function seedSession(page: Page) {
+  async function seedSession(page: Page, appRole?: string) {
+    const seededUser = appRole ? { ...user, app_metadata: { ...user.app_metadata, role: appRole } } : user
     await page.addInitScript(({ user, storageKey }) => {
       const payload = {
         sub: user.id, role: 'authenticated',
@@ -97,7 +108,7 @@ test.describe('Creator network with simulated Supabase Auth and REST', () => {
         user,
       }
       localStorage.setItem(storageKey, JSON.stringify(session))
-    }, { user, storageKey: 'sb-mock-creator-auth-token' })
+    }, { user: seededUser, storageKey: 'sb-mock-creator-auth-token' })
   }
 
   test('Registration preserves confirmation notice and creator destination', async ({ page }) => {
@@ -167,5 +178,45 @@ test.describe('Creator network with simulated Supabase Auth and REST', () => {
     expect(patch).not.toHaveProperty('author_id')
     expect(patchStatus).toContain('draft')
     expect(patchStatus).toContain('rejected')
+  })
+
+  test('Profile-only moderator cannot access the review controls', async ({ page }) => {
+    await seedSession(page)
+    await mockSupabase(page, { profileRole: 'MODERATOR' })
+    await page.goto('/cms/creator-moderation')
+    await expect(page.getByRole('heading', { name: 'Acceso restringido' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Aprobar y publicar' })).toHaveCount(0)
+  })
+
+  test('Trusted app moderator can review a pending creation', async ({ page }) => {
+    const requests: Array<Record<string, unknown>> = []
+    let approved = false
+    const sample = {
+      id: projectId, author_id: '22222222-2222-4222-8222-222222222222',
+      author_name: 'Autor externo', title: 'Proyecto para revisar',
+      summary: 'Una creación original para revisar en la comunidad.',
+      external_url: 'https://drive.google.com/file/d/sample',
+      category: 'programa', license: 'MIT', status: 'pending_review',
+      created_at: '2026-11-11T00:00:00Z',
+    }
+    await seedSession(page, 'moderator')
+    await mockSupabase(page, {
+      userAppRole: 'moderator', profileRole: 'GUEST',
+      moderation: data => {
+        requests.push(data)
+        if (data.action === 'review') { approved = true; return { ok: true, projectId, status: 'published' } }
+        return { ok: true, queue: approved ? [] : [sample], reports: [], reportedProjects: [] }
+      },
+    })
+    await page.goto('/cms/creator-moderation')
+    await expect(page.getByRole('heading', { name: 'Revisión de creaciones' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: /Pendientes de revisión \(1\)/ })).toBeVisible()
+    await page.getByRole('checkbox').first().check()
+    await page.getByRole('button', { name: 'Aprobar y publicar' }).click()
+    await expect(page.getByText('Proyecto aprobado y publicado.')).toBeVisible()
+    const review = requests.find(data => data.action === 'review')
+    expect(review?.projectId).toBe(projectId)
+    expect(review?.decision).toBe('approve')
+    expect(review?.reviewed).toBe(true)
   })
 })

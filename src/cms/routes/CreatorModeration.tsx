@@ -107,7 +107,7 @@ export default function CreatorModeration() {
   if (!canModerate) return <section role="alert" className="m-8 rounded-2xl border border-orange-500/50 bg-slate-950 p-8 text-white"><h1 className="text-2xl font-bold">Acceso restringido</h1><p>Solo cuentas con rol MODERATOR o ADMIN pueden revisar las creaciones.</p></section>
 
   return <main className="mx-auto max-w-6xl space-y-8 px-4 py-10 text-white">
-    <SEO title="Moderación de creadores · XETHKIOZ" url="/cms/creator-moderation" />
+    <SEO title="Moderación de creadores · XETHKIOZ" url="/cms/creator-moderation" noIndex />
     <header>
       <p className="text-xs font-bold uppercase tracking-[0.22em] text-violet-300">CREATOR NETWORK / CONTROL</p>
       <h1 className="mt-2 text-3xl font-black md:text-4xl">Revisión de creaciones</h1>
