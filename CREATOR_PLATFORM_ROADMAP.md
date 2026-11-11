@@ -332,3 +332,13 @@ _Actualizar esta única hoja tras cada bloque de ejecución, sin multiplicar pla
 - [x] Confirmación de registro y actualización de contraseña conserva el mensaje en pantalla al cambiar a modo ingresar.
 - [x] Enlace del email de confirmación conserva el destino interno seguro, para regresar a /publicar si se inició desde allí.
 - [ ] Falta prueba end-to-end de formulario con backend simulado y después contra Supabase real; no se automatizan altas reales de personas ni se envían mensajes a correo de terceros.
+
+## WEB-030 / WEB-034 — Pruebas integradas con Supabase simulado (11/11/2026)
+- [x] `tests/e2e/creator-auth-mock.spec.ts`: seis pruebas (3 recorridos por escritorio y móvil) ejecutadas con **host de Supabase ficticio e interceptación HTTP**; sin altas reales, envío de email ni escrituras en Supabase.
+- [x] Registro con nombre público elegido, correo de confirmación visible y retorno a la ruta `/publicar`.
+- [x] Usuario autenticado simulado envía ficha con enlace de su nube y recibe estado `pending_review`; la biblioteca impide editar mientras está en revisión.
+- [x] Edición de borrador con condición de estado y sin reescribir `author_id`.
+- [x] Revalidación de `test:creator-rls`: 16 reglas de PostgreSQL temporal, incluyendo rollback transaccional cuando falla la auditoría.
+- [x] Navegación real sin backend simulado: 14/14 pruebas `creator-network.spec.ts` en Chrome escritorio/móvil.
+- **Repetición del simulador (solo compilación local, no publicar):** configurar `VITE_SUPABASE_URL=https://mock-creator.supabase.co` y `VITE_SUPABASE_ANON_KEY=sb_publishable_testonly`, ejecutar `npm run build`; luego `MOCK_CREATOR_AUTH=1` al ejecutar `npx playwright test tests/e2e/creator-auth-mock.spec.ts`. El archivo se salta si `MOCK_CREATOR_AUTH` no está activado.
+- [ ] Seguir probando moderación; la base Supabase productiva aún no tiene tablas de creadores y no debe considerarse operativo el circuito real hasta instalar migración + Edge Function y probar usuarios separados.
