@@ -96,7 +96,14 @@ export default function AccountAccessStable() {
     setConfirmPassword('')
     setError(null)
     setMessage(null)
-    setParams(next === 'signup' ? {} : { mode: next }, { replace: true })
+    // Keep the internal creator destination when switching sign-up/sign-in modes.
+    setParams((current) => {
+      const nextParams = new URLSearchParams()
+      const destination = current.get('redirect')
+      if (destination) nextParams.set('redirect', safeRedirect(destination))
+      if (next !== 'signup') nextParams.set('mode', next)
+      return nextParams
+    }, { replace: true })
   }
 
   async function submit(event: FormEvent<HTMLFormElement>) {
