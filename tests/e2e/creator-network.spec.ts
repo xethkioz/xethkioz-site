@@ -37,6 +37,9 @@ test('Perfil público inválido no expone cuentas ni datos privados',async({page
 })
 test('Registro y acceso conservan el destino del creador',async({page})=>{
   await page.goto('/account?mode=signup&redirect=%2Fpublicar')
+  await expect(page.locator('.xk-creator-nav')).toHaveCount(1)
+  await expect(page.locator('header').filter({hasText:'CREATOR NETWORK'})).toHaveCount(1)
+  await expect(page.getByRole('heading',{name:/Tu cuenta de creador/})).toBeVisible()
   await expect(page.getByPlaceholder('Nombre visible')).toBeVisible()
   await page.getByRole('button',{name:'Ingresar',exact:true}).first().click()
   await expect(page).toHaveURL(/mode=signin/)

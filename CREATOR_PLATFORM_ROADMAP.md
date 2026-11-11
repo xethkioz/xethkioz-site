@@ -319,3 +319,9 @@ _Actualizar esta única hoja tras cada bloque de ejecución, sin multiplicar pla
 - [x] **Preparado en rama:** eventos de moderación ya no se eliminan silenciosamente mediante borrado en cascada cuando el autor elimina un proyecto rechazado. Pendiente revisión de retención/privacidad antes de abrir el servicio.
 - [x] **Preparado en rama:** los visitantes registrados pueden indicar el tipo de denuncia (malware, copyright, spam, otros, revisión general) desde la ficha de la creación; la revisión humana sigue siendo obligatoria.
 - [ ] **Pendiente:** comprobar en staging políticas de retención, denuncias y auditoría con cuentas reales, no dar por validada la seguridad solo por build.
+
+
+## WEB-030 / WEB-061 — 11/11/2026
+- [x] Preparado en rama: registro, acceso y recuperación utilizan la misma estructura de navegación de Creator Network, estética luminosa y metadatos noindex, evitando el contraste con la antigua página de cuenta cyber.
+- [x] La navegación de acceso vuelve a la biblioteca de creadores; el flujo conserva el parámetro redirect cuando se cambia entre registro e inicio de sesión.
+- [ ] Queda pendiente comprobar visualmente pantallas completas y validación real de Auth, así como la integración de la migración nueva en Supabase.

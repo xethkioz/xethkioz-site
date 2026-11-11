@@ -169,7 +169,7 @@ function AppShell() {
   const { lang } = useLang()
   const basePath = stripEnglishPrefix(location.pathname)
   const isCmsRoute = location.pathname === '/cms' || location.pathname.startsWith('/cms/')
-  const isCreatorRoute = ['/', '/explorar', '/publicar', '/mis-proyectos'].includes(basePath) || basePath.startsWith('/proyecto/') || basePath.startsWith('/publicar/') || basePath.startsWith('/creador/')
+  const isCreatorRoute = ['/', '/explorar', '/publicar', '/mis-proyectos', '/account'].includes(basePath) || basePath.startsWith('/proyecto/') || basePath.startsWith('/publicar/') || basePath.startsWith('/creador/')
   const isGamePortalRoute = basePath === '/world-of-xethkioz' || basePath === '/world-of-xethkioz/elemental-realms'
   const isThemedPortalRoute = isGamePortalRoute || ['/digital', '/digital/cursos', '/creacion-web', '/green-node'].includes(basePath)
   const hasPublicNavigation = !isCmsRoute && !isCreatorRoute && !isThemedPortalRoute

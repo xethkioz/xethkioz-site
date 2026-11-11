@@ -52,7 +52,7 @@ function safeCloudLink(value: string): boolean {
 function creatorLogin(redirect: string) {
   return '/account?mode=signin&redirect=' + encodeURIComponent(redirect)
 }
-function PlatformFrame({ children }: { children: ReactNode }) {
+export function PlatformFrame({ children }: { children: ReactNode }) {
   const { openSettings } = usePrivacyConsent()
   return (
     <div className="xk-creator-app">
