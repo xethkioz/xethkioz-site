@@ -342,3 +342,7 @@ _Actualizar esta única hoja tras cada bloque de ejecución, sin multiplicar pla
 - [x] Navegación real sin backend simulado: 14/14 pruebas `creator-network.spec.ts` en Chrome escritorio/móvil.
 - **Repetición del simulador (solo compilación local, no publicar):** configurar `VITE_SUPABASE_URL=https://mock-creator.supabase.co` y `VITE_SUPABASE_ANON_KEY=sb_publishable_testonly`, ejecutar `npm run build`; luego `MOCK_CREATOR_AUTH=1` al ejecutar `npx playwright test tests/e2e/creator-auth-mock.spec.ts`. El archivo se salta si `MOCK_CREATOR_AUTH` no está activado.
 - [ ] Seguir probando moderación; la base Supabase productiva aún no tiene tablas de creadores y no debe considerarse operativo el circuito real hasta instalar migración + Edge Function y probar usuarios separados.
+
+### WEB-061 — Regresión visual a 320 px (11/11/2026)
+- [x] Prueba Playwright de pantalla angosta (320 × 740) ejecutada en Chromium desktop y móvil: 2/2 aprobadas; portada, catálogo, cuenta y perfil público inválido sin desbordamiento horizontal y con enlaces de navegación dentro del ancho.
+- [ ] Pendiente: auditoría visual manual de contraste, enfoque de teclado y captura de pantallas en dispositivos reales.

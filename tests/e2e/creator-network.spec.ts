@@ -55,3 +55,23 @@ test('Búsqueda inicial puede abrirse desde un enlace compartido',async({page})=
   await page.goto('/explorar?q=aventura')
   await expect(page.getByPlaceholder(/Buscar juegos/)).toHaveValue('aventura')
 })
+
+test('Interfaz compacta de 320 px sin desplazamiento horizontal', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 740 })
+  for (const path of ['/', '/explorar', '/account?mode=signup&redirect=%2Fpublicar', '/creador/no-es-uuid']) {
+    await page.goto(path)
+    await expect(page.locator('.xk-creator-nav')).toBeVisible()
+    const extent = await page.evaluate(() => ({
+      scroll: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth),
+      viewport: window.innerWidth,
+    }))
+    expect(extent.scroll - extent.viewport, 'overflow in ' + path).toBeLessThanOrEqual(2)
+    const links = page.locator('.xk-creator-nav a')
+    for (let i = 0; i < await links.count(); i++) {
+      const box = await links.nth(i).boundingBox()
+      if (!box) continue
+      expect(box.x, path + ': navigation link begins outside screen').toBeGreaterThanOrEqual(-2)
+      expect(box.x + box.width, path + ': navigation link overflows screen').toBeLessThanOrEqual(322)
+    }
+  }
+})
