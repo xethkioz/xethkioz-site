@@ -354,3 +354,9 @@ _Actualizar esta única hoja tras cada bloque de ejecución, sin multiplicar pla
 - [x] `tests/e2e/creator-auth-mock.spec.ts`: 10/10 en escritorio/móvil, incluyendo caso de rol solo en perfil denegado y aprobación autorizada con rol `app_metadata` en el panel de control.
 - [x] `src/pages/AccountAccessStable.tsx`: destino de registro validado como ruta local, rechazando barras inversas, rutas protocol-relative y slash codificado para evitar redirección a sitios externos.
 - [ ] Mantenemos pendientes pruebas reales en Supabase independiente, configuración de límites de peticiones persistente y liberación autorizada de producción.
+
+## WEB-050/WEB-051 — Catálogo escalable, 11/11/2026
+- [x] En la rama de desarrollo, el catálogo consulta directamente Supabase para buscar en título, descripción y autor; los filtros por categoría se aplican en el servidor (sin limitarse a los primeros 48 resultados).
+- [x] Se incorpora paginación con botón «Mostrar más creaciones»: página de 24 resultados, lectura de 25 para comprobar si quedan más. La portada carga solo seis novedades.
+- [x] Búsquedas debounced de 350 ms, criterio de orden estable por fecha/ID y aislamiento de respuestas antiguas cuando cambian los filtros; sin novedades inventadas ni archivos alojados en XETHKIOZ.
+- [ ] Pendiente probar consultas contra un backend staging de Supabase y publicar con autorización final; este cambio permanece en PR de desarrollo.

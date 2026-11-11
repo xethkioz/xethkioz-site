@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import SEO from '../components/SEO'
 import { isSupabaseConfigured, supabase } from '../services/supabaseClient'
@@ -93,38 +93,82 @@ function ProjectCard({ project }: { project: Project }) {
     </article>
   )
 }
-function usePublishedProjects() {
+// All catalog filtering and pagination runs on the database, not only on the
+// first page shown in the browser. No public project is fabricated for demos.
+const PUBLISHED_COLUMNS = 'id,author_id,author_name,title,summary,category,external_url,cover_url,license,tags,status,created_at'
+function safeCatalogSearch(value: string) {
+  // PostgREST .or() accepts a filter expression. Strip operator syntax and
+  // wildcard characters from untrusted search input before interpolating it.
+  return value.trim().slice(0, 80).replace(/[%,()."\\_*]/g, ' ').replace(/\\s+/g, ' ').trim()
+}
+function publishedQuery(category: Kind | 'todos', search: string) {
+  let query = supabase.from('creator_projects').select(PUBLISHED_COLUMNS)
+    .eq('status', 'published')
+    .order('created_at', { ascending: false })
+    .order('id', { ascending: false })
+  if (category !== 'todos') query = query.eq('category', category)
+  const text = safeCatalogSearch(search)
+  if (text) query = query.or('title.ilike.%' + text + '%,summary.ilike.%' + text + '%,author_name.ilike.%' + text + '%')
+  return query
+}
+function usePublishedProjects(category: Kind | 'todos' = 'todos', search = '', pageSize = 6) {
   const [items, setItems] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [hasMore, setHasMore] = useState(false)
   const [error, setError] = useState('')
+  const generation = useRef(0)
+
   useEffect(() => {
-    let active = true
+    const currentGeneration = ++generation.current
+    setItems([])
+    setError('')
+    setLoading(true)
+    setLoadingMore(false)
+    setHasMore(false)
     if (!isSupabaseConfigured) {
       setError('El catálogo todavía no está conectado.')
       setLoading(false)
-      return
+      return () => { generation.current++ }
     }
-    void supabase.from('creator_projects').select('id, author_id, author_name, title, summary, category, external_url, cover_url, license, tags, status, created_at')
-      .eq('status', 'published').order('created_at', { ascending: false }).limit(48)
+    void publishedQuery(category, search).range(0, pageSize)
       .then(({ data, error: queryError }) => {
-        if (!active) return
+        if (generation.current !== currentGeneration) return
         if (queryError) setError('Estamos preparando la apertura del catálogo.')
-        else setItems((data ?? []) as Project[])
+        else {
+          setItems((data || []).slice(0, pageSize) as Project[])
+          setHasMore((data || []).length > pageSize)
+        }
         setLoading(false)
       })
-    return () => { active = false }
-  }, [])
-  return { items, loading, error }
+    return () => { generation.current++ }
+  }, [category, search, pageSize])
+
+  async function loadMore() {
+    if (loading || loadingMore || !hasMore || !isSupabaseConfigured) return
+    const currentGeneration = generation.current
+    setLoadingMore(true)
+    const { data, error: queryError } = await publishedQuery(category, search)
+      .range(items.length, items.length + pageSize)
+    if (generation.current !== currentGeneration) return
+    if (queryError) setError('No pudimos cargar más proyectos. Intentá nuevamente.')
+    else {
+      setItems((current) => [...current, ...((data || []).slice(0, pageSize) as Project[])])
+      setHasMore((data || []).length > pageSize)
+    }
+    setLoadingMore(false)
+  }
+  return { items, loading, error, hasMore, loadingMore, loadMore }
 }
-function ProjectGrid({ items, loading, error }: { items: Project[]; loading: boolean; error: string }) {
+function ProjectGrid({ items, loading, error, emptyMessage }: { items: Project[]; loading: boolean; error: string; emptyMessage?: string }) {
   if (loading) return <p className="xk-creator-state" role="status">Cargando proyectos…</p>
   if (error) return <p className="xk-creator-state" role="status">{error}</p>
-  if (!items.length) return <div className="xk-creator-state"><h3>Un espacio para nuevas ideas</h3><p>Todavía no hay proyectos publicados y aprobados. El catálogo crecerá con los primeros creadores.</p><Link to="/publicar">Presentá tu proyecto →</Link></div>
+  if (!items.length) return <div className="xk-creator-state"><h3>Un espacio para nuevas ideas</h3><p>{emptyMessage || 'Todavía no hay proyectos publicados y aprobados. El catálogo crecerá con los primeros creadores.'}</p><Link to="/publicar">Presentá tu proyecto →</Link></div>
   return <div className="xk-creator-grid">{items.map((project) => <ProjectCard key={project.id} project={project} />)}</div>
 }
 
 export function CreatorHome() {
-  const { items, loading, error } = usePublishedProjects()
+  const { items, loading, error } = usePublishedProjects('todos', '', 6)
   return <PlatformFrame>
     <SEO title="XETHKIOZ — Creá, compartí y descubrí" description="La plataforma donde los creadores comparten videojuegos, programas, videos, arte e ideas hechas con inteligencia artificial." url="/" />
     <main>
@@ -163,18 +207,24 @@ export function CreatorHome() {
 }
 
 export function CreatorExplore() {
-  const { items, loading, error } = usePublishedProjects()
-  const initialCategory = new URLSearchParams(window.location.search).get('categoria') || 'todos'
-  const [category, setCategory] = useState(initialCategory)
-  const [search, setSearch] = useState(() => new URLSearchParams(window.location.search).get('q') || '')
-  const filtered = items.filter((item) => (category === 'todos' || item.category === category)
-    && (item.title + ' ' + item.summary + ' ' + item.tags.join(' ')).toLocaleLowerCase('es').includes(search.trim().toLocaleLowerCase('es')))
+  const initial = new URLSearchParams(window.location.search)
+  const initialCategory = initial.get('categoria') || 'todos'
+  const [category, setCategory] = useState<Kind | 'todos'>(categories.some((item) => item.id === initialCategory) ? initialCategory as Kind | 'todos' : 'todos')
+  const [search, setSearch] = useState(initial.get('q') || '')
+  const [querySearch, setQuerySearch] = useState(search)
+  useEffect(() => {
+    const timer = setTimeout(() => setQuerySearch(search), 350)
+    return () => clearTimeout(timer)
+  }, [search])
+  const { items, loading, error, hasMore, loadingMore, loadMore } = usePublishedProjects(category, querySearch, 24)
+  const filtered = items
   return <PlatformFrame>
     <SEO title="Explorar proyectos · XETHKIOZ" description="Explorá videojuegos, programas, videos y herramientas de la comunidad." url="/explorar" />
     <main className="xk-creator-inner"><p className="xk-creator-eyebrow">EL CATÁLOGO DE LA COMUNIDAD</p><h1>Descubrí lo próximo.</h1><p className="xk-creator-lead">Creaciones compartidas por personas de todo el mundo. Publicaciones revisadas antes de aparecer.</p>
-      <label className="xk-creator-search"><span aria-hidden="true">⌕</span><span className="sr-only">Buscar proyectos</span><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Buscar juegos, programas, videos, creadores…" /></label>
+      <label className="xk-creator-search"><span aria-hidden="true">⌕</span><span className="sr-only">Buscar proyectos</span><input value={search} maxLength={80} onChange={(event) => setSearch(event.target.value)} placeholder="Buscar juegos, programas, videos, creadores…" /></label>
       <div className="xk-creator-pills" role="group" aria-label="Filtrar por categoría">{categories.map((item) => <button key={item.id} type="button" aria-pressed={category === item.id} onClick={() => setCategory(item.id)}>{item.icon} {item.label}</button>)}</div>
-      <ProjectGrid items={filtered} loading={loading} error={error} />
+      <ProjectGrid items={filtered} loading={loading} error={error} emptyMessage="No encontramos proyectos que coincidan con tu búsqueda. Probá otros términos o categorías." />
+      {hasMore && !error && <div className="xk-creator-more"><button type="button" disabled={loadingMore} onClick={() => void loadMore()}>{loadingMore ? 'Cargando…' : 'Mostrar más creaciones'}</button></div>}
     </main>
   </PlatformFrame>
 }

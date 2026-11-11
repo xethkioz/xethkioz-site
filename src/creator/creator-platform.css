@@ -12,3 +12,9 @@
 .xk-creator-report label{font-size:13px;font-weight:850;color:#5f517b}
 .xk-creator-report select{max-width:100%;min-width:min(360px,100%);border:1px solid #d4cde2;border-radius:12px;padding:11px 13px;background:#fff;color:#3b3154;font-size:13px}
 .xk-creator-report button{min-height:42px}
+
+/* The catalog continues past its first page without infinite-scroll surprises. */
+.xk-creator-more { display: flex; justify-content: center; padding: 30px 0 12px; }
+.xk-creator-more button { min-height: 48px; border: 1px solid #b4a9db; border-radius: 999px; padding: 11px 26px; background: #fff; color: #49366f; font-weight: 800; cursor: pointer; }
+.xk-creator-more button:hover:not(:disabled) { background: #ede8fa; }
+.xk-creator-more button:disabled { cursor: wait; opacity: .6; }
