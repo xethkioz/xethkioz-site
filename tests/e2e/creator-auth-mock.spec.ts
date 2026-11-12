@@ -31,6 +31,7 @@ test.describe('Creator network with simulated Supabase Auth and REST', () => {
     projectPost?: (data: Record<string, unknown>) => void,
     projectPatch?: (url: URL, data: Record<string, unknown>) => void,
     simulateDeleteConflict?: boolean,
+    catalogPageUnavailable?: () => boolean,
     initialProjects?: Array<Record<string, unknown>>,
     profileRole?: string,
     userAppRole?: string,
@@ -100,6 +101,9 @@ test.describe('Creator network with simulated Supabase Auth and REST', () => {
             .sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || ''))
               || String(b.id).localeCompare(String(a.id)))
           const offset = Math.max(0, Number(url.searchParams.get('offset') || 0))
+          if (offset >= 24 && options.catalogPageUnavailable?.()) {
+            return respond({ code: 'PGRST503', message: 'Simulated transient catalog failure' }, 503)
+          }
           const limit = Number(url.searchParams.get('limit') || filtered.length)
           const result = filtered.slice(offset, offset + limit)
           const single = (request.headers()['accept'] || '').includes('application/vnd.pgrst.object+json')
@@ -313,6 +317,29 @@ test.describe('Creator network with simulated Supabase Auth and REST', () => {
     await page.getByRole('button', { name: 'Eliminar borrador' }).click()
     await expect(page.getByRole('alert')).toContainText('No se eliminó el borrador.')
     await expect(page.getByRole('heading', { name: 'Borrador que cambió de estado' })).toBeVisible()
+  })
+
+  test('Catalog preserves loaded projects and retries after a transient page error', async ({ page }) => {
+    const projects = Array.from({ length: 31 }, (_, i) => ({
+      id: '00000000-0000-4000-8000-' + (i + 1).toString(16).padStart(12, '0'),
+      author_id: userId, author_name: 'Taller de prueba',
+      title: 'Creación de prueba ' + String(i + 1),
+      summary: 'Una creación comprobable para la comunidad.',
+      category: 'programa', license: 'MIT', tags: [],
+      external_url: 'https://drive.google.com/file/d/test-' + i,
+      status: 'published', created_at: new Date(Date.UTC(2026, 0, i + 1)).toISOString(),
+    }))
+    let catalogUnavailable = true
+    await mockSupabase(page, { initialProjects: projects, catalogPageUnavailable: () => catalogUnavailable })
+    await page.goto('/explorar')
+    await expect(page.locator('.xk-creator-card')).toHaveCount(24)
+    await page.getByRole('button', { name: 'Mostrar más creaciones' }).click()
+    await expect(page.getByRole('alert')).toContainText('No pudimos cargar más proyectos')
+    await expect(page.locator('.xk-creator-card')).toHaveCount(24)
+    catalogUnavailable = false
+    await page.getByRole('button', { name: 'Reintentar cargar más' }).click()
+    await expect(page.locator('.xk-creator-card')).toHaveCount(31)
+    await expect(page.getByRole('alert')).toHaveCount(0)
   })
 
 })

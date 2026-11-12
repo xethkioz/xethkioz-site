@@ -380,3 +380,11 @@ _Actualizar esta única hoja tras cada bloque de ejecución, sin multiplicar pla
 - [x] **6/6 pruebas WCAG AA aprobadas** después de aplicar los ajustes, sin introducir un tema oscuro como identidad dominante.
 - [x] **42/42 pruebas Playwright de Creator Network aprobadas** en corrida conjunta: navegación real, Supabase simulado, seguridad de operaciones y accesibilidad.
 - [ ] Pendiente medir accesibilidad y contraste con datos verdaderos de catálogo / publicaciones y en dispositivos reales antes del despliegue público.
+
+## WEB-054 — 12/11/2026: resiliencia del catálogo paginado
+- [x] Los errores de páginas adicionales ya no eliminan las tarjetas que se habían cargado correctamente; quedan disponibles para el usuario.
+- [x] Ante un error temporal se conserva la opción «Reintentar cargar más», que limpia el estado de error y vuelve a consultar el servidor.
+- [x] El flujo de `loadMore` maneja errores y excepciones de red, comprueba la generación activa para evitar respuestas obsoletas y siempre libera el estado de carga cuando corresponde.
+- [x] Incorporadas dos pruebas Chrome escritorio/móvil con Supabase HTTP simulado: página 2 devuelve error hasta que se reanuda el servicio; luego se recuperan las fichas faltantes.
+- [x] **44/44 Playwright aprobadas** en corrida conjunta (navegación, alta, publicaciones, moderación simulada, borrado, accesibilidad y reintento).
+- [ ] Pendiente probar paginación y errores con un entorno real de Supabase aislado. El backend de producción sigue sin migrar; no se realizaron cambios sobre sus datos.

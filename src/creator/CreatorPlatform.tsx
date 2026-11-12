@@ -152,23 +152,29 @@ function usePublishedProjects(category: Kind | 'todos' = 'todos', search = '', p
     if (loading || loadingMore || !hasMore || !isSupabaseConfigured) return
     const currentGeneration = generation.current
     setLoadingMore(true)
-    const { data, error: queryError } = await publishedQuery(category, search)
-      .range(items.length, items.length + pageSize)
-    if (generation.current !== currentGeneration) return
-    if (queryError) setError('No pudimos cargar más proyectos. Intentá nuevamente.')
-    else {
-      setItems((current) => [...current, ...((data || []).slice(0, pageSize) as Project[])])
-      setHasMore((data || []).length > pageSize)
+    setError('')
+    try {
+      const { data, error: queryError } = await publishedQuery(category, search)
+        .range(items.length, items.length + pageSize)
+      if (generation.current !== currentGeneration) return
+      if (queryError) setError('No pudimos cargar más proyectos. Intentá nuevamente.')
+      else {
+        setItems((current) => [...current, ...((data || []).slice(0, pageSize) as Project[])])
+        setHasMore((data || []).length > pageSize)
+      }
+    } catch {
+      if (generation.current === currentGeneration) setError('No pudimos cargar más proyectos. Intentá nuevamente.')
+    } finally {
+      if (generation.current === currentGeneration) setLoadingMore(false)
     }
-    setLoadingMore(false)
   }
   return { items, loading, error, hasMore, loadingMore, loadMore }
 }
 function ProjectGrid({ items, loading, error, emptyMessage }: { items: Project[]; loading: boolean; error: string; emptyMessage?: string }) {
   if (loading) return <p className="xk-creator-state" role="status">Cargando proyectos…</p>
-  if (error) return <p className="xk-creator-state" role="status">{error}</p>
+  if (error && !items.length) return <p className="xk-creator-state" role="alert">{error}</p>
   if (!items.length) return <div className="xk-creator-state"><h3>Un espacio para nuevas ideas</h3><p>{emptyMessage || 'Todavía no hay proyectos publicados y aprobados. El catálogo crecerá con los primeros creadores.'}</p><Link to="/publicar">Presentá tu proyecto →</Link></div>
-  return <div className="xk-creator-grid">{items.map((project) => <ProjectCard key={project.id} project={project} />)}</div>
+  return <>{error && <p className="xk-creator-state" role="alert">{error}</p>}<div className="xk-creator-grid">{items.map((project) => <ProjectCard key={project.id} project={project} />)}</div></>
 }
 
 export function CreatorHome() {
@@ -228,7 +234,7 @@ export function CreatorExplore() {
       <label className="xk-creator-search"><span aria-hidden="true">⌕</span><span className="sr-only">Buscar proyectos</span><input value={search} maxLength={80} onChange={(event) => setSearch(event.target.value)} placeholder="Buscar juegos, programas, videos, creadores…" /></label>
       <div className="xk-creator-pills" role="group" aria-label="Filtrar por categoría">{categories.map((item) => <button key={item.id} type="button" aria-pressed={category === item.id} onClick={() => setCategory(item.id)}>{item.icon} {item.label}</button>)}</div>
       <ProjectGrid items={filtered} loading={loading} error={error} emptyMessage="No encontramos proyectos que coincidan con tu búsqueda. Probá otros términos o categorías." />
-      {hasMore && !error && <div className="xk-creator-more"><button type="button" disabled={loadingMore} onClick={() => void loadMore()}>{loadingMore ? 'Cargando…' : 'Mostrar más creaciones'}</button></div>}
+      {hasMore && !loading && <div className="xk-creator-more"><button type="button" disabled={loadingMore} onClick={() => void loadMore()}>{loadingMore ? 'Cargando…' : error ? 'Reintentar cargar más' : 'Mostrar más creaciones'}</button></div>}
     </main>
   </PlatformFrame>
 }
