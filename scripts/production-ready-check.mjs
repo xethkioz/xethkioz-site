@@ -40,6 +40,8 @@ const shaderManager = read('src/engines/world/sandbox/ShaderManager.ts')
 const appShell = read('src/App.tsx')
 const header = read('src/components/Header.tsx')
 const footer = read('src/components/Footer.tsx')
+const creator = read('src/creator/CreatorPlatform.tsx')
+const creatorCss = read('src/creator/creator-platform.css')
 const mainEntry = read('src/main.tsx')
 const routeCssLoader = read('src/components/RouteCssLoader.tsx')
 const home = read('src/pages/Home.tsx')
@@ -85,7 +87,10 @@ check(
     && lockfile.version === pkg.version
     && lockfile.packages?.['']?.version === pkg.version,
 )
-check('shared public footer exposes the centralized release version', footer.includes("import { SITE_VERSION, SOCIAL_LINKS }") && footer.includes('{SITE_VERSION}'))
+check('shared public and Creator Network footers expose the release version',
+  footer.includes('{SITE_VERSION}') && footer.includes('SOCIAL_LINKS.filter')
+  && creator.includes('{SITE_VERSION}') && creator.includes('SOCIAL_LINKS.filter')
+)
 check(
   'installable web manifest is linked and versioned',
   indexHtml.includes('rel="manifest" href="/manifest.webmanifest"')
@@ -123,12 +128,12 @@ check(
     && !mainEntry.includes('mountNexusChat'),
 )
 check('Home scenery avoids automatic video and bounds optional motion', !home.includes('<video') && !home.includes('autoPlay') && read('src/components/portals/PortalEffects.tsx').includes('Math.min(count, 12)') && read('src/pages/HomePortals.css').includes('prefers-reduced-motion'))
-check(
-  'Home exposes official XETHKIOZ web and social signals',
-  footer.includes("['Threads', 'Instagram', 'TikTok Principal', 'YouTube', 'Web']")
-    && footer.includes('https://www.xethkioz.com.ar')
-    && appShell.includes('!isCmsRoute && (')
-    && appShell.includes('<Footer />'),
+check('Creator Network links to verified official social accounts',
+  siteConfig.includes('https://www.xethkioz.com.ar')
+  && creator.includes('aria-label="Redes oficiales"')
+  && creator.includes("social.name === 'Threads'")
+  && creator.includes("social.name === 'Instagram'")
+  && footer.includes('aria-label="Redes oficiales"')
 )
 check(
   'Home uses the canonical Veyr Wisp without duplicate Home implementation',
@@ -138,8 +143,17 @@ check(
     && !home.includes('className="xk-rb-wisp"'),
 )
 check('Home uses approved public portal scenery without production geometry', ['fire','nature','ice'].every(tone => exists(`public/assets/portals/${tone}-portal.webp`)) && !/\.(glb|gltf|fbx|blend)/.test(home))
-check('Home exposes accessible portal navigation with pause and reduced motion support', home.includes('PortalNavigation') && home.includes('xk-light-worlds') && read('src/components/portals/PortalNavigation.tsx').includes('aria-expanded={open}') && read('src/components/portals/PortalNavigation.tsx').includes('aria-pressed={effects.enabled}') && read('src/components/portals/PortalSystem.css').includes('prefers-reduced-motion'))
-check('Home preserves three direct destinations plus the Green Node rift', home.includes('xk-light-world--realms') && home.includes('xk-light-world--pets') && home.includes('xk-light-world--digital') && home.includes('xk-light-world--node') && home.includes('href="/mascotas/"') && home.includes("localizePath('/digital')") && home.includes("localizePath('/world-of-xethkioz/elemental-realms')"))
+check('Creator Network has accessible main navigation and reduced motion support',
+  creator.includes('aria-label="Navegación principal"')
+  && creator.includes('className="xk-creator-nav"')
+  && creatorCss.includes('@media(prefers-reduced-motion:reduce)')
+  && creatorCss.includes('.xk-creator-app a:focus-visible')
+)
+check('Creator Network provides project discovery plus the three preserved portals',
+  creator.includes('to="/explorar"') && creator.includes('to="/publicar"')
+  && creator.includes('to="/green-node"') && creator.includes('to="/science"')
+  && creator.includes('href="/mascotas/"')
+)
 check('Home keeps service catalog and local AI details in Digital instead of expanding Home', !home.includes('xk-veyr-story') && !home.includes('xk-studio-story') && read('src/pages/DigitalHub.tsx').includes('VEYR') && read('src/pages/DigitalHub.tsx').includes('https://argenciencia.com/'))
 check(
   'Retired Nexus City editorial material stays out of public feeds and article metadata',
@@ -160,21 +174,19 @@ check(
     && publicNews.includes("next.set('q', cleanValue)")
     && publicNews.includes('snap-mandatory'),
 )
-check(
-  'Navigation is keyboard and mobile accessible',
-  appShell.includes('xk-skip-link')
-    && appShell.includes('RouteAccessibility')
-    && appShell.includes('tabIndex={-1}')
-    && header.includes('xk-mobile-dock')
-    && header.includes('<NavLink')
-    && redesignCss.includes('.xk-mobile-dock a:focus-visible'),
+check('Creator navigation and route accessibility work on keyboard and mobile',
+  appShell.includes('xk-skip-link') && appShell.includes('RouteAccessibility')
+  && appShell.includes('tabIndex={-1}')
+  && creator.includes('<nav aria-label="Navegación principal">')
+  && creatorCss.includes(':focus-visible')
+  && creatorCss.includes('@media(max-width:760px)')
 )
-check(
-  'Public pages use one compact non-overlapping header',
-  header.includes('pointer-events-none sticky top-0')
-    && header.includes('grid-cols-[minmax(0,1fr)_auto]')
-    && !fusionShell.includes('<header')
-    && !fusionShell.includes("from 'react-router-dom'"),
+check('Creator routes render a single dedicated responsive header',
+  appShell.includes('const hasPublicNavigation = !isCmsRoute && !isCreatorRoute')
+  && creator.includes('<header className="xk-creator-nav">')
+  && creatorCss.includes('.xk-creator-nav{')
+  && creatorCss.includes('.xk-creator-nav nav{')
+  && !fusionShell.includes('<header')
 )
 check(
   'News RLS is role-scoped and avoids repeated auth evaluation',

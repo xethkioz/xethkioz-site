@@ -6,3 +6,6 @@ verify_jwt = true
 
 [functions.admin-users]
 verify_jwt = true
+
+[functions.creator-moderation]
+verify_jwt = true

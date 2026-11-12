@@ -21,11 +21,11 @@ export default function PortalNavigation({ home = false }: { home?: boolean }) {
     return () => { document.documentElement.removeAttribute('data-fantasy-menu-open'); document.removeEventListener('pointerdown', outside) }
   }, [open])
   return <header onBlur={event => { if (event.relatedTarget instanceof Node && !event.currentTarget.contains(event.relatedTarget)) setOpen(false) }} ref={ref} className={`portal-navigation${home ? ' is-home xk-launcher-nav' : ''}`} onKeyDown={event => { if (event.key === 'Escape' && open) { setOpen(false); toggleRef.current?.focus() } }}>
-    {home ? <span className="portal-navigation__signature" aria-hidden="true">✦ <span>{es ? 'UN UNIVERSO SIN LÍMITES' : 'ONE BOUNDLESS UNIVERSE'}</span></span> : <Link className="portal-navigation__back" to={localizePath('/')}><span aria-hidden="true">←</span> {es ? 'Portales' : 'Portals'}</Link>}
+    {home ? <span className="portal-navigation__signature" aria-hidden="true">✦ <span>{es ? 'UN UNIVERSO SIN LÍMITES' : 'ONE BOUNDLESS UNIVERSE'}</span></span> : <Link className="portal-navigation__back" to={localizePath('/')}><span aria-hidden="true">←</span> {es ? 'Inicio' : 'Home'}</Link>}
     {!home && <nav className="portal-navigation__destinations" aria-label={es ? 'Portales principales' : 'Main portals'}>
-      <Link data-tone="fire" aria-current={pathname.includes('elemental-realms') ? 'page' : undefined} to={localizePath('/world-of-xethkioz/elemental-realms')}>Elemental Realms</Link>
+      <Link data-tone="fire" aria-current={pathname.includes('elemental-realms') ? 'page' : undefined} to="/explorar">Explorar creaciones</Link>
       <a data-tone="nature" href="/mascotas/">{es ? 'Mascotas' : 'Pets'}</a>
-      <Link data-tone="ice" aria-current={pathname.includes('digital') || pathname.includes('creacion-web') ? 'page' : undefined} to={localizePath('/digital')}>Digital</Link>
+      <Link data-tone="ice" aria-current={pathname.includes('science') ? 'page' : undefined} to="/science">Ciencia</Link>
       <Link data-tone="node" aria-current={pathname.includes('green-node') ? 'page' : undefined} to={localizePath('/green-node')}>Green Node</Link>
     </nav>}
     <div className="portal-navigation__controls">
@@ -34,7 +34,7 @@ export default function PortalNavigation({ home = false }: { home?: boolean }) {
       <button ref={toggleRef} type="button" aria-expanded={open} aria-controls={menuId} onClick={() => setOpen(value => !value)}>{home ? <><span aria-hidden="true">{open ? '×' : '☰'}</span><span className="sr-only">{es ? 'Menú' : 'Menu'}</span></> : <>{es ? 'Menú' : 'Menu'} <span aria-hidden="true">{open ? '−' : '+'}</span></>}</button>
     </div>
     <nav id={menuId} className="portal-navigation__more" aria-hidden={!open} aria-label={es ? 'Más de XETHKIOZ' : 'More from XETHKIOZ'} onClick={() => setOpen(false)}>
-      <Link tabIndex={open ? 0 : -1} to="/news">{es ? 'Noticias' : 'News (ES)'}</Link><Link tabIndex={open ? 0 : -1} to={localizePath('/gaming')}>{es ? 'Biblioteca gamer' : 'Gaming library'}</Link><Link tabIndex={open ? 0 : -1} to={localizePath('/community')}>{es ? 'Comunidad' : 'Community'}</Link><Link tabIndex={open ? 0 : -1} to="/account">{es ? 'Mi cuenta' : 'My account'}</Link>
+      <Link tabIndex={open ? 0 : -1} to="/explorar">{es ? 'Explorar' : 'Explore'}</Link><Link tabIndex={open ? 0 : -1} to="/publicar">{es ? 'Publicar' : 'Publish'}</Link><Link tabIndex={open ? 0 : -1} to="/mis-proyectos">{es ? 'Mi espacio' : 'My space'}</Link><Link tabIndex={open ? 0 : -1} to="/account">{es ? 'Mi cuenta' : 'My account'}</Link>
     </nav>
   </header>
 }

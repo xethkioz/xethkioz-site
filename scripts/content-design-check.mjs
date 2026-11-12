@@ -21,6 +21,38 @@ const mainEntry = read('src/main.tsx')
 const checks = []
 const check = (name, ok) => checks.push([name, Boolean(ok)])
 
+
+// The creator platform intentionally replaces the retired Aion/WoW landing.
+// Audit its real contracts instead of requiring deleted launcher selectors.
+if (home.includes('CreatorHome as default')) {
+  const creator = read('src/creator/CreatorPlatform.tsx')
+  const creatorCss = read('src/creator/creator-platform.css')
+  const app = read('src/App.tsx')
+  check('Creator Home is mounted from the new platform', home.includes("from '../creator/CreatorPlatform'") && app.includes("import('./pages/Home')"))
+  check('Catalog, publishing, library, details are routed', ['/explorar','/publicar','/mis-proyectos','/proyecto/:id'].every(p => app.includes('path="' + p + '"')))
+  check('Green Node is still accessible', app.includes('path="/green-node"') && creator.includes('to="/green-node"') && green.includes('xk-green-view-nav'))
+  check('Science is still accessible', app.includes('path="/science"') && creator.includes('to="/science"') && science.includes('data-science-primary-content'))
+  check('Mascotas remains on its own static web portal', creator.includes('href="/mascotas/"') && fs.existsSync(path.join(root,'public/mascotas/index.html')))
+  check('Published items only in public gallery', creator.includes(".eq('status', 'published')") && creator.includes("from('creator_projects')"))
+  check('No sample projects masquerade as real publications', !creator.includes('demoProjects') && !creator.includes('sampleProjects') && creator.includes('Todavía no hay proyectos publicados'))
+  check('External creator content is HTTPS only and never embedded as active scripts', creator.includes("url.protocol !== 'https:'") && !creator.includes('<iframe') && !creator.includes('<script'))
+  check('Public submissions require moderation', creator.includes("void submit('pending_review')") && creator.includes('status: Status'))
+  check('Creator forms rely on authenticated Supabase user', creator.includes('supabase.auth.getUser()') && creator.includes('creatorLogin'))
+  check('User-owned cloud links, no hosting of uploaded executable files', creator.includes('drive.google.com') && creator.includes('onedrive.live.com') && creator.includes('dropbox.com') && !creator.includes('storage.from('))
+  check('Public projects include reporting actions', creator.includes('creator_project_reports') && creator.includes('reportProject'))
+  check('Design offers responsive grids and reduced-motion support', creatorCss.includes('@media(max-width:760px)') && creatorCss.includes('prefers-reduced-motion:reduce'))
+  check('New page has a content-first layout and no autoplay videos', !creator.includes('autoPlay') && !creator.includes('<video') && creator.includes('xk-creator-hero'))
+  check('Creator CSS has bounded source size', Buffer.byteLength(creatorCss, 'utf8') < 40 * 1024)
+  check('Private game-source content is not present in new creator frontend', !/\.(?:glb|gltf|fbx|blend|unitypackage)\b/i.test(creator))
+  check('Global entry does not import retired visibility fixes', !mainEntry.includes("import './visibility-fixes.css'"))
+  check('No duplicated community chat on creator pages', app.includes('!isCreatorRoute') && !creator.includes('<NexusChatWidget'))
+  let failures = checks.filter(([,ok]) => !ok)
+  for (const [name,ok] of checks) console.log((ok ? 'PASS ' : 'FAIL ') + name)
+  if (failures.length) { console.error('Creator platform content audit failed: ' + failures.length); process.exit(1) }
+  console.log('Creator platform content audit PASS')
+  process.exit(0)
+}
+
 check('Nexus links preserve localized routes', district.includes('const { lang, localizePath } = useLang()') && district.includes('to={localizePath(item.to)}'))
 check('Science district prioritizes sourced news', district.indexOf("title: 'Noticias con fuentes'") < district.indexOf("title: 'Herramientas y respuestas'"))
 check('Home exposes three compact public portals', destinations.includes("href: '/gaming'") && destinations.includes('https://argenciencia.com/') && destinations.includes("href: '/mascotas/'") && !home.includes("id: 'comicon'"))

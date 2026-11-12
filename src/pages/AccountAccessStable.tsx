@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import SEO from '../components/SEO'
+import { PlatformFrame } from '../creator/CreatorPlatform'
 import { useHud } from '../lib/HudContext'
 import { isSupabaseConfigured, supabase } from '../services/supabaseClient'
 import {
@@ -23,8 +24,17 @@ function redirectUrl(path: string) {
 }
 
 function safeRedirect(value: string | null) {
-  if (!value || !value.startsWith('/') || value.startsWith('//')) return '/profile'
-  return value
+  // Preserve only same-origin application paths. Browsers normalize backslashes
+  // into slashes in URLs, which can otherwise turn a crafted path into an external redirect.
+  if (!value || !value.startsWith('/') || value.startsWith('//') || /[\\\u0000-\u001f]/.test(value)) return '/profile'
+  try {
+    const origin = 'https://xethkioz.local'
+    const target = new URL(value, origin)
+    if (target.origin !== origin || /^\/%(?:2f|5c)/i.test(target.pathname)) return '/profile'
+    return target.pathname + target.search + target.hash
+  } catch {
+    return '/profile'
+  }
 }
 
 function friendlyError(error: unknown) {
@@ -65,7 +75,7 @@ export default function AccountAccessStable() {
       : isUpdate
         ? passwordAssessment.valid && match
         : isSignup
-          ? emailOk && passwordAssessment.valid && match
+          ? name.trim().length >= 3 && name.trim().length <= 70 && emailOk && passwordAssessment.valid && match
           : emailOk && loginPasswordOk
   )
 
@@ -96,7 +106,14 @@ export default function AccountAccessStable() {
     setConfirmPassword('')
     setError(null)
     setMessage(null)
-    setParams(next === 'signup' ? {} : { mode: next }, { replace: true })
+    // Keep the internal creator destination when switching sign-up/sign-in modes.
+    setParams((current) => {
+      const nextParams = new URLSearchParams()
+      const destination = current.get('redirect')
+      if (destination) nextParams.set('redirect', safeRedirect(destination))
+      if (next !== 'signup') nextParams.set('mode', next)
+      return nextParams
+    }, { replace: true })
   }
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -116,6 +133,10 @@ export default function AccountAccessStable() {
       setError('Ingresá tu contraseña.')
       return
     }
+    if (isSignup && (name.trim().length < 3 || name.trim().length > 70)) {
+      setError('Elegí un nombre público entre 3 y 70 caracteres. No uses tu email como nombre visible.')
+      return
+    }
     if (isSignup || isUpdate) {
       const policyError = passwordPolicyError(password)
       if (policyError) {
@@ -131,12 +152,12 @@ export default function AccountAccessStable() {
     setLoading(true)
     try {
       if (isSignup) {
-        const displayName = name.trim() || email.split('@')[0] || 'XETHKIOZ User'
+        const displayName = name.trim()
         const { data, error: signUpError } = await supabase.auth.signUp({
           email: email.trim(),
           password,
           options: {
-            emailRedirectTo: redirectUrl('/account?mode=signin'),
+            emailRedirectTo: redirectUrl('/account?mode=signin&redirect=' + encodeURIComponent(target)),
             data: { display_name: displayName, username: displayName, role: 'user', source: 'xethkioz-web' },
           },
         })
@@ -145,8 +166,8 @@ export default function AccountAccessStable() {
           await refreshAccount()
           navigate(target, { replace: true })
         } else {
-          setMessage('Cuenta creada. Revisá el correo de confirmación. Si no llega, usá reenviar confirmación.')
           changeMode('signin')
+          setMessage('Cuenta creada. Revisá el correo de confirmación. Si no llega, usá reenviar confirmación.')
         }
         return
       }
@@ -164,8 +185,8 @@ export default function AccountAccessStable() {
         const { error: updateError } = await supabase.auth.updateUser({ password })
         if (updateError) throw updateError
         await refreshAccount()
-        setMessage('Contraseña actualizada. Ya podés ingresar.')
         changeMode('signin')
+        setMessage('Contraseña actualizada. Ya podés ingresar.')
         return
       }
 
@@ -184,35 +205,36 @@ export default function AccountAccessStable() {
 
   return (
     <>
-      <SEO title="Cuenta XETHKIOZ" description="Acceso, registro y recuperación de cuenta XETHKIOZ." url="/account" />
-      <main className="min-h-screen bg-fusionBg px-4 py-28 text-gray-200 sm:px-6">
+      <SEO title="Cuenta XETHKIOZ" description="Creá tu cuenta de creador, ingresá o recuperá tu acceso." url="/account" noIndex />
+      <PlatformFrame>
+      <main className="min-h-[70vh] bg-[#f7f7fc] px-4 py-16 text-slate-800 sm:px-6">
         <section className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1fr_420px]">
-          <article className="panel-cyber border-l-2 border-l-orange p-8">
-            <p className="font-mono text-xs font-black uppercase tracking-[0.28em] text-orange">XETHKIOZ_ACCOUNT_CORE</p>
-            <h1 className="mt-4 text-4xl font-black uppercase tracking-wider text-white md:text-5xl">Cuenta XETHKIOZ</h1>
-            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-gray-400">Sistema estable de cuenta, perfil, roles y comunidad.</p>
-            <div className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-4 text-xs text-gray-300">
+          <article className="rounded-[28px] border border-violet-200 bg-white p-8 shadow-[0_16px_52px_rgba(90,70,160,0.08)]">
+            <p className="font-mono text-xs font-black uppercase tracking-[0.28em] text-violet-700">TU ESPACIO CREATIVO · XETHKIOZ</p>
+            <h1 className="mt-4 text-4xl font-black uppercase tracking-wider text-slate-900 md:text-5xl">Tu cuenta de creador.</h1>
+            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-500">Registrate, organizá tus creaciones y compartí tus proyectos. Los archivos siempre permanecen en tu propia nube.</p>
+            <div className="mt-6 rounded-2xl border border-violet-200 bg-violet-50 p-4 text-xs text-slate-600">
               Estado actual: <strong>{account.status}</strong>{account.email ? ` · ${account.email}` : ''}
             </div>
           </article>
 
-          <form onSubmit={submit} className="panel-cyber flex flex-col gap-4 p-6">
-            <div className="grid grid-cols-2 gap-1 rounded-3xl border border-white/10 bg-black/30 p-1">
-              <button type="button" onClick={() => changeMode('signup')} className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.18em] ${isSignup ? 'bg-orange text-black' : 'text-gray-400 hover:text-white'}`}>Crear</button>
-              <button type="button" onClick={() => changeMode('signin')} className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.18em] ${isSignin ? 'bg-neon text-black' : 'text-gray-400 hover:text-white'}`}>Ingresar</button>
+          <form onSubmit={submit} className="flex flex-col gap-4 rounded-[28px] border border-violet-200 bg-white p-6 shadow-[0_16px_52px_rgba(90,70,160,0.08)]">
+            <div className="grid grid-cols-2 gap-1 rounded-3xl border border-violet-200 bg-violet-50 p-1">
+              <button type="button" onClick={() => changeMode('signup')} className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.18em] ${isSignup ? 'bg-violet-700 text-white' : 'text-slate-700 hover:text-violet-950'}`}>Crear</button>
+              <button type="button" onClick={() => changeMode('signin')} className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.18em] ${isSignin ? 'bg-violet-700 text-white' : 'text-slate-700 hover:text-violet-950'}`}>Ingresar</button>
             </div>
 
-            {isSignup ? <input value={name} onChange={(event) => setName(event.target.value)} className="rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-sm text-white outline-none focus:border-orange" placeholder="Nombre visible" autoComplete="nickname" /> : null}
-            {!isUpdate ? <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} className="rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-sm text-white outline-none focus:border-orange" placeholder="tu@email.com" autoComplete="email" required /> : null}
-            {!isReset ? <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} className="rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-sm text-white outline-none focus:border-orange" placeholder={isUpdate ? 'Nueva contraseña' : 'Contraseña'} autoComplete={isSignin ? 'current-password' : 'new-password'} minLength={showStrongPasswordPolicy ? PASSWORD_MIN_LENGTH : 1} aria-describedby={showStrongPasswordPolicy ? 'password-policy' : undefined} aria-invalid={showStrongPasswordPolicy && password.length > 0 && !passwordAssessment.valid} required /> : null}
-            {(isSignup || isUpdate) ? <input type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} className="rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-sm text-white outline-none focus:border-orange" placeholder="Repetir contraseña" autoComplete="new-password" minLength={PASSWORD_MIN_LENGTH} required /> : null}
+            {isSignup ? <input value={name} onChange={(event) => setName(event.target.value)} className="rounded-xl border border-violet-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-violet-500" placeholder="Nombre visible (mínimo 3 caracteres)" autoComplete="nickname" minLength={3} maxLength={70} required /> : null}
+            {!isUpdate ? <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} className="rounded-xl border border-violet-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-violet-500" placeholder="tu@email.com" autoComplete="email" required /> : null}
+            {!isReset ? <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} className="rounded-xl border border-violet-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-violet-500" placeholder={isUpdate ? 'Nueva contraseña' : 'Contraseña'} autoComplete={isSignin ? 'current-password' : 'new-password'} minLength={showStrongPasswordPolicy ? PASSWORD_MIN_LENGTH : 1} aria-describedby={showStrongPasswordPolicy ? 'password-policy' : undefined} aria-invalid={showStrongPasswordPolicy && password.length > 0 && !passwordAssessment.valid} required /> : null}
+            {(isSignup || isUpdate) ? <input type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} className="rounded-xl border border-violet-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-violet-500" placeholder="Repetir contraseña" autoComplete="new-password" minLength={PASSWORD_MIN_LENGTH} required /> : null}
 
             {showStrongPasswordPolicy ? (
-              <div id="password-policy" className="rounded-xl border border-white/10 bg-black/30 p-3" aria-live="polite">
-                <p className="font-mono text-[10px] font-black uppercase tracking-[0.16em] text-gray-400">Seguridad de contraseña</p>
+              <div id="password-policy" className="rounded-xl border border-violet-200 bg-violet-50 p-3" aria-live="polite">
+                <p className="font-mono text-[10px] font-black uppercase tracking-[0.16em] text-slate-700">Seguridad de contraseña</p>
                 <ul className="mt-2 grid grid-cols-2 gap-2 text-[11px]">
                   {passwordAssessment.rules.map((rule) => (
-                    <li key={rule.key} className={rule.passed ? 'text-green-300' : 'text-gray-500'}>
+                    <li key={rule.key} className={rule.passed ? 'text-emerald-700' : 'text-slate-700'}>
                       <span aria-hidden="true">{rule.passed ? '✓' : '○'}</span> {rule.label}
                     </li>
                   ))}
@@ -220,21 +242,22 @@ export default function AccountAccessStable() {
               </div>
             ) : null}
 
-            {error ? <p className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">{error}</p> : null}
-            {message ? <p className="rounded-xl border border-green-400/30 bg-green-400/10 p-3 text-sm text-green-200">{message}</p> : null}
+            {error ? <p className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-700">{error}</p> : null}
+            {message ? <p className="rounded-xl border border-green-400/30 bg-green-400/10 p-3 text-sm text-emerald-700">{message}</p> : null}
 
-            <button type="submit" disabled={!canSubmit} className="rounded-full bg-orange px-5 py-3 text-sm font-black uppercase tracking-[0.2em] text-black transition hover:shadow-glow-action disabled:cursor-not-allowed disabled:opacity-40">
+            <button type="submit" disabled={!canSubmit} className="rounded-full bg-violet-700 px-5 py-3 text-sm font-black uppercase tracking-[0.2em] text-white transition hover:bg-violet-800 disabled:cursor-not-allowed disabled:opacity-40">
               {loading ? 'Procesando...' : isReset ? 'Enviar recuperación' : isUpdate ? 'Actualizar contraseña' : isSignup ? 'Crear cuenta' : 'Ingresar'}
             </button>
 
-            {!isReset && !isUpdate ? <button type="button" onClick={() => changeMode('reset')} className="font-mono text-xs uppercase tracking-[0.18em] text-orange hover:text-white">Recuperar contraseña</button> : null}
-            {!isUpdate ? <Link to="/confirm-email" className="text-center font-mono text-xs uppercase tracking-[0.18em] text-neon hover:text-white">Reenviar confirmación</Link> : null}
-            {(isReset || isUpdate) ? <button type="button" onClick={() => changeMode('signin')} className="font-mono text-xs uppercase tracking-[0.18em] text-gray-400 hover:text-orange">Volver a ingresar</button> : null}
-            {account.status === 'connected' ? <button type="button" onClick={toggleAccount} className="font-mono text-xs uppercase tracking-[0.18em] text-red-200 hover:text-white">Cerrar sesión</button> : null}
-            <Link to="/profile" className="text-center font-mono text-xs uppercase tracking-[0.18em] text-gray-500 hover:text-orange">Ver perfil</Link>
+            {!isReset && !isUpdate ? <button type="button" onClick={() => changeMode('reset')} className="font-mono text-xs uppercase tracking-[0.18em] text-violet-700 hover:text-violet-950">Recuperar contraseña</button> : null}
+            {!isUpdate ? <Link to="/confirm-email" className="text-center font-mono text-xs uppercase tracking-[0.18em] text-violet-700 hover:text-violet-950">Reenviar confirmación</Link> : null}
+            {(isReset || isUpdate) ? <button type="button" onClick={() => changeMode('signin')} className="font-mono text-xs uppercase tracking-[0.18em] text-slate-500 hover:text-violet-700">Volver a ingresar</button> : null}
+            {account.status === 'connected' ? <button type="button" onClick={toggleAccount} className="font-mono text-xs uppercase tracking-[0.18em] text-red-700 hover:text-violet-950">Cerrar sesión</button> : null}
+            <Link to="/mis-proyectos" className="text-center font-mono text-xs uppercase tracking-[0.18em] text-slate-500 hover:text-violet-700">Mis proyectos</Link>
           </form>
         </section>
       </main>
+      </PlatformFrame>
     </>
   )
 }

@@ -6,6 +6,7 @@ const navItems = [
   { to: '/cms/generate', es: ['Nueva noticia', 'Crear borrador'], en: ['New article', 'Create draft'] },
   { to: '/cms/news', es: ['Noticias', 'Borradores y publicadas'], en: ['Articles', 'Drafts and published'] },
   { to: '/cms/review', es: ['Revisión', 'Aprobar o pedir ajustes'], en: ['Review', 'Approve or request changes'] },
+  { to: '/cms/creator-moderation', es: ['Creadores', 'Revisión de proyectos y denuncias'], en: ['Creators', 'Projects and reports moderation'] },
   { to: '/cms/schedule', es: ['Programación', 'Publicaciones futuras seguras'], en: ['Scheduling', 'Safe future publications'] },
   { to: '/cms/media', es: ['Media Library', 'Imágenes reutilizables'], en: ['Media Library', 'Reusable images'] },
   { to: '/cms/news/new', es: ['Editor', 'Editor base'], en: ['Editor', 'Base editor'] },

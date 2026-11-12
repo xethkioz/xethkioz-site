@@ -4,6 +4,7 @@ export const ENGLISH_PREFIX = '/en'
 
 export const LOCALIZED_PUBLIC_PATHS = new Set([
   '/',
+  '/explorar',
   '/world-of-xethkioz',
   '/world-of-xethkioz/elemental-realms',
   '/gaming',

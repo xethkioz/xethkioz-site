@@ -26,15 +26,19 @@ function normalizeRole(value: unknown): CmsRole {
   return 'GUEST'
 }
 
-function hasMetadataAdminRole(user: User | null) {
-  if (!user) return false
+function trustedAppRole(user: User | null): 'admin' | 'moderator' | null {
+  if (!user) return null
+  // Creator moderation is authorized by the server using app_metadata only.
+  // A profile role by itself must never unlock moderation controls.
   const appRole = String(user.app_metadata?.role ?? '').toLowerCase()
-  return appRole === 'admin'
+  return appRole === 'admin' || appRole === 'moderator' ? appRole : null
 }
 
 async function resolveProfileAccess(user: User | null) {
   if (!user || !isSupabaseConfigured) return { role: 'GUEST' as CmsRole, tier: 'BASIC' }
-  if (hasMetadataAdminRole(user)) return { role: 'ADMIN' as CmsRole, tier: 'ARCHITECT' }
+  const trustedRole = trustedAppRole(user)
+  if (trustedRole === 'admin') return { role: 'ADMIN' as CmsRole, tier: 'ARCHITECT' }
+  if (trustedRole === 'moderator') return { role: 'MODERATOR' as CmsRole, tier: 'BASIC' }
 
   const { data, error } = await supabase
     .from('profiles')
@@ -110,6 +114,7 @@ export function useAdminSession(): AdminSessionState {
   }, [])
 
   const isAdmin = role === 'ADMIN'
+  const canModerate = trustedAppRole(user) !== null
   const isModerator = role === 'MODERATOR' || isAdmin
   const isEditorial = role === 'CONTRIBUTOR' || role === 'EDITOR' || role === 'MODERATOR' || isAdmin
   const isCreatorTier = tier === 'CREATOR' || tier === 'ARCHITECT'
@@ -119,12 +124,12 @@ export function useAdminSession(): AdminSessionState {
     role,
     tier,
     isAdmin,
-    canAccessCms: Boolean(user) && (isEditorial || isCreatorTier),
+    canAccessCms: Boolean(user) && (canModerate || isEditorial || isCreatorTier),
     canPublish: isAdmin,
     canDelete: isAdmin,
     canManageAds: isAdmin,
     canManageWebServices: isAdmin,
-    canModerate: isModerator,
+    canModerate,
     loading,
     ready: isSupabaseConfigured,
     logout,

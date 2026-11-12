@@ -21,8 +21,8 @@ const webCreation = read('creacion-web.html')
 const browserTest = read('tests/e2e/internationalization.spec.ts')
 
 const localizedPaths = [
-  '/', '/gaming', '/gaming/guides', '/science', '/creacion-web',
-  '/community', '/about', '/contact', '/support', '/privacy', '/editorial-policy',
+  '/', '/explorar', '/green-node', '/science',
+  '/about', '/contact', '/support', '/privacy', '/editorial-policy',
 ]
 const englishPaths = localizedPaths.map((route) => route === '/' ? '/en' : `/en${route}`)
 const rewriteSources = new Set((vercelConfig.rewrites ?? []).map((rewrite) => rewrite?.source).filter(Boolean))
@@ -33,8 +33,8 @@ check('news remains outside the localized route contract', !/LOCALIZED_PUBLIC_PA
 check('language is derived from URL before local storage', langContext.includes('isEnglishPath(window.location.pathname)') && langContext.includes("return 'en'"))
 check('language changes preserve the current route', langContext.includes('buildLocalizedPath(current, next)') && langContext.includes('navigate(destination)'))
 check('no IP or browser-language redirect is used', !langContext.includes('navigator.language') && !langContext.includes('x-vercel-ip-country'))
-check('header navigation localizes links', header.includes('localizePath(item.to)') && header.includes("setLang(lang === 'es' ? 'en' : 'es')"))
-check('footer trust links preserve language', footer.includes("localizePath('/about')") && footer.includes("localizePath('/editorial-policy')"))
+check('header navigation localizes links', header.includes("localizePath('/science')") && header.includes("localizePath('/green-node')") && header.includes("setLang(lang === 'es' ? 'en' : 'es')"))
+check('footer trust links preserve language', footer.includes("localizePath('/privacy')") && footer.includes("localizePath('/editorial-policy')"))
 check('all English core routes are mounted', englishPaths.every((route) => app.includes(`path="${route}"`)))
 check('English news routes are intentionally absent', !app.includes('path="/en/news"') && !app.includes('path="/en/news/:slug"'))
 check('runtime SEO provides reciprocal language alternates', seo.includes('hrefLang="es-AR"') && seo.includes('hrefLang="en"') && seo.includes('hrefLang="x-default"'))
@@ -46,8 +46,8 @@ check('shared root template avoids duplicate hreflang tags', !index.includes('hr
 check('Spanish web creation shell links to English counterpart', webCreation.includes('hreflang="en"') && webCreation.includes('/en/creacion-web'))
 check('Vercel maps every English path to a dedicated shell', missingEnglishRewrites.length === 0, missingEnglishRewrites.join(', '))
 check('sitemap declares XHTML alternate namespace', sitemap.includes('xmlns:xhtml="http://www.w3.org/1999/xhtml"'))
-check('sitemap contains reciprocal English and Spanish URLs', sitemap.includes("{ es: '/gaming', en: '/en/gaming'") && sitemap.includes('hreflang="x-default"'))
-check('sitemap keeps articles Spanish-only', sitemap.includes('${SITE_URL}/news/${escapeXml(article.slug)}') && !sitemap.includes('/en/news/${escapeXml(article.slug)}'))
+check('sitemap contains reciprocal English and Spanish URLs', sitemap.includes("{ es: '/explorar', en: '/en/explorar'") && sitemap.includes('hreflang="x-default"'))
+check('primary sitemap excludes retired news', !sitemap.includes('fetchFeedArticles') && !sitemap.includes("es: '/gaming'"))
 check('browser tests cover canonicals, language switch and untranslated news', browserTest.includes('canonical y alternates') && browserTest.includes('Noticias no publica una traducción inglesa inexistente'))
 
 let failed = 0
