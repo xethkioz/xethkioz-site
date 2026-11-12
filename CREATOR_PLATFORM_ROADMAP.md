@@ -373,3 +373,10 @@ _Actualizar esta única hoja tras cada bloque de ejecución, sin multiplicar pla
 - [x] Añadidas pruebas simuladas de eliminación confirmada y de respuesta sin filas afectadas para escritorio y móvil; total 18/18 tests de integración simulada aprobados.
 - [x] Añadida aserción en auditoría `audit:creator-network` para proteger esta condición frente a regresiones.
 - [ ] Pendiente probar el mismo caso con dos sesiones reales en un entorno de staging antes de abrir publicación comunitaria.
+
+## WEB-062 — 12/11/2026: accesibilidad WCAG AA del rediseño
+- [x] Incorporado `tests/e2e/creator-accessibility.spec.ts` con `@axe-core/playwright` sobre portada, catálogo y cuenta, en Chromium escritorio y móvil.
+- [x] Corregido contraste insuficiente en subtítulo de marca, categorías, estados vacíos, invitación, pie de página, pestañas de registro e indicadores de fortaleza de contraseña.
+- [x] **6/6 pruebas WCAG AA aprobadas** después de aplicar los ajustes, sin introducir un tema oscuro como identidad dominante.
+- [x] **42/42 pruebas Playwright de Creator Network aprobadas** en corrida conjunta: navegación real, Supabase simulado, seguridad de operaciones y accesibilidad.
+- [ ] Pendiente medir accesibilidad y contraste con datos verdaderos de catálogo / publicaciones y en dispositivos reales antes del despliegue público.

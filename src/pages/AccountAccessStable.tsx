@@ -220,8 +220,8 @@ export default function AccountAccessStable() {
 
           <form onSubmit={submit} className="flex flex-col gap-4 rounded-[28px] border border-violet-200 bg-white p-6 shadow-[0_16px_52px_rgba(90,70,160,0.08)]">
             <div className="grid grid-cols-2 gap-1 rounded-3xl border border-violet-200 bg-violet-50 p-1">
-              <button type="button" onClick={() => changeMode('signup')} className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.18em] ${isSignup ? 'bg-violet-700 text-white' : 'text-slate-500 hover:text-violet-950'}`}>Crear</button>
-              <button type="button" onClick={() => changeMode('signin')} className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.18em] ${isSignin ? 'bg-violet-700 text-white' : 'text-slate-500 hover:text-violet-950'}`}>Ingresar</button>
+              <button type="button" onClick={() => changeMode('signup')} className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.18em] ${isSignup ? 'bg-violet-700 text-white' : 'text-slate-700 hover:text-violet-950'}`}>Crear</button>
+              <button type="button" onClick={() => changeMode('signin')} className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.18em] ${isSignin ? 'bg-violet-700 text-white' : 'text-slate-700 hover:text-violet-950'}`}>Ingresar</button>
             </div>
 
             {isSignup ? <input value={name} onChange={(event) => setName(event.target.value)} className="rounded-xl border border-violet-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-violet-500" placeholder="Nombre visible (mínimo 3 caracteres)" autoComplete="nickname" minLength={3} maxLength={70} required /> : null}
@@ -231,10 +231,10 @@ export default function AccountAccessStable() {
 
             {showStrongPasswordPolicy ? (
               <div id="password-policy" className="rounded-xl border border-violet-200 bg-violet-50 p-3" aria-live="polite">
-                <p className="font-mono text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">Seguridad de contraseña</p>
+                <p className="font-mono text-[10px] font-black uppercase tracking-[0.16em] text-slate-700">Seguridad de contraseña</p>
                 <ul className="mt-2 grid grid-cols-2 gap-2 text-[11px]">
                   {passwordAssessment.rules.map((rule) => (
-                    <li key={rule.key} className={rule.passed ? 'text-emerald-700' : 'text-slate-500'}>
+                    <li key={rule.key} className={rule.passed ? 'text-emerald-700' : 'text-slate-700'}>
                       <span aria-hidden="true">{rule.passed ? '✓' : '○'}</span> {rule.label}
                     </li>
                   ))}
