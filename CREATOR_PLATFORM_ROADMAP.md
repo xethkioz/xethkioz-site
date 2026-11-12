@@ -431,3 +431,8 @@ _Actualizar esta única hoja tras cada bloque de ejecución, sin multiplicar pla
 - [x] `npm run audit:production-ready` aprobado en la PC; `npm run build` completo y 24/24 pruebas Playwright de portada, catálogo y accesibilidad, escritorio y móvil.
 - [ ] Pendiente confirmar GitHub Actions (CI, Browser Quality y Lighthouse) en el commit que incluye estos cambios, antes de fusionar el PR #313.
 - [ ] Pendiente comprobar variables de entorno Vercel en producción; el listado de variables del conector devuelve 403, mientras la puerta de build protege contra desplegar una configuración ausente.
+
+## WEB-067 — 12/11/2026 · Lighthouse de la nueva versión
+- [x] Ajustado `lighthouserc.cjs` para evaluar la portada Creator Network, `/explorar`, Green Node, Ciencia, Mascotas, registro y las rutas de exploración en inglés, en vez de rutas `/gaming` y `/en/gaming` retiradas del lanzamiento.
+- [x] Se mantienen sin rebajar las exigencias Lighthouse de rendimiento, accesibilidad, mejores prácticas, CLS, tiempos y peso de página; la página de cuenta no requiere indexación SEO.
+- [ ] Esperar resultados Lighthouse CI del commit nuevo: la ejecución anterior falló por accesibilidad y CLS en `/gaming`, dos rutas redirigidas al nuevo catálogo.
