@@ -388,3 +388,12 @@ _Actualizar esta única hoja tras cada bloque de ejecución, sin multiplicar pla
 - [x] Incorporadas dos pruebas Chrome escritorio/móvil con Supabase HTTP simulado: página 2 devuelve error hasta que se reanuda el servicio; luego se recuperan las fichas faltantes.
 - [x] **44/44 Playwright aprobadas** en corrida conjunta (navegación, alta, publicaciones, moderación simulada, borrado, accesibilidad y reintento).
 - [ ] Pendiente probar paginación y errores con un entorno real de Supabase aislado. El backend de producción sigue sin migrar; no se realizaron cambios sobre sus datos.
+
+## WEB-055 — 12/11/2026: perfiles públicos sin límite artificial
+- [x] Perfiles `/creador/:id` consultan publicaciones **aprobadas** filtradas en servidor por `author_id`; no se enumeran usuarios ni correos y quedan excluidos borradores y publicaciones de otros autores.
+- [x] Eliminado límite de 48 proyectos. Paginación progresiva de 24 elementos con orden estable por fecha e ID, usando el mismo flujo de búsqueda del catálogo.
+- [x] El contador indica «Mostrando N creaciones públicas y aprobadas», sin presentar falsamente N como total mientras existan páginas adicionales.
+- [x] El perfil conserva sus fichas ante errores de red y permite reintentar sin perder publicaciones cargadas.
+- [x] Pruebas de navegador del perfil: carga progresiva, privacidad por autor, exclusión de borradores y recuperación ante error temporal en escritorio/móvil.
+- [x] **48/48 pruebas Playwright de Creator Network aprobadas** (rutas, registro/creador simulado, moderación simulada, accesibilidad, perfil/catálogo y contingencias).
+- [ ] Persisten los bloqueos de apertura: Supabase real todavía no tiene las tablas de creadores ni la función Edge de moderación habilitada; el flujo se validó en simulación y PostgreSQL temporal, no con usuarios reales.

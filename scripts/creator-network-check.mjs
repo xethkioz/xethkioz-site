@@ -21,6 +21,7 @@ assert.ok(app.includes("basePath.startsWith('/creador/')") && !app.includes('isH
 assert.ok(app.includes("'/account'].includes(basePath)") && read('src/pages/AccountAccessStable.tsx').includes('<PlatformFrame>') && read('src/pages/AccountAccessStable.tsx').includes('url="/account" noIndex'), 'Creator account must use a private, standalone luminous layout')
 assert.ok(frontend.includes('CreatorPublicProfile') && frontend.includes('noIndex={!project}') && frontend.includes('get(\'q\')'), 'Public creator profiles, search query or private metadata missing')
 assert.ok(frontend.includes("error && !items.length") && frontend.includes("Reintentar cargar más") && frontend.includes("generation.current === currentGeneration"), 'A paginated catalog error must preserve loaded projects and permit retry')
+assert.ok(frontend.includes("if (authorId) query = query.eq('author_id', authorId)") && frontend.includes("usePublishedProjects('todos', '', 24, validId ? id : undefined, validId)") && !frontend.includes(".limit(48)"), 'Public creator profiles must paginate only their own approved content')
 assert.ok(read('index.html').includes('Creá, compartí y descubrí'), 'Home must advertise the creator network in crawl metadata')
 assert.ok(read('src/components/SEO.tsx').includes('noIndex = false') && read('src/components/SEO.tsx').includes('/explorar?q='), 'Search metadata or privacy controls not migrated')
 assert.ok(frontend.includes("status === 'draft'") && frontend.includes("status === 'pending_review'"), 'Draft/pending forms not guarded')

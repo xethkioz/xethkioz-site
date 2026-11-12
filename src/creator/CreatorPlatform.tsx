@@ -105,17 +105,18 @@ function safeCatalogSearch(value: string) {
   // wildcard characters from untrusted search input before interpolating it.
   return value.trim().slice(0, 80).replace(/[%,()."\\_*]/g, ' ').replace(/\s+/g, ' ').trim()
 }
-function publishedQuery(category: Kind | 'todos', search: string) {
+function publishedQuery(category: Kind | 'todos', search: string, authorId?: string) {
   let query = supabase.from('creator_projects').select(PUBLISHED_COLUMNS)
     .eq('status', 'published')
     .order('created_at', { ascending: false })
     .order('id', { ascending: false })
   if (category !== 'todos') query = query.eq('category', category)
+  if (authorId) query = query.eq('author_id', authorId)
   const text = safeCatalogSearch(search)
   if (text) query = query.or('title.ilike.%' + text + '%,summary.ilike.%' + text + '%,author_name.ilike.%' + text + '%')
   return query
 }
-function usePublishedProjects(category: Kind | 'todos' = 'todos', search = '', pageSize = 6) {
+function usePublishedProjects(category: Kind | 'todos' = 'todos', search = '', pageSize = 6, authorId?: string, enabled = true) {
   const [items, setItems] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
@@ -130,12 +131,16 @@ function usePublishedProjects(category: Kind | 'todos' = 'todos', search = '', p
     setLoading(true)
     setLoadingMore(false)
     setHasMore(false)
+    if (!enabled) {
+      setLoading(false)
+      return () => { generation.current++ }
+    }
     if (!isSupabaseConfigured) {
       setError('El catálogo todavía no está conectado.')
       setLoading(false)
       return () => { generation.current++ }
     }
-    void publishedQuery(category, search).range(0, pageSize)
+    void publishedQuery(category, search, authorId).range(0, pageSize)
       .then(({ data, error: queryError }) => {
         if (generation.current !== currentGeneration) return
         if (queryError) setError('Estamos preparando la apertura del catálogo.')
@@ -146,15 +151,15 @@ function usePublishedProjects(category: Kind | 'todos' = 'todos', search = '', p
         setLoading(false)
       })
     return () => { generation.current++ }
-  }, [category, search, pageSize])
+  }, [category, search, pageSize, authorId, enabled])
 
   async function loadMore() {
-    if (loading || loadingMore || !hasMore || !isSupabaseConfigured) return
+    if (loading || loadingMore || !hasMore || !isSupabaseConfigured || !enabled) return
     const currentGeneration = generation.current
     setLoadingMore(true)
     setError('')
     try {
-      const { data, error: queryError } = await publishedQuery(category, search)
+      const { data, error: queryError } = await publishedQuery(category, search, authorId)
         .range(items.length, items.length + pageSize)
       if (generation.current !== currentGeneration) return
       if (queryError) setError('No pudimos cargar más proyectos. Intentá nuevamente.')
@@ -401,50 +406,32 @@ export function CreatorMyProjects() {
  * A visitor cannot enumerate private accounts, drafts or email addresses. */
 export function CreatorPublicProfile() {
   const { id } = useParams()
-  const [projects, setProjects] = useState<Project[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
-  useEffect(() => {
-    let active = true
-    const valid = Boolean(id && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id))
-    if (!valid) {
-      setError('Perfil no disponible.')
-      setLoading(false)
-      return
-    }
-    if (!isSupabaseConfigured) {
-      setError('Los perfiles todavía están en preparación.')
-      setLoading(false)
-      return
-    }
-    void supabase.from('creator_projects')
-      .select('id, author_id, author_name, title, summary, category, external_url, cover_url, license, tags, status, created_at')
-      .eq('author_id', id!)
-      .eq('status', 'published')
-      .order('created_at', { ascending: false }).limit(48)
-      .then(({ data, error: queryError }) => {
-        if (!active) return
-        if (queryError) setError('No pudimos cargar este perfil.')
-        else setProjects((data ?? []) as Project[])
-        setLoading(false)
-      })
-    return () => { active = false }
-  }, [id])
+  // Do not query arbitrary account identifiers. Public profiles consist only
+  // of approved projects, never auth users, email addresses or private drafts.
+  const validId = Boolean(id && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id))
+  const { items: projects, loading, error, hasMore, loadingMore, loadMore } =
+    usePublishedProjects('todos', '', 24, validId ? id : undefined, validId)
+  const errorMessage = !validId ? 'Perfil no disponible.'
+    : !isSupabaseConfigured ? 'Los perfiles todavía están en preparación.'
+    : error
   const name = projects[0]?.author_name || 'Creador XETHKIOZ'
   return <PlatformFrame>
-    <SEO title={name + ' · Perfil de creador'} description={'Creaciones públicas de ' + name + ' en XETHKIOZ.'} url={id ? '/creador/' + id : '/explorar'} noIndex={loading || Boolean(error) || projects.length === 0} />
+    <SEO title={name + ' · Perfil de creador'} description={'Creaciones públicas de ' + name + ' en XETHKIOZ.'} url={validId ? '/creador/' + id : '/explorar'} noIndex={loading || projects.length === 0} />
     <main className="xk-creator-inner">
       <Link className="xk-creator-back" to="/explorar">← Volver al catálogo</Link>
       <section className="xk-creator-profile-hero">
         <div className="xk-creator-profile-avatar" aria-hidden="true">✦</div>
         <div><p className="xk-creator-eyebrow">PERFIL PÚBLICO · XETHKIOZ</p><h1>{name}</h1>
-          <p className="xk-creator-lead">{projects.length ? projects.length + ' creaciones publicadas y aprobadas.' : 'Descubrí los trabajos que este creador comparte con la comunidad.'}</p>
+          <p className="xk-creator-lead">{projects.length
+            ? 'Mostrando ' + projects.length + ' creaciones públicas y aprobadas.'
+            : 'Descubrí los trabajos que este creador comparte con la comunidad.'}</p>
         </div>
       </section>
       {loading ? <p role="status" className="xk-creator-state">Cargando perfil…</p> :
-        error ? <p role="alert" className="xk-creator-state">{error}</p> :
+        errorMessage && !projects.length ? <p role="alert" className="xk-creator-state">{errorMessage}</p> :
         !projects.length ? <p className="xk-creator-state">No hay publicaciones públicas de este creador.</p> :
-        <ProjectGrid items={projects} loading={false} error="" />}
+        <ProjectGrid items={projects} loading={false} error={errorMessage} />}
+      {hasMore && !loading && <div className="xk-creator-more"><button type="button" disabled={loadingMore} onClick={() => void loadMore()}>{loadingMore ? 'Cargando…' : errorMessage ? 'Reintentar cargar más' : 'Mostrar más creaciones'}</button></div>}
     </main>
   </PlatformFrame>
 }

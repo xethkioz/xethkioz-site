@@ -88,12 +88,14 @@ test.describe('Creator network with simulated Supabase Auth and REST', () => {
         }
         if (method === 'GET') {
           const rowId = url.searchParams.get('id')
+          const authorId = url.searchParams.get('author_id')
           const status = url.searchParams.get('status')
           const category = url.searchParams.get('category')
           const expression = url.searchParams.get('or') || ''
           const search = /title\.ilike\.%([^%]+)%/.exec(expression)?.[1]?.toLocaleLowerCase('es') || ''
           const filtered = projects
             .filter(x => !rowId || rowId === 'eq.' + x.id)
+            .filter(x => !authorId || authorId === 'eq.' + x.author_id)
             .filter(x => !status || status === 'eq.' + x.status)
             .filter(x => !category || category === 'eq.' + x.category)
             .filter(x => !search || [x.title, x.summary, x.author_name]
@@ -337,6 +339,63 @@ test.describe('Creator network with simulated Supabase Auth and REST', () => {
     await expect(page.getByRole('alert')).toContainText('No pudimos cargar más proyectos')
     await expect(page.locator('.xk-creator-card')).toHaveCount(24)
     catalogUnavailable = false
+    await page.getByRole('button', { name: 'Reintentar cargar más' }).click()
+    await expect(page.locator('.xk-creator-card')).toHaveCount(31)
+    await expect(page.getByRole('alert')).toHaveCount(0)
+  })
+
+  test('Public creator profile paginates only approved work by its author', async ({ page }) => {
+    const works = Array.from({ length: 31 }, (_, i) => ({
+      id: '00000000-0000-4000-8000-' + (i + 1).toString(16).padStart(12, '0'),
+      author_id: userId, author_name: 'Taller Zafiro',
+      title: 'Creación aprobada ' + String(i + 1),
+      summary: 'Obra original aprobada y disponible para el público.',
+      category: 'programa', status: 'published', license: 'MIT', tags: [],
+      external_url: 'https://drive.google.com/file/d/public-' + i,
+      created_at: new Date(Date.UTC(2026, 0, i + 1)).toISOString(),
+    }))
+    await mockSupabase(page, { initialProjects: [
+      ...works,
+      { ...works[0], id: 'dddddddd-dddd-4ddd-8ddd-dddddddddddd', title: 'Borrador privado',
+        status: 'draft', created_at: '2026-11-11T00:00:00Z' },
+      { ...works[0], id: 'eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee', title: 'Creación de otro autor',
+        author_id: '22222222-2222-4222-8222-222222222222', status: 'published',
+        created_at: '2026-11-12T00:00:00Z' },
+    ] })
+    await page.goto('/creador/' + userId)
+    await expect(page.getByRole('heading', { name: 'Taller Zafiro' })).toBeVisible()
+    await expect(page.locator('.xk-creator-card')).toHaveCount(24)
+    await expect(page.getByText('Mostrando 24 creaciones públicas y aprobadas.')).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Borrador privado' })).toHaveCount(0)
+    await expect(page.getByRole('heading', { name: 'Creación de otro autor' })).toHaveCount(0)
+    await page.getByRole('button', { name: 'Mostrar más creaciones' }).click()
+    await expect(page.locator('.xk-creator-card')).toHaveCount(31)
+    await expect(page.getByText('Mostrando 31 creaciones públicas y aprobadas.')).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Mostrar más creaciones' })).toHaveCount(0)
+    await expect(page.getByText(user.email)).toHaveCount(0)
+  })
+
+  test('Public profile preserves approved work and retries a failed page', async ({ page }) => {
+    const works = Array.from({ length: 31 }, (_, i) => ({
+      id: '00000000-0000-4000-8000-' + (i + 1).toString(16).padStart(12, '0'),
+      author_id: userId, author_name: 'Taller Zafiro',
+      title: 'Creación aprobada ' + String(i + 1),
+      summary: 'Obra original aprobada para la comunidad.',
+      category: 'programa', status: 'published', license: 'MIT', tags: [],
+      external_url: 'https://drive.google.com/file/d/public-' + i,
+      created_at: new Date(Date.UTC(2026, 0, i + 1)).toISOString(),
+    }))
+    let unavailable = true
+    await mockSupabase(page, {
+      initialProjects: works,
+      catalogPageUnavailable: () => unavailable,
+    })
+    await page.goto('/creador/' + userId)
+    await expect(page.locator('.xk-creator-card')).toHaveCount(24)
+    await page.getByRole('button', { name: 'Mostrar más creaciones' }).click()
+    await expect(page.getByRole('alert')).toContainText('No pudimos cargar más proyectos')
+    await expect(page.locator('.xk-creator-card')).toHaveCount(24)
+    unavailable = false
     await page.getByRole('button', { name: 'Reintentar cargar más' }).click()
     await expect(page.locator('.xk-creator-card')).toHaveCount(31)
     await expect(page.getByRole('alert')).toHaveCount(0)
