@@ -421,3 +421,13 @@ _Actualizar esta única hoja tras cada bloque de ejecución, sin multiplicar pla
 - [ ] Vercel: la cuenta conectada devuelve 403 al listar variables de entorno, incluso indicando el equipo. Verificar que `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY` estén configuradas en producción o confiar en que la puerta de build impida una versión rota.
 - [ ] Después de la publicación: comprobar `https://www.xethkioz.com.ar`, las redirecciones, registro y login con correo real, publicación/rechazo desde sesiones diferentes y recuperación de cuenta.
 - [ ] Hacer seguimiento de antiabuso persistente, retención de auditoría, accesibilidad con contenido real y OAuth/Picker de nubes como mejoras posteriores.
+
+## WEB-066 — 12/11/2026 · Auditoría de liberación adaptada a Creator Network
+- [x] La auditoría CI de producción ya valida la nueva portada y su navegación, no exige antiguas tarjetas de portales retirados por el rediseño.
+- [x] Se preservan controles independientes de privacidad, contenido, seguridad, Green Node, Ciencia, Mascotas y los archivos históricos de servicios/juegos.
+- [x] Revalidada la separación Huellas: `/mascotas` y `/mascotas/` resuelven a su micrositio estático según `vercel.json` parseado como JSON, evitando falsas alarmas por formato.
+- [x] Los antiguos `/nexus-city` y `/creacion-web` son redirecciones permanentes a `/explorar`; auditorías de archivos retirados no deben exigir rutas anteriores.
+- [x] Portada de Creator Network y pies de página muestran versión oficial y enlaces a Threads/Instagram desde el registro centralizado; navegación de teclado con foco visible y respeto por movimiento reducido.
+- [x] `npm run audit:production-ready` aprobado en la PC; `npm run build` completo y 24/24 pruebas Playwright de portada, catálogo y accesibilidad, escritorio y móvil.
+- [ ] Pendiente confirmar GitHub Actions (CI, Browser Quality y Lighthouse) en el commit que incluye estos cambios, antes de fusionar el PR #313.
+- [ ] Pendiente comprobar variables de entorno Vercel en producción; el listado de variables del conector devuelve 403, mientras la puerta de build protege contra desplegar una configuración ausente.

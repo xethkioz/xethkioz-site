@@ -18,3 +18,6 @@
 .xk-creator-more button { min-height: 48px; border: 1px solid #b4a9db; border-radius: 999px; padding: 11px 26px; background: #fff; color: #49366f; font-weight: 800; cursor: pointer; }
 .xk-creator-more button:hover:not(:disabled) { background: #ede8fa; }
 .xk-creator-more button:disabled { cursor: wait; opacity: .6; }
+
+/* Creator Network keyboard focus is visible on all interactive controls. */
+.xk-creator-app a:focus-visible,.xk-creator-app button:focus-visible,.xk-creator-app input:focus-visible,.xk-creator-app select:focus-visible,.xk-creator-app textarea:focus-visible{outline:3px solid #5a36a8!important;outline-offset:3px}

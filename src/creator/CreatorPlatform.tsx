@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import SEO from '../components/SEO'
 import { isSupabaseConfigured, supabase } from '../services/supabaseClient'
 import { usePrivacyConsent } from '../lib/PrivacyConsentContext'
+import { SITE_VERSION, SOCIAL_LINKS } from '../lib/siteConfig'
 import './creator-platform.css'
 
 type Kind = 'programa' | 'videojuego' | 'video' | 'arte' | 'herramienta_ia' | 'otro'
@@ -75,7 +76,8 @@ export function PlatformFrame({ children }: { children: ReactNode }) {
       </header>
       {children}
       <footer className="xk-creator-footer">
-        <span>© {new Date().getFullYear()} XETHKIOZ · Creá, compartí, descubrí.</span>
+        <span>© {new Date().getFullYear()} XETHKIOZ · Creá, compartí, descubrí. · {SITE_VERSION}</span>
+        <nav aria-label="Redes oficiales">{SOCIAL_LINKS.filter((social) => social.name === 'Threads' || social.name === 'Instagram').map((social) => <a key={social.name} href={social.url} target="_blank" rel="noopener noreferrer">{social.name}</a>)}</nav>
         <nav aria-label="Información"><Link to="/privacy">Privacidad</Link><Link to="/editorial-policy">Reglas de publicación</Link><Link to="/account">Mi cuenta</Link><button type="button" onClick={openSettings}>Cookies</button></nav>
       </footer>
     </div>
