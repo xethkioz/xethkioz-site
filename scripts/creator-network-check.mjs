@@ -36,6 +36,7 @@ assert.ok(sql.includes('creator_projects_owner_insert') && sql.includes('creator
 assert.ok(sql.includes("auth.uid()) = author_id and status in ('draft','rejected')") && !sql.includes("auth.uid()) = author_id and status in ('draft','pending_review','rejected')"), 'Pending content must be immutable for creator-owned updates')
 assert.ok(sql.includes('grant insert (project_id, reporter_id, reason) on public.creator_project_reports to authenticated;') && !sql.includes('grant insert, select on public.creator_project_reports'), 'Reporter must not forge resolution metadata')
 assert.ok(frontend.includes(".in('status', ['draft', 'rejected'])") && frontend.includes('insert({ ...payload, author_id: userId })'), 'Author ownership or pending edits are incorrectly handled')
+assert.ok(frontend.includes(".in('status', ['draft', 'rejected']).select('id').maybeSingle()") && frontend.includes('if (deleteError || !deleted)'), 'Draft deletion must verify the matching row was actually deleted')
 assert.ok(!frontend.includes("data.user.email?.split('@')[0]"), 'Public creator name must not fall back to a private email local part')
 assert.ok(edge.includes("const reportedIds = [...new Set(") && edge.includes(".in('id', reportedIds)"), 'Report moderation must query the actual reported IDs')
 assert.ok(sql.includes('revoke all on public.creator_projects from anon, authenticated') && sql.includes('revoke all on public.creator_project_reports from anon, authenticated'), 'Default privileges were not revoked')

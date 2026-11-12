@@ -372,15 +372,20 @@ export function CreatorMyProjects() {
   async function removeDraft(project: Project) {
     if (project.status !== 'draft' && project.status !== 'rejected') return
     if (!window.confirm('¿Eliminar definitivamente este borrador?')) return
-    const { error: deleteError } = await supabase.from('creator_projects').delete().eq('id', project.id)
-    if (deleteError) { setError('No fue posible eliminar este borrador.'); return }
+    setError('')
+    // An RLS-denied DELETE can return success with zero affected rows; never
+    // hide the project until the database confirms that its draft was deleted.
+    const { data: deleted, error: deleteError } = await supabase.from('creator_projects').delete()
+      .eq('id', project.id).in('status', ['draft', 'rejected']).select('id').maybeSingle()
+    if (deleteError || !deleted) { setError('No se eliminó el borrador. Puede que haya cambiado de estado; actualizá tu biblioteca y volvé a intentarlo.'); return }
     setProjects((items) => items.filter((item) => item.id !== project.id))
   }
   return <PlatformFrame>
     <SEO title="Mi espacio creativo · XETHKIOZ" url="/mis-proyectos" noIndex />
     <main className="xk-creator-inner"><p className="xk-creator-eyebrow">TU BIBLIOTECA PERSONAL</p><h1>Mi espacio creativo.</h1><p className="xk-creator-lead">Administrá tus fichas, borradores y solicitudes. Los archivos siguen bajo tu control en tu nube.</p>
       <Link className="xk-creator-primary" to="/publicar">+ Nueva publicación</Link>
-      {loading ? <p className="xk-creator-state">Cargando tu biblioteca…</p> : error ? <p className="xk-creator-state" role="alert">{error}</p> : !projects.length ? <p className="xk-creator-state">Todavía no creaste ninguna publicación. Empezá compartiendo tu primer proyecto.</p> : <div className="xk-creator-drafts">{projects.map((project) => <article key={project.id}><div><small>{kindLabel(project.category)} · {project.status === 'draft' ? 'Borrador' : project.status === 'pending_review' ? 'En revisión' : project.status === 'published' ? 'Publicado' : 'Requiere correcciones'}</small><h2>{project.title || 'Borrador sin título'}</h2><p>{project.summary || 'Completá los detalles cuando tengas lista tu idea.'}</p>{project.status === 'rejected' && project.rejection_reason && <p className="xk-creator-message">Motivo: {project.rejection_reason}</p>}</div><div className="xk-creator-draft-actions">{project.status === 'published' ? <Link to={'/proyecto/' + project.id}>Ver publicación ↗</Link> : project.status === 'pending_review' ? <span className="xk-creator-pending-label">En revisión · edición bloqueada</span> : <Link to={'/publicar/' + project.id}>Editar →</Link>}{(project.status === 'draft' || project.status === 'rejected') && <button type="button" onClick={() => void removeDraft(project)}>Eliminar borrador</button>}</div></article>)}</div>}
+      {error && <p className="xk-creator-state" role="alert">{error}</p>}
+      {loading ? <p className="xk-creator-state">Cargando tu biblioteca…</p> : !projects.length ? !error && <p className="xk-creator-state">Todavía no creaste ninguna publicación. Empezá compartiendo tu primer proyecto.</p> : <div className="xk-creator-drafts">{projects.map((project) => <article key={project.id}><div><small>{kindLabel(project.category)} · {project.status === 'draft' ? 'Borrador' : project.status === 'pending_review' ? 'En revisión' : project.status === 'published' ? 'Publicado' : 'Requiere correcciones'}</small><h2>{project.title || 'Borrador sin título'}</h2><p>{project.summary || 'Completá los detalles cuando tengas lista tu idea.'}</p>{project.status === 'rejected' && project.rejection_reason && <p className="xk-creator-message">Motivo: {project.rejection_reason}</p>}</div><div className="xk-creator-draft-actions">{project.status === 'published' ? <Link to={'/proyecto/' + project.id}>Ver publicación ↗</Link> : project.status === 'pending_review' ? <span className="xk-creator-pending-label">En revisión · edición bloqueada</span> : <Link to={'/publicar/' + project.id}>Editar →</Link>}{(project.status === 'draft' || project.status === 'rejected') && <button type="button" onClick={() => void removeDraft(project)}>Eliminar borrador</button>}</div></article>)}</div>}
     </main>
   </PlatformFrame>
 }

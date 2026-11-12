@@ -366,3 +366,10 @@ _Actualizar esta única hoja tras cada bloque de ejecución, sin multiplicar pla
 - [x] El formulario de publicaciones ya no acepta destinos HTTPS con IP pública literal, además de bloquear IP privadas, host locales, usuarios/contraseñas embebidos y puertos arbitrarios; armonizado con las restricciones previas del moderador Edge.
 - [x] Se incorpora una prueba de navegador con un enlace HTTPS a IP literal que debe rechazarse antes de enviar datos al backend ficticio.
 - [ ] La plataforma no puede garantizar que un enlace remoto sea benigno; se mantiene revisión humana y advertencia antes de descargar o ejecutar archivos.
+
+## WEB-033 — 12/11/2026: eliminación de borradores confirmada por base de datos
+- [x] Corregido borrado de borradores y rechazados: el navegador solicita `DELETE` solo sobre esos estados y exige recibir `RETURNING id`; no oculta un proyecto si RLS deniega la eliminación o si hubo un cambio de estado concurrente.
+- [x] La biblioteca conserva las fichas visibles si falla el borrado y muestra un aviso, en lugar de sustituir toda la biblioteca por un error.
+- [x] Añadidas pruebas simuladas de eliminación confirmada y de respuesta sin filas afectadas para escritorio y móvil; total 18/18 tests de integración simulada aprobados.
+- [x] Añadida aserción en auditoría `audit:creator-network` para proteger esta condición frente a regresiones.
+- [ ] Pendiente probar el mismo caso con dos sesiones reales en un entorno de staging antes de abrir publicación comunitaria.

@@ -30,6 +30,7 @@ test.describe('Creator network with simulated Supabase Auth and REST', () => {
     signup?: (url: URL, data: Record<string, unknown>) => void,
     projectPost?: (data: Record<string, unknown>) => void,
     projectPatch?: (url: URL, data: Record<string, unknown>) => void,
+    simulateDeleteConflict?: boolean,
     initialProjects?: Array<Record<string, unknown>>,
     profileRole?: string,
     userAppRole?: string,
@@ -76,6 +77,13 @@ test.describe('Creator network with simulated Supabase Auth and REST', () => {
           if (!match) return respond({ message: 'No match' }, 404)
           Object.assign(match, data)
           return respond({ id: match.id })
+        }
+        if (method === 'DELETE') {
+          if (options.simulateDeleteConflict) return respond(null)
+          const row = projects.find(item => url.searchParams.get('id') === 'eq.' + item.id && ['draft', 'rejected'].includes(String(item.status)))
+          if (!row) return respond(null)
+          projects.splice(projects.indexOf(row), 1)
+          return respond({ id: row.id })
         }
         if (method === 'GET') {
           const rowId = url.searchParams.get('id')
@@ -270,6 +278,41 @@ test.describe('Creator network with simulated Supabase Auth and REST', () => {
     await page.getByPlaceholder(/Buscar juegos/).fill('Zafiro')
     await expect(page.locator('.xk-creator-card')).toHaveCount(1)
     await expect(page.getByRole('heading', { name: 'Juego Zafiro Antiguo' })).toBeVisible()
+  })
+
+  test('Deleting a draft only removes it once the database confirms', async ({ page }) => {
+    await seedSession(page)
+    await mockSupabase(page, { initialProjects: [{
+      id: projectId, author_id: userId, author_name: 'Autora de prueba',
+      title: 'Borrador eliminable', summary: 'Archivo privado de prueba',
+      status: 'draft', category: 'programa', external_url: '',
+      license: 'MIT', tags: [], created_at: '2026-11-11T00:00:00Z',
+    }] })
+    page.on('dialog', dialog => { void dialog.accept() })
+    await page.goto('/mis-proyectos')
+    await expect(page.getByRole('heading', { name: 'Borrador eliminable' })).toBeVisible()
+    await page.getByRole('button', { name: 'Eliminar borrador' }).click()
+    await expect(page.getByText('Todavía no creaste ninguna publicación.', { exact: false })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Borrador eliminable' })).toHaveCount(0)
+  })
+
+  test('A pending-state race does not falsely remove a draft from the library', async ({ page }) => {
+    await seedSession(page)
+    await mockSupabase(page, {
+      simulateDeleteConflict: true,
+      initialProjects: [{
+        id: projectId, author_id: userId, author_name: 'Autora de prueba',
+        title: 'Borrador que cambió de estado', summary: 'Proyecto con otra operación simultánea',
+        status: 'draft', category: 'programa', external_url: '',
+        license: 'MIT', tags: [], created_at: '2026-11-11T00:00:00Z',
+      }],
+    })
+    page.on('dialog', dialog => { void dialog.accept() })
+    await page.goto('/mis-proyectos')
+    await expect(page.getByRole('heading', { name: 'Borrador que cambió de estado' })).toBeVisible()
+    await page.getByRole('button', { name: 'Eliminar borrador' }).click()
+    await expect(page.getByRole('alert')).toContainText('No se eliminó el borrador.')
+    await expect(page.getByRole('heading', { name: 'Borrador que cambió de estado' })).toBeVisible()
   })
 
 })
