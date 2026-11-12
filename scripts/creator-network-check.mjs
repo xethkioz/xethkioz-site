@@ -6,7 +6,7 @@ const vercel = JSON.parse(read('vercel.json'))
 const app = read('src/App.tsx')
 const frontend = read('src/creator/CreatorPlatform.tsx')
 const edge = read('supabase/functions/creator-moderation/index.ts')
-const sql = read('supabase/migrations/20261021111400_creator_platform_mvp.sql')
+const sql = read('supabase/migrations/20261112041220_creator_platform_mvp.sql')
 const routes = new Map(vercel.rewrites.map(r => [r.source, r.destination]))
 const paths = ['/explorar','/publicar','/publicar/:id','/mis-proyectos','/proyecto/:id','/creador/:id']
 for (const path of paths.flatMap(p => [p,'/en'+p])) {
@@ -19,7 +19,8 @@ assert.ok(frontend.includes('creator_project_reports'), 'Report button missing')
 assert.ok(frontend.includes('reason: reportReason') && frontend.includes('creator-report-reason'), 'Report reasons must be selectable')
 assert.ok(app.includes("basePath.startsWith('/creador/')") && !app.includes('isHomeRoute || isThemedPortalRoute'), 'Creator profile must not inherit the old global navigation or fantasy shell')
 assert.ok(app.includes("'/account'].includes(basePath)") && read('src/pages/AccountAccessStable.tsx').includes('<PlatformFrame>') && read('src/pages/AccountAccessStable.tsx').includes('url="/account" noIndex'), 'Creator account must use a private, standalone luminous layout')
-assert.ok(frontend.includes('CreatorPublicProfile') && frontend.includes('noIndex={!project}') && frontend.includes('get(\'q\')'), 'Public creator profiles, search query or private metadata missing')
+assert.ok(frontend.includes('CreatorPublicProfile') && frontend.includes('noIndex={!visibleProject}') && frontend.includes('get(\'q\')'), 'Public creator profiles, search query or private metadata missing')
+assert.ok(frontend.includes("const visibleProject = project && project.id === id ? project : null") && frontend.includes("select(PUBLISHED_COLUMNS).eq('id', id!).eq('status', 'published')") && frontend.includes("if (!visibleProject) return"), 'Project detail must never display or report a stale project when navigating')
 assert.ok(frontend.includes("error && !items.length") && frontend.includes("Reintentar cargar más") && frontend.includes("generation.current === currentGeneration"), 'A paginated catalog error must preserve loaded projects and permit retry')
 assert.ok(frontend.includes("if (authorId) query = query.eq('author_id', authorId)") && frontend.includes("usePublishedProjects('todos', '', 24, validId ? id : undefined, validId)") && !frontend.includes(".limit(48)"), 'Public creator profiles must paginate only their own approved content')
 assert.ok(read('index.html').includes('Creá, compartí y descubrí'), 'Home must advertise the creator network in crawl metadata')
@@ -48,4 +49,14 @@ assert.ok(sql.includes("char_length(array_to_string(tags, ',')) <= 255"), 'Creat
 assert.ok(!sql.includes('external_url, cover_url, license, tags, status) on public.creator_projects'), 'User should not set unreviewed cover URLs')
 assert.ok(sql.includes('project_id uuid not null,\n  reviewer_id uuid references auth.users'), 'Moderation audit must survive creator draft removal')
 assert.ok(!frontend.includes('SUPABASE_SERVICE_ROLE_KEY'), 'Browser contains server-only key')
+// A Vercel production build must fail closed rather than publish a beautiful
+// but unusable Creator Network with placeholder Supabase credentials.
+// Local builds and protected previews can still run the isolated QA suite.
+if (process.env.VERCEL_ENV === 'production') {
+  const url = String(process.env.VITE_SUPABASE_URL || '')
+  const key = String(process.env.VITE_SUPABASE_ANON_KEY || '')
+  assert.ok(/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url)
+    && (key.startsWith('sb_publishable_') || (key.startsWith('eyJ') && key.length > 80)),
+    'Production release blocked: configure valid VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Vercel')
+}
 console.log('PASS creator network: routes, preserved modules, RLS and moderation contracts.')

@@ -1,14 +1,27 @@
 # XETHKIOZ WEB — HOJA DE RUTA MAESTRA
-**Fecha de corte:** 11 de noviembre de 2026  
-**Estado:** planificación y validación del rediseño en rama de pruebas; no es una constancia de puesta en producción.  
+**Fecha de corte:** 12 de noviembre de 2026
+**Estado:** backend de Creator Network activado y validado en Supabase; frontend en rama de pruebas, pendiente de liberación a `main`.
 **Documento único de seguimiento:** `CREATOR_PLATFORM_ROADMAP.md`  
 **Repositorio:** `xethkioz/xethkioz-site`  
 **Rama:** `redesign/creator-cloud-platform`  
 **Pull request:** https://github.com/xethkioz/xethkioz-site/pull/313  
-**Último commit comprobado antes de actualizar esta hoja:** `4618a6f60d4be5b91fc1e8e8c6ee7b44e5104fdf`  
-**Preview Vercel READY:** https://xethkioz-site-3ef30vjzn-xethkioz-site.vercel.app/ (acceso protegido por Vercel).
+**Preview:** despliegue automático de Vercel por cada commit de la rama; acceso sujeto a Vercel Login.
+**Ver el último commit:** https://github.com/xethkioz/xethkioz-site/commits/redesign/creator-cloud-platform
 
 ---
+
+## ESTADO ACTUAL VERIFICADO — 12/11/2026
+
+- **Supabase real:** migración `creator_platform_mvp` aplicada aditivamente al proyecto correcto `pascicauudfyydzknoop`. Tres tablas con RLS y siete políticas. Sin datos preexistentes modificados ni tablas heredadas eliminadas.
+- **Edge Function real:** `creator-moderation` versión 1 **ACTIVE**, con `verify_jwt=true`. HTTP sin token rechazado 401; preflight autorizado responde 204.
+- **REST público:** lectura anónima de `creator_projects` responde 200, lectura anónima de reportes y auditoría responde 401; las nuevas tablas siguen vacías.
+- **SQL real sin persistencia:** una transacción abierta desde el usuario autenticado simulado por rol PostgreSQL envió una ficha a revisión, fue aprobada por RPC de `service_role` con un actor administrativo real, y se vio públicamente. La transacción cerró con `ROLLBACK`, sin dejar publicaciones ni auditoría de prueba.
+- **Seguridad:** `authenticated` no tiene EXECUTE de los RPC de moderación y `service_role` sí; una cuenta con rol admin confiable existe. Los tests del código, RLS temporal y Edge complementan pero no sustituyen una prueba completa de UI con cuenta real.
+- **Frontend:** 50/50 pruebas Playwright sobre la nueva web (desktop/móvil), incluidas publicaciones y moderación simuladas; falta validar sesión real, confirmación de correo y decisión desde el panel CMS después de la liberación.
+- **Publicación:** `main` todavía conserva la web anterior; el preview contiene el rediseño. No considerar la beta pública abierta hasta publicar `main` tras QA de despliegue.
+- **Conexión con nubes:** almacenamiento BYOS vía enlace HTTPS manual. OAuth/Google Picker/Dropbox Picker/OneDrive no están integrados y deben tratarse como una mejora futura, nunca como función existente.
+
+
 
 ## 1. Visión del producto
 
@@ -29,33 +42,30 @@ React + Vite + Vercel + Supabase Auth/Postgres + CMS existente. **No iniciar una
 
 ---
 
-## 2. Inventario verificado — qué existe realmente
+## 2. Inventario actualizado — evidencia real al 12/11/2026
 
-| Componente | Estado | Evidencia / limitación |
+| Componente | Estado verificado | Limitación pendiente |
 |---|---|---|
-| Nueva portada Creator Network luminosa | **Implementada en preview** | CTA, categorías, últimos proyectos aprobados, módulos conservados |
-| Catálogo /explorar | **Implementado en preview** | Filtros y búsqueda local sobre un conjunto limitado de proyectos publicados; falta paginación/búsqueda en servidor |
-| Fichas /proyecto/:id | **Implementadas en frontend** | Se muestran solo proyectos publicados; tabla SQL todavía ausente |
-| Perfil público /creador/:id | **Implementado en frontend** | Se deriva de publicaciones aprobadas; no muestra correos ni borradores |
-| Registro/login | **Reutilización preparada** | Supabase Auth anterior; falta QA de altas, recuperación de contraseña, sesiones y redirecciones |
-| Biblioteca /mis-proyectos | **Frontend preparado** | Estados y borradores; CRUD sin activación de tablas nuevas |
-| Formulario /publicar | **Frontend preparado** | Hoy requiere pegar enlace HTTPS de una nube; no sube archivos automáticamente |
-| Guardar borrador / enviar a revisión | **Frontend + SQL preparados** | Sin prueba real end-to-end ni migración aplicada |
-| Panel CMS /cms/creator-moderation | **Código preparado** | Cola, aprobación, rechazo, reportes; función Edge no desplegada |
-| Migración de proyectos, reportes y auditoría | **Preparada, NO aplicada** | `supabase/migrations/20261021111400_creator_platform_mvp.sql` |
-| Seguridad de base de datos | **Diseñada, sin test de RLS real** | Políticas por propietario, grants por columna, RPC transaccionales de moderación |
-| Google Drive OAuth/Picker | **Pendiente** | Solo enlace compartido manual |
-| Dropbox y OneDrive | **Enlaces externos manuales** | No hay conexión de cuentas ni gestor de archivos |
-| Redirecciones legacy y sitemap | **Implementadas en rama** | 23 redirecciones; mapa principal actualizado, no publicado |
-| Green Node | **Conservado** | Falta regresión visual/funcional completa |
-| Ciencia | **Conservado** | Falta regresión visual/funcional completa |
-| Mascotas/Huellas Argentina | **Conservado** | Sitio estático propio; falta regresión completa y mejora gráfica |
-| Vercel preview | **READY** | Build y auditorías estáticas correctas; la vista solicita Login de Vercel a externos |
-| Pruebas Playwright reales | **Especificaciones añadidas, pendientes de ejecutar** | No confundir compilación con prueba visual o autenticada |
-| Producción `main` | **Sin cambios** | Último SHA comprobado: `e544bf558dab3305d91b4a8d1333180a899445f3` |
-| Supabase de creadores | **Sin activar** | Verificación SQL de 11/11/2026: las tres tablas no existen |
+| Portada Creator Network y navegación | **Implementadas y probadas en preview** | Publicar rama en `main` solo después de verificación final |
+| Catálogo `/explorar` | **Búsqueda y paginación en servidor** | Comprobar con proyectos aprobados reales y volumen |
+| Ficha `/proyecto/:id` | **Lista y probada** | Proteger contra datos obsoletos al cambiar ruta; QA pendiente de nuevo commit |
+| Perfil público `/creador/:id` | **Filtrado por autor y paginado** | API de conteo total deliberadamente pendiente |
+| Registro, ingreso y recuperación | **Reutilización integrada** | Validar alta/correo/sesión real desde navegador |
+| Biblioteca `/mis-proyectos` | **Guardado y borrado con confirmación del servidor** | Validar contra cuenta real de creador |
+| Publicación `/publicar` | **Fichas HTTPS externas y revisión humana** | Picker/OAuth y carga directa a nubes no implementados |
+| Moderación CMS | **UI y pruebas simuladas** | Validar panel con cuenta admin y función Edge real |
+| Base de datos Creator | **Migración aplicada a Supabase real** | Políticas de retención/erasure y prueba E2E autenticada |
+| Moderación Edge | **Desplegada y ACTIVE** | Revisión operativa, tasa persistente y validación de contenidos |
+| API REST | **Lectura pública de aprobados; reportes y auditoría privados** | Probar con publicaciones no vacías en beta cerrada |
+| Green Node | **Conservado** | Revisión visual completa y contenido |
+| Ciencia / ArgenCiencia | **Conservada** | Revisión visual completa y contenido |
+| Mascotas / Huellas Argentina | **Conservada** | Mejoras gráficas y revisión completa |
+| Vercel preview | **READY** | Acceso protegido por Vercel Login |
+| Pruebas Playwright | **50/50 aprobadas** | Tests E2E contra Supabase con una sesión real |
+| Producción `main` | **Aún sin rediseño** | Liberación controlada y rollback |
+| Google Drive, Dropbox, OneDrive | **Enlaces BYOS manuales** | OAuth/Picker sin configurar; no prometer selector de archivos |
 
-**Interpretación:** tenemos un MVP visual y su arquitectura de seguridad en código, **no** una red de creadores utilizable públicamente de punta a punta.
+**Interpretación:** el backend real ya está activado y las rutas del rediseño pasaron QA en simulación. **Todavía falta validar el circuito completo desde una sesión real y liberar el frontend a producción de manera controlada**; no confundir pruebas aisladas con apertura comunitaria completa.
 
 ---
 
@@ -397,3 +407,17 @@ _Actualizar esta única hoja tras cada bloque de ejecución, sin multiplicar pla
 - [x] Pruebas de navegador del perfil: carga progresiva, privacidad por autor, exclusión de borradores y recuperación ante error temporal en escritorio/móvil.
 - [x] **48/48 pruebas Playwright de Creator Network aprobadas** (rutas, registro/creador simulado, moderación simulada, accesibilidad, perfil/catálogo y contingencias).
 - [ ] Persisten los bloqueos de apertura: Supabase real todavía no tiene las tablas de creadores ni la función Edge de moderación habilitada; el flujo se validó en simulación y PostgreSQL temporal, no con usuarios reales.
+
+## WEB-016 / WEB-020 / WEB-058 — 12/11/2026: backend real, circuito y puerta de liberación
+- [x] Migración PostgreSQL aditiva aplicada al proyecto `xethkioz-site` y permisos verificados: 3 tablas con RLS; 7 políticas; navegador no puede invocar RPC de aprobación ni de resolución.
+- [x] Archivo de migración alineado con la versión que registra Supabase (`20261112041220_creator_platform_mvp.sql`), para evitar aplicaciones duplicadas al sincronizar historial.
+- [x] Edge Function `creator-moderation` desplegada en versión 1, ACTIVE, `verify_jwt=true`; HTTP sin JWT 401 y preflight 204 para origen permitido.
+- [x] Integración real de base en transacción: usuario autenticado mediante rol PostgreSQL envía ficha para revisión, servicio aprueba mediante RPC y anon puede leer el resultado; se ejecutó `ROLLBACK` y la base volvió a 0 filas en proyectos, reportes y auditoría.
+- [x] API REST real desde PC: catálogo de aprobados 200, lectura anónima de denuncias y auditoría denegada 401.
+- [x] Frontend navegando al Supabase real con clave **publicable**, 2/2 pruebas Playwright en escritorio/móvil, solo lectura, sin altas de usuario ni escrituras.
+- [x] Corrigida navegación entre detalles: un proyecto anterior no puede mostrarse ni reportarse bajo el identificador nuevo. Probada en escritorio/móvil.
+- [x] Puerta de compilación: en `VERCEL_ENV=production`, exigir URL y clave pública de Supabase antes de permitir build; comprobadas las ramas de rechazo y aprobación sin imprimir secretos.
+- [x] La auditoría de higiene prohíbe `.env.local`. El archivo temporal creado para un ensayo se retiró tras su detección; no queda configuración sensible persistida en el repositorio ni se envió a Git.
+- [ ] Vercel: la cuenta conectada devuelve 403 al listar variables de entorno, incluso indicando el equipo. Verificar que `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY` estén configuradas en producción o confiar en que la puerta de build impida una versión rota.
+- [ ] Después de la publicación: comprobar `https://www.xethkioz.com.ar`, las redirecciones, registro y login con correo real, publicación/rechazo desde sesiones diferentes y recuperación de cuenta.
+- [ ] Hacer seguimiento de antiabuso persistente, retención de auditoría, accesibilidad con contenido real y OAuth/Picker de nubes como mejoras posteriores.

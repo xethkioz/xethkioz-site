@@ -41,7 +41,7 @@ try {
  grant execute on function auth.uid() to authenticated;
  `)
  await db.query('insert into auth.users(id) values ($1),($2),($3)',[id.a,id.b,id.mod])
- await db.exec(readFileSync('supabase/migrations/20261021111400_creator_platform_mvp.sql','utf8'))
+ await db.exec(readFileSync('supabase/migrations/20261112041220_creator_platform_mvp.sql','utf8'))
  await db.query(`
  insert into public.creator_projects(id,author_id,author_name,title,summary,category,external_url,license,status,published_at) values
  ($1,$2,'Autor A','Borrador','','programa','','MIT','draft',null),

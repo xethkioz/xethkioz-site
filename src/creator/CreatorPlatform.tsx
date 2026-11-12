@@ -250,34 +250,45 @@ export function CreatorProjectDetail() {
   const [error, setError] = useState('')
   const [reportMessage, setReportMessage] = useState('')
   const [reportReason, setReportReason] = useState<'needs_review' | 'malware' | 'copyright' | 'spam' | 'other'>('needs_review')
+  const validId = Boolean(id && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id))
   useEffect(() => {
     let active = true
-    if (!id || !isSupabaseConfigured) { setError('Proyecto no disponible.'); return }
-    void supabase.from('creator_projects').select('*').eq('id', id).eq('status', 'published').maybeSingle()
+    setProject(null)
+    setError('')
+    setReportMessage('')
+    setReportReason('needs_review')
+    if (!validId || !isSupabaseConfigured) {
+      setError('Proyecto no disponible.')
+      return () => { active = false }
+    }
+    void supabase.from('creator_projects').select(PUBLISHED_COLUMNS).eq('id', id!).eq('status', 'published').maybeSingle()
       .then(({ data, error: queryError }) => {
         if (!active) return
         if (queryError || !data) setError('Proyecto no encontrado o aún no aprobado.')
         else setProject(data as Project)
       })
     return () => { active = false }
-  }, [id])
+  }, [id, validId])
+  // A route parameter can change without remounting the detail component.
+  // Never display or report a previously loaded project's data under a new URL.
+  const visibleProject = project && project.id === id ? project : null
   async function reportProject() {
-    if (!project) return
+    if (!visibleProject) return
     const { data } = await supabase.auth.getUser()
     if (!data.user) { setReportMessage('Iniciá sesión para reportar este proyecto.'); return }
-    const { error: reportError } = await supabase.from('creator_project_reports').insert({ project_id: project.id, reporter_id: data.user.id, reason: reportReason })
+    const { error: reportError } = await supabase.from('creator_project_reports').insert({ project_id: visibleProject.id, reporter_id: data.user.id, reason: reportReason })
     setReportMessage(reportError ? 'No fue posible registrar el reporte; puede que ya lo hayas reportado.' : 'Reporte recibido para revisión.')
   }
   return <PlatformFrame>
-    <SEO title={project ? project.title + ' · XETHKIOZ' : 'Proyecto · XETHKIOZ'} url={id ? '/proyecto/' + id : '/explorar'} noIndex={!project} />
+    <SEO title={visibleProject ? visibleProject.title + ' · XETHKIOZ' : 'Proyecto · XETHKIOZ'} url={validId ? '/proyecto/' + id : '/explorar'} noIndex={!visibleProject} />
     <main className="xk-creator-inner"><Link to="/explorar" className="xk-creator-back">← Volver al catálogo</Link>
       {error && <p className="xk-creator-state" role="alert">{error}</p>}
-      {!error && !project && <p className="xk-creator-state">Cargando proyecto…</p>}
-      {project && <article className="xk-creator-detail"><span className="xk-creator-eyebrow">{kindLabel(project.category)} · POR <Link className="xk-creator-author-link" to={"/creador/" + project.author_id}>{project.author_name}</Link></span><h1>{project.title}</h1><p className="xk-creator-lead">{project.summary}</p>
-        <div className="xk-creator-pills">{project.tags.map((tag) => <span key={tag}>#{tag}</span>)}</div>
-        <p><strong>Licencia:</strong> {project.license}</p>
+      {!error && !visibleProject && <p className="xk-creator-state">Cargando proyecto…</p>}
+      {visibleProject && <article className="xk-creator-detail"><span className="xk-creator-eyebrow">{kindLabel(visibleProject.category)} · POR <Link className="xk-creator-author-link" to={"/creador/" + visibleProject.author_id}>{visibleProject.author_name}</Link></span><h1>{visibleProject.title}</h1><p className="xk-creator-lead">{visibleProject.summary}</p>
+        <div className="xk-creator-pills">{visibleProject.tags.map((tag) => <span key={tag}>#{tag}</span>)}</div>
+        <p><strong>Licencia:</strong> {visibleProject.license}</p>
         <p>El archivo está alojado fuera de XETHKIOZ, en la nube del creador. Revisá los permisos y la procedencia del archivo antes de descargarlo o ejecutarlo.</p>
-        <a className="xk-creator-primary" href={safeCloudLink(project.external_url) ? project.external_url : undefined} target="_blank" rel="noopener noreferrer nofollow" aria-disabled={!safeCloudLink(project.external_url)}>Abrir en la nube del creador ↗</a>
+        <a className="xk-creator-primary" href={safeCloudLink(visibleProject.external_url) ? visibleProject.external_url : undefined} target="_blank" rel="noopener noreferrer nofollow" aria-disabled={!safeCloudLink(visibleProject.external_url)}>Abrir en la nube del creador ↗</a>
         <div className="xk-creator-report"><label htmlFor="creator-report-reason">¿Por qué querés reportar esta creación?</label><select id="creator-report-reason" value={reportReason} onChange={(event) => setReportReason(event.target.value as typeof reportReason)}><option value="needs_review">Solicitar revisión</option><option value="malware">Posible malware o enlace peligroso</option><option value="copyright">Derechos de autor</option><option value="spam">Spam o engaño</option><option value="other">Otro problema</option></select><button type="button" onClick={() => void reportProject()}>Enviar reporte</button><span role="status">{reportMessage}</span></div>
       </article>}
     </main>

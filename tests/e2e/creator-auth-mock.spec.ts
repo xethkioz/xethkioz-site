@@ -32,6 +32,7 @@ test.describe('Creator network with simulated Supabase Auth and REST', () => {
     projectPatch?: (url: URL, data: Record<string, unknown>) => void,
     simulateDeleteConflict?: boolean,
     catalogPageUnavailable?: () => boolean,
+    delayedProjectId?: string,
     initialProjects?: Array<Record<string, unknown>>,
     profileRole?: string,
     userAppRole?: string,
@@ -107,6 +108,9 @@ test.describe('Creator network with simulated Supabase Auth and REST', () => {
             return respond({ code: 'PGRST503', message: 'Simulated transient catalog failure' }, 503)
           }
           const limit = Number(url.searchParams.get('limit') || filtered.length)
+          if (options.delayedProjectId && rowId === 'eq.' + options.delayedProjectId) {
+            await new Promise(resolve => setTimeout(resolve, 450))
+          }
           const result = filtered.slice(offset, offset + limit)
           const single = (request.headers()['accept'] || '').includes('application/vnd.pgrst.object+json')
           return respond(single ? result[0] || null : result)
@@ -399,6 +403,44 @@ test.describe('Creator network with simulated Supabase Auth and REST', () => {
     await page.getByRole('button', { name: 'Reintentar cargar más' }).click()
     await expect(page.locator('.xk-creator-card')).toHaveCount(31)
     await expect(page.getByRole('alert')).toHaveCount(0)
+  })
+
+  test('Changing project URL never renders or reports the previous project', async ({ page }) => {
+    const nextId = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb'
+    const first = {
+      id: projectId, author_id: userId, author_name: 'Creador A',
+      title: 'Proyecto aprobado uno', summary: 'Publicación comprobable del primer autor.',
+      category: 'programa', license: 'MIT', tags: [], status: 'published',
+      external_url: 'https://drive.google.com/file/d/first',
+      created_at: '2026-11-11T00:00:00Z',
+    }
+    await mockSupabase(page, {
+      initialProjects: [
+        first,
+        { ...first, id: nextId, title: 'Proyecto aprobado dos',
+          external_url: 'https://drive.google.com/file/d/second' },
+      ],
+      delayedProjectId: nextId,
+    })
+    await page.goto('/proyecto/' + projectId)
+    await expect(page.getByRole('heading', { name: 'Proyecto aprobado uno' })).toBeVisible()
+    await page.evaluate((target) => {
+      window.history.pushState({}, '', '/proyecto/' + target)
+      window.dispatchEvent(new PopStateEvent('popstate'))
+    }, nextId)
+    await expect(page).toHaveURL('/proyecto/' + nextId)
+    await expect(page.getByRole('heading', { name: 'Proyecto aprobado uno' })).toHaveCount(0)
+    await expect(page.getByRole('link', { name: /Abrir en la nube/ })).toHaveCount(0)
+    await expect(page.getByRole('heading', { name: 'Proyecto aprobado dos' })).toBeVisible()
+    await expect(page.getByRole('link', { name: /Abrir en la nube/ }))
+      .toHaveAttribute('href', 'https://drive.google.com/file/d/second')
+    await page.evaluate(() => {
+      window.history.pushState({}, '', '/proyecto/not-a-uuid')
+      window.dispatchEvent(new PopStateEvent('popstate'))
+    })
+    await expect(page.getByRole('alert')).toContainText('Proyecto no disponible.')
+    await expect(page.getByRole('heading', { name: 'Proyecto aprobado dos' })).toHaveCount(0)
+    await expect(page.getByRole('link', { name: /Abrir en la nube/ })).toHaveCount(0)
   })
 
 })

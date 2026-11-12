@@ -1,4 +1,4 @@
--- XETHKIOZ Creator Network: additive, staged for review. Do not run on production until approved.
+-- XETHKIOZ Creator Network: additive, applied to xethkioz-site on 2026-11-12 after isolated tests. Do not reapply on the same project.
 -- Creator files are NOT uploaded to this database; only external HTTPS links are stored.
 create table if not exists public.creator_projects (
   id uuid primary key default gen_random_uuid(),
